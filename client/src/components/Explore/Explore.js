@@ -73,6 +73,7 @@ const MasonryLayout = props => {
             }
         }
         window.addEventListener("resize", handleResize);
+        console.log('hi')
     }, [])
 
     // create columns
