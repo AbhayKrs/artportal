@@ -28,7 +28,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import moment from 'moment';
 
 import darkHeart2 from '../../assets/images/darkHeart_transparent3.png';
-import { fetchArtworkList, fetchArtwork, handleLikeArtwork, handleDislikeArtwork, handleAddComment, handleEditComment, handleDeleteComment, handleAddReply } from '../../store/actions/explore.actions';
+import { fetchArtworkList, fetchArtwork, handleLikeArtwork, handleDislikeArtwork, handleAddComment, handleEditComment, handleDeleteComment } from '../../store/actions/explore.actions';
 
 const useStyles = makeStyles((theme) => ({
     gridRoot: {
@@ -325,7 +325,6 @@ const CommentList = (props) => {
     const classes = useStyles();
     const [editForm, setEditForm] = useState('');
     const [editIndex, setEditIndex] = useState('');
-    const [reply, setReply] = useState('');
     const [editComment, setEditComment] = useState('');
     const [replyOpen, setReplyOpen] = useState('');
 
@@ -338,12 +337,6 @@ const CommentList = (props) => {
         setEditForm(false);
         props.fetchArtwork(props.artworkId);
         return false;
-    }
-    const replyComment = async (commentID) => {
-        await props.handleAddReply(reply, props.artworkId, commentID);
-        console.log('Reply submitted!');
-        await props.fetchArtwork(props.artworkId);
-        setReply('');
     }
 
     return (
@@ -404,7 +397,7 @@ const CommentList = (props) => {
                                 <ListItemText
                                     edge="end"
                                     classes={{ root: classes.commentListText, primary: classes.commentListItemTextPrimary, secondary: classes.commentListItemTextSecondary }}
-                                    primary={comment.comment}
+                                    primary={comment.content}
                                     secondary={'- ' + moment(comment.createdAt).fromNow()}
                                 />
                             }
@@ -415,13 +408,10 @@ const CommentList = (props) => {
                                             <CloseIcon fontSize='small' />
                                         </IconButton>
                                         :
-                                        <IconButton edge="end" onClick={() => { setEditComment(comment.comment); setEditForm(true); setEditIndex(index) }}>
+                                        <IconButton edge="end" onClick={() => { setEditComment(comment.content); setEditForm(true); setEditIndex(index) }}>
                                             <EditIcon className={classes.iconButton} fontSize='small' />
                                         </IconButton>
                                     }
-                                    <IconButton edge="end" onClick={() => { setReplyOpen(index) }}>
-                                        <ChatBubbleIcon className={classes.iconButton} fontSize='small' />
-                                    </IconButton>
                                     <IconButton edge="end" onClick={() => onDeleteComment(comment)}>
                                         <DeleteIcon className={classes.iconButton} fontSize='small' />
                                     </IconButton>
@@ -430,200 +420,12 @@ const CommentList = (props) => {
                                 ''
                             }
                         </div>
-                        {replyOpen === index ?
-                            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                <Grid style={{ width: '75%' }}>
-                                    <div className={classes.commentField}>
-                                        <TextField
-                                            id="standard-basic"
-                                            // label={"Hey " + props.explore.artworkData.author.username + ", Let the artist know what you think"}
-                                            fullWidth
-                                            value={reply}
-                                            onChange={(event) => setReply(event.target.value)}
-                                            className={classes.commentInput}
-                                            onKeyPress={(ev) => {
-                                                if (ev.key === 'Enter') {
-                                                    replyComment(comment._id)
-                                                }
-                                            }}
-                                            InputProps={{
-                                                startAdornment: (
-                                                    <InputAdornment position="start">
-                                                        <ReplyIcon fontSize='small' style={{ color: deepPurple[300] }} />
-                                                    </InputAdornment>
-                                                ),
-                                            }}
-                                        />
-                                    </div>
-                                </Grid>
-                                <IconButton style={{ padding: '5px 12px 0 0', backgroundColor: 'transparent' }} aria-controls='edit-menu' aria-haspopup='true' onClick={() => setReplyOpen('')}>
-                                    <CloseIcon fontSize='small' onClick={() => setReplyOpen('')} />
-                                </IconButton>
-                            </div>
-                            :
-                            null
-                        }
                     </ListItem>
-                    <RepliesList replies={comment.replies} common={props.common} artworkId={props.artworkId} handleEditComment={props.handleEditComment} fetchArtwork={props.fetchArtwork} handleDeleteComment={props.handleDeleteComment} handleAddReply={props.handleAddReply} />
                 </div>
             ))}
         </div>
     )
 }
-
-const RepliesList = (props) => {
-    const classes = useStyles();
-    const [editForm, setEditForm] = useState('');
-    const [editIndex, setEditIndex] = useState('');
-    const [subReply, setSubReply] = useState('');
-    const [editComment, setEditComment] = useState('');
-    const [replyOpen, setReplyOpen] = useState('');
-
-    const onDeleteComment = async (reply) => {
-        await props.handleDeleteComment(props.artworkId, reply._id);
-        props.fetchArtwork(props.artworkId);
-    }
-    const onEditComment = async (reply) => {
-        await props.handleEditComment(editComment, props.artworkId, reply._id);
-        setEditForm(false);
-        props.fetchArtwork(props.artworkId);
-        return false;
-    }
-    const replyComment = async (replyID) => {
-        await props.handleAddReply(subReply, props.artworkId, replyID);
-        console.log('Reply submitted!');
-        await props.fetchArtwork(props.artworkId);
-        setSubReply('');
-    }
-
-    return (
-        <div className={classes.replyListRoot}>
-            {props.replies.map((reply, index) => (
-                <div style={{ marginLeft: '10px' }}>
-                    <ListItem style={{ display: 'block' }} key={index} className={classes.commentListItem} disableGutters>
-                        <div style={{ display: 'flex', margin: '0 8px', alignItems: 'center' }}>
-                            <ListItemAvatar>
-                                <Chip
-                                    classes={{ root: classes.userChip, label: classes.userChipLabel }}
-                                    avatar={
-                                        <Avatar>
-                                            <img style={{ width: '100%' }} src={UserIcon} />
-                                        </Avatar>
-                                    }
-                                    label={reply.author.username}
-                                />
-                            </ListItemAvatar>
-                            {editForm && index === editIndex ?
-                                <ListItemText
-                                    edge="end"
-                                    classes={{ root: classes.commentListItemText, primary: classes.commentListItemTextPrimary, secondary: classes.commentListItemTextSecondary }}
-                                    primary={
-                                        <FormControl className={classes.editCommentForm}>
-                                            <Grid container spacing={1} alignItems="flex-end">
-                                                <Grid item className={classes.editCommentField} xs={12}>
-                                                    <TextField
-                                                        id="standard-basic"
-                                                        fullWidth
-                                                        value={editComment}
-                                                        onChange={(event) => setEditComment(event.target.value)}
-                                                        className={classes.commentInput}
-                                                        onKeyPress={(ev) => {
-                                                            if (ev.key === 'Enter') {
-                                                                ev.preventDefault();
-                                                                onEditComment(reply)
-                                                            }
-                                                        }}
-                                                        InputProps={{
-                                                            startAdornment: (
-                                                                <InputAdornment position="start" onClick={() => onEditComment(reply)}>
-                                                                    <SendIcon fontSize='small' style={{ color: deepPurple[300] }} />
-                                                                </InputAdornment>
-                                                            ),
-                                                        }}
-                                                    />
-                                                    {/* <IconButton className={classes.editButton} fontSize='small'>
-                                                        <SendIcon />
-                                                    </IconButton> */}
-                                                </Grid>
-                                            </Grid>
-                                        </FormControl>
-                                    }
-                                    secondary={'- ' + moment(reply.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
-                                />
-                                :
-                                <ListItemText
-                                    edge="end"
-                                    classes={{ root: classes.commentListText, primary: classes.commentListItemTextPrimary, secondary: classes.commentListItemTextSecondary }}
-                                    primary={reply.comment}
-                                    secondary={'- ' + moment(reply.createdAt).fromNow()}
-                                />
-                            }
-                            {props.common.isAuthenticated && props.common.user.id === reply.author.id ?
-                                <div>
-                                    {editForm && index === editIndex ?
-                                        <IconButton edge="end" onClick={() => setEditForm(false)}>
-                                            <CloseIcon fontSize='small' />
-                                        </IconButton>
-                                        :
-                                        <IconButton edge="end" onClick={() => { setEditComment(reply.comment); setEditForm(true); setEditIndex(index) }}>
-                                            <EditIcon className={classes.iconButton} fontSize='small' />
-                                        </IconButton>
-                                    }
-                                    <IconButton edge="end" onClick={() => { setReplyOpen(index) }}>
-                                        <ChatBubbleIcon className={classes.iconButton} fontSize='small' />
-                                    </IconButton>
-                                    <IconButton edge="end" onClick={() => onDeleteComment(reply)}>
-                                        <DeleteIcon className={classes.iconButton} fontSize='small' />
-                                    </IconButton>
-                                </div>
-                                :
-                                ''
-                            }
-                        </div>
-                        {replyOpen === index ?
-                            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                <Grid style={{ width: '75%' }}>
-                                    <div className={classes.commentField}>
-                                        <TextField
-                                            id="standard-basic"
-                                            fullWidth
-                                            value={subReply}
-                                            onChange={(event) => setSubReply(event.target.value)}
-                                            className={classes.commentInput}
-                                            onKeyPress={(ev) => {
-                                                if (ev.key === 'Enter') {
-                                                    replyComment(reply._id)
-                                                }
-                                            }}
-                                            InputProps={{
-                                                startAdornment: (
-                                                    <InputAdornment position="start">
-                                                        <ReplyIcon fontSize='small' style={{ color: deepPurple[300] }} />
-                                                    </InputAdornment>
-                                                ),
-                                            }}
-                                        />
-                                    </div>
-                                </Grid>
-                                <IconButton style={{ padding: '5px 12px 0 0', backgroundColor: 'transparent' }} aria-controls='edit-menu' aria-haspopup='true' onClick={() => setReplyOpen('')}>
-                                    <CloseIcon fontSize='small' onClick={() => setReplyOpen('')} />
-                                </IconButton>
-                            </div>
-                            :
-                            null
-                        }
-                    </ListItem>
-                    {reply.replies ?
-                        <RepliesList replies={reply.replies} common={props.common} artworkId={props.artworkId} handleEditComment={props.handleEditComment} fetchArtwork={props.fetchArtwork} handleDeleteComment={props.handleDeleteComment} handleAddReply={props.handleAddReply} />
-                        :
-                        ''
-                    }
-                </div>
-            ))}
-        </div>
-    )
-}
-
 
 const ExploreShow = (props) => {
     const [prev, setPrev] = useState('');
@@ -788,7 +590,7 @@ const ExploreShow = (props) => {
                             </Grid>
                         </ListSubheader>
                         <div style={{ margin: '10px' }}>
-                            <CommentList comments={props.explore.artworkData.comments} common={props.common} artworkId={props.history.location.state.artwork_id} handleEditComment={props.handleEditComment} fetchArtwork={props.fetchArtwork} handleDeleteComment={props.handleDeleteComment} handleAddReply={props.handleAddReply} />
+                            <CommentList comments={props.explore.artworkData.comments} common={props.common} artworkId={props.history.location.state.artwork_id} fetchArtwork={props.fetchArtwork} handleAddComment={props.handleAddComment} handleEditComment={props.handleEditComment} handleDeleteComment={props.handleDeleteComment} />
                         </div>
                     </List>
                 </div>
@@ -809,8 +611,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     handleDislikeArtwork,
     handleAddComment,
     handleEditComment,
-    handleDeleteComment,
-    handleAddReply
+    handleDeleteComment
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ExploreShow));

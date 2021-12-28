@@ -236,17 +236,6 @@ router.put('/:id/dislike', async (req, res) => {
                 res.json(dislike);
             }
         });
-
-        // const artwork = await Explore.findById(req.params.id);
-        // if (!req.body.user) {
-        //     return res.status(401).json({ msg: 'User not authorized!' })
-        // }
-        // console.log('body', artwork, req.body);
-        // artwork.like_count = req.body.likes;
-        // artwork.like_status = req.body.like_status;
-        // await artwork.save();
-        // console.log('likes updated', artwork.like_count);
-        // return res.json({ msg: artwork.like_count });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Failed to get likes count!');
@@ -264,7 +253,7 @@ router.post('/:id/comments/new', async (req, res) => {
             return res.status(401).json({ msg: 'User not authorized!' })
         }
         const newComment = new Comment({
-            comment: req.body.comment,
+            content: req.body.content,
             author: {
                 id: req.body.user.id,
                 username: req.body.user.username
@@ -361,15 +350,10 @@ router.put('/:id/comments/:comment_id', async (req, res) => {
             return res.status(401).json({ msg: 'Comment does not exist!' })
         }
 
-        // // Check user
-        // if (artwork.author.id !== editComment.author.id) {
-        //     return res.status(401).json({ msg: 'User not authorized!' });
-        // }
-
-        const newData = { comment: req.body.comment }
+        const newData = { content: req.body.content }
         await Comment.findByIdAndUpdate(
             req.params.comment_id,
-            { comment: newData.comment },
+            { content: newData.content },
             { new: true },
             async (err, comment) => {
                 if (err) {
@@ -377,7 +361,8 @@ router.put('/:id/comments/:comment_id', async (req, res) => {
                 } else {
                     const index = artwork.comments.findIndex(comment => comment === editComment);
                     artwork.comments[index] = comment;
-                    await artwork.save();
+                    console.log('edited comment', comment, index, artwork.comments);
+                    artwork.save();
                 }
             }
         );

@@ -2,8 +2,8 @@ import mongoose from 'mongoose';
 
 const commentSchema = new mongoose.Schema(
     {
-        comment: {
-            type: String,
+        content: {
+            type: String
         },
         author: {
             id: {
@@ -14,20 +14,6 @@ const commentSchema = new mongoose.Schema(
                 type: String
             }
         },
-        replies: [{
-            comment: {
-                type: String,
-            },
-            author: {
-                id: {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: 'User',
-                },
-                username: {
-                    type: String
-                }
-            }
-        }]
     },
     {
         timestamps: true,

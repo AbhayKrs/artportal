@@ -29,7 +29,7 @@ const exploreSchema = new mongoose.Schema(
         },
         // comments: ['Comment'],
         comments: [{
-            comment: {
+            content: {
                 type: String,
             },
             author: {
@@ -41,20 +41,6 @@ const exploreSchema = new mongoose.Schema(
                     type: String
                 }
             },
-            replies: [{
-                comment: {
-                    type: String,
-                },
-                author: {
-                    id: {
-                        type: mongoose.Schema.Types.ObjectId,
-                        ref: 'User',
-                    },
-                    username: {
-                        type: String
-                    }
-                }
-            }],
             createdAt: { type: Date },
             updatedAt: { type: Date }
         }],

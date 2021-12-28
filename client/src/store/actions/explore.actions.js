@@ -41,7 +41,7 @@ export const handleAddComment = (commentText, artworkID) => async (dispatch, get
             url: `http://localhost:4000/api/artworks/${artworkID}/comments/new`,
             method: 'POST',
             data: {
-                comment: commentText,
+                content: commentText,
                 user: getState().common.user
             }
         })
@@ -51,30 +51,13 @@ export const handleAddComment = (commentText, artworkID) => async (dispatch, get
     }
 }
 
-export const handleAddReply = (replyText, artworkID, commentID) => async (dispatch, getState) => {
-    console.log('handleAddReply');
-    try {
-        const replyData = await axios({
-            url: `http://localhost:4000/api/artworks/${artworkID}/comments/${commentID}/reply`,
-            method: 'PUT',
-            data: {
-                reply: replyText,
-                user: getState().common.user
-            }
-        })
-        console.log('commentData', replyData);
-    } catch (err) {
-        console.log('---error handleAddReply', err);
-    }
-}
-
 export const handleEditComment = (newComment, artworkID, commentID) => async (dispatch, getState) => {
     console.log('handleEditComment', artworkID, commentID);
     try {
         const editStatus = await axios({
             url: `http://localhost:4000/api/artworks/${artworkID}/comments/${commentID}`,
             method: 'PUT',
-            data: { comment: newComment, user: getState().common.user }
+            data: { content: newComment, user: getState().common.user }
         });
         console.log('editStatus', editStatus);
     } catch (err) {
