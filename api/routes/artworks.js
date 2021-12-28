@@ -201,13 +201,6 @@ router.put('/:id/like', async (req, res) => {
                 res.send(like);
             }
         });
-
-        // console.log('body', artwork, req.body);
-        // artwork.like_count = req.body.likes;
-        // artwork.like_status = req.body.like_status;
-        // await artwork.save();
-        // console.log('likes updated', artwork.like_count);
-        // return res.json({ msg: artwork.like_count });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Failed to get likes count!');
@@ -400,5 +393,64 @@ router.delete('/:id/comments/:comment_id', async (req, res) => {
         return res.status(500).send('Deleting a comment failed');
     }
 });
+
+// @route       PUT api/artworks/:id/comments/:comment_id/like
+// @desc        Like a comment
+// @access      Public
+router.put('/:id/comments/:comment_id/like', async (req, res) => {
+    const artwork = await Explore.findById(req.params.id);
+    try {
+        Comment.findByIdAndUpdate(req.params.comment_id, {
+            $push: {
+                likes: req.body.user.id
+            }
+        }, {
+            new: true
+        }).exec((err, likedComment) => {
+            if (err) {
+                res.status(500).send('Failed to like!');
+            } else {
+                console.log('ARTWORK COMMENT', artwork.comments.find(comment => { return comment._id.equals(likedComment._id) }))
+                artwork.comments.find(comment => { return comment._id.equals(likedComment._id) }).likes.push(req.body.user.id);
+                artwork.save();
+                res.send(likedComment);
+            }
+        });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Failed to get likes count!');
+    }
+})
+
+// @route       PUT api/artworks/:id/comments/:comment_id/dislike
+// @desc        Dislike a comment
+// @access      Public
+router.put('/:id/comments/:comment_id/dislike', async (req, res) => {
+    const artwork = await Explore.findById(req.params.id);
+    try {
+        if (!req.body.user) {
+            return res.status(401).json({ msg: 'User not authorized!' })
+        }
+        Comment.findByIdAndUpdate(req.params.comment_id, {
+            $pull: {
+                likes: req.body.user.id
+            }
+        }, {
+            new: true
+        }).exec((err, dislikedComment) => {
+            if (err) {
+                res.status(500).send('Failed to like!');
+            } else {
+                let likes = artwork.comments.find(comment => { return comment._id.equals(dislikedComment._id) }).likes;
+                likes.splice(likes.indexOf(req.body.user.id), 1);
+                artwork.save();
+                res.json(dislikedComment);
+            }
+        });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Failed to get likes count!');
+    }
+})
 
 export default router;

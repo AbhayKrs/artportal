@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { show, showTitle, InputAdornment, Chip, Typography, Grid, Box, IconButton, FormControl, Tooltip, Fab, Paper, Badge, Divider, TextField, ListItemSecondaryAction, Avatar, List, ListItem, ListItemAvatar, ListItemText, Card, CardContent, CardMedia, Menu, MenuItem, ListSubheader, ImageList } from '@material-ui/core';
+import { show, showTitle, InputAdornment, Chip, Typography, Grid, Box, IconButton, FormControl, Tooltip, Fab, Paper, Badge, Divider, TextField, ListItemSecondaryAction, Avatar, List, ListItem, ListItemAvatar, ListItemText, Card, CardContent, CardMedia, Menu, MenuItem, ListSubheader, ButtonGroup } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -18,17 +18,18 @@ import ReplyRoundedIcon from '@material-ui/icons/ReplyRounded';
 import SendIcon from '@material-ui/icons/Send';
 import UserIcon from '../../assets/images/panda.png';
 import AwardIcon from '../../assets/images/award_2.png';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import { grey, deepPurple, teal } from '@material-ui/core/colors';
+import { grey, deepPurple, teal, common } from '@material-ui/core/colors';
 import Carousel from 'react-material-ui-carousel';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import moment from 'moment';
 
 import darkHeart2 from '../../assets/images/darkHeart_transparent3.png';
-import { fetchArtworkList, fetchArtwork, handleLikeArtwork, handleDislikeArtwork, handleAddComment, handleEditComment, handleDeleteComment } from '../../store/actions/explore.actions';
+import { fetchArtworkList, fetchArtwork, handleLikeArtwork, handleDislikeArtwork, handleAddComment, handleEditComment, handleDeleteComment, handleLikeComment, handleDislikeComment } from '../../store/actions/explore.actions';
 
 const useStyles = makeStyles((theme) => ({
     gridRoot: {
@@ -292,7 +293,7 @@ const useStyles = makeStyles((theme) => ({
         color: grey[400]
     },
     iconButton: {
-        color: deepPurple[300]
+        color: teal[300]
     },
     heartIcon: {
         width: '225px',
@@ -326,7 +327,6 @@ const CommentList = (props) => {
     const [editForm, setEditForm] = useState('');
     const [editIndex, setEditIndex] = useState('');
     const [editComment, setEditComment] = useState('');
-    const [replyOpen, setReplyOpen] = useState('');
 
     const onDeleteComment = async (comment) => {
         await props.handleDeleteComment(props.artworkId, comment._id);
@@ -337,6 +337,14 @@ const CommentList = (props) => {
         setEditForm(false);
         props.fetchArtwork(props.artworkId);
         return false;
+    }
+    const handleToggleCommentLike = async (status, comment) => {
+        if (!status) {
+            await props.handleDislikeComment(props.artworkId, comment._id);
+        } else {
+            await props.handleLikeComment(props.artworkId, comment._id);
+        }
+        props.fetchArtwork(props.artworkId);
     }
 
     return (
@@ -401,8 +409,25 @@ const CommentList = (props) => {
                                     secondary={'- ' + moment(comment.createdAt).fromNow()}
                                 />
                             }
+                            <div style={{ display: 'flex' }}>
+                                {comment.likes.filter(item => item === props.common.user.id).length > 0 ?
+                                    <IconButton style={{ padding: '0 4px' }} disabled>
+                                        <ThumbUpIcon style={{ color: teal[400] }} fontSize='small' />
+                                    </IconButton>
+                                    :
+                                    <IconButton style={{ padding: '0 4px' }} onClick={() => { handleToggleCommentLike(true, comment) }}>
+                                        <ThumbUpIcon style={{ color: grey[700] }} fontSize='small' />
+                                    </IconButton>
+                                }
+                                <Typography variant='button' style={{ color: teal[400] }}>
+                                    {comment.likes.length}
+                                </Typography>
+                                <IconButton style={{ padding: '0 4px' }} onClick={() => { handleToggleCommentLike(false, comment) }}>
+                                    <ThumbDownIcon style={{ color: grey[700] }} fontSize='small' />
+                                </IconButton>
+                            </div>
                             {props.common.isAuthenticated && props.common.user.id === comment.author.id ?
-                                <div>
+                                <div style={{ marginLeft: '10px', borderLeft: `2px solid ${teal[400]}` }}>
                                     {editForm && index === editIndex ?
                                         <IconButton edge="end" onClick={() => setEditForm(false)}>
                                             <CloseIcon fontSize='small' />
@@ -430,7 +455,7 @@ const CommentList = (props) => {
 const ExploreShow = (props) => {
     const [prev, setPrev] = useState('');
     const [next, setNext] = useState('');
-    const [like, setLike] = useState(props.explore.artworkData.likes.filter(item => item === props.common.user.id).length > 0 ? true : false);
+    const [like, setLike] = useState(false);
     const [comment, setComment] = useState('');
     const classes = useStyles();
 
@@ -449,6 +474,11 @@ const ExploreShow = (props) => {
     useEffect(() => {
         const len = props.explore.artworkList.length;
         props.fetchArtwork(props.history.location.state.artwork_id);
+        if (props.explore.artworkData.likes.filter(item => item === props.common.user.id).length > 0) {
+            setLike(true);
+        } else {
+            setLike(false);
+        }
         props.explore.artworkList.forEach((item, index) => {
             if (item._id === props.explore.artworkData._id) {
                 if (index > 0) {
@@ -461,12 +491,10 @@ const ExploreShow = (props) => {
         })
     }, [props.explore.artworkData]);
 
-    const handleLike = async (likes) => {
+    const handleToggleLike = async (likes) => {
         if (likes.includes(props.common.user.id)) {
-            console.log('false');
             await props.handleDislikeArtwork(props.history.location.state.artwork_id, false);
         } else {
-            console.log('true');
             await props.handleLikeArtwork(props.history.location.state.artwork_id, true);
         }
         props.fetchArtwork(props.history.location.state.artwork_id);
@@ -475,7 +503,7 @@ const ExploreShow = (props) => {
     return (
         <Grid container className={classes.gridRoot} spacing={1}>
             <Grid item lg={7} xs={12} className={classes.imgGrid}>
-                <IconButton className={classes.likeButton} onClick={() => { setLike(!like); handleLike(props.explore.artworkData.likes) }} fontSize='large'>
+                <IconButton className={classes.likeButton} onClick={() => { setLike(!like); handleToggleLike(props.explore.artworkData.likes) }} fontSize='large'>
                     {like ?
                         <FavoriteIcon fontSize='large' />
                         :
@@ -510,15 +538,6 @@ const ExploreShow = (props) => {
                                 <Grid item xs={3} style={{ alignSelf: 'center' }}>
                                     <List>
                                         <ListItem disableGutters className={classes.statListItem}>
-                                            {/* <div
-                                                className={classes.heartIcon}
-                                                onClick={(ev) => {
-                                                    ev.target.className === classes.heartIcon ?
-                                                        ev.target.className = classes.heartIconClicked
-                                                        :
-                                                        ev.target.className = classes.heartIcon;
-                                                    handleLike(props.explore.artworkData.likes)
-                                                }}></div> */}
                                             <IconButton className={classes.statsButton}>
                                                 <ShareIcon />
                                             </IconButton>
@@ -562,10 +581,9 @@ const ExploreShow = (props) => {
                                     </List>
                                 </Grid>
                             </Grid>
-                            <Divider style={{ height: '3px', background: grey[400] }} />
+                            <Divider style={{ height: '3px', background: grey[600] }} />
                             <Grid style={{ marginTop: '10px' }}>
                                 <div className={classes.commentField}>
-                                    {/* <EditIcon fontSize='small' /> */}
                                     <TextField
                                         id="standard-basic"
                                         label={"Hey " + props.common.user.username + ", Let the artist know what you think"}
@@ -590,7 +608,7 @@ const ExploreShow = (props) => {
                             </Grid>
                         </ListSubheader>
                         <div style={{ margin: '10px' }}>
-                            <CommentList comments={props.explore.artworkData.comments} common={props.common} artworkId={props.history.location.state.artwork_id} fetchArtwork={props.fetchArtwork} handleAddComment={props.handleAddComment} handleEditComment={props.handleEditComment} handleDeleteComment={props.handleDeleteComment} />
+                            <CommentList comments={props.explore.artworkData.comments} common={props.common} artworkId={props.history.location.state.artwork_id} fetchArtwork={props.fetchArtwork} handleAddComment={props.handleAddComment} handleEditComment={props.handleEditComment} handleDeleteComment={props.handleDeleteComment} handleLikeComment={props.handleLikeComment} handleDislikeComment={props.handleDislikeComment} />
                         </div>
                     </List>
                 </div>
@@ -611,7 +629,9 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     handleDislikeArtwork,
     handleAddComment,
     handleEditComment,
-    handleDeleteComment
+    handleDeleteComment,
+    handleLikeComment,
+    handleDislikeComment
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ExploreShow));

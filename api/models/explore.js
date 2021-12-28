@@ -41,6 +41,11 @@ const exploreSchema = new mongoose.Schema(
                     type: String
                 }
             },
+            likes: [{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User',
+                default: ''
+            }],
             createdAt: { type: Date },
             updatedAt: { type: Date }
         }],
