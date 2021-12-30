@@ -48,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
     paperRoot: {
         marginTop: '10px',
         padding: '10px',
+        background: '#2a2a2a',
         [theme.breakpoints.up('lg')]: {
             margin: '10px 50px'
         }
@@ -224,6 +225,7 @@ const useStyles = makeStyles((theme) => ({
     secondaryShowcase: {
         [theme.breakpoints.down('md')]: {
             marginLeft: '5px',
+            display: 'block'
         }
     },
     userAvatar: {
@@ -268,9 +270,13 @@ const useStyles = makeStyles((theme) => ({
     priceRoot: {
         display: 'flex'
     },
+    pricePrimary: {
+        color: teal[400]
+    },
     priceSecondary: {
         margin: 'auto 5px 5.5px',
-        fontSize: '0.75rem'
+        fontSize: '0.75rem',
+        color: grey[400]
     },
     ratingProgressRoot: {
         height: 12,
@@ -284,8 +290,13 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: 5,
         backgroundColor: '#7258E9'
     },
+    rootRatingText: {
+        fontSize: '1.08rem',
+        color: '#7258E9'
+    },
     ratingText: {
-        fontSize: '0.75rem'
+        fontSize: '0.75rem',
+        color: '#7258E9'
     },
     avatarGroup: {
         height: '30px',
@@ -297,24 +308,34 @@ const useStyles = makeStyles((theme) => ({
         background: 'transparent'
     },
     userChipLabel: {
-        padding: '0 0 0 12px'
+        padding: '0 0 0 12px',
+        color: grey[500]
     },
     fab: {
-        zIndex: '2',
-        backgroundColor: deepPurple[900],
+        zIndex: 1100,
+        backgroundColor: grey[300],
         color: '#fff',
         margin: theme.spacing.unit,
         position: "fixed",
         bottom: theme.spacing.unit * 2,
         right: theme.spacing.unit * 3,
         '&:hover': {
-            color: deepPurple[900],
+            background: grey[100],
         }
     },
     badgeRoot: {
         height: '15px',
         width: '15px',
         minWidth: '15px'
+    },
+    authorRoot: {
+        textAlign: 'end'
+    },
+    authorPrimary: {
+        color: grey[400]
+    },
+    authorSecondary: {
+        color: grey[300]
     }
 }))
 
@@ -359,61 +380,63 @@ const StoreShow = (props) => {
                     <Grid item lg={6} xs={12} className={classes.showcaseImages}>
                         <img className={classes.primaryShowcase} src={`http://localhost:4000/api/artworks/image/${props.store.storeItemData.item}`} />
                         <Grid container spacing={1} className={classes.secondaryShowcase}>
-                            <Grid item md={4} xs={12}>
+                            <Grid item lg={4} xs={12}>
                                 <img src={`http://localhost:4000/api/artworks/image/${props.store.storeItemData.item}`} style={{ width: '100%', borderRadius: '10px' }} />
                             </Grid>
-                            <Grid item md={4} xs={12}>
+                            <Grid item lg={4} xs={12}>
                                 <img src={`http://localhost:4000/api/artworks/image/${props.store.storeItemData.item}`} style={{ width: '100%', borderRadius: '10px' }} />
                             </Grid>
-                            <Grid item md={4} xs={12}>
+                            <Grid item lg={4} xs={12}>
                                 <img src={`http://localhost:4000/api/artworks/image/${props.store.storeItemData.item}`} style={{ width: '100%', borderRadius: '10px' }} />
                             </Grid>
                         </Grid>
                     </Grid>
                     <Grid item lg={6} xs={12} style={{ padding: '15px' }}>
-                        <Typography variant='h4'>{props.store.storeItemData.title}</Typography>
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <ListItemText
-                                classes={{ root: classes.priceRoot, secondary: classes.priceSecondary }}
-                                primary={<Typography variant='h6' color='primary'>&#8377; {Number.parseFloat(props.store.storeItemData.price).toFixed(2)}</Typography>}
-                                secondary='including shipping + taxes'
-                            />
-                            <Button variant='contained' style={{ height: 'fit-content', background: deepPurple[500], color: grey[200] }} onClick={() => addToCart(props.store.storeItemData)}>Add to Cart</Button>
-                        </div>
-                        <Typography variant='body2' style={{ margin: '10px 0' }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        <Typography variant='h4' style={{ color: grey[300] }}>{props.store.storeItemData.title}</Typography>
+                        <ListItemText
+                            classes={{ root: classes.priceRoot, secondary: classes.priceSecondary }}
+                            primary={<Typography variant='h6' className={classes.pricePrimary}>&#8377; {Number.parseFloat(props.store.storeItemData.price).toFixed(2)}</Typography>}
+                            secondary='including shipping + taxes'
+                        />
+                        <Typography variant='body2' style={{ margin: '10px 0', color: grey[500] }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                             Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                         </Typography>
-                        <ListItemText
-                            style={{ textAlign: 'end' }}
-                            primary={
-                                <Chip
-                                    // style={{ background: 'transparent' }}
-                                    classes={{ root: classes.userChip, label: classes.userChipLabel }}
-                                    avatar={
-                                        <Avatar>
-                                            <img style={{ width: '100%' }} src={UserIcon} />
-                                        </Avatar>
-                                    }
-                                    label={props.store.storeItemData.seller.username}
-                                />}
-                            secondary={'Posted on ' + moment(props.store.storeItemData.createdAt).toDate().toLocaleString()}
-                        />
-                        <Paper elevation='3' style={{ padding: '10px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <Button variant='contained' style={{ height: 'fit-content', background: deepPurple[500], color: grey[200] }} onClick={() => addToCart(props.store.storeItemData)}>Add to Cart</Button>
+                            <ListItemText
+                                classes={{ root: classes.authorRoot, primary: classes.authorPrimary, secondary: classes.authorSecondary }}
+                                primary={
+                                    <Chip
+                                        // style={{ background: 'transparent' }}
+                                        classes={{ root: classes.userChip, label: classes.userChipLabel }}
+                                        avatar={
+                                            <Avatar>
+                                                <img style={{ width: '100%' }} src={UserIcon} />
+                                            </Avatar>
+                                        }
+                                        label={props.store.storeItemData.seller.username}
+                                    />}
+                                secondary={'Posted on ' + moment(props.store.storeItemData.createdAt).toDate().toLocaleString()}
+                            />
+                        </div>
+                        <Paper elevation='3' style={{ padding: '10px', background: '#323232' }}>
                             <List>
-                                <ListItem>Customer Reviews</ListItem>
-                                <ListItem style={{ display: 'block' }}>
-                                    <Box display="flex" alignItems="center">
+                                <ListItem style={{ color: grey[300], padding: '0 16px' }}>
+                                    <Typography variant='h6'>Customer Reviews</Typography>
+                                </ListItem>
+                                <ListItem style={{ display: 'block', paddingTop: 0 }}>
+                                    <Box display="flex">
                                         <Box mr={1}>
                                             <Rating
-                                                emptySymbol={<StarBorderIcon />}
-                                                fullSymbol={<StarIcon />}
+                                                emptySymbol={<StarBorderIcon style={{ color: '#7258E9' }} />}
+                                                fullSymbol={<StarIcon style={{ color: '#7258E9' }} />}
                                                 fractions={2}
                                                 initialRating={4.5}
                                                 onClick={rate => console.log('test rating', rate)}
                                             />
                                         </Box>
                                         <Box>
-                                            <Typography variant="body1" color="textSecondary" className={classes.ratingText}>4.5 out of 5</Typography>
+                                            <Typography variant="body1" color="textSecondary" className={classes.rootRatingText}>4.5 out of 5</Typography>
                                         </Box>
                                     </Box>
                                     <Box display="flex" alignItems="center">
@@ -505,8 +528,8 @@ const StoreShow = (props) => {
                                         <Avatar alt="Agnes Walker" src="https://randomuser.me/api/portraits/women/47.jpg" />
                                         <Avatar alt="Trevor Henderson" src="https://randomuser.me/api/portraits/women/47.jpg" />
                                     </AvatarGroup>
-                                    <Divider orientation="vertical" flexItem style={{ margin: '0 10px' }} />
-                                    <Typography variant='subtitle2'>6969 total ratings</Typography>
+                                    <Divider orientation="vertical" flexItem style={{ margin: '0 10px', background: grey[400] }} />
+                                    <Typography variant='subtitle2' style={{ color: grey[400] }}>6969 total ratings</Typography>
                                 </ListItem>
                             </List>
                         </Paper>
@@ -517,7 +540,7 @@ const StoreShow = (props) => {
                 <Tooltip Tooltip title="Cart" aria-label="add" onClick={props.handleCartOpen} style={{ borderRadius: '15px' }}>
                     <Fab className={classes.fab} >
                         <Badge badgeContent={props.common.user.cart_count} color="secondary" classes={{ badge: classes.badgeRoot }}>
-                            <ShoppingCartIcon />
+                            <ShoppingCartIcon style={{ color: deepPurple['A700'] }} />
                         </Badge>
                     </Fab>
                 </Tooltip>

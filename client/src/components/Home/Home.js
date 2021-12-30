@@ -231,6 +231,11 @@ const Home = (props) => {
                     navButtonsProps={{
                         className: classes.navButton
                     }}
+                    indicatorContainerProps={{
+                        style: {
+                            marginTop: 0
+                        }
+                    }}
                 >
                     {sliderContent}
                 </Carousel>

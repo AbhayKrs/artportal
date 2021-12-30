@@ -2,6 +2,7 @@ export const FETCH_ARTWORK = 'FETCH_ARTWORK';
 export const FETCH_ARTWORKLIST = 'FETCH_ARTWORKLIST';
 export const HANDLE_DIALOG_OPEN = 'HANDLE_DIALOG_OPEN';
 export const HANDLE_DIALOG_CLOSE = 'HANDLE_DIALOG_CLOSE';
+export const HANDLE_TABCHANGE = 'HANDLE_TABCHANGE';
 
 export const SKETCH_DETAILS_FAIL = 'SKETCH_DETAILS_FAIL';
 export const SKETCH_DELETE_REQUEST = 'SKETCH_DELETE_REQUEST';
@@ -58,6 +59,9 @@ export const exploreReducer = (state = initialState, { type, payload }) => {
         case HANDLE_DIALOG_CLOSE: {
             console.log('HANDLE_DIALOG_CLOSE', payload);
             return { ...state, activeDialog: payload }
+        }
+        case HANDLE_TABCHANGE: {
+            console.log('hello')
         }
         default:
             return state;

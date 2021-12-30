@@ -13,8 +13,9 @@ import { handleUploadArtwork } from '../../store/actions/upload.actions';
 
 const useStyles = makeStyles((theme) => ({
     uploadRoot: {
-        margin: '100px 50px',
-        padding: '40px',
+        margin: '100px 25px',
+        padding: '20px',
+        background: '#2a2a2a'
     },
     uploadContent: {
         width: '100%',
@@ -32,7 +33,10 @@ const useStyles = makeStyles((theme) => ({
     upldBtn: {
         padding: '5px',
         width: '95px',
-        float: 'right'
+        float: 'right',
+        '&:hover': {
+            cursor: 'pointer'
+        }
     },
     cardContent: {
         padding: '5px 5px 0 5px',
@@ -41,7 +45,10 @@ const useStyles = makeStyles((theme) => ({
         width: '40%'
     },
     imageLabel: {
-        display: 'flex'
+        display: 'flex',
+        '&:hover': {
+            cursor: 'pointer'
+        }
     },
     userChip: {
         margin: '2px 0 20px 0',
@@ -74,15 +81,28 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         color: deepPurple[500],
         '& .MuiFormLabel-root': {
-            color: pink[900],
+            color: deepPurple[400],
         },
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: deepPurple[400],
+            }
+        }
+    },
+    titleInputProp: {
+        color: grey[400]
     },
     descInput: {
         width: '100%',
         margin: '10px 0',
         '& .MuiFormLabel-root': {
-            color: pink[900],
+            color: deepPurple[400],
         },
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: deepPurple[400],
+            }
+        }
     },
     tagsInput: {
         margin: '10px 0'
@@ -100,6 +120,12 @@ const useStyles = makeStyles((theme) => ({
     chosenTags: {
         background: deepPurple[500],
         color: 'white'
+    },
+    tagsInputRoot: {
+        color: grey[400],
+        '& .MuiInput-underline:after': {
+            borderBottomColor: '#fff',
+        }
     }
 }));
 
@@ -120,8 +146,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Upload = (props) => {
     const [file, setFile] = useState('');
-    const [title, setTitle] = useState('test');
-    const [description, setDescription] = useState('test');
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
     const [uploadData, setUploadData] = useState({});
     const [progress, setProgress] = useState(0);
     const [selectedTag, setSelectedTag] = useState('');
@@ -208,7 +234,7 @@ const Upload = (props) => {
             <Grid container className={classes.uploadGrid}>
                 <div style={{ display: 'flex' }}>
                     <Grid item style={{ width: !file ? '100%' : '60%' }} className={classes.uploadContent}>
-                        <Typography variant='h5'>Upload a file</Typography>
+                        <Typography variant='h5' style={{ color: grey[300], marginBottom: '10px' }}>Upload a file</Typography>
                         <Card className={classes.upldBtn}>
                             <label className={classes.imageLabel}>
                                 <input
@@ -231,9 +257,13 @@ const Upload = (props) => {
                             id="filled-required"
                             label="Title"
                             variant="outlined"
+                            autoComplete="off"
                             className={classes.titleInput}
                             value={title}
                             onChange={handleTitleChange}
+                            InputProps={{
+                                className: classes.titleInputProp
+                            }}
                         />
                         <TextField
                             required
@@ -245,14 +275,19 @@ const Upload = (props) => {
                             className={classes.descInput}
                             value={description}
                             onChange={handleDescriptionChange}
+                            InputProps={{
+                                className: classes.titleInputProp
+                            }}
                         />
                         <FormControl fullWidth className={classes.tagsInput}>
-                            <InputLabel htmlFor="tags">Add tags to your artwork</InputLabel>
+                            <InputLabel htmlFor="tags" style={{ color: deepPurple[400] }}>Add tags to your artwork</InputLabel>
                             <Input
                                 id="tags"
                                 value={selectedTag}
+                                className={classes.tagsInputRoot}
+                                autoComplete="off"
                                 onChange={selectTags}
-                                startAdornment={<InputAdornment position="start">#</InputAdornment>}
+                                startAdornment={<InputAdornment position="start"><span style={{ color: grey[400] }}>#</span></InputAdornment>}
                             />
                             <Collapse in={selectedTag.length === 0 ? false : true}>
                                 <Paper elevation='3'>

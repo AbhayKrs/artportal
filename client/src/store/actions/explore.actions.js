@@ -4,7 +4,32 @@ import {
     FETCH_ARTWORKLIST,
     HANDLE_DIALOG_OPEN,
     HANDLE_DIALOG_CLOSE,
+    HANDLE_TABCHANGE
 } from '../reducers/explore.reducers';
+
+const dynamicSort = (property) => {
+    return (a, b) => {
+        var result = (a[property].toLowerCase() < b[property].toLowerCase()) ? -1 : (a[property].toLowerCase() > b[property].toLowerCase()) ? 1 : 0;
+        return result;
+    }
+}
+
+// function trendingCheck() {
+//     var createdAt = new Date(getState().explore.artworkList[0].createdAt)
+//     console.log('Trending', createdAt.getTime(), Date.now(), Date.now() - createdAt.getTime())
+//     // return function (a, b) {
+
+//     //     var result = 
+//     // }
+// }
+
+// if createdAt-1 is less than createdAt-2 then check if 
+const risingSort = (property) => {
+    return (a, b) => {
+        var result = (a[property].toLowerCase() < b[property].toLowerCase())
+        return result;
+    }
+}
 
 export const fetchArtwork = (artworkID) => async (dispatch, getState) => {
     try {
@@ -142,4 +167,30 @@ export const handleDislikeComment = (artworkID, commentID) => async (dispatch, g
     } catch (err) {
         console.log('---error handleDislikeComment', err);
     }
+}
+
+export const handleTabChange = (selectedTab) => async (dispatch, getState) => {
+    console.log('handleTabChange', selectedTab);
+    switch (selectedTab) {
+        case 'Latest': {
+            let artworkList = getState().explore.artworkList;
+            await dispatch({ type: FETCH_ARTWORKLIST, payload: artworkList.sort(dynamicSort('createdAt')) });
+            console.log('artworkList', typeof artworkList[0].createdAt, artworkList.sort(dynamicSort('createdAt'))[0]);
+            break;
+        }
+        case 'Trending': {
+            let artworkList = getState().explore.artworkList;
+
+            await dispatch({ type: FETCH_ARTWORKLIST, payload: artworkList.sort(dynamicSort('title')) });
+            break;
+        }
+        case 'Rising': {
+            let artworkList = getState().explore.artworkList;
+            await dispatch({ type: FETCH_ARTWORKLIST, payload: artworkList.sort(dynamicSort('title')) });
+            console.log('artworkList', typeof artworkList[0].createdAt, artworkList.sort(dynamicSort('title'))[0]);
+            break;
+        }
+        default: break;
+    }
+    dispatch({ type: HANDLE_TABCHANGE, payload: selectedTab })
 }

@@ -18,6 +18,7 @@ import StoreUpload from './StoreUpload';
 
 import { fetchStoreList } from '../../store/actions/store.actions';
 import { fetchCartList, handleCartOpen, handleCartClose, handleAddToCart, handleRemoveFromCart } from '../../store/actions/common.actions';
+
 const useStyles = makeStyles((theme) => ({
     storeRoot: {
         margin: '65px 0 0'
@@ -35,7 +36,9 @@ const useStyles = makeStyles((theme) => ({
         margin: '30px'
     },
     storeGrid: {
-        padding: '20px'
+        padding: '8px',
+        width: '100%',
+        margin: 0
     },
     mainTitle: {
         color: 'white',
@@ -61,7 +64,8 @@ const useStyles = makeStyles((theme) => ({
     cardContent: {
         padding: '0',
         position: 'relative',
-        paddingBottom: '150%'
+        paddingBottom: '150%',
+        border: `2px solid ${grey[300]}`
     },
     ratingRoot: {
         background: deepPurple[500],
@@ -93,7 +97,7 @@ const useStyles = makeStyles((theme) => ({
         MozBoxSizing: 'border-box',
         WebkitBoxSizing: 'border-box',
         boxSizing: 'border-box',
-        padding: '16px 10px',
+        padding: '16px 5px',
         position: 'absolute',
         width: '100%',
         zIndex: '1'
@@ -150,6 +154,7 @@ const useStyles = makeStyles((theme) => ({
     },
     actionRoot: {
         display: 'flex',
+        backgroundColor: grey[300],
         boxSizing: 'border-box',
         minHeight: '52px',
         padding: '8px',
@@ -197,15 +202,15 @@ const useStyles = makeStyles((theme) => ({
         height: 'fit-content',
     },
     fab: {
-        zIndex: '2',
-        backgroundColor: deepPurple[900],
+        zIndex: 1100,
+        backgroundColor: grey[300],
         color: '#fff',
         margin: theme.spacing.unit,
         position: "fixed",
         bottom: theme.spacing.unit * 2,
         right: theme.spacing.unit * 3,
         '&:hover': {
-            color: deepPurple[900],
+            background: grey[100],
         }
     }
 }))
@@ -238,7 +243,7 @@ const Store = (props) => {
                     <Button variant='contained' color='primary' className={classes.uploadBtn} onClick={() => props.history.push('/store/upload')}>Add to Store</Button>
                 </div>
             </div>
-            <Grid container spacing={2} className={classes.storeGrid}>
+            <Grid container spacing={1} className={classes.storeGrid}>
                 {props.store.storeList.map(item =>
                     <Grid key={item._id} item lg={3} xs={4}>
                         <Card className={classes.cardRoot}>
@@ -269,12 +274,10 @@ const Store = (props) => {
                             <div className={classes.actionRoot}>
                                 <div className={classes.actionGroup}>
                                     <Typography variant='body2' classes={{ root: classes.actionText, label: classes.actionLabel }} >&#8377;{Number.parseFloat(item.price).toFixed(2)}</Typography>
-                                    <Divider orientation='vertical' style={{ width: '2px', background: 'black' }} />
-                                </div>
-                                <div className={classes.actionIconGroup}>
                                     <IconButton className={classes.priceBtn} onClick={() => addToCart(item)}>
                                         <AddCircleIcon />
-                                    </IconButton >
+                                    </IconButton >                                </div>
+                                <div className={classes.actionIconGroup}>
                                     <IconButton className={classes.iconBtn}>
                                         <ShareIcon className={classes.actionIcon} />
                                     </IconButton>
@@ -291,7 +294,7 @@ const Store = (props) => {
                 <Tooltip Tooltip title="Cart" aria-label="add" onClick={props.handleCartOpen} style={{ borderRadius: '15px' }}>
                     <Fab className={classes.fab} >
                         <Badge badgeContent={props.common.user.cart_count} color="secondary" classes={{ badge: classes.badgeRoot }}>
-                            <ShoppingCartIcon />
+                            <ShoppingCartIcon style={{ color: deepPurple['A700'] }} />
                         </Badge>
                     </Fab>
                 </Tooltip>

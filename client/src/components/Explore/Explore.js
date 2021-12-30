@@ -41,11 +41,12 @@ const useStyles = makeStyles((theme) => ({
         color: '#fff',
         margin: theme.spacing.unit,
         position: "fixed",
-        bottom: theme.spacing.unit * 2,
-        left: theme.spacing.unit * 3,
+        bottom: 10,
+        left: 10,
         '&:hover': {
             color: deepPurple[700],
-        }
+        },
+        zIndex: '1101'
     }
 }))
 
@@ -59,12 +60,12 @@ const MasonryLayout = props => {
     useEffect(() => {
         if (window.innerWidth < 376) {
             setColumns(1);
-        } else if (window.innerWidth <= 768) {
+        } else if (window.innerWidth <= 925) {
             setColumns(3);
         }
         const handleResize = () => {
             console.log('resized to: ', window.innerWidth, 'x', window.innerHeight)
-            if (window.innerWidth < 768) {
+            if (window.innerWidth < 925) {
                 setColumns(3);
             } else if (window.innerWidth < 376) {
                 setColumns(1);

@@ -1,6 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Card, CardContent, CardActions, Button, Grid, Box, Tabs, Tab, } from '@material-ui/core';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { withRouter } from 'react-router-dom';
+import { Typography, Card, CardContent, ListItemText, Button, Grid, Box, Tabs, Tab, Avatar } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     profileRoot: {
@@ -15,8 +18,42 @@ const useStyles = makeStyles((theme) => ({
         backgroundPosition: '50%',
         backgroundSize: 'cover'
     },
+    profileBody: {
+        width: '100%',
+        position: 'relative'
+    },
+    profileBodyRoot: {
+        marginBottom: 0,
+        position: 'relative'
+    },
+    profileBodyBackdrop: {
+        backgroundImage: 'linear-gradient(180deg, rgba(6,7,13,0) 0, black 70%, black)',
+        position: 'relative',
+        inset: '350px 0 0',
+        width: '100%',
+        height: 300,
+        transform: 'translateY(-100%)'
+    },
+    profileTabRoot: {
+        flexGrow: 1,
+        position: 'relative',
+        background: 'black',
+        padding: '15px'
+    },
+    profileTabHeader: {
+        display: 'flex',
+        background: 'white',
+        padding: '20px 20px 0'
+    },
     tabs: {
         borderRight: `1px solid ${theme.palette.divider}`,
+    },
+    sellerThumbnail: {
+        borderRadius: '50%',
+        float: 'left',
+        width: '100px',
+        height: '100px',
+        marginTop: '-50px'
     },
 }));
 
@@ -47,7 +84,7 @@ function a11yProps(index) {
     };
 }
 
-const Profile = () => {
+const Profile = (props) => {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
 
@@ -57,90 +94,67 @@ const Profile = () => {
     return (
         <div className={classes.profileRoot}>
             <div className={classes.profileHeader}></div>
-            <div style={{
-                width: '100%',
-                position: 'relative'
-            }}>
-                <div style={{
-                    minHeight: 700,
-                    marginBottom: 0,
-                    position: 'relative'
-                }}>
-                    <div style={{
-                        backgroundImage: 'linear-gradient(180deg, rgba(6,7,13,0) 0, black 70%, black)',
-                        position: 'relative',
-                        inset: '626px 0 0',
-                        width: '100%',
-                        height: 500,
-                        transform: 'translateY(-100%)',
-                    }}></div>
-                    <div style={{ display: 'flex', flexGrow: 1, position: 'relative', background: 'black', padding: '20px' }}>
-                        {/* <Grid container style={{ transform: 'translateY(-25%)' }}>
-                            <Grid item xs={2}>hello</Grid>
-                            <Grid item xs={10}>
-                                {[0, 1, 2, 3, 4].map(item => (
-                                    <Card style={{ position: 'relative', margin: '10px auto', width: '80%' }}>
-                                        <CardContent>
-                                            <Typography className={classes.title} color="textSecondary" gutterBottom>
-                                                Word of the Day
-                                            </Typography>
-                                            <Typography variant="h5" component="h2">
-                                                benevolent
-                                            </Typography>
-                                            <Typography className={classes.pos} color="textSecondary">
-                                                adjective
-                                            </Typography>
-                                            <Typography variant="body2" component="p">
-                                                well meaning and kindly.
-                                                <br />
-                                                {'"a benevolent smile"'}
-                                            </Typography>
-                                        </CardContent>
-                                        <CardActions>
-                                            <Button size="small">Learn More</Button>
-                                        </CardActions>
-                                    </Card>
-                                ))}
-                            </Grid>
-                        </Grid> */}
+            <div className={classes.profileBody}>
+                <div className={classes.profileBodyRoot}>
+                    <div className={classes.profileBodyBackdrop}></div>
+                    <div className={classes.profileTabRoot}>
+                        <div className={classes.profileTabHeader}>
+                            <ListItemText
+                                primary={<Typography variant='h4'>{props.user.name}</Typography>}
+                                secondary={<Typography variant='subtitle2'># {props.user.username}</Typography>}
+                            />
+                            <Avatar className={classes.sellerThumbnail}>
+                                <img src="https://randomuser.me/api/portraits/women/47.jpg" alt="" width="100" height="100" className={classes.sellerAvatar} />
+                            </Avatar>
+                        </div>
                         <Tabs
-                            orientation="vertical"
-                            variant="scrollable"
+                            orientation="horizontal"
+                            // variant="scrollable"
                             value={value}
                             onChange={handleChange}
                             aria-label="Vertical tabs example"
                             className={classes.tabs}
                             style={{ position: 'relative', background: 'white' }}
                         >
-                            <Tab label="Item One" {...a11yProps(0)} />
-                            <Tab label="Item Two" {...a11yProps(1)} />
-                            <Tab label="Item Three" {...a11yProps(2)} />
-                            <Tab label="Item Four" {...a11yProps(3)} />
-                            <Tab label="Item Five" {...a11yProps(4)} />
-                            <Tab label="Item Six" {...a11yProps(5)} />
-                            <Tab label="Item Seven" {...a11yProps(6)} />
+                            <Tab label="Overview" {...a11yProps(0)} />
+                            <Tab label="Uploads" {...a11yProps(1)} />
+                            <Tab label="Store" {...a11yProps(2)} />
+                            <Tab label="Prizes Recieved" {...a11yProps(3)} />
+                            <Tab label="Prizes Given" {...a11yProps(4)} />
+                            {/* <Tab label="Item Six" {...a11yProps(5)} />
+                            <Tab label="Item Seven" {...a11yProps(6)} /> */}
                         </Tabs>
                         <TabPanel style={{ width: '100%', background: 'white' }} value={value} index={0}>
-                            Item One
+                            <div style={{ display: 'flex', minHeight: 500 }}>
+                                <Typography variant='button' style={{ margin: 'auto' }}>test</Typography>
+                            </div>
                         </TabPanel>
                         <TabPanel style={{ width: '100%', background: 'white' }} value={value} index={1}>
-                            Item Two
+                            <div style={{ display: 'flex', minHeight: 500 }}>
+                                <Typography variant='button' style={{ margin: 'auto' }}>test</Typography>
+                            </div>
                         </TabPanel>
                         <TabPanel style={{ width: '100%', background: 'white' }} value={value} index={2}>
-                            Item Three
+                            <div style={{ display: 'flex', minHeight: 500 }}>
+                                <Typography variant='button' style={{ margin: 'auto' }}>test</Typography>
+                            </div>
                         </TabPanel>
                         <TabPanel style={{ width: '100%', background: 'white' }} value={value} index={3}>
-                            Item Four
+                            <div style={{ display: 'flex', minHeight: 500 }}>
+                                <Typography variant='button' style={{ margin: 'auto' }}>test</Typography>
+                            </div>
                         </TabPanel>
                         <TabPanel style={{ width: '100%', background: 'white' }} value={value} index={4}>
-                            Item Five
+                            <div style={{ display: 'flex', minHeight: 500 }}>
+                                <Typography variant='button' style={{ margin: 'auto' }}>test</Typography>
+                            </div>
                         </TabPanel>
-                        <TabPanel style={{ width: '100%', background: 'white' }} value={value} index={5}>
+                        {/* <TabPanel style={{ width: '100%', background: 'white' }} value={value} index={5}>
                             Item Six
                         </TabPanel>
                         <TabPanel style={{ width: '100%', background: 'white' }} value={value} index={6}>
                             Item Seven
-                        </TabPanel>
+                        </TabPanel> */}
                     </div>
                 </div>
             </div>
@@ -149,4 +163,13 @@ const Profile = () => {
     )
 }
 
-export default Profile
+const mapStateToProps = (state, props) => ({
+    user: state.common.user,
+    common: state.common,
+    store: state.store
+})
+
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Profile));

@@ -84,7 +84,8 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     loggedinIcons: {
-        display: 'flex'
+        display: 'flex',
+        marginLeft: '12px'
     },
     userIcon: {
         margin: 'auto',
@@ -276,7 +277,8 @@ const useStyles = makeStyles((theme) => ({
         width: '100%'
     },
     tokenHead: {
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color: grey[900]
     },
     tokenContent: {
         alignItems: 'center',
@@ -410,7 +412,7 @@ const Header = (props) => {
                                             <img src={TokenIcon} className={classes.tokenIcon} />
                                         </Avatar>
                                         <ListItemText
-                                            primary={<Typography className={classes.tokenHead} color="inherit">Tokens</Typography>}
+                                            primary={<Typography className={classes.tokenHead}>Tokens</Typography>}
                                             secondary={
                                                 <Typography className={classes.tokenContent} variant='subtitle2' color="inherit">
                                                     0 tokens

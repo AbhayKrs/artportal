@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import { grey, deepPurple } from '@material-ui/core/colors';
 
 import { getTags } from '../../store/actions/common.actions';
-import { fetchArtworkList } from '../../store/actions/explore.actions';
+import { fetchArtworkList, handleTabChange } from '../../store/actions/explore.actions';
 
 const useStyles = makeStyles((theme) => ({
     panelRoot: {
@@ -246,18 +246,16 @@ const HomeTabPanel = (props) => {
     const [tabSort, setTabSort] = useState(2);
     const classes = useStyles();
     const handleTabsChange = (event, updatedTab) => {
-        console.log(updatedTab);
-        setTabValue(updatedTab)
+        setTabValue(updatedTab);
     }
     const handleSortSelect = (event) => {
-        console.log(event.target.value);
-        setTabSort(event.target.value)
+        console.log('SORT SELECTED', event.target.options[event.target.selectedIndex].value, event.target.options[event.target.selectedIndex].text);
+        setTabSort(event.target.options[event.target.selectedIndex].value);
+        props.handleTabChange(event.target.options[event.target.selectedIndex].text);
     }
     useEffect(() => {
-        console.log('test', props);
         props.fetchArtworkList();
         props.getTags();
-        console.log(props.tabPanelData)
     }, []);
     return (
         <div>
@@ -324,6 +322,7 @@ const mapStateToProps = (state, props) => ({
 const mapDispatchToProps = (dispatch) => bindActionCreators({
     getTags,
     fetchArtworkList,
+    handleTabChange
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(HomeTabPanel))

@@ -20,6 +20,16 @@ import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 const useStyles = makeStyles((theme) => ({
     root: {
         backgroundColor: 'rgb(29, 29, 31)',
+        borderTop: "1px solid #333",
+        textAlign: "center",
+        padding: 0,
+        position: "static",
+        left: "0",
+        bottom: "0",
+        width: "100%",
+        [theme.breakpoints.down('md')]: {
+            height: 'auto',
+        }
     },
     footerToolbar: {
         padding: '20px',

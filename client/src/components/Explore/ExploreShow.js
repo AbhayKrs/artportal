@@ -111,7 +111,7 @@ const useStyles = makeStyles((theme) => ({
         padding: '0 10px',
         width: '100%',
         color: grey[600],
-        wordBreak: 'break-all'
+        wordBreak: 'break-word'
     },
     statsButton: {
         color: deepPurple[400],
@@ -172,7 +172,7 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: '0px 3px 3px -2px rgb(0 0 0 / 20%), 3px 2px 4px 0px rgb(0 0 0 / 10%), 3px 2px 8px 0px rgb(0 0 0 / 10%)'
     },
     commentListItem: {
-        background: '#2a2a2a',
+        background: '#323232',
         margin: '5px 0',
         borderRadius: '10px',
         // padding: '8px',
@@ -538,15 +538,21 @@ const ExploreShow = (props) => {
                                 <Grid item xs={3} style={{ alignSelf: 'center' }}>
                                     <List>
                                         <ListItem disableGutters className={classes.statListItem}>
-                                            <IconButton className={classes.statsButton}>
-                                                <ShareIcon />
-                                            </IconButton>
-                                            <IconButton className={classes.statsButton}>
-                                                <BookmarkIcon />
-                                            </IconButton>
-                                            <IconButton className={classes.statsButton}>
-                                                <img style={{ width: '32px', height: '32px' }} src={AwardIcon} />
-                                            </IconButton>
+                                            <Tooltip title='Share'>
+                                                <IconButton className={classes.statsButton}>
+                                                    <ShareIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title='Save Artwork'>
+                                                <IconButton className={classes.statsButton}>
+                                                    <BookmarkIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title='Award'>
+                                                <IconButton className={classes.statsButton}>
+                                                    <img style={{ width: '32px', height: '32px' }} src={AwardIcon} />
+                                                </IconButton>
+                                            </Tooltip>
                                         </ListItem>
                                         <ListItem disableGutters className={classes.statListItem}>
                                             <IconButton disabled style={{ color: teal[400] }} className={classes.statsButton}>

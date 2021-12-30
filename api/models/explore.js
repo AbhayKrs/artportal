@@ -65,7 +65,7 @@ const exploreSchema = new mongoose.Schema(
         }]
     },
     {
-        timestamps: true,
+        timestamps: true
     }
 );
 
