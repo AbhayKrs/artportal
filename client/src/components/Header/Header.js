@@ -395,11 +395,11 @@ const Header = (props) => {
                                     <Typography variant='subtitle1' className={classes.userTitle}>
                                         {props.common.user.name}
                                     </Typography>
-                                    <Avatar variant='rounded' className={classes.themeBtn} style={{ background: theme ? grey[900] : grey[200] }} onClick={handleThemeChange}>
-                                        <Zoom in={!theme} className={classes.themeIconFade} style={{ transitionDelay: theme ? '0ms' : '150ms' }}>
+                                    <Avatar variant='rounded' className={classes.themeBtn} style={{ background: !theme ? grey[900] : grey[200] }} onClick={handleThemeChange}>
+                                        <Zoom in={theme} className={classes.themeIconFade} style={{ transitionDelay: !theme ? '0ms' : '150ms' }}>
                                             <img src={LightMode} className={classes.themeIcon} />
                                         </Zoom>
-                                        <Zoom in={theme} style={{ transitionDelay: theme ? '150ms' : '0ms' }}>
+                                        <Zoom in={!theme} style={{ transitionDelay: !theme ? '150ms' : '0ms' }}>
                                             <img src={DarkMode} />
                                         </Zoom>
                                     </Avatar>

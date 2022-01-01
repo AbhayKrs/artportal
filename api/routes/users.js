@@ -69,12 +69,17 @@ router.post("/login", (req, res) => {
             if (isMatch) {
                 // User matched - Create JWT Payload
                 console.log('user details', user);
-                const payload = { id: user.id, name: user.name, username: user.username, email: user.email, cart: user.cart, cart_count: user.cart_count };
+                const payload = {
+                    id: user._id,
+                    name: user.name,
+                    username: user.username,
+                    email: user.email,
+                };
                 jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 31556926 },
                     (err, token) => {
                         res.json({
                             success: true,
-                            token: "Bearer " + token,
+                            token: "Bearer " + token
                         });
                     }
                 );
@@ -267,6 +272,27 @@ router.put('/:id', async (req, res) => {
     } else {
         res.status(404);
         throw new Error('User not found');
+    }
+});
+
+// @route       GET api/users/:id/cart
+// @desc        Get all cart items
+// @access      Public
+router.get('/:id/artworks', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        console.log('get user artworks', user.artworks);
+        if (!user.cart) {
+            return res.status(400).send({ msg: 'Artworklist not found' });
+        }
+        const artworktData = {
+            artworks: user.artworks,
+            artwork_count: user.artwork_count
+        }
+        res.json(artworktData);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Unable to fetch cart items');
     }
 });
 

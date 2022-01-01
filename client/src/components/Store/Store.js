@@ -223,7 +223,6 @@ const Store = (props) => {
 
     useEffect(() => {
         props.fetchStoreList();
-        props.fetchCartList();
     }, [])
 
     const addToCart = async (item) => {

@@ -7,6 +7,7 @@ import {
     HANDLE_CART_OPEN,
     HANDLE_CART_CLOSE,
     HANDLE_VERIFY_USER,
+    FETCH_USER_ARTWORKLIST,
     FETCH_CARTLIST,
     PUSH_TO_CART,
     EDIT_CARTLIST,
@@ -49,7 +50,7 @@ export const getTags = () => (dispatch, getState) => {
 }
 
 export const handleVerifyUser = (userData) => (dispatch, getState) => {
-    console.log('handleVerifyUser invoked');
+    console.log('handleVerifyUser invoked', userData);
     try {
         dispatch({ type: HANDLE_VERIFY_USER, payload: userData });
     } catch (err) {
@@ -127,6 +128,17 @@ export const handleSignUp = (userData) => async (dispatch, getState) => {
             })
     } catch (err) {
         console.log('---error handleSignup', err);
+    }
+}
+
+export const fetchUserArtworkList = () => async (dispatch, getState) => {
+    console.log('fetchUserArtworkList invoked', getState().common);
+    try {
+        const userID = getState().common.user.id;
+        const artworkData = await axios.get(`http://localhost:4000/api/users/${userID}/artworks`);
+        await dispatch({ type: FETCH_USER_ARTWORKLIST, payload: artworkData.data });
+    } catch (err) {
+        console.log('---error fetchUserArtworkList', err)
     }
 }
 

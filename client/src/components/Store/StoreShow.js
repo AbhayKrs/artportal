@@ -348,7 +348,6 @@ const StoreShow = (props) => {
 
     useEffect(async () => {
         await props.fetchStoreList();
-        await props.fetchCartList();
         await props.fetchStoreItem(id);
     }, [])
 

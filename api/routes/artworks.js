@@ -56,7 +56,6 @@ const upload = multer({ storage });
 router.get('/', async (req, res) => {
     try {
         const artworks = await Explore.find({});
-        // console.log('get artworks', artworks);
         if (!artworks) {
             return res.status(400).send({ msg: 'Artworks not found' });
         }
@@ -76,7 +75,6 @@ router.get('/:id', async (req, res) => {
         if (!artwork) {
             return res.status(400).send({ msg: 'Artwork not found' });
         }
-        // console.log('artwork, next, prev', artwork);
         res.json(artwork);
     } catch (err) {
         // console.error(err.message);
@@ -111,6 +109,9 @@ router.post('/new', upload.single('file'),
             if (err) {
                 console.log(err);
             } else {
+                user.artworks.push(artwork);
+                user.artwork_count = user.artworks.length;
+                user.save();
                 res.send(artwork);
             }
         });
