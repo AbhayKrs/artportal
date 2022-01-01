@@ -10,23 +10,27 @@ import { grey, deepPurple, teal, pink } from '@material-ui/core/colors';
 const useStyles = makeStyles((theme) => ({
     profileRoot: {
         margin: '65px 0 0',
-    },
-    profileHeader: {
         backgroundImage: 'url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d14808a6-d6ac-49ac-bf38-62fa7ecd9808/ddsbe5i-e635f976-9a0f-4b45-88f7-2aaf4ab5ba22.jpg/v1/fill/w_1280,h_640,q_75,strp/alien_jungle_banner_deviantart_by_ahaas_ddsbe5i-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NjQwIiwicGF0aCI6IlwvZlwvZDE0ODA4YTYtZDZhYy00OWFjLWJmMzgtNjJmYTdlY2Q5ODA4XC9kZHNiZTVpLWU2MzVmOTc2LTlhMGYtNGI0NS04OGY3LTJhYWY0YWI1YmEyMi5qcGciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.S6SDvWTfBop0Rep4LqE5qNmLlJowodQCM0TptvJN_gs)',
-        position: 'fixed',
-        top: '54px',
-        height: 470,
+        backgroundSize: 'contain',
         width: '100%',
-        backgroundPosition: '50%',
-        backgroundSize: 'cover'
+        //     position: 'fixed',
     },
+    // profileHeader: {
+    //     backgroundImage: 'url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d14808a6-d6ac-49ac-bf38-62fa7ecd9808/ddsbe5i-e635f976-9a0f-4b45-88f7-2aaf4ab5ba22.jpg/v1/fill/w_1280,h_640,q_75,strp/alien_jungle_banner_deviantart_by_ahaas_ddsbe5i-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NjQwIiwicGF0aCI6IlwvZlwvZDE0ODA4YTYtZDZhYy00OWFjLWJmMzgtNjJmYTdlY2Q5ODA4XC9kZHNiZTVpLWU2MzVmOTc2LTlhMGYtNGI0NS04OGY3LTJhYWY0YWI1YmEyMi5qcGciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.S6SDvWTfBop0Rep4LqE5qNmLlJowodQCM0TptvJN_gs)',
+    //     position: 'fixed',
+    //     top: '54px',
+    //     height: 470,
+    //     width: '100%',
+    //     backgroundPosition: '50%',
+    //     backgroundSize: 'cover'
+    // },
     profileBody: {
         width: '100%',
         position: 'relative'
     },
     profileBodyRoot: {
         marginBottom: 0,
-        position: 'relative'
+        position: 'relative',
     },
     profileBodyBackdrop: {
         backgroundImage: 'linear-gradient(180deg, rgba(6,7,13,0) 0, black 70%, black)',
@@ -112,7 +116,7 @@ const MasonryLayout = props => {
         }
         const handleResize = () => {
             console.log('resized to: ', window.innerWidth, 'x', window.innerHeight)
-            if (window.innerWidth < 925) {
+            if (window.innerWidth <= 925) {
                 setColumns(3);
             } else if (window.innerWidth < 376) {
                 setColumns(1);
@@ -121,7 +125,7 @@ const MasonryLayout = props => {
             }
         }
         window.addEventListener("resize", handleResize);
-    }, [])
+    })
 
     // create columns
     for (let i = 0; i < columns; i++) {
@@ -170,7 +174,6 @@ const Profile = (props) => {
 
     return (
         <div className={classes.profileRoot}>
-            <div className={classes.profileHeader}></div>
             <div className={classes.profileBody}>
                 <div className={classes.profileBodyRoot}>
                     <div className={classes.profileBodyBackdrop}></div>
@@ -178,7 +181,7 @@ const Profile = (props) => {
                         <ListItemText
                             style={{ zIndex: 1 }}
                             primary={<Typography variant='h2' className={classes.profileNamePrimary}>{props.user.name}</Typography>}
-                            secondary={<div style={{ display: 'flex' }}>
+                            secondary={<div style={{ display: 'flex', margin: '10px 0' }}>
                                 <Typography variant='h6' className={classes.profileNameSecondary}># {props.user.username}</Typography>
                                 <Button variant='contained' size='small' style={{ height: 'fit-content', background: deepPurple[500], color: grey[200], margin: '0 5px 0 10px' }}>Follow</Button>
                                 <Button variant='contained' size='small' style={{ height: 'fit-content', background: grey[200], color: deepPurple[500], margin: '0 5px 0 10px' }}>Message</Button>
@@ -212,7 +215,7 @@ const Profile = (props) => {
                             {/* <Tab label="Item Six" {...a11yProps(5)} />
                             <Tab label="Item Seven" {...a11yProps(6)} /> */}
                         </Tabs>
-                        <TabPanel style={{ width: '100%', background: '#2a2a2a', borderRadius: '0 0 15px 15px' }} value={value} index={0}>
+                        <TabPanel style={{ width: '100%', background: '#2a2a2a' }} value={value} index={0}>
                             <div className={classes.exploreGrid}>
                                 {props.user.artwork_count > 0 ?
                                     <MasonryLayout className={classes.layout}>
