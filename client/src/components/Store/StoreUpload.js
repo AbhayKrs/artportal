@@ -8,7 +8,7 @@ import { pink, grey, deepPurple, common } from '@material-ui/core/colors';
 import PublishIcon from '@material-ui/icons/Publish';
 import UserIcon from '../../assets/images/panda.png';
 
-import { setError, getTags } from '../../store/actions/common.actions';
+import { setError } from '../../store/actions/common.actions';
 import { handleStoreUpload } from '../../store/actions/store.actions';
 
 const useStyles = makeStyles((theme) => ({
@@ -109,8 +109,6 @@ const StoreUpload = (props) => {
     const [price, setPrice] = useState(0);
     const [uploadData, setUploadData] = useState({});
     const [progress, setProgress] = useState(0);
-    const [selectedTag, setSelectedTag] = useState('');
-    const [tags, setTags] = useState([]);
 
     useEffect(() => {
         console.log('test', !file)
@@ -140,23 +138,9 @@ const StoreUpload = (props) => {
             price: event.target.value
         })
     }
-    const selectTags = (event) => {
-        setSelectedTag(event.target.value)
-    }
-    const addTags = (tag) => {
-        if (tags.filter(item => item == tag).length === 0) {
-            setTags(prevTags => [...prevTags, tag]);
-        } else {
-            const errorData = {
-                open: true,
-                message: 'Tag Selected Already!',
-                severity: 'warning'
-            }
-            props.setError(errorData)
-        }
-    }
+
     const handleUpload = () => {
-        if (file.length === 0 || title.length === 0 || description.length === 0 || tags.length === 0) {
+        if (file.length === 0 || title.length === 0 || description.length === 0) {
             const errorData = {
                 open: true,
                 message: 'Please fill all the required fields!',
@@ -174,7 +158,6 @@ const StoreUpload = (props) => {
         formData.append('price', price);
         formData.append('rating', 5);
         formData.append('userId', userId);
-        tags.map(item => formData.append('tags[]', item));
 
         console.log('formData', formData);
 
@@ -192,10 +175,6 @@ const StoreUpload = (props) => {
             });
     }
     const classes = useStyles();
-
-    useEffect(() => {
-        props.getTags();
-    }, []);
 
     return (
         <Paper elevation={3} className={classes.uploadRoot}>
@@ -240,26 +219,6 @@ const StoreUpload = (props) => {
                             value={description}
                             onChange={handleDescriptionChange}
                         />
-                        <FormControl fullWidth className={classes.tagsInput}>
-                            <InputLabel htmlFor="tags">Add tags to your artwork</InputLabel>
-                            <Input
-                                id="tags"
-                                value={selectedTag}
-                                onChange={selectTags}
-                                startAdornment={<InputAdornment position="start">#</InputAdornment>}
-                            />
-                            <Collapse in={selectedTag.length === 0 ? false : true}>
-                                <Paper elevation='3'>
-                                    <List className={classes.tagList}>
-                                        {props.common.tags.filter(tag => tag.includes(selectedTag)).map(tag => (
-                                            <ListItem button onClick={() => addTags(tag)}>
-                                                <ListItemText primary={<Typography variant='subtitle2' className={classes.tagText}># {tag}</Typography>} />
-                                            </ListItem>
-                                        ))}
-                                    </List>
-                                </Paper>
-                            </Collapse>
-                        </FormControl>
                         <FormControl fullWidth className={classes.margin} variant="outlined">
                             <InputLabel htmlFor="outlined-adornment-amount">Price</InputLabel>
                             <OutlinedInput
@@ -270,9 +229,6 @@ const StoreUpload = (props) => {
                                 labelWidth={60}
                             />
                         </FormControl>
-                        {tags.map(chosenTag => (
-                            <Chip size='small' label={chosenTag} className={classes.chosenTags} />
-                        ))}
                     </Grid>
                     {file &&
                         <Grid item className={classes.imageGrid}>
@@ -303,7 +259,6 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
     setError,
-    getTags,
     handleStoreUpload
 }, dispatch);
 

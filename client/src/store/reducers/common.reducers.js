@@ -8,6 +8,7 @@ export const HANDLE_HEADER_DIALOG_CLOSE = 'HANDLE_HEADER_DIALOG_CLOSE';
 export const HANDLE_CART_OPEN = 'HANDLE_CART_OPEN';
 export const HANDLE_CART_CLOSE = 'HANDLE_CART_CLOSE';
 export const FETCH_USER_ARTWORKLIST = 'FETCH_USER_ARTWORKLIST';
+export const FETCH_USER_STORELIST = 'FETCH_USER_STORELIST';
 export const FETCH_CARTLIST = 'FETCH_CARTLIST';
 export const PUSH_TO_CART = 'PUSH_TO_CART';
 export const REMOVE_FROM_CART = 'REMOVE_FROM_CART';
@@ -38,6 +39,8 @@ export const initialState = {
         email: '',
         artworks: [],
         artwork_count: 0,
+        store: [],
+        store_count: 0,
         cart: [],
         cart_count: 0
     },
@@ -121,12 +124,14 @@ export const commonReducer = (state = initialState, { type, payload }) => {
         // }
         case FETCH_USER_ARTWORKLIST: {
             const artworkList = [...payload.artworks];
-            console.log('---FETCH_USER_ARTWORKLIST', payload);
             return { ...state, user: { ...state.user, artworks: artworkList, artwork_count: payload.artwork_count } }
+        }
+        case FETCH_USER_STORELIST: {
+            const storeList = [...payload.store];
+            return { ...state, user: { ...state.user, store: storeList, store_count: payload.store_count } }
         }
         case FETCH_CARTLIST: {
             const cartList = [...payload.cart];
-            console.log('---FETCH_CARTLIST', payload, cartList);
             return { ...state, user: { ...state.user, cart: cartList, cart_count: payload.cart_count } }
         }
         case PUSH_TO_CART: {

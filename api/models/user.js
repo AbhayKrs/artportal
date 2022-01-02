@@ -126,6 +126,56 @@ const UserSchema = new Schema({
         type: Number,
         default: 0
     },
+    store: [{
+        title: {
+            type: String,
+            required: true,
+        },
+        item: {
+            type: String,
+            default: 'none',
+            required: true,
+        },
+        description: {
+            type: String,
+            required: true,
+        },
+        seller: {
+            id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User',
+            },
+            username: {
+                type: String,
+            },
+            avatar: {
+                type: String,
+            },
+            isSeller: {
+                type: Boolean
+            },
+            seller_rating: {
+                type: Number,
+                default: 0,
+                minimum: 0,
+                maximum: 5
+            }
+        },
+        price: {
+            type: Number,
+            default: 0
+        },
+        rating: {
+            type: Number,
+            default: 0
+        },
+        createdAt: { type: Date },
+        updatedAt: { type: Date }
+    }],
+    store_count: {
+        type: Number,
+        default: 0
+    }
 });
 
 const User = mongoose.model("User", UserSchema);

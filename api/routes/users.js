@@ -281,18 +281,37 @@ router.put('/:id', async (req, res) => {
 router.get('/:id/artworks', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
-        console.log('get user artworks', user.artworks);
-        if (!user.cart) {
+        if (!user.artworks) {
             return res.status(400).send({ msg: 'Artworklist not found' });
         }
-        const artworktData = {
+        const artworkData = {
             artworks: user.artworks,
             artwork_count: user.artwork_count
         }
-        res.json(artworktData);
+        res.json(artworkData);
     } catch (err) {
         console.error(err.message);
-        res.status(500).send('Unable to fetch cart items');
+        res.status(500).send('Unable to fetch artwork list');
+    }
+});
+
+// @route       GET api/users/:id/cart
+// @desc        Get all cart items
+// @access      Public
+router.get('/:id/store', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user.store) {
+            return res.status(400).send({ msg: 'Storelist not found' });
+        }
+        const storeData = {
+            store: user.store,
+            store_count: user.store_count
+        }
+        res.json(storeData);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Unable to fetch store items');
     }
 });
 
@@ -305,7 +324,6 @@ router.get('/:id/artworks', async (req, res) => {
 router.get('/:id/cart', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
-        console.log('get cart', user.cart);
         if (!user.cart) {
             return res.status(400).send({ msg: 'Cartlist not found' });
         }

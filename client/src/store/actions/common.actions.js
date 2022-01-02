@@ -8,6 +8,7 @@ import {
     HANDLE_CART_CLOSE,
     HANDLE_VERIFY_USER,
     FETCH_USER_ARTWORKLIST,
+    FETCH_USER_STORELIST,
     FETCH_CARTLIST,
     PUSH_TO_CART,
     EDIT_CARTLIST,
@@ -142,13 +143,22 @@ export const fetchUserArtworkList = () => async (dispatch, getState) => {
     }
 }
 
+export const fetchUserStoreList = () => async (dispatch, getState) => {
+    console.log('fetchUserStoreList invoked', getState().common);
+    try {
+        const userID = getState().common.user.id;
+        const storeData = await axios.get(`http://localhost:4000/api/users/${userID}/store`);
+        await dispatch({ type: FETCH_USER_STORELIST, payload: storeData.data });
+    } catch (err) {
+        console.log('---error fetchUserStoreList', err);
+    }
+}
+
 export const fetchCartList = () => async (dispatch, getState) => {
     console.log('fetchCartList invoked', getState().common);
     try {
         const userID = getState().common.user.id;
-        console.log('fetchCartList userID', userID);
         const cartData = await axios.get(`http://localhost:4000/api/users/${userID}/cart`);
-        console.log('cartData', cartData.data);
         await dispatch({ type: FETCH_CARTLIST, payload: cartData.data });
     } catch (err) {
         console.log('---error fetchCartList', err);

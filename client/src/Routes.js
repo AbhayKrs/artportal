@@ -5,7 +5,7 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 import { withRouter } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import setAuthToken from './utils/setAuthToken';
-import { handleSignOut, handleVerifyUser, fetchUserArtworkList, fetchCartList } from './store/actions/common.actions';
+import { handleSignOut, handleVerifyUser, fetchUserArtworkList, fetchUserStoreList, fetchCartList } from './store/actions/common.actions';
 
 import Loader from './components/Loader';
 import ErrorPopup from './components/Error/ErrorPopup';
@@ -33,6 +33,7 @@ const Routes = (props) => {
             const decoded = jwt_decode(token);
             await props.handleVerifyUser(decoded);
             await props.fetchUserArtworkList();
+            await props.fetchUserStoreList();
             await props.fetchCartList();
             const currentTime = Date.now() / 1000;
             if (decoded.exp < currentTime) {
@@ -74,6 +75,7 @@ const mapStateToProps = (state, props) => ({
 const mapDispatchToProps = (dispatch) => bindActionCreators({
     handleVerifyUser,
     fetchUserArtworkList,
+    fetchUserStoreList,
     fetchCartList,
     handleSignOut
 }, dispatch);

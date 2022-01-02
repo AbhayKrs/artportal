@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
-import { Typography, Card, CardContent, ListItemText, Button, Grid, Box, Tabs, Tab, Avatar } from '@material-ui/core';
+import { Typography, Card, CardContent, List, ListItem, ListItemText, ListItemAvatar, Button, Grid, Box, Tabs, Tab, Avatar, Table, TableBody, TableRow, TableCell } from '@material-ui/core';
 import { grey, deepPurple, teal, pink } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
@@ -15,15 +15,6 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         //     position: 'fixed',
     },
-    // profileHeader: {
-    //     backgroundImage: 'url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d14808a6-d6ac-49ac-bf38-62fa7ecd9808/ddsbe5i-e635f976-9a0f-4b45-88f7-2aaf4ab5ba22.jpg/v1/fill/w_1280,h_640,q_75,strp/alien_jungle_banner_deviantart_by_ahaas_ddsbe5i-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NjQwIiwicGF0aCI6IlwvZlwvZDE0ODA4YTYtZDZhYy00OWFjLWJmMzgtNjJmYTdlY2Q5ODA4XC9kZHNiZTVpLWU2MzVmOTc2LTlhMGYtNGI0NS04OGY3LTJhYWY0YWI1YmEyMi5qcGciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.S6SDvWTfBop0Rep4LqE5qNmLlJowodQCM0TptvJN_gs)',
-    //     position: 'fixed',
-    //     top: '54px',
-    //     height: 470,
-    //     width: '100%',
-    //     backgroundPosition: '50%',
-    //     backgroundSize: 'cover'
-    // },
     profileBody: {
         width: '100%',
         position: 'relative'
@@ -35,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     profileBodyBackdrop: {
         backgroundImage: 'linear-gradient(180deg, rgba(6,7,13,0) 0, black 70%, black)',
         position: 'relative',
-        inset: '390px 0 0',
+        inset: '400px 0 0',
         width: '100%',
         height: 200,
         transform: 'translateY(-100%)'
@@ -72,6 +63,20 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         height: '100%',
     },
+    storeImage: {
+        objectFit: 'cover',
+        width: '275px',
+        height: '100%',
+    },
+    sellerAvatar: {
+        backgroundColor: '#fff',
+        WebkitBorderRadius: '50%',
+        borderRadius: '50%',
+        top: '50%'
+    },
+    actionText: {
+        color: deepPurple[400]
+    }
 }));
 
 function TabPanel(props) {
@@ -208,10 +213,9 @@ const Profile = (props) => {
                             style={{ position: 'relative', borderRadius: '15px 15px 0 0', color: grey[400], background: '#2a2a2a' }}
                         >
                             <Tab label="Showcase" {...a11yProps(0)} />
-                            <Tab label="Uploads" {...a11yProps(1)} />
-                            <Tab label="Store" {...a11yProps(2)} />
-                            <Tab label="Prizes Recieved" {...a11yProps(3)} />
-                            <Tab label="Prizes Given" {...a11yProps(4)} />
+                            <Tab label="Store" {...a11yProps(1)} />
+                            <Tab label="Prizes Recieved" {...a11yProps(2)} />
+                            <Tab label="Prizes Given" {...a11yProps(3)} />
                             {/* <Tab label="Item Six" {...a11yProps(5)} />
                             <Tab label="Item Seven" {...a11yProps(6)} /> */}
                         </Tabs>
@@ -234,9 +238,46 @@ const Profile = (props) => {
                             </div>
                         </TabPanel>
                         <TabPanel style={{ width: '100%', background: '#2a2a2a', borderRadius: '0 0 15px 15px' }} value={value} index={1}>
-                            <div style={{ display: 'flex', minHeight: 500 }}>
-                                <Typography variant='button' style={{ margin: 'auto' }}>test</Typography>
-                            </div>
+                            {props.user.store_count > 0 ?
+                                <Table className={classes.table} aria-label="simple table">
+                                    <TableBody>
+                                        {props.user.store.map((storeItem, index) => (
+                                            <TableRow key={storeItem._id} style={{ height: '200px' }}>
+                                                <TableCell style={(props.user.store.length - 1) === index ? { borderBottom: 'none' } : {}} component="th" scope="row">
+                                                    <img
+                                                        className={classes.storeImage}
+                                                        id={storeItem._id}
+                                                        src={`http://localhost:4000/api/store/image/${storeItem.item}`}
+                                                    />
+                                                </TableCell>
+                                                <TableCell style={(props.user.store.length - 1) === index ? { borderBottom: 'none' } : {}}>
+                                                    <List style={{ color: grey[300] }}>
+                                                        <ListItem disableGutters>
+                                                            <Typography variant='h4' style={{ wordBreak: 'break-all' }}>{storeItem.title}</Typography>
+                                                        </ListItem>
+                                                        <ListItem disableGutters>
+                                                            <Typography variant='subtitle2'>{storeItem.description}</Typography>
+                                                        </ListItem>
+                                                        <ListItem disableGutters>
+                                                            <Typography variant='body'>Average User Rating: {Number.parseFloat(storeItem.rating).toFixed(2)}</Typography>
+                                                        </ListItem>
+                                                        <ListItem disableGutters>
+                                                            <Typography variant='h6' className={classes.actionText}>&#8377;{Number.parseFloat(storeItem.price).toFixed(2)}</Typography>
+                                                        </ListItem>
+                                                        <ListItem disableGutters>
+                                                            <Button variant='contained' style={{ margin: '0 5px' }}>Navigate to Listing</Button>
+                                                            <Button variant='contained' color='secondary' style={{ margin: '0 5px' }}>Remove Listing</Button>
+                                                        </ListItem>
+                                                    </List>
+                                                </TableCell>
+                                                {/* <TableCell>{storeItem.title}</TableCell>
+                                                <TableCell>{storeItem.description}</TableCell>
+                                                <TableCell>{storeItem.seller.username}</TableCell> */}
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                                : ''}
                         </TabPanel>
                         <TabPanel style={{ width: '100%', background: '#2a2a2a', borderRadius: '0 0 15px 15px' }} value={value} index={2}>
                             <div style={{ display: 'flex', minHeight: 500 }}>
@@ -248,11 +289,11 @@ const Profile = (props) => {
                                 <Typography variant='button' style={{ margin: 'auto' }}>test</Typography>
                             </div>
                         </TabPanel>
-                        <TabPanel style={{ width: '100%', background: '#2a2a2a', borderRadius: '0 0 15px 15px' }} value={value} index={4}>
+                        {/* <TabPanel style={{ width: '100%', background: '#2a2a2a', borderRadius: '0 0 15px 15px' }} value={value} index={4}>
                             <div style={{ display: 'flex', minHeight: 500 }}>
                                 <Typography variant='button' style={{ margin: 'auto' }}>test</Typography>
                             </div>
-                        </TabPanel>
+                        </TabPanel> */}
                         {/* <TabPanel style={{ width: '100%', background: '#2a2a2a' }} value={value} index={5}>
                             Item Six
                         </TabPanel>

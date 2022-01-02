@@ -56,15 +56,14 @@ const upload = multer({ storage });
 // @access      Public
 router.get('/', async (req, res) => {
     try {
-        const artworks = await Store.find({});
-        console.log('get artworks', artworks);
-        if (!artworks) {
-            return res.status(400).send({ msg: 'Artworks not found' });
+        const store = await Store.find({});
+        if (!store) {
+            return res.status(400).send({ msg: 'Storelist not found' });
         }
-        res.json(artworks);
+        res.send(store);
     } catch (err) {
         console.error(err.message);
-        res.status(500).send('Unable to fetch artworks');
+        res.status(500).send('Unable to fetch store');
     }
 });
 
@@ -91,15 +90,17 @@ router.post('/new', upload.single('file'),
                 // seller_rating: req.body.user.rating
             },
             price: req.body.price,
-            rating: req.body.rating,
-            tags: req.body.tags
+            rating: req.body.rating
         });
         console.log('newStoreItem data', newStoreItem);
-        Store.create(newStoreItem, (err, item) => {
+        Store.create(newStoreItem, (err, storeItem) => {
             if (err) {
                 console.log(err);
             } else {
-                res.send(item);
+                user.store.push(storeItem);
+                user.store_count = user.store.length;
+                user.save();
+                res.send(storeItem);
             }
         });
     }

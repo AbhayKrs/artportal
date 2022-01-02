@@ -257,7 +257,12 @@ const useStyles = makeStyles((theme) => ({
     },
     userName: {
         color: grey[200],
-        fontSize: '0.75rem'
+        fontSize: '0.75rem',
+        width: 'fit-content',
+        '&:hover': {
+            color: '#000',
+            cursor: 'pointer'
+        }
     },
     userSignout: {
         margin: '0 8px',
@@ -403,7 +408,7 @@ const Header = (props) => {
                                             <img src={DarkMode} />
                                         </Zoom>
                                     </Avatar>
-                                    <Typography variant='subtitle1' className={classes.userName}>
+                                    <Typography variant='subtitle1' className={classes.userName} onClick={() => props.history.push(`/user/${props.common.user.id}`)}>
                                         # {props.common.user.username}
                                     </Typography>
                                     <Divider />

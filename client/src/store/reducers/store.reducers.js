@@ -26,7 +26,6 @@ export const initialState = {
         description: '',
         rating: 0,
         price: 0,
-        tags: []
     },
     activeDialog: false
 }
