@@ -555,31 +555,8 @@ router.get('/image/:filename', (req, res) => {
 // @access  Private
 router.post('/:id/avatar', async (req, res) => {
     const user = await User.findById(req.params.id);
-    console.log('req.body', req.body);
     user.avatar = { ...req.body };
     user.save();
 })
-
-// @route       Edit api/artworks/:id
-// @desc        Edit an artwork
-// @access      Private/Admin
-router.put('/:id', function (req, res) {
-    const newArtworkDetails = {
-        title: req.body.title,
-        description: req.body.description,
-    };
-    console.log(newArtworkDetails);
-    Explore.findByIdAndUpdate(
-        req.params.id,
-        { $set: newData },
-        function (err, artworks) {
-            if (err) {
-                console.log(err);
-            } else {
-                res.send(artworks);
-            }
-        }
-    );
-});
 
 export default router;

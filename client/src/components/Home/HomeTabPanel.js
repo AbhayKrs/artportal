@@ -215,7 +215,7 @@ const HomeTabPanelContent = (props) => {
                                         <ListItem disableGutters className={classes.itemRoot}>
                                             <ListItemAvatar className={classes.itemAvatar}>
                                                 <Avatar className={classes.itemUserAvatar}>
-                                                    <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${props.user.avatar.icon}`} />
+                                                    <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${artwork.author.avatar.icon}`} />
                                                 </Avatar>
                                             </ListItemAvatar>
                                             <ListItemText classes={{ secondary: classes.itemUsername }} secondary={'#' + artwork.author.username} />

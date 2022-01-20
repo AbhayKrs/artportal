@@ -12,6 +12,10 @@ const commentSchema = new mongoose.Schema(
             },
             username: {
                 type: String
+            },
+            avatar: {
+                icon: String,
+                category: String
             }
         },
         likes: [{

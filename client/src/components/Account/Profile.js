@@ -9,6 +9,7 @@ import { grey, deepPurple, teal, pink } from '@material-ui/core/colors';
 import { handleUploadAsset, fetchAvatars, handleEditUserAvatar } from '../../store/actions/common.actions';
 import SettingsIcon from '@material-ui/icons/Settings';
 import TelegramIcon from '@material-ui/icons/Telegram';
+import AvatarModal from './AvatarModal';
 
 const useStyles = makeStyles((theme) => ({
     profileRoot: {
@@ -195,6 +196,7 @@ MasonryLayout.propTypes = {
 
 const Profile = (props) => {
     const classes = useStyles();
+    const [avatarModal, setAvatarModal] = useState(false);
     const [file, setFile] = useState('');
     const [value, setValue] = React.useState(0);
 
@@ -205,6 +207,10 @@ const Profile = (props) => {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
+    const handleDialogClose = () => {
+        setAvatarModal(false);
+    }
 
     return (
         <div className={classes.profileRoot}>
@@ -243,7 +249,7 @@ const Profile = (props) => {
                             <Tab classes={{ root: classes.tabRoot, selected: classes.selectedTab }} label="Prizes Given" {...a11yProps(3)} />
                             <Tab classes={{ root: classes.tabRoot, selected: classes.selectedTab }} label="Edit Profile" {...a11yProps(4)} />
                         </Tabs>
-                        {/* <TabPanel style={{ width: '100%', background: '#2a2a2a' }} value={value} index={0}>
+                        <TabPanel style={{ width: '100%', background: '#2a2a2a' }} value={value} index={0}>
                             <div className={classes.exploreGrid}>
                                 {props.user.artwork_count > 0 ?
                                     <MasonryLayout className={classes.layout}>
@@ -260,7 +266,7 @@ const Profile = (props) => {
                                     ''
                                 }
                             </div>
-                        </TabPanel> */}
+                        </TabPanel>
                         <TabPanel style={{ width: '100%', background: '#2a2a2a', borderRadius: '0 0 15px 15px' }} value={value} index={1}>
                             {props.user.store_count > 0 ?
                                 <Table className={classes.table} aria-label="simple table">
@@ -268,11 +274,11 @@ const Profile = (props) => {
                                         {props.user.store.map((storeItem, index) => (
                                             <TableRow key={storeItem._id} style={{ height: '200px' }}>
                                                 <TableCell style={(props.user.store.length - 1) === index ? { borderBottom: 'none' } : {}} component="th" scope="row">
-                                                    {/* <img
+                                                    <img
                                                         className={classes.storeImage}
                                                         id={storeItem._id}
                                                         src={`http://localhost:4000/api/store/image/${storeItem.item}`}
-                                                    /> */}
+                                                    />
                                                 </TableCell>
                                                 <TableCell style={(props.user.store.length - 1) === index ? { borderBottom: 'none' } : {}}>
                                                     <List style={{ color: grey[300] }}>
@@ -313,28 +319,13 @@ const Profile = (props) => {
                         </TabPanel>
                         <TabPanel style={{ width: '100%', background: '#2a2a2a', borderRadius: '0 0 15px 15px' }} value={value} index={4}>
                             <div style={{ display: 'flex', minHeight: 500 }}>
-                                <Grid container>
-                                    <Grid container xs={6} style={{ padding: '30px' }}>
-                                        <Typography variant='h6' style={{ width: '100%', textAlign: 'center', color: 'white', fontFamily: 'AntipastoProRegular' }}>Male</Typography>
-                                        {props.common.avatarList.filter(item => item.category === 'Male').map(item => (
-                                            <Grid item xs={3}>
-                                                <IconButton onClick={() => props.handleEditUserAvatar(item)}>
-                                                    <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${item.icon}`} />
-                                                </IconButton>
-                                            </Grid>
-                                        ))}
-                                    </Grid>
-                                    <Grid container xs={6} style={{ padding: '30px' }}>
-                                        <Typography variant='h6' style={{ width: '100%', textAlign: 'center', color: 'white', fontFamily: 'AntipastoProRegular' }}>Female</Typography>
-                                        {props.common.avatarList.filter(item => item.category === 'Female').map(item => (
-                                            <Grid item xs={3}>
-                                                <IconButton onClick={() => props.handleEditUserAvatar(item)}>
-                                                    <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${item.icon}`} />
-                                                </IconButton>
-                                            </Grid>
-                                        ))}
-                                    </Grid>
-                                </Grid>
+                                <Button variant='contained' onClick={() => setAvatarModal(true)}>Edit Avatar</Button>
+                                <AvatarModal
+                                    open={avatarModal}
+                                    title='Awards'
+                                    onClose={handleDialogClose}
+                                    onClick={handleDialogClose}
+                                />
                             </div>
                         </TabPanel>
                         {/* <TabPanel style={{ width: '100%', background: '#2a2a2a' }} value={value} index={5}>

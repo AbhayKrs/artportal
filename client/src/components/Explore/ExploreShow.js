@@ -374,7 +374,7 @@ const CommentList = (props) => {
                                     classes={{ root: classes.userChip, label: classes.userChipLabel }}
                                     avatar={
                                         <Avatar style={{ backgroundColor: 'transparent' }}>
-                                            <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${props.user.avatar.icon}`} />
+                                            <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${comment.author.avatar.icon}`} />
                                         </Avatar>
                                     }
                                     label={comment.author.username}
@@ -597,6 +597,7 @@ const ExploreShow = (props) => {
                                                 <ChatBubbleIcon />
                                             </IconButton>
                                         </ListItem>
+                                        {console.log('avatar icon', props.explore.artworkData.author.avatar.icon)}
                                         <ListItem disableGutters className={classes.statListItem}>
                                             <ListItemText
                                                 style={{ textAlign: 'right' }}
@@ -607,7 +608,7 @@ const ExploreShow = (props) => {
                                                             classes={{ root: classes.userChipRoot, label: classes.userChipLabelRoot }}
                                                             avatar={
                                                                 <Avatar style={{ backgroundColor: 'transparent' }}>
-                                                                    <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${props.user.avatar.icon}`} />
+                                                                    <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${props.explore.artworkData.author.avatar.icon}`} />
                                                                 </Avatar>
                                                             }
                                                             label={props.explore.artworkData.author.username}

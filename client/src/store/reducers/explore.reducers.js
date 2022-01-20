@@ -28,7 +28,11 @@ export const initialState = {
     artworkData: {
         author: {
             id: '',
-            username: ''
+            username: '',
+            avatar: {
+                icon: '',
+                category: ''
+            }
         },
         filename: '',
         comments: [],

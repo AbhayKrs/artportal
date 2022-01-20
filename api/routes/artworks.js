@@ -250,10 +250,10 @@ router.post('/:id/comments/new', async (req, res) => {
             content: req.body.content,
             author: {
                 id: req.body.user.id,
-                username: req.body.user.username
+                username: req.body.user.username,
+                avatar: req.body.user.avatar
             }
         });
-        console.log(newComment);
         Comment.create(newComment, (err, comment) => {
             if (err) {
                 console.log(err);

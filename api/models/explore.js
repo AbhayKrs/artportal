@@ -19,13 +19,14 @@ const exploreSchema = new mongoose.Schema(
             username: {
                 type: String,
             },
+            avatar: {
+                icon: String,
+                category: String
+            },
         },
         description: {
             type: String,
             required: true,
-        },
-        avatar: {
-            type: String,
         },
         // comments: ['Comment'],
         comments: [{
@@ -39,6 +40,10 @@ const exploreSchema = new mongoose.Schema(
                 },
                 username: {
                     type: String
+                },
+                avatar: {
+                    icon: String,
+                    category: String
                 }
             },
             likes: [{
