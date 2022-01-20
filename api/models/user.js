@@ -25,6 +25,10 @@ const UserSchema = new Schema({
         type: Date,
         default: Date.now,
     },
+    avatar: {
+        icon: String,
+        category: String
+    },
     artworks: [{
         filename: {
             type: String,

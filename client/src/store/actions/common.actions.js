@@ -14,7 +14,9 @@ import {
     EDIT_CARTLIST,
     HANDLE_SIGNIN,
     HANDLE_SIGNUP,
-    HANDLE_SIGNOUT
+    HANDLE_SIGNOUT,
+    FETCH_COMMON_IMAGES,
+    FETCH_AVATARLIST
 } from '../reducers/common.reducers';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
@@ -42,6 +44,21 @@ export const getTags = () => (dispatch, getState) => {
         }).then(res => {
             console.log('tags', res.data);
             dispatch({ type: GET_TAGS, payload: res.data });
+        }).catch(err => {
+            console.log('Error: ', err);
+        })
+    } catch (err) {
+        console.log('---error getTags', err);
+    }
+}
+
+export const fetchCommonImages = () => (dispatch, getState) => {
+    try {
+        axios({
+            url: 'http://localhost:4000/api/users/commonImages',
+            method: 'GET'
+        }).then(res => {
+            dispatch({ type: FETCH_COMMON_IMAGES, payload: res.data });
         }).catch(err => {
             console.log('Error: ', err);
         })
@@ -80,7 +97,7 @@ export const handleHeaderDialogClose = () => async (dispatch, getState) => {
     }
 }
 
-export const handleSignin = (userData) => async (dispatch, getState) => {
+export const handleSignin = (stayLoggedIn, userData) => async (dispatch, getState) => {
     console.log('handleSignin invoked');
     try {
         axios({
@@ -91,7 +108,10 @@ export const handleSignin = (userData) => async (dispatch, getState) => {
         })
             .then(res => {
                 const { token } = res.data;
-                localStorage.setItem('jwtToken', token);
+                stayLoggedIn ?
+                    localStorage.setItem('jwtToken', token)
+                    :
+                    sessionStorage.setItem('jwtToken', token)
                 setAuthToken(token);
                 const loginData = jwt_decode(token);
                 console.log('login token', token, loginData, res.data)
@@ -99,11 +119,16 @@ export const handleSignin = (userData) => async (dispatch, getState) => {
                 dispatch({ type: HANDLE_HEADER_DIALOG_CLOSE, payload: false });
             }).catch(err => {
                 if (err.response) {
-                    console.log('Login fail:: ', err.response.status);
+                    const error = {
+                        open: true,
+                        message: err.response.data,
+                        severity: 'error',
+                    }
+                    dispatch(setError(error))
                 }
             })
     } catch (err) {
-        console.log('---error handleSignin', err);
+        console.log('---`error` handleSignin', err);
     }
 }
 
@@ -254,7 +279,10 @@ export const handleCartClose = () => async (dispatch, getState) => {
 export const handleSignOut = () => async (dispatch, getState) => {
     console.log('handleSignOut invoked');
     try {
-        localStorage.removeItem('jwtToken');
+        localStorage.hasOwnProperty('jwtToken') ?
+            localStorage.removeItem('jwtToken')
+            :
+            sessionStorage.removeItem('jwtToken')
         setAuthToken(false);
         dispatch({ type: HANDLE_SIGNOUT, payload: {} });
     } catch (err) {
@@ -262,3 +290,52 @@ export const handleSignOut = () => async (dispatch, getState) => {
     }
 }
 
+export const fetchAvatars = () => async (dispatch, getState) => {
+    console.log('fetchAvatars invoked');
+    try {
+        const avatarList = await axios.get('http://localhost:4000/api/users/avatars');
+        console.log('avatarList', avatarList);
+        await dispatch({ type: FETCH_AVATARLIST, payload: avatarList.data });
+    } catch (err) {
+        console.log('---error fetchAvatars', err);
+    }
+}
+
+export const handleUploadAsset = (assetData) => async (dispatch, getState) => {
+    try {
+        await axios({
+            url: 'http://localhost:4000/api/users/assets/new',
+            method: 'POST',
+            headers: { 'Content-Type': 'multipart/form-data' },
+            data: assetData
+        }).then(async res => {
+            console.log('handleUploadAsset Successful!');
+        }).catch(err => {
+            if (err.response) {
+                console.log('Upload fail:: ', err.response.status);
+            }
+        })
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+export const handleEditUserAvatar = (avatar) => async (dispatch, getState) => {
+    const userID = getState().common.user.id;
+    console.log('handleEditUserAvatar', avatar);
+    try {
+        await axios({
+            url: `http://localhost:4000/api/users/${userID}/avatar`,
+            method: 'POST',
+            data: avatar
+        }).then(async res => {
+            console.log('handleEditUserAvatar Successful!');
+        }).catch(err => {
+            if (err.response) {
+                console.log('Fail:: ', err.response.status);
+            }
+        })
+    } catch (err) {
+        console.log(err);
+    }
+}

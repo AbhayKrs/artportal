@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center'
     },
     loaderText: {
-        fontFamily: "'calypsokaregular', serif",
+        fontFamily: "Calypsoka",
     }
 }))
 

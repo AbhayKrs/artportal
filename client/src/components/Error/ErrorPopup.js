@@ -45,7 +45,7 @@ const ErrorPopup = (props) => {
         <Snackbar
             anchorOrigin={{
                 vertical: 'bottom',
-                horizontal: 'left',
+                horizontal: 'left'
             }}
             open={props.error.open}
             autoHideDuration={3000}

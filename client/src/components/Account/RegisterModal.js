@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogTitle, DialogContent, FormControlLabel, Checkbox, ListItemText, Typography, List, ListItem, Button, Link, InputBase, IconButton, Paper, Card, CardContent, CardMedia, CardActions } from '@material-ui/core';
+import { Dialog, Grid, DialogContent, FormControlLabel, Checkbox, ListItemText, Typography, List, ListItem, Button, Link, InputBase, IconButton, Paper, Card, CardContent, CardMedia, CardActions } from '@material-ui/core';
 import { bindActionCreators } from 'redux';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
@@ -31,7 +31,9 @@ const useStyles = makeStyles((theme) => ({
     },
     closeIcon: {
         color: grey[200],
-        marginLeft: 'auto'
+        zIndex: 1,
+        position: 'absolute',
+        right: 0
     },
     dialogContent: {
         height: '100%',
@@ -59,8 +61,9 @@ const useStyles = makeStyles((theme) => ({
         background: 'rgb(39,39,43)'
     },
     cardMedia: {
-        width: '50%',
-        height: '100%'
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover'
     },
     cardDetails: {
         width: '100%',
@@ -70,7 +73,9 @@ const useStyles = makeStyles((theme) => ({
     },
     cardContent: {
         flex: '1 0 auto',
-        padding: '0 16px 23px 16px'
+        padding: '0 16px 23px 16px',
+        display: 'flex',
+        alignItems: 'center'
     },
     loginTitle: {
         fontWeight: 'bold',
@@ -155,94 +160,101 @@ const RegisterModal = (props) => {
     const classes = useStyles();
     return (
         <Dialog open={open} className={classes.loginRoot} aria-labelledby="simple-dialog-title" PaperProps={{ className: classes.dialogPaper }} >
-            <img className={classes.cardMedia} src={LoginMedia} />
-            <div className={classes.cardDetails}>
-                <IconButton className={classes.closeIcon} onClick={onClose}>
-                    <CloseIcon />
-                </IconButton>
-                <div className={classes.cardContent}>
-                    <List>
-                        <ListItem className={classes.listItem}>
-                            <ListItemText
-                                edge="start"
-                                primary={<Typography variant="h4" className={classes.loginTitle}>{title}</Typography>}
-                                secondary={<Typography variant="subtitle2" className={classes.loginSubtitle}>Become a Artyst Member. <Link onClick={() => { props.handleHeaderDialogClose(); props.handleHeaderDialogOpen('openLoginDialog') }}>Sign In</Link></Typography>}
-                            />
-                        </ListItem>
-                        <ListItem className={classes.listItem}>
-                            <Paper elevation={3} className={classes.loginFields}>
-                                <InputBase
-                                    value={name}
-                                    onChange={handleNameChange}
-                                    className={classes.inputFields}
-                                    placeholder="Name"
-                                    inputProps={{ 'aria-label': 'Name' }}
+            <Grid container>
+                <Grid item xs={12} sm={6} style={{ maxHeight: '100%' }}>
+                    <img
+                        className={classes.cardMedia}
+                        src={`http://localhost:4000/api/users/image/${props.common.signupImage}`}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6} className={classes.cardDetails}>
+                    <IconButton className={classes.closeIcon} onClick={onClose}>
+                        <CloseIcon />
+                    </IconButton>
+                    <div className={classes.cardContent}>
+                        <List>
+                            <ListItem className={classes.listItem}>
+                                <ListItemText
+                                    edge="start"
+                                    primary={<Typography variant="h4" className={classes.loginTitle}>{title}</Typography>}
+                                    secondary={<Typography variant="subtitle2" className={classes.loginSubtitle}>Become a Artyst Member. <Button size="small" style={{ color: deepPurple[400] }} onClick={() => { props.handleHeaderDialogClose(); props.handleHeaderDialogOpen('openLoginDialog') }}>Sign In</Button></Typography>}
                                 />
-                            </Paper>
-                        </ListItem>
-                        <ListItem className={classes.listItem}>
-                            <Paper elevation={3} className={classes.loginFields}>
-                                <InputBase
-                                    value={username}
-                                    onChange={handleUsernameChange}
-                                    className={classes.inputFields}
-                                    placeholder="Username"
-                                    inputProps={{ 'aria-label': 'Username' }}
-                                />
-                            </Paper>
-                        </ListItem>
-                        <ListItem className={classes.listItem}>
-                            <Paper elevation={3} className={classes.loginFields}>
-                                <InputBase
-                                    value={email}
-                                    onChange={handleEmailChange}
-                                    className={classes.inputFields}
-                                    placeholder="Email"
-                                    inputProps={{ 'aria-label': 'Email' }}
-                                />
-                            </Paper>
-                        </ListItem>
-                        <ListItem className={classes.listItem}>
-                            <Paper elevation={3} className={classes.loginFields}>
-                                <InputBase
-                                    type='password'
-                                    value={password}
-                                    onChange={handlePasswordChange}
-                                    className={classes.inputFields}
-                                    placeholder="Password"
-                                    inputProps={{ 'aria-label': 'Password' }}
-                                />
-                            </Paper>
-                        </ListItem>
-                        <ListItem className={classes.listItem}>
-                            <Paper elevation={3} className={classes.loginFields}>
-                                <InputBase
-                                    type='password'
-                                    value={password2}
-                                    onChange={handleConfirmPasswordChange}
-                                    className={classes.inputFields}
-                                    placeholder="Confirm Password"
-                                    inputProps={{ 'aria-label': 'Password' }}
-                                />
-                            </Paper>
-                        </ListItem>
-                        <ListItem>
-                            <Button variant="contained" size='large' className={classes.loginButton} onClick={onSubmitClick}>sign up</Button>
-                        </ListItem>
-                        <ListItem>
-                            <Typography variant='body2' className={classes.loginTOS}>
-                                By clicking Sign Up, I confirm that I have read and agree to the Artyst <Link onClick={() => props.history.push('/policy/services')} >Terms of Service</Link> and <Link onClick={() => props.history.push('/policy/privacy')}>Privacy Policy</Link>.
-                            </Typography>
-                        </ListItem>
-                    </List>
-                </div>
-            </div>
+                            </ListItem>
+                            <ListItem className={classes.listItem}>
+                                <Paper elevation={3} className={classes.loginFields}>
+                                    <InputBase
+                                        value={name}
+                                        onChange={handleNameChange}
+                                        className={classes.inputFields}
+                                        placeholder="Name"
+                                        inputProps={{ 'aria-label': 'Name' }}
+                                    />
+                                </Paper>
+                            </ListItem>
+                            <ListItem className={classes.listItem}>
+                                <Paper elevation={3} className={classes.loginFields}>
+                                    <InputBase
+                                        value={username}
+                                        onChange={handleUsernameChange}
+                                        className={classes.inputFields}
+                                        placeholder="Username"
+                                        inputProps={{ 'aria-label': 'Username' }}
+                                    />
+                                </Paper>
+                            </ListItem>
+                            <ListItem className={classes.listItem}>
+                                <Paper elevation={3} className={classes.loginFields}>
+                                    <InputBase
+                                        value={email}
+                                        onChange={handleEmailChange}
+                                        className={classes.inputFields}
+                                        placeholder="Email"
+                                        inputProps={{ 'aria-label': 'Email' }}
+                                    />
+                                </Paper>
+                            </ListItem>
+                            <ListItem className={classes.listItem}>
+                                <Paper elevation={3} className={classes.loginFields}>
+                                    <InputBase
+                                        type='password'
+                                        value={password}
+                                        onChange={handlePasswordChange}
+                                        className={classes.inputFields}
+                                        placeholder="Password"
+                                        inputProps={{ 'aria-label': 'Password' }}
+                                    />
+                                </Paper>
+                            </ListItem>
+                            <ListItem className={classes.listItem}>
+                                <Paper elevation={3} className={classes.loginFields}>
+                                    <InputBase
+                                        type='password'
+                                        value={password2}
+                                        onChange={handleConfirmPasswordChange}
+                                        className={classes.inputFields}
+                                        placeholder="Confirm Password"
+                                        inputProps={{ 'aria-label': 'Password' }}
+                                    />
+                                </Paper>
+                            </ListItem>
+                            <ListItem>
+                                <Button variant="contained" size='large' className={classes.loginButton} onClick={onSubmitClick}>sign up</Button>
+                            </ListItem>
+                            <ListItem>
+                                <Typography variant='body2' className={classes.loginTOS}>
+                                    By clicking Sign Up, I confirm that I have read and agree to the Artyst <Link onClick={() => props.history.push('/policy/services')} >Terms of Service</Link> and <Link onClick={() => props.history.push('/policy/privacy')}>Privacy Policy</Link>.
+                                </Typography>
+                            </ListItem>
+                        </List>
+                    </div>
+                </Grid>
+            </Grid>
         </Dialog >
     )
 }
 
 const mapStateToProps = (state, props) => ({
-    registerCreds: state.common.registerCreds,
+    common: state.common,
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

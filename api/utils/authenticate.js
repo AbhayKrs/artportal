@@ -1,20 +1,18 @@
 import Validator from 'validator';
 import isEmpty from 'is-empty';
 
-const validateLoginInput = (data) => {
-    let errors = {};
-    data.username = !isEmpty(data.username) ? data.username : '';
-    data.password = !isEmpty(data.password) ? data.password : '';
-
-    // Username checks
-    if (Validator.isEmpty(data.username)) {
-        errors.username = "Username field is required";
+const validateLoginInput = (users, data) => {
+    let errors = '';
+    let usernameList = users.map(item => { return item.username });
+    if (Validator.isEmpty(data.username) || !Validator.isIn(data.username, usernameList)) {
+        // Username checks
+        errors = "The entered username or email does not match to an existing user.";
+    } else if (Validator.isEmpty(data.password)) {
+        // Password checks
+        errors = "Password field is required";
     }
+    // isStrongPassword(data.password,{ minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1, returnScore: false, pointsPerUnique: 1, pointsPerRepeat: 0.5, pointsForContainingLower: 10, pointsForContainingUpper: 10, pointsForContainingNumber: 10, pointsForContainingSymbol: 10 })
 
-    // Password checks
-    if (Validator.isEmpty(data.password)) {
-        errors.password = "Password field is required";
-    }
     return { errors, isValid: isEmpty(errors) };
 }
 

@@ -3,10 +3,9 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Grid, Paper, Avatar, List, ListItem, ListItemText, FormControl, Collapse, InputLabel, Input, InputAdornment, Typography, Chip, Card, LinearProgress, TextField, Button } from '@material-ui/core';
+import { Grid, Paper, Avatar, List, ListItem, ListItemText, FormControl, Collapse, InputLabel, Input, InputAdornment, Typography, Chip, Card, TextField, Button } from '@material-ui/core';
 import { pink, grey, deepPurple, common } from '@material-ui/core/colors';
 import PublishIcon from '@material-ui/icons/Publish';
-import UserIcon from '../../assets/images/panda.png';
 
 import { setError, getTags } from '../../store/actions/common.actions';
 import { handleUploadArtwork } from '../../store/actions/upload.actions';
@@ -184,7 +183,7 @@ const Upload = (props) => {
             const errorData = {
                 open: true,
                 message: 'Tag Selected Already!',
-                severity: 'warning'
+                severity: 'warning',
             }
             props.setError(errorData)
         }
@@ -194,7 +193,7 @@ const Upload = (props) => {
             const errorData = {
                 open: true,
                 message: 'Please fill all the required fields!',
-                severity: 'error'
+                severity: 'error',
             }
             props.setError(errorData)
             return;
@@ -216,7 +215,7 @@ const Upload = (props) => {
                 const errorData = {
                     open: true,
                     message: 'Successfully Uploaded!',
-                    severity: 'success'
+                    severity: 'success',
                 }
                 props.setError(errorData);
             }).catch(err => {
@@ -249,7 +248,7 @@ const Upload = (props) => {
                         </Card>
                         <Chip
                             className={classes.userChip}
-                            avatar={<img src={UserIcon} />}
+                            avatar={<img src={`http://localhost:4000/api/users/image/${props.user.avatar.icon}`} />}
                             label={<Typography variant='body'>{props.common.user.username}</Typography>}
                         />
                         <TextField
@@ -324,7 +323,8 @@ const Upload = (props) => {
 
 const mapStateToProps = (state, props) => ({
     uploadData: state.uploadData,
-    common: state.common
+    common: state.common,
+    user: state.common.user
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

@@ -201,7 +201,7 @@ const Home = (props) => {
                         {tileData.slice(i, i + sliderItems).map((tile, index) => {
                             return (
                                 <ImageListItem key={tile.img}>
-                                    <img style={{ width: '100%' }} src={tile.img} alt={tile.title} />
+                                    <img style={{ width: '100%', height: '100%' }} src={tile.img} alt={tile.title} />
                                     <ImageListItemBar
                                         title={tile.title}
                                         subtitle={tile.author}
@@ -222,7 +222,6 @@ const Home = (props) => {
 
     return (
         <Grid container className={classes.homeRoot}>
-            <Header />
             <Toolbar id='back-to-top-anchor' />
             <Grid item className={classes.homeGrid}>
                 <Carousel

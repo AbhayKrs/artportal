@@ -6,7 +6,6 @@ import { withRouter } from 'react-router-dom';
 import { Grid, Typography, ImageList, InputBase, ListItem, ListItemAvatar, ListItemText, Avatar, ImageListItem, ImageListItemBar, IconButton, Paper, Tabs, Tab, FormControl, Select } from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
-import UserIcon from '../../assets/images/panda.png';
 import PropTypes from 'prop-types';
 import { grey, deepPurple } from '@material-ui/core/colors';
 
@@ -41,7 +40,13 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     imageSrc: {
-        borderRadius: '2px'
+        borderRadius: '2px',
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        transform: 'none'
     },
     imageBar: {
         display: 'none',
@@ -50,16 +55,20 @@ const useStyles = makeStyles((theme) => ({
         cursor: 'pointer'
     },
     imageBarTitle: {
+        fontFamily: 'CaviarDreams',
         color: grey[300],
-        position: 'relative',
-        top: '30%',
+        position: 'absolute',
         fontWeight: 'bold',
-        marginLeft: '5px',
-        marginRight: '-35px'
+        margin: 0,
+        width: '100%',
+        bottom: 0,
+        padding: '5px',
+        backgroundImage: 'linear-gradient(180deg, rgba(6,7,13,0) 0, black 80%, black)',
     },
     imageBarActions: {
-        position: 'relative',
-        bottom: '35%'
+        position: 'absolute',
+        top: 0,
+        right: 0
     },
     explorePaper: {
         padding: '2px'
@@ -78,9 +87,11 @@ const useStyles = makeStyles((theme) => ({
     itemUserAvatar: {
         width: theme.spacing(3),
         height: theme.spacing(3),
+        backgroundColor: 'transparent'
     },
     itemUsername: {
         color: grey[300],
+        fontSize: '0.75rem'
     },
     fab: {
         margin: theme.spacing.unit,
@@ -191,7 +202,6 @@ const HomeTabPanelContent = (props) => {
         >
             {value === index && (
                 <div>
-                    {console.log(props.width)}
                     <ImageList cols={props.width === 'sm' ? 4 : props.width === 'xs' ? 2 : 6} className={classes.imageList}>
                         {props.artworkList.filter(item => item.tags.includes(props.tags[index]) === true).map((artwork, index) => (
                             <ImageListItem key={index} className={classes.imageItem} onClick={() => props.history.push({ pathname: `/explore/${artwork._id}`, state: { artwork_id: artwork._id } })}>
@@ -205,7 +215,7 @@ const HomeTabPanelContent = (props) => {
                                         <ListItem disableGutters className={classes.itemRoot}>
                                             <ListItemAvatar className={classes.itemAvatar}>
                                                 <Avatar className={classes.itemUserAvatar}>
-                                                    <img style={{ width: '100%' }} src={UserIcon} />
+                                                    <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${props.user.avatar.icon}`} />
                                                 </Avatar>
                                             </ListItemAvatar>
                                             <ListItemText classes={{ secondary: classes.itemUsername }} secondary={'#' + artwork.author.username} />
@@ -265,7 +275,7 @@ const HomeTabPanel = (props) => {
                         <Tabs
                             classes={{
                                 root: classes.tabsRoot,
-                                indicator: classes.tabsIndicator,
+                                indicator: classes.tabsIndicator
                             }}
                             value={tabValue}
                             onChange={handleTabsChange}
@@ -299,7 +309,7 @@ const HomeTabPanel = (props) => {
                     </Grid>
                 </Grid>
                 {props.common.tags.map((tabData, index) => (
-                    <HomeTabPanelContent value={tabValue} index={index} history={props.history} width={props.width} artworkList={props.explore.artworkList} tags={props.common.tags}>
+                    <HomeTabPanelContent value={tabValue} index={index} history={props.history} width={props.width} artworkList={props.explore.artworkList} tags={props.common.tags} user={props.user}>
                         {tabData}
                     </HomeTabPanelContent>
                 ))}
@@ -316,7 +326,8 @@ HomeTabPanel.propTypes = {
 
 const mapStateToProps = (state, props) => ({
     explore: state.explore,
-    common: state.common
+    common: state.common,
+    user: state.common.user
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

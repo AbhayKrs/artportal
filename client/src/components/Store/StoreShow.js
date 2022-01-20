@@ -7,7 +7,6 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
-import UserIcon from '../../assets/images/panda.png';
 import { grey, deepPurple, teal } from '@material-ui/core/colors';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
@@ -406,11 +405,10 @@ const StoreShow = (props) => {
                                 classes={{ root: classes.authorRoot, primary: classes.authorPrimary, secondary: classes.authorSecondary }}
                                 primary={
                                     <Chip
-                                        // style={{ background: 'transparent' }}
                                         classes={{ root: classes.userChip, label: classes.userChipLabel }}
                                         avatar={
-                                            <Avatar>
-                                                <img style={{ width: '100%' }} src={UserIcon} />
+                                            <Avatar style={{ backgroundColor: 'transparent' }}>
+                                                <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${props.user.avatar.icon}`} />
                                             </Avatar>
                                         }
                                         label={props.store.storeItemData.seller.username}
@@ -558,6 +556,7 @@ const StoreShow = (props) => {
 const mapStateToProps = (state, props) => ({
     common: state.common,
     store: state.store,
+    user: state.common.user
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

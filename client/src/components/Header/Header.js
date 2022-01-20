@@ -25,7 +25,6 @@ import { withStyles, makeStyles } from '@material-ui/core/styles';
 import RegisterModal from '../Account/RegisterModal';
 import LoginModal from '../Account/LoginModal';
 import TokenModal from '../Account/TokenModal';
-import UserIcon from '../../assets/images/panda.png';
 import { handleHeaderDialogOpen, handleHeaderDialogClose, handleSignOut } from '../../store/actions/common.actions';
 import { grey, deepPurple } from '@material-ui/core/colors';
 
@@ -89,6 +88,7 @@ const useStyles = makeStyles((theme) => ({
     },
     userIcon: {
         margin: 'auto',
+        backgroundColor: 'transparent'
     },
     hoveredUserIcon: {
         width: '45px',
@@ -108,7 +108,7 @@ const useStyles = makeStyles((theme) => ({
     navTitle: {
         color: deepPurple[500],
         flexGrow: 0.05,
-        fontFamily: "'calypsokaregular', serif",
+        fontFamily: 'Calypsoka',
         fontSize: '3rem',
         fontWeight: 100,
     },
@@ -116,7 +116,7 @@ const useStyles = makeStyles((theme) => ({
         width: '15%',
         color: grey[300],
         flexGrow: 0.05,
-        fontFamily: "'calypsokaregular', serif",
+        fontFamily: 'Calypsoka',
         fontSize: '3rem',
         fontWeight: 100,
         cursor: 'pointer'
@@ -388,11 +388,11 @@ const Header = (props) => {
                         <div className={classes.loggedinIcons} onMouseLeave={() => toggleUserDropdown(false)}>
                             {userDropdown ?
                                 <Avatar className={classes.hoveredUserIcon} size='small' onMouseOver={() => toggleUserDropdown(true)} >
-                                    <img style={{ width: '100%' }} src={UserIcon} />
+                                    <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${props.user.avatar.icon}`} />
                                 </Avatar>
                                 :
                                 <Avatar className={classes.userIcon} size='small' onMouseOver={() => toggleUserDropdown(true)} >
-                                    <img style={{ width: '100%' }} src={UserIcon} />
+                                    <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${props.user.avatar.icon}`} />
                                 </Avatar>
                             }
                             <Card elevation={false} className={userDropdown ? classes.userCard : classes.userCardDisabled}>
@@ -614,7 +614,8 @@ const Header = (props) => {
 }
 
 const mapStateToProps = (state, props) => ({
-    common: state.common
+    common: state.common,
+    user: state.common.user
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

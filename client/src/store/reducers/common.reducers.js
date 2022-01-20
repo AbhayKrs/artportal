@@ -16,6 +16,8 @@ export const EDIT_CARTLIST = 'EDIT_CARTLIST';
 export const HANDLE_SIGNIN = 'HANDLE_SIGNIN';
 export const HANDLE_SIGNUP = 'HANDLE_SIGNUP';
 export const HANDLE_SIGNOUT = 'HANDLE_SIGNOUT';
+export const FETCH_COMMON_IMAGES = 'FETCH_COMMON_IMAGES';
+export const FETCH_AVATARLIST = 'FETCH_AVATARLIST';
 
 export const initialState = {
     loader: false,
@@ -25,7 +27,9 @@ export const initialState = {
         severity: ''
     },
     openLoginDialog: false,
+    loginImage: '',
     openRegisterDialog: false,
+    signupImage: '',
     openTokenDialog: false,
     openPurchaseDialog: false,
     tags: [],
@@ -37,6 +41,10 @@ export const initialState = {
         name: '',
         username: '',
         email: '',
+        avatar: {
+            icon: '',
+            category: ''
+        },
         artworks: [],
         artwork_count: 0,
         store: [],
@@ -48,7 +56,8 @@ export const initialState = {
     isAuthenticated: false,
     cartOpen: false,
     cartEmpty: true,
-    cartList: []
+    cartList: [],
+    avatarList: []
 }
 
 const openDialog = (value) => {
@@ -105,6 +114,11 @@ export const commonReducer = (state = initialState, { type, payload }) => {
         case HANDLE_CART_CLOSE: {
             return { ...state, cartOpen: false }
         }
+        case FETCH_AVATARLIST: {
+            console.log('FETCH_AVATARLIST', payload);
+            const avatarList = [...payload];
+            return { ...state, avatarList }
+        }
         // case PUSH_TO_CART: {
         //     return { ...state, cartList: [...state.cartList, payload] }
         // }
@@ -122,6 +136,9 @@ export const commonReducer = (state = initialState, { type, payload }) => {
         // case REMOVE_FROM_CART: {
         //     return { ...state, cartList: state.cartList.filter(item => item !== payload) }
         // }
+        case FETCH_COMMON_IMAGES: {
+            return { ...state, loginImage: payload.login, signupImage: payload.signup }
+        }
         case FETCH_USER_ARTWORKLIST: {
             const artworkList = [...payload.artworks];
             return { ...state, user: { ...state.user, artworks: artworkList, artwork_count: payload.artwork_count } }

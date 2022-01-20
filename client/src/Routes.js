@@ -5,7 +5,7 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 import { withRouter } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import setAuthToken from './utils/setAuthToken';
-import { handleSignOut, handleVerifyUser, fetchUserArtworkList, fetchUserStoreList, fetchCartList } from './store/actions/common.actions';
+import { handleSignOut, handleVerifyUser, fetchUserArtworkList, fetchUserStoreList, fetchCartList, fetchCommonImages } from './store/actions/common.actions';
 
 import Loader from './components/Loader';
 import ErrorPopup from './components/Error/ErrorPopup';
@@ -27,7 +27,21 @@ import Privacy from './components/Help/Privacy';
 
 const Routes = (props) => {
     useEffect(async () => {
-        if (localStorage.jwtToken) {
+        props.fetchCommonImages();
+        if (sessionStorage.jwtToken) {
+            const token = sessionStorage.jwtToken;
+            setAuthToken(token);
+            const decoded = jwt_decode(token);
+            await props.handleVerifyUser(decoded);
+            await props.fetchUserArtworkList();
+            await props.fetchUserStoreList();
+            await props.fetchCartList();
+            const currentTime = Date.now() / 1000;
+            if (decoded.exp < currentTime) {
+                props.handleSignOut();
+                window.location.href = './';
+            }
+        } else if (localStorage.jwtToken) {
             const token = localStorage.jwtToken;
             setAuthToken(token);
             const decoded = jwt_decode(token);
@@ -77,7 +91,8 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     fetchUserArtworkList,
     fetchUserStoreList,
     fetchCartList,
-    handleSignOut
+    handleSignOut,
+    fetchCommonImages
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Routes));

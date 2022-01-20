@@ -16,9 +16,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import ReplyIcon from '@material-ui/icons/Reply';
 import ReplyRoundedIcon from '@material-ui/icons/ReplyRounded';
 import SendIcon from '@material-ui/icons/Send';
-import UserIcon from '../../assets/images/panda.png';
 import AwardIcon from '../../assets/images/award_2.png';
-import { grey, deepPurple, teal, common } from '@material-ui/core/colors';
+import { grey, deepPurple, teal } from '@material-ui/core/colors';
 import Carousel from 'react-material-ui-carousel';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -27,6 +26,7 @@ import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import moment from 'moment';
+import AwardModal from './AwardModal';
 
 import darkHeart2 from '../../assets/images/darkHeart_transparent3.png';
 import { fetchArtworkList, fetchArtwork, handleLikeArtwork, handleDislikeArtwork, handleAddComment, handleEditComment, handleDeleteComment, handleLikeComment, handleDislikeComment } from '../../store/actions/explore.actions';
@@ -105,13 +105,15 @@ const useStyles = makeStyles((theme) => ({
     },
     showTitle: {
         padding: '0 10px',
-        color: grey[200]
+        color: grey[200],
+        fontFamily: 'CaviarDreams'
     },
     showDesc: {
         padding: '0 10px',
         width: '100%',
         color: grey[600],
-        wordBreak: 'break-word'
+        wordBreak: 'break-word',
+        fontFamily: 'CaviarDreams'
     },
     statsButton: {
         color: deepPurple[400],
@@ -226,7 +228,7 @@ const useStyles = makeStyles((theme) => ({
     commentInput: {
         width: '100%',
         color: deepPurple[400],
-        margin: '0 12px',
+        margin: '0 5px',
         '& .MuiFormLabel-root': {
             color: grey[50]
         },
@@ -260,8 +262,11 @@ const useStyles = makeStyles((theme) => ({
     },
     tagsChip: {
         margin: '5px',
-        backgroundColor: deepPurple[400],
-        color: '#d5d5d5'
+        backgroundColor: grey[800],
+        color: deepPurple[300],
+        padding: '5px 2px',
+        borderRadius: '10px',
+        fontWeight: 'bold'
     },
     swipeIcon: {
         fontSize: '4rem',
@@ -284,6 +289,14 @@ const useStyles = makeStyles((theme) => ({
     },
     usernameHeader: {
         padding: '0 10px'
+    },
+    userChipRoot: {
+        background: 'transparent',
+        justifyContent: 'right'
+    },
+    userChipLabelRoot: {
+        padding: '0 0 0 12px',
+        color: grey[400]
     },
     userChip: {
         background: 'transparent'
@@ -319,6 +332,9 @@ const useStyles = makeStyles((theme) => ({
         animation: 'fave-heart 1s steps(29)',
         backgroundPosition: '-8795px 0',
         transition: 'background 1s steps(29)',
+    },
+    textfieldInput: {
+        color: grey[200]
     }
 }));
 
@@ -357,8 +373,8 @@ const CommentList = (props) => {
                                 <Chip
                                     classes={{ root: classes.userChip, label: classes.userChipLabel }}
                                     avatar={
-                                        <Avatar>
-                                            <img style={{ width: '100%' }} src={UserIcon} />
+                                        <Avatar style={{ backgroundColor: 'transparent' }}>
+                                            <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${props.user.avatar.icon}`} />
                                         </Avatar>
                                     }
                                     label={comment.author.username}
@@ -385,21 +401,19 @@ const CommentList = (props) => {
                                                             }
                                                         }}
                                                         InputProps={{
-                                                            startAdornment: (
+                                                            className: classes.textfieldInput,
+                                                            endAdornment: (
                                                                 <InputAdornment position="start" onClick={() => onEditComment(comment)}>
                                                                     <SendIcon fontSize='small' style={{ color: deepPurple[300] }} />
                                                                 </InputAdornment>
                                                             ),
                                                         }}
                                                     />
-                                                    {/* <IconButton className={classes.editButton} fontSize='small'>
-                                                        <SendIcon />
-                                                    </IconButton> */}
                                                 </Grid>
                                             </Grid>
                                         </FormControl>
                                     }
-                                    secondary={'- ' + moment(comment.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
+                                    secondary={'- ' + moment(comment.createdAt).fromNow()}
                                 />
                                 :
                                 <ListItemText
@@ -409,41 +423,43 @@ const CommentList = (props) => {
                                     secondary={'- ' + moment(comment.createdAt).fromNow()}
                                 />
                             }
-                            <div style={{ display: 'flex' }}>
-                                {comment.likes.filter(item => item === props.common.user.id).length > 0 ?
-                                    <IconButton style={{ padding: '0 4px' }} disabled>
-                                        <ThumbUpIcon style={{ color: teal[400] }} fontSize='small' />
-                                    </IconButton>
-                                    :
-                                    <IconButton style={{ padding: '0 4px' }} onClick={() => { handleToggleCommentLike(true, comment) }}>
-                                        <ThumbUpIcon style={{ color: grey[700] }} fontSize='small' />
-                                    </IconButton>
-                                }
-                                <Typography variant='button' style={{ color: teal[400] }}>
-                                    {comment.likes.length}
-                                </Typography>
-                                <IconButton style={{ padding: '0 4px' }} onClick={() => { handleToggleCommentLike(false, comment) }}>
-                                    <ThumbDownIcon style={{ color: grey[700] }} fontSize='small' />
-                                </IconButton>
-                            </div>
-                            {props.common.isAuthenticated && props.common.user.id === comment.author.id ?
-                                <div style={{ marginLeft: '10px', borderLeft: `2px solid ${teal[400]}` }}>
-                                    {editForm && index === editIndex ?
-                                        <IconButton edge="end" onClick={() => setEditForm(false)}>
-                                            <CloseIcon fontSize='small' />
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <div style={{ display: 'flex' }}>
+                                    {comment.likes.filter(item => item === props.user.id).length > 0 ?
+                                        <IconButton style={{ padding: '0 4px' }} disabled>
+                                            <ThumbUpIcon style={{ color: teal[400] }} fontSize='small' />
                                         </IconButton>
                                         :
-                                        <IconButton edge="end" onClick={() => { setEditComment(comment.content); setEditForm(true); setEditIndex(index) }}>
-                                            <EditIcon className={classes.iconButton} fontSize='small' />
+                                        <IconButton style={{ padding: '0 4px' }} onClick={() => { handleToggleCommentLike(true, comment) }}>
+                                            <ThumbUpIcon style={{ color: grey[700] }} fontSize='small' />
                                         </IconButton>
                                     }
-                                    <IconButton edge="end" onClick={() => onDeleteComment(comment)}>
-                                        <DeleteIcon className={classes.iconButton} fontSize='small' />
+                                    <Typography variant='button' style={{ color: teal[400], margin: '0 5px' }}>
+                                        {comment.likes.length}
+                                    </Typography>
+                                    <IconButton style={{ padding: '0 4px' }} onClick={() => { handleToggleCommentLike(false, comment) }}>
+                                        <ThumbDownIcon style={{ color: grey[700] }} fontSize='small' />
                                     </IconButton>
                                 </div>
-                                :
-                                ''
-                            }
+                                {props.common.isAuthenticated && props.user.id === comment.author.id ?
+                                    <div style={{ marginLeft: '10px' }}>
+                                        {editForm && index === editIndex ?
+                                            <IconButton size='small' edge="end" onClick={() => setEditForm(false)} style={{ backgroundColor: grey[200], marginRight: '5px', padding: '5px' }}>
+                                                <CloseIcon fontSize='small' />
+                                            </IconButton>
+                                            :
+                                            <IconButton size='small' edge="end" onClick={() => { setEditComment(comment.content); setEditForm(true); setEditIndex(index) }} style={{ backgroundColor: grey[200], marginRight: '5px', padding: '5px' }}>
+                                                <EditIcon className={classes.iconButton} fontSize='small' />
+                                            </IconButton>
+                                        }
+                                        <IconButton size='small' edge="end" onClick={() => onDeleteComment(comment)} style={{ backgroundColor: grey[200], marginRight: '5px', padding: '5px' }}>
+                                            <DeleteIcon className={classes.iconButton} fontSize='small' />
+                                        </IconButton>
+                                    </div>
+                                    :
+                                    ''
+                                }
+                            </div>
                         </div>
                     </ListItem>
                 </div>
@@ -457,6 +473,7 @@ const ExploreShow = (props) => {
     const [next, setNext] = useState('');
     const [like, setLike] = useState(false);
     const [comment, setComment] = useState('');
+    const [awardOpen, setAwardOpen] = useState(false);
     const classes = useStyles();
 
     useEffect(async () => {
@@ -474,7 +491,7 @@ const ExploreShow = (props) => {
     useEffect(() => {
         const len = props.explore.artworkList.length;
         props.fetchArtwork(props.history.location.state.artwork_id);
-        if (props.explore.artworkData.likes.filter(item => item === props.common.user.id).length > 0) {
+        if (props.explore.artworkData.likes.filter(item => item === props.user.id).length > 0) {
             setLike(true);
         } else {
             setLike(false);
@@ -492,7 +509,7 @@ const ExploreShow = (props) => {
     }, [props.explore.artworkData]);
 
     const handleToggleLike = async (likes) => {
-        if (likes.includes(props.common.user.id)) {
+        if (likes.includes(props.user.id)) {
             await props.handleDislikeArtwork(props.history.location.state.artwork_id, false);
         } else {
             await props.handleLikeArtwork(props.history.location.state.artwork_id, true);
@@ -500,10 +517,18 @@ const ExploreShow = (props) => {
         props.fetchArtwork(props.history.location.state.artwork_id);
     }
 
+    const handleDialogClose = () => {
+        setAwardOpen(false);
+    }
+
     return (
         <Grid container className={classes.gridRoot} spacing={1}>
             <Grid item lg={7} xs={12} className={classes.imgGrid}>
-                <IconButton className={classes.likeButton} onClick={() => { setLike(!like); handleToggleLike(props.explore.artworkData.likes) }} fontSize='large'>
+                <IconButton
+                    className={classes.likeButton}
+                    onClick={() => { setLike(!like); handleToggleLike(props.explore.artworkData.likes) }}
+                    fontSize='large'
+                >
                     {like ?
                         <FavoriteIcon fontSize='large' />
                         :
@@ -530,7 +555,7 @@ const ExploreShow = (props) => {
                             <Grid container className={classes.showHeader}>
                                 <Grid item xs={9}>
                                     <Typography className={classes.showTitle} variant="h4">{props.explore.artworkData.title}</Typography>
-                                    <Typography className={classes.showDesc} variant="subtitle1">{props.explore.artworkData.description}</Typography>
+                                    <Typography className={classes.showDesc} component="p">{props.explore.artworkData.description}</Typography>
                                     {props.explore.artworkData.tags.map(tag => (
                                         <Chip className={classes.tagsChip} size="small" label={tag} />
                                     ))}
@@ -549,7 +574,7 @@ const ExploreShow = (props) => {
                                                 </IconButton>
                                             </Tooltip>
                                             <Tooltip title='Award'>
-                                                <IconButton className={classes.statsButton}>
+                                                <IconButton className={classes.statsButton} onClick={() => setAwardOpen(true)}>
                                                     <img style={{ width: '32px', height: '32px' }} src={AwardIcon} />
                                                 </IconButton>
                                             </Tooltip>
@@ -573,49 +598,67 @@ const ExploreShow = (props) => {
                                             </IconButton>
                                         </ListItem>
                                         <ListItem disableGutters className={classes.statListItem}>
-                                            <Typography variant="p" style={{ color: grey[200] }}>Posted by </Typography>
-                                            <Chip
-                                                classes={{ root: classes.userChip, label: classes.userChipLabel }}
-                                                avatar={
-                                                    <Avatar>
-                                                        <img style={{ width: '100%' }} src={UserIcon} />
-                                                    </Avatar>
+                                            <ListItemText
+                                                style={{ textAlign: 'right' }}
+                                                primary={<Typography variant='subtitle1' style={{ color: grey[200] }}>Posted by </Typography>}
+                                                secondary={
+                                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                        <Chip
+                                                            classes={{ root: classes.userChipRoot, label: classes.userChipLabelRoot }}
+                                                            avatar={
+                                                                <Avatar style={{ backgroundColor: 'transparent' }}>
+                                                                    <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${props.user.avatar.icon}`} />
+                                                                </Avatar>
+                                                            }
+                                                            label={props.explore.artworkData.author.username}
+                                                        />
+                                                        <Typography variant="caption" style={{ color: grey[400] }}>{moment(props.explore.artworkData.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</Typography>
+                                                    </div>
                                                 }
-                                                label={props.explore.artworkData.author.username}
                                             />
+
                                         </ListItem >
                                     </List>
                                 </Grid>
                             </Grid>
-                            <Divider style={{ height: '3px', background: grey[600] }} />
-                            <Grid style={{ marginTop: '10px' }}>
-                                <div className={classes.commentField}>
-                                    <TextField
-                                        id="standard-basic"
-                                        label={"Hey " + props.common.user.username + ", Let the artist know what you think"}
-                                        fullWidth
-                                        value={comment}
-                                        onChange={(event) => setComment(event.target.value)}
-                                        className={classes.commentInput}
-                                        onKeyPress={(ev) => {
-                                            if (ev.key === 'Enter') {
-                                                submitComment(ev)
-                                            }
-                                        }}
-                                        InputProps={{
-                                            startAdornment: (
-                                                <InputAdornment position="start">
-                                                    <ChatBubbleIcon fontSize='small' style={{ color: deepPurple[300] }} />
-                                                </InputAdornment>
-                                            ),
-                                        }}
-                                    />
-                                </div>
-                            </Grid>
+                            {props.common.isAuthenticated ? <>
+                                <Divider style={{ height: '3px', background: grey[600] }} />
+                                <Grid style={{ marginTop: '10px' }}>
+                                    <div className={classes.commentField}>
+                                        <TextField
+                                            id="standard-basic"
+                                            label={"Hey " + props.user.username + ", Let the artist know what you think"}
+                                            fullWidth
+                                            value={comment}
+                                            onChange={(event) => setComment(event.target.value)}
+                                            className={classes.commentInput}
+                                            onKeyPress={(ev) => {
+                                                if (ev.key === 'Enter') {
+                                                    submitComment(ev)
+                                                }
+                                            }}
+                                            InputProps={{
+                                                startAdornment: (
+                                                    <InputAdornment position="start">
+                                                        <ChatBubbleIcon fontSize='small' style={{ color: deepPurple[300] }} />
+                                                    </InputAdornment>
+                                                ),
+                                            }}
+                                        />
+                                    </div>
+                                </Grid>
+                            </>
+                                : ''}
                         </ListSubheader>
                         <div style={{ margin: '10px' }}>
-                            <CommentList comments={props.explore.artworkData.comments} common={props.common} artworkId={props.history.location.state.artwork_id} fetchArtwork={props.fetchArtwork} handleAddComment={props.handleAddComment} handleEditComment={props.handleEditComment} handleDeleteComment={props.handleDeleteComment} handleLikeComment={props.handleLikeComment} handleDislikeComment={props.handleDislikeComment} />
+                            <CommentList user={props.user} comments={props.explore.artworkData.comments} common={props.common} artworkId={props.history.location.state.artwork_id} fetchArtwork={props.fetchArtwork} handleAddComment={props.handleAddComment} handleEditComment={props.handleEditComment} handleDeleteComment={props.handleDeleteComment} handleLikeComment={props.handleLikeComment} handleDislikeComment={props.handleDislikeComment} />
                         </div>
+                        <AwardModal
+                            open={awardOpen}
+                            title='Awards'
+                            onClose={handleDialogClose}
+                            onClick={handleDialogClose}
+                        />
                     </List>
                 </div>
             </Grid>
@@ -624,6 +667,7 @@ const ExploreShow = (props) => {
 }
 
 const mapStateToProps = (state, props) => ({
+    user: state.common.user,
     common: state.common,
     explore: state.explore,
 })

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Card, List, ListItem, Paper, Tooltip, Fab } from '@material-ui/core';
+import { Grid, Card, List, ListItem, Paper, Tooltip, Fab, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { deepPurple } from '@material-ui/core/colors';
 

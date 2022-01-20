@@ -4,8 +4,22 @@
 } */
 
 @font-face {
-	font-family: 'calypsokaregular';
-	src: url('./assets/fonts/calypsoka-webfont.woff2') format('woff2'), url('./assets/fonts/calypsoka-webfont.woff') format('woff');
+	font-family: 'Calypsoka';
+	src: url('./assets/fonts/Calypsoka.ttf');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'CaviarDreams';
+	src: url('./assets/fonts/CaviarDreams.ttf');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'AntipastoProRegular';
+	src: url('./assets/fonts/AntipastoProRegular.ttf');
 	font-weight: normal;
 	font-style: normal;
 }

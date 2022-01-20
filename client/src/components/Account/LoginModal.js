@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogTitle, DialogContent, FormControlLabel, Checkbox, ListItemText, Typography, List, ListItem, Button, Link, InputBase, IconButton, Paper, Card, CardContent, CardMedia, CardActions } from '@material-ui/core';
+import { Dialog, Grid, DialogContent, FormControlLabel, Checkbox, ListItemText, Typography, List, ListItem, Button, Link, InputBase, IconButton, Paper, Card, CardContent, CardMedia, CardActions } from '@material-ui/core';
 import { bindActionCreators } from 'redux';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
@@ -15,12 +15,10 @@ import { handleHeaderDialogOpen, handleHeaderDialogClose, handleSignin } from '.
 const useStyles = makeStyles((theme) => ({
     loginRoot: {
         width: '100%',
-        // display: 'flex',
         background: 'rgba(255,255,255,0.3)'
     },
     dialogPaper: {
         width: '100%',
-        boxShadow: 'none',
         maxWidth: '900px',
         background: 'rgb(39,39,43)',
         flexDirection: 'inherit'
@@ -32,7 +30,9 @@ const useStyles = makeStyles((theme) => ({
     },
     closeIcon: {
         color: grey[200],
-        marginLeft: 'auto'
+        zIndex: 1,
+        position: 'absolute',
+        right: 0
     },
     dialogContent: {
         height: '100%',
@@ -62,8 +62,9 @@ const useStyles = makeStyles((theme) => ({
         background: 'rgb(39,39,43)'
     },
     cardMedia: {
-        width: '50%',
-        height: '100%'
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover'
     },
     cardDetails: {
         width: '100%',
@@ -89,6 +90,7 @@ const useStyles = makeStyles((theme) => ({
     loginIcons: {
         background: 'rgba(0, 0, 0, 0.15)',
         '&:disabled': {
+            minWidth: 'min-content',
             color: deepPurple[400]
         }
     },
@@ -136,84 +138,105 @@ const LoginModal = (props) => {
         setPassword(event.target.value)
     }
 
-    const onSubmitClick = (event) => {
-        event.preventDefault();
+    const onSubmitClick = () => {
+        setUsername('');
+        setPassword('');
         const signinInput = {
             username: username,
             password: password,
         }
-        props.handleSignin(signinInput);
+        props.handleSignin(stayLoggedIn, signinInput);
     }
 
     const classes = useStyles();
     return (
         <Dialog className={classes.loginRoot} aria-labelledby="simple-dialog-title" open={open} maxWidth={false} PaperProps={{ className: classes.dialogPaper }} >
-            <img className={classes.cardMedia} src={LoginMedia} />
-            <div className={classes.cardDetails}>
-                <IconButton className={classes.closeIcon} onClick={onClose}>
-                    <CloseIcon />
-                </IconButton>
-                <CardContent className={classes.cardContent}>
-                    <List>
-                        <ListItem>
-                            <ListItemText
-                                edge="start"
-                                primary={<Typography variant="h4" className={classes.loginTitle}>{title}</Typography>}
-                                secondary={<Typography variant="subtitle2" className={classes.loginSubtitle}>Become a Artyst Member. <Link onClick={() => { props.handleHeaderDialogClose(); props.handleHeaderDialogOpen('openRegisterDialog') }}>Join</Link></Typography>}
-                            />
-                        </ListItem>
-                        <ListItem>
-                            <Paper elevation={3} className={classes.loginFields}>
-                                <Button disabled className={classes.loginIcons}>
-                                    <PersonIcon />
-                                </Button>
-                                <InputBase
-                                    value={username}
-                                    onChange={handleUsernameChange}
-                                    className={classes.inputUser}
-                                    placeholder="Username"
-                                    inputProps={{ 'aria-label': 'Username' }}
+            <Grid container>
+                <Grid item xs={12} sm={6}>
+                    <img
+                        className={classes.cardMedia}
+                        src={`http://localhost:4000/api/users/image/${props.common.loginImage}`}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6} className={classes.cardDetails}>
+                    <IconButton className={classes.closeIcon} onClick={onClose}>
+                        <CloseIcon />
+                    </IconButton>
+                    <CardContent className={classes.cardContent}>
+                        <List>
+                            <ListItem>
+                                <ListItemText
+                                    edge="start"
+                                    primary={<Typography variant="h4" className={classes.loginTitle}>{title}</Typography>}
+                                    secondary={<Typography variant="subtitle2" className={classes.loginSubtitle}>Become a Artyst Member. <Button size="small" style={{ color: deepPurple[400], minWidth: 'fit-content' }} onClick={() => { props.handleHeaderDialogClose(); props.handleHeaderDialogOpen('openRegisterDialog') }}>Join</Button></Typography>}
                                 />
-                            </Paper>
-                        </ListItem>
-                        <ListItem>
-                            <Paper elevation={3} className={classes.loginFields}>
-                                <Button disabled className={classes.loginIcons}>
-                                    <LockIcon />
-                                </Button>
-                                <InputBase
-                                    type='password'
-                                    value={password}
-                                    onChange={handlePasswordChange}
-                                    className={classes.inputPass}
-                                    placeholder="Password"
-                                    inputProps={{ 'aria-label': 'Password' }}
+                            </ListItem>
+                            <ListItem>
+                                <Paper elevation={3} className={classes.loginFields}>
+                                    <Button disabled className={classes.loginIcons}>
+                                        <PersonIcon />
+                                    </Button>
+                                    <InputBase
+                                        value={username}
+                                        onChange={handleUsernameChange}
+                                        className={classes.inputUser}
+                                        placeholder="Username"
+                                        inputProps={{ 'aria-label': 'Username' }}
+                                        onKeyPress={(event) => {
+                                            if (event.key === 'Enter') {
+                                                onSubmitClick()
+                                            }
+                                        }}
+                                    />
+                                </Paper>
+                            </ListItem>
+                            <ListItem>
+                                <Paper elevation={3} className={classes.loginFields}>
+                                    <Button disabled className={classes.loginIcons}>
+                                        <LockIcon />
+                                    </Button>
+                                    <InputBase
+                                        type='password'
+                                        value={password}
+                                        onChange={handlePasswordChange}
+                                        className={classes.inputPass}
+                                        placeholder="Password"
+                                        inputProps={{ 'aria-label': 'Password' }}
+                                        onKeyPress={(event) => {
+                                            if (event.key === 'Enter') {
+                                                onSubmitClick()
+                                            }
+                                        }}
+                                    />
+                                </Paper>
+                            </ListItem>
+                            <ListItem>
+                                <FormControlLabel
+                                    className={classes.remainLoggedIn}
+                                    control={<Checkbox
+                                        color="default"
+                                        checked={stayLoggedIn}
+                                        onChange={stayLoggedin}
+                                        classes={{ root: classes.checkboxRoot, checked: classes.checkboxChecked }}
+                                    />}
+                                    label={<Typography variant="subtitle2" className={classes.checkboxText}>Keep me logged in</Typography>}
                                 />
-                            </Paper>
-                        </ListItem>
-                        <ListItem>
-                            <FormControlLabel
-                                className={classes.remainLoggedIn}
-                                control={<Checkbox
-                                    color="default"
-                                    checked={stayLoggedIn}
-                                    onChange={stayLoggedin}
-                                    classes={{ root: classes.checkboxRoot, checked: classes.checkboxChecked }}
-                                />}
-                                label={<Typography variant="subtitle2" className={classes.checkboxText}>Keep me logged in</Typography>}
-                            />
-                        </ListItem>
-                        <ListItem>
-                            <Button variant="contained" size='large' className={classes.loginButton} onClick={onSubmitClick}>sign in</Button>
-                        </ListItem>
-                        <ListItem>
-                            <Typography variant='body2' className={classes.loginTOS}>
-                                By clicking Log In, I confirm that I have read and agree to the Artyst <Link onClick={() => props.history.push('/policy/services')} >Terms of Service</Link> and <Link onClick={() => props.history.push('/policy/privacy')}>Privacy Policy</Link>.
-                            </Typography>
-                        </ListItem>
-                    </List>
-                </CardContent>
-            </div>
+                            </ListItem>
+                            <ListItem>
+                                <Button variant="contained" size='large' className={classes.loginButton} onClick={onSubmitClick}>sign in</Button>
+                            </ListItem>
+                            <ListItem>
+                                <Typography variant='body2' className={classes.loginTOS}>
+                                    By clicking Log In, I confirm that I have read and agree to the Artyst <Link onClick={() => props.history.push('/policy/services')} >Terms of Service</Link> and <Link onClick={() => props.history.push('/policy/privacy')}>Privacy Policy</Link>.
+                                </Typography>
+                            </ListItem>
+                        </List>
+                    </CardContent>
+                </Grid>
+            </Grid>
+            {/* <div className={classes.cardDetails}>
+
+            </div> */}
             {/* </Card> */}
             {/* </DialogContent> */}
         </Dialog >
@@ -221,7 +244,7 @@ const LoginModal = (props) => {
 }
 
 const mapStateToProps = (state, props) => ({
-    loginCreds: state.common.loginCreds
+    common: state.common
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

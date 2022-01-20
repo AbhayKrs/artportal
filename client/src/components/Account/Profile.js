@@ -4,13 +4,16 @@ import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
-import { Typography, Card, CardContent, List, ListItem, ListItemText, ListItemAvatar, Button, Grid, Box, Tabs, Tab, Avatar, Table, TableBody, TableRow, TableCell } from '@material-ui/core';
+import { Typography, Card, CardContent, List, ListItem, ListItemText, IconButton, Button, Grid, Box, Tabs, Tab, Avatar, Table, TableBody, TableRow, TableCell } from '@material-ui/core';
 import { grey, deepPurple, teal, pink } from '@material-ui/core/colors';
+import { handleUploadAsset, fetchAvatars, handleEditUserAvatar } from '../../store/actions/common.actions';
+import SettingsIcon from '@material-ui/icons/Settings';
+import TelegramIcon from '@material-ui/icons/Telegram';
 
 const useStyles = makeStyles((theme) => ({
     profileRoot: {
         margin: '65px 0 0',
-        backgroundImage: 'url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d14808a6-d6ac-49ac-bf38-62fa7ecd9808/ddsbe5i-e635f976-9a0f-4b45-88f7-2aaf4ab5ba22.jpg/v1/fill/w_1280,h_640,q_75,strp/alien_jungle_banner_deviantart_by_ahaas_ddsbe5i-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NjQwIiwicGF0aCI6IlwvZlwvZDE0ODA4YTYtZDZhYy00OWFjLWJmMzgtNjJmYTdlY2Q5ODA4XC9kZHNiZTVpLWU2MzVmOTc2LTlhMGYtNGI0NS04OGY3LTJhYWY0YWI1YmEyMi5qcGciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.S6SDvWTfBop0Rep4LqE5qNmLlJowodQCM0TptvJN_gs)',
+        backgroundImage: 'url(https://cdnb.artstation.com/p/assets/images/images/007/952/733/small/chris-cold-dimensions2.jpg?1509544484)',
         backgroundSize: 'contain',
         width: '100%',
         //     position: 'fixed',
@@ -24,18 +27,16 @@ const useStyles = makeStyles((theme) => ({
         position: 'relative',
     },
     profileBodyBackdrop: {
-        backgroundImage: 'linear-gradient(180deg, rgba(6,7,13,0) 0, black 70%, black)',
+        backgroundImage: 'linear-gradient(180deg, rgba(6,7,13,0) 0, black 125%, black)',
         position: 'relative',
         inset: '400px 0 0',
         width: '100%',
-        height: 200,
+        height: '180px',
         transform: 'translateY(-100%)'
     },
     profileTabRoot: {
         flexGrow: 1,
         position: 'relative',
-        background: 'black',
-        padding: '0 15px 15px'
     },
     profileTabHeader: {
         display: 'flex',
@@ -43,13 +44,35 @@ const useStyles = makeStyles((theme) => ({
         padding: '20px 20px 0',
     },
     profileNamePrimary: {
-        color: grey[300]
+        color: grey[300],
+        fontSize: '4rem',
+        lineHeight: 'inherit',
+        fontFamily: 'AntipastoProRegular'
     },
     profileNameSecondary: {
         color: grey[500]
     },
     tabs: {
         borderRight: `1px solid ${theme.palette.divider}`,
+        position: 'relative',
+        borderRadius: '15px 15px 0 0',
+        color: grey[400],
+        background: 'transparent',
+        height: '45px'
+    },
+    tabRoot: {
+        minWidth: '80px',
+        margin: '0 5px 10px 0',
+        textTransform: 'capitalize',
+        borderRadius: '20px',
+        minHeight: 'auto'
+        // background: 'white'
+    },
+    selectedTab: {
+        borderRadius: '10px 10px 0 0',
+        margin: '0 5px 0 0',
+        background: grey[800],
+        color: grey[200]
     },
     sellerThumbnail: {
         borderRadius: '50%',
@@ -69,9 +92,11 @@ const useStyles = makeStyles((theme) => ({
         height: '100%',
     },
     sellerAvatar: {
-        backgroundColor: '#fff',
-        WebkitBorderRadius: '50%',
         borderRadius: '50%',
+        float: 'left',
+        width: '200px',
+        height: '200px',
+        marginTop: '-175px',
         top: '50%'
     },
     actionText: {
@@ -168,10 +193,14 @@ MasonryLayout.propTypes = {
     children: PropTypes.arrayOf(PropTypes.element),
 };
 
-
 const Profile = (props) => {
     const classes = useStyles();
+    const [file, setFile] = useState('');
     const [value, setValue] = React.useState(0);
+
+    useEffect(() => {
+        props.fetchAvatars();
+    }, [])
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -184,42 +213,37 @@ const Profile = (props) => {
                     <div className={classes.profileBodyBackdrop}></div>
                     <div className={classes.profileTabHeader}>
                         <ListItemText
-                            style={{ zIndex: 1 }}
-                            primary={<Typography variant='h2' className={classes.profileNamePrimary}>{props.user.name}</Typography>}
-                            secondary={<div style={{ display: 'flex', margin: '10px 0' }}>
-                                <Typography variant='h6' className={classes.profileNameSecondary}># {props.user.username}</Typography>
-                                <Button variant='contained' size='small' style={{ height: 'fit-content', background: deepPurple[500], color: grey[200], margin: '0 5px 0 10px' }}>Follow</Button>
-                                <Button variant='contained' size='small' style={{ height: 'fit-content', background: grey[200], color: deepPurple[500], margin: '0 5px 0 10px' }}>Message</Button>
-                            </div>
-                            }
+                            style={{ zIndex: 1, alignSelf: 'end' }}
+                            primary={<Typography className={classes.profileNamePrimary}>{props.user.name}</Typography>}
+                            secondary={<Typography variant='subtitle1' className={classes.profileNameSecondary}>#{props.user.username}</Typography>}
                         />
                         <div style={{ zIndex: 1, textAlign: 'center' }}>
-                            <Avatar className={classes.sellerThumbnail}>
-                                <img src="https://randomuser.me/api/portraits/women/47.jpg" alt="" width="200" height="200" className={classes.sellerAvatar} />
-                            </Avatar>
+                            <img src={`http://localhost:4000/api/users/image/${props.user.avatar.icon}`} alt="" width="200" height="200" className={classes.sellerAvatar} />
                             <Typography variant='subtitle1' style={{ zIndex: 1, color: 'white' }}>6969 Followers</Typography>
                             <Typography variant='subtitle1' style={{ zIndex: 1, color: 'white' }}>69 Following</Typography>
                             <Typography variant='subtitle1' style={{ zIndex: 1, color: 'white' }}>432 Likes</Typography>
+                            <Button variant='contained' style={{ height: 'fit-content', background: deepPurple[500], color: grey[200], margin: '0 5px 0 10px' }}>Follow</Button>
+                            <IconButton size='small' style={{ padding: '8px', color: deepPurple[400], backgroundColor: grey[200] }}>
+                                <TelegramIcon />
+                            </IconButton>
                         </div>
                     </div>
                     <div className={classes.profileTabRoot}>
                         <Tabs
                             orientation="horizontal"
-                            // variant="scrollable"
                             value={value}
                             onChange={handleChange}
                             aria-label="Vertical tabs example"
                             className={classes.tabs}
-                            style={{ position: 'relative', borderRadius: '15px 15px 0 0', color: grey[400], background: '#2a2a2a' }}
+                            style={{}}
                         >
-                            <Tab label="Showcase" {...a11yProps(0)} />
-                            <Tab label="Store" {...a11yProps(1)} />
-                            <Tab label="Prizes Recieved" {...a11yProps(2)} />
-                            <Tab label="Prizes Given" {...a11yProps(3)} />
-                            {/* <Tab label="Item Six" {...a11yProps(5)} />
-                            <Tab label="Item Seven" {...a11yProps(6)} /> */}
+                            <Tab classes={{ root: classes.tabRoot, selected: classes.selectedTab }} label="Portfolio" {...a11yProps(0)} />
+                            <Tab classes={{ root: classes.tabRoot, selected: classes.selectedTab }} label="Store" {...a11yProps(1)} />
+                            <Tab classes={{ root: classes.tabRoot, selected: classes.selectedTab }} label="Prizes Recieved" {...a11yProps(2)} />
+                            <Tab classes={{ root: classes.tabRoot, selected: classes.selectedTab }} label="Prizes Given" {...a11yProps(3)} />
+                            <Tab classes={{ root: classes.tabRoot, selected: classes.selectedTab }} label="Edit Profile" {...a11yProps(4)} />
                         </Tabs>
-                        <TabPanel style={{ width: '100%', background: '#2a2a2a' }} value={value} index={0}>
+                        {/* <TabPanel style={{ width: '100%', background: '#2a2a2a' }} value={value} index={0}>
                             <div className={classes.exploreGrid}>
                                 {props.user.artwork_count > 0 ?
                                     <MasonryLayout className={classes.layout}>
@@ -236,7 +260,7 @@ const Profile = (props) => {
                                     ''
                                 }
                             </div>
-                        </TabPanel>
+                        </TabPanel> */}
                         <TabPanel style={{ width: '100%', background: '#2a2a2a', borderRadius: '0 0 15px 15px' }} value={value} index={1}>
                             {props.user.store_count > 0 ?
                                 <Table className={classes.table} aria-label="simple table">
@@ -244,11 +268,11 @@ const Profile = (props) => {
                                         {props.user.store.map((storeItem, index) => (
                                             <TableRow key={storeItem._id} style={{ height: '200px' }}>
                                                 <TableCell style={(props.user.store.length - 1) === index ? { borderBottom: 'none' } : {}} component="th" scope="row">
-                                                    <img
+                                                    {/* <img
                                                         className={classes.storeImage}
                                                         id={storeItem._id}
                                                         src={`http://localhost:4000/api/store/image/${storeItem.item}`}
-                                                    />
+                                                    /> */}
                                                 </TableCell>
                                                 <TableCell style={(props.user.store.length - 1) === index ? { borderBottom: 'none' } : {}}>
                                                     <List style={{ color: grey[300] }}>
@@ -270,39 +294,58 @@ const Profile = (props) => {
                                                         </ListItem>
                                                     </List>
                                                 </TableCell>
-                                                {/* <TableCell>{storeItem.title}</TableCell>
-                                                <TableCell>{storeItem.description}</TableCell>
-                                                <TableCell>{storeItem.seller.username}</TableCell> */}
                                             </TableRow>
                                         ))}
                                     </TableBody>
                                 </Table>
                                 : ''}
                         </TabPanel>
-                        <TabPanel style={{ width: '100%', background: '#2a2a2a', borderRadius: '0 0 15px 15px' }} value={value} index={2}>
+                        <TabPanel TabPanel style={{ width: '100%', background: '#2a2a2a', borderRadius: '0 0 15px 15px' }
+                        } value={value} index={2} >
                             <div style={{ display: 'flex', minHeight: 500 }}>
                                 <Typography variant='button' style={{ margin: 'auto' }}>test</Typography>
                             </div>
-                        </TabPanel>
+                        </TabPanel >
                         <TabPanel style={{ width: '100%', background: '#2a2a2a', borderRadius: '0 0 15px 15px' }} value={value} index={3}>
                             <div style={{ display: 'flex', minHeight: 500 }}>
                                 <Typography variant='button' style={{ margin: 'auto' }}>test</Typography>
                             </div>
                         </TabPanel>
-                        {/* <TabPanel style={{ width: '100%', background: '#2a2a2a', borderRadius: '0 0 15px 15px' }} value={value} index={4}>
+                        <TabPanel style={{ width: '100%', background: '#2a2a2a', borderRadius: '0 0 15px 15px' }} value={value} index={4}>
                             <div style={{ display: 'flex', minHeight: 500 }}>
-                                <Typography variant='button' style={{ margin: 'auto' }}>test</Typography>
+                                <Grid container>
+                                    <Grid container xs={6} style={{ padding: '30px' }}>
+                                        <Typography variant='h6' style={{ width: '100%', textAlign: 'center', color: 'white', fontFamily: 'AntipastoProRegular' }}>Male</Typography>
+                                        {props.common.avatarList.filter(item => item.category === 'Male').map(item => (
+                                            <Grid item xs={3}>
+                                                <IconButton onClick={() => props.handleEditUserAvatar(item)}>
+                                                    <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${item.icon}`} />
+                                                </IconButton>
+                                            </Grid>
+                                        ))}
+                                    </Grid>
+                                    <Grid container xs={6} style={{ padding: '30px' }}>
+                                        <Typography variant='h6' style={{ width: '100%', textAlign: 'center', color: 'white', fontFamily: 'AntipastoProRegular' }}>Female</Typography>
+                                        {props.common.avatarList.filter(item => item.category === 'Female').map(item => (
+                                            <Grid item xs={3}>
+                                                <IconButton onClick={() => props.handleEditUserAvatar(item)}>
+                                                    <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${item.icon}`} />
+                                                </IconButton>
+                                            </Grid>
+                                        ))}
+                                    </Grid>
+                                </Grid>
                             </div>
-                        </TabPanel> */}
+                        </TabPanel>
                         {/* <TabPanel style={{ width: '100%', background: '#2a2a2a' }} value={value} index={5}>
                             Item Six
                         </TabPanel>
                         <TabPanel style={{ width: '100%', background: '#2a2a2a' }} value={value} index={6}>
                             Item Seven
                         </TabPanel> */}
-                    </div>
-                </div>
-            </div>
+                    </div >
+                </div >
+            </div >
 
         </div >
     )
@@ -315,6 +358,9 @@ const mapStateToProps = (state, props) => ({
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
+    handleUploadAsset,
+    fetchAvatars,
+    handleEditUserAvatar
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Profile));

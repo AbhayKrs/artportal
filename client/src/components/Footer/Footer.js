@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     footerTitle: {
         color: deepPurple[400],
         flexGrow: 0.05,
-        fontFamily: "'calypsokaregular', serif",
+        fontFamily: "'Calypsoka', serif",
         fontSize: '3.5rem',
         fontWeight: 100,
     },

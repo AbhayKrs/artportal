@@ -9,6 +9,45 @@ import {
     validateLoginInput,
     validateRegisterInput
 } from '../utils/authenticate.js';
+import mongoose from 'mongoose';
+
+//Importing gfs database
+import multer from 'multer';
+import Grid from 'gridfs-stream';
+import { GridFsStorage } from 'multer-gridfs-storage';
+import crypto from 'crypto';
+import path from 'path';
+
+//Connect gfs to database
+const conn = mongoose.connection;
+conn.once('open', () => {
+    gfs = Grid(conn.db, mongoose.mongo);
+    gfs.collection('assets');
+});
+
+let gfs;
+
+//Storage for image uploaded
+const storage = new GridFsStorage({
+    url: process.env.MONGO_URI,
+    file: (req, file) => {
+        return new Promise((resolve, reject) => {
+            crypto.randomBytes(16, (err, buf) => {
+                if (err) {
+                    return reject(err);
+                }
+                const filename =
+                    buf.toString('hex') + path.extname(file.originalname);
+                const fileInfo = {
+                    filename: filename,
+                    bucketName: 'assets',
+                };
+                resolve(fileInfo);
+            });
+        });
+    },
+});
+const asset = multer({ storage });
 
 // @desc    Get all users
 // @route   GET /api/users
@@ -29,41 +68,54 @@ router.get("/tags", async (req, res) => {
     res.json(common[0].tags);
 });
 
-// // @desc    Get all tags
-// // @route   GET /api/users/tags
-// // @access  Public
-// router.post("/tags", async (req, res) => {
-//     const tagData = [
-//         { text: 'cartoonlist' },
-//         { text: 'illustration' },
-//         { text: 'myart' }
-//     ]
-//     const newCommon = new Common({
-//         tags: tagData
-//     });
-//     console.log('newCommon data', newCommon);
-//     Common.create(newCommon, (err, common) => {
-//         if (err) {
-//             console.log(err);
-//         } else {
-//             res.send(common);
-//         }
-//     });
-//     res.json(common);
-// });
+// @desc    Get all tags
+// @route   GET /api/users/commonImages
+// @access  Public
+router.get("/commonImages", async (req, res) => {
+    const common = await Common.find({});
+    console.log('loginImage', common[0].images);
+    res.json(common[0].images);
+});
+
+// @desc    Get all tags
+// @route   GET /api/users/assets/
+// @access  Public
+router.get('/avatars', async (req, res) => {
+    const common = await Common.findOne();
+    res.json(common.avatars);
+});
+
+// @desc    Get all tags
+// @route   GET /api/users/assets/new
+// @access  Public
+router.post('/assets/new', asset.single('file'), async (req, res) => {
+    const common = await Common.findOne();
+    console.log('NEW ASSET CREATED!', common, common.avatars, req.file.filename);
+    common.avatars.push(req.file.filename);
+    common.avatars.map(item => {
+        common.avatarList.push({ avatar: item, category: 'Male' })
+    })
+    common.save();
+});
 
 // //@desc         Auth user and get token
 // //@route        POST /api/users/login
 // //@access       Public
-router.post("/login", (req, res) => {
-    const { errors, isValid } = validateLoginInput(req.body);
-    if (!isValid) { return res.status(400).json(errors) }
+router.post("/login", async (req, res) => {
+    let userList = [];
     const username = req.body.username;
     const password = req.body.password;
 
+    await User.find({}).then(users => {
+        userList.push(...users)
+    });
+
+    const { errors, isValid } = validateLoginInput(userList, req.body);
+    if (!isValid) { return res.status(400).json(errors) }
+
     User.findOne({ username }).then(user => {
         if (!user) {
-            return res.status(404).json({ usernotfound: 'User not found!' })
+            return res.status(404).json('User not found!')
         }
         bcrypt.compare(password, user.password).then((isMatch) => {
             if (isMatch) {
@@ -74,6 +126,7 @@ router.post("/login", (req, res) => {
                     name: user.name,
                     username: user.username,
                     email: user.email,
+                    avatar: user.avatar
                 };
                 jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 31556926 },
                     (err, token) => {
@@ -84,7 +137,7 @@ router.post("/login", (req, res) => {
                     }
                 );
             } else {
-                return res.status(400).json({ passwordincorrect: "Password incorrect" });
+                return res.status(400).json("Password incorrect");
             }
         });
     });
@@ -225,26 +278,20 @@ router.put('/profile', async (req, res) => {
     }
 });
 
-// @desc    Delete user
-// @route   DELETE /api/users/:id
+// @desc    Get users
+// @route   GET /api/users
 // @access  Private/Admin
-router.delete('/:id', async (req, res) => {
-    const user = await User.findById(req.params.id);
-
-    if (user) {
-        await user.remove();
-        res.json({ message: 'User removed' });
-    } else {
-        res.status(404);
-        throw new Error('User not found');
-    }
+router.get('/', async (req, res, next) => {
+    const users = await User.find({});
+    res.json(users);
 });
 
 // @desc    Get user by ID
 // @route   GET /api/users/:id
 // @access  Private/Admin
-router.get('/:id', (req, res, next) => {
-    res.send(req.user);
+router.get('/:id', async (req, res, next) => {
+    const user = await User.findById(req.params.id);
+    res.json(user);
 });
 
 // @desc    Update user
@@ -269,6 +316,21 @@ router.put('/:id', async (req, res) => {
             avatar: updateUser.avatar,
             isAdmin: updatedUser.isAdmin,
         });
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
+});
+
+// @desc    Delete user
+// @route   DELETE /api/users/:id
+// @access  Private/Admin
+router.delete('/:id', async (req, res) => {
+    const user = await User.findById(req.params.id);
+
+    if (user) {
+        await user.remove();
+        res.json({ message: 'User removed' });
     } else {
         res.status(404);
         throw new Error('User not found');
@@ -459,6 +521,64 @@ router.get("/logout", (req, res, next) => {
             });
         },
         (err) => next(err)
+    );
+});
+
+// @route   Image Route
+// @desc    Image from gridFS storage - /api/users/image/:filename
+// @access  Private
+router.get('/image/:filename', (req, res) => {
+    gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+        // Check if file
+        if (!file || file.length === 0) {
+            return res.status(404).json({ err: 'No file exists' });
+        }
+        // Check if image
+        if (
+            file.contentType === 'image/jpg' ||
+            file.contentType === 'image/jpeg' ||
+            file.contentType === 'image/png'
+        ) {
+            // Read output to browser
+            const readstream = gfs.createReadStream({
+                filename: req.params.filename,
+            });
+            readstream.pipe(res);
+        } else {
+            res.status(404).json({ err: 'Not an image' });
+        }
+    });
+});
+
+// @route   Edit User Avatar
+// @desc    /api/users/:id
+// @access  Private
+router.post('/:id/avatar', async (req, res) => {
+    const user = await User.findById(req.params.id);
+    console.log('req.body', req.body);
+    user.avatar = { ...req.body };
+    user.save();
+})
+
+// @route       Edit api/artworks/:id
+// @desc        Edit an artwork
+// @access      Private/Admin
+router.put('/:id', function (req, res) {
+    const newArtworkDetails = {
+        title: req.body.title,
+        description: req.body.description,
+    };
+    console.log(newArtworkDetails);
+    Explore.findByIdAndUpdate(
+        req.params.id,
+        { $set: newData },
+        function (err, artworks) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.send(artworks);
+            }
+        }
     );
 });
 
