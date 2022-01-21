@@ -16,7 +16,8 @@ import {
     HANDLE_SIGNUP,
     HANDLE_SIGNOUT,
     FETCH_COMMON_IMAGES,
-    FETCH_AVATARLIST
+    FETCH_AVATARLIST,
+    FETCH_AWARDLIST
 } from '../reducers/common.reducers';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
@@ -301,7 +302,19 @@ export const fetchAvatars = () => async (dispatch, getState) => {
     }
 }
 
+export const fetchAwards = () => async (dispatch, getState) => {
+    console.log('fetchAwards invoked');
+    try {
+        const awardList = await axios.get('http://localhost:4000/api/users/awards');
+        console.log('avatarList', awardList);
+        await dispatch({ type: FETCH_AWARDLIST, payload: awardList.data });
+    } catch (err) {
+        console.log('---error fetchAwards', err);
+    }
+}
+
 export const handleUploadAsset = (assetData) => async (dispatch, getState) => {
+    console.log('handleUploadAsset invoked', assetData);
     try {
         await axios({
             url: 'http://localhost:4000/api/users/assets/new',

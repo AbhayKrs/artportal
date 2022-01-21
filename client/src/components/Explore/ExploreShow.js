@@ -373,7 +373,7 @@ const CommentList = (props) => {
                                 <Chip
                                     classes={{ root: classes.userChip, label: classes.userChipLabel }}
                                     avatar={
-                                        <Avatar style={{ backgroundColor: 'transparent' }}>
+                                        <Avatar style={{ backgroundColor: 'transparent', borderRadius: 0 }}>
                                             <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${comment.author.avatar.icon}`} />
                                         </Avatar>
                                     }
@@ -597,7 +597,6 @@ const ExploreShow = (props) => {
                                                 <ChatBubbleIcon />
                                             </IconButton>
                                         </ListItem>
-                                        {console.log('avatar icon', props.explore.artworkData.author.avatar.icon)}
                                         <ListItem disableGutters className={classes.statListItem}>
                                             <ListItemText
                                                 style={{ textAlign: 'right' }}
@@ -607,7 +606,7 @@ const ExploreShow = (props) => {
                                                         <Chip
                                                             classes={{ root: classes.userChipRoot, label: classes.userChipLabelRoot }}
                                                             avatar={
-                                                                <Avatar style={{ backgroundColor: 'transparent' }}>
+                                                                <Avatar style={{ backgroundColor: 'transparent', borderRadius: 0 }}>
                                                                     <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${props.explore.artworkData.author.avatar.icon}`} />
                                                                 </Avatar>
                                                             }

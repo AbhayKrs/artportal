@@ -18,6 +18,7 @@ export const HANDLE_SIGNUP = 'HANDLE_SIGNUP';
 export const HANDLE_SIGNOUT = 'HANDLE_SIGNOUT';
 export const FETCH_COMMON_IMAGES = 'FETCH_COMMON_IMAGES';
 export const FETCH_AVATARLIST = 'FETCH_AVATARLIST';
+export const FETCH_AWARDLIST = 'FETCH_AWARDLIST';
 
 export const initialState = {
     loader: false,
@@ -57,7 +58,8 @@ export const initialState = {
     cartOpen: false,
     cartEmpty: true,
     cartList: [],
-    avatarList: []
+    avatarList: [],
+    awardList: []
 }
 
 const openDialog = (value) => {
@@ -118,6 +120,11 @@ export const commonReducer = (state = initialState, { type, payload }) => {
             console.log('FETCH_AVATARLIST', payload);
             const avatarList = [...payload];
             return { ...state, avatarList }
+        }
+        case FETCH_AWARDLIST: {
+            console.log('FETCH_AWARDLIST', payload);
+            const awardList = [...payload];
+            return { ...state, awardList }
         }
         // case PUSH_TO_CART: {
         //     return { ...state, cartList: [...state.cartList, payload] }

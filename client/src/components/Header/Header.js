@@ -88,7 +88,8 @@ const useStyles = makeStyles((theme) => ({
     },
     userIcon: {
         margin: 'auto',
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
+        borderRadius: 0
     },
     hoveredUserIcon: {
         width: '45px',
@@ -96,7 +97,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: deepPurple[500],
         boxShadow: '8px 15px 15px 0px rgb(0 0 0 / 80%)',
         margin: 'auto',
-        padding: '15px 8px 8px',
+        padding: '12px 8px 8px',
         borderRadius: '50% 50% 0 0'
     },
     navBtn: {

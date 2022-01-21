@@ -87,7 +87,8 @@ const useStyles = makeStyles((theme) => ({
     itemUserAvatar: {
         width: theme.spacing(3),
         height: theme.spacing(3),
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
+        borderRadius: 0
     },
     itemUsername: {
         color: grey[300],

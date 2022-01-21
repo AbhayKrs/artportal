@@ -85,16 +85,21 @@ router.get('/avatars', async (req, res) => {
     res.json(common.avatars);
 });
 
+router.get('/awards', async (req, res) => {
+    const common = await Common.findOne();
+    res.json(common.awards);
+});
+
 // @desc    Get all tags
 // @route   GET /api/users/assets/new
 // @access  Public
 router.post('/assets/new', asset.single('file'), async (req, res) => {
     const common = await Common.findOne();
-    console.log('NEW ASSET CREATED!', common, common.avatars, req.file.filename);
-    common.avatars.push(req.file.filename);
-    common.avatars.map(item => {
-        common.avatarList.push({ avatar: item, category: 'Male' })
-    })
+    const asset = {
+        icon: req.file.filename,
+        title: ''
+    }
+    common.awards.push(asset);
     common.save();
 });
 

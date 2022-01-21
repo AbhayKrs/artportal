@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { Typography, Card, CardContent, List, ListItem, ListItemText, IconButton, Button, Grid, Box, Tabs, Tab, Avatar, Table, TableBody, TableRow, TableCell } from '@material-ui/core';
 import { grey, deepPurple, teal, pink } from '@material-ui/core/colors';
-import { handleUploadAsset, fetchAvatars, handleEditUserAvatar } from '../../store/actions/common.actions';
+import { handleUploadAsset, fetchAvatars, fetchAwards, handleEditUserAvatar } from '../../store/actions/common.actions';
 import SettingsIcon from '@material-ui/icons/Settings';
 import TelegramIcon from '@material-ui/icons/Telegram';
 import AvatarModal from './AvatarModal';
@@ -59,11 +59,12 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '15px 15px 0 0',
         color: grey[400],
         background: 'transparent',
-        height: '45px'
+        height: '45px',
+        placeItems: 'end',
+        padding: '0 5px'
     },
     tabRoot: {
         minWidth: '80px',
-        margin: '0 5px 10px 0',
         textTransform: 'capitalize',
         borderRadius: '20px',
         minHeight: 'auto'
@@ -71,7 +72,6 @@ const useStyles = makeStyles((theme) => ({
     },
     selectedTab: {
         borderRadius: '10px 10px 0 0',
-        margin: '0 5px 0 0',
         background: grey[800],
         color: grey[200]
     },
@@ -89,11 +89,11 @@ const useStyles = makeStyles((theme) => ({
     },
     storeImage: {
         objectFit: 'cover',
-        width: '275px',
-        height: '100%',
+        maxWidth: '100%',
+        maxHeight: '100%',
+        paddingTop: '5px'
     },
     sellerAvatar: {
-        borderRadius: '50%',
         float: 'left',
         width: '200px',
         height: '200px',
@@ -101,11 +101,15 @@ const useStyles = makeStyles((theme) => ({
         top: '50%'
     },
     actionText: {
-        color: deepPurple[400]
+        color: deepPurple[400],
+        marginRight: '3px'
+    },
+    listItem: {
+        padding: '4px 0'
     }
 }));
 
-function TabPanel(props) {
+const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
 
     return (
@@ -202,6 +206,7 @@ const Profile = (props) => {
 
     useEffect(() => {
         props.fetchAvatars();
+        props.fetchAwards();
     }, [])
 
     const handleChange = (event, newValue) => {
@@ -212,6 +217,17 @@ const Profile = (props) => {
         setAvatarModal(false);
     }
 
+    const onFileChange = (event) => {
+        setFile(event.target.files[0]);
+    }
+
+    const handleUpload = () => {
+        const formData = new FormData();
+        formData.append('file', file);
+        props.handleUploadAsset(formData);
+        setTimeout(() => props.fetchAwards(), 3000)
+    }
+
     return (
         <div className={classes.profileRoot}>
             <div className={classes.profileBody}>
@@ -219,15 +235,15 @@ const Profile = (props) => {
                     <div className={classes.profileBodyBackdrop}></div>
                     <div className={classes.profileTabHeader}>
                         <ListItemText
-                            style={{ zIndex: 1, alignSelf: 'end' }}
+                            style={{ zIndex: 1, alignSelf: 'end', margin: 0 }}
                             primary={<Typography className={classes.profileNamePrimary}>{props.user.name}</Typography>}
                             secondary={<Typography variant='subtitle1' className={classes.profileNameSecondary}>#{props.user.username}</Typography>}
                         />
                         <div style={{ zIndex: 1, textAlign: 'center' }}>
                             <img src={`http://localhost:4000/api/users/image/${props.user.avatar.icon}`} alt="" width="200" height="200" className={classes.sellerAvatar} />
-                            <Typography variant='subtitle1' style={{ zIndex: 1, color: 'white' }}>6969 Followers</Typography>
-                            <Typography variant='subtitle1' style={{ zIndex: 1, color: 'white' }}>69 Following</Typography>
-                            <Typography variant='subtitle1' style={{ zIndex: 1, color: 'white' }}>432 Likes</Typography>
+                            <Typography component='p' style={{ zIndex: 1, color: 'white', fontFamily: 'CaviarDreams' }}>6969 Followers</Typography>
+                            <Typography component='p' style={{ zIndex: 1, color: 'white', fontFamily: 'CaviarDreams' }}>69 Following</Typography>
+                            <Typography component='p' style={{ zIndex: 1, color: 'white', fontFamily: 'CaviarDreams' }}>432 Likes</Typography>
                             <Button variant='contained' style={{ height: 'fit-content', background: deepPurple[500], color: grey[200], margin: '0 5px 0 10px' }}>Follow</Button>
                             <IconButton size='small' style={{ padding: '8px', color: deepPurple[400], backgroundColor: grey[200] }}>
                                 <TelegramIcon />
@@ -272,31 +288,32 @@ const Profile = (props) => {
                                 <Table className={classes.table} aria-label="simple table">
                                     <TableBody>
                                         {props.user.store.map((storeItem, index) => (
-                                            <TableRow key={storeItem._id} style={{ height: '200px' }}>
-                                                <TableCell style={(props.user.store.length - 1) === index ? { borderBottom: 'none' } : {}} component="th" scope="row">
+                                            <TableRow key={storeItem._id} style={{ maxHeight: '200px' }}>
+                                                <TableCell style={(props.user.store.length - 1) === index ? { borderBottom: 'none', width: '250px', height: '225px', textAlign: 'center', padding: '0 15px' } : { width: '250px', height: '225px', textAlign: 'center', padding: '0 15px' }} component="th" scope="row">
                                                     <img
                                                         className={classes.storeImage}
                                                         id={storeItem._id}
                                                         src={`http://localhost:4000/api/store/image/${storeItem.item}`}
                                                     />
                                                 </TableCell>
-                                                <TableCell style={(props.user.store.length - 1) === index ? { borderBottom: 'none' } : {}}>
+                                                <TableCell style={(props.user.store.length - 1) === index ? { borderBottom: 'none', padding: 0 } : { padding: 0 }}>
                                                     <List style={{ color: grey[300] }}>
-                                                        <ListItem disableGutters>
-                                                            <Typography variant='h4' style={{ wordBreak: 'break-all' }}>{storeItem.title}</Typography>
+                                                        <ListItem className={classes.listItem} disableGutters>
+                                                            <Typography variant='h6' style={{ wordBreak: 'break-all' }}>{storeItem.title}</Typography>
                                                         </ListItem>
-                                                        <ListItem disableGutters>
-                                                            <Typography variant='subtitle2'>{storeItem.description}</Typography>
+                                                        <ListItem className={classes.listItem} disableGutters>
+                                                            <Typography variant='caption'>{storeItem.description}</Typography>
                                                         </ListItem>
-                                                        <ListItem disableGutters>
+                                                        <ListItem className={classes.listItem} disableGutters>
                                                             <Typography variant='body'>Average User Rating: {Number.parseFloat(storeItem.rating).toFixed(2)}</Typography>
                                                         </ListItem>
-                                                        <ListItem disableGutters>
-                                                            <Typography variant='h6' className={classes.actionText}>&#8377;{Number.parseFloat(storeItem.price).toFixed(2)}</Typography>
+                                                        <ListItem className={classes.listItem} disableGutters>
                                                         </ListItem>
-                                                        <ListItem disableGutters>
-                                                            <Button variant='contained' style={{ margin: '0 5px' }}>Navigate to Listing</Button>
-                                                            <Button variant='contained' color='secondary' style={{ margin: '0 5px' }}>Remove Listing</Button>
+                                                        <ListItem className={classes.listItem} disableGutters>
+                                                            <Typography variant='h6' className={classes.actionText}>&#8377;{Number.parseFloat(storeItem.price).toFixed(2)}</Typography>
+                                                            &bull;
+                                                            <Button size="small" variant='contained' style={{ margin: '0 5px' }}>Navigate to Listing</Button>
+                                                            <Button size="small" variant='contained' color='secondary' style={{ margin: '0 5px' }}>Remove Listing</Button>
                                                         </ListItem>
                                                     </List>
                                                 </TableCell>
@@ -308,8 +325,28 @@ const Profile = (props) => {
                         </TabPanel>
                         <TabPanel TabPanel style={{ width: '100%', background: '#2a2a2a', borderRadius: '0 0 15px 15px' }
                         } value={value} index={2} >
-                            <div style={{ display: 'flex', minHeight: 500 }}>
-                                <Typography variant='button' style={{ margin: 'auto' }}>test</Typography>
+                            <div style={{ minHeight: 500 }}>
+                                <input
+                                    type="file"
+                                    className={classes.imageInput}
+                                    onChange={onFileChange}
+                                    name="myImage"
+                                />
+                                {file && <Grid item>
+                                    <Card style={{ background: 'transparent', width: '100px', height: '100px' }}>
+                                        <img style={{ width: '100%' }} id="preview" src={URL.createObjectURL(file)} alt="" />
+                                        <div onClick={() => setFile('')}>Cancel</div>
+                                    </Card>
+                                </Grid>
+                                }
+                                <Button variant='contained' onClick={handleUpload}>Add Award</Button>
+                                <Grid container spacing={2}>
+                                    {props.common.awardList.map(award => (
+                                        <Grid item xs={2}>
+                                            <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${award.icon}`} />
+                                        </Grid>
+                                    ))}
+                                </Grid>
                             </div>
                         </TabPanel >
                         <TabPanel style={{ width: '100%', background: '#2a2a2a', borderRadius: '0 0 15px 15px' }} value={value} index={3}>
@@ -351,6 +388,7 @@ const mapStateToProps = (state, props) => ({
 const mapDispatchToProps = (dispatch) => bindActionCreators({
     handleUploadAsset,
     fetchAvatars,
+    fetchAwards,
     handleEditUserAvatar
 }, dispatch);
 

@@ -10,7 +10,8 @@ const commonSchema = new mongoose.Schema(
             signup: String
         },
         awards: [{
-            type: String
+            icon: String,
+            title: String
         }],
         avatars: [{
             icon: String,
