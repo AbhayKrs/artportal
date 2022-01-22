@@ -10,7 +10,7 @@ import AddIcon from '@material-ui/icons/Add';
 import CoinIcon from '../../assets/images/coin.png';
 import { grey, blueGrey, deepPurple } from '@material-ui/core/colors';
 
-import { handleHeaderDialogOpen, handleHeaderDialogClose, handleSignin } from '../../store/actions/common.actions';
+import { fetchAwards, handleHeaderDialogOpen, handleHeaderDialogClose, handleSignin } from '../../store/actions/common.actions';
 
 const useStyles = makeStyles((theme) => ({
     loginRoot: {
@@ -199,11 +199,10 @@ const TabPanelContent = (props) => {
             {...other}
         >
             {value === index && (
-                <Grid container style={{ padding: '15px', height: '320px' }}>
-                    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39].map((item, index) => (
+                <Grid container spacing={4} style={{ padding: '15px', height: '320px' }}>
+                    {props.awards.map(award => (
                         <Grid item xs={2}>
-                            <Avatar alt="Remy Sharp" src={CoinIcon} />
-                            <Typography variant="p" style={{ color: grey[200] }}>{(children * 100) + item}</Typography>
+                            <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${award.icon}`} />
                         </Grid>
                     ))}
                 </Grid>
@@ -224,6 +223,10 @@ const AwardModal = (props) => {
     const [value, setValue] = useState(0);
 
     const classes = useStyles();
+
+    useEffect(() => {
+        props.fetchAwards();
+    }, [])
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -260,7 +263,7 @@ const AwardModal = (props) => {
                     <Tab classes={{ root: classes.tabRoot, selected: classes.selectedTab }} label="Premium" {...tabProps(2)} />
                 </Tabs>
                 {[0, 1, 2].map((item, index) => (
-                    <TabPanelContent value={value} index={index}>
+                    <TabPanelContent value={value} index={index} awards={props.common.awardList}>
                         {item}
                     </TabPanelContent>
                 ))}
@@ -276,6 +279,7 @@ const mapStateToProps = (state, props) => ({
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
+    fetchAwards,
     handleHeaderDialogOpen,
     handleHeaderDialogClose,
     handleSignin

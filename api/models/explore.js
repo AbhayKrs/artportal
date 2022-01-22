@@ -28,7 +28,6 @@ const exploreSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        // comments: ['Comment'],
         comments: [{
             content: {
                 type: String,
@@ -53,6 +52,10 @@ const exploreSchema = new mongoose.Schema(
             }],
             createdAt: { type: Date },
             updatedAt: { type: Date }
+        }],
+        awards: [{
+            icon: String,
+            title: String
         }],
         likes: [{
             type: mongoose.Schema.Types.ObjectId,

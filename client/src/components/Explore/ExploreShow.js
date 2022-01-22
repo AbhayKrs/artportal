@@ -553,12 +553,19 @@ const ExploreShow = (props) => {
                     <List className={classes.commentList} disablePadding>
                         <ListSubheader className={classes.commentListHeader} disableGutters>
                             <Grid container className={classes.showHeader}>
-                                <Grid item xs={9}>
+                                <Grid item xs={9} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }}>
                                     <Typography className={classes.showTitle} variant="h4">{props.explore.artworkData.title}</Typography>
                                     <Typography className={classes.showDesc} component="p">{props.explore.artworkData.description}</Typography>
-                                    {props.explore.artworkData.tags.map(tag => (
-                                        <Chip className={classes.tagsChip} size="small" label={tag} />
-                                    ))}
+                                    <div style={{ display: 'flex', flexFlow: 'wrap' }}>
+                                        {props.explore.artworkData.tags.map(tag => (
+                                            <Chip className={classes.tagsChip} size="small" label={tag} />
+                                        ))}
+                                    </div>
+                                    {/* <div style={{ display: 'flex', flexFlow: 'wrap' }}>
+                                        {props.common.awardList.filter((item, index) => index < 5).map(award => (
+                                            <img style={{ width: '30px' }} src={`http://localhost:4000/api/users/image/${award.icon}`} />
+                                        ))}
+                                    </div> */}
                                 </Grid>
                                 <Grid item xs={3} style={{ alignSelf: 'center' }}>
                                     <List>

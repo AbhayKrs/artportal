@@ -99,7 +99,8 @@ router.post('/new', upload.single('file'),
             title: req.body.title,
             author: {
                 id: user.id,
-                username: user.username
+                username: user.username,
+                avatar: user.avatar
             },
             description: req.body.description,
             tags: req.body.tags

@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
-import { Typography, Card, CardContent, List, ListItem, ListItemText, IconButton, Button, Grid, Box, Tabs, Tab, Avatar, Table, TableBody, TableRow, TableCell } from '@material-ui/core';
+import { Typography, Card, Divider, List, ListItem, ListItemText, IconButton, Button, Grid, Box, Tabs, Tab, Avatar, Table, TableBody, TableRow, TableCell } from '@material-ui/core';
 import { grey, deepPurple, teal, pink } from '@material-ui/core/colors';
 import { handleUploadAsset, fetchAvatars, fetchAwards, handleEditUserAvatar } from '../../store/actions/common.actions';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -225,7 +225,10 @@ const Profile = (props) => {
         const formData = new FormData();
         formData.append('file', file);
         props.handleUploadAsset(formData);
-        setTimeout(() => props.fetchAwards(), 3000)
+        setTimeout(() => {
+            props.fetchAwards();
+            props.fetchAvatars()
+        }, 3000)
     }
 
     return (
@@ -340,10 +343,16 @@ const Profile = (props) => {
                                 </Grid>
                                 }
                                 <Button variant='contained' onClick={handleUpload}>Add Award</Button>
-                                <Grid container spacing={2}>
-                                    {props.common.awardList.map(award => (
+                                <Grid container spacing={2} style={{ padding: '30px' }}>
+                                    {/* {props.common.awardList.map(award => (
                                         <Grid item xs={2}>
                                             <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${award.icon}`} />
+                                        </Grid>
+                                    ))}
+                                    <Divider /> */}
+                                    {props.common.avatarList.map(avatar => (
+                                        <Grid item xs={2}>
+                                            <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${avatar.icon}`} />
                                         </Grid>
                                     ))}
                                 </Grid>

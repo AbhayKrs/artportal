@@ -217,28 +217,6 @@ const AwardModal = (props) => {
                         ))}
                     </Grid>
                 </Grid>
-                <Grid container>
-                    <Grid container xs={6} style={{ padding: '30px' }}>
-                        <Typography variant='h6' style={{ width: '100%', textAlign: 'center', color: 'white', fontFamily: 'AntipastoProRegular' }}>Male</Typography>
-                        {props.common.avatarList.filter(item => item.category === 'Male').map(item => (
-                            <Grid item xs={3}>
-                                <IconButton onClick={() => props.handleEditUserAvatar(item)}>
-                                    <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${item.icon}`} />
-                                </IconButton>
-                            </Grid>
-                        ))}
-                    </Grid>
-                    <Grid container xs={6} style={{ padding: '30px' }}>
-                        <Typography variant='h6' style={{ width: '100%', textAlign: 'center', color: 'white', fontFamily: 'AntipastoProRegular' }}>Female</Typography>
-                        {props.common.avatarList.filter(item => item.category === 'Female').map(item => (
-                            <Grid item xs={3}>
-                                <IconButton onClick={() => props.handleEditUserAvatar(item)}>
-                                    <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${item.icon}`} />
-                                </IconButton>
-                            </Grid>
-                        ))}
-                    </Grid>
-                </Grid>
             </DialogContent>
         </Dialog >
     )

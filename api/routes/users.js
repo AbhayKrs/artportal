@@ -94,13 +94,28 @@ router.get('/awards', async (req, res) => {
 // @route   GET /api/users/assets/new
 // @access  Public
 router.post('/assets/new', asset.single('file'), async (req, res) => {
-    const common = await Common.findOne();
-    const asset = {
-        icon: req.file.filename,
-        title: ''
-    }
-    common.awards.push(asset);
-    common.save();
+    //Add awards
+    // const common = await Common.findOne();
+    // const asset = {
+    //     icon: req.file.filename,
+    //     title: ''
+    // }
+    // common.awards.push(asset);
+    // common.save();
+
+    //Add avatars
+    // const common = await Common.findOne();
+    // const asset = {
+    //     icon: req.file.filename,
+    //     category: 'Female'
+    // }
+    // common.avatars.push(asset);
+    // common.save();
+
+    //Add login and signup image
+    // const common = await Common.findOne();
+    // common.images.signup = req.file.filename;
+    // common.save();
 });
 
 // //@desc         Auth user and get token
