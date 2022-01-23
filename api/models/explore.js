@@ -16,12 +16,10 @@ const exploreSchema = new mongoose.Schema(
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'User',
             },
-            username: {
-                type: String,
-            },
+            username: { type: String, default: '' },
             avatar: {
-                icon: String,
-                category: String
+                icon: { type: String, default: '' },
+                category: { type: String, default: '' }
             },
         },
         description: {
@@ -37,13 +35,11 @@ const exploreSchema = new mongoose.Schema(
                     type: mongoose.Schema.Types.ObjectId,
                     ref: 'User',
                 },
-                username: {
-                    type: String
-                },
+                username: { type: String, default: '' },
                 avatar: {
-                    icon: String,
-                    category: String
-                }
+                    icon: { type: String, default: '' },
+                    category: { type: String, default: '' }
+                },
             },
             likes: [{
                 type: mongoose.Schema.Types.ObjectId,
@@ -54,8 +50,8 @@ const exploreSchema = new mongoose.Schema(
             updatedAt: { type: Date }
         }],
         awards: [{
-            icon: String,
-            title: String
+            icon: { type: String, default: '' },
+            title: { type: String, default: '' }
         }],
         likes: [{
             type: mongoose.Schema.Types.ObjectId,
@@ -68,9 +64,7 @@ const exploreSchema = new mongoose.Schema(
             type: Number,
             default: 0
         },
-        tags: [{
-            type: String
-        }]
+        tags: [{ type: String, default: '' }]
     },
     {
         timestamps: true

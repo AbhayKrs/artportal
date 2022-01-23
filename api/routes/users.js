@@ -1,6 +1,8 @@
 import express from 'express';
 const router = express.Router();
 import User from '../models/user.js';
+import Explore from '../models/explore.js';
+import Comment from '../models/comment.js';
 import Common from '../models/common.js';
 import Cart from '../models/cart.js';
 import jwt from 'jsonwebtoken';
@@ -571,12 +573,28 @@ router.get('/image/:filename', (req, res) => {
 });
 
 // @route   Edit User Avatar
-// @desc    /api/users/:id
+// @desc    POST /api/users/:id/avatar
 // @access  Private
 router.post('/:id/avatar', async (req, res) => {
     const user = await User.findById(req.params.id);
+    const artwork = await Explore.find({ "author.id": req.params.id });
+
+    artwork.map(item => {
+        item.author.avatar = { ...req.body };
+        item.save();
+    });
+    Explore.updateMany(
+        { 'comments.author.id': req.params.id },
+        { $set: { "comments.$[comment].author.avatar": req.body } },
+        { arrayFilters: [{ 'comment.author.id': { $in: req.params.id } }] }
+    ).then(item => {
+        console.log('Success!', item);
+    }).catch(err => {
+        console.log('Error - ' + err);
+    });
     user.avatar = { ...req.body };
     user.save();
+    res.json(artwork);
 })
 
 export default router;

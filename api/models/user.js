@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Explore from './explore.js';
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
@@ -26,8 +27,8 @@ const UserSchema = new Schema({
         default: Date.now,
     },
     avatar: {
-        icon: String,
-        category: String
+        icon: { type: String, default: '' },
+        category: { type: String, default: '' }
     },
     artworks: [{
         filename: {
@@ -44,16 +45,15 @@ const UserSchema = new Schema({
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'User',
             },
-            username: {
-                type: String,
-            },
+            username: { type: String, default: '' },
+            avatar: {
+                icon: { type: String, default: '' },
+                category: { type: String, default: '' }
+            }
         },
         description: {
             type: String,
             required: true,
-        },
-        avatar: {
-            type: String,
         },
         comments: [{
             content: {
@@ -87,9 +87,7 @@ const UserSchema = new Schema({
             type: Number,
             default: 0
         },
-        tags: [{
-            type: String
-        }]
+        tags: [{ type: String, default: '' }]
     }],
     artwork_count: {
         type: Number,
@@ -121,8 +119,10 @@ const UserSchema = new Schema({
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'User',
             },
-            username: {
-                type: String,
+            username: { type: String, default: '' },
+            avatar: {
+                icon: { type: String, default: '' },
+                category: { type: String, default: '' }
             }
         },
     }],

@@ -2,20 +2,18 @@ import mongoose from 'mongoose';
 
 const commonSchema = new mongoose.Schema(
     {
-        tags: [{
-            type: String
-        }],
+        tags: [{ type: String, default: '' }],
         images: {
-            login: String,
-            signup: String
+            login: { type: String, default: '' },
+            signup: { type: String, default: '' }
         },
         awards: [{
-            icon: String,
-            title: String
+            icon: { type: String, default: '' },
+            title: { type: String, default: '' }
         }],
         avatars: [{
-            icon: String,
-            category: String
+            icon: { type: String, default: '' },
+            category: { type: String, default: '' }
         }]
     }
 );
