@@ -51,12 +51,13 @@ export const initialState = {
         store: [],
         store_count: 0,
         cart: [],
-        cart_count: 0
+        cart_count: 0,
     },
     token: null,
     isAuthenticated: false,
     cartOpen: false,
     cartEmpty: true,
+    cartTotal: 0,
     cartList: [],
     avatarList: [],
     awardList: []
@@ -156,7 +157,11 @@ export const commonReducer = (state = initialState, { type, payload }) => {
         }
         case FETCH_CARTLIST: {
             const cartList = [...payload.cart];
-            return { ...state, user: { ...state.user, cart: cartList, cart_count: payload.cart_count } }
+            let cartTotal = 0;
+            cartList.map(cart => {
+                cartTotal = cartTotal + cart.subtotal;
+            })
+            return { ...state, user: { ...state.user, cart: cartList, cart_count: payload.cart_count }, cartTotal: cartTotal }
         }
         case PUSH_TO_CART: {
             return {

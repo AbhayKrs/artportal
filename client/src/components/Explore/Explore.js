@@ -116,7 +116,7 @@ MasonryLayout.propTypes = {
 const Explore = (props) => {
     useEffect(() => {
         props.setLoader(true);
-        setTimeout(() => { props.setLoader(false); console.log('loader close') }, 5000);
+        setTimeout(() => { props.setLoader(false) }, 5000);
         props.fetchArtworkList();
         console.log(props.exploreData)
     }, []);

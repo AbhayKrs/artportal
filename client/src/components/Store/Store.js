@@ -14,8 +14,6 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import storeBackground from '../../assets/images/store_background.jpg'
 import Cart from './Cart';
 
-import StoreUpload from './StoreUpload';
-
 import { fetchStoreList } from '../../store/actions/store.actions';
 import { fetchCartList, handleCartOpen, handleCartClose, handleAddToCart, handleRemoveFromCart } from '../../store/actions/common.actions';
 
@@ -49,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: "'Oswald', sans-serif"
     },
     cardRoot: {
-        backgroundColor: '#fff',
+        backgroundColor: 'rgb(50, 50, 50)',
         MozBorderRadius: '4px',
         WebkitBorderRadius: '4px',
         borderRadius: '4px',
@@ -65,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
         padding: '0',
         position: 'relative',
         paddingBottom: '150%',
-        border: `2px solid ${grey[300]}`
+        border: '2px solid rgb(50, 50, 50)'
     },
     ratingRoot: {
         background: deepPurple[500],
@@ -154,7 +152,7 @@ const useStyles = makeStyles((theme) => ({
     },
     actionRoot: {
         display: 'flex',
-        backgroundColor: grey[300],
+        backgroundColor: 'rgb(50, 50, 50)',
         boxSizing: 'border-box',
         minHeight: '52px',
         padding: '8px',
@@ -192,7 +190,8 @@ const useStyles = makeStyles((theme) => ({
         display: 'inline',
         margin: 'auto ',
         fontWeight: '600',
-        marginRight: '5px'
+        marginRight: '5px',
+        color: grey[300]
     },
     actionLabel: {
         display: 'block'
@@ -216,9 +215,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Store = (props) => {
-    const [price, setPrice] = useState(0);
-    const [cartItems, setCartItems] = useState([]);
-    const [priceDialog, setPriceDialog] = useState(false);
     const classes = useStyles();
 
     useEffect(() => {
@@ -303,6 +299,7 @@ const Store = (props) => {
             {props.common.cartOpen ?
                 <Cart
                     open={true}
+                    cartTotal={props.common.cartTotal}
                     cartList={props.common.user.cart}
                     handleClose={props.handleCartClose}
                     fetchCartList={props.fetchCartList}
