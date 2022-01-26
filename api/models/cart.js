@@ -23,10 +23,14 @@ const cartSchema = new mongoose.Schema({
     seller: {
         id: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
+            ref: 'User'
         },
         username: {
             type: String,
+        },
+        avatar: {
+            icon: { type: String, default: '' },
+            category: { type: String, default: '' }
         }
     },
 });

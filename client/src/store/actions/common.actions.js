@@ -180,6 +180,29 @@ export const fetchUserStoreList = () => async (dispatch, getState) => {
     }
 }
 
+export const deleteUserStoreItem = (storeID) => async (dispatch, getState) => {
+    console.log('deleteUserStoreItem invoked', getState().common);
+    try {
+        const userID = getState().common.user.id;
+        const storeStatus = await axios({
+            url: `http://localhost:4000/api/store/${storeID}`,
+            method: 'DELETE',
+            headers: { "Content-Type": "application/json" },
+            data: { userID: userID }
+        }).then(async res => {
+            console.log('res', res.status);
+            await dispatch({ type: FETCH_USER_STORELIST, payload: res.data });
+        }).catch(err => {
+            if (err.response) {
+                console.log('Signup fail:: ', err.response.status);
+            }
+        })
+        dispatch(fetchUserStoreList());
+    } catch (err) {
+        console.log('---error deleteUserStoreItem', err);
+    }
+}
+
 export const fetchCartList = () => async (dispatch, getState) => {
     console.log('fetchCartList invoked', getState().common);
     try {
@@ -208,7 +231,14 @@ export const handleAddToCart = (data) => async (dispatch, getState) => {
             await axios({
                 url: `http://localhost:4000/api/users/${userID}/cart/${cartID}`,
                 method: 'PUT',
-                data: cartData,
+                data: cartData
+            }).then(async res => {
+                console.log('res', res.status);
+                await dispatch(fetchCartList());
+            }).catch(err => {
+                if (err.response) {
+                    console.log('Signup fail:: ', err.response.status);
+                }
             })
         } else {
             console.log('handleAddToCart add');
@@ -222,6 +252,13 @@ export const handleAddToCart = (data) => async (dispatch, getState) => {
                 url: `http://localhost:4000/api/users/${userID}/cart/add`,
                 method: 'POST',
                 data: cartData
+            }).then(async res => {
+                console.log('res', res.status);
+                await dispatch(fetchCartList());
+            }).catch(err => {
+                if (err.response) {
+                    console.log('Signup fail:: ', err.response.status);
+                }
             })
         }
     } catch (err) {
@@ -240,7 +277,14 @@ export const handleRemoveFromCart = (data) => async (dispatch, getState) => {
             await axios({
                 url: `http://localhost:4000/api/users/${userID}/cart/${cartID}`,
                 method: 'DELETE',
-            });
+            }).then(async res => {
+                console.log('res', res.status);
+                await dispatch(fetchCartList());
+            }).catch(err => {
+                if (err.response) {
+                    console.log('Signup fail:: ', err.response.status);
+                }
+            })
         } else {
             let quantity = userCart.filter(item => item.title === data.title)[0].quantity - 1;
             let subtotal = data.price * quantity;
@@ -253,6 +297,13 @@ export const handleRemoveFromCart = (data) => async (dispatch, getState) => {
                 url: `http://localhost:4000/api/users/${userID}/cart/${cartID}`,
                 method: 'PUT',
                 data: cartData,
+            }).then(async res => {
+                console.log('res', res.status);
+                await dispatch(fetchCartList());
+            }).catch(err => {
+                if (err.response) {
+                    console.log('Signup fail:: ', err.response.status);
+                }
             })
         }
     } catch (err) {

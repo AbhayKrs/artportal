@@ -442,7 +442,6 @@ router.post('/:id/cart/add', async (req, res) => {
                 username: user.username
             }
         });
-        console.log(newCartItem);
         Cart.create(newCartItem, (err, cartItem) => {
             if (err) {
                 console.log(err);
@@ -451,8 +450,6 @@ router.post('/:id/cart/add', async (req, res) => {
                 user.cart.push(cartItem);
                 user.cart_count = user.cart.length;
                 user.save();
-                console.log('user', user.cart);
-                console.log('cartItem', cartItem);
                 res.json(cartItem);
             }
         });

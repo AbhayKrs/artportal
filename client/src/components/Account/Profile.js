@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { Typography, Card, Divider, List, ListItem, ListItemText, IconButton, Button, Grid, Box, Tabs, Tab, Avatar, Table, TableBody, TableRow, TableCell } from '@material-ui/core';
 import { grey, deepPurple, teal, pink } from '@material-ui/core/colors';
-import { handleUploadAsset, fetchAvatars, fetchAwards, handleEditUserAvatar } from '../../store/actions/common.actions';
+import { handleUploadAsset, fetchAvatars, fetchAwards, handleEditUserAvatar, deleteUserStoreItem } from '../../store/actions/common.actions';
 import SettingsIcon from '@material-ui/icons/Settings';
 import TelegramIcon from '@material-ui/icons/Telegram';
 import AvatarModal from './AvatarModal';
@@ -231,6 +231,11 @@ const Profile = (props) => {
         }, 3000)
     }
 
+    const removeStoreListing = (storeID) => {
+        console.log('storeitem', storeID)
+        props.deleteUserStoreItem(storeID);
+    }
+
     return (
         <div className={classes.profileRoot}>
             <div className={classes.profileBody}>
@@ -316,7 +321,7 @@ const Profile = (props) => {
                                                             <Typography variant='h6' className={classes.actionText}>&#8377;{Number.parseFloat(storeItem.price).toFixed(2)}</Typography>
                                                             &bull;
                                                             <Button size="small" variant='contained' style={{ margin: '0 5px' }}>Navigate to Listing</Button>
-                                                            <Button size="small" variant='contained' color='secondary' style={{ margin: '0 5px' }}>Remove Listing</Button>
+                                                            <Button size="small" variant='contained' color='secondary' style={{ margin: '0 5px' }} onClick={() => removeStoreListing(storeItem._id)}>Remove Listing</Button>
                                                         </ListItem>
                                                     </List>
                                                 </TableCell>
@@ -398,7 +403,8 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     handleUploadAsset,
     fetchAvatars,
     fetchAwards,
-    handleEditUserAvatar
+    handleEditUserAvatar,
+    deleteUserStoreItem
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Profile));

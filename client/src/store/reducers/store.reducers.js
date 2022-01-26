@@ -18,7 +18,11 @@ export const initialState = {
     storeItemData: {
         seller: {
             id: '',
-            username: ''
+            username: '',
+            avatar: {
+                icon: '',
+                category: ''
+            }
         },
         item: '',
         _id: '',

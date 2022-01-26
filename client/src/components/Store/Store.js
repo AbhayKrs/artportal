@@ -40,11 +40,12 @@ const useStyles = makeStyles((theme) => ({
     },
     mainTitle: {
         color: 'white',
-        fontFamily: "'Oswald', sans-serif"
+        fontFamily: 'CaviarDreams',
+        fontWeight: 'bold'
     },
     mainSubTitle: {
         color: 'white',
-        fontFamily: "'Oswald', sans-serif"
+        fontFamily: 'CaviarDreams'
     },
     cardRoot: {
         backgroundColor: 'rgb(50, 50, 50)',
@@ -90,12 +91,12 @@ const useStyles = makeStyles((theme) => ({
         color: grey[300]
     },
     textBox: {
-        backgroundImage: 'linear-gradient(rgba(0,0,0,0), rgba(0,0,0,.76))',
+        backgroundImage: 'linear-gradient(180deg, transparent, rgb(50, 50, 50))',
         bottom: '0',
         MozBoxSizing: 'border-box',
         WebkitBoxSizing: 'border-box',
         boxSizing: 'border-box',
-        padding: '16px 5px',
+        padding: '0 5px 5px',
         position: 'absolute',
         width: '100%',
         zIndex: '1'
@@ -111,7 +112,7 @@ const useStyles = makeStyles((theme) => ({
         boxSizing: 'border-box',
         padding: '0',
         color: '#fff',
-        display: 'block',
+        display: 'flex',
         float: 'left',
         width: '100%',
         zIndex: '100'
@@ -134,7 +135,7 @@ const useStyles = makeStyles((theme) => ({
         width: 'auto',
         bottom: 'auto',
         display: 'grid',
-        padding: '0 10px',
+        padding: '0 5px',
         margin: '0',
         top: '50%'
     },
@@ -154,8 +155,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         backgroundColor: 'rgb(50, 50, 50)',
         boxSizing: 'border-box',
-        minHeight: '52px',
-        padding: '8px',
+        padding: '0 8px 8px',
         position: 'relative',
         zIndex: '1'
     },
@@ -202,14 +202,14 @@ const useStyles = makeStyles((theme) => ({
     },
     fab: {
         zIndex: 1100,
-        backgroundColor: grey[300],
+        backgroundColor: 'rgb(29, 29, 31)',
         color: '#fff',
         margin: theme.spacing.unit,
         position: "fixed",
         bottom: theme.spacing.unit * 2,
         right: theme.spacing.unit * 3,
         '&:hover': {
-            background: grey[100],
+            backgroundColor: 'rgb(29, 29, 31)',
         }
     }
 }))
@@ -223,7 +223,6 @@ const Store = (props) => {
 
     const addToCart = async (item) => {
         await props.handleAddToCart(item);
-        props.fetchCartList();
     }
 
     return (
@@ -252,11 +251,9 @@ const Store = (props) => {
                                 <div className={classes.textBox}>
                                     <Typography variant='h6' className={classes.cardHeader}>{item.title}</Typography>
                                     <ListItem disableGutters className={classes.sellerRoot}>
-                                        <ListItemAvatar>
-                                            <Avatar className={classes.sellerThumbnail}>
-                                                <img src="https://randomuser.me/api/portraits/women/47.jpg" alt="" width="40" height="40" className={classes.sellerAvatar} />
-                                            </Avatar>
-                                        </ListItemAvatar>
+                                        <Avatar style={{ backgroundColor: 'transparent', borderRadius: 0 }}>
+                                            <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${item.seller.avatar.icon}`} />
+                                        </Avatar>
                                         <ListItemText
                                             className={classes.sellerHeader}
                                             primary={<Typography variant='caption' className={classes.sellerPrimary}>{item.seller.username}</Typography>}
@@ -271,7 +268,8 @@ const Store = (props) => {
                                     <Typography variant='body2' classes={{ root: classes.actionText, label: classes.actionLabel }} >&#8377;{Number.parseFloat(item.price).toFixed(2)}</Typography>
                                     <IconButton className={classes.priceBtn} onClick={() => addToCart(item)}>
                                         <AddCircleIcon />
-                                    </IconButton >                                </div>
+                                    </IconButton >
+                                </div>
                                 <div className={classes.actionIconGroup}>
                                     <IconButton className={classes.iconBtn}>
                                         <ShareIcon className={classes.actionIcon} />
@@ -288,8 +286,8 @@ const Store = (props) => {
             {!props.common.cartOpen ?
                 <Tooltip Tooltip title="Cart" aria-label="add" onClick={props.handleCartOpen} style={{ borderRadius: '15px' }}>
                     <Fab className={classes.fab} >
-                        <Badge badgeContent={props.common.user.cart_count} color="secondary" classes={{ badge: classes.badgeRoot }}>
-                            <ShoppingCartIcon style={{ color: deepPurple['A700'] }} />
+                        <Badge badgeContent={props.common.user.cart_count} color="primary" classes={{ badge: classes.badgeRoot }}>
+                            <ShoppingCartIcon style={{ color: grey[300] }} />
                         </Badge>
                     </Fab>
                 </Tooltip>

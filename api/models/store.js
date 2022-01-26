@@ -24,7 +24,8 @@ const storeSchema = new mongoose.Schema(
                 type: String,
             },
             avatar: {
-                type: String,
+                icon: { type: String, default: '' },
+                category: { type: String, default: '' }
             },
             isSeller: {
                 type: Boolean

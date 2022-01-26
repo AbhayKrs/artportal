@@ -15,7 +15,7 @@ import Cart from './Cart';
 import moment from 'moment';
 
 import { fetchStoreList, fetchStoreItem, handleStoreExit } from '../../store/actions/store.actions';
-import { setLoader, handleCartOpen, fetchCartList, handleCartClose, handleAddToCart } from '../../store/actions/common.actions';
+import { setLoader, handleCartOpen, fetchCartList, handleCartClose, handleAddToCart, handleRemoveFromCart } from '../../store/actions/common.actions';
 
 import Rating from 'react-rating';
 
@@ -267,7 +267,9 @@ const useStyles = makeStyles((theme) => ({
         padding: '0 10px'
     },
     priceRoot: {
-        display: 'flex'
+        display: 'flex',
+        flexDirection: 'column',
+        textAlign: 'end'
     },
     pricePrimary: {
         color: teal[400]
@@ -312,14 +314,14 @@ const useStyles = makeStyles((theme) => ({
     },
     fab: {
         zIndex: 1100,
-        backgroundColor: grey[300],
+        backgroundColor: 'rgb(29, 29, 31)',
         color: '#fff',
         margin: theme.spacing.unit,
         position: "fixed",
         bottom: theme.spacing.unit * 2,
         right: theme.spacing.unit * 3,
         '&:hover': {
-            background: grey[100],
+            backgroundColor: 'rgb(29, 29, 31)',
         }
     },
     badgeRoot: {
@@ -339,9 +341,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const StoreShow = (props) => {
-    const [date, setDate] = useState('');
-    const [cartItems, setCartItems] = useState([]);
-    const [rating, setRating] = useState(0);
     const { id } = useParams();
     const classes = useStyles();
 
@@ -370,7 +369,7 @@ const StoreShow = (props) => {
         <div style={{ margin: '80px 20px 20px' }}>
             <Breadcrumbs aria-label="breadcrumb" style={{ color: grey[400] }}>
                 <Typography style={{ cursor: 'pointer' }} variant='body2' color="inherit" onClick={handleStoreClick}>Store</Typography>
-                <Typography variant='body2' color="inherit" onClick={handleStoreClick}>{props.store.storeItemData.seller.username}</Typography>
+                <Typography style={{ cursor: 'pointer' }} variant='body2' color="inherit" onClick={handleStoreClick}>{props.store.storeItemData.seller.username}</Typography>
                 <Typography style={{ color: deepPurple[500] }}>{props.store.storeItemData.title}</Typography>
             </Breadcrumbs>
             <Paper elevation={2} className={classes.paperRoot}>
@@ -390,12 +389,14 @@ const StoreShow = (props) => {
                         </Grid>
                     </Grid>
                     <Grid item lg={6} xs={12} style={{ padding: '15px' }}>
-                        <Typography variant='h4' style={{ color: grey[300] }}>{props.store.storeItemData.title}</Typography>
-                        <ListItemText
-                            classes={{ root: classes.priceRoot, secondary: classes.priceSecondary }}
-                            primary={<Typography variant='h6' className={classes.pricePrimary}>&#8377; {Number.parseFloat(props.store.storeItemData.price).toFixed(2)}</Typography>}
-                            secondary='including shipping + taxes'
-                        />
+                        <div style={{ display: 'flex' }}>
+                            <Typography variant='h4' style={{ color: grey[300] }}>{props.store.storeItemData.title}</Typography>
+                            <ListItemText
+                                classes={{ root: classes.priceRoot, secondary: classes.priceSecondary }}
+                                primary={<Typography variant='h5' className={classes.pricePrimary}>&#8377; {Number.parseFloat(props.store.storeItemData.price).toFixed(2)}</Typography>}
+                                secondary='including shipping + taxes'
+                            />
+                        </div>
                         <Typography variant='body2' style={{ margin: '10px 0', color: grey[500] }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                             Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                         </Typography>
@@ -536,8 +537,8 @@ const StoreShow = (props) => {
             {!props.common.cartOpen ?
                 <Tooltip Tooltip title="Cart" aria-label="add" onClick={props.handleCartOpen} style={{ borderRadius: '15px' }}>
                     <Fab className={classes.fab} >
-                        <Badge badgeContent={props.common.user.cart_count} color="secondary" classes={{ badge: classes.badgeRoot }}>
-                            <ShoppingCartIcon style={{ color: deepPurple['A700'] }} />
+                        <Badge badgeContent={props.common.user.cart_count} color="primary" classes={{ badge: classes.badgeRoot }}>
+                            <ShoppingCartIcon style={{ color: grey[300] }} />
                         </Badge>
                     </Fab>
                 </Tooltip>
@@ -547,7 +548,11 @@ const StoreShow = (props) => {
             <Cart
                 open={props.common.cartOpen}
                 cartList={props.common.user.cart}
+                cartTotal={props.common.cartTotal}
                 handleClose={props.handleCartClose}
+                fetchCartList={props.fetchCartList}
+                handleAddToCart={props.handleAddToCart}
+                handleRemoveFromCart={props.handleRemoveFromCart}
             />
         </div >
     )
@@ -566,6 +571,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     fetchStoreItem,
     handleStoreExit,
     handleAddToCart,
+    handleRemoveFromCart,
     handleCartOpen,
     handleCartClose,
 }, dispatch);

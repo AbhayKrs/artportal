@@ -85,7 +85,7 @@ router.post('/new', upload.single('file'),
             seller: {
                 id: user.id,
                 username: user.username,
-                // avatar: req.body.user.avatar,
+                avatar: user.avatar,
                 isSeller: true,
                 // seller_rating: req.body.user.rating
             },
@@ -151,11 +151,17 @@ router.put('/:id', function (req, res) {
 router.delete('/:id', async (req, res) => {
     try {
         const storeItem = await Store.findById(req.params.id);
+        const user = await User.findById(req.body.userID);
+        const deleteListing = user.store.find(storeItem => storeItem._id == req.params.id);
+
         if (!storeItem) {
             return res.status(404).send('Store item not found');
         }
         await storeItem.remove();
-        res.send('Store item removed successfully');
+        user.store = user.store.filter(storeItem => storeItem._id !== deleteListing._id);
+        user.store_count = user.store.length;
+        await user.save();
+        res.json('Store item removed successfully');
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Store item removal failed');

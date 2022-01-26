@@ -63,7 +63,7 @@ const Cart = (props) => {
                                 <TableHead>
                                     <TableRow>
                                         {columns.map((column) => (
-                                            <TableCell key={column.id} style={{ color: grey[300], backgroundColor: 'rgb(39, 39, 43)', padding: '8px 14px' }}>
+                                            <TableCell key={column.id} style={{ color: grey[300], backgroundColor: 'rgb(39, 39, 43)', padding: '8px 16px' }}>
                                                 <Typography variant='button' >{column.label}</Typography>
                                             </TableCell>
                                         ))}
@@ -72,21 +72,21 @@ const Cart = (props) => {
                                 <TableBody>
                                     {props.cartList.map((item, index) => (
                                         <TableRow role="checkbox" tabIndex={-1} key={index}>
-                                            <TableCell key={index} style={{ color: grey[300], borderBottomColor: 'transparent', padding: '8px 16px' }}>
+                                            <TableCell key={index} style={{ color: grey[300], borderBottomColor: 'transparent', padding: '8px 20px' }}>
                                                 {item.title}
                                             </TableCell>
-                                            <TableCell key={index} style={{ color: grey[300], borderBottomColor: 'transparent', padding: '8px 16px' }}>
+                                            <TableCell key={index} style={{ color: grey[300], borderBottomColor: 'transparent', padding: '8px 20px' }}>
                                                 {item.price}
                                             </TableCell>
-                                            <TableCell key={index} style={{ color: grey[300], borderBottomColor: 'transparent', padding: '8px 16px' }}>
+                                            <TableCell key={index} style={{ color: grey[300], borderBottomColor: 'transparent', padding: '8px 20px' }}>
                                                 <ButtonGroup size="small" aria-label="small outlined button group">
-                                                    <Button style={{ color: grey[100], background: teal[400], padding: 2, minWidth: 'fit-content' }} onClick={async () => { await props.handleAddToCart(item); props.fetchCartList(); }}>
+                                                    <Button style={{ color: grey[100], background: teal[400], padding: 2, minWidth: 'fit-content' }} onClick={async () => { await props.handleAddToCart(item) }}>
                                                         <AddIcon fontSize='small' />
                                                     </Button>
                                                     <Button disabled style={{ color: grey[300], backgroundColor: teal[400], minWidth: 'fit-content', padding: '0 10px' }}>
                                                         {item.quantity}
                                                     </Button>
-                                                    <Button style={{ color: grey[100], background: teal[400], padding: 2, minWidth: 'fit-content' }} onClick={async () => { await props.handleRemoveFromCart(item); props.fetchCartList(); }}>
+                                                    <Button style={{ color: grey[100], background: teal[400], padding: 2, minWidth: 'fit-content' }} onClick={async () => { await props.handleRemoveFromCart(item) }}>
                                                         <RemoveIcon fontSize='small' />
                                                     </Button>
                                                     {console.log('item', item)}
@@ -107,7 +107,7 @@ const Cart = (props) => {
             {props.cartList.length === 0 ?
                 ''
                 :
-                <DialogActions style={{ padding: '5px 15px', justifyContent: 'space-between' }}>
+                <DialogActions style={{ padding: '5px 10px', justifyContent: 'space-between' }}>
                     <Typography variant='button' style={{ padding: '5px', color: grey[300] }}>Total: &#8377;{props.cartTotal}</Typography>
                     <Button autoFocus onClick={props.handleClose} style={{ color: grey[300] }}>
                         Checkout
