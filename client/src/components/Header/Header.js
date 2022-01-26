@@ -88,12 +88,11 @@ const useStyles = makeStyles((theme) => ({
     },
     userIcon: {
         margin: 'auto',
-        backgroundColor: deepPurple[500],
-        padding: '6px',
-        borderRadius: '50%'
+        backgroundColor: 'transparent',
+        borderRadius: 0
     },
     hoveredUserIcon: {
-        width: '45px',
+        width: '40px',
         height: '36px',
         backgroundColor: deepPurple[500],
         boxShadow: '8px 15px 15px 0px rgb(0 0 0 / 80%)',

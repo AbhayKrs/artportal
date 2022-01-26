@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
     imgPreview: {
         width: '100%',
         objectFit: 'cover',
-        height: '100%'
+        height: '100%',
     },
     uploadBtn: {
         padding: '10px',

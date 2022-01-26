@@ -348,7 +348,7 @@ const Profile = (props) => {
                                 </Grid>
                                 }
                                 <Button variant='contained' onClick={handleUpload}>Add Award</Button>
-                                <Grid container spacing={2} style={{ padding: '30px' }}>
+                                <Grid container spacing={4} style={{ padding: '30px' }}>
                                     {/* {props.common.awardList.map(award => (
                                         <Grid item xs={2}>
                                             <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${award.icon}`} />

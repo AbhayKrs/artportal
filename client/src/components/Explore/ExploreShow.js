@@ -553,10 +553,10 @@ const ExploreShow = (props) => {
                     <List className={classes.commentList} disablePadding>
                         <ListSubheader className={classes.commentListHeader} disableGutters>
                             <Grid container className={classes.showHeader}>
-                                <Grid item xs={9} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }}>
+                                <Grid item xs={9} style={{ display: 'flex', flexDirection: 'column', padding: '15px 0' }}>
                                     <Typography className={classes.showTitle} variant="h4">{props.explore.artworkData.title}</Typography>
                                     <Typography className={classes.showDesc} component="p">{props.explore.artworkData.description}</Typography>
-                                    <div style={{ display: 'flex', flexFlow: 'wrap' }}>
+                                    <div style={{ display: 'flex', flexFlow: 'wrap', marginTop: 'auto' }}>
                                         {props.explore.artworkData.tags.map(tag => (
                                             <Chip className={classes.tagsChip} size="small" label={tag} />
                                         ))}
@@ -654,8 +654,7 @@ const ExploreShow = (props) => {
                                         />
                                     </div>
                                 </Grid>
-                            </>
-                                : ''}
+                            </> : ''}
                         </ListSubheader>
                         <div style={{ margin: '10px' }}>
                             <CommentList user={props.user} comments={props.explore.artworkData.comments} common={props.common} artworkId={props.history.location.state.artwork_id} fetchArtwork={props.fetchArtwork} handleAddComment={props.handleAddComment} handleEditComment={props.handleEditComment} handleDeleteComment={props.handleDeleteComment} handleLikeComment={props.handleLikeComment} handleDislikeComment={props.handleDislikeComment} />

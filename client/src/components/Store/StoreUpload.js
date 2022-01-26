@@ -12,25 +12,30 @@ import { handleStoreUpload } from '../../store/actions/store.actions';
 
 const useStyles = makeStyles((theme) => ({
     uploadRoot: {
-        margin: '100px 50px',
-        padding: '40px',
+        margin: '100px 25px',
+        padding: '20px',
+        background: '#2a2a2a'
     },
     uploadContent: {
-        height: '500px',
+        width: '100%',
+        padding: '0 20px 0 0'
     },
     uploadGrid: {
         display: 'block',
-        maxWidth: '500px',
         margin: 'auto'
     },
     cardRoot: {
         backgroundColor: grey[50],
         padding: '5px 5px 0 5px',
+        margin: '20px 0'
     },
     upldBtn: {
         padding: '5px',
         width: '95px',
-        float: 'right'
+        float: 'right',
+        '&:hover': {
+            cursor: 'pointer'
+        }
     },
     cardContent: {
         padding: '5px 5px 0 5px',
@@ -39,10 +44,13 @@ const useStyles = makeStyles((theme) => ({
         width: '40%'
     },
     imageLabel: {
-        display: 'flex'
+        display: 'flex',
+        '&:hover': {
+            cursor: 'pointer'
+        }
     },
     userChip: {
-        margin: '10px',
+        margin: '2px 0 20px 0',
     },
     uploadIcon: {
         color: deepPurple[500]
@@ -55,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
     imgPreview: {
         width: '100%',
         objectFit: 'cover',
-        height: '100%'
+        height: '100%',
     },
     uploadBtn: {
         padding: '10px',
@@ -72,15 +80,28 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         color: deepPurple[500],
         '& .MuiFormLabel-root': {
-            color: pink[900],
+            color: deepPurple[400],
         },
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: deepPurple[400],
+            }
+        }
+    },
+    titleInputProp: {
+        color: grey[400]
     },
     descInput: {
         width: '100%',
         margin: '10px 0',
         '& .MuiFormLabel-root': {
-            color: pink[900],
+            color: deepPurple[400],
         },
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: deepPurple[400],
+            }
+        }
     },
     tagsInput: {
         margin: '10px 0'
@@ -98,13 +119,22 @@ const useStyles = makeStyles((theme) => ({
     chosenTags: {
         background: deepPurple[500],
         color: 'white'
+    },
+    tagsInputRoot: {
+        color: grey[400],
+        '& .MuiInput-underline:after': {
+            borderBottomColor: '#fff',
+        }
+    },
+    startAdorn: {
+        color: grey[400]
     }
 }));
 
 const StoreUpload = (props) => {
     const [file, setFile] = useState('');
-    const [title, setTitle] = useState('test');
-    const [description, setDescription] = useState('test');
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
     const [price, setPrice] = useState(0);
     const [uploadData, setUploadData] = useState({});
     const [progress, setProgress] = useState(0);
@@ -177,10 +207,10 @@ const StoreUpload = (props) => {
 
     return (
         <Paper elevation={3} className={classes.uploadRoot}>
-            <Grid container spacing={3} className={classes.uploadGrid}>
-                <div style={{ display: 'flex' }}>
+            <Grid container className={classes.uploadGrid}>
+                <div style={{ display: 'flex', marginBottom: '10px' }}>
                     <Grid item style={!file ? { width: '100%' } : { width: '60%' }} className={classes.uploadContent}>
-                        <Typography variant='h5'>Upload a file</Typography>
+                        <Typography variant='h5' style={{ color: grey[300], marginBottom: '10px' }}>Upload a file</Typography>
                         <Card className={classes.upldBtn}>
                             <label className={classes.imageLabel}>
                                 <input
@@ -206,6 +236,9 @@ const StoreUpload = (props) => {
                             className={classes.titleInput}
                             value={title}
                             onChange={handleTitleChange}
+                            InputProps={{
+                                className: classes.titleInputProp
+                            }}
                         />
                         <TextField
                             required
@@ -217,15 +250,25 @@ const StoreUpload = (props) => {
                             className={classes.descInput}
                             value={description}
                             onChange={handleDescriptionChange}
+                            InputProps={{
+                                className: classes.titleInputProp
+                            }}
                         />
-                        <FormControl fullWidth className={classes.margin} variant="outlined">
+                        <FormControl fullWidth className={classes.titleInput} variant="outlined">
                             <InputLabel htmlFor="outlined-adornment-amount">Price</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-amount"
                                 value={price}
                                 onChange={handlePriceChange}
-                                startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                                startAdornment={<InputAdornment position="start" style={{ color: deepPurple[500] }}>$</InputAdornment>}
                                 labelWidth={60}
+                                classes={{
+                                    adornedStart: classes.startAdorn,
+                                    inputAdornedStart: classes.inputAdornment
+                                }}
+                                InputProps={{
+                                    className: classes.titleInputProp
+                                }}
                             />
                         </FormControl>
                     </Grid>
