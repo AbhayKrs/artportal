@@ -6,7 +6,6 @@ import { Backdrop, CircularProgress, Typography } from '@material-ui/core';
 import { grey, deepPurple, common } from '@material-ui/core/colors';
 
 import panda_loading from '../assets/images/panda_loading.gif';
-import loader_spinner from '../assets/images/loader_spinner.gif';
 
 const useStyles = makeStyles((theme) => ({
     backdrop: {

@@ -284,7 +284,7 @@ const useStyles = makeStyles((theme) => ({
     },
     tokenHead: {
         fontWeight: 'bold',
-        color: grey[900]
+        color: grey[200]
     },
     tokenContent: {
         alignItems: 'center',
@@ -398,7 +398,7 @@ const Header = (props) => {
                             }
                             <Card elevation={false} className={userDropdown ? classes.userCard : classes.userCardDisabled}>
                                 <CardContent style={{ padding: '10px 12px' }}>
-                                    <Typography variant='subtitle1' className={classes.userTitle}>
+                                    <Typography variant='h6' className={classes.userTitle}>
                                         {props.common.user.name}
                                     </Typography>
                                     <Avatar variant='rounded' className={classes.themeBtn} style={{ background: !theme ? grey[900] : grey[200] }} onClick={handleThemeChange}>
@@ -421,7 +421,7 @@ const Header = (props) => {
                                             primary={<Typography className={classes.tokenHead}>Tokens</Typography>}
                                             secondary={
                                                 <Typography className={classes.tokenContent} variant='subtitle2' color="inherit">
-                                                    0 tokens
+                                                    {props.common.user.tokens} tokens
                                                     <IconButton color='inherit' style={{ padding: '0px 5px 2px 5px' }} onClick={() => props.handleHeaderDialogOpen('openTokenDialog')}>
                                                         <AddCircleOutlined fontSize='small' style={{ color: 'rgb(29, 29, 31)' }} />
                                                     </IconButton>

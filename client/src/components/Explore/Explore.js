@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Card, List, ListItem, Paper, Tooltip, Fab, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { deepPurple } from '@material-ui/core/colors';
+import Masonry from '../Masonry';
 
 import { fetchArtworkList, handleDialogOpen, handleDialogClose } from '../../store/actions/explore.actions';
 import { setLoader, handleHeaderDialogOpen, handleHeaderDialogClose } from '../../store/actions/common.actions';
@@ -48,91 +49,19 @@ const useStyles = makeStyles((theme) => ({
         },
         zIndex: '1101'
     }
-}))
-
-const MasonryLayout = props => {
-    const columnWrapper = {};
-    const gap = 0;
-    const result = [];
-
-    const [columns, setColumns] = useState(5);
-
-    useEffect(() => {
-        if (window.innerWidth < 376) {
-            setColumns(1);
-        } else if (window.innerWidth <= 925) {
-            setColumns(3);
-        }
-        const handleResize = () => {
-            console.log('resized to: ', window.innerWidth, 'x', window.innerHeight)
-            if (window.innerWidth < 925) {
-                setColumns(3);
-            } else if (window.innerWidth < 376) {
-                setColumns(1);
-            } else {
-                setColumns(5);
-            }
-        }
-        window.addEventListener("resize", handleResize);
-    }, [])
-
-    // create columns
-    for (let i = 0; i < columns; i++) {
-        columnWrapper[`column${i}`] = [];
-    }
-    // divide children into columns
-    for (let i = 0; i < props.children.length; i++) {
-        const columnIndex = i % columns;
-        columnWrapper[`column${columnIndex}`].push(
-            <div style={{ marginBottom: `${gap}px`, fontSize: '0', lineHeight: '0' }}>
-                {props.children[i]}
-            </div>
-        );
-    }
-
-    // wrap children in each column with a div
-    for (let i = 0; i < columns; i++) {
-        result.push(
-            <div style={{ marginLeft: `${i > 0 ? gap : 0}px`, flex: 1 }}>
-                {columnWrapper[`column${i}`]}
-            </div>
-        );
-    }
-
-    return (
-        <div style={{ display: 'flex' }}>
-            {result}
-        </div>
-    )
-}
-
-MasonryLayout.propTypes = {
-    columns: PropTypes.number.isRequired,
-    gap: PropTypes.number.isRequired,
-    children: PropTypes.arrayOf(PropTypes.element),
-};
-
+}));
 
 const Explore = (props) => {
     useEffect(() => {
+        window.scrollTo(0, 0);
         props.setLoader(true);
-        setTimeout(() => { props.setLoader(false) }, 5000);
         props.fetchArtworkList();
-        console.log(props.exploreData)
+        setTimeout(() => { props.setLoader(false) }, 5000);
     }, []);
     const classes = useStyles();
     return (
         <div className={classes.exploreGrid}>
-            <MasonryLayout className={classes.layout}>
-                {props.explore.artworkList.map((artwork, index) => (
-                    <img
-                        onClick={() => { props.history.push({ pathname: `/explore/${artwork._id}`, state: { artwork_id: artwork._id } }); window.scroll(0, 0) }}
-                        className={classes.exploreImage}
-                        id={artwork._id}
-                        src={`http://localhost:4000/api/artworks/image/${artwork.filename}`}
-                    />
-                ))}
-            </MasonryLayout>
+            <Masonry {...props} imageList={props.explore.artworkList} />
             {
                 props.common.isAuthenticated === true ? <Tooltip title="Upload" aria-label="add" onClick={() => props.history.push('/upload')}>
                     <Fab className={classes.fab} >

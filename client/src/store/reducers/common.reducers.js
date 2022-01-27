@@ -46,6 +46,7 @@ export const initialState = {
             icon: '',
             category: ''
         },
+        tokens: 0,
         artworks: [],
         artwork_count: 0,
         store: [],

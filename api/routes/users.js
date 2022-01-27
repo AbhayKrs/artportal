@@ -56,7 +56,6 @@ const asset = multer({ storage });
 // @access  Private/Admin
 router.get('/', async (req, res) => {
     const { signedCookies = {} } = req;
-    console.log('signedCookies', signedCookies);
     const users = await User.find({});
     res.json(users);
 });
@@ -148,7 +147,8 @@ router.post("/login", async (req, res) => {
                     name: user.name,
                     username: user.username,
                     email: user.email,
-                    avatar: user.avatar
+                    avatar: user.avatar,
+                    tokens: user.tokens
                 };
                 jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 31556926 },
                     (err, token) => {

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Divider, Dialog, DialogTitle, DialogContent, TableContainer, ButtonGroup, Table, TableHead, TableRow, TableCell, TableBody, DialogActions, Button, Typography, Snackbar } from '@material-ui/core';
+import { Divider, Dialog, DialogTitle, DialogContent, TableContainer, ButtonGroup, Table, TableHead, TableRow, TableCell, TableBody, DialogActions, Button, Typography, Avatar } from '@material-ui/core';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import { grey, deepPurple, teal } from '@material-ui/core/colors';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import CloseIcon from '@material-ui/icons/Close';
 import AddToPhotosIcon from '@material-ui/icons/AddToPhotos';
+import LazyPanda from '../../assets/images/lazyPanda2.png';
 
 // rgb(39,39,43)
 const useStyles = makeStyles((theme) => ({
@@ -42,16 +43,17 @@ const Cart = (props) => {
     return (
         <Dialog open={props.open} onClose={props.handleClose} aria-labelledby="customized-dialog-title" classes={{ paper: classes.cartPaper }}>
             {props.cartList.length === 0 ?
-                <DialogContent style={{ padding: '20px' }}>
-                    <CloseIcon style={{ position: 'absolute', right: 0, top: 0 }} fontSize='small' onClick={props.handleClose} />
-                    <Typography variant='button' style={{ padding: '0 30px' }}>
-                        This cart is empty!
+                <DialogContent style={{ padding: '20px 60px', textAlign: 'center' }}>
+                    <CloseIcon style={{ padding: '5px', position: 'absolute', right: 0, top: 0, color: grey[400] }} onClick={props.handleClose} />
+                    <img src={LazyPanda} style={{ width: '150px' }} />
+                    <Typography variant='h5' style={{ fontFamily: 'CaviarDreams', fontWeight: 'bold', letterSpacing: '0.25rem', padding: '0 30px', color: grey[300], textTransform: 'uppercase' }}>
+                        The cart is empty
                     </Typography>
                 </DialogContent>
                 :
                 <>
                     <DialogTitle id="customized-dialog-title" onClose={props.handleClose} disableTypography style={{ backgroundColor: deepPurple[500], padding: '16px' }}>
-                        <div style={{ display: 'flex', color: 'white' }}>
+                        <div style={{ display: 'flex', color: grey[300], fontWeight: 'bold', alignItems: 'center', fontFamily: 'CaviarDreams' }}>
                             <ShoppingCartIcon fontSize='small' style={{ margin: 'auto 5px auto 0' }} />
                             My Shopping Cart
                             <CloseIcon style={{ marginLeft: 'auto' }} onClick={props.handleClose} />
@@ -101,9 +103,9 @@ const Cart = (props) => {
                             </Table>
                         </TableContainer>
                     </DialogContent>
+                    <Divider style={{ height: '2px', backgroundColor: '#444' }} />
                 </>
             }
-            <Divider style={{ height: '2px', backgroundColor: '#444' }} />
             {props.cartList.length === 0 ?
                 ''
                 :

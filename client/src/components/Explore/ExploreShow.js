@@ -28,7 +28,6 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import moment from 'moment';
 import AwardModal from './AwardModal';
 
-import darkHeart2 from '../../assets/images/darkHeart_transparent3.png';
 import { fetchArtworkList, fetchArtwork, handleLikeArtwork, handleDislikeArtwork, handleAddComment, handleEditComment, handleDeleteComment, handleLikeComment, handleDislikeComment } from '../../store/actions/explore.actions';
 
 const useStyles = makeStyles((theme) => ({
@@ -98,7 +97,7 @@ const useStyles = makeStyles((theme) => ({
         right: 0
     },
     showHeader: {
-        padding: '10px 10px 0',
+        padding: '10px',
         position: '-webkit-sticky',
         position: 'sticky',
         top: '0',
@@ -124,7 +123,7 @@ const useStyles = makeStyles((theme) => ({
     },
     disabledStatsButton: {
         color: deepPurple[400],
-        padding: '5px',
+        padding: '4px',
         "&:disabled": {
             color: deepPurple[400]
         },
@@ -220,7 +219,8 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center'
     },
     commentField: {
-        display: 'flex'
+        display: 'flex',
+        margin: '0 5px'
     },
     editCommentField: {
         display: 'flex',
@@ -265,8 +265,9 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: grey[800],
         color: deepPurple[300],
         padding: '5px 2px',
-        borderRadius: '10px',
-        fontWeight: 'bold'
+        fontSize: '0.85rem',
+        fontWeight: 'bold',
+        fontFamily: 'AntipastoProRegular'
     },
     swipeIcon: {
         fontSize: '4rem',
@@ -314,7 +315,6 @@ const useStyles = makeStyles((theme) => ({
         position: 'absolute',
         marginTop: '10px',
         // transform: 'translate(-90%, -75%)',
-        background: `url(${darkHeart2}) no-repeat`,
         backgroundSize: 'cover',
         backgroundPosition: '-55px 0',
         cursor: 'pointer',
@@ -326,7 +326,6 @@ const useStyles = makeStyles((theme) => ({
         position: 'absolute',
         marginTop: '10px',
         // transform: 'translate(-90%, -75%)',
-        background: `url(${darkHeart2}) no-repeat`,
         backgroundSize: 'cover',
         cursor: 'pointer',
         animation: 'fave-heart 1s steps(29)',
@@ -506,7 +505,7 @@ const ExploreShow = (props) => {
                 }
             }
         })
-    }, [props.explore.artworkData]);
+    }, [props.explore.artworkData._id]);
 
     const handleToggleLike = async (likes) => {
         if (likes.includes(props.user.id)) {
@@ -540,8 +539,8 @@ const ExploreShow = (props) => {
                     className={classes.homeCarouselRoot}
                     navButtonsAlwaysVisible={true}
                     navButtonsProps={{ className: classes.navButton }}
-                    NextIcon={<ChevronRightIcon style={{ fontSize: '3rem' }} />}
-                    PrevIcon={<ChevronLeftIcon style={{ fontSize: '3rem' }} />}
+                    NextIcon={next.length === 0 ? null : <ChevronRightIcon style={{ fontSize: '3rem' }} />}
+                    PrevIcon={prev.length === 0 ? null : <ChevronLeftIcon style={{ fontSize: '3rem' }} />}
                     next={() => { props.history.push({ pathname: `/explore/${next}`, state: { artwork_id: next } }); props.fetchArtwork(props.history.location.state.artwork_id); }}
                     prev={() => { props.history.push({ pathname: `/explore/${prev}`, state: { artwork_id: prev } }); props.fetchArtwork(props.history.location.state.artwork_id); }}
                 >
@@ -553,7 +552,7 @@ const ExploreShow = (props) => {
                     <List className={classes.commentList} disablePadding>
                         <ListSubheader className={classes.commentListHeader} disableGutters>
                             <Grid container className={classes.showHeader}>
-                                <Grid item xs={9} style={{ display: 'flex', flexDirection: 'column', padding: '15px 0' }}>
+                                <Grid item xs={9} style={{ display: 'flex', flexDirection: 'column', padding: 0 }}>
                                     <Typography className={classes.showTitle} variant="h4">{props.explore.artworkData.title}</Typography>
                                     <Typography className={classes.showDesc} component="p">{props.explore.artworkData.description}</Typography>
                                     <div style={{ display: 'flex', flexFlow: 'wrap', marginTop: 'auto' }}>
@@ -568,7 +567,7 @@ const ExploreShow = (props) => {
                                     </div> */}
                                 </Grid>
                                 <Grid item xs={3} style={{ alignSelf: 'center' }}>
-                                    <List>
+                                    <List style={{ padding: 0 }}>
                                         <ListItem disableGutters className={classes.statListItem}>
                                             <Tooltip title='Share'>
                                                 <IconButton className={classes.statsButton}>
@@ -587,13 +586,13 @@ const ExploreShow = (props) => {
                                             </Tooltip>
                                         </ListItem>
                                         <ListItem disableGutters className={classes.statListItem}>
-                                            <IconButton disabled style={{ color: teal[400] }} className={classes.statsButton}>
+                                            <IconButton disabled style={{ color: teal[400], padding: '4px' }} className={classes.statsButton}>
                                                 <Typography className={classes.statsButtonText} variant="subtitle2">{new Intl.NumberFormat().format(props.explore.artworkData.likes.length) + ' views'}</Typography>
                                                 <VisibilityIcon />
                                             </IconButton>
                                         </ListItem>
                                         <ListItem disableGutters className={classes.statListItem}>
-                                            <IconButton disabled style={{ color: deepPurple[400] }} className={classes.statsButton}>
+                                            <IconButton disabled style={{ color: deepPurple[400], padding: '4px' }} className={classes.statsButton}>
                                                 <Typography className={classes.statsButtonText} variant="subtitle2">{new Intl.NumberFormat().format(props.explore.artworkData.likes.length) + ' likes'}</Typography>
                                                 <FavoriteIcon />
                                             </IconButton>
@@ -606,8 +605,8 @@ const ExploreShow = (props) => {
                                         </ListItem>
                                         <ListItem disableGutters className={classes.statListItem}>
                                             <ListItemText
-                                                style={{ textAlign: 'right' }}
-                                                primary={<Typography variant='subtitle1' style={{ color: grey[200] }}>Posted by </Typography>}
+                                                style={{ textAlign: 'right', padding: 0 }}
+                                                primary={<Typography variant='subtitle2' style={{ color: grey[200] }}>Posted by </Typography>}
                                                 secondary={
                                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                                         <Chip
@@ -619,11 +618,10 @@ const ExploreShow = (props) => {
                                                             }
                                                             label={props.explore.artworkData.author.username}
                                                         />
-                                                        <Typography variant="caption" style={{ color: grey[400] }}>{moment(props.explore.artworkData.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</Typography>
+                                                        <Typography variant="caption" style={{ color: grey[400], whiteSpace: 'nowrap' }}>{moment(props.explore.artworkData.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</Typography>
                                                     </div>
                                                 }
                                             />
-
                                         </ListItem >
                                     </List>
                                 </Grid>

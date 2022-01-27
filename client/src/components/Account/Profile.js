@@ -7,9 +7,10 @@ import { withRouter } from 'react-router-dom';
 import { Typography, Card, Divider, List, ListItem, ListItemText, IconButton, Button, Grid, Box, Tabs, Tab, Avatar, Table, TableBody, TableRow, TableCell } from '@material-ui/core';
 import { grey, deepPurple, teal, pink } from '@material-ui/core/colors';
 import { handleUploadAsset, fetchAvatars, fetchAwards, handleEditUserAvatar, deleteUserStoreItem } from '../../store/actions/common.actions';
-import SettingsIcon from '@material-ui/icons/Settings';
 import TelegramIcon from '@material-ui/icons/Telegram';
 import AvatarModal from './AvatarModal';
+import PrizeBackground from '../../assets/images/prizeRecieved.png';
+import Masonry from '../Masonry';
 
 const useStyles = makeStyles((theme) => ({
     profileRoot: {
@@ -106,6 +107,17 @@ const useStyles = makeStyles((theme) => ({
     },
     listItem: {
         padding: '4px 0'
+    },
+    prizeRecieved: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+        width: '100%',
+        backgroundImage: `url('${PrizeBackground}')`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'contain',
     }
 }));
 
@@ -136,68 +148,6 @@ function a11yProps(index) {
     };
 }
 
-const MasonryLayout = props => {
-    const columnWrapper = {};
-    const gap = 0;
-    const result = [];
-
-    const [columns, setColumns] = useState(5);
-
-    useEffect(() => {
-        if (window.innerWidth < 376) {
-            setColumns(1);
-        } else if (window.innerWidth <= 925) {
-            setColumns(3);
-        }
-        const handleResize = () => {
-            console.log('resized to: ', window.innerWidth, 'x', window.innerHeight)
-            if (window.innerWidth <= 925) {
-                setColumns(3);
-            } else if (window.innerWidth < 376) {
-                setColumns(1);
-            } else {
-                setColumns(5);
-            }
-        }
-        window.addEventListener("resize", handleResize);
-    })
-
-    // create columns
-    for (let i = 0; i < columns; i++) {
-        columnWrapper[`column${i}`] = [];
-    }
-    // divide children into columns
-    for (let i = 0; i < props.children.length; i++) {
-        const columnIndex = i % columns;
-        columnWrapper[`column${columnIndex}`].push(
-            <div style={{ marginBottom: `${gap}px`, fontSize: '0', lineHeight: '0' }}>
-                {props.children[i]}
-            </div>
-        );
-    }
-
-    // wrap children in each column with a div
-    for (let i = 0; i < columns; i++) {
-        result.push(
-            <div style={{ marginLeft: `${i > 0 ? gap : 0}px`, flex: 1 }}>
-                {columnWrapper[`column${i}`]}
-            </div>
-        );
-    }
-
-    return (
-        <div style={{ display: 'flex' }}>
-            {result}
-        </div>
-    )
-}
-
-MasonryLayout.propTypes = {
-    columns: PropTypes.number.isRequired,
-    gap: PropTypes.number.isRequired,
-    children: PropTypes.arrayOf(PropTypes.element),
-};
-
 const Profile = (props) => {
     const classes = useStyles();
     const [avatarModal, setAvatarModal] = useState(false);
@@ -205,6 +155,7 @@ const Profile = (props) => {
     const [value, setValue] = React.useState(0);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         props.fetchAvatars();
         props.fetchAwards();
     }, [])
@@ -276,16 +227,7 @@ const Profile = (props) => {
                         <TabPanel style={{ width: '100%', background: '#2a2a2a' }} value={value} index={0}>
                             <div className={classes.exploreGrid}>
                                 {props.user.artwork_count > 0 ?
-                                    <MasonryLayout className={classes.layout}>
-                                        {props.user.artworks.map((artwork, index) => (
-                                            <img
-                                                onClick={() => { props.history.push({ pathname: `/explore/${artwork._id}`, state: { artwork_id: artwork._id } }); window.scroll(0, 0) }}
-                                                className={classes.exploreImage}
-                                                id={artwork._id}
-                                                src={`http://localhost:4000/api/artworks/image/${artwork.filename}`}
-                                            />
-                                        ))}
-                                    </MasonryLayout>
+                                    <Masonry {...props} imageList={props.user.artworks} />
                                     :
                                     ''
                                 }
@@ -331,36 +273,38 @@ const Profile = (props) => {
                                 </Table>
                                 : ''}
                         </TabPanel>
-                        <TabPanel TabPanel style={{ width: '100%', background: '#2a2a2a', borderRadius: '0 0 15px 15px' }
-                        } value={value} index={2} >
-                            <div style={{ minHeight: 500 }}>
-                                <input
-                                    type="file"
-                                    className={classes.imageInput}
-                                    onChange={onFileChange}
-                                    name="myImage"
-                                />
-                                {file && <Grid item>
-                                    <Card style={{ background: 'transparent', width: '100px', height: '100px' }}>
-                                        <img style={{ width: '100%' }} id="preview" src={URL.createObjectURL(file)} alt="" />
-                                        <div onClick={() => setFile('')}>Cancel</div>
-                                    </Card>
-                                </Grid>
-                                }
-                                <Button variant='contained' onClick={handleUpload}>Add Award</Button>
-                                <Grid container spacing={4} style={{ padding: '30px' }}>
-                                    {/* {props.common.awardList.map(award => (
-                                        <Grid item xs={2}>
-                                            <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${award.icon}`} />
+                        <TabPanel style={{ width: '100%', background: '#2a2a2a', borderRadius: '0 0 15px 15px' }} value={value} index={2} >
+                            <div className={classes.prizeRecieved}>
+                                <div>
+                                    <ListItemText
+                                        style={{ margin: '50px' }}
+                                        primary={<Typography variant='h3' style={{ textAlign: 'center', color: grey[300] }}>Prized Awarded to YOU</Typography>}
+                                        secondary={<Typography variant='subtitle1' style={{ textAlign: 'center', color: grey[300] }}>Look through all the awards you have recieved in recoginition of your art which people.</Typography>}
+                                    />
+                                    <div style={{ minHeight: 500 }}>
+                                        <input
+                                            type="file"
+                                            className={classes.imageInput}
+                                            onChange={onFileChange}
+                                            name="myImage"
+                                        />
+                                        {file && <Grid item>
+                                            <Card style={{ background: 'transparent', width: '100px', height: '100px' }}>
+                                                <img style={{ width: '100%' }} id="preview" src={URL.createObjectURL(file)} alt="" />
+                                                <div onClick={() => setFile('')}>Cancel</div>
+                                            </Card>
                                         </Grid>
-                                    ))}
-                                    <Divider /> */}
-                                    {props.common.avatarList.map(avatar => (
-                                        <Grid item xs={2}>
-                                            <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${avatar.icon}`} />
+                                        }
+                                        <Button variant='contained' onClick={handleUpload}>Add Award</Button>
+                                        <Grid container spacing={4} style={{ padding: '30px' }}>
+                                            {props.common.avatarList.map(avatar => (
+                                                <Grid item xs={2}>
+                                                    <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${avatar.icon}`} />
+                                                </Grid>
+                                            ))}
                                         </Grid>
-                                    ))}
-                                </Grid>
+                                    </div>
+                                </div>
                             </div>
                         </TabPanel >
                         <TabPanel style={{ width: '100%', background: '#2a2a2a', borderRadius: '0 0 15px 15px' }} value={value} index={3}>

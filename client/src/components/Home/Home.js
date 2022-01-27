@@ -185,6 +185,7 @@ const tileData = [
 ]
 
 const Home = (props) => {
+    window.scrollTo(0, 0);
     useEffect(() => {
         props.setLoader(true);
         setTimeout(() => { props.setLoader(false); console.log('loader close') }, 3000);

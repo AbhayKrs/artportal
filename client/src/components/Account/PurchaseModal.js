@@ -28,12 +28,13 @@ const useStyles = makeStyles((theme) => ({
         padding: '0'
     },
     closeIcon: {
-        float: 'right',
+        position: 'absolute',
+        right: 0,
+        top: 0,
         color: 'white'
     },
     dialogContent: {
         height: '100%',
-        paddingTop: '0',
         '&::-webkit-scrollbar': {
             width: '0.8em',
         },
@@ -163,14 +164,14 @@ const PurchaseModal = (props) => {
                         />
                         <ListItemText
                             edge="start"
-                            primary={<Typography variant="subtitle2" color="textSecondary" className={classes.textSecondaryRoot}>Purchased tokens will be added to, Akn322</Typography>}
+                            primary={<Typography variant="subtitle2" color="textSecondary" className={classes.textSecondaryRoot}>Purchased tokens will be added to, {props.user.username}</Typography>}
                             secondary={<Typography variant="p" color="textSecondary" className={classes.subTextRoot}>By purchasing Coins and Awards, you agree to the <Link>Artyst User Agreement.</Link></Typography>}
                         />
                     </ListItem>
                     <Divider style={{ marginBottom: '5px', backgroundColor: '#d5d5d5' }} />
                     <ListItem disableGutters>
                         <Typography variant="body2" className={classes.textRoot} style={{ display: 'flex', margin: '5px 0' }}>
-                            Coin Balance: <img src={TokenIcon} className={classes.tokenIcon} />{new Intl.NumberFormat().format(data)}
+                            Coin Balance: <img src={TokenIcon} className={classes.tokenIcon} />{new Intl.NumberFormat().format(props.user.tokens)}
                         </Typography>
                         <Button variant='contained' size='small' style={{ backgroundColor: amber[400], marginLeft: 'auto' }}>Add</Button>
                     </ListItem>
@@ -181,7 +182,8 @@ const PurchaseModal = (props) => {
 }
 
 const mapStateToProps = (state, props) => ({
-    common: state.common
+    common: state.common,
+    user: state.common.user
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

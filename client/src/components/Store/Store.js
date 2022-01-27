@@ -102,7 +102,7 @@ const useStyles = makeStyles((theme) => ({
         zIndex: '1'
     },
     cardHeader: {
-        fontFamily: 'IBM Plex Sans, sans-serif',
+        fontFamily: 'CaviarDreams',
         fontWeight: '700',
         wordBreak: 'break-all',
         color: '#fff'
@@ -219,6 +219,7 @@ const Store = (props) => {
 
     useEffect(() => {
         props.fetchStoreList();
+        window.scrollTo(0, 0);
     }, [])
 
     const addToCart = async (item) => {

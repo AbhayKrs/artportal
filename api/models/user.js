@@ -27,7 +27,7 @@ const UserSchema = new Schema({
         icon: { type: String, default: '' },
         category: { type: String, default: '' }
     },
-    tokens: String,
+    tokens: { type: Number, default: 0 },
     artworks: [{
         filename: {
             type: String,

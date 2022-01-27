@@ -112,7 +112,6 @@ const useStyles = makeStyles((theme) => ({
         color: '#fff',
         minWidth: 72,
         fontWeight: theme.typography.fontWeightRegular,
-        marginRight: theme.spacing(4),
         fontFamily: [
             '-apple-system',
             'BlinkMacSystemFont',

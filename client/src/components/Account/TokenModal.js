@@ -28,13 +28,14 @@ const useStyles = makeStyles((theme) => ({
         padding: '0'
     },
     closeIcon: {
-        float: 'right',
+        position: 'absolute',
+        right: 0,
+        top: 0,
         color: 'white'
     },
     dialogContent: {
         height: '100%',
-        // marginBottom: '10px',
-        paddingTop: '0',
+        padding: '15px',
         '&::-webkit-scrollbar': {
             width: '0.8em',
         },
@@ -71,11 +72,12 @@ const useStyles = makeStyles((theme) => ({
     },
     tokenTitle: {
         // textTransform: 'uppercase',
-        // fontFamily: 'Teko',
+        fontFamily: 'AntipastoProRegular',
         fontWeight: 'bold',
         color: deepPurple[600]
     },
     tokenSubTitle: {
+        fontFamily: 'AntipastoProRegular',
         fontWeight: 'bold',
         color: '#d5d5d5',
     },
@@ -176,8 +178,8 @@ const TokenModal = (props) => {
                     <ListItem style={{ paddingTop: '0' }}>
                         <ListItemText
                             edge="start"
-                            primary={<Typography variant="h5" className={classes.tokenTitle}>{title}</Typography>}
-                            secondary={<Typography variant="subtitle2" className={classes.tokenSubTitle}>Tokens are used to purchase awards, badges and profile avatars. You can gift your tokens to artists you admire as well!</Typography>}
+                            primary={<Typography variant="h4" className={classes.tokenTitle}>{title}</Typography>}
+                            secondary={<Typography variant="subtitle1" className={classes.tokenSubTitle}>Tokens are used to purchase awards, badges and profile avatars. You can gift your tokens to artists you admire as well!</Typography>}
                         />
                     </ListItem>
                     <ListItem>
@@ -216,7 +218,7 @@ const TokenModal = (props) => {
                     <ListItem>
                         <ListItemText
                             primary="Premium"
-                            secondary="1000 tokens/month. No Ads & more!"
+                            secondary="Get 1000 tokens/month. No Ads & more!"
                             style={{ color: 'white' }}
                             classes={{
                                 root: classes.textRoot,
