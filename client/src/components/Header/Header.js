@@ -436,7 +436,7 @@ const Header = (props) => {
                                         className={classes.userSignout}
                                         variant='contained'
                                         color='secondary'
-                                        onClick={() => props.handleSignOut()}
+                                        onClick={() => { props.handleSignOut(); props.history.push('/') }}
                                     >
                                         Sign out
                                     </SignoutButton>

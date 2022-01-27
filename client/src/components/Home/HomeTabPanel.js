@@ -185,6 +185,9 @@ const useStyles = makeStyles((theme) => ({
     statsButtonText: {
         fontSize: '0.75rem',
         marginTop: '-2px'
+    },
+    tabScrollButtons: {
+        width: 'fit-content'
     }
 }))
 
@@ -275,7 +278,8 @@ const HomeTabPanel = (props) => {
                         <Tabs
                             classes={{
                                 root: classes.tabsRoot,
-                                indicator: classes.tabsIndicator
+                                indicator: classes.tabsIndicator,
+                                scrollButtons: classes.tabScrollButtons
                             }}
                             value={tabValue}
                             onChange={handleTabsChange}

@@ -171,7 +171,7 @@ const PurchaseModal = (props) => {
                     <Divider style={{ marginBottom: '5px', backgroundColor: '#d5d5d5' }} />
                     <ListItem disableGutters>
                         <Typography variant="body2" className={classes.textRoot} style={{ display: 'flex', margin: '5px 0' }}>
-                            Coin Balance: <img src={TokenIcon} className={classes.tokenIcon} />{new Intl.NumberFormat().format(props.user.tokens)}
+                            Current Balance: <img src={TokenIcon} className={classes.tokenIcon} />{new Intl.NumberFormat().format(props.user.tokens)}
                         </Typography>
                         <Button variant='contained' size='small' style={{ backgroundColor: amber[400], marginLeft: 'auto' }}>Add</Button>
                     </ListItem>
