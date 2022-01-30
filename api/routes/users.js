@@ -55,7 +55,6 @@ const asset = multer({ storage });
 // @route   GET /api/users
 // @access  Private/Admin
 router.get('/', async (req, res) => {
-    const { signedCookies = {} } = req;
     const users = await User.find({});
     res.json(users);
 });
@@ -140,7 +139,6 @@ router.post("/login", async (req, res) => {
         }
         bcrypt.compare(password, user.password).then((isMatch) => {
             if (isMatch) {
-                // User matched - Create JWT Payload
                 console.log('user details', user);
                 const payload = {
                     id: user._id,
@@ -165,56 +163,6 @@ router.post("/login", async (req, res) => {
     });
 });
 
-router.post("/refreshToken", (req, res, next) => {
-    const { signedCookies } = req;
-    const { refreshToken } = signedCookies
-    if (refreshToken) {
-        try {
-            const payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-            const userId = payload._id;
-            User.findOne({ _id: userId })
-                .then(
-                    (user) => {
-                        if (user) {
-                            // Find the refresh token against the user record in database
-                            const tokenIndex = user.refreshToken.findIndex(
-                                (item) => item.refreshToken === refreshToken
-                            );
-                            if (tokenIndex === -1) {
-                                res.statusCode = 401;
-                                res.send("Unauthorized_one");
-                            } else {
-                                const token = getToken({ _id: userId });
-                                // If the refresh token exists, then create new one and replace it.
-                                const newRefreshToken = getRefreshToken({ _id: userId });
-                                user.refreshToken[tokenIndex] = { refreshToken: newRefreshToken };
-                                user.save((err, user) => {
-                                    if (err) {
-                                        res.statusCode = 500;
-                                        res.send(err);
-                                    } else {
-                                        res.cookie("refreshToken", newRefreshToken, COOKIE_OPTIONS);
-                                        res.send({ success: true, token });
-                                    }
-                                });
-                            }
-                        } else {
-                            res.statusCode = 401;
-                            res.send("Unauthorized_two");
-                        }
-                    },
-                    (err) => next(err)
-                );
-        } catch (err) {
-            res.statusCode = 401;
-            res.send("Unauthorized_three");
-        }
-    } else {
-        res.statusCode = 401;
-        res.send("Unauthorized_four");
-    }
-});
-
 // //@desc         Register a new user
 // //@route        POST /api/users/register
 // //@access       Public
@@ -226,13 +174,17 @@ router.post("/signup", (req, res) => {
     }
     User.findOne({ username: req.body.username }).then(user => {
         if (user) {
-            return res.status(400).json({ username: 'User already exists' });
+            return res.status(400).json('User already exists');
         } else {
             const newUser = new User({
                 name: req.body.name,
                 email: req.body.email,
                 username: req.body.username,
-                password: req.body.password
+                password: req.body.password,
+                avatar: {
+                    icon: '92845b9c51df0d6bf3cf693393cc0905.png',
+                    category: 'None'
+                }
             });
             bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash(newUser.password, salt, (err, hash) => {
@@ -303,7 +255,7 @@ router.put('/profile', async (req, res) => {
 // @desc    Get users
 // @route   GET /api/users
 // @access  Private/Admin
-router.get('/', async (req, res, next) => {
+router.get('/', async (req, res) => {
     const users = await User.find({});
     res.json(users);
 });
@@ -311,9 +263,22 @@ router.get('/', async (req, res, next) => {
 // @desc    Get user by ID
 // @route   GET /api/users/:id
 // @access  Private/Admin
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', async (req, res) => {
     const user = await User.findById(req.params.id);
-    res.json(user);
+    const payload = {
+        id: user._id,
+        name: user.name,
+        username: user.username,
+        email: user.email,
+        avatar: user.avatar,
+        tokens: user.tokens
+    };
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 31556926 }, (err, token) => {
+        res.json({
+            success: true,
+            token: "Bearer " + token
+        });
+    })
 });
 
 // @desc    Update user

@@ -13,7 +13,7 @@ import {
 export const fetchStoreList = () => async (dispatch, getState) => {
     console.log('fetchStoreList invoked');
     try {
-        const storeList = await axios.get('http://localhost:4000/api/store');
+        const storeList = await axios.get('http://localhost:5000/api/store');
         console.log('storeList', storeList);
         await dispatch({ type: FETCH_STORELIST, payload: storeList.data });
     } catch (err) {
@@ -23,7 +23,7 @@ export const fetchStoreList = () => async (dispatch, getState) => {
 
 export const fetchStoreItem = (itemID) => async (dispatch, getState) => {
     try {
-        const storeItem = await axios.get(`http://localhost:4000/api/store/${itemID}`);
+        const storeItem = await axios.get(`http://localhost:5000/api/store/${itemID}`);
         await dispatch({ type: FETCH_STOREITEM, payload: storeItem.data });
     } catch (err) {
         console.log('---error fetchArtwork', err);
@@ -34,7 +34,7 @@ export const handleStoreUpload = (itemData) => async (dispatch, getState) => {
     console.log('handleStoreUpload invoked', itemData);
     try {
         await axios({
-            url: 'http://localhost:4000/api/store/new',
+            url: 'http://localhost:5000/api/store/new',
             method: 'POST',
             headers: { 'Content-Type': 'multipart/form-data' },
             data: itemData
@@ -53,7 +53,7 @@ export const handleStoreUpload = (itemData) => async (dispatch, getState) => {
 // export const fetchCartList = () => async (dispatch, getState) => {
 //     console.log('fetchCartList invoked');
 //     try {
-//         const cartList = await axios.get('http://localhost:4000/api/cart');
+//         const cartList = await axios.get('http://localhost:5000/api/cart');
 //         console.log('cartList', cartList);
 //         await dispatch({ type: FETCH_CARTLIST, payload: cartList.data });
 //     } catch (err) {
@@ -80,7 +80,7 @@ export const handleStoreUpload = (itemData) => async (dispatch, getState) => {
 //     console.log('handleAddToCart');
 //     try {
 //         const cartData = await axios({
-//             url: `http://localhost:4000/api/user/${userID}/cart/add`,
+//             url: `http://localhost:5000/api/user/${userID}/cart/add`,
 //             method: 'POST',
 //             data: {
 //                 cartItem: data,
@@ -97,7 +97,7 @@ export const handleStoreUpload = (itemData) => async (dispatch, getState) => {
 //     console.log('handleEditCartData', userID, cartID);
 //     try {
 //         const editStatus = await axios({
-//             url: `http://localhost:4000/api/user/${userID}/cart/${cartID}`,
+//             url: `http://localhost:5000/api/user/${userID}/cart/${cartID}`,
 //             method: 'PUT',
 //             data: { cartItem: newCartItem, user: getState().common.user }
 //         });
@@ -111,7 +111,7 @@ export const handleStoreUpload = (itemData) => async (dispatch, getState) => {
 //     console.log('handleDeleteCartData', userID, cartID);
 //     try {
 //         const deleteStatus = await axios({
-//             url: `http://localhost:4000/api/user/${userID}/cart/${cartID}`,
+//             url: `http://localhost:5000/api/user/${userID}/cart/${cartID}`,
 //             method: 'DELETE',
 //         });
 //         console.log('deleteStatus', deleteStatus);

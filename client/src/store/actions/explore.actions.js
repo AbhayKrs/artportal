@@ -33,7 +33,7 @@ const risingSort = (property) => {
 
 export const fetchArtwork = (artworkID) => async (dispatch, getState) => {
     try {
-        const artworkData = await axios.get(`http://localhost:4000/api/artworks/${artworkID}`);
+        const artworkData = await axios.get(`http://localhost:5000/api/artworks/${artworkID}`);
         await dispatch({ type: FETCH_ARTWORK, payload: artworkData.data });
     } catch (err) {
         console.log('---error fetchArtwork', err);
@@ -43,7 +43,7 @@ export const fetchArtwork = (artworkID) => async (dispatch, getState) => {
 export const fetchArtworkList = () => async (dispatch, getState) => {
     console.log('fetchArtworkList invoked');
     try {
-        const artworkList = await axios.get('http://localhost:4000/api/artworks');
+        const artworkList = await axios.get('http://localhost:5000/api/artworks');
         console.log('artworkList', artworkList);
         await dispatch({ type: FETCH_ARTWORKLIST, payload: artworkList.data });
     } catch (err) {
@@ -73,7 +73,7 @@ export const handleLikeArtwork = (artworkID) => async (dispatch, getState) => {
     console.log('handleLikesCount', artworkID);
     try {
         const likeCount = await axios({
-            url: `http://localhost:4000/api/artworks/${artworkID}/like`,
+            url: `http://localhost:5000/api/artworks/${artworkID}/like`,
             method: 'PUT',
             data: { user: getState().common.user }
         });
@@ -87,7 +87,7 @@ export const handleDislikeArtwork = (artworkID, likeStatus) => async (dispatch, 
     console.log('handleDislikeArtwork', likeStatus, artworkID);
     try {
         const dislikeCount = await axios({
-            url: `http://localhost:4000/api/artworks/${artworkID}/dislike`,
+            url: `http://localhost:5000/api/artworks/${artworkID}/dislike`,
             method: 'PUT',
             data: { user: getState().common.user }
         });
@@ -101,7 +101,7 @@ export const handleAddComment = (commentText, artworkID) => async (dispatch, get
     console.log('handleAddComment');
     try {
         const commentData = await axios({
-            url: `http://localhost:4000/api/artworks/${artworkID}/comments/new`,
+            url: `http://localhost:5000/api/artworks/${artworkID}/comments/new`,
             method: 'POST',
             data: {
                 content: commentText,
@@ -118,7 +118,7 @@ export const handleEditComment = (newComment, artworkID, commentID) => async (di
     console.log('handleEditComment', artworkID, commentID);
     try {
         const editStatus = await axios({
-            url: `http://localhost:4000/api/artworks/${artworkID}/comments/${commentID}`,
+            url: `http://localhost:5000/api/artworks/${artworkID}/comments/${commentID}`,
             method: 'PUT',
             data: { content: newComment, user: getState().common.user }
         });
@@ -132,7 +132,7 @@ export const handleDeleteComment = (artworkID, commentID) => async (dispatch, ge
     console.log('handleDeleteComment', artworkID, commentID);
     try {
         const deleteStatus = await axios({
-            url: `http://localhost:4000/api/artworks/${artworkID}/comments/${commentID}`,
+            url: `http://localhost:5000/api/artworks/${artworkID}/comments/${commentID}`,
             method: 'DELETE',
         });
         console.log('deleteStatus', deleteStatus);
@@ -145,7 +145,7 @@ export const handleLikeComment = (artworkID, commentID) => async (dispatch, getS
     console.log('handleLikeComment', artworkID, commentID);
     try {
         const likeCommentCount = await axios({
-            url: `http://localhost:4000/api/artworks/${artworkID}/comments/${commentID}/like`,
+            url: `http://localhost:5000/api/artworks/${artworkID}/comments/${commentID}/like`,
             method: 'PUT',
             data: { user: getState().common.user }
         });
@@ -159,7 +159,7 @@ export const handleDislikeComment = (artworkID, commentID) => async (dispatch, g
     console.log('handleDislikeComment', artworkID, commentID);
     try {
         const dislikeCommentCount = await axios({
-            url: `http://localhost:4000/api/artworks/${artworkID}/comments/${commentID}/dislike`,
+            url: `http://localhost:5000/api/artworks/${artworkID}/comments/${commentID}/dislike`,
             method: 'PUT',
             data: { user: getState().common.user }
         });

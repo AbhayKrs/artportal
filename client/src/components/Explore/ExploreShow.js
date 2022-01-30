@@ -373,7 +373,7 @@ const CommentList = (props) => {
                                     classes={{ root: classes.userChip, label: classes.userChipLabel }}
                                     avatar={
                                         <Avatar style={{ backgroundColor: 'transparent', borderRadius: 0 }}>
-                                            <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${comment.author.avatar.icon}`} />
+                                            <img style={{ width: '100%' }} src={`http://localhost:5000/api/users/image/${comment.author.avatar.icon}`} />
                                         </Avatar>
                                     }
                                     label={comment.author.username}
@@ -544,7 +544,7 @@ const ExploreShow = (props) => {
                     next={() => { props.history.push({ pathname: `/explore/${next}`, state: { artwork_id: next } }); props.fetchArtwork(props.history.location.state.artwork_id); }}
                     prev={() => { props.history.push({ pathname: `/explore/${prev}`, state: { artwork_id: prev } }); props.fetchArtwork(props.history.location.state.artwork_id); }}
                 >
-                    <img className={classes.showImage} id='img' src={`http://localhost:4000/api/artworks/image/${props.explore.artworkData.filename}`} />
+                    <img className={classes.showImage} id='img' src={`http://localhost:5000/api/artworks/image/${props.explore.artworkData.filename}`} />
                 </Carousel>
             </Grid>
             <Grid item lg={5} xs={12} className={classes.gridContent}>
@@ -562,7 +562,7 @@ const ExploreShow = (props) => {
                                     </div>
                                     {/* <div style={{ display: 'flex', flexFlow: 'wrap' }}>
                                         {props.common.awardList.filter((item, index) => index < 5).map(award => (
-                                            <img style={{ width: '30px' }} src={`http://localhost:4000/api/users/image/${award.icon}`} />
+                                            <img style={{ width: '30px' }} src={`http://localhost:5000/api/users/image/${award.icon}`} />
                                         ))}
                                     </div> */}
                                 </Grid>
@@ -613,7 +613,7 @@ const ExploreShow = (props) => {
                                                             classes={{ root: classes.userChipRoot, label: classes.userChipLabelRoot }}
                                                             avatar={
                                                                 <Avatar style={{ backgroundColor: 'transparent', borderRadius: 0 }}>
-                                                                    <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${props.explore.artworkData.author.avatar.icon}`} />
+                                                                    <img style={{ width: '100%' }} src={`http://localhost:5000/api/users/image/${props.explore.artworkData.author.avatar.icon}`} />
                                                                 </Avatar>
                                                             }
                                                             label={props.explore.artworkData.author.username}
@@ -659,7 +659,6 @@ const ExploreShow = (props) => {
                         </div>
                         <AwardModal
                             open={awardOpen}
-                            title='Awards'
                             onClose={handleDialogClose}
                             onClick={handleDialogClose}
                         />

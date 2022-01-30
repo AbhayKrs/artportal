@@ -76,7 +76,7 @@ const Masonry = props => {
                     onClick={() => { props.history.push({ pathname: `/explore/${image._id}`, state: { artwork_id: image._id } }); window.scroll(0, 0) }}
                     className={classes.exploreImage}
                     id={image._id}
-                    src={`http://localhost:4000/api/artworks/image/${image.filename}`}
+                    src={`http://localhost:5000/api/artworks/image/${image.filename}`}
                 />
             ))}
         </Layout>

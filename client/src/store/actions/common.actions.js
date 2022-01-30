@@ -13,6 +13,7 @@ import {
     PUSH_TO_CART,
     EDIT_CARTLIST,
     HANDLE_SIGNIN,
+    HANDLE_REFRESHTOKEN,
     HANDLE_SIGNUP,
     HANDLE_SIGNOUT,
     FETCH_COMMON_IMAGES,
@@ -40,7 +41,7 @@ export const getTags = () => (dispatch, getState) => {
     console.log('getTags invoked');
     try {
         axios({
-            url: 'http://localhost:4000/api/users/tags',
+            url: 'http://localhost:5000/api/users/tags',
             method: 'GET'
         }).then(res => {
             console.log('tags', res.data);
@@ -56,7 +57,7 @@ export const getTags = () => (dispatch, getState) => {
 export const fetchCommonImages = () => (dispatch, getState) => {
     try {
         axios({
-            url: 'http://localhost:4000/api/users/commonImages',
+            url: 'http://localhost:5000/api/users/commonImages',
             method: 'GET'
         }).then(res => {
             dispatch({ type: FETCH_COMMON_IMAGES, payload: res.data });
@@ -68,10 +69,11 @@ export const fetchCommonImages = () => (dispatch, getState) => {
     }
 }
 
-export const handleVerifyUser = (userData) => (dispatch, getState) => {
-    console.log('handleVerifyUser invoked', userData);
+export const handleVerifyUser = (token) => (dispatch, getState) => {
+    console.log('handleVerifyUser invoked', token);
     try {
-        dispatch({ type: HANDLE_VERIFY_USER, payload: userData });
+        const decoded = jwt_decode(token);
+        dispatch({ type: HANDLE_VERIFY_USER, payload: decoded });
     } catch (err) {
         console.log('err', err);
     }
@@ -102,7 +104,7 @@ export const handleSignin = (stayLoggedIn, userData) => async (dispatch, getStat
     console.log('handleSignin invoked');
     try {
         axios({
-            url: 'http://localhost:4000/api/users/login',
+            url: 'http://localhost:5000/api/users/login',
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             data: userData
@@ -137,7 +139,7 @@ export const handleSignUp = (userData) => async (dispatch, getState) => {
     console.log('handleSignUp invoked', userData);
     try {
         axios({
-            url: 'http://localhost:4000/api/users/signup',
+            url: 'http://localhost:5000/api/users/signup',
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             data: userData
@@ -150,7 +152,12 @@ export const handleSignUp = (userData) => async (dispatch, getState) => {
                 dispatch({ type: HANDLE_HEADER_DIALOG_CLOSE, payload: false });
             }).catch(err => {
                 if (err.response) {
-                    console.log('Signup fail:: ', err.response.status);
+                    const error = {
+                        open: true,
+                        message: err.response.data,
+                        severity: 'error',
+                    }
+                    dispatch(setError(error))
                 }
             })
     } catch (err) {
@@ -158,11 +165,58 @@ export const handleSignUp = (userData) => async (dispatch, getState) => {
     }
 }
 
+export const getUserDetails = () => async (dispatch, getState) => {
+    const userID = getState().common.user.id;
+    console.log('handleRefreshToken invoked');
+    try {
+        axios({
+            url: `http://localhost:5000/api/users/${userID}`,
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        }).then(res => {
+            const { token } = res.data;
+            if (localStorage.getItem('jwtToken')) {
+                localStorage.setItem('jwtToken', token)
+            } else if (sessionStorage.getItem('jwtToken')) {
+                sessionStorage.setItem('jwtToken', token)
+            }
+            setAuthToken(token);
+            const loginData = jwt_decode(token);
+            dispatch({ type: HANDLE_REFRESHTOKEN, payload: loginData });
+        }).catch(err => {
+            if (err.response) {
+                const error = {
+                    open: true,
+                    message: err.response.data,
+                    severity: 'error',
+                }
+                dispatch(setError(error))
+            }
+        })
+        // .then(async (response) => {
+        //     if (response.ok) {
+        //       const data = await response.json();
+        //       setUserContext((oldValues) => {
+        //         return { ...oldValues, token: data.token };
+        //       });
+        //     } else {
+        //       setUserContext((oldValues) => {
+        //         return { ...oldValues, token: null };
+        //       });
+        //     }
+        //     // call refreshToken every 5 minutes to renew the authentication token.
+        //     setTimeout(verifyUser, 5 * 60 * 1000);
+        //   });
+    } catch (err) {
+        console.log('---error handleRefreshToken', err);
+    }
+}
+
 export const fetchUserArtworkList = () => async (dispatch, getState) => {
     console.log('fetchUserArtworkList invoked', getState().common);
     try {
         const userID = getState().common.user.id;
-        const artworkData = await axios.get(`http://localhost:4000/api/users/${userID}/artworks`);
+        const artworkData = await axios.get(`http://localhost:5000/api/users/${userID}/artworks`);
         await dispatch({ type: FETCH_USER_ARTWORKLIST, payload: artworkData.data });
     } catch (err) {
         console.log('---error fetchUserArtworkList', err)
@@ -173,7 +227,7 @@ export const fetchUserStoreList = () => async (dispatch, getState) => {
     console.log('fetchUserStoreList invoked', getState().common);
     try {
         const userID = getState().common.user.id;
-        const storeData = await axios.get(`http://localhost:4000/api/users/${userID}/store`);
+        const storeData = await axios.get(`http://localhost:5000/api/users/${userID}/store`);
         await dispatch({ type: FETCH_USER_STORELIST, payload: storeData.data });
     } catch (err) {
         console.log('---error fetchUserStoreList', err);
@@ -185,7 +239,7 @@ export const deleteUserStoreItem = (storeID) => async (dispatch, getState) => {
     try {
         const userID = getState().common.user.id;
         const storeStatus = await axios({
-            url: `http://localhost:4000/api/store/${storeID}`,
+            url: `http://localhost:5000/api/store/${storeID}`,
             method: 'DELETE',
             headers: { "Content-Type": "application/json" },
             data: { userID: userID }
@@ -207,7 +261,7 @@ export const fetchCartList = () => async (dispatch, getState) => {
     console.log('fetchCartList invoked', getState().common);
     try {
         const userID = getState().common.user.id;
-        const cartData = await axios.get(`http://localhost:4000/api/users/${userID}/cart`);
+        const cartData = await axios.get(`http://localhost:5000/api/users/${userID}/cart`);
         await dispatch({ type: FETCH_CARTLIST, payload: cartData.data });
     } catch (err) {
         console.log('---error fetchCartList', err);
@@ -229,7 +283,7 @@ export const handleAddToCart = (data) => async (dispatch, getState) => {
             }
             const cartID = userCart.filter(item => item.title === data.title)[0]._id;
             await axios({
-                url: `http://localhost:4000/api/users/${userID}/cart/${cartID}`,
+                url: `http://localhost:5000/api/users/${userID}/cart/${cartID}`,
                 method: 'PUT',
                 data: cartData
             }).then(async res => {
@@ -249,7 +303,7 @@ export const handleAddToCart = (data) => async (dispatch, getState) => {
                 subtotal: data.price * 1
             }
             await axios({
-                url: `http://localhost:4000/api/users/${userID}/cart/add`,
+                url: `http://localhost:5000/api/users/${userID}/cart/add`,
                 method: 'POST',
                 data: cartData
             }).then(async res => {
@@ -275,7 +329,7 @@ export const handleRemoveFromCart = (data) => async (dispatch, getState) => {
     try {
         if (userCart.filter(item => item.title === data.title)[0].quantity === 1) {
             await axios({
-                url: `http://localhost:4000/api/users/${userID}/cart/${cartID}`,
+                url: `http://localhost:5000/api/users/${userID}/cart/${cartID}`,
                 method: 'DELETE',
             }).then(async res => {
                 console.log('res', res.status);
@@ -294,7 +348,7 @@ export const handleRemoveFromCart = (data) => async (dispatch, getState) => {
             }
             const cartID = userCart.filter(item => item.title === data.title)[0]._id;
             await axios({
-                url: `http://localhost:4000/api/users/${userID}/cart/${cartID}`,
+                url: `http://localhost:5000/api/users/${userID}/cart/${cartID}`,
                 method: 'PUT',
                 data: cartData,
             }).then(async res => {
@@ -345,7 +399,7 @@ export const handleSignOut = () => async (dispatch, getState) => {
 export const fetchAvatars = () => async (dispatch, getState) => {
     console.log('fetchAvatars invoked');
     try {
-        const avatarList = await axios.get('http://localhost:4000/api/users/avatars');
+        const avatarList = await axios.get('http://localhost:5000/api/users/avatars');
         console.log('avatarList', avatarList);
         await dispatch({ type: FETCH_AVATARLIST, payload: avatarList.data });
     } catch (err) {
@@ -356,7 +410,7 @@ export const fetchAvatars = () => async (dispatch, getState) => {
 export const fetchAwards = () => async (dispatch, getState) => {
     console.log('fetchAwards invoked');
     try {
-        const awardList = await axios.get('http://localhost:4000/api/users/awards');
+        const awardList = await axios.get('http://localhost:5000/api/users/awards');
         console.log('avatarList', awardList);
         await dispatch({ type: FETCH_AWARDLIST, payload: awardList.data });
     } catch (err) {
@@ -368,7 +422,7 @@ export const handleUploadAsset = (assetData) => async (dispatch, getState) => {
     console.log('handleUploadAsset invoked', assetData);
     try {
         await axios({
-            url: 'http://localhost:4000/api/users/assets/new',
+            url: 'http://localhost:5000/api/users/assets/new',
             method: 'POST',
             headers: { 'Content-Type': 'multipart/form-data' },
             data: assetData
@@ -389,7 +443,7 @@ export const handleEditUserAvatar = (avatar) => async (dispatch, getState) => {
     console.log('handleEditUserAvatar', avatar);
     try {
         await axios({
-            url: `http://localhost:4000/api/users/${userID}/avatar`,
+            url: `http://localhost:5000/api/users/${userID}/avatar`,
             method: 'POST',
             data: avatar
         }).then(async res => {

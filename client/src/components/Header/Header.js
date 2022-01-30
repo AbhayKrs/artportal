@@ -389,11 +389,11 @@ const Header = (props) => {
                         <div className={classes.loggedinIcons} onMouseLeave={() => toggleUserDropdown(false)}>
                             {userDropdown ?
                                 <Avatar className={classes.hoveredUserIcon} size='small' onMouseOver={() => toggleUserDropdown(true)} >
-                                    <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${props.user.avatar.icon}`} />
+                                    <img style={{ width: '100%' }} src={`http://localhost:5000/api/users/image/${props.user.avatar.icon}`} />
                                 </Avatar>
                                 :
                                 <Avatar className={classes.userIcon} size='small' onMouseOver={() => toggleUserDropdown(true)} >
-                                    <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${props.user.avatar.icon}`} />
+                                    <img style={{ width: '100%' }} src={`http://localhost:5000/api/users/image/${props.user.avatar.icon}`} />
                                 </Avatar>
                             }
                             <Card elevation={false} className={userDropdown ? classes.userCard : classes.userCardDisabled}>

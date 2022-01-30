@@ -253,7 +253,7 @@ const Store = (props) => {
                                     <Typography variant='h6' className={classes.cardHeader}>{item.title}</Typography>
                                     <ListItem disableGutters className={classes.sellerRoot}>
                                         <Avatar style={{ backgroundColor: 'transparent', borderRadius: 0 }}>
-                                            <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${item.seller.avatar.icon}`} />
+                                            <img style={{ width: '100%' }} src={`http://localhost:5000/api/users/image/${item.seller.avatar.icon}`} />
                                         </Avatar>
                                         <ListItemText
                                             className={classes.sellerHeader}
@@ -262,7 +262,7 @@ const Store = (props) => {
                                         />
                                     </ListItem>
                                 </div>
-                                <img src={`http://localhost:4000/api/store/image/${item.item}`} alt="" width="960" height="640" className={classes.sellerPiece} />
+                                <img src={`http://localhost:5000/api/store/image/${item.item}`} alt="" width="960" height="640" className={classes.sellerPiece} />
                             </CardContent>
                             <div className={classes.actionRoot}>
                                 <div className={classes.actionGroup}>

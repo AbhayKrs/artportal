@@ -7,7 +7,7 @@ export const handleUploadArtwork = (artworkData) => async (dispatch, getState) =
     console.log('handleUploadArtwork invoked', artworkData);
     try {
         await axios({
-            url: 'http://localhost:4000/api/artworks/new',
+            url: 'http://localhost:5000/api/artworks/new',
             method: 'POST',
             headers: { 'Content-Type': 'multipart/form-data' },
             data: artworkData

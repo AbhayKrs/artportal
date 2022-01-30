@@ -225,7 +225,7 @@ const StoreUpload = (props) => {
                         </Card>
                         <Chip
                             className={classes.userChip}
-                            avatar={<img src={`http://localhost:4000/api/users/image/${props.user.avatar.icon}`} />}
+                            avatar={<img src={`http://localhost:5000/api/users/image/${props.user.avatar.icon}`} />}
                             label={<Typography variant='body'>{props.common.user.username}</Typography>}
                         />
                         <TextField

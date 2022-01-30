@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { Typography, Card, Divider, List, ListItem, ListItemText, IconButton, Button, Grid, Box, Tabs, Tab, Avatar, Table, TableBody, TableRow, TableCell } from '@material-ui/core';
 import { grey, deepPurple, teal, pink } from '@material-ui/core/colors';
-import { handleUploadAsset, fetchAvatars, fetchAwards, handleEditUserAvatar, deleteUserStoreItem } from '../../store/actions/common.actions';
+import { handleUploadAsset, fetchAvatars, fetchAwards, deleteUserStoreItem } from '../../store/actions/common.actions';
 import TelegramIcon from '@material-ui/icons/Telegram';
 import AvatarModal from './AvatarModal';
 import PrizeBackground from '../../assets/images/prizeRecieved.png';
@@ -199,7 +198,7 @@ const Profile = (props) => {
                             secondary={<Typography variant='subtitle1' className={classes.profileNameSecondary}>#{props.user.username}</Typography>}
                         />
                         <div style={{ zIndex: 1, textAlign: 'center' }}>
-                            <img src={`http://localhost:4000/api/users/image/${props.user.avatar.icon}`} alt="" width="200" height="200" className={classes.sellerAvatar} />
+                            <img src={`http://localhost:5000/api/users/image/${props.user.avatar.icon}`} alt="" width="200" height="200" className={classes.sellerAvatar} />
                             <Typography component='p' style={{ zIndex: 1, color: 'white', fontFamily: 'CaviarDreams' }}>6969 Followers</Typography>
                             <Typography component='p' style={{ zIndex: 1, color: 'white', fontFamily: 'CaviarDreams' }}>69 Following</Typography>
                             <Typography component='p' style={{ zIndex: 1, color: 'white', fontFamily: 'CaviarDreams' }}>432 Likes</Typography>
@@ -243,7 +242,7 @@ const Profile = (props) => {
                                                     <img
                                                         className={classes.storeImage}
                                                         id={storeItem._id}
-                                                        src={`http://localhost:4000/api/store/image/${storeItem.item}`}
+                                                        src={`http://localhost:5000/api/store/image/${storeItem.item}`}
                                                     />
                                                 </TableCell>
                                                 <TableCell style={(props.user.store.length - 1) === index ? { borderBottom: 'none', padding: 0 } : { padding: 0 }}>
@@ -299,7 +298,7 @@ const Profile = (props) => {
                                         <Grid container spacing={4} style={{ padding: '30px' }}>
                                             {props.common.avatarList.map(avatar => (
                                                 <Grid item xs={2}>
-                                                    <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${avatar.icon}`} />
+                                                    <img style={{ width: '100%' }} src={`http://localhost:5000/api/users/image/${avatar.icon}`} />
                                                 </Grid>
                                             ))}
                                         </Grid>
@@ -347,7 +346,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     handleUploadAsset,
     fetchAvatars,
     fetchAwards,
-    handleEditUserAvatar,
     deleteUserStoreItem
 }, dispatch);
 

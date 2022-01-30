@@ -78,6 +78,7 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center'
     },
     loginTitle: {
+        fontFamily: 'AntipastoProRegular',
         fontWeight: 'bold',
         color: deepPurple[400]
     },
@@ -125,11 +126,7 @@ const RegisterModal = (props) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [password2, setPassword2] = useState('');
-    const [stayLoggedIn, setLoggedIn] = useState(true);
 
-    const stayLoggedin = (event) => {
-        setLoggedIn(event.target.checked);
-    };
     const handleNameChange = (event) => {
         setName(event.target.value)
     }
@@ -164,7 +161,7 @@ const RegisterModal = (props) => {
                 <Grid item xs={12} sm={6} style={{ maxHeight: '100%' }}>
                     <img
                         className={classes.cardMedia}
-                        src={`http://localhost:4000/api/users/image/${props.common.signupImage}`}
+                        src={`http://localhost:5000/api/users/image/${props.common.signupImage}`}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6} className={classes.cardDetails}>
@@ -176,7 +173,7 @@ const RegisterModal = (props) => {
                             <ListItem className={classes.listItem}>
                                 <ListItemText
                                     edge="start"
-                                    primary={<Typography variant="h4" className={classes.loginTitle}>{title}</Typography>}
+                                    primary={<Typography variant="h3" className={classes.loginTitle}>{title}</Typography>}
                                     secondary={<Typography variant="subtitle2" className={classes.loginSubtitle}>Become a Artyst Member. <Button size="small" style={{ color: deepPurple[400] }} onClick={() => { props.handleHeaderDialogClose(); props.handleHeaderDialogOpen('openLoginDialog') }}>Sign In</Button></Typography>}
                                 />
                             </ListItem>

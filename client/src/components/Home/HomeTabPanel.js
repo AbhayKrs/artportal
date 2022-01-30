@@ -110,7 +110,7 @@ const useStyles = makeStyles((theme) => ({
     tabRoot: {
         textTransform: 'none',
         color: '#fff',
-        minWidth: 72,
+        minWidth: 0,
         fontWeight: theme.typography.fontWeightRegular,
         fontFamily: [
             '-apple-system',
@@ -208,7 +208,7 @@ const HomeTabPanelContent = (props) => {
                     <ImageList cols={props.width === 'sm' ? 4 : props.width === 'xs' ? 2 : 6} className={classes.imageList}>
                         {props.artworkList.filter(item => item.tags.includes(props.tags[index]) === true).map((artwork, index) => (
                             <ImageListItem key={index} className={classes.imageItem} onClick={() => props.history.push({ pathname: `/explore/${artwork._id}`, state: { artwork_id: artwork._id } })}>
-                                <img id='itemImg' className={classes.imageSrc} src={`http://localhost:4000/api/artworks/image/${artwork.filename}`} alt={artwork.title} />
+                                <img id='itemImg' className={classes.imageSrc} src={`http://localhost:5000/api/artworks/image/${artwork.filename}`} alt={artwork.title} />
                                 <ImageListItemBar
                                     id='itemBar'
                                     className={classes.imageBar}
@@ -218,7 +218,7 @@ const HomeTabPanelContent = (props) => {
                                         <ListItem disableGutters className={classes.itemRoot}>
                                             <ListItemAvatar className={classes.itemAvatar}>
                                                 <Avatar className={classes.itemUserAvatar}>
-                                                    <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${artwork.author.avatar.icon}`} />
+                                                    <img style={{ width: '100%' }} src={`http://localhost:5000/api/users/image/${artwork.author.avatar.icon}`} />
                                                 </Avatar>
                                             </ListItemAvatar>
                                             <ListItemText classes={{ secondary: classes.itemUsername }} secondary={'#' + artwork.author.username} />
@@ -274,7 +274,7 @@ const HomeTabPanel = (props) => {
         <div>
             <Paper >
                 <Grid container>
-                    <Grid item sm={10} xs={6}>
+                    <Grid item sm={10} xs={8}>
                         <Tabs
                             classes={{
                                 root: classes.tabsRoot,
@@ -293,7 +293,7 @@ const HomeTabPanel = (props) => {
                             ))}
                         </Tabs>
                     </Grid>
-                    <Grid item sm={2} xs={6} className={classes.tabSortRoot}>
+                    <Grid item sm={2} xs={4} className={classes.tabSortRoot}>
                         <FormControl size='small' className={classes.tabSortForm} >
                             <Select
                                 native

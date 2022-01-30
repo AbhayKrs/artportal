@@ -14,6 +14,7 @@ export const PUSH_TO_CART = 'PUSH_TO_CART';
 export const REMOVE_FROM_CART = 'REMOVE_FROM_CART';
 export const EDIT_CARTLIST = 'EDIT_CARTLIST';
 export const HANDLE_SIGNIN = 'HANDLE_SIGNIN';
+export const HANDLE_REFRESHTOKEN = 'HANDLE_REFRESHTOKEN';
 export const HANDLE_SIGNUP = 'HANDLE_SIGNUP';
 export const HANDLE_SIGNOUT = 'HANDLE_SIGNOUT';
 export const FETCH_COMMON_IMAGES = 'FETCH_COMMON_IMAGES';
@@ -171,6 +172,9 @@ export const commonReducer = (state = initialState, { type, payload }) => {
         }
         case HANDLE_SIGNIN: {
             console.log('---HANDLE_SIGNIN', payload);
+            return { ...state, isAuthenticated: true, user: payload }
+        }
+        case HANDLE_REFRESHTOKEN: {
             return { ...state, isAuthenticated: true, user: payload }
         }
         case HANDLE_SIGNUP: {

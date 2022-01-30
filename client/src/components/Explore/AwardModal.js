@@ -55,8 +55,8 @@ const useStyles = makeStyles((theme) => ({
         flex: '1 0 auto'
     },
     tokenTitle: {
+        fontFamily: 'AntipastoProRegular',
         textTransform: 'uppercase',
-        fontFamily: 'Teko',
         fontWeight: 'bold',
         color: deepPurple[600]
     },
@@ -156,18 +156,7 @@ const useStyles = makeStyles((theme) => ({
         color: '#fff',
         minWidth: 72,
         fontWeight: theme.typography.fontWeightRegular,
-        fontFamily: [
-            '-apple-system',
-            'BlinkMacSystemFont',
-            '"Segoe UI"',
-            'Roboto',
-            '"Helvetica Neue"',
-            'Arial',
-            'sans-serif',
-            '"Apple Color Emoji"',
-            '"Segoe UI Emoji"',
-            '"Segoe UI Symbol"',
-        ].join(','),
+        fontFamily: 'CaviarDreams',
         '&$selected': {
             color: deepPurple[500],
             fontWeight: theme.typography.fontWeightMedium,
@@ -202,7 +191,8 @@ const TabPanelContent = (props) => {
                 <Grid container spacing={4} style={{ padding: '15px', height: '320px' }}>
                     {props.awards.map(award => (
                         <Grid item xs={2}>
-                            <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${award.icon}`} />
+                            <img style={{ width: '100%' }} src={`http://localhost:5000/api/users/image/${award.icon}`} />
+                            <Typography variant='caption' style={{ color: grey[400] }}>500</Typography>
                         </Grid>
                     ))}
                 </Grid>
@@ -219,7 +209,7 @@ function tabProps(index) {
 }
 
 const AwardModal = (props) => {
-    const { open, title, onClose } = props;
+    const { open, onClose } = props;
     const [value, setValue] = useState(0);
 
     const classes = useStyles();
@@ -239,7 +229,7 @@ const AwardModal = (props) => {
             </IconButton>
             <DialogContent className={classes.dialogContent}>
                 <div style={{ display: 'flex', alignItems: 'center', marginRight: '25px' }}>
-                    <Typography variant="h3" className={classes.tokenTitle}>{title}</Typography>
+                    <Typography variant="h3" className={classes.tokenTitle}>Awards</Typography>
                     <Paper elevation={5} style={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
                         <img src={CoinIcon} style={{ width: '100%', height: '22px', marginLeft: '5px' }} />
                         <Typography variant='button' style={{ margin: '0px 3px' }}>1000</Typography>
@@ -267,7 +257,7 @@ const AwardModal = (props) => {
                         {item}
                     </TabPanelContent>
                 ))}
-                <Button variant='contained' onClick={onClose} style={{ marginTop: '10px' }}>Close</Button>
+                <Button variant='contained' onClick={onClose} style={{ marginTop: '10px', backgroundColor: 'rgb(29, 29, 31)', color: grey[300] }}>Close</Button>
             </DialogContent>
         </Dialog >
     )

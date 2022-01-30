@@ -375,16 +375,16 @@ const StoreShow = (props) => {
             <Paper elevation={2} className={classes.paperRoot}>
                 <Grid container>
                     <Grid item lg={6} xs={12} className={classes.showcaseImages}>
-                        <img className={classes.primaryShowcase} src={`http://localhost:4000/api/artworks/image/${props.store.storeItemData.item}`} />
+                        <img className={classes.primaryShowcase} src={`http://localhost:5000/api/artworks/image/${props.store.storeItemData.item}`} />
                         <Grid container spacing={1} className={classes.secondaryShowcase}>
                             <Grid item lg={4} xs={12}>
-                                <img src={`http://localhost:4000/api/artworks/image/${props.store.storeItemData.item}`} style={{ width: '100%', borderRadius: '10px' }} />
+                                <img src={`http://localhost:5000/api/artworks/image/${props.store.storeItemData.item}`} style={{ width: '100%', borderRadius: '10px' }} />
                             </Grid>
                             <Grid item lg={4} xs={12}>
-                                <img src={`http://localhost:4000/api/artworks/image/${props.store.storeItemData.item}`} style={{ width: '100%', borderRadius: '10px' }} />
+                                <img src={`http://localhost:5000/api/artworks/image/${props.store.storeItemData.item}`} style={{ width: '100%', borderRadius: '10px' }} />
                             </Grid>
                             <Grid item lg={4} xs={12}>
-                                <img src={`http://localhost:4000/api/artworks/image/${props.store.storeItemData.item}`} style={{ width: '100%', borderRadius: '10px' }} />
+                                <img src={`http://localhost:5000/api/artworks/image/${props.store.storeItemData.item}`} style={{ width: '100%', borderRadius: '10px' }} />
                             </Grid>
                         </Grid>
                     </Grid>
@@ -409,7 +409,7 @@ const StoreShow = (props) => {
                                         classes={{ root: classes.userChip, label: classes.userChipLabel }}
                                         avatar={
                                             <Avatar style={{ backgroundColor: 'transparent' }}>
-                                                <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${props.user.avatar.icon}`} />
+                                                <img style={{ width: '100%' }} src={`http://localhost:5000/api/users/image/${props.user.avatar.icon}`} />
                                             </Avatar>
                                         }
                                         label={props.store.storeItemData.seller.username}

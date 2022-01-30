@@ -10,7 +10,7 @@ import AddIcon from '@material-ui/icons/Add';
 import CoinIcon from '../../assets/images/coin.png';
 import { grey, blueGrey, deepPurple } from '@material-ui/core/colors';
 
-import { fetchAvatars, handleEditUserAvatar } from '../../store/actions/common.actions';
+import { fetchAvatars, handleEditUserAvatar, getUserDetails } from '../../store/actions/common.actions';
 
 const useStyles = makeStyles((theme) => ({
     loginRoot: {
@@ -186,8 +186,13 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const AwardModal = (props) => {
-    const { open, title, onClose } = props;
+    const { open, onClose } = props;
     const classes = useStyles();
+
+    const editAvatar = async (avatar) => {
+        await props.handleEditUserAvatar(avatar);
+        setTimeout(() => props.getUserDetails(), 1000)
+    }
 
     return (
         <Dialog className={classes.loginRoot} aria-labelledby="simple-dialog-title" open={open} maxWidth={false} PaperProps={{ className: classes.dialogPaper }} >
@@ -200,8 +205,8 @@ const AwardModal = (props) => {
                         <Typography variant='h6' style={{ width: '100%', textAlign: 'center', color: 'white', fontFamily: 'AntipastoProRegular' }}>Male</Typography>
                         {props.common.avatarList.filter(item => item.category === 'Male').map(item => (
                             <Grid item xs={3}>
-                                <IconButton onClick={() => props.handleEditUserAvatar(item)}>
-                                    <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${item.icon}`} />
+                                <IconButton onClick={() => editAvatar(item)}>
+                                    <img style={{ width: '100%' }} src={`http://localhost:5000/api/users/image/${item.icon}`} />
                                 </IconButton>
                             </Grid>
                         ))}
@@ -210,8 +215,8 @@ const AwardModal = (props) => {
                         <Typography variant='h6' style={{ width: '100%', textAlign: 'center', color: 'white', fontFamily: 'AntipastoProRegular' }}>Female</Typography>
                         {props.common.avatarList.filter(item => item.category === 'Female').map(item => (
                             <Grid item xs={3}>
-                                <IconButton onClick={() => props.handleEditUserAvatar(item)}>
-                                    <img style={{ width: '100%' }} src={`http://localhost:4000/api/users/image/${item.icon}`} />
+                                <IconButton onClick={() => editAvatar(item)}>
+                                    <img style={{ width: '100%' }} src={`http://localhost:5000/api/users/image/${item.icon}`} />
                                 </IconButton>
                             </Grid>
                         ))}
@@ -228,7 +233,8 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
     fetchAvatars,
-    handleEditUserAvatar
+    handleEditUserAvatar,
+    getUserDetails
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AwardModal))

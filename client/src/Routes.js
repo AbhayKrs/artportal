@@ -31,29 +31,17 @@ const Routes = (props) => {
         if (sessionStorage.jwtToken) {
             const token = sessionStorage.jwtToken;
             setAuthToken(token);
-            const decoded = jwt_decode(token);
-            await props.handleVerifyUser(decoded);
+            await props.handleVerifyUser(token);
             await props.fetchUserArtworkList();
             await props.fetchUserStoreList();
             await props.fetchCartList();
-            const currentTime = Date.now() / 1000;
-            if (decoded.exp < currentTime) {
-                props.handleSignOut();
-                window.location.href = './';
-            }
         } else if (localStorage.jwtToken) {
             const token = localStorage.jwtToken;
             setAuthToken(token);
-            const decoded = jwt_decode(token);
-            await props.handleVerifyUser(decoded);
+            await props.handleVerifyUser(token);
             await props.fetchUserArtworkList();
             await props.fetchUserStoreList();
             await props.fetchCartList();
-            const currentTime = Date.now() / 1000;
-            if (decoded.exp < currentTime) {
-                props.handleSignOut();
-                window.location.href = './';
-            }
         }
     }, []);
 

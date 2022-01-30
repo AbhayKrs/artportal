@@ -76,6 +76,7 @@ const useStyles = makeStyles((theme) => ({
         flex: '1 0 auto'
     },
     loginTitle: {
+        fontFamily: 'AntipastoProRegular',
         fontWeight: 'bold',
         color: deepPurple[400]
     },
@@ -155,7 +156,7 @@ const LoginModal = (props) => {
                 <Grid item xs={12} sm={6}>
                     <img
                         className={classes.cardMedia}
-                        src={`http://localhost:4000/api/users/image/${props.common.loginImage}`}
+                        src={`http://localhost:5000/api/users/image/${props.common.loginImage}`}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6} className={classes.cardDetails}>
@@ -167,7 +168,7 @@ const LoginModal = (props) => {
                             <ListItem>
                                 <ListItemText
                                     edge="start"
-                                    primary={<Typography variant="h4" className={classes.loginTitle}>{title}</Typography>}
+                                    primary={<Typography variant="h3" className={classes.loginTitle}>{title}</Typography>}
                                     secondary={<Typography variant="subtitle2" className={classes.loginSubtitle}>Become a Artyst Member. <Button size="small" style={{ color: deepPurple[400], minWidth: 'fit-content' }} onClick={() => { props.handleHeaderDialogClose(); props.handleHeaderDialogOpen('openRegisterDialog') }}>Join</Button></Typography>}
                                 />
                             </ListItem>
@@ -227,7 +228,7 @@ const LoginModal = (props) => {
                             </ListItem>
                             <ListItem>
                                 <Typography variant='body2' className={classes.loginTOS}>
-                                    By clicking Log In, I confirm that I have read and agree to the Artyst <Link onClick={() => props.history.push('/policy/services')} >Terms of Service</Link> and <Link onClick={() => props.history.push('/policy/privacy')}>Privacy Policy</Link>.
+                                    By clicking Sign In, I confirm that I have read and agree to the Artyst <Link onClick={() => props.history.push('/policy/services')} >Terms of Service</Link> and <Link onClick={() => props.history.push('/policy/privacy')}>Privacy Policy</Link>.
                                 </Typography>
                             </ListItem>
                         </List>
