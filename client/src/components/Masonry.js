@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles((theme) => ({
-    exploreImage: {
-        objectFit: 'cover',
-        width: '100%',
-        height: '100%'
-    }
-}));
 
 const Layout = props => {
     const columnWrapper = {};
@@ -67,14 +58,13 @@ const Layout = props => {
 }
 
 const Masonry = props => {
-    const classes = useStyles();
     return (
         <Layout>
             {props.imageList.map((image, index) => (
                 <img
                     id={index}
                     onClick={() => { props.history.push({ pathname: `/explore/${image._id}`, state: { artwork_id: image._id } }); window.scroll(0, 0) }}
-                    className={classes.exploreImage}
+                    className='object-cover w-full h-full'
                     id={image._id}
                     src={`http://localhost:5000/api/artworks/image/${image.filename}`}
                 />

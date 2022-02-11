@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { artworkItemAPI, artworkListAPI } from '../../api';
 import {
     FETCH_ARTWORK,
     FETCH_ARTWORKLIST,
@@ -32,23 +33,19 @@ const risingSort = (property) => {
 }
 
 export const fetchArtwork = (artworkID) => async (dispatch, getState) => {
-    try {
-        const artworkData = await axios.get(`http://localhost:5000/api/artworks/${artworkID}`);
-        await dispatch({ type: FETCH_ARTWORK, payload: artworkData.data });
-    } catch (err) {
+    await artworkItemAPI(artworkID).then(res => {
+        dispatch({ type: FETCH_ARTWORK, payload: res.data })
+    }).catch(err => {
         console.log('---error fetchArtwork', err);
-    }
+    })
 }
 
 export const fetchArtworkList = () => async (dispatch, getState) => {
-    console.log('fetchArtworkList invoked');
-    try {
-        const artworkList = await axios.get('http://localhost:5000/api/artworks');
-        console.log('artworkList', artworkList);
-        await dispatch({ type: FETCH_ARTWORKLIST, payload: artworkList.data });
-    } catch (err) {
+    await artworkListAPI().then(res => {
+        dispatch({ type: FETCH_ARTWORKLIST, payload: res.data });
+    }).catch(err => {
         console.log('---error fetchArtworkList', err);
-    }
+    })
 };
 
 export const handleDialogOpen = (value) => async (dispatch, getState) => {
