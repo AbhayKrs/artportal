@@ -6,6 +6,13 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
+    screens: {
+      'xs': '360px',
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1280px',
+      'xl': '1920px'
+    },
     fontFamily: {
       'antipasto': 'AntipastoProRegular',
       'caviar': 'CaviarDreams'
@@ -18,3 +25,4 @@ module.exports = {
   },
   plugins: [],
 }
+// #2b2b2b

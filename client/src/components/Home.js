@@ -2,8 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import HomeTabPanel from './HomeTabPanel';
+import { fetchArtworkList } from '../store/actions/explore.actions';
 
 const Home = (props) => {
+    useEffect(() => {
+        props.fetchArtworkList()
+    }, [])
     let defaultTransform = 0;
 
     const goNext = () => {
@@ -47,7 +51,7 @@ const Home = (props) => {
     }]
 
     return (
-        <div className='bg-slate-100'>
+        <div className='bg-gray-200 dark:bg-zinc-900'>
             <div className="flex items-center justify-center w-full h-full">
                 <div className="w-full relative flex items-center justify-center">
                     <button onClick={() => goPrev()} aria-label="slide backward" className="absolute z-30 ml-0.5 left-0 cursor-pointer">
@@ -57,8 +61,8 @@ const Home = (props) => {
                     </button>
                     <div className="w-full h-full mx-7 overflow-x-hidden overflow-y-hidden">
                         <div id="slider" className="h-full flex space-x-2 items-center justify-start transition ease-out duration-700">
-                            {carouselData.map(item => {
-                                return <div className="flex h-52 w-52 flex-shrink-0 relative">
+                            {carouselData.map((item, index) => {
+                                return <div key={index} className="flex h-52 w-52 flex-shrink-0 relative">
                                     <img src={item.image} alt="black chair and white table" className="object-cover object-center w-full rounded-lg" />
                                     <div className="bg-gray-800 rounded-lg bg-opacity-30 absolute w-full h-full p-3">
                                         <div className="flex h-full items-end">
@@ -88,6 +92,7 @@ const mapStateToProps = (state, props) => ({
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
+    fetchArtworkList
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

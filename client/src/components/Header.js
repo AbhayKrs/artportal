@@ -31,26 +31,24 @@ const Header = (props) => {
     const logout = () => {
         props.handleSignOut();
     }
-
+    // drop-shadow(0 4px 3px rgb(0 0 0 / 55%)) drop-shadow(0 2px 2px rgb(0 0 0 / 50%));
     return (
-        <nav className='bg-slate-200 dark:bg-darkNavBg w-full fixed px-2 top-0 drop-shadow-md'>
+        <nav className='bg-slate-300 dark:bg-darkNavBg w-full fixed top-0 z-50 shadow-[0_4px_3px_rgba(175,175,175,0.55),_0_2px_2px_rgba(175,175,175,0.5)] dark:shadow-[0_4px_3px_rgba(45,45,45,0.55),_0_2px_2px_rgba(45,45,45,0.5)]'>
             <div className='h-14 px-2 sm:px-2 lg:px-4'>
                 <div className='flex-shrink-0 flex h-full items-center'>
                     <Link to='/'>
                         <img className='block h-7 w-auto hover:cursor-pointer' src={Artyst_logo} alt='Artyst' />
                     </Link>
                     <div className='flex ml-auto'>
-                        <Link to='/explore' className='text-gray-900 dark:text-gray-200 hover:text-violet-500 px-3 py-2 rounded-md text-lg font-caviar font-bold'>
+                        <Link to='/explore' className='text-gray-900 dark:text-gray-200 hover:text-violet-500 px-3 py-1 rounded-md text-lg font-caviar font-bold dark:font-normal'>
                             Explore
                         </Link>
-                        <Link to='/store' className='text-gray-900 dark:text-gray-200 hover:text-violet-500 px-3 py-2 rounded-md text-lg font-caviar font-bold'>
+                        <Link to='/store' className='text-gray-900 dark:text-gray-200 hover:text-violet-500 px-3 py-1 rounded-md text-lg font-caviar font-bold dark:font-normal'>
                             Store
                         </Link>
-                        <Link to='/profile' className='text-gray-900 dark:text-gray-200 hover:text-violet-500 px-3 py-2 rounded-md text-lg font-caviar font-bold'>
+                        <Link to='/profile' className='text-gray-900 dark:text-gray-200 hover:text-violet-500 px-3 py-1 rounded-md text-lg font-caviar font-bold dark:font-normal'>
                             Profile
                         </Link>
-                        <button onClick={onSubmitClick} className='text-gray-900 dark:text-gray-200 hover:text-violet-500 px-3 py-2 rounded-md text-lg font-caviar font-bold'>Login</button>
-                        <button onClick={logout} className='text-gray-900 dark:text-gray-200 hover:text-violet-500 px-3 py-2 rounded-md text-lg font-caviar font-bold'>Logout</button>
                         {props.common.isAuthenticated ?
                             <div className='relative group group-hover:block ml-1'>
                                 <div className='flex relative w-10 h-10 justify-center items-center text-xl group-hover:p-1 group-hover:scale-125 group-hover:rounded-b-lg group-hover:block group-hover:bg-slate-300 group-hover:rounded-full'>
@@ -61,7 +59,7 @@ const Header = (props) => {
                                         <div className='flex place-content-between'>
                                             <div className='block text-left'>
                                                 <p className='text-gray-900 dark:text-gray-200 text-md font-caviar font-semibold'>{props.user.name}</p>
-                                                <a href="#" className='text-gray-900 dark:text-gray-200 text-xs font-caviar font-semibold'>#{props.user.username}</a>
+                                                <Link to='/' className='text-gray-900 dark:text-gray-200 text-xs font-caviar font-semibold'>#{props.user.username}</Link>
                                             </div>
                                             <button className='rounded px-1.5 py-0.5 m-1 border-b-4 border-l-2 shadow-sm bg-gray-200 border-gray-300' onClick={() => console.log('toggle theme')}>
                                                 <img src={LightMode} />
@@ -76,18 +74,21 @@ const Header = (props) => {
                                             </div>
                                         </div>
                                         <div className='flex flex-col'>
-                                            <a href="#" className='flex items-center text-gray-900 dark:text-gray-200 text-base font-caviar font-semibold'><MdSettings className='mx-1.5 text-lg' /> Settings</a>
+                                            <Link to='/' className='flex items-center text-gray-900 dark:text-gray-200 text-base font-caviar font-semibold'><MdSettings className='mx-1.5 text-lg' /> Settings</Link>
                                         </div>
                                         <div className='flex flex-col'>
-                                            <a href="#" className="bg-white rounded-md text-black text-center uppercase px-2 py-1 transition duration-300 ease-in-out hover:bg-gray-100">
+                                            <button onClick={logout} className="bg-white rounded-md text-black text-center uppercase px-2 py-1 transition duration-300 ease-in-out hover:bg-gray-100">
                                                 Sign Out
-                                            </a>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             :
-                            ''
+                            <>
+                                <button onClick={onSubmitClick} className='bg-violet-500/75 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 px-3 py-1 rounded-md text-lg font-caviar font-bold dark:font-normal'>Login</button>
+                                <button onClick={onSubmitClick} className='bg-violet-500/75 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 px-3 py-1 ml-3 rounded-md text-lg font-caviar font-bold dark:font-normal'>Signup</button>
+                            </>
                         }
                     </div>
                 </div>

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchArtworkList } from '../store/actions/explore.actions';
 import Masonry from './Masonry';
+import ImageCard from './ImageCard';
 
 const Explore = (props) => {
     useEffect(async () => {
