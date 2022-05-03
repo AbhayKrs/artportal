@@ -10,7 +10,7 @@ export default combineReducers({
     uploadData: uploadReducer,
     common: commonReducer,
     store: storeReducer
-    // artworkList: sketchListReducer,
+    // exploreList: sketchListReducer,
     // sketchDetails: sketchDetailsReducer,
     // sketchDelete: sketchDeleteReducer,
     // sketchCreate: sketchCreateReducer,

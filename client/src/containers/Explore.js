@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { bindActionCreators } from 'redux';
-import { fetchArtworkList } from '../store/actions/explore.actions';
+import { fetchExploreList } from '../store/actions/explore.actions';
 import Masonry from '../components/Masonry';
 import SearchBar from '../components/SearchBar';
 import { HiFilter } from 'react-icons/hi';
 import { MdUpload, MdClose } from 'react-icons/md';
-import { fetchArtworkImages } from '../api';
+import { fetchExploreImages } from '../api';
 
 const Explore = (props) => {
     let navigate = useNavigate();
@@ -15,7 +15,7 @@ const Explore = (props) => {
     const [bottomUI, setBottomUI] = useState(false);
 
     useEffect(async () => {
-        props.fetchArtworkList();
+        props.fetchExploreList();
     }, []);
 
     window.onscroll = function (ev) {
@@ -30,14 +30,14 @@ const Explore = (props) => {
         <div className='bg-gray-200 dark:bg-darkNavBg'>
             <SearchBar />
             <Masonry>
-                {props.explore.artworkList.map((artwork, index) => (
+                {props.explore.exploreList.map((explore, index) => (
                     <div>
                         <img
                             id={index}
-                            onClick={() => navigate(`/explore/${artwork._id}`)}
-                            // onClick={() => { props.history.push({ pathname: `/explore/${image._id}`, state: { artwork_id: image._id } }); window.scroll(0, 0) }}
+                            onClick={() => navigate(`/explore/${explore._id}`)}
+                            // onClick={() => { props.history.push({ pathname: `/explore/${image._id}`, state: { explore_id: image._id } }); window.scroll(0, 0) }}
                             className='object-cover w-full h-full'
-                            src={fetchArtworkImages(artwork.files[0])}
+                            src={fetchExploreImages(explore.files[0])}
                         />
                     </div>
                 ))}
@@ -188,7 +188,7 @@ const mapStateToProps = (state, props) => ({
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-    fetchArtworkList
+    fetchExploreList
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Explore);

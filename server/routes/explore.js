@@ -49,45 +49,45 @@ const storage = new GridFsStorage({
 });
 const upload = multer({ storage });
 
-// @route       GET api/artworks
-// @desc        Get all artworks
+// @route       GET api/explore
+// @desc        Get all explore
 // @access      Public
 router.get('/', async (req, res) => {
     try {
-        const artworks = await Explore.find({});
-        if (!artworks) {
-            return res.status(400).send({ msg: 'Artworks not found' });
+        const explore = await Explore.find({});
+        if (!explore) {
+            return res.status(400).send({ msg: 'Explores not found' });
         }
-        res.json(artworks);
+        res.json(explore);
     } catch (err) {
         // console.error(err.message);
-        res.status(500).send('Unable to fetch artworks');
+        res.status(500).send('Unable to fetch explore');
     }
 });
 
-// @route       Get api/artworks/:id
-// @desc        Fetch artwork by ID along with next and prev artworks
+// @route       Get api/explore/:id
+// @desc        Fetch explore by ID along with next and prev explore
 // @access      Public
 router.get('/:id', async (req, res) => {
     try {
-        const artwork = await Explore.findById(req.params.id);
-        if (!artwork) {
-            return res.status(400).send({ msg: 'Artwork not found' });
+        const explore = await Explore.findById(req.params.id);
+        if (!explore) {
+            return res.status(400).send({ msg: 'Explore not found' });
         }
-        res.json(artwork);
+        res.json(explore);
     } catch (err) {
         // console.error(err.message);
-        res.status(500).send('Unable to fetch artwork');
+        res.status(500).send('Unable to fetch explore');
     }
 });
 
-// @route       POST api/artworks/new
-// @desc        Create an artwork
+// @route       POST api/explore/new
+// @desc        Create an explore
 // @access      Private
 router.post('/new', upload.any(), async (req, res) => {
     const user = await User.findById(req.body.userID);
     console.log('form data', req.files, req.body);
-    const newArtwork = new Explore({
+    const newExplore = new Explore({
         files: req.files.map(file => { return file.filename }),
         title: req.body.title,
         author: {
@@ -98,28 +98,28 @@ router.post('/new', upload.any(), async (req, res) => {
         description: req.body.description,
         tags: req.body.tags
     });
-    console.log('newArtwork data', newArtwork);
-    Explore.create(newArtwork, (err, artwork) => {
+    console.log('newExplore data', newExplore);
+    Explore.create(newExplore, (err, explore) => {
         if (err) {
             console.log(err);
         } else {
-            user.artworks.push(artwork);
-            user.artwork_count = user.artworks.length;
+            user.explore.push(explore);
+            user.explore_count = user.explore.length;
             user.save();
-            res.send(artwork);
+            res.send(explore);
         }
     });
 }
 );
 
-// // @route       POST api/artworks/new
-// // @desc        Create an artwork
+// // @route       POST api/explore/new
+// // @desc        Create an explore
 // // @access      Private
 // router.post('/new', upload.single('file'), async (req, res) => {
 //     console.log('user id', req.body.userId);
 //     const user = await User.findById(req.body.userId);
 //     console.log('user', user);
-//     const newArtwork = new Explore({
+//     const newExplore = new Explore({
 //         filename: req.file.filename,
 //         title: req.body.title,
 //         author: {
@@ -130,56 +130,56 @@ router.post('/new', upload.any(), async (req, res) => {
 //         description: req.body.description,
 //         tags: req.body.tags
 //     });
-//     console.log('newArtwork data', newArtwork);
-//     Explore.create(newArtwork, (err, artwork) => {
+//     console.log('newExplore data', newExplore);
+//     Explore.create(newExplore, (err, explore) => {
 //         if (err) {
 //             console.log(err);
 //         } else {
-//             user.artworks.push(artwork);
-//             user.artwork_count = user.artworks.length;
+//             user.explore.push(explore);
+//             user.explore_count = user.explore.length;
 //             user.save();
-//             res.send(artwork);
+//             res.send(explore);
 //         }
 //     });
 // }
 // );
 
-// @route       Edit api/artworks/:id
-// @desc        Edit an artwork
+// @route       Edit api/explore/:id
+// @desc        Edit an explore
 // @access      Private/Admin
 router.put('/:id', function (req, res) {
-    const newArtworkDetails = {
+    const newExploreDetails = {
         title: req.body.title,
         description: req.body.description,
     };
-    console.log(newArtworkDetails);
+    console.log(newExploreDetails);
     Explore.findByIdAndUpdate(
         req.params.id,
         { $set: newData },
-        function (err, artworks) {
+        function (err, explore) {
             if (err) {
                 console.log(err);
             } else {
-                res.send(artworks);
+                res.send(explore);
             }
         }
     );
 });
 
-// @route       Delete api/artworks/:id
-// @desc        Delete an artwork
+// @route       Delete api/explore/:id
+// @desc        Delete an explore
 // @access      Private/Admin
 router.delete('/:id', [protect, admin, checkObjectId('id')], async (req, res) => {
     try {
-        const artwork = await Explore.findById(req.params.id);
-        if (!artwork) {
-            return res.status(404).send('Artwork not found');
+        const explore = await Explore.findById(req.params.id);
+        if (!explore) {
+            return res.status(404).send('Explore not found');
         }
-        await artwork.remove();
-        res.send('Artwork removed successfully');
+        await explore.remove();
+        res.send('Explore removed successfully');
     } catch (err) {
         console.error(err.message);
-        res.status(500).send('Artwork removal failed');
+        res.status(500).send('Explore removal failed');
     }
 }
 );
@@ -210,8 +210,8 @@ router.get('/image/:filename', (req, res) => {
     });
 });
 
-// @route       PUT api/artworks/:id/like
-// @desc        Like an artwork
+// @route       PUT api/explore/:id/like
+// @desc        Like an explore
 // @access      Public
 router.put('/:id/like', async (req, res) => {
     try {
@@ -234,8 +234,8 @@ router.put('/:id/like', async (req, res) => {
     }
 })
 
-// @route       PUT api/artworks/:id/dislike
-// @desc        Like an artwork
+// @route       PUT api/explore/:id/dislike
+// @desc        Like an explore
 // @access      Public
 router.put('/:id/dislike', async (req, res) => {
     try {
@@ -261,18 +261,18 @@ router.put('/:id/dislike', async (req, res) => {
     }
 })
 
-// @route       PUT api/artworks/:id/dislike
-// @desc        Like an artwork
+// @route       PUT api/explore/:id/dislike
+// @desc        Like an explore
 // @access      Public
 router.put('/:id/award', async (req, res) => {
     try {
-        const artwork = await Explore.findById(req.params.id);
-        const checkAward = artwork.awards.find(award => award._id == req.body._id);
+        const explore = await Explore.findById(req.params.id);
+        const checkAward = explore.awards.find(award => award._id == req.body._id);
         if (checkAward) {
-            console.log('test', artwork.awards.find(award => award._id == req.body._id))
-            artwork.awards.find(award => award._id == req.body._id).count = artwork.awards.find(award => award._id == req.body._id).count + 1;
-            artwork.save();
-            res.send(artwork);
+            console.log('test', explore.awards.find(award => award._id == req.body._id))
+            explore.awards.find(award => award._id == req.body._id).count = explore.awards.find(award => award._id == req.body._id).count + 1;
+            explore.save();
+            res.send(explore);
         } else {
             Explore.findByIdAndUpdate(req.params.id, {
                 $push: {
@@ -282,7 +282,7 @@ router.put('/:id/award', async (req, res) => {
                 new: true,
             }).exec((err, award) => {
                 if (err) {
-                    res.status(500).send('Failed to award the artwork!');
+                    res.status(500).send('Failed to award the explore!');
                 } else {
                     res.send(award);
                 }
@@ -290,16 +290,16 @@ router.put('/:id/award', async (req, res) => {
         }
     } catch (err) {
         console.log(err.message);
-        res.status(500).send('Failed to award the artwork!');
+        res.status(500).send('Failed to award the explore!');
     }
 })
 
-// @route       POST api/artworks/:id/comments/new
+// @route       POST api/explore/:id/comments/new
 // @desc        Add a new comment
 // @access      Private
 router.post('/:id/comments/new', async (req, res) => {
     try {
-        const artwork = await Explore.findById(req.params.id);
+        const explore = await Explore.findById(req.params.id);
         console.log('body', req.body);
         if (!req.body.user) {
             return res.status(401).json({ msg: 'User not authorized!' })
@@ -317,10 +317,10 @@ router.post('/:id/comments/new', async (req, res) => {
                 console.log(err);
             } else {
                 comment.save();
-                artwork.comments.push(comment);
-                artwork.comment_count = artwork.comments.length;
-                artwork.save();
-                console.log('artwork', artwork.comments);
+                explore.comments.push(comment);
+                explore.comment_count = explore.comments.length;
+                explore.save();
+                console.log('explore', explore.comments);
                 console.log('comment', comment);
                 res.json(comment);
             }
@@ -331,14 +331,14 @@ router.post('/:id/comments/new', async (req, res) => {
     }
 });
 
-// @route       POST api/artworks/:id/comments/:comment_id/reply
+// @route       POST api/explore/:id/comments/:comment_id/reply
 // @desc        Add a reply
 // @access      Private
 router.put('/:id/comments/:comment_id/reply', async (req, res) => {
     try {
-        const artwork = await Explore.findById(req.params.id);
+        const explore = await Explore.findById(req.params.id);
         const comment = await Comment.findById(req.params.comment_id);
-        const replyComment = artwork.comments.find(comment => comment._id == req.params.comment_id);
+        const replyComment = explore.comments.find(comment => comment._id == req.params.comment_id);
         if (!req.body.user) {
             return res.status(401).json({ msg: 'User not authorized!' })
         }
@@ -362,8 +362,8 @@ router.put('/:id/comments/:comment_id/reply', async (req, res) => {
                     if (err) {
                         console.log(err)
                     } else {
-                        artwork.comments.filter(comment => comment._id === replyComment._id)[0].replies.push(reply);
-                        artwork.save();
+                        explore.comments.filter(comment => comment._id === replyComment._id)[0].replies.push(reply);
+                        explore.save();
                     }
                 }
             );
@@ -379,25 +379,25 @@ router.put('/:id/comments/:comment_id/reply', async (req, res) => {
         //     if (err) {
         //         console.log(err)
         //     } else {
-        //         artwork.comments.filter(comment => comment._id === replyComment._id)[0].replies.push(reply);
-        //         artwork.save();
-        //         console.log('repliedData', reply, artwork.comments[0].replies);
+        //         explore.comments.filter(comment => comment._id === replyComment._id)[0].replies.push(reply);
+        //         explore.save();
+        //         console.log('repliedData', reply, explore.comments[0].replies);
         //     }
         // });
-        return res.json(artwork.comments);
+        return res.json(explore.comments);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Adding a comment failed');
     }
 });
 
-// @route    PUT api/artworks/:id/comments/:comment_id
+// @route    PUT api/explore/:id/comments/:comment_id
 // @desc     Edit a comment
 // @access   Private
 router.put('/:id/comments/:comment_id', async (req, res) => {
     try {
-        const artwork = await Explore.findById(req.params.id);
-        const editComment = artwork.comments.find(comment => comment._id == req.params.comment_id);
+        const explore = await Explore.findById(req.params.id);
+        const editComment = explore.comments.find(comment => comment._id == req.params.comment_id);
         if (!editComment) {
             return res.status(401).json({ msg: 'Comment does not exist!' })
         }
@@ -411,53 +411,53 @@ router.put('/:id/comments/:comment_id', async (req, res) => {
                 if (err) {
                     console.log(err)
                 } else {
-                    const index = artwork.comments.findIndex(comment => comment === editComment);
-                    artwork.comments[index] = comment;
-                    console.log('edited comment', comment, index, artwork.comments);
-                    artwork.save();
+                    const index = explore.comments.findIndex(comment => comment === editComment);
+                    explore.comments[index] = comment;
+                    console.log('edited comment', comment, index, explore.comments);
+                    explore.save();
                 }
             }
         );
-        return res.json(artwork.comments);
+        return res.json(explore.comments);
     } catch (err) {
         console.error(err.message);
         return res.status(500).send('Editing a comment failed');
     }
 })
 
-// @route    DELETE api/artworks/:id/comments/:comment_id
+// @route    DELETE api/explore/:id/comments/:comment_id
 // @desc     Delete a comment
 // @access   Private
 router.delete('/:id/comments/:comment_id', async (req, res) => {
     try {
-        const artwork = await Explore.findById(req.params.id);
+        const explore = await Explore.findById(req.params.id);
         const comment = await Comment.findById(req.params.comment_id);
-        const deleteComment = artwork.comments.find(comment => comment._id == req.params.comment_id);
+        const deleteComment = explore.comments.find(comment => comment._id == req.params.comment_id);
         if (!deleteComment) {
             return res.status(404).json({ msg: 'Comment does not exist!' });
         }
 
         // // Check user
-        // if (artwork.author.id !== deleteComment.author.id) {
+        // if (explore.author.id !== deleteComment.author.id) {
         //     return res.status(401).json({ msg: 'User not authorized!' });
         // }
 
-        artwork.comments = artwork.comments.filter(comment => comment._id !== deleteComment._id);
-        artwork.comment_count = artwork.comments.length;
+        explore.comments = explore.comments.filter(comment => comment._id !== deleteComment._id);
+        explore.comment_count = explore.comments.length;
         comment.deleteOne(deleteComment);
-        await artwork.save();
-        return res.json(artwork.comments);
+        await explore.save();
+        return res.json(explore.comments);
     } catch (err) {
         console.error(err.message);
         return res.status(500).send('Deleting a comment failed');
     }
 });
 
-// @route       PUT api/artworks/:id/comments/:comment_id/like
+// @route       PUT api/explore/:id/comments/:comment_id/like
 // @desc        Like a comment
 // @access      Public
 router.put('/:id/comments/:comment_id/like', async (req, res) => {
-    const artwork = await Explore.findById(req.params.id);
+    const explore = await Explore.findById(req.params.id);
     try {
         Comment.findByIdAndUpdate(req.params.comment_id, {
             $push: {
@@ -469,9 +469,9 @@ router.put('/:id/comments/:comment_id/like', async (req, res) => {
             if (err) {
                 res.status(500).send('Failed to like!');
             } else {
-                console.log('ARTWORK COMMENT', artwork.comments.find(comment => { return comment._id.equals(likedComment._id) }))
-                artwork.comments.find(comment => { return comment._id.equals(likedComment._id) }).likes.push(req.body.user.id);
-                artwork.save();
+                console.log('EXPLORE COMMENT', explore.comments.find(comment => { return comment._id.equals(likedComment._id) }))
+                explore.comments.find(comment => { return comment._id.equals(likedComment._id) }).likes.push(req.body.user.id);
+                explore.save();
                 res.send(likedComment);
             }
         });
@@ -481,11 +481,11 @@ router.put('/:id/comments/:comment_id/like', async (req, res) => {
     }
 })
 
-// @route       PUT api/artworks/:id/comments/:comment_id/dislike
+// @route       PUT api/explore/:id/comments/:comment_id/dislike
 // @desc        Dislike a comment
 // @access      Public
 router.put('/:id/comments/:comment_id/dislike', async (req, res) => {
-    const artwork = await Explore.findById(req.params.id);
+    const explore = await Explore.findById(req.params.id);
     try {
         if (!req.body.user) {
             return res.status(401).json({ msg: 'User not authorized!' })
@@ -500,9 +500,9 @@ router.put('/:id/comments/:comment_id/dislike', async (req, res) => {
             if (err) {
                 res.status(500).send('Failed to like!');
             } else {
-                let likes = artwork.comments.find(comment => { return comment._id.equals(dislikedComment._id) }).likes;
+                let likes = explore.comments.find(comment => { return comment._id.equals(dislikedComment._id) }).likes;
                 likes.splice(likes.indexOf(req.body.user.id), 1);
-                artwork.save();
+                explore.save();
                 res.json(dislikedComment);
             }
         });

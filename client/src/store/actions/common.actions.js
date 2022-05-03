@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { loginAPI, signUpAPI, tagsAPI, commonImagesAPI, userDetailsAPI, userArtworkListAPI, userStoreListAPI, userCartListAPI, deleteStoreItemAPI, awardListAPI } from '../../api';
+import { loginAPI, signUpAPI, tagsAPI, commonImagesAPI, userDetailsAPI, userExploreListAPI, userStoreListAPI, userCartListAPI, deleteStoreItemAPI, awardListAPI } from '../../api';
 import {
     SWITCH_THEME,
     SET_LOADER,
@@ -10,7 +10,7 @@ import {
     HANDLE_CART_OPEN,
     HANDLE_CART_CLOSE,
     HANDLE_VERIFY_USER,
-    FETCH_USER_ARTWORKLIST,
+    FETCH_USER_EXPLORELIST,
     FETCH_USER_STORELIST,
     FETCH_CARTLIST,
     HANDLE_SIGNIN,
@@ -190,12 +190,12 @@ export const getUserDetails = () => async (dispatch, getState) => {
     //   });
 }
 
-export const fetchUserArtworkList = () => async (dispatch, getState) => {
+export const fetchUserExploreList = () => async (dispatch, getState) => {
     const userID = getState().common.user.id;
-    await userArtworkListAPI(userID).then(res => {
-        dispatch({ type: FETCH_USER_ARTWORKLIST, payload: res.data });
+    await userExploreListAPI(userID).then(res => {
+        dispatch({ type: FETCH_USER_EXPLORELIST, payload: res.data });
     }).catch(err => {
-        console.log('---error fetchUserArtworkList', err);
+        console.log('---error fetchUserExploreList', err);
     })
 }
 

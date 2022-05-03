@@ -1,5 +1,5 @@
 import React from 'react';
-import { fetchArtworkImages, fetchUserImages } from '../api';
+import { fetchExploreImages, fetchUserImages } from '../api';
 
 import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
@@ -12,14 +12,14 @@ export const ExploreShowCarousel = (props) => {
                     {props.prevTrue ? <button onClick={props.prev} aria-label="slide backward" className="absolute z-30 ml-3 left-0 cursor-pointer">
                         <FaChevronLeft className='text-5xl text-neutral-800 dark:text-gray-300' />
                     </button> : ''}
-                    <img src={`${fetchArtworkImages(props.currentImage)}`} alt="black chair and white table" className="h-full object-cover object-center rounded-lg md:max-h-screen" />
+                    <img src={`${fetchExploreImages(props.currentImage)}`} alt="black chair and white table" className="h-full object-cover object-center rounded-lg md:max-h-screen" />
                     {props.nextTrue ? <button onClick={props.next} aria-label="slide forward" className="absolute mr-3 z-30 right-0">
                         <FaChevronRight className='text-5xl text-neutral-800 dark:text-gray-300' />
                     </button> : ''}
                 </div>
                 <div className='flex space-x-3 justify-center'>
                     {props.secondaryImages.map((image, index) => (
-                        <img key={index} src={`${fetchArtworkImages(image)}`} alt="black chair and white table" className="h-60 w-auto max-w-xs object-cover object-center rounded-lg" />
+                        <img key={index} src={`${fetchExploreImages(image)}`} alt="black chair and white table" className="h-60 w-auto max-w-xs object-cover object-center rounded-lg" />
                     ))}
                 </div>
             </div>

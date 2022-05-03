@@ -26,7 +26,7 @@ export const fetchStoreItem = (itemID) => async (dispatch, getState) => {
         const storeItem = await axios.get(`http://localhost:5000/api/store/${itemID}`);
         await dispatch({ type: FETCH_STOREITEM, payload: storeItem.data });
     } catch (err) {
-        console.log('---error fetchArtwork', err);
+        console.log('---error fetchExplore', err);
     }
 }
 
@@ -64,7 +64,7 @@ export const handleStoreUpload = (itemData) => async (dispatch, getState) => {
 // export const handleAddToCart = (data, quantity) => async (dispatch, getState) => {
 //     try {
 //         let cartData = {
-//             artwork: data.title,
+//             explore: data.title,
 //             price: data.price,
 //             quantity,
 //             subtotal: data.price * quantity

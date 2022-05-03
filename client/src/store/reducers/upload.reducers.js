@@ -1,4 +1,4 @@
-export const HANDLE_UPLOAD_ARTWORK = 'HANDLE_UPLOAD_ARTWORK';
+export const HANDLE_UPLOAD_EXPLORE = 'HANDLE_UPLOAD_EXPLORE';
 
 export const initialState = {
     file: '',
@@ -9,8 +9,8 @@ export const initialState = {
 
 export const uploadReducer = (state = initialState, { type, payload }) => {
     switch (type) {
-        case HANDLE_UPLOAD_ARTWORK: {
-            console.log('HANDLE_UPLOAD_ARTWORK', payload);
+        case HANDLE_UPLOAD_EXPLORE: {
+            console.log('HANDLE_UPLOAD_EXPLORE', payload);
             return { ...state, file: payload.file, title: payload.title, description: payload.description, uploadStatus: 'success' }
         }
         default:

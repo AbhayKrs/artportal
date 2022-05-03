@@ -28,7 +28,7 @@ const UserSchema = new Schema({
         category: { type: String, default: '' }
     },
     tokens: { type: Number, default: 0 },
-    artworks: [{
+    explore: [{
         filename: {
             type: String,
             default: 'none',
@@ -66,7 +66,7 @@ const UserSchema = new Schema({
         comment_count: { type: Number, default: 0 },
         tags: [{ type: String, default: '' }]
     }],
-    artwork_count: { type: Number, default: 0 },
+    explore_count: { type: Number, default: 0 },
     cart: [{
         id: { type: mongoose.Schema.Types.ObjectId, ref: 'Cart' },
         title: { type: String, required: true },

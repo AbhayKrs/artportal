@@ -50,8 +50,8 @@ export const HomeTabPanel = (props) => {
             <div className="grid bg-gray-300 dark:bg-neutral-800 overflow-hidden rounded-b-md lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2">
                 {props.tags.map((tag, index) => {
                     return <>
-                        {index === activeStatus && props.artworkList.filter(item => item.tags.includes(tag) === true).map(artwork => (
-                            <ImageCard artwork={artwork} author={artwork.author} />
+                        {index === activeStatus && props.exploreList.filter(item => item.tags.includes(tag) === true).map(explore => (
+                            <ImageCard explore={explore} author={explore.author} />
                         ))}
                     </>
                 })}
@@ -105,7 +105,7 @@ export const AwardTabPanel = (props) => {
                 open={confirmData.open}
                 awardData={confirmData.award}
                 onClose={() => setConfirmData({ open: false, award: {} })}
-                handleAwardArtwork={props.handleAwardArtwork}
+                handleAwardExplore={props.handleAwardExplore}
             />
         </div >
     )

@@ -1,5 +1,5 @@
-export const FETCH_ARTWORK = 'FETCH_ARTWORK';
-export const FETCH_ARTWORKLIST = 'FETCH_ARTWORKLIST';
+export const FETCH_EXPLORE = 'FETCH_EXPLORE';
+export const FETCH_EXPLORELIST = 'FETCH_EXPLORELIST';
 export const HANDLE_DIALOG_OPEN = 'HANDLE_DIALOG_OPEN';
 export const HANDLE_DIALOG_CLOSE = 'HANDLE_DIALOG_CLOSE';
 export const HANDLE_TABCHANGE = 'HANDLE_TABCHANGE';
@@ -23,9 +23,9 @@ export const SKETCH_CREATE_REVIEW_RESET = 'SKETCH_CREATE_REVIEW_RESET';
 
 export const initialState = {
     ID: null,
-    openArtworkDialog: false,
-    artworkList: [],
-    artworkData: {
+    openExploreDialog: false,
+    exploreList: [],
+    exploreData: {
         author: {
             id: '',
             username: '',
@@ -48,18 +48,18 @@ export const initialState = {
 
 export const exploreReducer = (state = initialState, { type, payload }) => {
     switch (type) {
-        case FETCH_ARTWORK: {
-            return { ...state, artworkData: payload }
+        case FETCH_EXPLORE: {
+            return { ...state, exploreData: payload }
         }
-        case FETCH_ARTWORKLIST: {
-            console.log('ARTWORKLIST_REQUEST', payload);
-            const artworkList = [...payload];
-            return { ...state, artworkList }
+        case FETCH_EXPLORELIST: {
+            console.log('EXPLORELIST_REQUEST', payload);
+            const exploreList = [...payload];
+            return { ...state, exploreList }
         }
         case HANDLE_DIALOG_OPEN: {
             console.log('HANDLE_DIALOG_OPEN', payload);
             const selectedData = payload.data;
-            return { ...state, activeDialog: payload.activeDialog, selectedArtwork: selectedData }
+            return { ...state, activeDialog: payload.activeDialog, selectedExplore: selectedData }
         }
         case HANDLE_DIALOG_CLOSE: {
             console.log('HANDLE_DIALOG_CLOSE', payload);

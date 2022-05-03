@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { useNavigate } from "react-router-dom";
 
 import { setError, getTags } from '../store/actions/common.actions';
-import { handleUploadArtwork } from '../store/actions/upload.actions';
+import { handleUploadExplore } from '../store/actions/upload.actions';
 
 import { MdClose } from 'react-icons/md';
 import { BsHash } from 'react-icons/bs';
@@ -14,10 +14,10 @@ import DragDrop from '../components/DragDrop';
 const ExploreUpload = (props) => {
     let navigate = useNavigate();
 
-    const [artworkFiles, setArtworkFiles] = useState([]);
-    const [artworkTitle, setArtworkTitle] = useState('test_title');
-    const [artworkDesc, setArtworkDesc] = useState('test_desc');
-    const [artworkTags, setArtworkTags] = useState([]);
+    const [exploreFiles, setExploreFiles] = useState([]);
+    const [exploreTitle, setExploreTitle] = useState('test_title');
+    const [exploreDesc, setExploreDesc] = useState('test_desc');
+    const [exploreTags, setExploreTags] = useState([]);
     const [tagSearch, setTagSearch] = useState('');
     const [primaryFile, setPrimaryFile] = useState('');
 
@@ -26,11 +26,11 @@ const ExploreUpload = (props) => {
     }, [])
 
     useEffect(() => {
-        console.log('files', artworkFiles);
-    }, [artworkFiles])
+        console.log('files', exploreFiles);
+    }, [exploreFiles])
 
     const onImageChange = (ev) => {
-        if (ev.target.files.length > 3 || artworkFiles.length > 2) {
+        if (ev.target.files.length > 3 || exploreFiles.length > 2) {
             const error = {
                 open: true,
                 message: 'Only a maximum of 3 files may be selected.',
@@ -40,7 +40,7 @@ const ExploreUpload = (props) => {
         }
         else {
             Object.keys(ev.target.files).map((key, index) => {
-                setArtworkFiles(arr => [...arr, ev.target.files[key]])
+                setExploreFiles(arr => [...arr, ev.target.files[key]])
             })
             setPrimaryFile(ev.target.files[0]);
         }
@@ -48,7 +48,7 @@ const ExploreUpload = (props) => {
 
     const dropHandler = (ev) => {
         ev.nativeEvent.preventDefault();
-        if (ev.dataTransfer.files.length > 3 || artworkFiles.length > 2) {
+        if (ev.dataTransfer.files.length > 3 || exploreFiles.length > 2) {
             const error = {
                 open: true,
                 message: 'Only a maximum of 3 files may be selected.',
@@ -57,7 +57,7 @@ const ExploreUpload = (props) => {
             props.setError(error);
         } else {
             Object.keys(ev.dataTransfer.files).map((key, index) => {
-                setArtworkFiles(arr => [...arr, ev.dataTransfer.files[key]])
+                setExploreFiles(arr => [...arr, ev.dataTransfer.files[key]])
             })
             setPrimaryFile(ev.dataTransfer.files[0]);
         }
@@ -69,8 +69,8 @@ const ExploreUpload = (props) => {
     }
 
     const handleSelectTag = (selectedTag) => {
-        if (artworkTags.filter(item => item == selectedTag).length === 0) {
-            if (artworkTags.length === 10) {
+        if (exploreTags.filter(item => item == selectedTag).length === 0) {
+            if (exploreTags.length === 10) {
                 setTagSearch('');
                 const error = {
                     open: true,
@@ -79,17 +79,17 @@ const ExploreUpload = (props) => {
                 }
                 props.setError(error);
             } else {
-                setArtworkTags(tags => [...tags, selectedTag])
+                setExploreTags(tags => [...tags, selectedTag])
             }
         }
     }
 
     const handleRemoveTag = (selectedTag) => {
-        setArtworkTags(artworkTags.filter(tag => tag !== selectedTag))
+        setExploreTags(exploreTags.filter(tag => tag !== selectedTag))
     }
 
     const handleUpload = () => {
-        if (artworkFiles.length === 0 || artworkTitle.length === 0 || artworkDesc.length === 0 || artworkTags.length === 0) {
+        if (exploreFiles.length === 0 || exploreTitle.length === 0 || exploreDesc.length === 0 || exploreTags.length === 0) {
             const errorData = {
                 open: true,
                 message: 'Please fill all the required fields!',
@@ -102,13 +102,13 @@ const ExploreUpload = (props) => {
         const userID = props.common.user.id;
         const formData = new FormData();
 
-        artworkFiles.map(file => formData.append('files[]', file));
-        formData.append('title', artworkTitle);
-        formData.append('description', artworkDesc);
+        exploreFiles.map(file => formData.append('files[]', file));
+        formData.append('title', exploreTitle);
+        formData.append('description', exploreDesc);
         formData.append('userID', userID);
-        artworkTags.map(tag => formData.append('tags[]', tag));
+        exploreTags.map(tag => formData.append('tags[]', tag));
 
-        props.handleUploadArtwork(formData).then(() => {
+        props.handleUploadExplore(formData).then(() => {
             navigate(`/explore`)
             const errorData = {
                 open: true,
@@ -140,7 +140,7 @@ const ExploreUpload = (props) => {
                             <div className="flex flex-col rounded-lg bg-neutral-700 items-center py-5 px-1 w-full">
                                 <h1 className="font-bold sm:text-lg text-gray-400">Upload Files</h1>
                                 <div className="h-full w-full text-center flex flex-col items-center justify-center items-center">
-                                    {artworkFiles.length === 0 ?
+                                    {exploreFiles.length === 0 ?
                                         <div>
                                             <img className="mx-auto w-32" src="https://user-images.githubusercontent.com/507615/54591670-ac0a0180-4a65-11e9-846c-e55ffce0fe7b.png" alt="no data" />
                                             <span className="text-small text-gray-500">No files selected</span>
@@ -149,13 +149,13 @@ const ExploreUpload = (props) => {
                                         :
                                         <div className=''>
                                             <DragDrop
-                                                selectedImages={artworkFiles.map((artwork, index) => {
+                                                selectedImages={exploreFiles.map((explore, index) => {
                                                     return {
                                                         id: index.toString(),
-                                                        content: artwork
+                                                        content: explore
                                                     }
                                                 })}
-                                                setReorderedFiles={setArtworkFiles}
+                                                setReorderedFiles={setExploreFiles}
                                             />
                                         </div>
                                     }
@@ -166,11 +166,11 @@ const ExploreUpload = (props) => {
                     <div>
                         <div>
                             <span className='font-josefinlight text-gray-300'>Title<span className='font-josefinlight text-rose-400 text-md'>*</span></span>
-                            <input type="text" value={artworkTitle} onChange={(ev) => setArtworkTitle(ev.target.value)} className="py-2 px-3 text-md bg-neutral-600 text-gray-300 focus:outline-none rounded-md w-full" placeholder='Title' />
+                            <input type="text" value={exploreTitle} onChange={(ev) => setExploreTitle(ev.target.value)} className="py-2 px-3 text-md bg-neutral-600 text-gray-300 focus:outline-none rounded-md w-full" placeholder='Title' />
                         </div>
                         <div>
                             <span className='font-josefinlight text-gray-300'>Description<span className='font-josefinlight text-rose-400 text-md'>*</span></span>
-                            <textarea rows='4' value={artworkDesc} onChange={(ev) => setArtworkDesc(ev.target.value)} className="scrollbar py-2 px-3 text-md bg-neutral-600 text-gray-300 resize-none focus:outline-none rounded-md w-full" placeholder='Title' />
+                            <textarea rows='4' value={exploreDesc} onChange={(ev) => setExploreDesc(ev.target.value)} className="scrollbar py-2 px-3 text-md bg-neutral-600 text-gray-300 resize-none focus:outline-none rounded-md w-full" placeholder='Title' />
                         </div>
                         <div>
                             <span className='font-josefinlight text-gray-300'>Add tags:</span>
@@ -184,7 +184,7 @@ const ExploreUpload = (props) => {
                                 {tagSearch.length === 0 ? '' :
                                     <div className="scrollbar grid grid-cols-2 bg-neutral-600 max-h-60 h-full overflow-y-auto w-full mt-2 rounded">
                                         {props.common.tags.filter(tag => tag.includes(tagSearch)).map(tag => {
-                                            if (artworkTags.includes(tag)) {
+                                            if (exploreTags.includes(tag)) {
                                                 return <div className="flex justify-between items-center pl-8 pr-2 py-2 m-2 bg-violet-100 text-gray-600 rounded">
                                                     {tag}
                                                     <MdClose onClick={() => handleRemoveTag(tag)} className='h-5 w-5 cursor-pointer' />
@@ -197,9 +197,9 @@ const ExploreUpload = (props) => {
                                         })}
                                     </div>
                                 }
-                                {artworkTags.length === 0 ? '' :
+                                {exploreTags.length === 0 ? '' :
                                     <div id='tagmenu' className='flex flex-wrap justify-center space-x-1 p-2'>
-                                        {artworkTags.map(tag => (
+                                        {exploreTags.map(tag => (
                                             <div class="flex justify-center items-center m-1 font-medium py-1 px-2 rounded-full text-indigo-100 bg-violet-600 border border-violet-700 ">
                                                 <div class="text-xs font-normal leading-none max-w-full flex-initial">{tag}</div>
                                                 <div class="flex flex-auto flex-row-reverse">
@@ -242,7 +242,7 @@ const mapStateToProps = (state, props) => ({
 const mapDispatchToProps = (dispatch) => bindActionCreators({
     setError,
     getTags,
-    handleUploadArtwork
+    handleUploadExplore
 }, dispatch);
 
 export default {

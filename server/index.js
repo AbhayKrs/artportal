@@ -19,8 +19,9 @@ import './utils/authenticate.js';
 
 //Importing routes
 import users from './routes/users.js';
-import artworks from './routes/artworks.js';
+import explore from './routes/explore.js';
 import store from './routes/store.js';
+import articles from './routes/articles.js';
 
 dotenv.config();
 //Database Connection Established
@@ -40,9 +41,10 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(passport.initialize());
 
 // Define Routes
-app.use('/api/artworks', artworks);
+app.use('/api/explore', explore);
 app.use('/api/users', users);
 app.use('/api/store', store);
+app.use('/api/articles', articles);
 
 // const __dirname = path.resolve();
 // if (process.env.NODE_ENV === 'production') {

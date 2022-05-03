@@ -3,8 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
-import { fetchArtworkImages, fetchUserImages } from '../api';
-import { fetchArtworkList, fetchArtwork, handleLikeArtwork, handleAwardArtwork, handleDislikeArtwork, handleAddComment, handleEditComment, handleDeleteComment, handleLikeComment, handleDislikeComment } from '../store/actions/explore.actions';
+import { fetchExploreImages, fetchUserImages } from '../api';
+import { fetchExploreList, fetchExplore, handleLikeExplore, handleAwardExplore, handleDislikeExplore, handleAddComment, handleEditComment, handleDeleteComment, handleLikeComment, handleDislikeComment } from '../store/actions/explore.actions';
 import { fetchAwards, setError } from '../store/actions/common.actions';
 import { ExploreShowCarousel } from '../components/Carousel';
 import { AwardModal } from '../components/Modal';
@@ -34,35 +34,35 @@ const ExploreShow = (props) => {
     let navigate = useNavigate();
 
     useEffect(async () => {
-        await props.fetchArtworkList();
-        props.fetchArtwork(id);
+        await props.fetchExploreList();
+        props.fetchExplore(id);
         props.fetchAwards();
     }, [])
 
     const submitComment = async (event) => {
         event.preventDefault();
         await props.handleAddComment(comment, id);
-        props.fetchArtwork(id);
+        props.fetchExplore(id);
         setComment('');
     }
 
     useEffect(() => {
-        const len = props.explore.artworkList.length;
-        props.fetchArtwork(id);
+        const len = props.explore.exploreList.length;
+        props.fetchExplore(id);
         if (props.exploreShow.likes.filter(item => item === props.user.id).length > 0) {
             setLike(true);
         } else {
             setLike(false);
         }
-        props.explore.artworkList.forEach((item, index) => {
+        props.explore.exploreList.forEach((item, index) => {
             if (item._id === props.exploreShow._id) {
                 if (index > 0) {
-                    setPrev(props.explore.artworkList[index - 1]._id)
+                    setPrev(props.explore.exploreList[index - 1]._id)
                 } else {
                     setPrev('');
                 }
                 if (index < len - 1) {
-                    setNext(props.explore.artworkList[index + 1]._id)
+                    setNext(props.explore.exploreList[index + 1]._id)
                 } else {
                     setNext('')
                 }
@@ -72,31 +72,31 @@ const ExploreShow = (props) => {
 
     const handleToggleLike = async (likes) => {
         if (likes.includes(props.user.id)) {
-            await props.handleDislikeArtwork(id, false);
+            await props.handleDislikeExplore(id, false);
         } else {
-            await props.handleLikeArtwork(id, true);
+            await props.handleLikeExplore(id, true);
         }
-        props.fetchArtwork(id);
+        props.fetchExplore(id);
     }
 
-    const handleAwardArtwork = async (award) => {
-        console.log('handleAwardArtwork', award);
-        await props.handleAwardArtwork(id, award);
+    const handleAwardExplore = async (award) => {
+        console.log('handleAwardExplore', award);
+        await props.handleAwardExplore(id, award);
         setTimeout(() => {
-            props.fetchArtwork(id);
+            props.fetchExplore(id);
         }, 2000);
     }
 
     const onDeleteComment = async (comment) => {
         await props.handleDeleteComment(id, comment._id);
-        props.fetchArtwork(id);
+        props.fetchExplore(id);
     }
 
     const onEditComment = async (comment) => {
         await props.handleEditComment(editComment, id, comment._id);
         setEditForm(false);
         setTimeout(() => {
-            props.fetchArtwork(id);
+            props.fetchExplore(id);
         }, 2000);
         return false;
     }
@@ -108,7 +108,7 @@ const ExploreShow = (props) => {
             await props.handleLikeComment(id, comment._id);
         }
         setTimeout(() => {
-            props.fetchArtwork(id);
+            props.fetchExplore(id);
         }, 2000);
     }
 
@@ -154,11 +154,11 @@ const ExploreShow = (props) => {
             <ExploreShowCarousel
                 prevTrue={prev.length > 0}
                 nextTrue={next.length > 0}
-                data={props.explore.artworkList}
+                data={props.explore.exploreList}
                 currentImage={props.exploreShow.files[0]}
                 secondaryImages={props.exploreShow.files.filter((image, index) => index !== 0)}
-                prev={() => { navigate(`/explore/${prev}`); props.fetchArtwork(prev); }}
-                next={() => { navigate(`/explore/${next}`); props.fetchArtwork(next); }}
+                prev={() => { navigate(`/explore/${prev}`); props.fetchExplore(prev); }}
+                next={() => { navigate(`/explore/${next}`); props.fetchExplore(next); }}
             />
             <div className='lg:col-span-5 md:mt-3 sm:mt-0'>
                 <div className='flex flex-col rounded-md bg-neutral-50 dark:bg-neutral-800 mx-2 p-3'>
@@ -294,7 +294,7 @@ const ExploreShow = (props) => {
                     awardList={props.common.awardList}
                     onClose={() => setAwardOpen(false)}
                     onClick={() => setAwardOpen(false)}
-                    handleAwardArtwork={handleAwardArtwork}
+                    handleAwardExplore={handleAwardExplore}
                 />
             </div>
         </div >
@@ -311,15 +311,15 @@ const mapStateToProps = (state, props) => ({
     user: state.common.user,
     common: state.common,
     explore: state.explore,
-    exploreShow: state.explore.artworkData
+    exploreShow: state.explore.exploreData
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-    fetchArtwork,
-    fetchArtworkList,
-    handleLikeArtwork,
-    handleAwardArtwork,
-    handleDislikeArtwork,
+    fetchExplore,
+    fetchExploreList,
+    handleLikeExplore,
+    handleAwardExplore,
+    handleDislikeExplore,
     handleAddComment,
     handleEditComment,
     handleDeleteComment,

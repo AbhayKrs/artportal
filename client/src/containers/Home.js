@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { HomeTabPanel } from '../components/TabPanel';
-import { fetchArtworkList } from '../store/actions/explore.actions';
+import { fetchExploreList } from '../store/actions/explore.actions';
 import { getTags } from '../store/actions/common.actions';
 import { MultipleCarousel, MultipleCarouselWithHeaders } from '../components/Carousel';
 
 const Home = (props) => {
     useEffect(() => {
-        props.fetchArtworkList();
+        props.fetchExploreList();
         props.getTags();
     }, [])
     let defaultTransform = 0;
@@ -62,7 +62,7 @@ const Home = (props) => {
                     data={carouselData}
                 />
             </div>
-            <HomeTabPanel tags={props.common.tags} artworkList={props.explore.artworkList} />
+            <HomeTabPanel tags={props.common.tags} exploreList={props.explore.exploreList} />
         </div>
     )
 }
@@ -74,7 +74,7 @@ const mapStateToProps = (state, props) => ({
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-    fetchArtworkList,
+    fetchExploreList,
     getTags
 }, dispatch);
 

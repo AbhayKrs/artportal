@@ -5,7 +5,7 @@ import TokenIcon from '../assets/images/money.png';
 import { fetchUserImages } from '../api';
 
 export const AwardConfirmModal = (props) => {
-    const { open, awardData, onClose, handleAwardArtwork } = props;
+    const { open, awardData, onClose, handleAwardExplore } = props;
 
     return (
         <div className={`${open ? 'block' : 'hidden'} flex fixed w-full inset-0 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
@@ -24,7 +24,7 @@ export const AwardConfirmModal = (props) => {
                     <hr className='h-2 w-full px-2 mt-2' />
                     <div className='flex items-center place-content-between'>
                         <p className='flex text-md text-gray-300 font-caviar'>Current Balance: <img src={TokenIcon} className='h-6 w-6 ml-1 mr-0.5' />9999</p>
-                        <button onClick={() => { handleAwardArtwork(awardData); onClose() }} className='p-1.5 bg-yellow-400 w-fit rounded-md'>Confirm</button>
+                        <button onClick={() => { handleAwardExplore(awardData); onClose() }} className='p-1.5 bg-yellow-400 w-fit rounded-md'>Confirm</button>
                     </div>
                 </div>
             </div>

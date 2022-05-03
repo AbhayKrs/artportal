@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import setAuthToken from './utils/setAuthToken';
-import { setError, handleSignOut, handleVerifyUser, fetchUserArtworkList, fetchUserStoreList, fetchCartList, fetchCommonImages } from './store/actions/common.actions';
+import { setError, handleSignOut, handleVerifyUser, fetchUserExploreList, fetchUserStoreList, fetchCartList, fetchCommonImages } from './store/actions/common.actions';
 
 // import Loader from './components/Loader';
 // import ErrorPopup from './components/Error/ErrorPopup';
@@ -14,6 +14,7 @@ import Home from './containers/Home';
 import Explore from './containers/Explore';
 import Upload from './containers/Upload';
 import Show from './containers/Show';
+import Store from './containers/Store';
 
 // import ExploreUpload from './components/ExploreUpload';
 import SnackBarError from './components/SnackBarError';
@@ -22,7 +23,6 @@ import SnackBarError from './components/SnackBarError';
 // import Dashboard from './components/Dashboard/Dashboard';
 // import Profile from './components/Account/Profile';
 // import Notification from './components/Notification/Notification';
-// import Store from './components/Store/Store';
 // import StoreShow from './components/Store/StoreShow';
 // import StoreUpload from './components/Store/StoreUpload';
 // import Upload from './components/Explore/Upload';
@@ -35,14 +35,14 @@ const ArtystRoutes = (props) => {
             const token = sessionStorage.jwtToken;
             setAuthToken(token);
             await props.handleVerifyUser(token);
-            await props.fetchUserArtworkList();
+            await props.fetchUserExploreList();
             await props.fetchUserStoreList();
             await props.fetchCartList();
         } else if (localStorage.jwtToken) {
             const token = localStorage.jwtToken;
             setAuthToken(token);
             await props.handleVerifyUser(token);
-            await props.fetchUserArtworkList();
+            await props.fetchUserExploreList();
             await props.fetchUserStoreList();
             await props.fetchCartList();
         }
@@ -59,10 +59,10 @@ const ArtystRoutes = (props) => {
                 <Route path='/explore/:id' exact element={<Show.ExploreShow />} />
                 <Route path='/store/:id' exact element={<Show.StoreShow />} />
                 <Route path='/explore/new' exact element={<Upload.ExploreUpload />} />
+                <Route path='/store' exact element={<Store />} />
                 {/* <Route path='/about' exact component={About} />
                 <Route path='/dashboard' exact component={Dashboard} />
                 <Route path='/notification' exact component={Notification} />
-                <Route path='/store' exact component={Store} />
                 <Route path='/store/upload' exact component={StoreUpload} />
                 <Route path='/upload' exact component={Upload} />
                 <Route path='/user/:id' exact component={Profile} />
@@ -81,7 +81,7 @@ const mapStateToProps = (state, props) => ({
 const mapDispatchToProps = (dispatch) => bindActionCreators({
     setError,
     handleVerifyUser,
-    fetchUserArtworkList,
+    fetchUserExploreList,
     fetchUserStoreList,
     fetchCartList,
     handleSignOut,

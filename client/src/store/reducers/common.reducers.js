@@ -8,7 +8,7 @@ export const HANDLE_HEADER_DIALOG_OPEN = 'HANDLE_HEADER_DIALOG_OPEN';
 export const HANDLE_HEADER_DIALOG_CLOSE = 'HANDLE_HEADER_DIALOG_CLOSE';
 export const HANDLE_CART_OPEN = 'HANDLE_CART_OPEN';
 export const HANDLE_CART_CLOSE = 'HANDLE_CART_CLOSE';
-export const FETCH_USER_ARTWORKLIST = 'FETCH_USER_ARTWORKLIST';
+export const FETCH_USER_EXPLORELIST = 'FETCH_USER_EXPLORELIST';
 export const FETCH_USER_STORELIST = 'FETCH_USER_STORELIST';
 export const FETCH_CARTLIST = 'FETCH_CARTLIST';
 export const PUSH_TO_CART = 'PUSH_TO_CART';
@@ -50,8 +50,8 @@ export const initialState = {
             category: ''
         },
         tokens: 0,
-        artworks: [],
-        artwork_count: 0,
+        explore: [],
+        explore_count: 0,
         store: [],
         store_count: 0,
         cart: [],
@@ -138,12 +138,12 @@ export const commonReducer = (state = initialState, { type, payload }) => {
         //     return { ...state, cartList: [...state.cartList, payload] }
         // }
         // case EDIT_CARTLIST: {
-        //     // const cartList = state.cartList.filter(item => item.artwork === payload);
+        //     // const cartList = state.cartList.filter(item => item.explore === payload);
         //     // cartList.quantity
         //     // return { ...state, cartList: cart }
         //     return {
         //         ...state,
-        //         cartList: state.cartList.map(cartItem => cartItem.artwork === payload.artwork ?
+        //         cartList: state.cartList.map(cartItem => cartItem.explore === payload.explore ?
         //             { ...cartItem, quantity: payload.quantity, subtotal: payload.subtotal } : cartItem
         //         )
         //     };
@@ -154,9 +154,9 @@ export const commonReducer = (state = initialState, { type, payload }) => {
         case FETCH_COMMON_IMAGES: {
             return { ...state, loginImage: payload.login, signupImage: payload.signup }
         }
-        case FETCH_USER_ARTWORKLIST: {
-            const artworkList = [...payload.artworks];
-            return { ...state, user: { ...state.user, artworks: artworkList, artwork_count: payload.artwork_count } }
+        case FETCH_USER_EXPLORELIST: {
+            const exploreList = [...payload.explore];
+            return { ...state, user: { ...state.user, explore: exploreList, explore_count: payload.explore_count } }
         }
         case FETCH_USER_STORELIST: {
             const storeList = [...payload.store];

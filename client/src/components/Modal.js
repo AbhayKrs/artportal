@@ -190,7 +190,7 @@ export const RegisterModal = (props) => {
 }
 
 export const AwardModal = (props) => {
-    const { open, onClose, title, awardList, handleAwardArtwork } = props;
+    const { open, onClose, title, awardList, handleAwardExplore } = props;
 
     return (
         <div className={`${open ? 'block' : 'hidden'} flex  fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
@@ -199,7 +199,7 @@ export const AwardModal = (props) => {
                     <div className='p-4 pt-2 flex flex-col space-y-3'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                         <h1 className='text-violet-500 dark:text-violet-800 text-4xl font-semibold tracking-widest font-antipasto'>{title}</h1>
-                        <AwardTabPanel awards={awardList} handleAwardArtwork={handleAwardArtwork} />
+                        <AwardTabPanel awards={awardList} handleAwardExplore={handleAwardExplore} />
                     </div>
                 </div>
             </div>

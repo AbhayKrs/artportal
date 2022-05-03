@@ -327,20 +327,20 @@ router.delete('/:id', async (req, res) => {
 // @route       GET api/users/:id/cart
 // @desc        Get all cart items
 // @access      Public
-router.get('/:id/artworks', async (req, res) => {
+router.get('/:id/explore', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
-        if (!user.artworks) {
-            return res.status(400).send({ msg: 'Artworklist not found' });
+        if (!user.explore) {
+            return res.status(400).send({ msg: 'Explorelist not found' });
         }
-        const artworkData = {
-            artworks: user.artworks,
-            artwork_count: user.artwork_count
+        const exploreData = {
+            explore: user.explore,
+            explore_count: user.explore_count
         }
-        res.json(artworkData);
+        res.json(exploreData);
     } catch (err) {
         console.error(err.message);
-        res.status(500).send('Unable to fetch artwork list');
+        res.status(500).send('Unable to fetch explore list');
     }
 });
 
@@ -434,7 +434,7 @@ router.put('/:id/cart/:cart_id', async (req, res) => {
         return res.status(401).json({ msg: 'Cart item does not exist!' })
     }
     // // Check user
-    // if (artwork.author.id !== editComment.author.id) {
+    // if (explore.author.id !== editComment.author.id) {
     //     return res.status(401).json({ msg: 'User not authorized!' });
     // }
     console.log('edit cart item', req.body);
@@ -539,9 +539,9 @@ router.get('/image/:filename', (req, res) => {
 // @access  Private
 router.post('/:id/avatar', async (req, res) => {
     const user = await User.findById(req.params.id);
-    const artwork = await Explore.find({ "author.id": req.params.id });
+    const explore = await Explore.find({ "author.id": req.params.id });
 
-    artwork.map(item => {
+    explore.map(item => {
         item.author.avatar = { ...req.body };
         item.save();
     });
@@ -556,7 +556,7 @@ router.post('/:id/avatar', async (req, res) => {
     });
     user.avatar = { ...req.body };
     user.save();
-    res.json(artwork);
+    res.json(explore);
 })
 
 export default router;
