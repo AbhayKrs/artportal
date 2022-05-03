@@ -17,13 +17,16 @@ export const userStoreListAPI = userID => get_api.get(`/users/${userID}/store`);
 export const userCartListAPI = userID => get_api.get(`/users/${userID}/cart`);
 export const tagsAPI = () => get_api.get(`/users/tags`);
 export const commonImagesAPI = () => get_api.get(`/users/commonImages`);
-export const userDetailsAPI = userID => get_api.get(`/users/${userID}`)
-
+export const userDetailsAPI = userID => get_api.get(`/users/${userID}`);
+export const awardListAPI = () => get_api.get(`/users/awards`);
 //POST Request API's
 export const loginAPI = userData => post_api.post(`/users/login`, userData);
 export const signUpAPI = userData => post_api.post(`/users/signup`, userData);
 
 //PUT Request API's
+export const likeArtworkAPI = (artworkID, userData) => get_api.put(`/artworks/${artworkID}/like`, userData);
+export const dislikeArtworkAPI = (artworkID, userData) => get_api.put(`/artworks/${artworkID}/dislike`, userData);
+export const awardArtworkAPI = (artworkID, awardData) => get_api.put(`/artworks/${artworkID}/award`, awardData);
 
 //DELETE Request API's
 export const deleteStoreItemAPI = (storeID, userID) => post_api.delete(`/store/${storeID}`, userID);

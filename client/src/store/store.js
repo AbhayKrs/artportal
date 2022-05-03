@@ -5,8 +5,10 @@ import reducers from './reducers';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 const initialState = {};
+
 const middlewares = [];
 middlewares.push(thunk);
+
 if (process.env.NODE_ENV_RUN === 'development') {
     middlewares.push(freeze)
 }

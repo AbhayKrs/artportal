@@ -84,12 +84,11 @@ router.get('/:id', async (req, res) => {
 // @route       POST api/artworks/new
 // @desc        Create an artwork
 // @access      Private
-router.post('/new', upload.single('file'), async (req, res) => {
-    console.log('user id', req.body.userId);
-    const user = await User.findById(req.body.userId);
-    console.log('user', user);
+router.post('/new', upload.any(), async (req, res) => {
+    const user = await User.findById(req.body.userID);
+    console.log('form data', req.files, req.body);
     const newArtwork = new Explore({
-        filename: req.file.filename,
+        files: req.files.map(file => { return file.filename }),
         title: req.body.title,
         author: {
             id: user.id,
@@ -112,6 +111,38 @@ router.post('/new', upload.single('file'), async (req, res) => {
     });
 }
 );
+
+// // @route       POST api/artworks/new
+// // @desc        Create an artwork
+// // @access      Private
+// router.post('/new', upload.single('file'), async (req, res) => {
+//     console.log('user id', req.body.userId);
+//     const user = await User.findById(req.body.userId);
+//     console.log('user', user);
+//     const newArtwork = new Explore({
+//         filename: req.file.filename,
+//         title: req.body.title,
+//         author: {
+//             id: user.id,
+//             username: user.username,
+//             avatar: user.avatar
+//         },
+//         description: req.body.description,
+//         tags: req.body.tags
+//     });
+//     console.log('newArtwork data', newArtwork);
+//     Explore.create(newArtwork, (err, artwork) => {
+//         if (err) {
+//             console.log(err);
+//         } else {
+//             user.artworks.push(artwork);
+//             user.artwork_count = user.artworks.length;
+//             user.save();
+//             res.send(artwork);
+//         }
+//     });
+// }
+// );
 
 // @route       Edit api/artworks/:id
 // @desc        Edit an artwork
@@ -186,7 +217,7 @@ router.put('/:id/like', async (req, res) => {
     try {
         Explore.findByIdAndUpdate(req.params.id, {
             $push: {
-                likes: req.body.user.id
+                likes: req.body.id
             }
         }, {
             new: true
@@ -208,13 +239,12 @@ router.put('/:id/like', async (req, res) => {
 // @access      Public
 router.put('/:id/dislike', async (req, res) => {
     try {
-
-        if (!req.body.user) {
+        if (!req.body.id) {
             return res.status(401).json({ msg: 'User not authorized!' })
         }
         Explore.findByIdAndUpdate(req.params.id, {
             $pull: {
-                likes: req.body.user.id
+                likes: req.body.id
             }
         }, {
             new: true
@@ -228,6 +258,39 @@ router.put('/:id/dislike', async (req, res) => {
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Failed to get likes count!');
+    }
+})
+
+// @route       PUT api/artworks/:id/dislike
+// @desc        Like an artwork
+// @access      Public
+router.put('/:id/award', async (req, res) => {
+    try {
+        const artwork = await Explore.findById(req.params.id);
+        const checkAward = artwork.awards.find(award => award._id == req.body._id);
+        if (checkAward) {
+            console.log('test', artwork.awards.find(award => award._id == req.body._id))
+            artwork.awards.find(award => award._id == req.body._id).count = artwork.awards.find(award => award._id == req.body._id).count + 1;
+            artwork.save();
+            res.send(artwork);
+        } else {
+            Explore.findByIdAndUpdate(req.params.id, {
+                $push: {
+                    awards: { ...req.body, count: 1 }
+                }
+            }, {
+                new: true,
+            }).exec((err, award) => {
+                if (err) {
+                    res.status(500).send('Failed to award the artwork!');
+                } else {
+                    res.send(award);
+                }
+            });
+        }
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send('Failed to award the artwork!');
     }
 })
 

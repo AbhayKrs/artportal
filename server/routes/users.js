@@ -157,7 +157,7 @@ router.post("/login", async (req, res) => {
                     }
                 );
             } else {
-                return res.status(400).json("Password incorrect");
+                return res.status(400).json("Incorrect Password. Please try again!");
             }
         });
     });
@@ -240,9 +240,9 @@ router.put('/profile', async (req, res) => {
         res.json({
             _id: updatedUser._id,
             name: updatedUser.name,
-            username: updateUser.username,
+            username: updatedUser.username,
             email: updatedUser.email,
-            avatar: updateUser.avatar,
+            avatar: updatedUser.avatar,
             isAdmin: updatedUser.isAdmin,
             token: generateToken(updatedUser._id),
         });
@@ -300,7 +300,7 @@ router.put('/:id', async (req, res) => {
             name: updatedUser.name,
             username: updatedUser.username,
             email: updatedUser.email,
-            avatar: updateUser.avatar,
+            avatar: updatedUser.avatar,
             isAdmin: updatedUser.isAdmin,
         });
     } else {

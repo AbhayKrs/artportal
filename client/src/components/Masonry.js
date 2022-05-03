@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
+// import ImageCard from './ImageCard';
 
-const Layout = props => {
+const Masonry = props => {
     const columnWrapper = {};
     const gap = 0;
     const result = [];
@@ -35,7 +38,7 @@ const Layout = props => {
     for (let i = 0; i < props.children.length; i++) {
         const columnIndex = i % columns;
         columnWrapper[`column${columnIndex}`].push(
-            <div style={{ marginBottom: `${gap}px`, fontSize: '0', lineHeight: '0' }}>
+            <div style={{ marginBottom: `${gap}px` }}>
                 {props.children[i]}
             </div>
         );
@@ -57,26 +60,20 @@ const Layout = props => {
     )
 }
 
-const Masonry = props => {
-    return (
-        <Layout>
-            {props.imageList.map((image, index) => (
-                <img
-                    id={index}
-                    onClick={() => { props.history.push({ pathname: `/explore/${image._id}`, state: { artwork_id: image._id } }); window.scroll(0, 0) }}
-                    className='object-cover w-full h-full'
-                    id={image._id}
-                    src={`http://localhost:5000/api/artworks/image/${image.filename}`}
-                />
-            ))}
-        </Layout>
-    )
-}
-
-Layout.propTypes = {
+Masonry.propTypes = {
     columns: PropTypes.number.isRequired,
     gap: PropTypes.number.isRequired,
     children: PropTypes.arrayOf(PropTypes.element),
 };
 
-export default Masonry;
+const mapStateToProps = (state, props) => ({
+    explore: state.explore,
+    common: state.common,
+    user: state.common.user
+})
+
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Masonry);
+

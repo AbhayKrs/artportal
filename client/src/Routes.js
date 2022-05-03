@@ -3,16 +3,20 @@ import { Routes, Route } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import setAuthToken from './utils/setAuthToken';
-import { handleSignOut, handleVerifyUser, fetchUserArtworkList, fetchUserStoreList, fetchCartList, fetchCommonImages } from './store/actions/common.actions';
+import { setError, handleSignOut, handleVerifyUser, fetchUserArtworkList, fetchUserStoreList, fetchCartList, fetchCommonImages } from './store/actions/common.actions';
 
 // import Loader from './components/Loader';
 // import ErrorPopup from './components/Error/ErrorPopup';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import Header from './containers/Header';
+import Footer from './containers/Footer';
 import Alerts from './components/Alerts';
+import Home from './containers/Home';
+import Explore from './containers/Explore';
+import Upload from './containers/Upload';
+import Show from './containers/Show';
 
-import Home from './components/Home';
-import Explore from './components/Explore';
+// import ExploreUpload from './components/ExploreUpload';
+import SnackBarError from './components/SnackBarError';
 // import ExploreShow from './components/Explore/ExploreShow';
 // import About from './components/Help/About';
 // import Dashboard from './components/Dashboard/Dashboard';
@@ -45,26 +49,28 @@ const ArtystRoutes = (props) => {
     }, []);
 
     return (
-        <>
+        <div className={props.common.theme}>
             <Header />
             <div className='mt-14'></div>
+            <SnackBarError error={props.common.error} setError={props.setError} />
             <Routes>
                 <Route path='/' exact element={<Home />} />
                 <Route path='/explore' exact element={<Explore />} />
+                <Route path='/explore/:id' exact element={<Show.ExploreShow />} />
+                <Route path='/store/:id' exact element={<Show.StoreShow />} />
+                <Route path='/explore/new' exact element={<Upload.ExploreUpload />} />
                 {/* <Route path='/about' exact component={About} />
-                <Route path='/explore/:id' exact component={ExploreShow} />
                 <Route path='/dashboard' exact component={Dashboard} />
                 <Route path='/notification' exact component={Notification} />
                 <Route path='/store' exact component={Store} />
                 <Route path='/store/upload' exact component={StoreUpload} />
-                <Route path='/store/:id' exact component={StoreShow} />
                 <Route path='/upload' exact component={Upload} />
                 <Route path='/user/:id' exact component={Profile} />
                 <Route path='/privacy' exact component={Privacy} /> */}
             </Routes>
             <Alerts open={false} type='info' />
             <Footer />
-        </>
+        </div>
     )
 }
 
@@ -73,6 +79,7 @@ const mapStateToProps = (state, props) => ({
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
+    setError,
     handleVerifyUser,
     fetchUserArtworkList,
     fetchUserStoreList,

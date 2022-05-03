@@ -1,3 +1,4 @@
+export const SWITCH_THEME = 'SWITCH_THEME';
 export const SET_ERROR = 'SET_ERROR';
 export const SET_LOADER = 'SET_LOADER';
 export const GET_TAGS = 'GET_TAGS';
@@ -22,11 +23,12 @@ export const FETCH_AVATARLIST = 'FETCH_AVATARLIST';
 export const FETCH_AWARDLIST = 'FETCH_AWARDLIST';
 
 export const initialState = {
+    theme: 'light',
     loader: false,
     error: {
         open: false,
         message: '',
-        severity: ''
+        type: ''
     },
     openLoginDialog: false,
     loginImage: '',
@@ -87,6 +89,9 @@ export const commonReducer = (state = initialState, { type, payload }) => {
     switch (type) {
         case GET_TAGS: {
             return { ...state, tags: payload }
+        }
+        case SWITCH_THEME: {
+            return { ...state, theme: payload }
         }
         case SET_LOADER: {
             return { ...state, loader: payload }

@@ -34,13 +34,14 @@ export const initialState = {
                 category: ''
             }
         },
-        filename: '',
+        files: [],
         comments: [],
         _id: '',
         title: '',
         description: '',
         likes: [],
-        tags: []
+        tags: [],
+        awards: []
     },
     activeDialog: false
 }

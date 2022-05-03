@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { loginAPI, signUpAPI, tagsAPI, commonImagesAPI, userDetailsAPI, userArtworkListAPI, userStoreListAPI, userCartListAPI, deleteStoreItemAPI } from '../../api';
+import { loginAPI, signUpAPI, tagsAPI, commonImagesAPI, userDetailsAPI, userArtworkListAPI, userStoreListAPI, userCartListAPI, deleteStoreItemAPI, awardListAPI } from '../../api';
 import {
+    SWITCH_THEME,
     SET_LOADER,
     SET_ERROR,
     GET_TAGS,
@@ -22,6 +23,10 @@ import {
 } from '../reducers/common.reducers';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from '../../utils/setAuthToken';
+
+export const switchTheme = (theme) => (dispatch) => {
+    dispatch({ type: SWITCH_THEME, payload: theme })
+}
 
 export const setLoader = (loaderData) => (dispatch) => {
     dispatch({ type: SET_LOADER, payload: loaderData })
@@ -81,7 +86,7 @@ export const handleHeaderDialogClose = () => async (dispatch, getState) => {
     }
 }
 
-export const handleSignin = (stayLoggedIn, userData) => async (dispatch, getState) => {
+export const handleSignIn = (stayLoggedIn, userData) => async (dispatch, getState) => {
     await loginAPI(userData).then(res => {
         const { token } = res.data;
         stayLoggedIn ?
@@ -97,7 +102,7 @@ export const handleSignin = (stayLoggedIn, userData) => async (dispatch, getStat
             const error = {
                 open: true,
                 message: err.response.data,
-                severity: 'error',
+                type: 'inline',
             }
             dispatch(setError(error))
         }
@@ -115,37 +120,11 @@ export const handleSignUp = (userData) => async (dispatch, getState) => {
             const error = {
                 open: true,
                 message: err.response.data,
-                severity: 'error',
+                type: 'inline',
             }
             dispatch(setError(error))
         }
     })
-    // try {
-    //     axios({
-    //         url: 'http://localhost:5000/api/users/signup',
-    //         method: 'POST',
-    //         headers: { "Content-Type": "application/json" },
-    //         data: userData
-    //     })
-    //         .then(async res => {
-    //             console.log('res', res.status);
-    //             const data = res.data;
-    //             console.log('res data', data);
-    //             dispatch({ type: HANDLE_SIGNUP, payload: data });
-    //             dispatch({ type: HANDLE_HEADER_DIALOG_CLOSE, payload: false });
-    //         }).catch(err => {
-    //             if (err.response) {
-    //                 const error = {
-    //                     open: true,
-    //                     message: err.response.data,
-    //                     severity: 'error',
-    //                 }
-    //                 dispatch(setError(error))
-    //             }
-    //         })
-    // } catch (err) {
-    //     console.log('---error handleSignup', err);
-    // }
 }
 
 export const getUserDetails = () => async (dispatch, getState) => {
@@ -165,7 +144,7 @@ export const getUserDetails = () => async (dispatch, getState) => {
             const error = {
                 open: true,
                 message: err.response.data,
-                severity: 'error',
+                type: 'high',
             }
             dispatch(setError(error))
         }
@@ -409,14 +388,14 @@ export const fetchAvatars = () => async (dispatch, getState) => {
 
 export const fetchAwards = () => async (dispatch, getState) => {
     console.log('fetchAwards invoked');
-    try {
-        const awardList = await axios.get('http://localhost:5000/api/users/awards');
-        console.log('avatarList', awardList);
-        await dispatch({ type: FETCH_AWARDLIST, payload: awardList.data });
-    } catch (err) {
+    await awardListAPI().then(res => {
+        console.log('awardList', res);
+        dispatch({ type: FETCH_AWARDLIST, payload: res.data });
+    }).catch(err => {
         console.log('---error fetchAwards', err);
-    }
+    });
 }
+
 
 export const handleUploadAsset = (assetData) => async (dispatch, getState) => {
     console.log('handleUploadAsset invoked', assetData);

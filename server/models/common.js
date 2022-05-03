@@ -8,6 +8,7 @@ const commonSchema = new mongoose.Schema(
             signup: { type: String, default: '' }
         },
         awards: [{
+            id: { type: mongoose.Schema.Types.ObjectId },
             icon: { type: String, default: '' },
             title: { type: String, default: '' }
         }],

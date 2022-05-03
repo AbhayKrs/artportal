@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { artworkItemAPI, artworkListAPI } from '../../api';
+import { artworkItemAPI, artworkListAPI, likeArtworkAPI, dislikeArtworkAPI, awardArtworkAPI } from '../../api';
 import {
     FETCH_ARTWORK,
     FETCH_ARTWORKLIST,
@@ -68,30 +68,29 @@ export const handleDialogClose = () => async (dispatch, getState) => {
 
 export const handleLikeArtwork = (artworkID) => async (dispatch, getState) => {
     console.log('handleLikesCount', artworkID);
-    try {
-        const likeCount = await axios({
-            url: `http://localhost:5000/api/artworks/${artworkID}/like`,
-            method: 'PUT',
-            data: { user: getState().common.user }
-        });
-        console.log('likeCount', likeCount);
-    } catch (err) {
+    await likeArtworkAPI(artworkID, getState().common.user).then(res => {
+        console.log('likeCount', res.status);
+    }).catch(err => {
         console.log('---error handleLikesCount', err);
-    }
+    })
 }
 
 export const handleDislikeArtwork = (artworkID, likeStatus) => async (dispatch, getState) => {
     console.log('handleDislikeArtwork', likeStatus, artworkID);
-    try {
-        const dislikeCount = await axios({
-            url: `http://localhost:5000/api/artworks/${artworkID}/dislike`,
-            method: 'PUT',
-            data: { user: getState().common.user }
-        });
-        console.log('dislikeCount', dislikeCount);
-    } catch (err) {
+    await dislikeArtworkAPI(artworkID, getState().common.user).then(res => {
+        console.log('likeCount', res.status);
+    }).catch(err => {
         console.log('---error handleDislikeArtwork', err);
-    }
+    })
+}
+
+export const handleAwardArtwork = (artworkID, award) => async (dispatch, getState) => {
+    console.log('handleAwardArtwork', award);
+    await awardArtworkAPI(artworkID, award).then(res => {
+        console.log('award', res.status);
+    }).catch(err => {
+        console.log('---error handleAwardArtwork', err);
+    })
 }
 
 export const handleAddComment = (commentText, artworkID) => async (dispatch, getState) => {

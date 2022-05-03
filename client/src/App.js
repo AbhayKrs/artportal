@@ -8,7 +8,7 @@ function App() {
   return (
     <Provider store={store}>
       <Router>
-        <div className='App dark'>
+        <div className='App'>
           <ArtystRoutes />
         </div>
       </Router>

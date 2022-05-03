@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import HomeTabPanel from './HomeTabPanel';
+import { HomeTabPanel } from '../components/TabPanel';
 import { fetchArtworkList } from '../store/actions/explore.actions';
+import { getTags } from '../store/actions/common.actions';
+import { MultipleCarousel, MultipleCarouselWithHeaders } from '../components/Carousel';
 
 const Home = (props) => {
     useEffect(() => {
-        props.fetchArtworkList()
+        props.fetchArtworkList();
+        props.getTags();
     }, [])
     let defaultTransform = 0;
 
@@ -51,36 +54,15 @@ const Home = (props) => {
     }]
 
     return (
-        <div className='bg-gray-200 dark:bg-zinc-900'>
-            <div className="flex items-center justify-center w-full h-full">
-                <div className="w-full relative flex items-center justify-center">
-                    <button onClick={() => goPrev()} aria-label="slide backward" className="absolute z-30 ml-0.5 left-0 cursor-pointer">
-                        <svg className="dark:text-gray-900 h-6 w-6" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7 1L1 7L7 13" stroke="currentColor" />
-                        </svg>
-                    </button>
-                    <div className="w-full h-full mx-7 overflow-x-hidden overflow-y-hidden">
-                        <div id="slider" className="h-full flex space-x-2 items-center justify-start transition ease-out duration-700">
-                            {carouselData.map((item, index) => {
-                                return <div key={index} className="flex h-52 w-52 flex-shrink-0 relative">
-                                    <img src={item.image} alt="black chair and white table" className="object-cover object-center w-full rounded-lg" />
-                                    <div className="bg-gray-800 rounded-lg bg-opacity-30 absolute w-full h-full p-3">
-                                        <div className="flex h-full items-end">
-                                            <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">{item.title}</h3>
-                                        </div>
-                                    </div>
-                                </div>
-                            })}
-                        </div>
-                    </div>
-                    <button onClick={() => goNext()} aria-label="slide forward" className="absolute mr-0.5 z-30 right-0">
-                        <svg className="dark:text-gray-900 h-6 w-6" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M1 1L7 7L1 13" stroke="currentColor" />
-                        </svg>
-                    </button>
-                </div>
+        <div className='bg-gray-200 dark:bg-darkNavBg'>
+            <div className="flex pt-2 items-center justify-center w-full h-full">
+                <MultipleCarouselWithHeaders
+                    prev={() => goPrev()}
+                    next={() => goNext()}
+                    data={carouselData}
+                />
             </div>
-            <HomeTabPanel />
+            <HomeTabPanel tags={props.common.tags} artworkList={props.explore.artworkList} />
         </div>
     )
 }
@@ -92,7 +74,8 @@ const mapStateToProps = (state, props) => ({
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-    fetchArtworkList
+    fetchArtworkList,
+    getTags
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

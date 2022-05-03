@@ -2,11 +2,7 @@ import mongoose from 'mongoose';
 
 const exploreSchema = new mongoose.Schema(
     {
-        filename: {
-            type: String,
-            default: 'none',
-            required: true,
-        },
+        files: [{ type: String, default: '' }],
         title: {
             type: String,
             required: true,
@@ -50,8 +46,10 @@ const exploreSchema = new mongoose.Schema(
             updatedAt: { type: Date }
         }],
         awards: [{
+            id: { type: mongoose.Schema.Types.ObjectId },
             icon: { type: String, default: '' },
-            title: { type: String, default: '' }
+            title: { type: String, default: '' },
+            count: { type: Number, default: 0 }
         }],
         likes: [{
             type: mongoose.Schema.Types.ObjectId,
