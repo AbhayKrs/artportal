@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import ImageCard from './ImageCard';
 import { AwardConfirmModal } from './SubModal';
+import { MdUpload, MdClose } from 'react-icons/md';
+import Dropdown from './Dropdown';
+import SearchBar from './SearchBar';
 
 import { fetchUserImages } from '../api';
 
@@ -108,5 +112,54 @@ export const AwardTabPanel = (props) => {
                 handleAwardExplore={props.handleAwardExplore}
             />
         </div >
+    )
+}
+
+export const FilterPanel = (props) => {
+    let navigate = useNavigate();
+    const [activeFilter, setActiveFilter] = useState(-1);
+    const [activePeriod, setActivePeriod] = useState('month');
+
+    const filters = ['trending', 'popular', 'new', 'rising', 'most discussed'];
+
+    const popularOptions = [
+        { id: 1, label: 'Past hour', value: 'hour' },
+        { id: 2, label: 'Past 24 hours', value: 'day' },
+        { id: 3, label: 'Past week', value: 'week' },
+        { id: 4, label: 'Past month', value: 'month' },
+        { id: 5, label: 'Past year', value: 'year' },
+        { id: 6, label: 'All time', value: 'all time' }
+    ]
+
+    const selectPopular = (popular) => {
+        setActivePeriod(popular.value)
+    }
+
+    useEffect(() => {
+        props.filterExploreList(filters[activeFilter], activePeriod);
+    }, [activeFilter, activePeriod])
+
+    return (
+        <div className='flex w-full items-center bg-slate-100/75 dark:bg-darkNavBg/75 p-2 sticky top-14 z-20'>
+            <div className='flex overflow-hidden'>
+                <ul id='tabSlider' className="flex space-x-2 items-center">
+                    {filters.map((filter, index) => {
+                        return <li key={index} onClick={() => setActiveFilter(index)} className={index === activeFilter ? "font-caviar text-sm font-bold tracking-wider text-gray-700 bg-violet-300 rounded-lg h-fit shadow" : "font-caviar text-sm font-bold tracking-wider text-gray-700 dark:text-gray-400 bg-slate-200 dark:bg-neutral-900 flex items-center shadow cursor-pointer rounded-lg h-fit"}>
+                            <div className="flex items-center">
+                                <span className="py-2 px-3">{filter}</span>
+                            </div>
+                        </li>
+                    })}
+                </ul>
+            </div>
+            <span className='text-gray-600 dark:text-gray-400 mx-2'>&#9679;</span>
+            <div className="flex items-center cursor-pointer space-x-2">
+                <Dropdown left default='Most Popular' options={popularOptions} onSelect={selectPopular} />
+            </div>
+            <SearchBar />
+            <button type="button" className='btn ml-2 bg-violet-700 drop-shadow-xl p-2.5 items-center shadow-lg rounded-xl' onClick={() => navigate(`/explore/new`)}>
+                <MdUpload className='h-6 w-full text-gray-200' />
+            </button>
+        </div>
     )
 }

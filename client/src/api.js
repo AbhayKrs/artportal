@@ -11,6 +11,7 @@ export const fetchUserImages = filename => baseURL + `/users/image/${filename}`;
 
 //GET Request API's
 export const exploreListAPI = () => get_api.get(`/explore`);
+export const filterExploreListAPI = (filter, period) => get_api.get(`/explore?t=${filter}&p=${period}`);
 export const exploreItemAPI = exploreID => get_api.get(`/explore/${exploreID}`);
 export const userExploreListAPI = userID => get_api.get(`/users/${userID}/explore`);
 export const userStoreListAPI = userID => get_api.get(`/users/${userID}/store`);

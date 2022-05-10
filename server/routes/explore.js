@@ -54,9 +54,49 @@ const upload = multer({ storage });
 // @access      Public
 router.get('/', async (req, res) => {
     try {
-        const explore = await Explore.find({});
+        let explore = [];
         if (!explore) {
             return res.status(400).send({ msg: 'Explores not found' });
+        }
+        const filter = req.query.t;
+        const period = req.query.p;
+        console.log('filter', filter, period);
+        if (!filter && !period) {
+            explore = await Explore.find({});
+        } else {
+            const exploreData = await Explore.find({});
+            const getPeriod = (label) => {
+                let value = 0;
+                switch (label) {
+                    case 'hour': { value = 3600000; break; }
+                    case 'day': { value = 86400000; break; }
+                    case 'week': { value = 604800000; break; }
+                    case 'month': { value = 2592000000; break; }
+                    case 'year': { value = 31556952000; break; }
+                    default: break;
+                }
+                return value;
+            }
+
+            switch (filter) {
+                case 'trending': { explore = exploreData; break; }
+                case 'popular': {
+                    const filteredByPeriod = exploreData.filter(item => (Date.now() - item.createdAt) <= getPeriod(period));
+                    explore = filteredByPeriod.sort((item1, item2) => item2.likes.length - item1.likes.length)
+                    break;
+                }
+                case 'new': {
+                    explore = exploreData.sort((item1, item2) => item2.createdAt - item1.createdAt)
+                    break;
+                }
+                case 'rising': {
+                    const explore30d = exploreData.filter(item => (Date.now() - item.createdAt) <= 2592000000);
+                    explore = explore30d.sort((item1, item2) => item2.likes.length - item1.likes.length)
+                    break;
+                }
+                case 'most discussed': { explore = exploreData; break; }
+                default: break;
+            }
         }
         res.json(explore);
     } catch (err) {

@@ -15,8 +15,8 @@ const ExploreUpload = (props) => {
     let navigate = useNavigate();
 
     const [exploreFiles, setExploreFiles] = useState([]);
-    const [exploreTitle, setExploreTitle] = useState('test_title');
-    const [exploreDesc, setExploreDesc] = useState('test_desc');
+    const [exploreTitle, setExploreTitle] = useState('');
+    const [exploreDesc, setExploreDesc] = useState('');
     const [exploreTags, setExploreTags] = useState([]);
     const [tagSearch, setTagSearch] = useState('');
     const [primaryFile, setPrimaryFile] = useState('');
@@ -122,29 +122,29 @@ const ExploreUpload = (props) => {
     }
 
     return (
-        <div className="bg-darkNavBg p-5">
-            <div className="bg-neutral-800 rounded-lg p-5">
-                <span className='font-caviar text-3xl text-gray-300'>Upload</span>
+        <div className="bg-gray-200 dark:bg-darkNavBg p-5">
+            <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-5">
+                <span className='font-caviar text-3xl text-gray-700 dark:text-gray-300'>Upload</span>
                 <div className='mt-3 space-y-2'>
                     <div>
-                        <span className='font-josefinlight text-gray-300'>Files<span className='font-josefinlight text-rose-400 text-md'>*</span></span>
+                        <span className='font-josefinlight font-semibold text-gray-700 dark:text-gray-300'>Files<span className='font-josefinlight text-rose-400 text-md'>*</span></span>
                         <div className="flex flex-col space-y-3">
                             <div className="flex flex-col justify-center items-center border-dashed space-y-2 rounded-lg border-2 border-gray-400 py-8" onDrop={(ev) => dropHandler(ev)} onDragOver={(ev) => dragOverHandler(ev)} >
-                                <p className="font-semibold text-gray-300 flex flex-wrap justify-center">Drag files</p>
-                                <p className="font-semibold text-gray-300">OR</p>
+                                <p className="font-semibold text-gray-700 dark:text-gray-300 flex flex-wrap justify-center">Drag files</p>
+                                <p className="font-semibold text-gray-700 dark:text-gray-300">OR</p>
                                 <label for="file-upload" className='bg-violet-500 text-white font-caviar font-semibold py-1 px-2 rounded'>
                                     Select files
                                 </label>
                                 <input id="file-upload" className='hidden' type="file" multiple onChange={onImageChange} />
                             </div>
-                            <div className="flex flex-col rounded-lg bg-neutral-700 items-center py-5 px-1 w-full">
-                                <h1 className="font-bold sm:text-lg text-gray-400">Upload Files</h1>
+                            <div className="flex flex-col rounded-lg bg-slate-100 dark:bg-neutral-700 shadow items-center py-5 px-1 w-full">
+                                <h1 className="font-bold sm:text-lg text-gray-800 dark:text-gray-400">Upload Files</h1>
                                 <div className="h-full w-full text-center flex flex-col items-center justify-center items-center">
                                     {exploreFiles.length === 0 ?
                                         <div>
                                             <img className="mx-auto w-32" src="https://user-images.githubusercontent.com/507615/54591670-ac0a0180-4a65-11e9-846c-e55ffce0fe7b.png" alt="no data" />
-                                            <span className="text-small text-gray-500">No files selected</span>
-                                            <div className='font-josefinlight text-rose-400 text-sm'>You may select a maximum of 3 files.</div>
+                                            <span className="text-small dark:text-gray-500">No files selected</span>
+                                            <div className='font-josefinlight text-rose-400 font-semibold text-sm'>You may select a maximum of 3 files.</div>
                                         </div>
                                         :
                                         <div className=''>
@@ -165,32 +165,32 @@ const ExploreUpload = (props) => {
                     </div>
                     <div>
                         <div>
-                            <span className='font-josefinlight text-gray-300'>Title<span className='font-josefinlight text-rose-400 text-md'>*</span></span>
-                            <input type="text" value={exploreTitle} onChange={(ev) => setExploreTitle(ev.target.value)} className="py-2 px-3 text-md bg-neutral-600 text-gray-300 focus:outline-none rounded-md w-full" placeholder='Title' />
+                            <span className='font-josefinlight font-semibold text-gray-700 dark:text-gray-300'>Title<span className='font-josefinlight text-rose-400 text-md'>*</span></span>
+                            <input type="text" value={exploreTitle} onChange={(ev) => setExploreTitle(ev.target.value)} className="py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 focus:outline-none rounded-md w-full" placeholder='Title' />
                         </div>
                         <div>
-                            <span className='font-josefinlight text-gray-300'>Description<span className='font-josefinlight text-rose-400 text-md'>*</span></span>
-                            <textarea rows='4' value={exploreDesc} onChange={(ev) => setExploreDesc(ev.target.value)} className="scrollbar py-2 px-3 text-md bg-neutral-600 text-gray-300 resize-none focus:outline-none rounded-md w-full" placeholder='Title' />
+                            <span className='font-josefinlight font-semibold text-gray-700 dark:text-gray-300'>Description<span className='font-josefinlight text-rose-400 text-md'>*</span></span>
+                            <textarea rows='4' value={exploreDesc} onChange={(ev) => setExploreDesc(ev.target.value)} className="scrollbar py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 resize-none focus:outline-none rounded-md w-full" placeholder='Title' />
                         </div>
                         <div>
-                            <span className='font-josefinlight text-gray-300'>Add tags:</span>
-                            <div className='font-josefinlight text-rose-400 text-sm'>You may assign a maximum of 10 tags</div>
+                            <span className='font-josefinlight font-semibold text-gray-700 dark:text-gray-300'>Add tags:</span>
+                            <div className='font-josefinlight text-rose-400 font-semibold text-sm'>You may assign a maximum of 10 tags</div>
                             <div className="w-full inline-flex flex-col justify-center relative text-gray-500">
                                 <div className="relative">
-                                    <input value={tagSearch} onChange={(ev) => setTagSearch(ev.target.value)} type="text" className="p-2 pl-8 w-full text-md rounded bg-neutral-600 text-gray-300 focus:outline-none" placeholder="Search for tags..." />
-                                    <BsHash className="w-5 h-5 text-gray-300 absolute left-2 top-2.5" />
-                                    {tagSearch.length === 0 ? '' : <MdClose onClick={() => setTagSearch('')} className="w-5 h-5 text-gray-300 absolute right-2 top-2.5" />}
+                                    <input value={tagSearch} onChange={(ev) => setTagSearch(ev.target.value)} type="text" className="p-2 shadow  pl-8 w-full text-md rounded bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 focus:outline-none" placeholder="Search for tags..." />
+                                    <BsHash className="w-5 h-5 text-gray-400 dark:text-gray-300 absolute left-2 top-2.5" />
+                                    {tagSearch.length === 0 ? '' : <MdClose onClick={() => setTagSearch('')} className="w-5 h-5 text-gray-700 dark:text-gray-300 absolute right-2 top-2.5" />}
                                 </div>
                                 {tagSearch.length === 0 ? '' :
-                                    <div className="scrollbar grid grid-cols-2 bg-neutral-600 max-h-60 h-full overflow-y-auto w-full mt-2 rounded">
+                                    <div className="scrollbar grid grid-cols-2 bg-gray-200/25 dark:bg-neutral-700 max-h-60 h-full overflow-y-auto w-full mt-2 rounded">
                                         {props.common.tags.filter(tag => tag.includes(tagSearch)).map(tag => {
                                             if (exploreTags.includes(tag)) {
-                                                return <div className="flex justify-between items-center pl-8 pr-2 py-2 m-2 bg-violet-100 text-gray-600 rounded">
+                                                return <div className="flex justify-between items-center pl-8 pr-2 py-2 m-1 bg-violet-100 text-gray-600 rounded">
                                                     {tag}
                                                     <MdClose onClick={() => handleRemoveTag(tag)} className='h-5 w-5 cursor-pointer' />
                                                 </div>
                                             } else {
-                                                return <div onClick={() => handleSelectTag(tag)} className="pl-8 pr-2 py-2 m-2 text-gray-300 cursor-pointer hover:bg-violet-300 hover:text-gray-800 hover:rounded">
+                                                return <div onClick={() => handleSelectTag(tag)} className="pl-8 pr-2 py-2 m-1 text-gray-700 dark:text-gray-300 cursor-pointer hover:bg-violet-300 hover:text-gray-800 hover:rounded">
                                                     {tag}
                                                 </div>
                                             }

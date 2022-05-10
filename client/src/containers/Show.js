@@ -246,7 +246,7 @@ const ExploreShow = (props) => {
                                     <p className='font-josefinlight text-lg font-bold'>{comment.content}</p>
                                 }
                                 <div className='flex'>
-                                    <div className="w-4 h-4 overflow-hidden">
+                                    <div className="w-5 h-5 overflow-hidden">
                                         <img src={fetchUserImages(comment.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
                                     </div>
                                     <p className="font-josefinlight text-sm mx-0.5">
@@ -303,7 +303,46 @@ const ExploreShow = (props) => {
 
 const StoreShow = (props) => {
     return (
-        <div>test store show</div>
+        <div className='bg-gray-200 dark:bg-darkNavBg max-100vh'>
+            <section className="text-gray-400 body-font overflow-hidden">
+                <div className="p-6 mx-auto">
+                    <div className="lg:w-4/5 mx-auto flex flex-wrap">
+                        <img className="lg:w-1/2 w-full lg:h-auto h-96 object-cover object-center rounded" src="https://source.unsplash.com/400x400/?nature,water" />
+                        <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-4 lg:mt-0">
+                            <div className="text-black dark:text-white text-4xl title-font font-medium mb-1">The Catcher in the Rye</div>
+                            <p className="text-gray-500 leading-relaxed">Fam locavore kickstarter distillery. Mixtape chillwave tumeric sriracha taximy chia microdosing tilde DIY. XOXO fam indxgo juiceramps cornhole raw denim forage brooklyn. Everyday carry +1 seitan poutine tumeric. Gastropub blue bottle austin listicle pour-over, neutra jean shorts keytar banjo tattooed umami cardigan.</p>
+                            <div className="flex my-2">
+                                <span className="flex items-center">
+                                    <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-5 h-5 text-indigo-400" viewBox="0 0 24 24">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                                    </svg>
+                                    <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-5 h-5 text-indigo-400" viewBox="0 0 24 24">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                                    </svg>
+                                    <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-5 h-5 text-indigo-400" viewBox="0 0 24 24">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                                    </svg>
+                                    <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-5 h-5 text-indigo-400" viewBox="0 0 24 24">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                                    </svg>
+                                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-5 h-5 text-indigo-400" viewBox="0 0 24 24">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                                    </svg>
+                                    <span className="ml-3 text-gray-600">4 Reviews</span>
+                                </span>
+                            </div>
+                            <div className="flex">
+                                <span className="flex flex-col font-medium text-3xl text-gray-700 dark:text-gray-300">
+                                    $58.00
+                                    <span className='text-xs text-rose-400'>including shipping & taxes</span>
+                                </span>
+                                <button className="flex ml-auto leading-[0] items-center font-caviar font-bold text-violet-400 bg-transparent border-2 border-violet-400 py-2 px-6 focus:outline-none hover:bg-violet-400 hover:text-gray-200 rounded-md">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
     )
 }
 

@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { HomeTabPanel } from '../components/TabPanel';
 import { fetchExploreList } from '../store/actions/explore.actions';
 import { getTags } from '../store/actions/common.actions';
-import { MultipleCarousel, MultipleCarouselWithHeaders } from '../components/Carousel';
+import { MultipleCarousel, HomeMultiCarousel } from '../components/Carousel';
 
 const Home = (props) => {
     useEffect(() => {
@@ -56,7 +56,7 @@ const Home = (props) => {
     return (
         <div className='bg-gray-200 dark:bg-darkNavBg'>
             <div className="flex pt-2 items-center justify-center w-full h-full">
-                <MultipleCarouselWithHeaders
+                <HomeMultiCarousel
                     prev={() => goPrev()}
                     next={() => goNext()}
                     data={carouselData}
