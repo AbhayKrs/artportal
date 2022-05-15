@@ -13,61 +13,40 @@ const Footer = () => {
                 <div className='flex mx-auto w-9/12'>
                     <div className="w-80 flex-shrink-0 mr-auto">
                         <Link to='/'>
-                            <img className='block h-14 w-auto hover:cursor-pointer' src={Artyst_logo} alt='Artyst' />
+                            <img className='block h-10 w-auto hover:cursor-pointer' src={Artyst_logo} alt='Artyst' />
                         </Link>
                         <p className="mt-2 text-xl font-bold text-gray-900 dark:text-gray-200">Focal point of everything art</p>
                     </div>
-                    <div className="flex grow gap-8">
-                        <div className="lg:w-1/4 md:w-1/2 w-full px-4">
+                    <div className="flex flex-col grow">
+                        <div className="flex space-x-3">
                             <h1 className="title-font font-bold text-gray-900 dark:text-gray-200 tracking-widest text-lg mb-3">CATEGORIES</h1>
-                            <nav className="list-none mb-4 font-caviar">
-                                <li>
-                                    <Link to="/" className="text-gray-900 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-500">First Link</Link>
-                                </li>
-                                <li>
-                                    <Link to="/" className="text-gray-900 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-500">Second Link</Link>
-                                </li>
-                                <li>
-                                    <Link to="/" className="text-gray-900 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-500">Third Link</Link>
-                                </li>
-                                <li>
-                                    <Link to="/" className="text-gray-900 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-500">Fourth Link</Link>
-                                </li>
-                            </nav>
+                            <span className='text-violet-700'>&#9679;</span>
+                            <div className='flex h-fit'>
+                                <Link to="/" className="font-caviar px-2 text-gray-900 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-500 text-center border-r-2 border-gray-400">First Link</Link>
+                                <Link to="/" className="font-caviar px-2 text-gray-900 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-500 text-center border-r-2 border-gray-400">Second Link</Link>
+                                <Link to="/" className="font-caviar px-2 text-gray-900 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-500 text-center border-r-2 border-gray-400">Third Link</Link>
+                                <Link to="/" className="font-caviar px-2 text-gray-900 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-500 text-center">Fourth Link</Link>
+                            </div>
                         </div>
-                        <div className="lg:w-1/4 md:w-1/2 w-full px-4">
-                            <h2 className="title-font font-bold text-gray-900 dark:text-gray-200 tracking-widest text-lg mb-3">CATEGORIES</h2>
-                            <nav className="list-none mb-4 font-caviar">
-                                <li>
-                                    <Link to="/" className="text-gray-900 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-500">First Link</Link>
-                                </li>
-                                <li>
-                                    <Link to="/" className="text-gray-900 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-500">Second Link</Link>
-                                </li>
-                                <li>
-                                    <Link to="/" className="text-gray-900 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-500">Third Link</Link>
-                                </li>
-                                <li>
-                                    <Link to="/" className="text-gray-900 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-500">Fourth Link</Link>
-                                </li>
-                            </nav>
+                        <div className="flex space-x-3">
+                            <h1 className="title-font font-bold text-gray-900 dark:text-gray-200 tracking-widest text-lg mb-3">CATEGORIES</h1>
+                            <span className='text-violet-700'>&#9679;</span>
+                            <div className='flex h-fit'>
+                                <Link to="/" className="font-caviar px-2 text-gray-900 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-500 text-center border-r-2 border-gray-400">First Link</Link>
+                                <Link to="/" className="font-caviar px-2 text-gray-900 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-500 text-center border-r-2 border-gray-400">Second Link</Link>
+                                <Link to="/" className="font-caviar px-2 text-gray-900 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-500 text-center border-r-2 border-gray-400">Third Link</Link>
+                                <Link to="/" className="font-caviar px-2 text-gray-900 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-500 text-center">Fourth Link</Link>
+                            </div>
                         </div>
-                        <div className="lg:w-1/4 md:w-1/2 w-full px-4">
-                            <h2 className="title-font font-bold text-gray-900 dark:text-gray-200 tracking-widest text-lg mb-3">CATEGORIES</h2>
-                            <nav className="list-none mb-4 font-caviar">
-                                <li>
-                                    <Link to="/" className="text-gray-900 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-500">First Link</Link>
-                                </li>
-                                <li>
-                                    <Link to="/" className="text-gray-900 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-500">Second Link</Link>
-                                </li>
-                                <li>
-                                    <Link to="/" className="text-gray-900 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-500">Third Link</Link>
-                                </li>
-                                <li>
-                                    <Link to="/" className="text-gray-900 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-500">Fourth Link</Link>
-                                </li>
-                            </nav>
+                        <div className="flex space-x-3">
+                            <h1 className="title-font font-bold text-gray-900 dark:text-gray-200 tracking-widest text-lg mb-3">CATEGORIES</h1>
+                            <span className='text-violet-700'>&#9679;</span>
+                            <div className='flex h-fit'>
+                                <Link to="/" className="font-caviar px-2 text-gray-900 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-500 text-center border-r-2 border-gray-400">First Link</Link>
+                                <Link to="/" className="font-caviar px-2 text-gray-900 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-500 text-center border-r-2 border-gray-400">Second Link</Link>
+                                <Link to="/" className="font-caviar px-2 text-gray-900 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-500 text-center border-r-2 border-gray-400">Third Link</Link>
+                                <Link to="/" className="font-caviar px-2 text-gray-900 dark:text-gray-200 hover:text-violet-500 dark:hover:text-violet-500 text-center">Fourth Link</Link>
+                            </div>
                         </div>
                     </div>
                 </div>

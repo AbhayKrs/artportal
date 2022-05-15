@@ -55,13 +55,16 @@ const upload = multer({ storage });
 // @access      Public
 router.get('/', async (req, res) => {
     try {
-        const store = await Store.find({});
-        if (!store) {
-            return res.status(400).send({ msg: 'Storelist not found' });
+        let store = [];
+        const category = req.query.category;
+        if (!category) {
+            store = await Store.find({});
+        } else {
+            const storeData = await Store.find({});
+            store = storeData.filter(item => item.category === category);
         }
         res.send(store);
     } catch (err) {
-        console.error(err.message);
         res.status(500).send('Unable to fetch store');
     }
 });
@@ -69,12 +72,11 @@ router.get('/', async (req, res) => {
 // @route       POST api/store/new
 // @desc        Publish on store
 // @access      Private
-router.post('/new', upload.single('file'), async (req, res) => {
-    console.log('user id', req.body.userId);
-    const user = await User.findById(req.body.userId);
+router.post('/new', upload.any(), async (req, res) => {
+    const user = await User.findById(req.body.userID);
     const newStoreItem = new Store({
         title: req.body.title,
-        item: req.file.filename,
+        files: req.files.map(file => { return file.filename }),
         description: req.body.description,
         seller: {
             id: user.id,
@@ -84,7 +86,8 @@ router.post('/new', upload.single('file'), async (req, res) => {
             // seller_rating: req.body.user.rating
         },
         price: req.body.price,
-        rating: req.body.rating
+        rating: req.body.rating,
+        category: req.body.category
     });
     console.log('newStoreItem data', newStoreItem);
     Store.create(newStoreItem, (err, storeItem) => {

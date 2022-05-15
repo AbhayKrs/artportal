@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { exploreItemAPI, exploreListAPI, filterExploreListAPI, likeExploreAPI, dislikeExploreAPI, awardExploreAPI } from '../../api';
+import { exploreItemAPI, exploreListAPI, searchExploreListAPI, filterExploreListAPI, likeExploreAPI, dislikeExploreAPI, awardExploreAPI } from '../../api';
 import {
     FETCH_EXPLORE,
     FETCH_EXPLORELIST,
@@ -32,11 +32,11 @@ const risingSort = (property) => {
     }
 }
 
-export const fetchExplore = (exploreID) => async (dispatch, getState) => {
+export const fetchExploreItem = (exploreID) => async (dispatch, getState) => {
     await exploreItemAPI(exploreID).then(res => {
         dispatch({ type: FETCH_EXPLORE, payload: res.data })
     }).catch(err => {
-        console.log('---error fetchExplore', err);
+        console.log('---error fetchExploreItem', err);
     })
 }
 
@@ -48,11 +48,19 @@ export const fetchExploreList = () => async (dispatch, getState) => {
     })
 };
 
+export const searchExploreList = (query, filter, period) => async (dispatch, getState) => {
+    await searchExploreListAPI(query, filter, period).then(res => {
+        dispatch({ type: FETCH_EXPLORELIST, payload: res.data });
+    }).catch(err => {
+        console.log('---error searchExploreList', err);
+    })
+}
+
 export const filterExploreList = (filter, period) => async (dispatch, getState) => {
     await filterExploreListAPI(filter, period).then(res => {
         dispatch({ type: FETCH_EXPLORELIST, payload: res.data });
     }).catch(err => {
-        console.log('---error fetchExploreList', err);
+        console.log('---error filterExploreList', err);
     })
 }
 

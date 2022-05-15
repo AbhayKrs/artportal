@@ -12,6 +12,7 @@ import Footer from './containers/Footer';
 import Alerts from './components/Alerts';
 import Home from './containers/Home';
 import Explore from './containers/Explore';
+import ExploreSearch from './containers/ExploreSearch';
 import Upload from './containers/Upload';
 import Show from './containers/Show';
 import Store from './containers/Store';
@@ -57,11 +58,13 @@ const ArtystRoutes = (props) => {
             <Routes>
                 <Route path='/' exact element={<Home />} />
                 <Route path='/explore' exact element={<Explore />} />
+                <Route path='/explore/search' exact element={<ExploreSearch />} />
                 <Route path='/explore/:id' exact element={<Show.ExploreShow />} />
-                <Route path='/store/:id' exact element={<Show.StoreShow />} />
                 <Route path='/explore/new' exact element={<Upload.ExploreUpload />} />
                 <Route path='/store' exact element={<Store />} />
+                <Route path='/store/:id' exact element={<Show.StoreShow />} />
                 <Route path='/store/all' exact element={<StoreAll />} />
+                <Route path='/store/new' exact element={<Upload.StoreUpload />} />
                 {/* <Route path='/about' exact component={About} />
                 <Route path='/dashboard' exact component={Dashboard} />
                 <Route path='/notification' exact component={Notification} />

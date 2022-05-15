@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { loginAPI, signUpAPI, tagsAPI, commonImagesAPI, userDetailsAPI, userExploreListAPI, userStoreListAPI, userCartListAPI, deleteStoreItemAPI, awardListAPI } from '../../api';
+import { loginAPI, signUpAPI, tagsAPI, commonImagesAPI, userDetailsAPI, userExploreListAPI, userStoreListAPI, userCartListAPI, addUserCartAPI, updateUserCartAPI, deleteStoreItemAPI, awardListAPI } from '../../api';
 import {
     SWITCH_THEME,
     SET_LOADER,
@@ -247,13 +247,12 @@ export const fetchCartList = () => async (dispatch, getState) => {
     })
 }
 
-export const handleAddToCart = (data) => async (dispatch, getState) => {
+export const handleCartAdd = (data) => async (dispatch, getState) => {
     try {
         let cartData;
         const userID = getState().common.user.id;
         const userCart = getState().common.user.cart;
         if (userCart.filter(item => item.title === data.title).length !== 0) {
-            console.log('handleAddToCart update');
             let quantity = userCart.filter(item => item.title === data.title)[0].quantity + 1;
             let subtotal = data.price * quantity;
             cartData = {
@@ -261,37 +260,25 @@ export const handleAddToCart = (data) => async (dispatch, getState) => {
                 subtotal
             }
             const cartID = userCart.filter(item => item.title === data.title)[0]._id;
-            await axios({
-                url: `http://localhost:5000/api/users/${userID}/cart/${cartID}`,
-                method: 'PUT',
-                data: cartData
-            }).then(async res => {
-                console.log('res', res.status);
-                await dispatch(fetchCartList());
+            await updateUserCartAPI(userID, cartID, cartData).then(res => {
+                dispatch(fetchCartList());
             }).catch(err => {
-                if (err.response) {
-                    console.log('Signup fail:: ', err.response.status);
-                }
+                console.log('---error updateUserCartAPI', err);
             })
         } else {
-            console.log('handleAddToCart add');
+            console.log('handleCartAdd add', data);
             cartData = {
+                file: data.files[0],
                 title: data.title,
+                category: data.category,
                 price: data.price,
                 quantity: 1,
                 subtotal: data.price * 1
             }
-            await axios({
-                url: `http://localhost:5000/api/users/${userID}/cart/add`,
-                method: 'POST',
-                data: cartData
-            }).then(async res => {
-                console.log('res', res.status);
-                await dispatch(fetchCartList());
+            await addUserCartAPI(userID, cartData).then(res => {
+                dispatch(fetchCartList());
             }).catch(err => {
-                if (err.response) {
-                    console.log('Signup fail:: ', err.response.status);
-                }
+                console.log('---error addUserCartAPI', err);
             })
         }
     } catch (err) {
@@ -311,8 +298,7 @@ export const handleRemoveFromCart = (data) => async (dispatch, getState) => {
                 url: `http://localhost:5000/api/users/${userID}/cart/${cartID}`,
                 method: 'DELETE',
             }).then(async res => {
-                console.log('res', res.status);
-                await dispatch(fetchCartList());
+                dispatch(fetchCartList());
             }).catch(err => {
                 if (err.response) {
                     console.log('Signup fail:: ', err.response.status);
@@ -331,8 +317,7 @@ export const handleRemoveFromCart = (data) => async (dispatch, getState) => {
                 method: 'PUT',
                 data: cartData,
             }).then(async res => {
-                console.log('res', res.status);
-                await dispatch(fetchCartList());
+                dispatch(fetchCartList());
             }).catch(err => {
                 if (err.response) {
                     console.log('Signup fail:: ', err.response.status);
@@ -341,23 +326,6 @@ export const handleRemoveFromCart = (data) => async (dispatch, getState) => {
         }
     } catch (err) {
         console.log('---error handleRemoveFromCart', err);
-    }
-}
-
-export const handleCartOpen = () => async (dispatch, getState) => {
-    try {
-        dispatch({ type: HANDLE_CART_OPEN });
-
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-export const handleCartClose = () => async (dispatch, getState) => {
-    try {
-        dispatch({ type: HANDLE_CART_CLOSE })
-    } catch (err) {
-        console.log(err);
     }
 }
 

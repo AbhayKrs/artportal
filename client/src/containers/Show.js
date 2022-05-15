@@ -4,21 +4,19 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import { fetchExploreImages, fetchUserImages } from '../api';
-import { fetchExploreList, fetchExplore, handleLikeExplore, handleAwardExplore, handleDislikeExplore, handleAddComment, handleEditComment, handleDeleteComment, handleLikeComment, handleDislikeComment } from '../store/actions/explore.actions';
+import { fetchExploreList, fetchExploreItem, handleLikeExplore, handleAwardExplore, handleDislikeExplore, handleAddComment, handleEditComment, handleDeleteComment, handleLikeComment, handleDislikeComment } from '../store/actions/explore.actions';
 import { fetchAwards, setError } from '../store/actions/common.actions';
 import { ExploreShowCarousel } from '../components/Carousel';
 import { AwardModal } from '../components/Modal';
 
 import { IoEye, IoHeart, IoSend, IoShareSocialSharp, IoChatbox } from 'react-icons/io5';
-import { BsFillBookmarkFill, BsTrash, BsHeartFill, BsPlusLg } from 'react-icons/bs';
+import { BsFillBookmarkFill, BsTrash, BsHeartFill } from 'react-icons/bs';
 import { IoIosSend } from "react-icons/io";
 import { AiFillLike, AiFillDislike } from 'react-icons/ai';
-import { FcLikePlaceholder, FcLike } from "react-icons/fc";
 import { MdEdit, MdEditOff } from 'react-icons/md';
 import { ImPlus } from 'react-icons/im';
 
 import AwardIcon from '../assets/images/gift.png';
-import Explore from './Explore';
 
 const ExploreShow = (props) => {
     const [prev, setPrev] = useState('');
@@ -34,21 +32,22 @@ const ExploreShow = (props) => {
     let navigate = useNavigate();
 
     useEffect(async () => {
+        window.scrollTo(0, 0)
         await props.fetchExploreList();
-        props.fetchExplore(id);
+        props.fetchExploreItem(id);
         props.fetchAwards();
     }, [])
 
     const submitComment = async (event) => {
         event.preventDefault();
         await props.handleAddComment(comment, id);
-        props.fetchExplore(id);
+        props.fetchExploreItem(id);
         setComment('');
     }
 
     useEffect(() => {
         const len = props.explore.exploreList.length;
-        props.fetchExplore(id);
+        props.fetchExploreItem(id);
         if (props.exploreShow.likes.filter(item => item === props.user.id).length > 0) {
             setLike(true);
         } else {
@@ -76,27 +75,27 @@ const ExploreShow = (props) => {
         } else {
             await props.handleLikeExplore(id, true);
         }
-        props.fetchExplore(id);
+        props.fetchExploreItem(id);
     }
 
     const handleAwardExplore = async (award) => {
         console.log('handleAwardExplore', award);
         await props.handleAwardExplore(id, award);
         setTimeout(() => {
-            props.fetchExplore(id);
+            props.fetchExploreItem(id);
         }, 2000);
     }
 
     const onDeleteComment = async (comment) => {
         await props.handleDeleteComment(id, comment._id);
-        props.fetchExplore(id);
+        props.fetchExploreItem(id);
     }
 
     const onEditComment = async (comment) => {
         await props.handleEditComment(editComment, id, comment._id);
         setEditForm(false);
         setTimeout(() => {
-            props.fetchExplore(id);
+            props.fetchExploreItem(id);
         }, 2000);
         return false;
     }
@@ -108,7 +107,7 @@ const ExploreShow = (props) => {
             await props.handleLikeComment(id, comment._id);
         }
         setTimeout(() => {
-            props.fetchExplore(id);
+            props.fetchExploreItem(id);
         }, 2000);
     }
 
@@ -157,8 +156,8 @@ const ExploreShow = (props) => {
                 data={props.explore.exploreList}
                 currentImage={props.exploreShow.files[0]}
                 secondaryImages={props.exploreShow.files.filter((image, index) => index !== 0)}
-                prev={() => { navigate(`/explore/${prev}`); props.fetchExplore(prev); }}
-                next={() => { navigate(`/explore/${next}`); props.fetchExplore(next); }}
+                prev={() => { navigate(`/explore/${prev}`); props.fetchExploreItem(prev); }}
+                next={() => { navigate(`/explore/${next}`); props.fetchExploreItem(next); }}
             />
             <div className='lg:col-span-5 md:mt-3 sm:mt-0'>
                 <div className='flex flex-col rounded-md bg-neutral-50 dark:bg-neutral-800 mx-2 p-3'>
@@ -168,7 +167,7 @@ const ExploreShow = (props) => {
                             <p className='font-josefinlight text-lg tex-gray-800 dark:text-gray-400'>{props.exploreShow.description}</p>
                             <div className='flex flex-wrap'>
                                 {props.exploreShow.tags.map(item => (
-                                    <div className="flex w-fit justify-center items-center m-1 font-medium py-1 px-2 bg-neutral-700 dark:bg-gray-300 rounded-full text-gray-200 dark:text-gray-900 border border-gray-300 " >
+                                    <div className="flex w-fit justify-center items-center m-1 font-medium py-1.5 px-2 bg-indigo-50 dark:bg-neutral-700 rounded-full text-gray-600 dark:text-gray-400 shadow">
                                         <div className="text-xs font-medium leading-none">{item}</div>
                                     </div>
                                 ))}
@@ -223,24 +222,24 @@ const ExploreShow = (props) => {
                     </div>
                 </div>
                 {props.common.isAuthenticated ?
-                    <div className='m-2 rounded flex bg-violet-900'>
+                    <div className='m-2 rounded flex bg-gray-300 dark:bg-neutral-700'>
                         {comment.length > 0 ?
-                            <IoIosSend onClick={(ev) => submitComment(ev)} className='h-7 w-7 text-gray-200 cursor-pointer self-center ml-2' />
+                            <IoIosSend onClick={(ev) => submitComment(ev)} className='h-7 w-7 text-gray-600 dark:text-gray-300 cursor-pointer self-center ml-2' />
                             :
-                            <IoIosSend className='h-7 w-7 text-gray-300 self-center ml-2' />
+                            <IoIosSend className='h-7 w-7 text-neutral-700 dark:text-gray-300 self-center ml-2' />
                         }
-                        <input type="text" name="comment" value={comment} onChange={(ev) => setComment(ev.target.value)} onKeyPress={(ev) => { if (ev.key === 'Enter') { submitComment(ev) } }} placeholder={`Hey ${props.user.username}, Let the artist know your thoughts...`} className="font-josefinlight w-full mx-2 my-3 font-bold text-md placeholder:text-gray-300 text-gray-200 outline-none bg-violet-900 border-b-2 border-b-gray-300" />
+                        <input type="text" name="comment" value={comment} onChange={(ev) => setComment(ev.target.value)} onKeyPress={(ev) => { if (ev.key === 'Enter') { submitComment(ev) } }} placeholder={`Hey ${props.user.username}, Let the artist know your thoughts...`} className="font-josefinlight w-full mx-2 my-3 font-bold text-md placeholder:text-neutral-700 dark:placeholder:text-gray-300 text-gray-600 dark:text-gray-300 outline-none bg-gray-300 dark:bg-neutral-700 border-b-2 border-b-gray-700 dark:border-b-gray-300" />
                     </div>
                     :
                     ''}
                 <div className='m-2 ml-6'>
                     {props.exploreShow.comments.map((comment, index) => (
-                        <div className='flex rounded-lg items-center bg-violet-900 text-gray-300 py-2 px-4 mb-2 space-x-2'>
+                        <div className='flex rounded-lg items-center bg-gray-300 dark:bg-neutral-700 text-neutral-700 dark:text-gray-300 py-2 px-4 mb-2 space-x-2'>
                             <div className='flex flex-col basis-10/12'>
                                 {editForm && index === editIndex ?
-                                    <div className='rounded flex bg-violet-900'>
-                                        <input type="text" name="comment" value={editComment} onChange={(ev) => setEditComment(ev.target.value)} onKeyPress={(ev) => { if (ev.key === 'Enter') { ev.preventDefault(); onEditComment(comment) } }} className="font-josefinlight w-fit mb-2 font-bold text-md placeholder:text-gray-300 text-gray-200 outline-none bg-violet-900 border-b-2 border-b-gray-300" />
-                                        <IoSend onClick={(ev) => onEditComment(comment)} className='h-5 w-5 ml-2 text-gray-200 cursor-pointer self-center' />
+                                    <div className='rounded flex bg-gray-300 dark:bg-neutral-700'>
+                                        <input type="text" name="comment" value={editComment} onChange={(ev) => setEditComment(ev.target.value)} onKeyPress={(ev) => { if (ev.key === 'Enter') { ev.preventDefault(); onEditComment(comment) } }} className="font-josefinlight w-fit mb-2 font-bold text-md placeholder:text-neutral-700 dark:placeholder:text-gray-300 text-gray-600 dark:text-gray-300 outline-none bg-gray-300 dark:bg-neutral-700 border-b-2 border-b-gray-700 dark:border-b-gray-300" />
+                                        <IoSend onClick={(ev) => onEditComment(comment)} className='h-5 w-5 ml-2 text-gray-600 dark:text-gray-300 cursor-pointer self-center' />
                                     </div>
                                     :
                                     <p className='font-josefinlight text-lg font-bold'>{comment.content}</p>
@@ -258,12 +257,12 @@ const ExploreShow = (props) => {
                             <div className="flex basis-2/12 items-center justify-end relative ">
                                 <div className='flex space-x-1'>
                                     {comment.likes.filter(item => item === props.user.id).length > 0 ?
-                                        <button onClick={() => console.log('already liked!')}>
-                                            <AiFillLike className='w-5 h-5' />
+                                        <button disabled>
+                                            <AiFillLike className='w-5 h-5 text-violet-500' />
                                         </button>
                                         :
                                         <button onClick={props.common.isAuthenticated ? () => handleToggleCommentLike(true, comment) : handleInvalidUser}>
-                                            <AiFillLike className='w-5 h-5 text-gray-900' />
+                                            <AiFillLike className='w-5 h-5 text-neutral-500' />
                                         </button>
                                     }
                                     <div className="text-sm">
@@ -274,7 +273,7 @@ const ExploreShow = (props) => {
                                     </button>
                                 </div>
                                 {props.common.isAuthenticated && props.user.id === comment.author.id ?
-                                    <div className='flex flex-col ml-2 border-l-2 border-gray-300 pl-3 space-y-2'>
+                                    <div className='flex flex-col ml-2 border-l-2 border-gray-600 pl-3 space-y-2'>
                                         {editForm && index === editIndex ?
                                             <MdEditOff onClick={() => { setEditForm(false) }} className='w-5 h-5' />
                                             :
@@ -332,11 +331,11 @@ const StoreShow = (props) => {
                                 </span>
                             </div>
                             <div className="flex">
-                                <span className="flex flex-col font-medium text-3xl text-gray-700 dark:text-gray-300">
+                                <span className="flex flex-col font-medium text-3xl text-neutral-700 dark:text-gray-300">
                                     $58.00
                                     <span className='text-xs text-rose-400'>including shipping & taxes</span>
                                 </span>
-                                <button className="flex ml-auto leading-[0] items-center font-caviar font-bold text-violet-400 bg-transparent border-2 border-violet-400 py-2 px-6 focus:outline-none hover:bg-violet-400 hover:text-gray-200 rounded-md">Add to Cart</button>
+                                <button className="flex ml-auto leading-[0] items-center font-caviar font-bold text-violet-400 bg-transparent border-2 border-violet-400 py-2 px-6 focus:outline-none hover:bg-violet-400 hover:text-gray-600 rounded-md">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -354,7 +353,7 @@ const mapStateToProps = (state, props) => ({
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-    fetchExplore,
+    fetchExploreItem,
     fetchExploreList,
     handleLikeExplore,
     handleAwardExplore,

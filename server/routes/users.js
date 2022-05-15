@@ -399,6 +399,8 @@ router.post('/:id/cart/add', async (req, res) => {
         }
         const newCartItem = new Cart({
             title: req.body.title,
+            file: req.body.file,
+            category: req.body.category,
             price: req.body.price,
             quantity: req.body.quantity,
             subtotal: req.body.subtotal,

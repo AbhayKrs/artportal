@@ -6,11 +6,11 @@ const storeSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        item: {
+        category: {
             type: String,
-            default: 'none',
             required: true,
         },
+        files: [{ type: String, default: '' }],
         description: {
             type: String,
             required: true,

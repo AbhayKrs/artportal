@@ -11,9 +11,9 @@ import moment from 'moment';
 
 import { BsHeart, BsChat } from 'react-icons/bs';
 import { BiTimeFive } from 'react-icons/bi';
-import { FilterPanel } from '../components/TabPanel';
+import { SearchFilterPanel } from '../components/TabPanel';
 
-const Explore = (props) => {
+const ExploreSearch = (props) => {
     let navigate = useNavigate();
 
     useEffect(async () => {
@@ -22,7 +22,7 @@ const Explore = (props) => {
 
     return (
         <div className='bg-gray-200 dark:bg-darkNavBg'>
-            <FilterPanel fetchExploreList={props.fetchExploreList} filterExploreList={props.filterExploreList} searchExploreList={props.searchExploreList} />
+            <SearchFilterPanel fetchExploreList={props.fetchExploreList} filterExploreList={props.filterExploreList} searchExploreList={props.searchExploreList} />
             <div className='flex flex-row'>
                 <Masonry>
                     {props.explore.exploreList.map((explore, index) => (
@@ -79,10 +79,4 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     filterExploreList
 }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Explore);
-
-
-{/* <label className="flex items-center cursor-pointer">
-                            <input type="radio" name='top' className="form-radio h-3.5 w-3.5 bg-slate-300 text-neutral-700 cursor-pointer mr-1" />
-                            <p className='font-caviar font-semibold text-sm'>New</p>
-                        </label> */}
+export default connect(mapStateToProps, mapDispatchToProps)(ExploreSearch);

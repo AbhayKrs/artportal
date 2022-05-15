@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { FaUser, FaLock } from 'react-icons/fa';
 import { IoCloseSharp, IoCloseCircle } from 'react-icons/io5';
+import { FaMinus } from 'react-icons/fa';
+import { MdOutlineRemoveShoppingCart } from 'react-icons/md';
 import { AwardTabPanel } from './TabPanel';
 
 import TokenLogo from '../assets/images/money.png';
@@ -217,13 +219,13 @@ export const TokenModal = (props) => {
 
     return (
         <div className={`${open ? 'block' : 'hidden'} flex fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
-            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 md:w-6/12 sm:w-8/12 rounded-xl z-50 overflow-y-auto">
+            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 lg:w-4/12 md:w-6/12 sm:w-8/12 rounded-xl z-50 overflow-y-auto">
                 <div className='grid'>
-                    <div className='p-4 flex flex-col'>
+                    <div className='p-6 flex flex-col'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                         <h1 className='text-violet-500 dark:text-violet-800 text-4xl font-semibold tracking-widest font-antipasto'>{title}</h1>
                         <div className='text-black dark:text-white text-md font-josefinlight'>Tokens are used to purchase awards, badges and profile avatars. You can gift your tokens to artists you admire as well!</div>
-                        <ul className='px-5 space-y-2 text-gray-700 dark:text-gray-400'>
+                        <ul className='py-2 px-5 space-y-2 text-gray-700 dark:text-gray-400'>
                             <li className='flex justify-between place-items-center'>
                                 <div className='text-lg font-caviar'>250 tokens</div>
                                 <button onClick={() => setPurchaseDialog({ open: true, value: 250, price: 100 })} className='w-20 bg-violet-500/75 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 p-2 rounded-md text-sm font-caviar font-bold dark:font-normal'>&#8377;100</button>
@@ -281,7 +283,7 @@ export const PurchaseModal = (props) => {
 
     return (
         <div className={`${open ? 'block' : 'hidden'} flex  fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
-            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 md:w-6/12 sm:w-9/12 rounded-xl z-50 overflow-y-auto">
+            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 lg:w-4/12 md:w-6/12 sm:w-9/12 rounded-xl z-50 overflow-y-auto">
                 <div className='grid'>
                     <div className='p-4 flex flex-col'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
@@ -295,6 +297,96 @@ export const PurchaseModal = (props) => {
                             <button className='whitespace-nowrap text-center bg-amber-400 text-gray-900 hover:bg-amber-500 dark:hover:bg-amber-500 py-1 px-4 rounded-md text-sm font-caviar font-bold'>Add</button>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export const CartModal = (props) => {
+    const { open, onClose, cartList, fetchStoreImages } = props;
+
+    let total = 0;
+    cartList && cartList.map(item =>
+        total = item.subtotal + total
+    );
+
+    return (
+        <div className={`${open ? 'block' : 'hidden'} fixed right-0 bottom-0 m-2 bg-slate-100 dark:bg-neutral-800 rounded-xl z-50 antialiased text-gray-600`}>
+            <div className="flex flex-col h-full">
+                <div className="py-4 px-3 border-b border-gray-300">
+                    <h2 className="text-violet-500 dark:text-violet-800 text-3xl leading-none font-semibold tracking-wider font-josefinregular">Cart Items</h2>
+                    <FaMinus onClick={onClose} className='w-5 h-5 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
+                </div>
+                <div className='p-2 min-w-[20em]'>
+                    {cartList && cartList.length > 0 ?
+                        <div className="overflow-x-auto">
+                            <table className="table-auto w-full">
+                                <thead className="text-xs font-semibold uppercase text-gray-400">
+                                    <tr>
+                                        <th className="p-2 whitespace-nowrap">
+                                            <div className="font-semibold text-left">Product</div>
+                                        </th>
+                                        <th className="p-2 whitespace-nowrap">
+                                            <div className="font-semibold text-left">Title</div>
+                                        </th>
+                                        <th className="p-2 whitespace-nowrap">
+                                            <div className="font-semibold text-left">Category</div>
+                                        </th>
+                                        <th className="p-2 whitespace-nowrap">
+                                            <div className="font-semibold text-left">Price</div>
+                                        </th>
+                                        <th className="p-2 whitespace-nowrap">
+                                            <div className="font-semibold text-center">Quantity</div>
+                                        </th>
+                                        <th className="p-2 whitespace-nowrap">
+                                            <div className="font-semibold text-center">Total</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody className="text-sm divide-y font-josefinregular divide-gray-100">
+                                    {cartList.map(item => (
+                                        <tr>
+                                            <td className="p-2 whitespace-nowrap">
+                                                <div className="flex items-center">
+                                                    <div className="w-14 h-14 flex-shrink-0 mr-2 sm:mr-3">
+                                                        <img className="w-full h-full rounded-md object-cover" src={fetchStoreImages(item.file)} />
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="p-2 whitespace-nowrap">
+                                                <div className="text-md font-medium text-gray-800">{item.title}</div>
+                                            </td>
+                                            <td className="p-2 whitespace-nowrap">
+                                                <div className="text-md text-center font-medium capitalize">{item.category}</div>
+                                            </td>
+                                            <td className="p-2 whitespace-nowrap">
+                                                <div className="text-md text-center font-medium">${item.price}</div>
+                                            </td>
+                                            <td className="p-2 whitespace-nowrap">
+                                                <div className="text-md text-center font-medium">{item.quantity}</div>
+                                            </td>
+                                            <td className="p-2 whitespace-nowrap">
+                                                <div className="text-md font-semibold text-center text-violet-500">${item.subtotal}</div>
+                                            </td>
+                                            <td className="p-2 whitespace-nowrap">
+                                                <MdOutlineRemoveShoppingCart className='h-5 w-5 text-rose-500' onClick={() => props.handleCartRemove(item)} />
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            <div className="p-2 flex font-josefinregular items-center justify-between">
+                                <div className="flex text-lg font-semibold text-center space-x-2 items-center">
+                                    <p>Total:</p>
+                                    <p className='text-violet-500'>${total}</p>
+                                </div>
+                                <button className="bg-gradient-to-r font-caviar font-semibold from-indigo-300 to-blue-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg text-black">Checkout</button>
+                            </div>
+                        </div>
+                        :
+                        <div className="font-josefinregular text-lg font-semibold p-2">Cart is empty!</div>
+                    }
                 </div>
             </div>
         </div>

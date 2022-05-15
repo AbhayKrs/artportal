@@ -69,7 +69,9 @@ const UserSchema = new Schema({
     explore_count: { type: Number, default: 0 },
     cart: [{
         id: { type: mongoose.Schema.Types.ObjectId, ref: 'Cart' },
+        file: { type: String, default: '' },
         title: { type: String, required: true },
+        category: { type: String, required: true },
         price: { type: Number, default: 0 },
         quantity: { type: Number, default: 0 },
         subtotal: { type: Number, default: 0 },
@@ -80,7 +82,7 @@ const UserSchema = new Schema({
                 icon: { type: String, default: '' },
                 category: { type: String, default: '' }
             }
-        },
+        }
     }],
     cart_count: { type: Number, default: 0 },
     store: [{

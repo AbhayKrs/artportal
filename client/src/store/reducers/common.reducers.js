@@ -118,12 +118,6 @@ export const commonReducer = (state = initialState, { type, payload }) => {
             console.log('activeDialog', activeDialogName)
             return { ...state, [`open${activeDialogName}`]: payload, activeDialogName: '', dialogTitle: '', dialogData: '' };
         }
-        case HANDLE_CART_OPEN: {
-            return { ...state, cartOpen: true }
-        }
-        case HANDLE_CART_CLOSE: {
-            return { ...state, cartOpen: false }
-        }
         case FETCH_AVATARLIST: {
             console.log('FETCH_AVATARLIST', payload);
             const avatarList = [...payload];

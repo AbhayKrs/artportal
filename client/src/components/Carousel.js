@@ -8,18 +8,18 @@ export const ExploreShowCarousel = (props) => {
   return (
     <div className="flex relative lg:col-span-7 w-full justify-center bg-gray-300 dark:bg-[#101010] ">
       <div className="flex flex-col m-3 space-y-3 w-full justify-center">
-        <div className='flex max-h-[44rem] w-fit self-center items-center'>
+        <div className='flex max-h-[44rem]  w-fit self-center items-center place-content-center'>
           {props.prevTrue ? <button onClick={props.prev} aria-label="slide backward" className="absolute z-30 ml-3 left-0 cursor-pointer">
             <FaChevronLeft className='text-5xl text-neutral-800 dark:text-gray-300' />
           </button> : ''}
-          <img src={`${fetchExploreImages(props.currentImage)}`} alt="black chair and white table" className="h-full object-cover object-center rounded-lg md:max-h-screen" />
+          <img src={`${fetchExploreImages(props.currentImage)}`} className="h-full object-cover object-center rounded-lg md:max-h-screen max-w-[92%]" />
           {props.nextTrue ? <button onClick={props.next} aria-label="slide forward" className="absolute mr-3 z-30 right-0">
             <FaChevronRight className='text-5xl text-neutral-800 dark:text-gray-300' />
           </button> : ''}
         </div>
         <div className='flex space-x-3 justify-center'>
           {props.secondaryImages.map((image, index) => (
-            <img key={index} src={`${fetchExploreImages(image)}`} alt="black chair and white table" className="h-60 w-auto max-w-xs object-cover object-center rounded-lg" />
+            <img key={index} src={`${fetchExploreImages(image)}`} className="h-60 w-auto max-w-xs object-cover object-center rounded-lg" />
           ))}
         </div>
       </div>
@@ -86,29 +86,25 @@ export const StoreMultiCarousel = (props) => {
       <div className="flex justify-between absolute top left w-full h-full">
         <button
           onClick={() => movePrev()}
-          className="hover:bg-blue-900/75 text-white w-10 h-full text-center opacity-75 hover:opacity-100 disabled:opacity-25 disabled:cursor-not-allowed z-10 p-0 m-0 transition-all ease-in-out duration-300"
+          className="hover:bg-violet-900/75 rounded-r-md text-white dark:text-gray-800 w-10 h-full text-center opacity-75 hover:opacity-100 disabled:opacity-25 disabled:cursor-not-allowed z-10 p-0 m-0 transition-all ease-in-out duration-300"
         >
           <GoChevronLeft className='h-12 w-20 -ml-5' />
         </button>
         <button
           onClick={() => moveNext()}
-          className="hover:bg-blue-900/75 text-white w-10 h-full text-center opacity-75 hover:opacity-100 disabled:opacity-25 disabled:cursor-not-allowed z-10 p-0 m-0 transition-all ease-in-out duration-300"
+          className="hover:bg-violet-900/75 rounded-l-md text-white dark:text-gray-800 w-10 h-full text-center opacity-75 hover:opacity-100 disabled:opacity-25 disabled:cursor-not-allowed z-10 p-0 m-0 transition-all ease-in-out duration-300"
         >
           <GoChevronRight className='h-12 w-20 -ml-5' />
         </button>
       </div>
-      <div ref={carousel} className="carousel-container relative flex gap-4 overflow-hidden scroll-smooth snap-x snap-mandatory touch-pan-x z-0">
+      <div ref={carousel} className="carousel-container relative flex gap-3 overflow-hidden scroll-smooth snap-x snap-mandatory touch-pan-x z-0 mx-14">
         {props.data.map((item, index) => {
           return (
-            <div key={index} className="carousel-item rounded text-center relative w-72 h-72 snap-start">
+            <div key={index} className="carousel-item rounded text-center relative w-56 h-56 snap-start">
               <div className='h-full w-full aspect-square block bg-origin-padding bg-left-top bg-cover bg-no-repeat z-0'>
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full aspect-square rounded"
-                />
-                <div className="h-full w-full aspect-square block absolute top-0 left-0 transition-opacity duration-300 opacity-0 hover:opacity-75 bg-violet-500/75 z-10">
-                  <h3 className="absolute font-caviar bottom-0 text-white py-6 px-3 mx-auto text-xl">
+                <img src={item.image} alt={item.title} className="w-full aspect-square rounded" />
+                <div className="h-full w-full aspect-square block absolute top-0 left-0 transition-opacity duration-300 opacity-0 hover:opacity-75 bg-violet-500/75 z-10 rounded">
+                  <h3 className="absolute font-caviar font-semibold bottom-0 text-white py-6 px-3 mx-auto text-xl">
                     {item.title}
                   </h3>
                 </div>

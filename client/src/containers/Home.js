@@ -8,6 +8,7 @@ import { MultipleCarousel, HomeMultiCarousel } from '../components/Carousel';
 
 const Home = (props) => {
     useEffect(() => {
+        window.scrollTo(0, 0)
         props.fetchExploreList();
         props.getTags();
     }, [])

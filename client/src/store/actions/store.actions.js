@@ -1,4 +1,5 @@
-import axios from 'axios';
+import { storeListAPI, storeItemAPI, categorizedStoreListAPI, storeUploadAPI } from '../../api';
+
 import {
     FETCH_STORELIST,
     FETCH_STOREITEM,
@@ -11,43 +12,37 @@ import {
 } from '../reducers/store.reducers';
 
 export const fetchStoreList = () => async (dispatch, getState) => {
-    console.log('fetchStoreList invoked');
-    try {
-        const storeList = await axios.get('http://localhost:5000/api/store');
-        console.log('storeList', storeList);
-        await dispatch({ type: FETCH_STORELIST, payload: storeList.data });
-    } catch (err) {
+    await storeListAPI().then(res => {
+        dispatch({ type: FETCH_STORELIST, payload: res.data });
+    }).catch(err => {
         console.log('---error fetchStoreList', err);
-    }
+    })
 };
 
-export const fetchStoreItem = (itemID) => async (dispatch, getState) => {
-    try {
-        const storeItem = await axios.get(`http://localhost:5000/api/store/${itemID}`);
-        await dispatch({ type: FETCH_STOREITEM, payload: storeItem.data });
-    } catch (err) {
-        console.log('---error fetchExplore', err);
-    }
-}
+export const fetchStoreItem = (storeID) => async (dispatch, getState) => {
+    await storeItemAPI(storeID).then(res => {
+        dispatch({ type: FETCH_STOREITEM, payload: res.data })
+    }).catch(err => {
+        console.log('---error fetchStoreItem', err);
+    })
+};
 
-export const handleStoreUpload = (itemData) => async (dispatch, getState) => {
-    console.log('handleStoreUpload invoked', itemData);
-    try {
-        await axios({
-            url: 'http://localhost:5000/api/store/new',
-            method: 'POST',
-            headers: { 'Content-Type': 'multipart/form-data' },
-            data: itemData
-        }).then(async res => {
-            dispatch({ type: HANDLE_STORE_UPLOAD, payload: res.data });
-        }).catch(err => {
-            if (err.response) {
-                console.log('Upload fail:: ', err.response.status);
-            }
-        })
-    } catch (err) {
-        console.log(err);
-    }
+export const fetchCategorizedStoreList = (category) => async (dispatch, getState) => {
+    await categorizedStoreListAPI(category).then(res => {
+        dispatch({ type: FETCH_STORELIST, payload: res.data });
+    }).catch(err => {
+        console.log('---error fetchCategorizedStoreList', err);
+    })
+};
+
+
+
+export const handleStoreUpload = (storeData) => async (dispatch, getState) => {
+    await storeUploadAPI(storeData).then(res => {
+        dispatch({ type: HANDLE_STORE_UPLOAD, payload: res.data });
+    }).catch(err => {
+        console.log('---error handleStoreUpload', err);
+    })
 }
 
 // export const fetchCartList = () => async (dispatch, getState) => {

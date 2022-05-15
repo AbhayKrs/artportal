@@ -14,7 +14,6 @@ import { switchTheme, handleHeaderDialogOpen, handleHeaderDialogClose, handleSig
 import { fetchUserImages } from '../api';
 
 const Header = (props) => {
-    const [myTheme, toggleTheme] = useState('');
     const [tokenOpen, setTokenOpen] = useState(false);
 
     const logout = () => props.handleSignOut();
@@ -38,11 +37,11 @@ const Header = (props) => {
                         </Link>
                         {props.common.isAuthenticated ?
                             <div className='relative group group-hover:block ml-1'>
-                                <div className='flex relative w-10 h-10 justify-center items-center text-xl group-hover:p-1 group-hover:scale-125 group-hover:rounded-b-lg group-hover:block group-hover:bg-slate-300 dark:group-hover:bg-neutral-800 group-hover:rounded-full'>
-                                    <img alt='user' src={fetchUserImages(props.user.avatar.icon)} />
+                                <div className='flex relative w-10 h-10 justify-center items-center text-xl group-hover:p-1 group-hover:scale-125 group-hover:rounded-b-lg group-hover:block group-hover:bg-slate-300 dark:group-hover:bg-[#313135] group-hover:rounded-full'>
+                                    <img alt='user' src={fetchUserImages(props.user.avatar.icon)} className='mt-0.5' />
                                 </div>
-                                <div className='container hidden fixed group-hover:block top-12 w-52' style={{ right: '0.2rem' }}>
-                                    <div className='grid grid-cols-1 space-y-2 bg-slate-300 dark:bg-neutral-800 text-white rounded-tl-lg rounded-br-lg p-3 rounded-bl-lg group-hover:block'>
+                                <div className='container hidden fixed group-hover:block top-[3.25rem] w-52' style={{ right: '0.725rem' }}>
+                                    <div className='grid grid-cols-1 space-y-2 bg-slate-300 dark:bg-[#313135] text-white rounded-tl-lg rounded-br-lg p-3 rounded-bl-lg group-hover:block'>
                                         <div className='flex place-content-between'>
                                             <div className='block text-left'>
                                                 <p className='text-gray-900 dark:text-gray-300 text-md font-caviar font-semibold'>{props.user.name}</p>
@@ -67,7 +66,7 @@ const Header = (props) => {
                                             </div>
                                         </div>
                                         <div className='flex flex-col'>
-                                            <Link to='/' className='flex items-center text-gray-900 dark:text-violet-700 text-base font-caviar font-semibold'><MdSettings className='mr-1.5 text-lg' /> Settings</Link>
+                                            <Link to='/' className='flex items-center text-gray-900 dark:text-violet-500 text-base font-caviar font-semibold'><MdSettings className='mr-1.5 text-lg' /> Settings</Link>
                                         </div>
                                         <div className='flex flex-col'>
                                             <button onClick={logout} className="bg-gray-200 rounded-md font-caviar font-bold text-gray-900 text-center uppercase px-2 py-1 transition duration-300 ease-in-out hover:bg-gray-100">

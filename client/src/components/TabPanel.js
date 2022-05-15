@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import ImageCard from './ImageCard';
 import { AwardConfirmModal } from './SubModal';
 import { MdUpload, MdClose } from 'react-icons/md';
@@ -117,12 +117,15 @@ export const AwardTabPanel = (props) => {
 
 export const FilterPanel = (props) => {
     let navigate = useNavigate();
+
+    const [exploreSearch, setExploreSearch] = useState('');
     const [activeFilter, setActiveFilter] = useState(-1);
-    const [activePeriod, setActivePeriod] = useState('month');
+    const [activePeriod, setActivePeriod] = useState('');
+    const [activePeriodLabel, setActivePeriodLabel] = useState('Select a time period');
 
     const filters = ['trending', 'popular', 'new', 'rising', 'most discussed'];
 
-    const popularOptions = [
+    const periodOptions = [
         { id: 1, label: 'Past hour', value: 'hour' },
         { id: 2, label: 'Past 24 hours', value: 'day' },
         { id: 3, label: 'Past week', value: 'week' },
@@ -131,22 +134,70 @@ export const FilterPanel = (props) => {
         { id: 6, label: 'All time', value: 'all time' }
     ]
 
-    const selectPopular = (popular) => {
+    const handlePeriodChange = (popular) => {
         setActivePeriod(popular.value)
     }
 
     useEffect(() => {
-        props.filterExploreList(filters[activeFilter], activePeriod);
+        const params = new Proxy(new URLSearchParams(window.location.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+        });
+        if (params.filter || params.period) {
+            setActiveFilter(filters.indexOf(params.filter));
+            params.period ? setActivePeriod(params.period) : setActivePeriod('');
+        }
+    }, []);
+
+    useEffect(() => {
+        let label = activePeriod && periodOptions.find(item => item.value === activePeriod) ?
+            periodOptions.find(item => item.value === activePeriod).label
+            :
+            'Select a time period'
+        setActivePeriodLabel(label);
+
+        if (activeFilter < 0) {
+            props.fetchExploreList();
+            navigate('/explore');
+        } else {
+            if (activeFilter === 0 || activeFilter === 2 || activeFilter === 3) {
+                navigate(`?filter=${filters[activeFilter].replace(/\s+/g, '+')}`);
+                props.filterExploreList(filters[activeFilter].replace(/\s+/g, '+'));
+            } else {
+                setActivePeriod('month')
+                navigate(`?filter=${filters[activeFilter].replace(/\s+/g, '+')}&period=${activePeriod}`);
+                props.filterExploreList(filters[activeFilter].replace(/\s+/g, '+'), activePeriod);
+            }
+        }
     }, [activeFilter, activePeriod])
+
+    const selectFilter = (index) => {
+        if (activeFilter === index) {
+            setActiveFilter(-1);
+            setActivePeriod('')
+        } else {
+            setActiveFilter(index)
+        }
+    }
+
+    const handleExploreSearch = () => {
+        if (activeFilter < 0) {
+            navigate(`/explore/search?query=${exploreSearch}`);
+        } else if (activeFilter === 0 || activeFilter === 2 || activeFilter === 3) {
+            navigate(`/explore/search?query=${exploreSearch}&filter=${filters[activeFilter].replace(/\s+/g, '+')}`);
+
+        } else {
+            navigate(`/explore/search?query=${exploreSearch}&filter=${filters[activeFilter].replace(/\s+/g, '+')}&period=${activePeriod}`);
+        }
+    }
 
     return (
         <div className='flex w-full items-center bg-slate-100/75 dark:bg-darkNavBg/75 p-2 sticky top-14 z-20'>
             <div className='flex overflow-hidden'>
                 <ul id='tabSlider' className="flex space-x-2 items-center">
                     {filters.map((filter, index) => {
-                        return <li key={index} onClick={() => setActiveFilter(index)} className={index === activeFilter ? "font-caviar text-sm font-bold tracking-wider text-gray-700 bg-violet-300 rounded-lg h-fit shadow" : "font-caviar text-sm font-bold tracking-wider text-gray-700 dark:text-gray-400 bg-slate-200 dark:bg-neutral-900 flex items-center shadow cursor-pointer rounded-lg h-fit"}>
+                        return <li key={index} onClick={() => selectFilter(index)} className={index === activeFilter ? "font-caviar text-sm font-bold tracking-wider text-gray-700 bg-violet-300 rounded-lg h-fit shadow" : "font-caviar text-sm font-bold tracking-wider text-gray-700 dark:text-gray-400 bg-slate-200 dark:bg-neutral-900 flex items-center shadow cursor-pointer rounded-lg h-fit"}>
                             <div className="flex items-center">
-                                <span className="py-2 px-3">{filter}</span>
+                                <span className="py-2 px-3 capitalize">{filter}</span>
                             </div>
                         </li>
                     })}
@@ -154,10 +205,114 @@ export const FilterPanel = (props) => {
             </div>
             <span className='text-gray-600 dark:text-gray-400 mx-2'>&#9679;</span>
             <div className="flex items-center cursor-pointer space-x-2">
-                <Dropdown left default='Most Popular' options={popularOptions} onSelect={selectPopular} />
+                <Dropdown left selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
             </div>
-            <SearchBar />
-            <button type="button" className='btn ml-2 bg-violet-700 drop-shadow-xl p-2.5 items-center shadow-lg rounded-xl' onClick={() => navigate(`/explore/new`)}>
+            <SearchBar searchValue={exploreSearch} setSearchValue={setExploreSearch} handleSubmit={handleExploreSearch} />
+            <button type="button" className='btn ml-2 bg-violet-700 drop-shadow-xl p-2.5 items-center shadow-lg rounded-xl' onClick={() => navigate(`/explore/new `)}>
+                <MdUpload className='h-6 w-full text-gray-200' />
+            </button>
+        </div>
+    )
+}
+
+export const SearchFilterPanel = (props) => {
+    let navigate = useNavigate();
+
+    const [exploreSearch, setExploreSearch] = useState('');
+    const [activeFilter, setActiveFilter] = useState(-1);
+    const [activePeriod, setActivePeriod] = useState('');
+    const [activePeriodLabel, setActivePeriodLabel] = useState('Select a time period');
+
+    const filters = ['trending', 'popular', 'new', 'rising', 'most discussed'];
+
+    const periodOptions = [
+        { id: 1, label: 'Past hour', value: 'hour' },
+        { id: 2, label: 'Past 24 hours', value: 'day' },
+        { id: 3, label: 'Past week', value: 'week' },
+        { id: 4, label: 'Past month', value: 'month' },
+        { id: 5, label: 'Past year', value: 'year' },
+        { id: 6, label: 'All time', value: 'all time' }
+    ]
+
+    const handlePeriodChange = (popular) => {
+        setActivePeriod(popular.value)
+    }
+
+    useEffect(() => {
+        const params = new Proxy(new URLSearchParams(window.location.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+        });
+        setExploreSearch(params.query);
+        if (params.filter || params.period) {
+            params.filter && setActiveFilter(filters.indexOf(params.filter));
+            params.period ? setActivePeriod(params.period) : setActivePeriod('');
+        }
+    }, []);
+
+    useEffect(() => {
+        let label = activePeriod && periodOptions.find(item => item.value === activePeriod) ?
+            periodOptions.find(item => item.value === activePeriod).label
+            :
+            'Select a time period'
+        setActivePeriodLabel(label);
+        if (exploreSearch.length === 0) {
+            props.fetchExploreList();
+            navigate('/explore');
+        }
+        if (activeFilter < 0) {
+            props.searchExploreList(exploreSearch);
+            navigate(`/explore/search?query=${exploreSearch}`);
+        } else {
+            if (activeFilter === 0 || activeFilter === 2 || activeFilter === 3) {
+                navigate(`/explore/search?query=${exploreSearch}&filter=${filters[activeFilter].replace(/\s+/g, '+')}`);
+                props.searchExploreList(exploreSearch, filters[activeFilter].replace(/\s+/g, '+'));
+            } else {
+                setActivePeriod('month')
+                navigate(`/explore/search?query=${exploreSearch}&filter=${filters[activeFilter].replace(/\s+/g, '+')}&period=${activePeriod}`);
+                props.searchExploreList(exploreSearch, filters[activeFilter].replace(/\s+/g, '+'), activePeriod);
+            }
+        }
+    }, [exploreSearch, activeFilter, activePeriod])
+
+    const selectFilter = (index) => {
+        if (activeFilter === index) {
+            setActiveFilter(-1);
+            setActivePeriod('')
+        } else {
+            setActiveFilter(index)
+        }
+    }
+
+    const handleExploreSearch = () => {
+        if (activeFilter < 0) {
+            navigate(`/explore/search?query=${exploreSearch}`);
+        } else if (activeFilter === 0 || activeFilter === 2 || activeFilter === 3) {
+            navigate(`/explore/search?query=${exploreSearch}&filter=${filters[activeFilter].replace(/\s+/g, '+')}`);
+
+        } else {
+            navigate(`/explore/search?query=${exploreSearch}&filter=${filters[activeFilter].replace(/\s+/g, '+')}&period=${activePeriod}`);
+        }
+    }
+
+    return (
+        <div className='flex w-full items-center bg-slate-100/75 dark:bg-darkNavBg/75 p-2 sticky top-14 z-20'>
+            <div className='flex overflow-hidden'>
+                <ul id='tabSlider' className="flex space-x-2 items-center">
+                    {filters.map((filter, index) => {
+                        return <li key={index} onClick={() => selectFilter(index)} className={index === activeFilter ? "font-caviar text-sm font-bold tracking-wider text-gray-700 bg-violet-300 rounded-lg h-fit shadow" : "font-caviar text-sm font-bold tracking-wider text-gray-700 dark:text-gray-400 bg-slate-200 dark:bg-neutral-900 flex items-center shadow cursor-pointer rounded-lg h-fit"}>
+                            <div className="flex items-center">
+                                <span className="py-2 px-3 capitalize">{filter}</span>
+                            </div>
+                        </li>
+                    })}
+                </ul>
+            </div>
+            <span className='text-gray-600 dark:text-gray-400 mx-2'>&#9679;</span>
+            <div className="flex items-center cursor-pointer space-x-2">
+                <Dropdown left selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
+            </div>
+            <SearchBar searchValue={exploreSearch} setSearchValue={setExploreSearch} handleSubmit={handleExploreSearch} />
+            <button type="button" className='btn ml-2 bg-violet-700 drop-shadow-xl p-2.5 items-center shadow-lg rounded-xl' onClick={() => navigate(`/explore/new `)}>
                 <MdUpload className='h-6 w-full text-gray-200' />
             </button>
         </div>

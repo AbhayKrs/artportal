@@ -55,12 +55,8 @@ const upload = multer({ storage });
 router.get('/', async (req, res) => {
     try {
         let explore = [];
-        if (!explore) {
-            return res.status(400).send({ msg: 'Explores not found' });
-        }
-        const filter = req.query.t;
-        const period = req.query.p;
-        console.log('filter', filter, period);
+        const filter = req.query.filter;
+        const period = req.query.period;
         if (!filter && !period) {
             explore = await Explore.find({});
         } else {
@@ -81,7 +77,12 @@ router.get('/', async (req, res) => {
             switch (filter) {
                 case 'trending': { explore = exploreData; break; }
                 case 'popular': {
-                    const filteredByPeriod = exploreData.filter(item => (Date.now() - item.createdAt) <= getPeriod(period));
+                    let filteredByPeriod = [];
+                    if (period === 'all time') {
+                        filteredByPeriod = exploreData;
+                    } else {
+                        filteredByPeriod = exploreData.filter(item => (Date.now() - item.createdAt) <= getPeriod(period));
+                    }
                     explore = filteredByPeriod.sort((item1, item2) => item2.likes.length - item1.likes.length)
                     break;
                 }
@@ -94,9 +95,103 @@ router.get('/', async (req, res) => {
                     explore = explore30d.sort((item1, item2) => item2.likes.length - item1.likes.length)
                     break;
                 }
-                case 'most discussed': { explore = exploreData; break; }
+                case 'most discussed': {
+                    let filteredByPeriod = [];
+                    if (period === 'all time') {
+                        filteredByPeriod = exploreData;
+                    } else {
+                        filteredByPeriod = exploreData.filter(item => (Date.now() - item.createdAt) <= getPeriod(period));
+                    }
+                    explore = filteredByPeriod.sort((item1, item2) => item2.comments.length - item1.comments.length)
+                    break;
+                }
                 default: break;
             }
+        }
+        res.json(explore);
+    } catch (err) {
+        // console.error(err.message);
+        res.status(500).send('Unable to fetch explore');
+    }
+});
+
+// @route       GET api/explore/search
+// @desc        Filter explore based on search query
+// @access      Public
+router.get('/search', async (req, res) => {
+    try {
+        let exploreSearch = [];
+        const query = req.query.query;
+        const filter = req.query.filter;
+        const period = req.query.period;
+        if (!filter && !period) {
+            exploreData = await Explore.find({});
+            exploreSearch = exploreData.filter(item => (item.title.indexOf(query) != -1) || (item.tags.find(a => a.includes(query))))
+        } else {
+            const exploreData = await Explore.find({});
+            exploreSearch = exploreData.filter(item => (item.title.indexOf(query) != -1) || (item.tags.find(a => a.includes(query))))
+            const getPeriod = (label) => {
+                let value = 0;
+                switch (label) {
+                    case 'hour': { value = 3600000; break; }
+                    case 'day': { value = 86400000; break; }
+                    case 'week': { value = 604800000; break; }
+                    case 'month': { value = 2592000000; break; }
+                    case 'year': { value = 31556952000; break; }
+                    default: break;
+                }
+                return value;
+            }
+
+            switch (filter) {
+                case 'trending': { exploreSearch = exploreSearch; break; }
+                case 'popular': {
+                    let filteredByPeriod = [];
+                    if (period === 'all time') {
+                        filteredByPeriod = exploreSearch;
+                    } else {
+                        filteredByPeriod = exploreSearch.filter(item => (Date.now() - item.createdAt) <= getPeriod(period));
+                    }
+                    exploreSearch = filteredByPeriod.sort((item1, item2) => item2.likes.length - item1.likes.length)
+                    break;
+                }
+                case 'new': {
+                    exploreSearch = exploreSearch.sort((item1, item2) => item2.createdAt - item1.createdAt)
+                    break;
+                }
+                case 'rising': {
+                    const explore30d = exploreSearch.filter(item => (Date.now() - item.createdAt) <= 2592000000);
+                    exploreSearch = explore30d.sort((item1, item2) => item2.likes.length - item1.likes.length)
+                    break;
+                }
+                case 'most discussed': {
+                    let filteredByPeriod = [];
+                    if (period === 'all time') {
+                        filteredByPeriod = exploreSearch;
+                    } else {
+                        filteredByPeriod = exploreSearch.filter(item => (Date.now() - item.createdAt) <= getPeriod(period));
+                    }
+                    exploreSearch = filteredByPeriod.sort((item1, item2) => item2.comments.length - item1.comments.length)
+                    break;
+                }
+                default: break;
+            }
+        }
+        res.json(exploreSearch);
+    } catch (err) {
+        // console.error(err.message);
+        res.status(500).send('Unable to fetch explore');
+    }
+});
+
+// @route       Get api/explore/:id
+// @desc        Fetch explore by ID along with next and prev explore
+// @access      Public
+router.get('/:id', async (req, res) => {
+    try {
+        const explore = await Explore.findById(req.params.id);
+        if (!explore) {
+            return res.status(400).send({ msg: 'Explore not found' });
         }
         res.json(explore);
     } catch (err) {

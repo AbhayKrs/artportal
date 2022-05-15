@@ -5,11 +5,13 @@ import { useNavigate } from "react-router-dom";
 
 import { setError, getTags } from '../store/actions/common.actions';
 import { handleUploadExplore } from '../store/actions/upload.actions';
+import { handleStoreUpload } from '../store/actions/store.actions';
 
 import { MdClose } from 'react-icons/md';
 import { BsHash } from 'react-icons/bs';
 
 import DragDrop from '../components/DragDrop';
+import Dropdown from '../components/Dropdown';
 
 const ExploreUpload = (props) => {
     let navigate = useNavigate();
@@ -22,12 +24,9 @@ const ExploreUpload = (props) => {
     const [primaryFile, setPrimaryFile] = useState('');
 
     useEffect(() => {
+        window.scrollTo(0, 0)
         props.getTags();
     }, [])
-
-    useEffect(() => {
-        console.log('files', exploreFiles);
-    }, [exploreFiles])
 
     const onImageChange = (ev) => {
         if (ev.target.files.length > 3 || exploreFiles.length > 2) {
@@ -228,8 +227,178 @@ const ExploreUpload = (props) => {
 }
 
 const StoreUpload = (props) => {
+    let navigate = useNavigate();
+
+    const [storeFiles, setStoreFiles] = useState([]);
+    const [storeTitle, setStoreTitle] = useState('');
+    const [storeDesc, setStoreDesc] = useState('');
+    const [storePrice, setStorePrice] = useState(0);
+    const [storeCategory, setStoreCategory] = useState('');
+    const [primaryFile, setPrimaryFile] = useState('');
+    const [activeCategoryLabel, setActiveCategoryLabel] = useState('Pick a category');
+
+    const categoryOptions = [
+        { id: 1, label: 'Prints', value: 'prints' },
+        { id: 2, label: 'Clothing', value: 'clothes' },
+        { id: 3, label: 'Frames', value: 'frames' }
+    ]
+
+    useEffect(() => {
+        window.scrollTo(0, 0)
+        props.getTags();
+    }, [])
+
+    const onImageChange = (ev) => {
+        if (ev.target.files.length > 3 || storeFiles.length > 2) {
+            const error = {
+                open: true,
+                message: 'Only a maximum of 3 files may be selected.',
+                type: 'snackbar'
+            }
+            props.setError(error);
+        }
+        else {
+            Object.keys(ev.target.files).map((key, index) => {
+                setStoreFiles(arr => [...arr, ev.target.files[key]])
+            })
+            setPrimaryFile(ev.target.files[0]);
+        }
+    }
+
+    const dropHandler = (ev) => {
+        ev.nativeEvent.preventDefault();
+        if (ev.dataTransfer.files.length > 3 || storeFiles.length > 2) {
+            const error = {
+                open: true,
+                message: 'Only a maximum of 3 files may be selected.',
+                type: 'snackbar'
+            }
+            props.setError(error);
+        } else {
+            Object.keys(ev.dataTransfer.files).map((key, index) => {
+                setStoreFiles(arr => [...arr, ev.dataTransfer.files[key]])
+            })
+            setPrimaryFile(ev.dataTransfer.files[0]);
+        }
+        ev.preventDefault();
+    }
+
+    const dragOverHandler = (ev) => {
+        ev.preventDefault();
+    }
+
+    const handleCategoryChange = (category) => {
+        setStoreCategory(category.value);
+        setActiveCategoryLabel(category.label)
+    }
+
+    const handleUpload = () => {
+        if (storeFiles.length === 0 || storeTitle.length === 0 || storeDesc.length === 0) {
+            const errorData = {
+                open: true,
+                message: 'Please fill all the required fields!',
+                type: 'error'
+            }
+            props.setError(errorData)
+            return;
+        }
+
+        const userID = props.common.user.id;
+        const formData = new FormData();
+
+        storeFiles.map(file => formData.append('files[]', file));
+        formData.append('title', storeTitle);
+        formData.append('description', storeDesc);
+        formData.append('price', storePrice);
+        formData.append('category', storeCategory);
+        formData.append('userID', userID);
+
+        props.handleStoreUpload(formData).then(() => {
+            navigate(`/store`)
+            const errorData = {
+                open: true,
+                message: 'Successfully listed product!',
+                type: 'success'
+            }
+            props.setError(errorData);
+        }).catch(err => {
+            console.log('err', err);
+        });
+    }
+
     return (
-        <div>test store show</div>
+        <div className="bg-gray-200 dark:bg-darkNavBg p-5">
+            <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-5">
+                <span className='font-caviar text-3xl text-gray-700 dark:text-gray-300'>List Product to Store</span>
+                <div className='flex flex-row mt-3 space-x-4'>
+                    <div className='w-full'>
+                        <span className='font-josefinlight font-semibold text-gray-700 dark:text-gray-300'>Files<span className='font-josefinlight text-rose-400 text-md'>*</span></span>
+                        <div className="flex flex-col space-y-3">
+                            <div className="flex flex-col justify-center items-center border-dashed space-y-2 rounded-lg border-2 border-gray-400 py-8" onDrop={(ev) => dropHandler(ev)} onDragOver={(ev) => dragOverHandler(ev)} >
+                                <p className="font-semibold text-gray-700 dark:text-gray-300 flex flex-wrap justify-center">Drag files</p>
+                                <p className="font-semibold text-gray-700 dark:text-gray-300">OR</p>
+                                <label for="file-upload" className='bg-violet-500 text-white font-caviar font-semibold py-1 px-2 rounded'>
+                                    Select files
+                                </label>
+                                <input id="file-upload" className='hidden' type="file" multiple onChange={onImageChange} />
+                            </div>
+                            <div className="flex flex-col rounded-lg bg-slate-100 dark:bg-neutral-700 shadow items-center py-5 px-1 w-full">
+                                <h1 className="font-bold sm:text-lg text-gray-800 dark:text-gray-400">Upload Files</h1>
+                                <div className="h-full w-full text-center flex flex-col items-center justify-center items-center">
+                                    {storeFiles.length === 0 ?
+                                        <div>
+                                            <img className="mx-auto w-32" src="https://user-images.githubusercontent.com/507615/54591670-ac0a0180-4a65-11e9-846c-e55ffce0fe7b.png" alt="no data" />
+                                            <span className="text-small dark:text-gray-500">No files selected</span>
+                                            <div className='font-josefinlight text-rose-400 font-semibold text-sm'>You may select a maximum of 3 files.</div>
+                                        </div>
+                                        :
+                                        <div className=''>
+                                            <DragDrop
+                                                selectedImages={storeFiles.map((store, index) => {
+                                                    return {
+                                                        id: index.toString(),
+                                                        content: store
+                                                    }
+                                                })}
+                                                setReorderedFiles={setStoreFiles}
+                                            />
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='w-full space-y-2'>
+                        <div className='flex flex-col'>
+                            <span className='font-josefinlight font-semibold text-gray-700 dark:text-gray-300'>Title<span className='font-josefinlight text-rose-400 text-md'>*</span></span>
+                            <input type="text" value={storeTitle} onChange={(ev) => setStoreTitle(ev.target.value)} className="py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 focus:outline-none rounded-md w-full" placeholder='Title' />
+                        </div>
+                        <div className='flex flex-col'>
+                            <span className='font-josefinlight font-semibold text-gray-700 dark:text-gray-300'>Description<span className='font-josefinlight text-rose-400 text-md'>*</span></span>
+                            <textarea rows='3' value={storeDesc} onChange={(ev) => setStoreDesc(ev.target.value)} className="scrollbar py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 resize-none focus:outline-none rounded-md w-full" placeholder='Description' />
+                        </div>
+                        <div className='flex flex-col'>
+                            <span className='font-josefinlight font-semibold text-gray-700 dark:text-gray-300'>Price<span className='font-josefinlight text-rose-400 text-md'>*</span></span>
+                            <span className="absolute ml-2 mt-8 text-gray-700 dark:text-gray-300">$</span>
+                            <input type='number' value={storePrice} onChange={(ev) => setStorePrice(ev.target.value)} className="scrollbar w-fit py-2 pl-6 pr-3 shadow text-md bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 focus:outline-none rounded-md" />
+                        </div>
+                        <div className='flex flex-col'>
+                            <span className='font-josefinlight font-semibold text-gray-700 dark:text-gray-300'>Category<span className='font-josefinlight text-rose-400 text-md'>*</span></span>
+                            <Dropdown left selectedPeriod={activeCategoryLabel} options={categoryOptions} onSelect={handleCategoryChange} />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="flex justify-end pt-5">
+                <button onClick={() => navigate(`/store`)} className="rounded-md px-3 py-1 bg-gray-300 focus:shadow-outline focus:outline-none">
+                    Cancel
+                </button>
+                <button onClick={handleUpload} className="ml-3 rounded-md px-3 py-1 bg-blue-700 hover:bg-blue-500 text-white focus:shadow-outline focus:outline-none">
+                    Apply
+                </button>
+            </div>
+        </div>
     )
 }
 
@@ -242,7 +411,8 @@ const mapStateToProps = (state, props) => ({
 const mapDispatchToProps = (dispatch) => bindActionCreators({
     setError,
     getTags,
-    handleUploadExplore
+    handleUploadExplore,
+    handleStoreUpload
 }, dispatch);
 
 export default {
