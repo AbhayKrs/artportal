@@ -81,9 +81,7 @@ router.post('/new', upload.any(), async (req, res) => {
         seller: {
             id: user.id,
             username: user.username,
-            avatar: user.avatar,
-            isSeller: true,
-            // seller_rating: req.body.user.rating
+            avatar: user.avatar
         },
         price: req.body.price,
         rating: req.body.rating,

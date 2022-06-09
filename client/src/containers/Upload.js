@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { useNavigate } from "react-router-dom";
 
+import randomSentence from 'random-sentence';
+
 import { setError, getTags } from '../store/actions/common.actions';
 import { handleUploadExplore } from '../store/actions/upload.actions';
 import { handleStoreUpload } from '../store/actions/store.actions';
@@ -26,6 +28,9 @@ const ExploreUpload = (props) => {
     useEffect(() => {
         window.scrollTo(0, 0)
         props.getTags();
+        setExploreTitle(randomSentence({ min: 2, max: 8 }))
+        setExploreDesc(randomSentence({ min: 5, max: 14 }))
+        setExploreTags(props.common.tags.sort(() => 0.5 - Math.random()).slice(0, 10))
     }, [])
 
     const onImageChange = (ev) => {
@@ -121,7 +126,7 @@ const ExploreUpload = (props) => {
     }
 
     return (
-        <div className="bg-gray-200 dark:bg-darkNavBg p-5">
+        <div className="main-container bg-gray-200 dark:bg-darkNavBg p-5">
             <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-5">
                 <span className='font-caviar text-3xl text-gray-700 dark:text-gray-300'>Upload</span>
                 <div className='mt-3 space-y-2'>
@@ -199,9 +204,9 @@ const ExploreUpload = (props) => {
                                 {exploreTags.length === 0 ? '' :
                                     <div id='tagmenu' className='flex flex-wrap justify-center space-x-1 p-2'>
                                         {exploreTags.map(tag => (
-                                            <div class="flex justify-center items-center m-1 font-medium py-1 px-2 rounded-full text-indigo-100 bg-violet-600 border border-violet-700 ">
-                                                <div class="text-xs font-normal leading-none max-w-full flex-initial">{tag}</div>
-                                                <div class="flex flex-auto flex-row-reverse">
+                                            <div className="flex justify-center items-center m-1 font-medium py-1 px-2 rounded-full text-indigo-100 bg-violet-500 border border-violet-700 ">
+                                                <div className="text-xs font-normal leading-none max-w-full flex-initial">{tag}</div>
+                                                <div className="flex flex-auto flex-row-reverse">
                                                     <MdClose className='feather feather-x cursor-pointer hover:text-indigo-400 rounded-full w-4 h-4 ml-1' />
                                                 </div>
                                             </div>
@@ -258,11 +263,36 @@ const StoreUpload = (props) => {
             props.setError(error);
         }
         else {
-            Object.keys(ev.target.files).map((key, index) => {
-                setStoreFiles(arr => [...arr, ev.target.files[key]])
-            })
-            setPrimaryFile(ev.target.files[0]);
+            const reader = new FileReader();
+            reader.readAsDataURL(ev.target.files[0]);
+            reader.onload = (ev) => {
+                const imgElement = document.createElement("img");
+                imgElement.src = ev.target.result;
+
+                imgElement.onload = function (e) {
+                    const canvas = document.createElement("canvas");
+                    const MAX_WIDTH = 300;
+
+                    const scaleSize = MAX_WIDTH / e.target.width;
+                    canvas.width = MAX_WIDTH;
+                    canvas.height = e.target.height * scaleSize;
+
+                    const ctx = canvas.getContext("2d");
+
+                    ctx.drawImage(e.target, 0, 0, canvas.width, canvas.height);
+
+                    const srcEncoded = ctx.canvas.toDataURL(e.target, "image/jpeg");
+
+                    // you can send srcEncoded to the server
+                    console.log('srcEncoded', srcEncoded);
+                    document.querySelector("#output").src = srcEncoded;
+                }
+            }
         }
+        Object.keys(ev.target.files).map((key, index) => {
+            setStoreFiles(arr => [...arr, ev.target.files[key]])
+        })
+        setPrimaryFile(ev.target.files[0]);
     }
 
     const dropHandler = (ev) => {
@@ -327,7 +357,7 @@ const StoreUpload = (props) => {
     }
 
     return (
-        <div className="bg-gray-200 dark:bg-darkNavBg p-5">
+        <div className="main-container bg-gray-200 dark:bg-darkNavBg p-5">
             <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-5">
                 <span className='font-caviar text-3xl text-gray-700 dark:text-gray-300'>List Product to Store</span>
                 <div className='flex flex-row mt-3 space-x-4'>
@@ -342,6 +372,7 @@ const StoreUpload = (props) => {
                                 </label>
                                 <input id="file-upload" className='hidden' type="file" multiple onChange={onImageChange} />
                             </div>
+                            <img id='output' />
                             <div className="flex flex-col rounded-lg bg-slate-100 dark:bg-neutral-700 shadow items-center py-5 px-1 w-full">
                                 <h1 className="font-bold sm:text-lg text-gray-800 dark:text-gray-400">Upload Files</h1>
                                 <div className="h-full w-full text-center flex flex-col items-center justify-center items-center">

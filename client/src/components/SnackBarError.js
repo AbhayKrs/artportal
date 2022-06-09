@@ -26,9 +26,9 @@ const SnackBarError = (props) => {
     return (
         <>
             {open ?
-                <div class="m-2 z-50 fixed bottom-0 inline-flex items-center bg-rose-700 text-gray-200 rounded-lg p-3 shadow text-md space-x-4">
+                <div className="m-2 z-50 fixed bottom-0 inline-flex items-center bg-rose-700 text-gray-200 rounded-lg p-3 shadow text-md space-x-4">
                     <MdError className='h-5 w-5' />
-                    <span class="inline-flex font-caviar font-bold">{props.error.message}</span>
+                    <span className="inline-flex font-caviar font-bold">{props.error.message}</span>
                     <IoCloseSharp onClick={closeSnackbar} className='h-5 w-5' />
                 </div>
                 :

@@ -32,7 +32,7 @@ const Dropdown = (props) => {
                 <div className={`absolute w-56 mt-2 ${props.right && `right-0`} ${props.left && `left-0`} origin-top-right bg-white dark:bg-neutral-900 divide-y divide-gray-100 rounded-md shadow-lg outline-none`} aria-labelledby="headlessui-menu-button-1" id="headlessui-menu-items-117" role="menu">
                     <div className="p-1 space-y-0.5">
                         {props.options.map((option, index) => (
-                            <div onClick={() => selectItem(option)} tabindex={index} className={`text-gray-700 dark:text-gray-400 flex justify-between w-full px-4 py-2 text-sm leading-5 text-left ${props.selectedPeriod === option.label && `bg-gray-200 dark:bg-neutral-800`} hover:bg-gray-100 dark:hover:bg-neutral-800/25 rounded`} role="option">{option.label}</div>
+                            <div key={index} onClick={() => selectItem(option)} tabIndex={index} className={`text-gray-700 dark:text-gray-400 flex justify-between w-full px-4 py-2 text-sm leading-5 text-left ${props.selectedPeriod === option.label && `bg-gray-200 dark:bg-neutral-800`} hover:bg-gray-100 dark:hover:bg-neutral-800/25 rounded`} role="option">{option.label}</div>
                         ))}
                     </div>
                 </div>

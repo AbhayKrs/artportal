@@ -21,7 +21,7 @@ const ExploreSearch = (props) => {
     }, []);
 
     return (
-        <div className='bg-gray-200 dark:bg-darkNavBg'>
+        <div className='main-container bg-gray-200 dark:bg-darkNavBg'>
             <SearchFilterPanel fetchExploreList={props.fetchExploreList} filterExploreList={props.filterExploreList} searchExploreList={props.searchExploreList} />
             <div className='flex flex-row'>
                 <Masonry>

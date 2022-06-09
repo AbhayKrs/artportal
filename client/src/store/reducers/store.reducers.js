@@ -1,3 +1,4 @@
+export const FETCH_SELLERLIST = 'STORE_FETCH_SELLERLIST';
 export const FETCH_STORELIST = 'STORE_FETCH_STORELIST';
 export const HANDLE_STORE_UPLOAD = 'STORE_HANDLE_STORE_UPLOAD';
 export const FETCH_STOREITEM = 'STORE_FETCH_STOREITEM';
@@ -14,8 +15,9 @@ export const initialState = {
     title: '',
     description: '',
     uploadStatus: '',
+    sellerList: [],
     storeList: [],
-    storeItemData: {
+    storeItem: {
         seller: {
             id: '',
             username: '',
@@ -24,10 +26,11 @@ export const initialState = {
                 category: ''
             }
         },
-        item: '',
+        files: [],
         _id: '',
         title: '',
         description: '',
+        category: '',
         rating: 0,
         price: 0,
     },
@@ -36,13 +39,17 @@ export const initialState = {
 
 export const storeReducer = (state = initialState, { type, payload }) => {
     switch (type) {
+        case FETCH_SELLERLIST: {
+            const sellerList = [...payload];
+            return { ...state, sellerList }
+        }
         case FETCH_STORELIST: {
             console.log('FETCH_STORELIST', payload);
             const storeList = [...payload];
             return { ...state, storeList }
         }
         case FETCH_STOREITEM: {
-            return { ...state, storeItemData: payload }
+            return { ...state, storeItem: payload }
         }
         case HANDLE_STORE_UPLOAD: {
             console.log('HANDLE_STORE_UPLOAD', payload);

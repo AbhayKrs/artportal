@@ -1,6 +1,7 @@
-import { storeListAPI, storeItemAPI, categorizedStoreListAPI, storeUploadAPI } from '../../api';
+import { sellerListAPI, storeListAPI, storeItemAPI, categorizedStoreListAPI, storeUploadAPI } from '../../api';
 
 import {
+    FETCH_SELLERLIST,
     FETCH_STORELIST,
     FETCH_STOREITEM,
     HANDLE_STORE_UPLOAD,
@@ -10,6 +11,14 @@ import {
     HANDLE_CART_CLOSE,
     PUSH_TO_CART
 } from '../reducers/store.reducers';
+
+export const fetchSellerList = () => async (dispatch, getState) => {
+    await sellerListAPI().then(res => {
+        dispatch({ type: FETCH_SELLERLIST, payload: res.data });
+    }).catch(err => {
+        console.log('---error fetchSellersList', err)
+    })
+}
 
 export const fetchStoreList = () => async (dispatch, getState) => {
     await storeListAPI().then(res => {

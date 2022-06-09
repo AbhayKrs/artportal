@@ -74,7 +74,7 @@ export const AwardTabPanel = (props) => {
                 <div className='flex w-full overflow-hidden bg-gray-100 dark:bg-neutral-800'>
                     <ul id='tabSlider' className="flex ">
                         {['Artyst Specials', 'Community Made', 'Premium'].map((awardType, index) => {
-                            return <li key={index} onClick={() => setActiveStatus(index)} className={index === activeStatus ? "text-sm text-gray-900 dark:font-medium bg-violet-400 mr-1 rounded-t-md" : "text-sm text-gray-600 rounded-t-md dark:text-gray-400 dark:bg-neutral-700 flex items-center mr-1 hover:text-indigo-700 cursor-pointer"}>
+                            return <li key={index} onClick={() => setActiveStatus(index)} className={index === activeStatus ? "text-sm text-gray-900 dark:font-medium bg-violet-500 mr-1 rounded-t-md" : "text-sm text-gray-600 rounded-t-md dark:text-gray-400 dark:bg-neutral-700 flex items-center mr-1 hover:text-indigo-700 cursor-pointer"}>
                                 <div className="font-josefinregular flex items-center uppercase">
                                     <span className="p-2 pb-1">{awardType}</span>
                                 </div>
@@ -89,7 +89,7 @@ export const AwardTabPanel = (props) => {
                         {index === activeStatus && props.awards.map(award => (
                             <button onClick={() => setConfirmData({ open: true, award })}>
                                 <img style={{ width: '3em', height: '3em' }} src={fetchUserImages(award.icon)} />
-                                <p class="font-bold font-serif text-right text-neutral-700 dark:text-gray-300 text-sm">500</p>
+                                <p className="font-bold font-serif text-right text-neutral-700 dark:text-gray-300 text-sm">500</p>
                             </button>
                         ))}
                     </>
@@ -99,7 +99,7 @@ export const AwardTabPanel = (props) => {
                         {index === activeStatus && props.awards.map(award => (
                             <button onClick={() => setConfirmData({ open: true, award })}>
                                 <img style={{ width: '3em', height: '3em' }} src={fetchUserImages(award.icon)} />
-                                <p class="font-bold font-serif text-right text-neutral-700 dark:text-gray-300 text-sm">500</p>
+                                <p className="font-bold font-serif text-right text-neutral-700 dark:text-gray-300 text-sm">500</p>
                             </button>
                         ))}
                     </>
@@ -208,8 +208,8 @@ export const FilterPanel = (props) => {
                 <Dropdown left selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
             </div>
             <SearchBar searchValue={exploreSearch} setSearchValue={setExploreSearch} handleSubmit={handleExploreSearch} />
-            <button type="button" className='btn ml-2 bg-violet-700 drop-shadow-xl p-2.5 items-center shadow-lg rounded-xl' onClick={() => navigate(`/explore/new `)}>
-                <MdUpload className='h-6 w-full text-gray-200' />
+            <button type="button" className='btn ml-2 bg-violet-500 drop-shadow-xl p-2.5 items-center shadow-lg rounded-xl' onClick={() => navigate(`/explore/new `)}>
+                <MdUpload className='h-6 w-full text-white' />
             </button>
         </div>
     )

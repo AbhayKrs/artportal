@@ -14,6 +14,7 @@ export const FETCH_CARTLIST = 'FETCH_CARTLIST';
 export const PUSH_TO_CART = 'PUSH_TO_CART';
 export const REMOVE_FROM_CART = 'REMOVE_FROM_CART';
 export const EDIT_CARTLIST = 'EDIT_CARTLIST';
+export const GET_USER_DETAILS = 'GET_USER_DETAILS';
 export const HANDLE_SIGNIN = 'HANDLE_SIGNIN';
 export const HANDLE_REFRESHTOKEN = 'HANDLE_REFRESHTOKEN';
 export const HANDLE_SIGNUP = 'HANDLE_SIGNUP';
@@ -50,12 +51,36 @@ export const initialState = {
             category: ''
         },
         tokens: 0,
+        followers: [],
+        followers_count: 0,
         explore: [],
         explore_count: 0,
+        comment_count: 0,
         store: [],
         store_count: 0,
         cart: [],
         cart_count: 0,
+        seller: false,
+        seller_rating: 0
+    },
+    viewed_user: {
+        id: '',
+        name: '',
+        username: '',
+        email: '',
+        avatar: {
+            icon: '',
+            category: ''
+        },
+        followers: [],
+        followers_count: 0,
+        explore: [],
+        explore_count: 0,
+        comment_count: 0,
+        store: [],
+        store_count: 0,
+        seller: false,
+        seller_rating: 0
     },
     token: null,
     isAuthenticated: false,
@@ -168,6 +193,9 @@ export const commonReducer = (state = initialState, { type, payload }) => {
             return {
                 ...state, user: { ...state.user, cart: [...state.user.cart, payload] }
             }
+        }
+        case GET_USER_DETAILS: {
+            return { ...state, viewed_user: payload }
         }
         case HANDLE_SIGNIN: {
             console.log('---HANDLE_SIGNIN', payload);

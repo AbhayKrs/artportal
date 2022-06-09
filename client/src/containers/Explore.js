@@ -21,12 +21,12 @@ const Explore = (props) => {
     }, []);
 
     return (
-        <div className='bg-gray-200 dark:bg-darkNavBg'>
+        <div className='main-container bg-gray-200 dark:bg-darkNavBg'>
             <FilterPanel fetchExploreList={props.fetchExploreList} filterExploreList={props.filterExploreList} searchExploreList={props.searchExploreList} />
             <div className='flex flex-row'>
                 <Masonry>
                     {props.explore.exploreList.map((explore, index) => (
-                        <div onClick={() => navigate(`/explore/${explore._id}`)} className='relative group group-hover:block'>
+                        <div key={index} onClick={() => navigate(`/explore/${explore._id}`)} className='relative group group-hover:block'>
                             <img
                                 id={index}
                                 className='object-cover w-full h-full'
@@ -44,7 +44,7 @@ const Explore = (props) => {
                                         </svg>
                                     </div>
                                 </div>
-                                <div className="flex flex-col place-items-end space-y-1">
+                                <div className="flex flex-col self-end place-items-end space-y-1.5">
                                     <div className="inline-flex items-center">
                                         <BsHeart className='h-4 w-4' />
                                         <span className="text-xs ml-1 antialiased">{explore.likes.length}</span>

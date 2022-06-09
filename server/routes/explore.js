@@ -247,38 +247,6 @@ router.post('/new', upload.any(), async (req, res) => {
 }
 );
 
-// // @route       POST api/explore/new
-// // @desc        Create an explore
-// // @access      Private
-// router.post('/new', upload.single('file'), async (req, res) => {
-//     console.log('user id', req.body.userId);
-//     const user = await User.findById(req.body.userId);
-//     console.log('user', user);
-//     const newExplore = new Explore({
-//         filename: req.file.filename,
-//         title: req.body.title,
-//         author: {
-//             id: user.id,
-//             username: user.username,
-//             avatar: user.avatar
-//         },
-//         description: req.body.description,
-//         tags: req.body.tags
-//     });
-//     console.log('newExplore data', newExplore);
-//     Explore.create(newExplore, (err, explore) => {
-//         if (err) {
-//             console.log(err);
-//         } else {
-//             user.explore.push(explore);
-//             user.explore_count = user.explore.length;
-//             user.save();
-//             res.send(explore);
-//         }
-//     });
-// }
-// );
-
 // @route       Edit api/explore/:id
 // @desc        Edit an explore
 // @access      Private/Admin
@@ -323,17 +291,14 @@ router.delete('/:id', [protect, admin, checkObjectId('id')], async (req, res) =>
 // @desc    Image from gridFS storage
 // @access  Private
 router.get('/image/:filename', (req, res) => {
+    // /image/:filename?
     gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
         // Check if file
         if (!file || file.length === 0) {
             return res.status(404).json({ err: 'No file exists' });
         }
         // Check if image
-        if (
-            file.contentType === 'image/jpg' ||
-            file.contentType === 'image/jpeg' ||
-            file.contentType === 'image/png'
-        ) {
+        if (file.contentType === 'image/jpg' || file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
             // Read output to browser
             const readstream = gfs.createReadStream({
                 filename: req.params.filename,
@@ -435,6 +400,7 @@ router.put('/:id/award', async (req, res) => {
 router.post('/:id/comments/new', async (req, res) => {
     try {
         const explore = await Explore.findById(req.params.id);
+        const user = await User.findById(explore.author.id);
         console.log('body', req.body);
         if (!req.body.user) {
             return res.status(401).json({ msg: 'User not authorized!' })
@@ -452,10 +418,13 @@ router.post('/:id/comments/new', async (req, res) => {
                 console.log(err);
             } else {
                 comment.save();
+                const user_explore = user.explore.find(item => item.id === req.params.id);
+                user_explore.comments.push(comment);
+                user_explore.comment_count = user_explore.comments.length;
                 explore.comments.push(comment);
                 explore.comment_count = explore.comments.length;
+                user.save();
                 explore.save();
-                console.log('explore', explore.comments);
                 console.log('comment', comment);
                 res.json(comment);
             }

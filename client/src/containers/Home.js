@@ -31,31 +31,37 @@ const Home = (props) => {
     const carouselData = [{
         id: 1,
         image: 'https://images.unsplash.com/photo-1644416598043-11c2816eec28?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80',
-        title: 'Minimal Interior'
+        title: 'Library of Craft',
+        title2: 'Scroll through the pages that define craft.'
     }, {
         id: 2,
         image: 'https://images.pexels.com/photos/161154/stained-glass-spiral-circle-pattern-161154.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260',
-        title: 'Minimal Interior'
+        title: 'Mirror Spiral',
+        title2: 'Endless spiral of paint that each have a tale of its own.'
     }, {
         id: 3,
         image: 'https://images.pexels.com/photos/1585325/pexels-photo-1585325.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-        title: 'Minimal Interior'
+        title: 'World of Lost Colors',
+        title2: 'Mix of various techniques into the discovery of something unknown.'
     }, {
         id: 4,
         image: 'https://images.pexels.com/photos/1646953/pexels-photo-1646953.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-        title: 'Minimal Interior'
+        title: 'The Brush that Defines Art',
+        title2: 'Each brush tells the tale of the artist that held it for his mastery.'
     }, {
         id: 5,
         image: 'https://images.pexels.com/photos/20967/pexels-photo.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-        title: 'Minimal Interior'
+        title: 'Witness the Majestic Frames',
+        title2: 'A picture frame is a poem without words.'
     }, {
         id: 6,
         image: 'https://images.pexels.com/photos/587958/pexels-photo-587958.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-        title: 'Minimal Interior'
+        title: 'Blended Paint',
+        title2: 'All have beauty to it, not everyone perceives it the way presented.'
     }]
 
     return (
-        <div className='bg-gray-200 dark:bg-darkNavBg'>
+        <div className='main-container bg-gray-200 dark:bg-darkNavBg'>
             <div className="flex pt-2 items-center justify-center w-full h-full">
                 <HomeMultiCarousel
                     prev={() => goPrev()}
@@ -64,7 +70,7 @@ const Home = (props) => {
                 />
             </div>
             <HomeTabPanel tags={props.common.tags} exploreList={props.explore.exploreList} />
-        </div>
+        </div >
     )
 }
 

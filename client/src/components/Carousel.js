@@ -6,20 +6,20 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 export const ExploreShowCarousel = (props) => {
   return (
-    <div className="flex relative lg:col-span-7 w-full justify-center bg-gray-300 dark:bg-[#101010] ">
+    <div className="flex relative lg:col-span-9 w-full justify-center bg-gray-300 dark:bg-[#101010]">
       <div className="flex flex-col m-3 space-y-3 w-full justify-center">
-        <div className='flex max-h-[44rem]  w-fit self-center items-center place-content-center'>
-          {props.prevTrue ? <button onClick={props.prev} aria-label="slide backward" className="absolute z-30 ml-3 left-0 cursor-pointer">
+        <div className='flex w-fit self-center items-center place-content-center'>
+          {props.prevTrue ? <button onClick={props.prev} aria-label="slide backward" className="fixed z-30 ml-3 top-0 bottom-0 left-0 cursor-pointer">
             <FaChevronLeft className='text-5xl text-neutral-800 dark:text-gray-300' />
           </button> : ''}
-          <img src={`${fetchExploreImages(props.currentImage)}`} className="h-full object-cover object-center rounded-lg md:max-h-screen max-w-[92%]" />
-          {props.nextTrue ? <button onClick={props.next} aria-label="slide forward" className="absolute mr-3 z-30 right-0">
+          <img src={`${fetchExploreImages(props.currentImage)}`} className="h-full px-14 object-cover object-center rounded-lg" />
+          {props.nextTrue ? <button onClick={props.next} aria-label="slide forward" className="fixed z-30 mr-3 top-0 bottom-0 right-96 cursor-pointer">
             <FaChevronRight className='text-5xl text-neutral-800 dark:text-gray-300' />
           </button> : ''}
         </div>
-        <div className='flex space-x-3 justify-center'>
+        <div className='flex w-fit flex-col self-center items-center space-y-3 place-content-center'>
           {props.secondaryImages.map((image, index) => (
-            <img key={index} src={`${fetchExploreImages(image)}`} className="h-60 w-auto max-w-xs object-cover object-center rounded-lg" />
+            <img key={index} src={`${fetchExploreImages(image)}`} className="h-full px-14 object-cover object-center rounded-lg" />
           ))}
         </div>
       </div>
@@ -38,8 +38,8 @@ export const HomeMultiCarousel = (props) => {
               <img src={item.image} alt="black chair and white table" className="object-cover object-center w-full rounded-lg" />
               <div className="bg-gray-800 bg-gradient-to-t from-black rounded-lg bg-opacity-30 absolute w-full h-full p-2">
                 <div className="flex flex-col h-full justify-end">
-                  <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-neutral-200">{item.title}</h3>
-                  <span className='text-sm text-white dark:text-neutral-400'>secondary description</span>
+                  <h3 className="text-xl lg:text-2xl font-josefinlight font-semibold leading-5 lg:leading-6 text-white dark:text-neutral-200">{item.title}</h3>
+                  <span className='text-md font-josefinlight text-white dark:text-neutral-400 truncate'>{item.title2}</span>
                 </div>
               </div>
             </div>
@@ -118,128 +118,128 @@ export const StoreMultiCarousel = (props) => {
 }
 
 /*
-<div class="flex items-center justify-center w-full h-full py-24 sm:py-8 px-4">
+<div className="flex items-center justify-center w-full h-full py-24 sm:py-8 px-4">
   <!--- more free and premium Tailwind CSS components at https://tailwinduikit.com/ --->
-  <div class="w-full relative flex items-center justify-center">
-    <button aria-label="slide backward" class="absolute z-30 left-0 ml-10 focus:outline-none focus:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 cursor-pointer" id="prev">
-      <svg class="dark:text-gray-900" width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <div className="w-full relative flex items-center justify-center">
+    <button aria-label="slide backward" className="absolute z-30 left-0 ml-10 focus:outline-none focus:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 cursor-pointer" id="prev">
+      <svg className="dark:text-gray-900" width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M7 1L1 7L7 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
     </button>
-    <div class="w-full h-full mx-auto overflow-x-hidden overflow-y-hidden">
-      <div id="slider" class="h-full flex lg:gap-8 md:gap-6 gap-14 items-center justify-start transition ease-out duration-700">
-        <div class="flex flex-shrink-0 relative w-full sm:w-auto">
-          <img src="https://i.ibb.co/fDngH9G/carosel-1.png" alt="black chair and white table" class="object-cover object-center w-full" />
-          <div class="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-            <h2 class="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 1</h2>
-            <div class="flex h-full items-end pb-6">
-              <h3 class="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
+    <div className="w-full h-full mx-auto overflow-x-hidden overflow-y-hidden">
+      <div id="slider" className="h-full flex lg:gap-8 md:gap-6 gap-14 items-center justify-start transition ease-out duration-700">
+        <div className="flex flex-shrink-0 relative w-full sm:w-auto">
+          <img src="https://i.ibb.co/fDngH9G/carosel-1.png" alt="black chair and white table" className="object-cover object-center w-full" />
+          <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
+            <h2 className="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 1</h2>
+            <div className="flex h-full items-end pb-6">
+              <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
             </div>
           </div>
         </div>
-        <div class="flex flex-shrink-0 relative w-full sm:w-auto">
-          <img src="https://i.ibb.co/DWrGxX6/carosel-2.png" alt="sitting area" class="object-cover object-center w-full" />
-          <div class="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-            <h2 class="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
-            <div class="flex h-full items-end pb-6">
-              <h3 class="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
+        <div className="flex flex-shrink-0 relative w-full sm:w-auto">
+          <img src="https://i.ibb.co/DWrGxX6/carosel-2.png" alt="sitting area" className="object-cover object-center w-full" />
+          <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
+            <h2 className="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
+            <div className="flex h-full items-end pb-6">
+              <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
             </div>
           </div>
         </div>
-        <div class="flex flex-shrink-0 relative w-full sm:w-auto">
-          <img src="https://i.ibb.co/tCfVky2/carosel-3.png" alt="sitting area" class="object-cover object-center w-full" />
-          <div class="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-            <h2 class="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
-            <div class="flex h-full items-end pb-6">
-              <h3 class="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
+        <div className="flex flex-shrink-0 relative w-full sm:w-auto">
+          <img src="https://i.ibb.co/tCfVky2/carosel-3.png" alt="sitting area" className="object-cover object-center w-full" />
+          <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
+            <h2 className="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
+            <div className="flex h-full items-end pb-6">
+              <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
             </div>
           </div>
         </div>
-        <div class="flex flex-shrink-0 relative w-full sm:w-auto">
-          <img src="https://i.ibb.co/rFsGfr5/carosel-4.png" alt="sitting area" class="object-cover object-center w-full" />
-          <div class="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-            <h2 class="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
-            <div class="flex h-full items-end pb-6">
-              <h3 class="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
+        <div className="flex flex-shrink-0 relative w-full sm:w-auto">
+          <img src="https://i.ibb.co/rFsGfr5/carosel-4.png" alt="sitting area" className="object-cover object-center w-full" />
+          <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
+            <h2 className="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
+            <div className="flex h-full items-end pb-6">
+              <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
             </div>
           </div>
         </div>
-        <div class="flex flex-shrink-0 relative w-full sm:w-auto">
-          <img src="https://i.ibb.co/fDngH9G/carosel-1.png" alt="black chair and white table" class="object-cover object-center w-full" />
-          <div class="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-            <h2 class="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
-            <div class="flex h-full items-end pb-6">
-              <h3 class="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
+        <div className="flex flex-shrink-0 relative w-full sm:w-auto">
+          <img src="https://i.ibb.co/fDngH9G/carosel-1.png" alt="black chair and white table" className="object-cover object-center w-full" />
+          <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
+            <h2 className="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
+            <div className="flex h-full items-end pb-6">
+              <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
             </div>
           </div>
         </div>
-        <div class="flex flex-shrink-0 relative w-full sm:w-auto">
-          <img src="https://i.ibb.co/DWrGxX6/carosel-2.png" alt="sitting area" class="object-cover object-center w-full" />
-          <div class="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-            <h2 class="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
-            <div class="flex h-full items-end pb-6">
-              <h3 class="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
+        <div className="flex flex-shrink-0 relative w-full sm:w-auto">
+          <img src="https://i.ibb.co/DWrGxX6/carosel-2.png" alt="sitting area" className="object-cover object-center w-full" />
+          <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
+            <h2 className="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
+            <div className="flex h-full items-end pb-6">
+              <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
             </div>
           </div>
         </div>
-        <div class="flex flex-shrink-0 relative w-full sm:w-auto">
-          <img src="https://i.ibb.co/tCfVky2/carosel-3.png" alt="sitting area" class="object-cover object-center w-full" />
-          <div class="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-            <h2 class="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
-            <div class="flex h-full items-end pb-6">
-              <h3 class="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
+        <div className="flex flex-shrink-0 relative w-full sm:w-auto">
+          <img src="https://i.ibb.co/tCfVky2/carosel-3.png" alt="sitting area" className="object-cover object-center w-full" />
+          <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
+            <h2 className="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
+            <div className="flex h-full items-end pb-6">
+              <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
             </div>
           </div>
         </div>
-        <div class="flex flex-shrink-0 relative w-full sm:w-auto">
-          <img src="https://i.ibb.co/rFsGfr5/carosel-4.png" alt="sitting area" class="object-cover object-center w-full" />
-          <div class="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-            <h2 class="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
-            <div class="flex h-full items-end pb-6">
-              <h3 class="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
+        <div className="flex flex-shrink-0 relative w-full sm:w-auto">
+          <img src="https://i.ibb.co/rFsGfr5/carosel-4.png" alt="sitting area" className="object-cover object-center w-full" />
+          <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
+            <h2 className="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
+            <div className="flex h-full items-end pb-6">
+              <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
             </div>
           </div>
         </div>
-        <div class="flex flex-shrink-0 relative w-full sm:w-auto">
-          <img src="https://i.ibb.co/fDngH9G/carosel-1.png" alt="black chair and white table" class="object-cover object-center w-full" />
-          <div class="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-            <h2 class="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
-            <div class="flex h-full items-end pb-6">
-              <h3 class="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
+        <div className="flex flex-shrink-0 relative w-full sm:w-auto">
+          <img src="https://i.ibb.co/fDngH9G/carosel-1.png" alt="black chair and white table" className="object-cover object-center w-full" />
+          <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
+            <h2 className="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
+            <div className="flex h-full items-end pb-6">
+              <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
             </div>
           </div>
         </div>
-        <div class="flex flex-shrink-0 relative w-full sm:w-auto">
-          <img src="https://i.ibb.co/DWrGxX6/carosel-2.png" alt="sitting area" class="object-cover object-center w-full" />
-          <div class="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-            <h2 class="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
-            <div class="flex h-full items-end pb-6">
-              <h3 class="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
+        <div className="flex flex-shrink-0 relative w-full sm:w-auto">
+          <img src="https://i.ibb.co/DWrGxX6/carosel-2.png" alt="sitting area" className="object-cover object-center w-full" />
+          <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
+            <h2 className="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
+            <div className="flex h-full items-end pb-6">
+              <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
             </div>
           </div>
         </div>
-        <div class="flex flex-shrink-0 relative w-full sm:w-auto">
-          <img src="https://i.ibb.co/tCfVky2/carosel-3.png" alt="sitting area" class="object-cover object-center w-full" />
-          <div class="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-            <h2 class="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
-            <div class="flex h-full items-end pb-6">
-              <h3 class="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
+        <div className="flex flex-shrink-0 relative w-full sm:w-auto">
+          <img src="https://i.ibb.co/tCfVky2/carosel-3.png" alt="sitting area" className="object-cover object-center w-full" />
+          <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
+            <h2 className="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
+            <div className="flex h-full items-end pb-6">
+              <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
             </div>
           </div>
         </div>
-        <div class="flex flex-shrink-0 relative w-full sm:w-auto">
-          <img src="https://i.ibb.co/rFsGfr5/carosel-4.png" alt="sitting area" class="object-cover object-center w-full" />
-          <div class="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-            <h2 class="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
-            <div class="flex h-full items-end pb-6">
-              <h3 class="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
+        <div className="flex flex-shrink-0 relative w-full sm:w-auto">
+          <img src="https://i.ibb.co/rFsGfr5/carosel-4.png" alt="sitting area" className="object-cover object-center w-full" />
+          <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
+            <h2 className="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
+            <div className="flex h-full items-end pb-6">
+              <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <button aria-label="slide forward" class="absolute z-30 right-0 mr-10 focus:outline-none focus:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-gray-400" id="next">
-      <svg class="dark:text-gray-900" width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <button aria-label="slide forward" className="absolute z-30 right-0 mr-10 focus:outline-none focus:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-gray-400" id="next">
+      <svg className="dark:text-gray-900" width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M1 1L7 7L1 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
     </button>

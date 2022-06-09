@@ -3,8 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
-import { fetchExploreImages, fetchUserImages } from '../api';
+import { fetchExploreImages, fetchUserImages, fetchStoreImages } from '../api';
 import { fetchExploreList, fetchExploreItem, handleLikeExplore, handleAwardExplore, handleDislikeExplore, handleAddComment, handleEditComment, handleDeleteComment, handleLikeComment, handleDislikeComment } from '../store/actions/explore.actions';
+import { fetchStoreList, fetchStoreItem } from '../store/actions/store.actions';
 import { fetchAwards, setError } from '../store/actions/common.actions';
 import { ExploreShowCarousel } from '../components/Carousel';
 import { AwardModal } from '../components/Modal';
@@ -14,7 +15,7 @@ import { BsFillBookmarkFill, BsTrash, BsHeartFill } from 'react-icons/bs';
 import { IoIosSend } from "react-icons/io";
 import { AiFillLike, AiFillDislike } from 'react-icons/ai';
 import { MdEdit, MdEditOff } from 'react-icons/md';
-import { ImPlus } from 'react-icons/im';
+import { ImPlus, ImStarFull } from 'react-icons/im';
 
 import AwardIcon from '../assets/images/gift.png';
 
@@ -149,7 +150,7 @@ const ExploreShow = (props) => {
     }
 
     return (
-        <div className='grid gap-2 bg-gray-200 dark:bg-darkNavBg sm:grid-cols-1 lg:grid-cols-12'>
+        <div className='main-container grid min-h-screen gap-2 bg-gray-200 dark:bg-darkNavBg sm:grid-cols-1 lg:grid-cols-12'>
             <ExploreShowCarousel
                 prevTrue={prev.length > 0}
                 nextTrue={next.length > 0}
@@ -159,42 +160,46 @@ const ExploreShow = (props) => {
                 prev={() => { navigate(`/explore/${prev}`); props.fetchExploreItem(prev); }}
                 next={() => { navigate(`/explore/${next}`); props.fetchExploreItem(next); }}
             />
-            <div className='lg:col-span-5 md:mt-3 sm:mt-0'>
-                <div className='flex flex-col rounded-md bg-neutral-50 dark:bg-neutral-800 mx-2 p-3'>
-                    <div className='flex'>
-                        <div className='basis-9/12 space-y-2'>
-                            <h1 className='font-caviar text-3xl tex-gray-900 dark:text-gray-300 font-bold'>{props.exploreShow.title}</h1>
-                            <p className='font-josefinlight text-lg tex-gray-800 dark:text-gray-400'>{props.exploreShow.description}</p>
-                            <div className='flex flex-wrap'>
-                                {props.exploreShow.tags.map(item => (
-                                    <div className="flex w-fit justify-center items-center m-1 font-medium py-1.5 px-2 bg-indigo-50 dark:bg-neutral-700 rounded-full text-gray-600 dark:text-gray-400 shadow">
-                                        <div className="text-xs font-medium leading-none">{item}</div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                        <div className='basis-3/12'>
-                            <div className='flex justify-end items-center space-x-3'>
+            <div className='flex fixed m-5 space-x-3 p-1 bg-neutral-100 dark:bg-neutral-800 rounded'>
+                <div className='flex justify-end py-0.5 space-x-2 text-teal-500'>
+                    <h3 className='font-josefinlight text-lg'>{new Intl.NumberFormat().format(props.exploreShow.likes.length)}</h3>
+                    <IoEye className='h-6 w-6' />
+                </div>
+                <div className='flex justify-end py-0.5 space-x-2 text-violet-500 dark:text-violet-500'>
+                    <h3 className='font-josefinlight text-lg'>{new Intl.NumberFormat().format(props.exploreShow.likes.length)}</h3>
+                    <IoHeart className='h-6 w-6' />
+                </div>
+                <div className='flex justify-end py-0.5 space-x-2 text-violet-500 dark:text-violet-500'>
+                    <h3 className='font-josefinlight text-lg'>{new Intl.NumberFormat().format(props.exploreShow.comment_count)}</h3>
+                    <IoChatbox className='h-6 w-6' />
+                </div>
+            </div>
+            <div className='lg:col-span-3 md:mt-3 sm:mt-0 bg-fixed'>
+                <div className='flex flex-col rounded-md bg-neutral-50 dark:bg-neutral-800 mr-2 py-3'>
+                    <div className='flex flex-col'>
+                        <div className='flex flex-row space-x-2'>
+                            <div className='flex w-fit flex-col items-center space-y-3'>
                                 <div className="relative float-left flex">
                                     <img onClick={props.common.isAuthenticated ? () => setAwardOpen(true) : handleInvalidUser} src={AwardIcon} className='h-12 w-12 cursor-pointer' />
                                     <ImPlus className="absolute bottom-0 right-0 text-[#D1853A] h-4 w-4" />
                                 </div>
                                 <BsHeartFill style={like ? { color: '#FF3980' } : { color: '#F190B3' }} className='h-6 w-6 cursor-pointer' onClick={props.common.isAuthenticated ? () => { setLike(!like); handleToggleLike(props.exploreShow.likes) } : handleInvalidUser} />
-                                <IoShareSocialSharp className='h-6 w-6 text-violet-500 dark:text-violet-400' />
-                                <BsFillBookmarkFill onClick={props.common.isAuthenticated ? () => console.log('bookmark!') : handleInvalidUser} className='h-6 w-6 text-violet-500 dark:text-violet-400' />
+                                <IoShareSocialSharp className='h-6 w-6 text-violet-500 dark:text-violet-500' />
+                                <BsFillBookmarkFill onClick={props.common.isAuthenticated ? () => console.log('bookmark!') : handleInvalidUser} className='h-6 w-6 text-violet-500 dark:text-violet-500' />
                             </div>
-                            <div className='flex justify-end py-0.5 space-x-2 text-teal-500'>
-                                <h3 className='font-josefinlight text-lg'>{new Intl.NumberFormat().format(props.exploreShow.likes.length) + ' views'}</h3>
-                                <IoEye className='h-6 w-6' />
+                            <div className='flex flex-col w-full space-y-2'>
+                                <h1 className='font-caviar text-2xl tex-gray-900 dark:text-gray-200 font-bold'>{props.exploreShow.title}</h1>
+                                <p className='font-josefinlight text-lg tex-gray-800 dark:text-gray-300'>{props.exploreShow.description}</p>
                             </div>
-                            <div className='flex justify-end py-0.5 space-x-2 text-violet-500 dark:text-violet-400'>
-                                <h3 className='font-josefinlight text-lg'>{new Intl.NumberFormat().format(props.exploreShow.likes.length) + ' likes'}</h3>
-                                <IoHeart className='h-6 w-6' />
-                            </div>
-                            <div className='flex justify-end py-0.5 space-x-2 text-violet-500 dark:text-violet-400'>
-                                <h3 className='font-josefinlight text-lg'>{new Intl.NumberFormat().format(props.exploreShow.comment_count) + ' comments'}</h3>
-                                <IoChatbox className='h-6 w-6' />
-                            </div>
+                        </div>
+                        <div className='flex flex-wrap px-1'>
+                            {props.exploreShow.tags.map(item => (
+                                <div className="flex w-fit justify-center items-center m-0.5 font-medium py-1.5 px-2 bg-indigo-50 dark:bg-violet-500/25 rounded-full text-gray-600 dark:text-gray-300 shadow">
+                                    <div className="text-xs font-medium leading-none">{item}</div>
+                                </div>
+                            ))}
+                        </div>
+                        <div className='mr-3'>
                             <div className='flex flex-col text-right justify-end py-1 text-neutral-900 dark:text-gray-400'>
                                 <p className='font-josefinlight text-xl'>Posted By</p>
                                 <div className="flex justify-end">
@@ -212,7 +217,7 @@ const ExploreShow = (props) => {
                             </div>
                         </div>
                     </div>
-                    <div id='award' className='flex overflow-x-hidden bg-slate-200 dark:bg-neutral-700 p-2 rounded-lg space-x-2'>
+                    <div id='award' className='flex overflow-x-hidden bg-slate-200 dark:bg-neutral-700 mx-2 p-2 rounded-lg space-x-2'>
                         {props.common.awardList.map(award => (
                             <div className="relative float-left mr-2 flex">
                                 <img draggable="false" className='max-w-fit h-12 w-12' src={fetchUserImages(award.icon)} />
@@ -301,15 +306,25 @@ const ExploreShow = (props) => {
 }
 
 const StoreShow = (props) => {
+    const { id } = useParams();
+    let navigate = useNavigate();
+
+    useEffect(async () => {
+        window.scrollTo(0, 0)
+        await props.fetchStoreList();
+        props.fetchStoreItem(id);
+    }, [])
+
     return (
-        <div className='bg-gray-200 dark:bg-darkNavBg max-100vh'>
+        <div className='main-container bg-gray-200 dark:bg-darkNavBg max-100vh'>
             <section className="text-gray-400 body-font overflow-hidden">
                 <div className="p-6 mx-auto">
                     <div className="lg:w-4/5 mx-auto flex flex-wrap">
-                        <img className="lg:w-1/2 w-full lg:h-auto h-96 object-cover object-center rounded" src="https://source.unsplash.com/400x400/?nature,water" />
+                        <img className="lg:w-1/2 w-full lg:h-auto h-96 object-cover object-center rounded" src={fetchStoreImages(props.storeShow.files[0])} />
                         <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-4 lg:mt-0">
-                            <div className="text-black dark:text-white text-4xl title-font font-medium mb-1">The Catcher in the Rye</div>
-                            <p className="text-gray-500 leading-relaxed">Fam locavore kickstarter distillery. Mixtape chillwave tumeric sriracha taximy chia microdosing tilde DIY. XOXO fam indxgo juiceramps cornhole raw denim forage brooklyn. Everyday carry +1 seitan poutine tumeric. Gastropub blue bottle austin listicle pour-over, neutra jean shorts keytar banjo tattooed umami cardigan.</p>
+                            <div className="text-black dark:text-white text-4xl title-font font-medium mb-1">{props.storeShow.title}</div>
+                            <h2 className="tracking-widest text-lg title-font font-medium text-gray-400 mb-2">CATEGORY: <span className='capitalize text-gray-700'>{props.storeShow.category}</span></h2>
+                            <p className="text-gray-500 leading-relaxed">{props.storeShow.description}</p>
                             <div className="flex my-2">
                                 <span className="flex items-center">
                                     <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-5 h-5 text-indigo-400" viewBox="0 0 24 24">
@@ -327,15 +342,33 @@ const StoreShow = (props) => {
                                     <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-5 h-5 text-indigo-400" viewBox="0 0 24 24">
                                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
                                     </svg>
-                                    <span className="ml-3 text-gray-600">4 Reviews</span>
+                                    <span className="ml-3 text-lg text-gray-600">{Number.parseFloat(props.storeShow.rating).toFixed(1)} / 5.0</span>
                                 </span>
+                            </div>
+                            <div className='mr-3'>
+                                <div className='flex flex-col text-right justify-end py-1 text-neutral-900 dark:text-gray-400'>
+                                    <p className='font-josefinlight text-xl'>Seller Details</p>
+                                    <div className="flex justify-end">
+                                        <div className="w-6 h-6 overflow-hidden">
+                                            <img src={fetchUserImages(props.storeShow.seller.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
+                                        </div>
+                                        <p className="font-josefinlight pt-0.5 font-medium text-lg mx-0.5">
+                                            {props.storeShow.seller.username}
+                                        </p>
+                                        <svg className="stroke-current stroke-1 text-blue-600 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                    <div className='flex justify-end text-md items-center text-josefinlight'>Rating: {Number.parseFloat(props.storeShow.seller.seller_rating).toFixed(1)} <ImStarFull className='ml-1 text-indigo-500' /></div>
+                                    <p className='font-josefinlight whitespace-nowrap text-sm'>{moment(props.storeShow.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</p>
+                                </div>
                             </div>
                             <div className="flex">
                                 <span className="flex flex-col font-medium text-3xl text-neutral-700 dark:text-gray-300">
-                                    $58.00
+                                    ${Number.parseFloat(props.storeShow.price).toFixed(2)}
                                     <span className='text-xs text-rose-400'>including shipping & taxes</span>
                                 </span>
-                                <button className="flex ml-auto leading-[0] items-center font-caviar font-bold text-violet-400 bg-transparent border-2 border-violet-400 py-2 px-6 focus:outline-none hover:bg-violet-400 hover:text-gray-600 rounded-md">Add to Cart</button>
+                                <button className="flex ml-auto leading-[0] items-center font-caviar font-bold text-violet-500 bg-transparent border-2 border-violet-500 py-2 px-6 focus:outline-none hover:bg-violet-500 hover:text-gray-600 rounded-md">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -349,12 +382,16 @@ const mapStateToProps = (state, props) => ({
     user: state.common.user,
     common: state.common,
     explore: state.explore,
-    exploreShow: state.explore.exploreData
+    exploreShow: state.explore.exploreData,
+    store: state.store,
+    storeShow: state.store.storeItem
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
     fetchExploreItem,
     fetchExploreList,
+    fetchStoreList,
+    fetchStoreItem,
     handleLikeExplore,
     handleAwardExplore,
     handleDislikeExplore,

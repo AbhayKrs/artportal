@@ -17,6 +17,7 @@ import Upload from './containers/Upload';
 import Show from './containers/Show';
 import Store from './containers/Store';
 import StoreAll from './containers/StoreAll';
+import Profile from './containers/Profile';
 
 // import ExploreUpload from './components/ExploreUpload';
 import SnackBarError from './components/SnackBarError';
@@ -65,12 +66,12 @@ const ArtystRoutes = (props) => {
                 <Route path='/store/:id' exact element={<Show.StoreShow />} />
                 <Route path='/store/all' exact element={<StoreAll />} />
                 <Route path='/store/new' exact element={<Upload.StoreUpload />} />
+                <Route path='/users/:id' exact element={<Profile />} />
                 {/* <Route path='/about' exact component={About} />
                 <Route path='/dashboard' exact component={Dashboard} />
                 <Route path='/notification' exact component={Notification} />
                 <Route path='/store/upload' exact component={StoreUpload} />
                 <Route path='/upload' exact component={Upload} />
-                <Route path='/user/:id' exact component={Profile} />
                 <Route path='/privacy' exact component={Privacy} /> */}
             </Routes>
             <Alerts open={false} type='info' />

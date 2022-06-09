@@ -23,9 +23,11 @@ const exploreSchema = new mongoose.Schema(
             required: true,
         },
         comments: [{
-            content: {
-                type: String,
+            id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Comment',
             },
+            content: { type: String },
             author: {
                 id: {
                     type: mongoose.Schema.Types.ObjectId,

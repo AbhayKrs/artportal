@@ -48,10 +48,21 @@ const UserSchema = new Schema({
         },
         description: { type: String, required: true },
         comments: [{
+            id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Comment',
+            },
             content: { type: String },
             author: {
-                id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-                username: { type: String }
+                id: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'User',
+                },
+                username: { type: String, default: '' },
+                avatar: {
+                    icon: { type: String, default: '' },
+                    category: { type: String, default: '' }
+                },
             },
             likes: [{
                 type: mongoose.Schema.Types.ObjectId,
@@ -67,6 +78,19 @@ const UserSchema = new Schema({
         tags: [{ type: String, default: '' }]
     }],
     explore_count: { type: Number, default: 0 },
+    followers: [{
+        id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        name: { type: String, required: true },
+        username: { type: String, default: '' },
+        avatar: {
+            icon: { type: String, default: '' },
+            category: { type: String, default: '' }
+        }
+    }],
+    followers_count: { type: Number, default: 0 },
     cart: [{
         id: { type: mongoose.Schema.Types.ObjectId, ref: 'Cart' },
         file: { type: String, default: '' },
@@ -85,36 +109,12 @@ const UserSchema = new Schema({
         }
     }],
     cart_count: { type: Number, default: 0 },
-    store: [{
-        title: { type: String, required: true },
-        item: {
-            type: String,
-            default: 'none',
-            required: true,
-        },
-        description: { type: String, required: true },
-        seller: {
-            id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-            username: { type: String },
-            avatar: {
-                icon: { type: String, default: '' },
-                category: { type: String, default: '' }
-            },
-            isSeller: { type: Boolean },
-            seller_rating: {
-                type: Number,
-                default: 0,
-                minimum: 0,
-                maximum: 5
-            }
-        },
-        price: { type: Number, default: 0 },
-        rating: { type: Number, default: 0 },
-        createdAt: { type: Date },
-        updatedAt: { type: Date }
-    }],
-    store_count: { type: Number, default: 0 }
-});
+    seller: { type: Boolean, default: false },
+    seller_rating: { type: Number },
+    store: { type: Array },
+    store_count: { type: Number },
+    ysr: { type: Number }
+}, { strict: false });
 
 const User = mongoose.model("User", UserSchema);
 export default User;

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import PropTypes from 'prop-types';
 // import ImageCard from './ImageCard';
 
 const Masonry = props => {
@@ -38,7 +37,7 @@ const Masonry = props => {
     for (let i = 0; i < props.children.length; i++) {
         const columnIndex = i % columns;
         columnWrapper[`column${columnIndex}`].push(
-            <div style={{ marginBottom: `${gap}px` }}>
+            <div key={i} style={{ marginBottom: `${gap}px` }}>
                 {props.children[i]}
             </div>
         );
@@ -47,7 +46,7 @@ const Masonry = props => {
     // wrap children in each column with a div
     for (let i = 0; i < columns; i++) {
         result.push(
-            <div style={{ marginLeft: `${i > 0 ? gap : 0}px`, flex: 1 }}>
+            <div key={i} style={{ marginLeft: `${i > 0 ? gap : 0}px`, flex: 1 }}>
                 {columnWrapper[`column${i}`]}
             </div>
         );
@@ -59,12 +58,6 @@ const Masonry = props => {
         </div>
     )
 }
-
-Masonry.propTypes = {
-    columns: PropTypes.number.isRequired,
-    gap: PropTypes.number.isRequired,
-    children: PropTypes.arrayOf(PropTypes.element),
-};
 
 const mapStateToProps = (state, props) => ({
     explore: state.explore,

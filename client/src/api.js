@@ -16,6 +16,7 @@ export const exploreListAPI = () => get_api.get(`/explore`);
 export const exploreItemAPI = exploreID => get_api.get(`/explore/${exploreID}`);
 export const searchExploreListAPI = (query, filter, period) => get_api.get(`/explore/search?query=${query}&filter=${filter}&period=${period}`);
 export const filterExploreListAPI = (filter, period) => get_api.get(`/explore?filter=${filter}&period=${period}`);
+export const sellerListAPI = () => get_api.get('/users?type=seller');
 export const storeListAPI = () => get_api.get(`/store`);
 export const storeItemAPI = storeID => get_api.get(`/store/${storeID}`);
 export const categorizedStoreListAPI = (category) => get_api.get(`/store?category=${category}`);

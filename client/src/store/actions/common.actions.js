@@ -13,13 +13,15 @@ import {
     FETCH_USER_EXPLORELIST,
     FETCH_USER_STORELIST,
     FETCH_CARTLIST,
+    GET_USER_DETAILS,
     HANDLE_SIGNIN,
     HANDLE_REFRESHTOKEN,
     HANDLE_SIGNUP,
     HANDLE_SIGNOUT,
     FETCH_COMMON_IMAGES,
     FETCH_AVATARLIST,
-    FETCH_AWARDLIST
+    FETCH_AWARDLIST,
+    initialState
 } from '../reducers/common.reducers';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from '../../utils/setAuthToken';
@@ -127,18 +129,11 @@ export const handleSignUp = (userData) => async (dispatch, getState) => {
     })
 }
 
-export const getUserDetails = () => async (dispatch, getState) => {
-    const userID = getState().common.user.id;
+export const getUserDetails = (userID) => async (dispatch, getState) => {
     await userDetailsAPI(userID).then(res => {
         const { token } = res.data;
-        if (localStorage.getItem('jwtToken')) {
-            localStorage.setItem('jwtToken', token)
-        } else if (sessionStorage.getItem('jwtToken')) {
-            sessionStorage.setItem('jwtToken', token)
-        }
-        setAuthToken(token);
         const loginData = jwt_decode(token);
-        dispatch({ type: HANDLE_REFRESHTOKEN, payload: loginData });
+        dispatch({ type: GET_USER_DETAILS, payload: loginData });
     }).catch(err => {
         if (err.response) {
             const error = {
@@ -149,45 +144,11 @@ export const getUserDetails = () => async (dispatch, getState) => {
             dispatch(setError(error))
         }
     })
-    // try {
-    //     axios({
-    //         url: `http://localhost:5000/api/users/${userID}`,
-    //         method: 'GET',
-    //         headers: { 'Content-Type': 'application/json' }
-    //     }).then(res => {
-    //         const { token } = res.data;
-    //         if (localStorage.getItem('jwtToken')) {
-    //             localStorage.setItem('jwtToken', token)
-    //         } else if (sessionStorage.getItem('jwtToken')) {
-    //             sessionStorage.setItem('jwtToken', token)
-    //         }
-    //         setAuthToken(token);
-    //         const loginData = jwt_decode(token);
-    //         dispatch({ type: HANDLE_REFRESHTOKEN, payload: loginData });
-    //     }).catch(err => {
-    //         if (err.response) {
-    //             const error = {
-    //                 open: true,
-    //                 message: err.response.data,
-    //                 severity: 'error',
-    //             }
-    //             dispatch(setError(error))
-    //         }
-    //     })
-    // .then(async (response) => {
-    //     if (response.ok) {
-    //       const data = await response.json();
-    //       setUserContext((oldValues) => {
-    //         return { ...oldValues, token: data.token };
-    //       });
-    //     } else {
-    //       setUserContext((oldValues) => {
-    //         return { ...oldValues, token: null };
-    //       });
-    //     }
-    //     // call refreshToken every 5 minutes to renew the authentication token.
-    //     setTimeout(verifyUser, 5 * 60 * 1000);
-    //   });
+}
+
+export const clearUserProfile = () => async (dispatch, getState) => {
+    console.log('dance')
+    dispatch({ type: GET_USER_DETAILS, payload: initialState.viewed_user })
 }
 
 export const fetchUserExploreList = () => async (dispatch, getState) => {

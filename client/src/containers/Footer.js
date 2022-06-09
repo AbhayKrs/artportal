@@ -9,7 +9,7 @@ const Footer = () => {
 
     return (
         <footer className="bg-slate-100 dark:bg-darkNavHeader w-full shadow-[0_-4px_3px_rgba(175,175,175,0.55),_0_-2px_2px_rgba(175,175,175,0.5)] dark:shadow-[0_-4px_3px_rgba(45,45,45,0.55),_0_-2px_2px_rgba(45,45,45,0.5)]">
-            <div className="font-antipasto mx-2 px-6 pt-8 flex-col sm:hidden md:flex">
+            {/* <div className="font-antipasto mx-2 px-6 pt-8 flex-col sm:hidden md:flex">
                 <div className='flex mx-auto w-9/12'>
                     <div className="w-80 flex-shrink-0 mr-auto">
                         <Link to='/'>
@@ -77,8 +77,8 @@ const Footer = () => {
                         </Link>
                     </div>
                 </div>
-            </div>
-            <div className="md:hidden sm:block">
+            </div> */}
+            <div className="block">
                 <div className="items-center mx-2 p-1 flex flex-wrap flex-col sm:flex-row">
                     <div className='flex'>
                         <img onClick={() => navigate('/')} className='h-10 w-auto hover:cursor-pointer' src={Artyst_icon} alt='Artyst' />

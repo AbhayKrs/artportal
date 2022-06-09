@@ -11,12 +11,13 @@ import { fetchCartList, handleCartAdd, handleRemoveFromCart } from '../store/act
 import Dropdown from '../components/Dropdown';
 import { CartModal } from '../components/Modal';
 
-import { MdOutlineAddShoppingCart } from 'react-icons/md';
+import { MdShoppingCart, MdOutlineAddShoppingCart } from 'react-icons/md';
 
 
 const StoreAll = (props) => {
     let navigate = useNavigate();
-    const [cartOpen, setCartOpen] = useState(true);
+    let cartTotal = 0;
+    const [cartOpen, setCartOpen] = useState(false);
     const [storeCategory, setStoreCategory] = useState('');
     const [activeCategoryLabel, setActiveCategoryLabel] = useState('Pick a category');
 
@@ -51,19 +52,35 @@ const StoreAll = (props) => {
     }
 
     const cartAdd = (item) => {
-        setCartOpen(true)
         props.handleCartAdd(item);
+    }
+    const handleCartOpen = () => {
+        setCartOpen(true)
     }
     const handleCartClose = () => {
         setCartOpen(false)
     }
 
+    const findCartTotal = () => {
+        let cart = props.common.user.cart
+        if (cart && cart.length > 0) {
+            cart.map(item => {
+                cartTotal = item.subtotal + cartTotal
+            })
+        }
+        return cartTotal;
+    }
+
     return (
-        <div className='bg-gray-200 dark:bg-darkNavBg'>
+        <div className='main-container bg-gray-200 dark:bg-darkNavBg'>
             <div className='p-4 items-center'>
                 <div className='flex mb-3 justify-between'>
-                    <div className='text-3xl font-antipasto font-bold tracking-wider text-violet-500 dark:text-violet-600'>Artyst Store</div>
-                    <div className='space-x-2'>
+                    <div className='text-3xl font-antipasto font-bold tracking-wider text-violet-500 dark:text-violet-500'>Artyst Store</div>
+                    <div className='flex items-center space-x-2'>
+                        {props.common.user.cart && props.common.user.cart.length > 0 && <button onClick={() => handleCartOpen()} className='relative h-fit tracking-wider overflow-visible bg-violet-500 font-bold p-2 rounded-lg'>
+                            <MdShoppingCart className='w-6 h-6 text-gray-200 hover:cursor-pointer' />
+                            <div className={`${!cartOpen && 'animate-pulse'} absolute -top-1 -right-1 px-1 bg-red-600 text-gray-200 rounded-full text-xs`}>{props.common.user.cart.length}</div>
+                        </button>}
                         <button onClick={() => navigate('/store/new')} className='ml-auto h-fit tracking-wider border-2 border-violet-500 text-violet-500 font-antipasto font-bold py-1.5 px-3 rounded-lg'>Create Listing</button>
                         <Dropdown right selectedPeriod={activeCategoryLabel} options={categoryOptions} onSelect={handleCategoryChange} />
                         {storeCategory.length > 0 ? <a className='text-sm font-medium text-rose-400 underline' onClick={() => handleCategoryChange(null)}>Clear</a> : ''}
@@ -83,7 +100,7 @@ const StoreAll = (props) => {
                                         <div className='tracking-wide text-md font-medium text-gray-500 font-josefinregular'>${item.price}</div>
                                         <div className='flex space-x-2'>
                                             <MdOutlineAddShoppingCart className='w-8 h-8 text-rose-500 hover:cursor-pointer' onClick={() => cartAdd(item)} />
-                                            <button onClick={() => navigate(`/store/${item._id}`)} className="bg-gradient-to-r font-caviar font-semibold from-violet-400 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Learn more</button>
+                                            <button onClick={() => navigate(`/store/${item._id}`)} className="bg-gradient-to-r font-caviar font-semibold from-violet-500 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Learn more</button>
                                         </div>
                                     </div>
                                 </div>
@@ -92,6 +109,7 @@ const StoreAll = (props) => {
                     </div>
                 </div>
             </div>
+            {cartOpen && <CartModal open={cartOpen} onClose={handleCartClose} cartList={props.common.user.cart} cartTotal={findCartTotal()} fetchStoreImages={fetchStoreImages} cartAdd={cartAdd} handleCartRemove={props.handleRemoveFromCart} />}
         </div>
     )
 }
