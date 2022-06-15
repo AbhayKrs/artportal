@@ -10,7 +10,7 @@ const commonSchema = new mongoose.Schema(
         awards: [{
             id: { type: mongoose.Schema.Types.ObjectId },
             icon: { type: String, default: '' },
-            title: { type: String, default: '' }
+            value: { type: String, default: '' }
         }],
         avatars: [{
             icon: { type: String, default: '' },

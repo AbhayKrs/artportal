@@ -13,7 +13,8 @@ import {
     FETCH_USER_EXPLORELIST,
     FETCH_USER_STORELIST,
     FETCH_CARTLIST,
-    GET_USER_DETAILS,
+    REFRESH_USER_DETAILS,
+    LOAD_PROFILE_DETAILS,
     HANDLE_SIGNIN,
     HANDLE_REFRESHTOKEN,
     HANDLE_SIGNUP,
@@ -129,11 +130,28 @@ export const handleSignUp = (userData) => async (dispatch, getState) => {
     })
 }
 
-export const getUserDetails = (userID) => async (dispatch, getState) => {
+export const refreshUserDetails = (userID) => async (dispatch, getState) => {
+    await userDetailsAPI(userID).then(res => {
+        const { token } = res.data;
+        const userData = jwt_decode(token);
+        dispatch({ type: REFRESH_USER_DETAILS, payload: userData });
+    }).catch(err => {
+        if (err.response) {
+            const error = {
+                open: true,
+                message: err.response.data,
+                type: 'high',
+            }
+            dispatch(setError(error))
+        }
+    })
+}
+
+export const loadProfileDetails = (userID) => async (dispatch, getState) => {
     await userDetailsAPI(userID).then(res => {
         const { token } = res.data;
         const loginData = jwt_decode(token);
-        dispatch({ type: GET_USER_DETAILS, payload: loginData });
+        dispatch({ type: LOAD_PROFILE_DETAILS, payload: loginData });
     }).catch(err => {
         if (err.response) {
             const error = {
@@ -147,8 +165,7 @@ export const getUserDetails = (userID) => async (dispatch, getState) => {
 }
 
 export const clearUserProfile = () => async (dispatch, getState) => {
-    console.log('dance')
-    dispatch({ type: GET_USER_DETAILS, payload: initialState.viewed_user })
+    dispatch({ type: LOAD_PROFILE_DETAILS, payload: initialState.viewed_user })
 }
 
 export const fetchUserExploreList = () => async (dispatch, getState) => {

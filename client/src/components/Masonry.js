@@ -11,7 +11,7 @@ const Masonry = props => {
     const [columns, setColumns] = useState(5);
 
     useEffect(() => {
-        if (window.innerWidth < 376) {
+        if (window.innerWidth < 640) {
             setColumns(1);
         } else if (window.innerWidth <= 925) {
             setColumns(3);

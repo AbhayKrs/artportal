@@ -103,7 +103,7 @@ const Store = (props) => {
             </div>
             <div className='w-full flex p-3'>
                 <button onClick={() => navigate('/store/all')} className="tracking-wider h-fit border-2 border-violet-500 text-violet-500 font-antipasto font-bold py-1.5 px-3 mr-2 rounded">Store - All</button>
-                <button onClick={() => navigate('/store/sellers')} className="tracking-wider h-fit border-2 border-violet-500 text-violet-500 font-antipasto font-bold py-1.5 px-3 rounded">Artyst Verified Sellers</button>
+                {/* <button onClick={() => navigate('/store/sellers')} className="tracking-wider h-fit border-2 border-violet-500 text-violet-500 font-antipasto font-bold py-1.5 px-3 rounded">Artyst Verified Sellers</button> */}
                 <div className='flex ml-auto space-x-3'>
                     {props.common.user.cart && props.common.user.cart.length > 0 && <button onClick={() => handleCartOpen()} className='relative h-fit tracking-wider overflow-visible bg-violet-500 font-bold p-2 rounded-lg'>
                         <MdShoppingCart className='w-6 h-6 text-gray-200 hover:cursor-pointer' />
@@ -116,7 +116,7 @@ const Store = (props) => {
             {/* Highlights of the Day section */}
             <div className='p-4 space-y-2'>
                 <div className='text-3xl font-antipasto font-bold dark:text-neutral-400'>Highlights of the Day</div>
-                <div className='grid gap-4 grid-cols-4'>
+                <div className='grid gap-4 sm:grid-cols-3 grid-cols-1'>
                     {props.store.storeList.map(item => (
                         <div className="drop-shadow-lg rounded-xl bg-indigo-50 dark:bg-neutral-800 overflow-hidden">
                             <img className="h-60 w-full object-cover object-center scale-110 transition-all duration-400 scale-100" src={fetchStoreImages(item.files[0])} />
@@ -140,7 +140,7 @@ const Store = (props) => {
             {/* Featured */}
             <div className='p-4 space-y-2'>
                 <div className='text-3xl font-antipasto font-bold dark:text-neutral-400'>Featured</div>
-                <div className='grid gap-4 grid-cols-4'>
+                <div className='grid gap-4 sm:grid-cols-3 grid-cols-1'>
                     {props.store.storeList.map(item => (
                         <div className="drop-shadow-lg rounded-xl bg-indigo-50 dark:bg-neutral-800 overflow-hidden">
                             <img className="h-60 w-full object-cover object-center scale-110 transition-all duration-400 scale-100" src={fetchStoreImages(item.files[0])} />
@@ -164,7 +164,7 @@ const Store = (props) => {
             {/* Artists of the Month */}
             <div className='p-4'>
                 <div className='text-3xl font-antipasto font-bold dark:text-neutral-400 pb-10'>Trending Sellers</div>
-                <div className='grid gap-4 grid-cols-5'>
+                <div className='grid gap-4 sm:grid-cols-3 grid-cols-1'>
                     {props.store.sellerList.map(seller => (
                         <div className="py-8 h-3/4 mt-auto cursor-pointer rounded-3xl bg-gray-100 dark:bg-neutral-900 transition duration-300 ease-in-out hover:scale-105">
                             <div className="-mb-14 -translate-y-36 transform">

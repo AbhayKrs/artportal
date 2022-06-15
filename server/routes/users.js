@@ -271,6 +271,7 @@ router.put('/profile', async (req, res) => {
 // @access  Private/Admin
 router.get('/:id', async (req, res) => {
     const user = await User.findById(req.params.id);
+    console.log('user', user)
     let comment_count = 0;
     const comment_countList = user.explore.map(item => item.comment_count);
     for (let i = 0; i < comment_countList.length; i++)
@@ -281,10 +282,12 @@ router.get('/:id', async (req, res) => {
         username: user.username,
         email: user.email,
         avatar: user.avatar,
+        tokens: user.tokens,
         followers: user.followers,
         followers_count: user.followers_count,
         explore: user.explore,
         explore_count: user.explore_count,
+        likes: user.likes,
         comment_count
     };
     jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 31556926 }, (err, token) => {

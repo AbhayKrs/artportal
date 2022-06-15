@@ -7,6 +7,7 @@ import AddressMap from './AddressMap';
 import Stepper from './Stepper';
 
 import TokenLogo from '../assets/images/money.png';
+import TokenIcon from '../assets/images/money.png';
 
 import { fetchUserImages } from '../api';
 
@@ -38,9 +39,9 @@ export const LoginModal = (props) => {
     }
     return (
         <div className={`${open ? 'block' : 'hidden'} flex fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
-            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 md:w-6/12 sm:w-11/12 rounded-xl z-50 overflow-y-auto">
-                <div className='grid grid-cols-2'>
-                    <img src={fetchUserImages(banner)} />
+            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 lg:w-8/12 sm:w-11/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
+                <div className='grid sm:grid-cols-2 grid-cols-1'>
+                    <img className='h-full sm:flex hidden' src={fetchUserImages(banner)} />
                     <div className='p-4 pt-2 flex flex-col space-y-3'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                         <h1 className='text-violet-500 dark:text-violet-500 text-5xl font-semibold tracking-widest font-antipasto mt-10'>{title}</h1>
@@ -172,9 +173,9 @@ export const RegisterModal = (props) => {
 
     return (
         <div className={`${open ? 'block' : 'hidden'} flex fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
-            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 md:w-6/12 sm:w-11/12 rounded-xl z-50 overflow-y-auto">
-                <div className='grid grid-cols-2'>
-                    <img className='h-full' src={fetchUserImages(banner)} />
+            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 lg:w-8/12 sm:w-11/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
+                <div className='grid sm:grid-cols-2 grid-cols-1'>
+                    <img className='h-full sm:flex hidden' src={fetchUserImages(banner)} />
                     <div className='p-4 pt-2 flex flex-col space-y-3'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                         <h1 className='text-violet-500 text-5xl font-semibold tracking-widest font-antipasto'>{title}</h1>
@@ -247,20 +248,52 @@ export const RegisterModal = (props) => {
 }
 
 export const AwardModal = (props) => {
-    const { open, onClose, title, awardList, handleAwardExplore } = props;
+    const { open, onClose, title, awardList, user, exploreID, handleAwardExplore } = props;
 
     return (
         <div className={`${open ? 'block' : 'hidden'} flex  fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
-            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 md:w-6/12 sm:w-10/12 rounded-xl z-50 overflow-y-auto">
+            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 lg:w-8/12 sm:w-11/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
                 <div className='grid'>
                     <div className='p-4 pt-2 flex flex-col space-y-3'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                         <h1 className='text-violet-500 dark:text-violet-800 text-4xl font-semibold tracking-widest font-antipasto'>{title}</h1>
-                        <AwardTabPanel awards={awardList} handleAwardExplore={handleAwardExplore} />
+                        <AwardTabPanel awards={awardList} user={user} exploreID={exploreID} handleAwardExplore={handleAwardExplore} />
                     </div>
                 </div>
             </div>
         </div>
+    )
+}
+
+export const AwardConfirmModal = (props) => {
+    const { open, awardData, user, onClose, exploreID, handleAwardExplore } = props;
+
+    return (
+        <div className={`${open ? 'block' : 'hidden'} flex  fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
+            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 sm:w-8/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
+                <div className='p-4 flex flex-col'>
+                    <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute right-0 top-0 mt-2 mr-2 cursor-pointer text-gray-400' />
+                    <p className='text-violet-800 font-josefinregular text-2xl font-semibold '>Confirm Purchase?</p>
+                    <div className='flex items-center space-x-3 my-2'>
+                        <img className='h-16 w-16' src={fetchUserImages(awardData.icon)} />
+                        <div className='flex-row'>
+                            <div className='flex space-x-1 items-center'>
+                                <img src={TokenIcon} className='h-6 w-6' />
+                                <span className='flex items-center font-bold text-2xl text-emerald-500 font-caviar'>{awardData.value}</span>
+                            </div>
+                            <p className='text-gray-900 font-bold dark:text-gray-200 font-caviar text-md'>Awarded by {user.username}.</p>
+                            <p className='text-gray-400 text-sm italic'>By purchasing the award, you understand the mentioned total will be deducted from your balance.</p>
+                        </div>
+                    </div>
+
+                    <hr className='h-2 w-full px-2 mt-2' />
+                    <div className='flex items-center place-content-between'>
+                        <p className='flex text-md text-gray-900 font-bold dark:text-gray-300 font-caviar'>Current Balance: <img src={TokenIcon} className='h-6 w-6 ml-1 mr-1' />{user.tokens}</p>
+                        <button onClick={() => { handleAwardExplore(awardData); onClose() }} className='p-1.5 bg-yellow-400 w-fit rounded-md'>Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div >
     )
 }
 
@@ -274,9 +307,9 @@ export const TokenModal = (props) => {
 
     return (
         <div className={`${open ? 'block' : 'hidden'} flex fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
-            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 lg:w-4/12 md:w-6/12 sm:w-8/12 rounded-xl z-50 overflow-y-auto">
+            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 lg:w-8/12 sm:w-11/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
                 <div className='grid'>
-                    <div className='p-6 flex flex-col'>
+                    <div className='p-4 flex flex-col'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                         <h1 className='text-violet-500 dark:text-violet-800 text-4xl font-semibold tracking-widest font-antipasto'>{title}</h1>
                         <div className='text-black dark:text-white text-md font-josefinlight'>Tokens are used to purchase awards, badges and profile avatars. You can gift your tokens to artists you admire as well!</div>
@@ -338,7 +371,7 @@ export const PurchaseModal = (props) => {
 
     return (
         <div className={`${open ? 'block' : 'hidden'} flex  fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
-            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 lg:w-4/12 md:w-6/12 sm:w-9/12 rounded-xl z-50 overflow-y-auto">
+            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 sm:w-8/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
                 <div className='grid'>
                     <div className='p-4 flex flex-col'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
@@ -409,14 +442,16 @@ export const CartModal = (props) => {
     const switchCartView = () => {
         switch (currentIndex) {
             case 0: return <div>
-                <div className='scrollbar px-2 flex bg-slate-200 dark:bg-neutral-900 max-h-48 overflow-y-auto rounded-md flex-col w-full divide-y-2 divide-neutral-800 text-gray-800 dark:text-gray-300 font-semibold dark:font-medium'>
+                <div className='sm:scrollbar px-2 flex flex-col bg-slate-200 dark:bg-neutral-900 max-h-48 overflow-y-auto w-full divide-y-2 divide-neutral-800 text-gray-800 dark:text-gray-300 font-semibold dark:font-medium'>
                     {cartList && cartList.map(cartItem => (
-                        <div className='flex gap-5 py-2 font-caviar text-md'>
-                            <img src={fetchStoreImages(cartItem.file)} className="w-20 h-20 object-cover rounded shadow-lg" alt="Thumbnail" />
-                            <div className='flex flex-col'>
-                                <span>Title: {cartItem.title}</span>
-                                <span>Category: {cartItem.title}</span>
-                                <span>Price: &#8377;{Number.parseFloat(cartItem.price).toFixed(2)}</span>
+                        <div className='flex sm:flex-row flex-col gap-5 py-2 font-caviar text-md'>
+                            <div className='flex gap-4'>
+                                <img src={fetchStoreImages(cartItem.file)} className="w-20 h-20 object-cover rounded shadow-lg" alt="Thumbnail" />
+                                <div className='flex flex-col'>
+                                    <span>Title: {cartItem.title}</span>
+                                    <span>Category: {cartItem.title}</span>
+                                    <span>Price: &#8377;{Number.parseFloat(cartItem.price).toFixed(2)}</span>
+                                </div>
                             </div>
                             <div className='flex flex-col items-end ml-auto space-y-2'>
                                 <div className="flex flex-row h-10 rounded-lg relative bg-transparent mt-1">
@@ -433,8 +468,8 @@ export const CartModal = (props) => {
                         </div>
                     ))}
                 </div>
-                <div className="flex mt-4 mx-2 space-x-8">
-                    <div className="w-1/2 space-y-4">
+                <div className="flex sm:flex-row flex-col mt-4 sm:mx-2 mx-0 gap-4">
+                    <div className="sm:w-1/2 w-full space-y-4">
                         <div>
                             <h1 className="font-bold uppercase text-gray-700 dark:text-gray-300">Coupon Code</h1>
                             <p className="mb-2 text-sm italic text-gray-500">If you have a coupon code, please enter it in the box below</p>
@@ -457,7 +492,7 @@ export const CartModal = (props) => {
                             <textarea rows='4' value={sellerInstruction} onChange={(ev) => setSellerInstruction(ev.target.value)} className="scrollbar w-full p-2 bg-gray-100 dark:bg-neutral-700 rounded resize-none text-gray-800 dark:text-gray-400 focus:outline-none"></textarea>
                         </div>
                     </div>
-                    <div className="w-1/2">
+                    <div className="sm:w-1/2 w-full">
                         <h1 className="font-bold uppercase text-gray-700 dark:text-gray-300">Order Details</h1>
                         <p className="mb-6 italic text-gray-500">Shipping and additionnal costs are calculated based on values you have entered</p>
                         <div className="flex justify-between">
@@ -477,12 +512,12 @@ export const CartModal = (props) => {
                             <div className="text-lg font-bold text-center text-gray-900 dark:text-gray-400">Final</div>
                             <div className="font-bold text-center text-gray-900 dark:text-gray-200">&#8377;{Number.parseFloat(final).toFixed(2)}</div>
                         </div>
-                        <button onClick={() => setCurrentIndex(1)} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-violet-400 rounded-xl shadow item-center hover:bg-violet-500 focus:shadow-outline focus:outline-none">Select the delivery location</button>
+                        <button onClick={() => setCurrentIndex(1)} className="flex float-right justify-center w-fit p-3 mt-6 sm:mb-0 mb-6 font-medium text-white uppercase bg-violet-400 rounded-xl shadow item-center hover:bg-violet-500 focus:shadow-outline focus:outline-none">Select the delivery location</button>
                     </div>
                 </div>
             </div>
 
-            case 1: return <div className='flex h-full space-x-4'>
+            case 1: return <div className='flex sm:flex-row flex-col h-full gap-4'>
                 <AddressMap />
                 <div className="flex flex-col w-full">
                     <div className="space-y-4">
@@ -586,9 +621,9 @@ export const CartModal = (props) => {
             </div>
 
             case 3: return <div className='flex flex-col h-full'>
-                <div className='space-y-8'>
+                <div className='space-y-6'>
                     <h1 className="font-bold uppercase text-gray-300">Summary</h1>
-                    <div className='flex flex-row space-x-8'>
+                    <div className='flex sm:flex-row flex-col gap-8'>
                         <div className='w-full'>
                             <div className="text-lg font-bold text-gray-800 dark:text-violet-400">Price Details</div>
                             <div className="flex justify-between">
@@ -634,7 +669,7 @@ export const CartModal = (props) => {
 
     return (
         <div className={`${open ? 'block' : 'hidden'} flex fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
-            <div className="scrollbar relative m-auto bg-slate-100 dark:bg-neutral-800 w-full h-full max-w-[80%] max-h-[80%] rounded-xl z-50 overflow-y-auto">
+            <div className="scrollbar relative m-auto bg-slate-100 dark:bg-neutral-800 lg:w-8/12 sm:w-11/12 xs:w-11/12 h-full max-h-[90%] rounded-xl z-50 overflow-y-auto">
                 <div className='p-4 h-full flex flex-col'>
                     <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                     <h1 className='text-violet-500 dark:text-violet-500 text-5xl font-semibold tracking-widest font-antipasto'>Cart</h1>

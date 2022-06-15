@@ -14,7 +14,8 @@ export const FETCH_CARTLIST = 'FETCH_CARTLIST';
 export const PUSH_TO_CART = 'PUSH_TO_CART';
 export const REMOVE_FROM_CART = 'REMOVE_FROM_CART';
 export const EDIT_CARTLIST = 'EDIT_CARTLIST';
-export const GET_USER_DETAILS = 'GET_USER_DETAILS';
+export const LOAD_PROFILE_DETAILS = 'LOAD_PROFILE_DETAILS';
+export const REFRESH_USER_DETAILS = 'REFRESH_USER_DETAILS';
 export const HANDLE_SIGNIN = 'HANDLE_SIGNIN';
 export const HANDLE_REFRESHTOKEN = 'HANDLE_REFRESHTOKEN';
 export const HANDLE_SIGNUP = 'HANDLE_SIGNUP';
@@ -24,7 +25,7 @@ export const FETCH_AVATARLIST = 'FETCH_AVATARLIST';
 export const FETCH_AWARDLIST = 'FETCH_AWARDLIST';
 
 export const initialState = {
-    theme: 'light',
+    theme: 'dark',
     loader: false,
     error: {
         open: false,
@@ -194,7 +195,10 @@ export const commonReducer = (state = initialState, { type, payload }) => {
                 ...state, user: { ...state.user, cart: [...state.user.cart, payload] }
             }
         }
-        case GET_USER_DETAILS: {
+        case REFRESH_USER_DETAILS: {
+            return { ...state, user: payload }
+        }
+        case LOAD_PROFILE_DETAILS: {
             return { ...state, viewed_user: payload }
         }
         case HANDLE_SIGNIN: {

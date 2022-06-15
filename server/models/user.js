@@ -29,11 +29,6 @@ const UserSchema = new Schema({
     },
     tokens: { type: Number, default: 0 },
     explore: [{
-        filename: {
-            type: String,
-            default: 'none',
-            required: true,
-        },
         title: { type: String, required: true },
         author: {
             id: {

@@ -37,7 +37,7 @@ export const addUserCartAPI = (userID, cartData) => get_api.post(`/users/${userI
 //PUT Request API's
 export const likeExploreAPI = (exploreID, userData) => get_api.put(`/explore/${exploreID}/like`, userData);
 export const dislikeExploreAPI = (exploreID, userData) => get_api.put(`/explore/${exploreID}/dislike`, userData);
-export const awardExploreAPI = (exploreID, awardData) => get_api.put(`/explore/${exploreID}/award`, awardData);
+export const awardExploreAPI = (exploreID, userID, awardData) => get_api.put(`/explore/${exploreID}/award`, { userID: userID, ...awardData });
 export const updateUserCartAPI = (userID, cartID, cartData) => get_api.put(`/users/${userID}/cart/${cartID}`, cartData);
 
 //DELETE Request API's

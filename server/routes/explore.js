@@ -314,6 +314,8 @@ router.get('/image/:filename', (req, res) => {
 // @desc        Like an explore
 // @access      Public
 router.put('/:id/like', async (req, res) => {
+    const fetchExplore = await Explore.findById(req.params.id);
+    const user = await User.findById(fetchExplore.author.id);
     try {
         Explore.findByIdAndUpdate(req.params.id, {
             $push: {
@@ -325,6 +327,8 @@ router.put('/:id/like', async (req, res) => {
             if (err) {
                 res.status(500).send('Failed to like!');
             } else {
+                user.explore.find(item => item._id == req.params.id).likes.push(req.body.id);
+                user.save();
                 res.send(like);
             }
         });
@@ -338,6 +342,8 @@ router.put('/:id/like', async (req, res) => {
 // @desc        Like an explore
 // @access      Public
 router.put('/:id/dislike', async (req, res) => {
+    const fetchExplore = await Explore.findById(req.params.id);
+    const user = await User.findById(fetchExplore.author.id);
     try {
         if (!req.body.id) {
             return res.status(401).json({ msg: 'User not authorized!' })
@@ -352,6 +358,8 @@ router.put('/:id/dislike', async (req, res) => {
             if (err) {
                 res.status(500).send('Failed to like!');
             } else {
+                user.explore.find(item => item._id == req.params.id).likes.filter(item => item !== req.body.id);
+                user.save();
                 res.json(dislike);
             }
         });
@@ -361,15 +369,17 @@ router.put('/:id/dislike', async (req, res) => {
     }
 })
 
-// @route       PUT api/explore/:id/dislike
+// @route       PUT api/explore/:id/award
 // @desc        Like an explore
 // @access      Public
 router.put('/:id/award', async (req, res) => {
     try {
+        console.log('test 1', req.body)
+        const user = await User.findById(req.body.userID);
         const explore = await Explore.findById(req.params.id);
-        const checkAward = explore.awards.find(award => award._id == req.body._id);
+        const checkAward = explore.awards.find(award => award.icon == req.body.icon);
         if (checkAward) {
-            console.log('test', explore.awards.find(award => award._id == req.body._id))
+            console.log('test', checkAward)
             explore.awards.find(award => award._id == req.body._id).count = explore.awards.find(award => award._id == req.body._id).count + 1;
             explore.save();
             res.send(explore);
@@ -384,6 +394,8 @@ router.put('/:id/award', async (req, res) => {
                 if (err) {
                     res.status(500).send('Failed to award the explore!');
                 } else {
+                    user.tokens = user.tokens - req.body.value;
+                    user.save();
                     res.send(award);
                 }
             });

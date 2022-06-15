@@ -74,7 +74,7 @@ const StoreAll = (props) => {
     return (
         <div className='main-container bg-gray-200 dark:bg-darkNavBg'>
             <div className='p-4 items-center'>
-                <div className='flex mb-3 justify-between'>
+                <div className='flex sm:flex-row flex-col mb-3 justify-between'>
                     <div className='text-3xl font-antipasto font-bold tracking-wider text-violet-500 dark:text-violet-500'>Artyst Store</div>
                     <div className='flex items-center space-x-2'>
                         {props.common.user.cart && props.common.user.cart.length > 0 && <button onClick={() => handleCartOpen()} className='relative h-fit tracking-wider overflow-visible bg-violet-500 font-bold p-2 rounded-lg'>
@@ -82,16 +82,16 @@ const StoreAll = (props) => {
                             <div className={`${!cartOpen && 'animate-pulse'} absolute -top-1 -right-1 px-1 bg-red-600 text-gray-200 rounded-full text-xs`}>{props.common.user.cart.length}</div>
                         </button>}
                         <button onClick={() => navigate('/store/new')} className='ml-auto h-fit tracking-wider border-2 border-violet-500 text-violet-500 font-antipasto font-bold py-1.5 px-3 rounded-lg'>Create Listing</button>
-                        <Dropdown right selectedPeriod={activeCategoryLabel} options={categoryOptions} onSelect={handleCategoryChange} />
+                        <Dropdown right name='category' selectedPeriod={activeCategoryLabel} options={categoryOptions} onSelect={handleCategoryChange} />
                         {storeCategory.length > 0 ? <a className='text-sm font-medium text-rose-400 underline' onClick={() => handleCategoryChange(null)}>Clear</a> : ''}
                     </div>
                 </div>
                 {/* Highlights of the Day section */}
                 <div className='space-y-2'>
-                    <div className='grid gap-4 grid-cols-5'>
+                    <div className='grid gap-4 sm:grid-cols-3 grid-cols-1'>
                         {props.store.storeList.map(item => (
-                            <div className="h-full drop-shadow-lg rounded-xl bg-indigo-50 dark:bg-neutral-800 overflow-hidden">
-                                <img className="h-full max-h-60 w-full object-cover object-center scale-110 transition-all duration-400 scale-100" src={fetchStoreImages(item.files[0])} />
+                            <div className="drop-shadow-lg rounded-xl bg-indigo-50 dark:bg-neutral-800 overflow-hidden">
+                                <img className="sm:h-full max-h-60 w-full object-cover object-center scale-110 transition-all duration-400 scale-100" src={fetchStoreImages(item.files[0])} />
                                 <div className="py-6 px-4">
                                     <h2 className="tracking-widest text-xs title-font font-medium text-gray-400 mb-2">CATEGORY: <span className='capitalize text-gray-700'>{item.category}</span></h2>
                                     <h1 className="title-font text-lg font-medium text-neutral-800 dark:text-neutral-300">{item.title}</h1>

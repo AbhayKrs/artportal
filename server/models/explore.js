@@ -50,7 +50,7 @@ const exploreSchema = new mongoose.Schema(
         awards: [{
             id: { type: mongoose.Schema.Types.ObjectId },
             icon: { type: String, default: '' },
-            title: { type: String, default: '' },
+            value: { type: Number, default: 0 },
             count: { type: Number, default: 0 }
         }],
         likes: [{

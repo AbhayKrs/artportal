@@ -6,7 +6,7 @@ import moment from 'moment';
 import { fetchExploreImages, fetchUserImages, fetchStoreImages } from '../api';
 import { fetchExploreList, fetchExploreItem, handleLikeExplore, handleAwardExplore, handleDislikeExplore, handleAddComment, handleEditComment, handleDeleteComment, handleLikeComment, handleDislikeComment } from '../store/actions/explore.actions';
 import { fetchStoreList, fetchStoreItem } from '../store/actions/store.actions';
-import { fetchAwards, setError } from '../store/actions/common.actions';
+import { fetchAwards, loadProfileDetails, refreshUserDetails, setError } from '../store/actions/common.actions';
 import { ExploreShowCarousel } from '../components/Carousel';
 import { AwardModal } from '../components/Modal';
 
@@ -81,8 +81,9 @@ const ExploreShow = (props) => {
 
     const handleAwardExplore = async (award) => {
         console.log('handleAwardExplore', award);
-        await props.handleAwardExplore(id, award);
+        await props.handleAwardExplore(id, props.user.id, award);
         setTimeout(() => {
+            props.refreshUserDetails(props.user.id);
             props.fetchExploreItem(id);
         }, 2000);
     }
@@ -162,32 +163,23 @@ const ExploreShow = (props) => {
             />
             <div className='flex fixed m-5 space-x-3 p-1 bg-neutral-100 dark:bg-neutral-800 rounded'>
                 <div className='flex justify-end py-0.5 space-x-2 text-teal-500'>
-                    <h3 className='font-josefinlight text-lg'>{new Intl.NumberFormat().format(props.exploreShow.likes.length)}</h3>
+                    <h3 className='font-josefinlight text-lg leading-[0] self-center'>{new Intl.NumberFormat().format(props.exploreShow.likes.length)}</h3>
                     <IoEye className='h-6 w-6' />
                 </div>
                 <div className='flex justify-end py-0.5 space-x-2 text-violet-500 dark:text-violet-500'>
-                    <h3 className='font-josefinlight text-lg'>{new Intl.NumberFormat().format(props.exploreShow.likes.length)}</h3>
+                    <h3 className='font-josefinlight text-lg leading-[0] self-center'>{new Intl.NumberFormat().format(props.exploreShow.likes.length)}</h3>
                     <IoHeart className='h-6 w-6' />
                 </div>
                 <div className='flex justify-end py-0.5 space-x-2 text-violet-500 dark:text-violet-500'>
-                    <h3 className='font-josefinlight text-lg'>{new Intl.NumberFormat().format(props.exploreShow.comment_count)}</h3>
+                    <h3 className='font-josefinlight text-lg leading-[0] self-center'>{new Intl.NumberFormat().format(props.exploreShow.comment_count)}</h3>
                     <IoChatbox className='h-6 w-6' />
                 </div>
             </div>
-            <div className='lg:col-span-3 md:mt-3 sm:mt-0 bg-fixed'>
-                <div className='flex flex-col rounded-md bg-neutral-50 dark:bg-neutral-800 mr-2 py-3'>
-                    <div className='flex flex-col'>
+            <div className='lg:col-span-4 md:mt-3 sm:mt-0 bg-fixed'>
+                <div className='flex flex-col rounded-md bg-neutral-50 dark:bg-neutral-800 mr-2 ml-2 lg:ml-0 py-3'>
+                    <div className='flex flex-col space-y-2'>
                         <div className='flex flex-row space-x-2'>
-                            <div className='flex w-fit flex-col items-center space-y-3'>
-                                <div className="relative float-left flex">
-                                    <img onClick={props.common.isAuthenticated ? () => setAwardOpen(true) : handleInvalidUser} src={AwardIcon} className='h-12 w-12 cursor-pointer' />
-                                    <ImPlus className="absolute bottom-0 right-0 text-[#D1853A] h-4 w-4" />
-                                </div>
-                                <BsHeartFill style={like ? { color: '#FF3980' } : { color: '#F190B3' }} className='h-6 w-6 cursor-pointer' onClick={props.common.isAuthenticated ? () => { setLike(!like); handleToggleLike(props.exploreShow.likes) } : handleInvalidUser} />
-                                <IoShareSocialSharp className='h-6 w-6 text-violet-500 dark:text-violet-500' />
-                                <BsFillBookmarkFill onClick={props.common.isAuthenticated ? () => console.log('bookmark!') : handleInvalidUser} className='h-6 w-6 text-violet-500 dark:text-violet-500' />
-                            </div>
-                            <div className='flex flex-col w-full space-y-2'>
+                            <div className='flex flex-col w-full space-y-2 px-2'>
                                 <h1 className='font-caviar text-2xl tex-gray-900 dark:text-gray-200 font-bold'>{props.exploreShow.title}</h1>
                                 <p className='font-josefinlight text-lg tex-gray-800 dark:text-gray-300'>{props.exploreShow.description}</p>
                             </div>
@@ -199,29 +191,40 @@ const ExploreShow = (props) => {
                                 </div>
                             ))}
                         </div>
-                        <div className='mr-3'>
-                            <div className='flex flex-col text-right justify-end py-1 text-neutral-900 dark:text-gray-400'>
-                                <p className='font-josefinlight text-xl'>Posted By</p>
-                                <div className="flex justify-end">
-                                    <div className="w-6 h-6 overflow-hidden">
-                                        <img src={fetchUserImages(props.exploreShow.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
-                                    </div>
-                                    <p className="font-josefinlight pt-0.5 font-medium text-lg mx-0.5">
-                                        {props.exploreShow.author.username}
-                                    </p>
-                                    <svg className="stroke-current stroke-1 text-blue-600 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                                    </svg>
+                        <div className='flex pl-1 justify-between'>
+                            <div className='flex w-fit items-center space-x-3'>
+                                <div className="relative float-left flex">
+                                    <img onClick={props.common.isAuthenticated ? () => setAwardOpen(true) : handleInvalidUser} src={AwardIcon} className='h-12 w-12 cursor-pointer' />
+                                    <ImPlus className="absolute bottom-0 right-0 text-[#D1853A] h-4 w-4" />
                                 </div>
-                                <p className='font-josefinlight whitespace-nowrap text-sm'>{moment(props.exploreShow.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</p>
+                                <BsHeartFill style={like ? { color: '#FF3980' } : { color: '#F190B3' }} className='h-7 w-7 cursor-pointer' onClick={props.common.isAuthenticated ? () => { setLike(!like); handleToggleLike(props.exploreShow.likes) } : handleInvalidUser} />
+                                <IoShareSocialSharp className='h-7 w-7 text-violet-500 dark:text-violet-500' />
+                                <BsFillBookmarkFill onClick={props.common.isAuthenticated ? () => console.log('bookmark!') : handleInvalidUser} className='h-7 w-7 text-violet-500 dark:text-violet-500' />
+                            </div>
+                            <div className='mr-3'>
+                                <div className='flex flex-col text-right justify-end py-1 text-neutral-900 dark:text-gray-400'>
+                                    <p className='font-josefinlight text-xl'>Posted By</p>
+                                    <div className="flex justify-end">
+                                        <div className="w-6 h-6 overflow-hidden">
+                                            <img src={fetchUserImages(props.exploreShow.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
+                                        </div>
+                                        <p className="font-josefinlight pt-0.5 font-medium text-lg mx-0.5">
+                                            {props.exploreShow.author.username}
+                                        </p>
+                                        <svg className="stroke-current stroke-1 text-blue-600 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                    <p className='font-josefinlight whitespace-nowrap text-sm'>{moment(props.exploreShow.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div id='award' className='flex overflow-x-hidden bg-slate-200 dark:bg-neutral-700 mx-2 p-2 rounded-lg space-x-2'>
-                        {props.common.awardList.map(award => (
+                        {props.exploreShow.awards.map(award => (
                             <div className="relative float-left mr-2 flex">
                                 <img draggable="false" className='max-w-fit h-12 w-12' src={fetchUserImages(award.icon)} />
-                                <span className="absolute font-bold top-0 right-0 inline-block rounded-full bg-violet-800 shadow-lg shadow-neutral-800 text-gray-300 px-1.5 py-0.5 text-xs">{0/*award.count*/}</span>
+                                <span className="absolute font-bold top-0 right-0 inline-block rounded-full bg-violet-800 shadow-lg shadow-neutral-800 text-gray-300 px-1.5 py-0.5 text-xs">{award.count}</span>
                             </div>
                         ))}
                     </div>
@@ -296,6 +299,8 @@ const ExploreShow = (props) => {
                     open={awardOpen}
                     title='Awards'
                     awardList={props.common.awardList}
+                    user={props.user}
+                    exploreID={id}
                     onClose={() => setAwardOpen(false)}
                     onClick={() => setAwardOpen(false)}
                     handleAwardExplore={handleAwardExplore}
@@ -392,6 +397,8 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     fetchExploreList,
     fetchStoreList,
     fetchStoreItem,
+    loadProfileDetails,
+    refreshUserDetails,
     handleLikeExplore,
     handleAwardExplore,
     handleDislikeExplore,

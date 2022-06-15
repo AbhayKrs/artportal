@@ -100,9 +100,9 @@ export const handleDislikeExplore = (exploreID, likeStatus) => async (dispatch, 
     })
 }
 
-export const handleAwardExplore = (exploreID, award) => async (dispatch, getState) => {
+export const handleAwardExplore = (exploreID, userID, award) => async (dispatch, getState) => {
     console.log('handleAwardExplore', award);
-    await awardExploreAPI(exploreID, award).then(res => {
+    await awardExploreAPI(exploreID, userID, award).then(res => {
         console.log('award', res.status);
     }).catch(err => {
         console.log('---error handleAwardExplore', err);

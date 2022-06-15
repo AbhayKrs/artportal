@@ -129,8 +129,8 @@ const ExploreUpload = (props) => {
         <div className="main-container bg-gray-200 dark:bg-darkNavBg p-5">
             <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-5">
                 <span className='font-caviar text-3xl text-gray-700 dark:text-gray-300'>Upload</span>
-                <div className='mt-3 space-y-2'>
-                    <div>
+                <div className='flex lg:flex-row flex-col mt-3 lg:space-x-4 md:space-y-2'>
+                    <div className='w-full'>
                         <span className='font-josefinlight font-semibold text-gray-700 dark:text-gray-300'>Files<span className='font-josefinlight text-rose-400 text-md'>*</span></span>
                         <div className="flex flex-col space-y-3">
                             <div className="flex flex-col justify-center items-center border-dashed space-y-2 rounded-lg border-2 border-gray-400 py-8" onDrop={(ev) => dropHandler(ev)} onDragOver={(ev) => dragOverHandler(ev)} >
@@ -167,16 +167,16 @@ const ExploreUpload = (props) => {
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <div>
+                    <div className='w-full space-y-2'>
+                        <div className='flex flex-col'>
                             <span className='font-josefinlight font-semibold text-gray-700 dark:text-gray-300'>Title<span className='font-josefinlight text-rose-400 text-md'>*</span></span>
                             <input type="text" value={exploreTitle} onChange={(ev) => setExploreTitle(ev.target.value)} className="py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 focus:outline-none rounded-md w-full" placeholder='Title' />
                         </div>
-                        <div>
+                        <div className='flex flex-col'>
                             <span className='font-josefinlight font-semibold text-gray-700 dark:text-gray-300'>Description<span className='font-josefinlight text-rose-400 text-md'>*</span></span>
                             <textarea rows='4' value={exploreDesc} onChange={(ev) => setExploreDesc(ev.target.value)} className="scrollbar py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 resize-none focus:outline-none rounded-md w-full" placeholder='Title' />
                         </div>
-                        <div>
+                        <div className='flex flex-col'>
                             <span className='font-josefinlight font-semibold text-gray-700 dark:text-gray-300'>Add tags:</span>
                             <div className='font-josefinlight text-rose-400 font-semibold text-sm'>You may assign a maximum of 10 tags</div>
                             <div className="w-full inline-flex flex-col justify-center relative text-gray-500">
@@ -217,7 +217,6 @@ const ExploreUpload = (props) => {
                         </div>
                     </div>
                 </div>
-
                 <div className="flex justify-end pt-5">
                     <button onClick={() => navigate(`/explore`)} className="rounded-md px-3 py-1 bg-gray-300 focus:shadow-outline focus:outline-none">
                         Cancel
@@ -360,7 +359,7 @@ const StoreUpload = (props) => {
         <div className="main-container bg-gray-200 dark:bg-darkNavBg p-5">
             <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-5">
                 <span className='font-caviar text-3xl text-gray-700 dark:text-gray-300'>List Product to Store</span>
-                <div className='flex flex-row mt-3 space-x-4'>
+                <div className='flex lg:flex-row flex-col mt-3 lg:space-x-4 md:space-y-2'>
                     <div className='w-full'>
                         <span className='font-josefinlight font-semibold text-gray-700 dark:text-gray-300'>Files<span className='font-josefinlight text-rose-400 text-md'>*</span></span>
                         <div className="flex flex-col space-y-3">
@@ -372,7 +371,6 @@ const StoreUpload = (props) => {
                                 </label>
                                 <input id="file-upload" className='hidden' type="file" multiple onChange={onImageChange} />
                             </div>
-                            <img id='output' />
                             <div className="flex flex-col rounded-lg bg-slate-100 dark:bg-neutral-700 shadow items-center py-5 px-1 w-full">
                                 <h1 className="font-bold sm:text-lg text-gray-800 dark:text-gray-400">Upload Files</h1>
                                 <div className="h-full w-full text-center flex flex-col items-center justify-center items-center">
@@ -415,19 +413,18 @@ const StoreUpload = (props) => {
                         </div>
                         <div className='flex flex-col'>
                             <span className='font-josefinlight font-semibold text-gray-700 dark:text-gray-300'>Category<span className='font-josefinlight text-rose-400 text-md'>*</span></span>
-                            <Dropdown left selectedPeriod={activeCategoryLabel} options={categoryOptions} onSelect={handleCategoryChange} />
+                            <Dropdown left name='category' selectedPeriod={activeCategoryLabel} options={categoryOptions} onSelect={handleCategoryChange} />
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div className="flex justify-end pt-5">
-                <button onClick={() => navigate(`/store`)} className="rounded-md px-3 py-1 bg-gray-300 focus:shadow-outline focus:outline-none">
-                    Cancel
-                </button>
-                <button onClick={handleUpload} className="ml-3 rounded-md px-3 py-1 bg-blue-700 hover:bg-blue-500 text-white focus:shadow-outline focus:outline-none">
-                    Apply
-                </button>
+                <div className="flex justify-end pt-5">
+                    <button onClick={() => navigate(`/store`)} className="rounded-md px-3 py-1 bg-gray-300 focus:shadow-outline focus:outline-none">
+                        Cancel
+                    </button>
+                    <button onClick={handleUpload} className="ml-3 rounded-md px-3 py-1 bg-blue-700 hover:bg-blue-500 text-white focus:shadow-outline focus:outline-none">
+                        Apply
+                    </button>
+                </div>
             </div>
         </div>
     )

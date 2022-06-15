@@ -6,20 +6,30 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 export const ExploreShowCarousel = (props) => {
   return (
-    <div className="flex relative lg:col-span-9 w-full justify-center bg-gray-300 dark:bg-[#101010]">
+    <div className="flex relative lg:col-span-8 w-full justify-center bg-gray-300 dark:bg-[#101010]">
       <div className="flex flex-col m-3 space-y-3 w-full justify-center">
         <div className='flex w-fit self-center items-center place-content-center'>
-          {props.prevTrue ? <button onClick={props.prev} aria-label="slide backward" className="fixed z-30 ml-3 top-0 bottom-0 left-0 cursor-pointer">
-            <FaChevronLeft className='text-5xl text-neutral-800 dark:text-gray-300' />
-          </button> : ''}
-          <img src={`${fetchExploreImages(props.currentImage)}`} className="h-full px-14 object-cover object-center rounded-lg" />
-          {props.nextTrue ? <button onClick={props.next} aria-label="slide forward" className="fixed z-30 mr-3 top-0 bottom-0 right-96 cursor-pointer">
-            <FaChevronRight className='text-5xl text-neutral-800 dark:text-gray-300' />
-          </button> : ''}
+          <div className='hidden lg:visible'>
+            {props.prevTrue ? <button onClick={props.prev} aria-label="slide backward" className="fixed z-30 top-0 bottom-0 left-0 cursor-pointer">
+              <FaChevronLeft className='text-5xl text-neutral-800 dark:text-gray-300' />
+            </button> : ''}
+            {props.nextTrue ? <button onClick={props.next} aria-label="slide forward" className="fixed z-30 lg:right-[33.5%] md:right-0 top-0 bottom-0 right-[31rem] cursor-pointer">
+              <FaChevronRight className='text-5xl text-neutral-800 dark:text-gray-300' />
+            </button> : ''}
+          </div>
+          <div className='lg:hidden flex fixed top-14 right-0 m-5 space-x-3 p-1 bg-neutral-100 dark:bg-neutral-800 rounded'>
+            {props.prevTrue ? <div onClick={props.prev} className='flex justify-end py-0.5 space-x-2 text-gray-700 dark:text-gray-200'>
+              <FaChevronLeft className='h-8 w-8' />
+            </div> : ''}
+            {props.nextTrue ? <div onClick={props.next} className='flex justify-end py-0.5 space-x-2 text-gray-700 dark:text-gray-200'>
+              <FaChevronRight className='h-8 w-8' />
+            </div> : ''}
+          </div>
+          <img src={`${fetchExploreImages(props.currentImage)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
         </div>
         <div className='flex w-fit flex-col self-center items-center space-y-3 place-content-center'>
           {props.secondaryImages.map((image, index) => (
-            <img key={index} src={`${fetchExploreImages(image)}`} className="h-full px-14 object-cover object-center rounded-lg" />
+            <img key={index} src={`${fetchExploreImages(image)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
           ))}
         </div>
       </div>
@@ -88,13 +98,13 @@ export const StoreMultiCarousel = (props) => {
           onClick={() => movePrev()}
           className="hover:bg-violet-900/75 rounded-r-md text-white dark:text-gray-800 w-10 h-full text-center opacity-75 hover:opacity-100 disabled:opacity-25 disabled:cursor-not-allowed z-10 p-0 m-0 transition-all ease-in-out duration-300"
         >
-          <GoChevronLeft className='h-12 w-20 -ml-5' />
+          <GoChevronLeft className='h-12 w-20 -ml-5 text-neutral-800 dark:text-gray-300' />
         </button>
         <button
           onClick={() => moveNext()}
           className="hover:bg-violet-900/75 rounded-l-md text-white dark:text-gray-800 w-10 h-full text-center opacity-75 hover:opacity-100 disabled:opacity-25 disabled:cursor-not-allowed z-10 p-0 m-0 transition-all ease-in-out duration-300"
         >
-          <GoChevronRight className='h-12 w-20 -ml-5' />
+          <GoChevronRight className='h-12 w-20 -ml-5 text-neutral-800 dark:text-gray-300' />
         </button>
       </div>
       <div ref={carousel} className="carousel-container relative flex gap-3 overflow-hidden scroll-smooth snap-x snap-mandatory touch-pan-x z-0 mx-14">
@@ -116,151 +126,3 @@ export const StoreMultiCarousel = (props) => {
     </div>
   )
 }
-
-/*
-<div className="flex items-center justify-center w-full h-full py-24 sm:py-8 px-4">
-  <!--- more free and premium Tailwind CSS components at https://tailwinduikit.com/ --->
-  <div className="w-full relative flex items-center justify-center">
-    <button aria-label="slide backward" className="absolute z-30 left-0 ml-10 focus:outline-none focus:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 cursor-pointer" id="prev">
-      <svg className="dark:text-gray-900" width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M7 1L1 7L7 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-      </svg>
-    </button>
-    <div className="w-full h-full mx-auto overflow-x-hidden overflow-y-hidden">
-      <div id="slider" className="h-full flex lg:gap-8 md:gap-6 gap-14 items-center justify-start transition ease-out duration-700">
-        <div className="flex flex-shrink-0 relative w-full sm:w-auto">
-          <img src="https://i.ibb.co/fDngH9G/carosel-1.png" alt="black chair and white table" className="object-cover object-center w-full" />
-          <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-            <h2 className="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 1</h2>
-            <div className="flex h-full items-end pb-6">
-              <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-shrink-0 relative w-full sm:w-auto">
-          <img src="https://i.ibb.co/DWrGxX6/carosel-2.png" alt="sitting area" className="object-cover object-center w-full" />
-          <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-            <h2 className="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
-            <div className="flex h-full items-end pb-6">
-              <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-shrink-0 relative w-full sm:w-auto">
-          <img src="https://i.ibb.co/tCfVky2/carosel-3.png" alt="sitting area" className="object-cover object-center w-full" />
-          <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-            <h2 className="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
-            <div className="flex h-full items-end pb-6">
-              <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-shrink-0 relative w-full sm:w-auto">
-          <img src="https://i.ibb.co/rFsGfr5/carosel-4.png" alt="sitting area" className="object-cover object-center w-full" />
-          <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-            <h2 className="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
-            <div className="flex h-full items-end pb-6">
-              <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-shrink-0 relative w-full sm:w-auto">
-          <img src="https://i.ibb.co/fDngH9G/carosel-1.png" alt="black chair and white table" className="object-cover object-center w-full" />
-          <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-            <h2 className="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
-            <div className="flex h-full items-end pb-6">
-              <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-shrink-0 relative w-full sm:w-auto">
-          <img src="https://i.ibb.co/DWrGxX6/carosel-2.png" alt="sitting area" className="object-cover object-center w-full" />
-          <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-            <h2 className="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
-            <div className="flex h-full items-end pb-6">
-              <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-shrink-0 relative w-full sm:w-auto">
-          <img src="https://i.ibb.co/tCfVky2/carosel-3.png" alt="sitting area" className="object-cover object-center w-full" />
-          <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-            <h2 className="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
-            <div className="flex h-full items-end pb-6">
-              <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-shrink-0 relative w-full sm:w-auto">
-          <img src="https://i.ibb.co/rFsGfr5/carosel-4.png" alt="sitting area" className="object-cover object-center w-full" />
-          <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-            <h2 className="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
-            <div className="flex h-full items-end pb-6">
-              <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-shrink-0 relative w-full sm:w-auto">
-          <img src="https://i.ibb.co/fDngH9G/carosel-1.png" alt="black chair and white table" className="object-cover object-center w-full" />
-          <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-            <h2 className="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
-            <div className="flex h-full items-end pb-6">
-              <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-shrink-0 relative w-full sm:w-auto">
-          <img src="https://i.ibb.co/DWrGxX6/carosel-2.png" alt="sitting area" className="object-cover object-center w-full" />
-          <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-            <h2 className="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
-            <div className="flex h-full items-end pb-6">
-              <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-shrink-0 relative w-full sm:w-auto">
-          <img src="https://i.ibb.co/tCfVky2/carosel-3.png" alt="sitting area" className="object-cover object-center w-full" />
-          <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-            <h2 className="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
-            <div className="flex h-full items-end pb-6">
-              <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-shrink-0 relative w-full sm:w-auto">
-          <img src="https://i.ibb.co/rFsGfr5/carosel-4.png" alt="sitting area" className="object-cover object-center w-full" />
-          <div className="bg-gray-800 bg-opacity-30 absolute w-full h-full p-6">
-            <h2 className="lg:text-xl leading-4 text-base lg:leading-5 text-white dark:text-gray-900">Catalog 2</h2>
-            <div className="flex h-full items-end pb-6">
-              <h3 className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-white dark:text-gray-900">Minimal Interior</h3>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <button aria-label="slide forward" className="absolute z-30 right-0 mr-10 focus:outline-none focus:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-gray-400" id="next">
-      <svg className="dark:text-gray-900" width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M1 1L7 7L1 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-      </svg>
-    </button>
-  </div>
-</div>
-<script>
-    let defaultTransform = 0;
-function goNext() {
-  defaultTransform = defaultTransform - 398;
-  var slider = document.getElementById("slider");
-  if (Math.abs(defaultTransform) >= slider.scrollWidth / 1.7)
-    defaultTransform = 0;
-  slider.style.transform = "translateX(" + defaultTransform + "px)";
-}
-next.addEventListener("click", goNext);
-function goPrev() {
-  var slider = document.getElementById("slider");
-  if (Math.abs(defaultTransform) === 0) defaultTransform = 0;
-  else defaultTransform = defaultTransform + 398;
-  slider.style.transform = "translateX(" + defaultTransform + "px)";
-}
-prev.addEventListener("click", goPrev);
-</script>
-*/

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import ImageCard from './ImageCard';
-import { AwardConfirmModal } from './SubModal';
+import { AwardConfirmModal } from './Modal';
 import { MdUpload, MdClose } from 'react-icons/md';
 import Dropdown from './Dropdown';
 import SearchBar from './SearchBar';
@@ -51,7 +51,7 @@ export const HomeTabPanel = (props) => {
                     </svg>
                 </button>
             </div>
-            <div className="grid bg-gray-300 dark:bg-neutral-800 overflow-hidden rounded-b-md lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2">
+            <div className="grid bg-gray-300 dark:bg-neutral-800 overflow-hidden rounded-b-md lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-3 xs:grid-cols-1">
                 {props.tags.map((tag, index) => {
                     return <>
                         {index === activeStatus && props.exploreList.filter(item => item.tags.includes(tag) === true).map(explore => (
@@ -83,23 +83,13 @@ export const AwardTabPanel = (props) => {
                     </ul>
                 </div>
             </div>
-            <div className="scrollbar grid max-h-96 gap-6 bg-gray-300 dark:bg-neutral-900 p-5 overflow-x-hidden rounded-b-md lg:grid-cols-6 md:grid-cols-6 sm:grid-cols-7 xs:grid-cols-2" >
+            <div className="scrollbar grid max-h-96 gap-6 bg-gray-300 dark:bg-neutral-900 p-5 overflow-x-hidden rounded-b-md lg:grid-cols-6 xs:grid-cols-2" >
                 {props.awards.map((award, index) => {
                     return <>
                         {index === activeStatus && props.awards.map(award => (
                             <button onClick={() => setConfirmData({ open: true, award })}>
                                 <img style={{ width: '3em', height: '3em' }} src={fetchUserImages(award.icon)} />
-                                <p className="font-bold font-serif text-right text-neutral-700 dark:text-gray-300 text-sm">500</p>
-                            </button>
-                        ))}
-                    </>
-                })}
-                {props.awards.map((award, index) => {
-                    return <>
-                        {index === activeStatus && props.awards.map(award => (
-                            <button onClick={() => setConfirmData({ open: true, award })}>
-                                <img style={{ width: '3em', height: '3em' }} src={fetchUserImages(award.icon)} />
-                                <p className="font-bold font-serif text-right text-neutral-700 dark:text-gray-300 text-sm">500</p>
+                                <p className="font-bold font-serif text-right text-neutral-700 dark:text-gray-300 text-sm">{award.value}</p>
                             </button>
                         ))}
                     </>
@@ -108,6 +98,8 @@ export const AwardTabPanel = (props) => {
             <AwardConfirmModal
                 open={confirmData.open}
                 awardData={confirmData.award}
+                user={props.user}
+                exploreID={props.exploreID}
                 onClose={() => setConfirmData({ open: false, award: {} })}
                 handleAwardExplore={props.handleAwardExplore}
             />
@@ -123,7 +115,13 @@ export const FilterPanel = (props) => {
     const [activePeriod, setActivePeriod] = useState('');
     const [activePeriodLabel, setActivePeriodLabel] = useState('Select a time period');
 
-    const filters = ['trending', 'popular', 'new', 'rising', 'most discussed'];
+    const filters = [
+        { id: 0, label: 'Trending', value: 'trending' },
+        { id: 1, label: 'Popular', value: 'popular' },
+        { id: 2, label: 'New', value: 'new' },
+        { id: 3, label: 'Rising', value: 'rising' },
+        { id: 4, label: 'Most Discussed', value: 'most discussed' }
+    ];
 
     const periodOptions = [
         { id: 1, label: 'Past hour', value: 'hour' },
@@ -133,10 +131,6 @@ export const FilterPanel = (props) => {
         { id: 5, label: 'Past year', value: 'year' },
         { id: 6, label: 'All time', value: 'all time' }
     ]
-
-    const handlePeriodChange = (popular) => {
-        setActivePeriod(popular.value)
-    }
 
     useEffect(() => {
         const params = new Proxy(new URLSearchParams(window.location.search), {
@@ -160,57 +154,72 @@ export const FilterPanel = (props) => {
             navigate('/explore');
         } else {
             if (activeFilter === 0 || activeFilter === 2 || activeFilter === 3) {
-                navigate(`?filter=${filters[activeFilter].replace(/\s+/g, '+')}`);
-                props.filterExploreList(filters[activeFilter].replace(/\s+/g, '+'));
+                navigate(`?filter=${filters[activeFilter].value.replace(/\s+/g, '+')}`);
+                props.filterExploreList(filters[activeFilter].value.replace(/\s+/g, '+'));
             } else {
                 setActivePeriod('month')
-                navigate(`?filter=${filters[activeFilter].replace(/\s+/g, '+')}&period=${activePeriod}`);
-                props.filterExploreList(filters[activeFilter].replace(/\s+/g, '+'), activePeriod);
+                navigate(`?filter=${filters[activeFilter].value.replace(/\s+/g, '+')}&period=${activePeriod}`);
+                props.filterExploreList(filters[activeFilter].value.replace(/\s+/g, '+'), activePeriod);
             }
         }
     }, [activeFilter, activePeriod])
 
-    const selectFilter = (index) => {
-        if (activeFilter === index) {
-            setActiveFilter(-1);
+    const selectFilter = (item) => {
+        console.log('index', item)
+        if (activeFilter === item.id) {
+            setActiveFilter(item.id);
             setActivePeriod('')
         } else {
-            setActiveFilter(index)
+            setActiveFilter(item.id)
         }
+    }
+    const handlePeriodChange = (popular) => {
+        setActivePeriod(popular.value)
     }
 
     const handleExploreSearch = () => {
         if (activeFilter < 0) {
             navigate(`/explore/search?query=${exploreSearch}`);
         } else if (activeFilter === 0 || activeFilter === 2 || activeFilter === 3) {
-            navigate(`/explore/search?query=${exploreSearch}&filter=${filters[activeFilter].replace(/\s+/g, '+')}`);
+            navigate(`/explore/search?query=${exploreSearch}&filter=${filters[activeFilter].value.replace(/\s+/g, '+')}`);
 
         } else {
-            navigate(`/explore/search?query=${exploreSearch}&filter=${filters[activeFilter].replace(/\s+/g, '+')}&period=${activePeriod}`);
+            navigate(`/explore/search?query=${exploreSearch}&filter=${filters[activeFilter].value.replace(/\s+/g, '+')}&period=${activePeriod}`);
         }
     }
 
     return (
-        <div className='flex w-full items-center bg-slate-100/75 dark:bg-darkNavBg/75 p-2 sticky top-14 z-20'>
-            <div className='flex overflow-hidden'>
-                <ul id='tabSlider' className="flex space-x-2 items-center">
-                    {filters.map((filter, index) => {
-                        return <li key={index} onClick={() => selectFilter(index)} className={index === activeFilter ? "font-caviar text-sm font-bold tracking-wider text-gray-700 bg-violet-300 rounded-lg h-fit shadow" : "font-caviar text-sm font-bold tracking-wider text-gray-700 dark:text-gray-400 bg-slate-200 dark:bg-neutral-900 flex items-center shadow cursor-pointer rounded-lg h-fit"}>
-                            <div className="flex items-center">
-                                <span className="py-2 px-3 capitalize">{filter}</span>
-                            </div>
-                        </li>
-                    })}
-                </ul>
+        <div className='flex sm:flex-row gap-2 flex-col w-full items-center bg-slate-100/75 dark:bg-darkNavBg/75 p-2 sticky top-14 z-20'>
+            <div className='flex w-full items-center sm:justify-start justify-between'>
+                <div className='lg:flex hidden overflow-hidden'>
+                    <ul id='tabSlider' className="flex space-x-2 items-center">
+                        {filters.map((filter, index) => {
+                            return <li key={index} onClick={() => selectFilter(index)} className={index === activeFilter ? "font-caviar text-sm font-bold tracking-wider text-gray-700 bg-violet-300 rounded-lg h-fit shadow" : "font-caviar text-sm font-bold tracking-wider text-gray-700 dark:text-gray-400 bg-slate-200 dark:bg-neutral-900 flex items-center shadow cursor-pointer rounded-lg h-fit"}>
+                                <div className="flex items-center">
+                                    <span className="py-2 px-3 capitalize">{filter.label}</span>
+                                </div>
+                            </li>
+                        })}
+                    </ul>
+                </div>
+                <div className="lg:hidden flex items-center cursor-pointer space-x-2">
+                    <Dropdown left name='filters' selectedPeriod={activeFilter === -1 ? 'Select a filter' : filters[activeFilter].label} options={filters} onSelect={selectFilter} />
+                </div>
+                <span className='text-gray-600 dark:text-gray-400 mx-2'>&#9679;</span>
+                <div className="flex items-center cursor-pointer space-x-2">
+                    {window.innerWidth > 640 ?
+                        <Dropdown left name='period' selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
+                        :
+                        <Dropdown right name='period' selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
+                    }
+                </div>
             </div>
-            <span className='text-gray-600 dark:text-gray-400 mx-2'>&#9679;</span>
-            <div className="flex items-center cursor-pointer space-x-2">
-                <Dropdown left selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
+            <div className='flex sm:ml-auto'>
+                <SearchBar searchValue={exploreSearch} setSearchValue={setExploreSearch} handleSubmit={handleExploreSearch} />
+                <button type="button" className='btn ml-2 bg-violet-500 drop-shadow-xl p-2.5 items-center shadow-lg rounded-xl' onClick={() => navigate(`/explore/new `)}>
+                    <MdUpload className='h-6 w-full text-white' />
+                </button>
             </div>
-            <SearchBar searchValue={exploreSearch} setSearchValue={setExploreSearch} handleSubmit={handleExploreSearch} />
-            <button type="button" className='btn ml-2 bg-violet-500 drop-shadow-xl p-2.5 items-center shadow-lg rounded-xl' onClick={() => navigate(`/explore/new `)}>
-                <MdUpload className='h-6 w-full text-white' />
-            </button>
         </div>
     )
 }
@@ -309,7 +318,7 @@ export const SearchFilterPanel = (props) => {
             </div>
             <span className='text-gray-600 dark:text-gray-400 mx-2'>&#9679;</span>
             <div className="flex items-center cursor-pointer space-x-2">
-                <Dropdown left selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
+                <Dropdown left name='period' selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
             </div>
             <SearchBar searchValue={exploreSearch} setSearchValue={setExploreSearch} handleSubmit={handleExploreSearch} />
             <button type="button" className='btn ml-2 bg-violet-700 drop-shadow-xl p-2.5 items-center shadow-lg rounded-xl' onClick={() => navigate(`/explore/new `)}>

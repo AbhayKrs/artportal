@@ -79,11 +79,11 @@ const Footer = () => {
                 </div>
             </div> */}
             <div className="block">
-                <div className="items-center mx-2 p-1 flex flex-wrap flex-col sm:flex-row">
+                <div className="items-center mx-2 p-1 flex flex-wrap flex-row">
                     <div className='flex'>
                         <img onClick={() => navigate('/')} className='h-10 w-auto hover:cursor-pointer' src={Artyst_icon} alt='Artyst' />
                     </div>
-                    <span className="inline-flex sm:ml-auto sm:mt-0 mt-2 justify-center sm:justify-start">
+                    <span className="inline-flex ml-auto mt-0 mt-2 justify-start">
                         <Link to='/' className="text-violet-500">
                             <svg fill="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24">
                                 <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>

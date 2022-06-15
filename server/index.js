@@ -1,6 +1,5 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import path from 'path';
 import morgan from 'morgan';
 import cors from 'cors';
 import bodyParser from 'body-parser';
@@ -10,7 +9,6 @@ import bcrypt from 'bcryptjs';
 import passportLocal from 'passport-local';
 // import flash from 'connect-flash';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
-import path from 'path';
 
 import connectDB from './config/db.js';
 import './strategies/JwtStrategy.js';
@@ -52,15 +50,6 @@ app.get('/', (req, res) => {
 
 app.use(notFound);
 app.use(errorHandler);
-
-//Serve static assets if in production
-if (process.env.NODE_ENV === 'prod') {
-    //Set static folder
-    app.use(express.static('client/build'));
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-    })
-}
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, console.log(`Server running`));
