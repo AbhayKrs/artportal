@@ -113,7 +113,7 @@ const Header = (props) => {
                                         </div>
                                         <div className='block text-left'>
                                             <p className='text-gray-900 dark:text-gray-300 text-md font-caviar font-semibold'>{props.user.name}</p>
-                                            <Link to={`/users/${props.user.id}`} className='text-gray-900 dark:text-gray-300 text-xs font-caviar font-semibold'>#{props.user.username}</Link>
+                                            <Link to={`/users/${props.user.id}`} onClick={() => setMobileMenu(false)} className='text-gray-900 dark:text-gray-300 text-xs font-caviar font-semibold'>#{props.user.username}</Link>
                                         </div>
                                         {props.common.theme === 'dark' ?
                                             <button className='rounded px-1.5 py-0.5 m-1 shadow-sm bg-gray-300 border-gray-300' onClick={() => props.switchTheme('light')}>

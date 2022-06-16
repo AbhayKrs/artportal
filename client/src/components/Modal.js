@@ -130,11 +130,11 @@ export const LoginModal = (props) => {
 
 export const RegisterModal = (props) => {
     const { open, title, banner, error, onClose, openLogin, handleSignUp } = props;
-    const [name, setName] = useState('Anuj K');
-    const [email, setEmail] = useState('anuj@fnasf.com');
-    const [username, setUsername] = useState('anuj23');
-    const [password, setPassword] = useState('Aj#54962');
-    const [password2, setPassword2] = useState('Aj#54962');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [password2, setPassword2] = useState('');
 
     const handleNameChange = (event) => {
         setName(event.target.value)
