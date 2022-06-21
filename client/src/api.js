@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 // const baseURL = 'https://artyst-web.herokuapp.com/api';
-const baseURL = 'https://localhost:5000/api';
+const baseURL = 'http://localhost:5000/api';
 
 
 const get_api = axios.create({ baseURL });
