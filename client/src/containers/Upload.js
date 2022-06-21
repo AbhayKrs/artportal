@@ -28,9 +28,9 @@ const ExploreUpload = (props) => {
     useEffect(() => {
         window.scrollTo(0, 0)
         props.getTags();
-        // setExploreTitle(randomSentence({ min: 2, max: 8 }))
-        // setExploreDesc(randomSentence({ min: 5, max: 14 }))
-        // setExploreTags(props.common.tags.sort(() => 0.5 - Math.random()).slice(0, 10))
+        setExploreTitle(randomSentence({ min: 2, max: 8 }))
+        setExploreDesc(randomSentence({ min: 5, max: 14 }))
+        setExploreTags(props.common.tags.sort(() => 0.5 - Math.random()).slice(0, 10))
     }, [])
 
     const onImageChange = (ev) => {
