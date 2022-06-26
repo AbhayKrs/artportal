@@ -2,6 +2,7 @@ import passport from 'passport';
 import dotenv from 'dotenv';
 import jwtstrategy from 'passport-jwt';
 import User from '../models/user.js';
+
 const JwtStrategy = jwtstrategy.Strategy;
 const ExtractJwt = jwtstrategy.ExtractJwt;
 dotenv.config();
@@ -20,7 +21,7 @@ passport.use(
                 if (user) {
                     return done(null, user);
                 }
-                return done(null, false);
+                return done(null, false, { message: 'Invalid User!' });
             })
             .catch((err) => console.log('Error:', err));
     })
