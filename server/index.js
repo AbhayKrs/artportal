@@ -12,7 +12,7 @@ import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 import connectDB from './config/db.js';
 import './strategies/JwtStrategy.js';
-// import './strategies/LocalStrategy.js';
+import './strategies/GoogleStrategy.js';
 import './utils/authenticate.js';
 
 //Importing routes
@@ -45,7 +45,7 @@ app.use('/api/store', store);
 app.use('/api/articles', articles);
 
 app.get('/', (req, res) => {
-    res.send('API is running...');
+    res.send('<a href="/api/users/googleAuth">Authenicate with Google</a>');
 });
 
 app.use(notFound);

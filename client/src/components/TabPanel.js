@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import ImageCard from './ImageCard';
 import { AwardConfirmModal } from './Modal';
@@ -53,14 +53,16 @@ export const HomeTabPanel = (props) => {
             </div>
             <div className="grid bg-gray-300 dark:bg-neutral-800 overflow-hidden rounded-b-md lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-3 xs:grid-cols-1">
                 {props.tags.map((tag, index) => {
-                    return <>
-                        {index === activeStatus && props.exploreList.filter(item => item.tags.includes(tag) === true).map(explore => (
-                            <ImageCard explore={explore} author={explore.author} />
-                        ))}
-                    </>
+                    return <Fragment key={index}>
+                        {
+                            index === activeStatus && props.exploreList.filter(item => item.tags.includes(tag) === true).map((explore, index) => (
+                                <ImageCard key={index} explore={explore} author={explore.author} />
+                            ))
+                        }
+                    </Fragment>
                 })}
             </div>
-        </div>
+        </div >
     )
 }
 
@@ -86,9 +88,9 @@ export const AwardTabPanel = (props) => {
             <div className="scrollbar grid max-h-96 gap-6 bg-gray-300 dark:bg-neutral-900 p-5 overflow-x-hidden rounded-b-md lg:grid-cols-6 xs:grid-cols-2" >
                 {props.awards.map((award, index) => {
                     return <>
-                        {index === activeStatus && props.awards.map(award => (
-                            <button onClick={() => setConfirmData({ open: true, award })}>
-                                <img style={{ width: '3em', height: '3em' }} src={fetchUserImages(award.icon)} />
+                        {index === activeStatus && props.awards.map((award, index) => (
+                            <button key={index} onClick={() => setConfirmData({ open: true, award })}>
+                                {/* <img style={{ width: '3em', height: '3em' }} src={fetchUserImages(award.icon)} /> */}
                                 <p className="font-bold font-serif text-right text-neutral-700 dark:text-gray-300 text-sm">{award.value}</p>
                             </button>
                         ))}
@@ -147,6 +149,7 @@ export const FilterPanel = (props) => {
             periodOptions.find(item => item.value === activePeriod).label
             :
             'Select a time period'
+        console.log('tested', label);
         setActivePeriodLabel(label);
 
         if (activeFilter < 0) {
@@ -154,10 +157,11 @@ export const FilterPanel = (props) => {
             navigate('/explore');
         } else {
             if (activeFilter === 0 || activeFilter === 2 || activeFilter === 3) {
+                setActivePeriod('')
                 navigate(`?filter=${filters[activeFilter].value.replace(/\s+/g, '+')}`);
                 props.filterExploreList(filters[activeFilter].value.replace(/\s+/g, '+'));
             } else {
-                setActivePeriod('month')
+                activePeriod.length <= 0 && setActivePeriod('month')
                 navigate(`?filter=${filters[activeFilter].value.replace(/\s+/g, '+')}&period=${activePeriod}`);
                 props.filterExploreList(filters[activeFilter].value.replace(/\s+/g, '+'), activePeriod);
             }
@@ -165,14 +169,14 @@ export const FilterPanel = (props) => {
     }, [activeFilter, activePeriod])
 
     const selectFilter = (item) => {
-        console.log('index', item)
-        if (activeFilter === item.id) {
-            setActiveFilter(item.id);
+        if (activeFilter === item) {
+            setActiveFilter(-1);
             setActivePeriod('')
         } else {
-            setActiveFilter(item.id)
+            setActiveFilter(item)
         }
     }
+
     const handlePeriodChange = (popular) => {
         setActivePeriod(popular.value)
     }
@@ -205,14 +209,17 @@ export const FilterPanel = (props) => {
                 <div className="lg:hidden flex items-center cursor-pointer space-x-2">
                     <Dropdown left name='filters' selectedPeriod={activeFilter === -1 ? 'Select a filter' : filters[activeFilter].label} options={filters} onSelect={selectFilter} />
                 </div>
-                <span className='text-gray-600 dark:text-gray-400 mx-2'>&#9679;</span>
-                <div className="flex items-center cursor-pointer space-x-2">
-                    {window.innerWidth > 640 ?
-                        <Dropdown left name='period' selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
-                        :
-                        <Dropdown right name='period' selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
-                    }
-                </div>
+                {activePeriod.length > 0 && <span className='text-gray-600 dark:text-gray-400 mx-2'>&#9679;</span>}
+                {activePeriod.length > 0 ?
+                    <div className="flex items-center cursor-pointer space-x-2">
+                        {window.innerWidth > 640 ?
+                            <Dropdown left name='period' selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
+                            :
+                            <Dropdown right name='period' selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
+                        }
+                    </div>
+                    :
+                    null}
             </div>
             <div className='flex sm:ml-auto'>
                 <SearchBar searchValue={exploreSearch} setSearchValue={setExploreSearch} handleSubmit={handleExploreSearch} />

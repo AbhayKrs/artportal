@@ -17,6 +17,7 @@ export const EDIT_CARTLIST = 'EDIT_CARTLIST';
 export const LOAD_PROFILE_DETAILS = 'LOAD_PROFILE_DETAILS';
 export const REFRESH_USER_DETAILS = 'REFRESH_USER_DETAILS';
 export const HANDLE_SIGNIN = 'HANDLE_SIGNIN';
+export const GOOGLE_AUTH = 'GOOGLE_AUTH';
 export const HANDLE_REFRESHTOKEN = 'HANDLE_REFRESHTOKEN';
 export const HANDLE_SIGNUP = 'HANDLE_SIGNUP';
 export const HANDLE_SIGNOUT = 'HANDLE_SIGNOUT';
@@ -206,6 +207,9 @@ export const commonReducer = (state = initialState, { type, payload }) => {
             return { ...state, isAuthenticated: true, user: payload }
         }
         case HANDLE_REFRESHTOKEN: {
+            return { ...state, isAuthenticated: true, user: payload }
+        }
+        case GOOGLE_AUTH: {
             return { ...state, isAuthenticated: true, user: payload }
         }
         case HANDLE_SIGNUP: {

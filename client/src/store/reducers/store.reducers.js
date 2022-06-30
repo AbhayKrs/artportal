@@ -10,7 +10,7 @@ export const REMOVE_FROM_CART = 'STORE_REMOVE_FROM_CART';
 export const HANDLE_CART_CLOSE = 'STORE_HANDLE_CART_CLOSE';
 
 export const initialState = {
-    ID: null,
+    id: null,
     file: '',
     title: '',
     description: '',
@@ -27,7 +27,7 @@ export const initialState = {
             }
         },
         files: [],
-        _id: '',
+        id: '',
         title: '',
         description: '',
         category: '',

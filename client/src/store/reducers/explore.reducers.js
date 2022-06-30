@@ -22,7 +22,7 @@ export const SKETCH_CREATE_REVIEW_FAIL = 'SKETCH_CREATE_REVIEW_FAIL';
 export const SKETCH_CREATE_REVIEW_RESET = 'SKETCH_CREATE_REVIEW_RESET';
 
 export const initialState = {
-    ID: null,
+    id: null,
     openExploreDialog: false,
     exploreList: [],
     exploreData: {
@@ -36,7 +36,7 @@ export const initialState = {
         },
         files: [],
         comments: [],
-        _id: '',
+        id: '',
         title: '',
         description: '',
         likes: [],

@@ -6,7 +6,7 @@ import moment from 'moment';
 import Masonry from '../components/Masonry';
 
 import { fetchExploreImages, fetchUserImages } from '../api';
-import { loadProfileDetails, clearUserProfile } from '../store/actions/common.actions';
+import { setLoader, loadProfileDetails, clearUserProfile } from '../store/actions/common.actions';
 import { fetchExploreList } from '../store/actions/explore.actions';
 
 import { BsHeart, BsChat } from 'react-icons/bs';
@@ -17,6 +17,7 @@ const Profile = (props) => {
     let navigate = useNavigate();
 
     useEffect(() => {
+        props.setLoader(true);
         window.scrollTo(0, 0);
         props.loadProfileDetails(id);
         props.fetchExploreList();
@@ -93,7 +94,7 @@ const Profile = (props) => {
                             {activeView === 'portfolio' && props.viewed_user.explore && <div className='flex flex-row'>
                                 <Masonry>
                                     {props.viewed_user.explore.map((explore, index) => (
-                                        <div key={index} onClick={() => navigate(`/explore/${explore._id}`)} className='relative group group-hover:block'>
+                                        <div key={index} onClick={() => navigate(`/explore/${explore.id}`)} className='relative group group-hover:block'>
                                             <img
                                                 id={index}
                                                 className='object-cover w-full h-full'
@@ -107,7 +108,7 @@ const Profile = (props) => {
                                                             {explore.author.username}
                                                         </span>
                                                         <svg className="stroke-current stroke-1 text-blue-600 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                            <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                                            <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
                                                         </svg>
                                                     </div>
                                                 </div>
@@ -135,7 +136,7 @@ const Profile = (props) => {
                             {activeView === 'liked' && <div className='flex flex-row'>
                                 <Masonry>
                                     {props.explore.exploreList.filter(item => item.likes.indexOf(props.viewed_user.id) >= 0).map((explore, index) => (
-                                        <div key={index} onClick={() => navigate(`/explore/${explore._id}`)} className='relative group group-hover:block'>
+                                        <div key={index} onClick={() => navigate(`/explore/${explore.id}`)} className='relative group group-hover:block'>
                                             <img
                                                 id={index}
                                                 className='object-cover w-full h-full'
@@ -149,7 +150,7 @@ const Profile = (props) => {
                                                             {explore.author.username}
                                                         </span>
                                                         <svg className="stroke-current stroke-1 text-blue-600 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                            <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                                            <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
                                                         </svg>
                                                     </div>
                                                 </div>
@@ -187,6 +188,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
+    setLoader,
     fetchExploreList,
     loadProfileDetails,
     clearUserProfile

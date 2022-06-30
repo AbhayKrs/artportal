@@ -327,7 +327,7 @@ router.put('/:id/like', async (req, res) => {
             if (err) {
                 res.status(500).send('Failed to like!');
             } else {
-                user.explore.find(item => item._id == req.params.id).likes.push(req.body.id);
+                user.explore.find(item => item.id == req.params.id).likes.push(req.body.id);
                 user.save();
                 res.send(like);
             }
@@ -358,7 +358,7 @@ router.put('/:id/dislike', async (req, res) => {
             if (err) {
                 res.status(500).send('Failed to like!');
             } else {
-                user.explore.find(item => item._id == req.params.id).likes.filter(item => item !== req.body.id);
+                user.explore.find(item => item.id == req.params.id).likes.filter(item => item !== req.body.id);
                 user.save();
                 res.json(dislike);
             }
@@ -380,7 +380,7 @@ router.put('/:id/award', async (req, res) => {
         const checkAward = explore.awards.find(award => award.icon == req.body.icon);
         if (checkAward) {
             console.log('test', checkAward)
-            explore.awards.find(award => award._id == req.body._id).count = explore.awards.find(award => award._id == req.body._id).count + 1;
+            explore.awards.find(award => award.id == req.body.id).count = explore.awards.find(award => award.id == req.body.id).count + 1;
             explore.save();
             res.send(explore);
         } else {
@@ -447,20 +447,20 @@ router.post('/:id/comments/new', async (req, res) => {
     }
 });
 
-// @route       POST api/explore/:id/comments/:comment_id/reply
+// @route       POST api/explore/:id/comments/:commentid/reply
 // @desc        Add a reply
 // @access      Private
-router.put('/:id/comments/:comment_id/reply', async (req, res) => {
+router.put('/:id/comments/:commentid/reply', async (req, res) => {
     try {
         const explore = await Explore.findById(req.params.id);
-        const comment = await Comment.findById(req.params.comment_id);
-        const replyComment = explore.comments.find(comment => comment._id == req.params.comment_id);
+        const comment = await Comment.findById(req.params.commentid);
+        const replyComment = explore.comments.find(comment => comment._id == req.params.commentid);
         if (!req.body.user) {
             return res.status(401).json({ msg: 'User not authorized!' })
         }
         const newReply =
             Comment.findByIdAndUpdate(
-                req.params.comment_id,
+                req.params.commentid,
                 {
                     $push: {
                         "replies": {
@@ -495,7 +495,7 @@ router.put('/:id/comments/:comment_id/reply', async (req, res) => {
         //     if (err) {
         //         console.log(err)
         //     } else {
-        //         explore.comments.filter(comment => comment._id === replyComment._id)[0].replies.push(reply);
+        //         explore.comments.filter(comment => comment.id === replyComment.id)[0].replies.push(reply);
         //         explore.save();
         //         console.log('repliedData', reply, explore.comments[0].replies);
         //     }
@@ -507,20 +507,20 @@ router.put('/:id/comments/:comment_id/reply', async (req, res) => {
     }
 });
 
-// @route    PUT api/explore/:id/comments/:comment_id
+// @route    PUT api/explore/:id/comments/:commentid
 // @desc     Edit a comment
 // @access   Private
-router.put('/:id/comments/:comment_id', async (req, res) => {
+router.put('/:id/comments/:commentid', async (req, res) => {
     try {
         const explore = await Explore.findById(req.params.id);
-        const editComment = explore.comments.find(comment => comment._id == req.params.comment_id);
+        const editComment = explore.comments.find(comment => comment._id == req.params.commentid);
         if (!editComment) {
             return res.status(401).json({ msg: 'Comment does not exist!' })
         }
 
         const newData = { content: req.body.content }
         await Comment.findByIdAndUpdate(
-            req.params.comment_id,
+            req.params.commentid,
             { content: newData.content },
             { new: true },
             async (err, comment) => {
@@ -541,14 +541,14 @@ router.put('/:id/comments/:comment_id', async (req, res) => {
     }
 })
 
-// @route    DELETE api/explore/:id/comments/:comment_id
+// @route    DELETE api/explore/:id/comments/:commentid
 // @desc     Delete a comment
 // @access   Private
-router.delete('/:id/comments/:comment_id', async (req, res) => {
+router.delete('/:id/comments/:commentid', async (req, res) => {
     try {
         const explore = await Explore.findById(req.params.id);
-        const comment = await Comment.findById(req.params.comment_id);
-        const deleteComment = explore.comments.find(comment => comment._id == req.params.comment_id);
+        const comment = await Comment.findById(req.params.commentid);
+        const deleteComment = explore.comments.find(comment => comment._id == req.params.commentid);
         if (!deleteComment) {
             return res.status(404).json({ msg: 'Comment does not exist!' });
         }
@@ -569,13 +569,13 @@ router.delete('/:id/comments/:comment_id', async (req, res) => {
     }
 });
 
-// @route       PUT api/explore/:id/comments/:comment_id/like
+// @route       PUT api/explore/:id/comments/:commentid/like
 // @desc        Like a comment
 // @access      Public
-router.put('/:id/comments/:comment_id/like', async (req, res) => {
+router.put('/:id/comments/:commentid/like', async (req, res) => {
     const explore = await Explore.findById(req.params.id);
     try {
-        Comment.findByIdAndUpdate(req.params.comment_id, {
+        Comment.findByIdAndUpdate(req.params.commentid, {
             $push: {
                 likes: req.body.user.id
             }
@@ -597,16 +597,16 @@ router.put('/:id/comments/:comment_id/like', async (req, res) => {
     }
 })
 
-// @route       PUT api/explore/:id/comments/:comment_id/dislike
+// @route       PUT api/explore/:id/comments/:commentid/dislike
 // @desc        Dislike a comment
 // @access      Public
-router.put('/:id/comments/:comment_id/dislike', async (req, res) => {
+router.put('/:id/comments/:commentid/dislike', async (req, res) => {
     const explore = await Explore.findById(req.params.id);
     try {
         if (!req.body.user) {
             return res.status(401).json({ msg: 'User not authorized!' })
         }
-        Comment.findByIdAndUpdate(req.params.comment_id, {
+        Comment.findByIdAndUpdate(req.params.commentid, {
             $pull: {
                 likes: req.body.user.id
             }

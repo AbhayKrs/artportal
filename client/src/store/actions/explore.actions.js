@@ -5,7 +5,8 @@ import {
     FETCH_EXPLORELIST,
     HANDLE_DIALOG_OPEN,
     HANDLE_DIALOG_CLOSE,
-    HANDLE_TABCHANGE
+    HANDLE_TABCHANGE,
+    initialState
 } from '../reducers/explore.reducers';
 
 const dynamicSort = (property) => {
@@ -30,6 +31,11 @@ const risingSort = (property) => {
         var result = (a[property].toLowerCase() < b[property].toLowerCase())
         return result;
     }
+}
+
+export const clearExploreShow = () => (dispatch, getState) => {
+    console.log('clear', initialState.exploreData)
+    dispatch({ type: FETCH_EXPLORE, payload: initialState.exploreData })
 }
 
 export const fetchExploreItem = (exploreID) => async (dispatch, getState) => {

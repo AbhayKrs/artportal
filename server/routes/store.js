@@ -147,13 +147,13 @@ router.delete('/:id', async (req, res) => {
     try {
         const storeItem = await Store.findById(req.params.id);
         const user = await User.findById(req.body.userID);
-        const deleteListing = user.store.find(storeItem => storeItem._id == req.params.id);
+        const deleteListing = user.store.find(storeItem => storeItem.id == req.params.id);
 
         if (!storeItem) {
             return res.status(404).send('Store item not found');
         }
         await storeItem.remove();
-        user.store = user.store.filter(storeItem => storeItem._id !== deleteListing._id);
+        user.store = user.store.filter(storeItem => storeItem.id !== deleteListing.id);
         user.store_count = user.store.length;
         await user.save();
         res.json('Store item removed successfully');

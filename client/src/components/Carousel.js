@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { fetchExploreImages, fetchUserImages } from '../api';
+import { fetchExploreImages } from '../api';
 
 import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
@@ -7,22 +7,14 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 export const ExploreShowCarousel = (props) => {
   return (
     <div className="flex relative lg:col-span-8 w-full justify-center bg-gray-300 dark:bg-[#101010]">
-      <div className="flex flex-col m-3 space-y-3 w-full justify-center">
+      <div className="flex flex-col my-3 mx-32 space-y-3 w-full justify-center">
         <div className='flex w-fit self-center items-center place-content-center'>
-          <div className='hidden lg:visible'>
-            {props.prevTrue ? <button onClick={props.prev} aria-label="slide backward" className="fixed z-30 top-0 bottom-0 left-0 cursor-pointer">
-              <FaChevronLeft className='text-5xl text-neutral-800 dark:text-gray-300' />
-            </button> : ''}
-            {props.nextTrue ? <button onClick={props.next} aria-label="slide forward" className="fixed z-30 lg:right-[33.5%] md:right-0 top-0 bottom-0 right-[31rem] cursor-pointer">
-              <FaChevronRight className='text-5xl text-neutral-800 dark:text-gray-300' />
-            </button> : ''}
-          </div>
-          <div className='lg:hidden flex fixed top-14 right-0 m-5 space-x-3 p-1 bg-neutral-100 dark:bg-neutral-800 rounded'>
-            {props.prevTrue ? <div onClick={props.prev} className='flex justify-end py-0.5 space-x-2 text-gray-700 dark:text-gray-200'>
-              <FaChevronLeft className='h-8 w-8' />
+          <div className='flex fixed top-14 right-0 lg:right-[33.5%]  m-5 space-x-3 p-1 bg-neutral-100 dark:bg-neutral-800 rounded'>
+            {props.prevTrue ? <div onClick={props.prev} className='cursor-pointer flex justify-end py-0.5 space-x-2 text-gray-700 hover:text-violet-400 dark:text-gray-200 dark:hover:text-violet-500'>
+              <FaChevronLeft className='h-6 w-6' />
             </div> : ''}
-            {props.nextTrue ? <div onClick={props.next} className='flex justify-end py-0.5 space-x-2 text-gray-700 dark:text-gray-200'>
-              <FaChevronRight className='h-8 w-8' />
+            {props.nextTrue ? <div onClick={props.next} className='cursor-pointer flex justify-end py-0.5 space-x-2 text-gray-700 hover:text-violet-400 dark:text-gray-200 dark:hover:text-violet-500'>
+              <FaChevronRight className='h-6 w-6' />
             </div> : ''}
           </div>
           <img src={`${fetchExploreImages(props.currentImage)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />

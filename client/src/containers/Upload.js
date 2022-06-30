@@ -26,6 +26,7 @@ const ExploreUpload = (props) => {
     const [primaryFile, setPrimaryFile] = useState('');
 
     useEffect(() => {
+        props.setLoader(true);
         window.scrollTo(0, 0)
         props.getTags();
         setExploreTitle(randomSentence({ min: 2, max: 8 }))
@@ -248,6 +249,7 @@ const StoreUpload = (props) => {
     ]
 
     useEffect(() => {
+        props.setLoader(true);
         window.scrollTo(0, 0)
         props.getTags();
     }, [])

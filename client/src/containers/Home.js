@@ -3,12 +3,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { HomeTabPanel } from '../components/TabPanel';
 import { fetchExploreList } from '../store/actions/explore.actions';
-import { getTags } from '../store/actions/common.actions';
+import { setLoader, getTags } from '../store/actions/common.actions';
 import { MultipleCarousel, HomeMultiCarousel } from '../components/Carousel';
 
 const Home = (props) => {
     useEffect(() => {
-        window.scrollTo(0, 0)
+        props.setLoader(true);
+        window.scrollTo(0, 0);
         props.fetchExploreList();
         props.getTags();
     }, [])
@@ -81,6 +82,7 @@ const mapStateToProps = (state, props) => ({
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
+    setLoader,
     fetchExploreList,
     getTags
 }, dispatch);

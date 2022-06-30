@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 const exploreSchema = new mongoose.Schema(
     {
+        id: { type: String, required: true, unique: true, index: true, default: mongoose.Types.ObjectId },
         files: [{ type: String, default: '' }],
         title: {
             type: String,
@@ -23,10 +24,6 @@ const exploreSchema = new mongoose.Schema(
             required: true,
         },
         comments: [{
-            id: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Comment',
-            },
             content: { type: String },
             author: {
                 id: {

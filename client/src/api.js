@@ -14,6 +14,7 @@ export const fetchStoreImages = filename => baseURL + `/store/image/${filename}`
 export const fetchUserImages = filename => baseURL + `/users/image/${filename}`;
 
 //GET Request API's
+export const googleLoginAPI = () => get_api.get(`/users/googleAuth`);
 export const exploreListAPI = () => get_api.get(`/explore`);
 export const exploreItemAPI = exploreID => get_api.get(`/explore/${exploreID}`);
 export const searchExploreListAPI = (query, filter, period) => get_api.get(`/explore/search?query=${query}&filter=${filter}&period=${period}`);

@@ -11,7 +11,7 @@ import { MdSettings } from "react-icons/md";
 import { RiFireFill } from "react-icons/ri";
 import { TokenModal, LoginModal, RegisterModal } from '../components/Modal';
 
-import { switchTheme, handleHeaderDialogOpen, handleHeaderDialogClose, handleSignIn, handleSignUp, handleSignOut } from '../store/actions/common.actions';
+import { switchTheme, handleHeaderDialogOpen, handleHeaderDialogClose, handleSignIn, handleSignUp, handleGoogleAuth, handleSignOut } from '../store/actions/common.actions';
 import { fetchUserImages } from '../api';
 
 const Header = (props) => {
@@ -48,7 +48,7 @@ const Header = (props) => {
                         {props.common.isAuthenticated ?
                             <div className='relative group group-hover:block ml-1'>
                                 <div className='flex relative w-10 h-10 justify-center items-center text-xl group-hover:p-1 group-hover:scale-125 group-hover:rounded-b-lg group-hover:block group-hover:bg-slate-300 dark:group-hover:bg-[#313135] group-hover:rounded-full'>
-                                    {props.common.isAuthenticated ? <img alt='user' src={fetchUserImages(props.user.avatar.icon)} className='mt-0.5' /> : null}
+                                    {props.common.isAuthenticated && props.common.user && <img alt='user' src={fetchUserImages(props.user.avatar.icon)} className='mt-0.5' />}
                                 </div>
                                 <div className='container hidden fixed group-hover:block top-[3.25rem] w-52' style={{ right: window.innerWidth > 1024 ? '0.725rem' : '0.2rem' }}>
                                     <div className='grid grid-cols-1 space-y-2 bg-slate-300 dark:bg-[#313135] text-white rounded-tl-lg rounded-br-lg p-3 rounded-bl-lg group-hover:block'>
@@ -109,7 +109,7 @@ const Header = (props) => {
                                 <div className='grid grid-cols-1 w-full space-y-2 bg-slate-300 dark:bg-[#313135] text-white rounded-lg p-3 rounded-bl-lg group-hover:block'>
                                     <div className='flex place-content-between'>
                                         <div className='flex relative w-10 h-10 justify-center items-center text-xl group-hover:p-1 group-hover:scale-125 group-hover:rounded-b-lg group-hover:block group-hover:bg-slate-300 dark:group-hover:bg-[#313135] group-hover:rounded-full'>
-                                            {props.common.isAuthenticated ? <img alt='user' src={fetchUserImages(props.user.avatar.icon)} className='mt-0.5' /> : null}
+                                            {props.common.isAuthenticated && props.common.user && <img alt='user' src={fetchUserImages(props.user.avatar.icon)} className='mt-0.5' />}
                                         </div>
                                         <div className='block text-left'>
                                             <p className='text-gray-900 dark:text-gray-300 text-md font-caviar font-semibold'>{props.user.name}</p>
@@ -184,6 +184,7 @@ const Header = (props) => {
                 onClick={props.handleHeaderDialogClose}
                 openLogin={() => props.handleHeaderDialogOpen('openLoginDialog')}
                 handleSignUp={props.handleSignUp}
+                handleGoogleAuth={props.handleGoogleAuth}
             />
             <TokenModal
                 open={tokenOpen}
@@ -207,6 +208,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     handleHeaderDialogClose,
     handleSignIn,
     handleSignUp,
+    handleGoogleAuth,
     handleSignOut
 }, dispatch);
 

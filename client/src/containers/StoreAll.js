@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { fetchStoreImages } from '../api';
 
 import { fetchStoreList, fetchCategorizedStoreList } from '../store/actions/store.actions';
-import { fetchCartList, handleCartAdd, handleRemoveFromCart } from '../store/actions/common.actions';
+import { setLoader, fetchCartList, handleCartAdd, handleRemoveFromCart } from '../store/actions/common.actions';
 
 import Dropdown from '../components/Dropdown';
 import { CartModal } from '../components/Modal';
@@ -22,6 +22,7 @@ const StoreAll = (props) => {
     const [activeCategoryLabel, setActiveCategoryLabel] = useState('Pick a category');
 
     useEffect(() => {
+        props.setLoader(true);
         window.scrollTo(0, 0);
     }, [])
 
@@ -100,7 +101,7 @@ const StoreAll = (props) => {
                                         <div className='tracking-wide text-md font-medium text-gray-500 font-josefinregular'>${item.price}</div>
                                         <div className='flex space-x-2'>
                                             <MdOutlineAddShoppingCart className='w-8 h-8 text-rose-500 hover:cursor-pointer' onClick={() => cartAdd(item)} />
-                                            <button onClick={() => navigate(`/store/${item._id}`)} className="bg-gradient-to-r font-caviar font-semibold from-violet-500 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Learn more</button>
+                                            <button onClick={() => navigate(`/store/${item.id}`)} className="bg-gradient-to-r font-caviar font-semibold from-violet-500 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Learn more</button>
                                         </div>
                                     </div>
                                 </div>
@@ -120,6 +121,7 @@ const mapStateToProps = (state, props) => ({
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
+    setLoader,
     fetchStoreList,
     fetchCategorizedStoreList,
     fetchCartList,

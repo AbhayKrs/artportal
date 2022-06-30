@@ -5,6 +5,7 @@ import Explore from '../models/explore.js';
 import Comment from '../models/comment.js';
 import Common from '../models/common.js';
 import Cart from '../models/cart.js';
+import passport from 'passport';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import {
@@ -151,7 +152,7 @@ router.post("/login", async (req, res) => {
                     comment_count += comment_countList[i];
                 console.log('user details', comment_countList, comment_count);
                 const payload = {
-                    id: user._id,
+                    id: user.id,
                     name: user.name,
                     username: user.username,
                     email: user.email,
@@ -177,9 +178,10 @@ router.post("/login", async (req, res) => {
     });
 });
 
-// //@desc         Register a new user
-// //@route        POST /api/users/register
-// //@access       Public
+
+//@desc         Register a new user 
+//@route        POST /api/users/register
+//@access       Public
 router.post("/signup", (req, res) => {
     // Verify that first name is not empty
     const { errors, isValid } = validateRegisterInput(req.body);
@@ -213,15 +215,138 @@ router.post("/signup", (req, res) => {
     })
 });
 
+// @desc    Login via Google
+// @route   GET /api/users/googleAuth
+// @access  Private
+router.get('/googleAuth', passport.authenticate('google', {
+    scope: ['email', 'profile'],
+    prompt: 'select_account'
+}));
+
+// @desc    Login via Google
+// @route   GET /api/users/googleAuth/success
+// @access  Private
+router.get('/googleAuth/callback', passport.authenticate('google', {
+    failureRedirect: 'http://localhost:3000/google_failed',
+    session: false
+}), async (req, res) => {
+    const authenticatedUser = await User.findOne({ id: req.user.id });
+    console.log('authenticatedUser', authenticatedUser);
+    let comment_count = 0;
+    const comment_countList = authenticatedUser.explore.length > 0 && authenticatedUser.explore.map(item => item.comment_count);
+    for (let i = 0; i < comment_countList.length; i++)
+        comment_count += comment_countList[i];
+    const payload = {
+        id: authenticatedUser.id,
+        name: authenticatedUser.name,
+        username: authenticatedUser.username,
+        email: authenticatedUser.email,
+        avatar: authenticatedUser.avatar,
+        tokens: authenticatedUser.tokens,
+        followers: authenticatedUser.followers,
+        followers_count: authenticatedUser.followers_count,
+        explore_count: authenticatedUser.explore_count,
+        comment_count
+    };
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 31556926 },
+        (err, token) => {
+            let googleToken = "Bearer " + token
+            res.redirect('http://localhost:3000/google_success?auth=' + googleToken)
+        }
+    );
+})
+
+// @desc    Login via Facebook
+// @route   GET /api/users/facebookAuth
+// @access  Private
+router.get('/facebookAuth', passport.authenticate('facebook', {
+    scope: ['email', 'profile'],
+    prompt: 'select_account'
+}));
+
+// @desc    Login via Google
+// @route   GET /api/users/googleAuth/success
+// @access  Private
+router.get('/facebookAuth/callback', passport.authenticate('facebook', {
+    failureRedirect: 'http://localhost:3000/google_failed',
+    session: false
+}), async (req, res) => {
+    const authenticatedUser = await User.findOne({ id: req.user.id });
+    console.log('authenticatedUser', authenticatedUser);
+    let comment_count = 0;
+    const comment_countList = authenticatedUser.explore.length > 0 && authenticatedUser.explore.map(item => item.comment_count);
+    for (let i = 0; i < comment_countList.length; i++)
+        comment_count += comment_countList[i];
+    const payload = {
+        id: authenticatedUser.id,
+        name: authenticatedUser.name,
+        username: authenticatedUser.username,
+        email: authenticatedUser.email,
+        avatar: authenticatedUser.avatar,
+        tokens: authenticatedUser.tokens,
+        followers: authenticatedUser.followers,
+        followers_count: authenticatedUser.followers_count,
+        explore_count: authenticatedUser.explore_count,
+        comment_count
+    };
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 31556926 },
+        (err, token) => {
+            let googleToken = "Bearer " + token
+            res.redirect('http://localhost:3000/google_success?auth=' + googleToken)
+        }
+    );
+})
+
+// @desc    Login via Google
+// @route   GET /api/users/googleAuth
+// @access  Private
+router.get('/googleAuth', passport.authenticate('google', {
+    scope: ['email', 'profile'],
+    prompt: 'select_account'
+}));
+
+// @desc    Login via Google
+// @route   GET /api/users/googleAuth/success
+// @access  Private
+router.get('/googleAuth/callback', passport.authenticate('google', {
+    failureRedirect: 'http://localhost:3000/google_failed',
+    session: false
+}), async (req, res) => {
+    const authenticatedUser = await User.findOne({ id: req.user.id });
+    console.log('authenticatedUser', authenticatedUser);
+    let comment_count = 0;
+    const comment_countList = authenticatedUser.explore.length > 0 && authenticatedUser.explore.map(item => item.comment_count);
+    for (let i = 0; i < comment_countList.length; i++)
+        comment_count += comment_countList[i];
+    const payload = {
+        id: authenticatedUser.id,
+        name: authenticatedUser.name,
+        username: authenticatedUser.username,
+        email: authenticatedUser.email,
+        avatar: authenticatedUser.avatar,
+        tokens: authenticatedUser.tokens,
+        followers: authenticatedUser.followers,
+        followers_count: authenticatedUser.followers_count,
+        explore_count: authenticatedUser.explore_count,
+        comment_count
+    };
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 31556926 },
+        (err, token) => {
+            let googleToken = "Bearer " + token
+            res.redirect('http://localhost:3000/google_success?auth=' + googleToken)
+        }
+    );
+})
+
 // @desc    Get user profile
 // @route   GET /api/users/profile
 // @access  Private
 router.get('/profile', async (req, res) => {
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user.id);
     console.log('user details', user);
     if (user) {
         res.json({
-            _id: user._id,
+            id: user.id,
             name: user.name,
             username: user.username,
             email: user.email,
@@ -238,7 +363,7 @@ router.get('/profile', async (req, res) => {
 // @route   PUT /api/users/profile
 // @access  Private
 router.put('/profile', async (req, res) => {
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user.id);
 
     if (user) {
         user.name = req.body.name || user.name;
@@ -252,13 +377,13 @@ router.put('/profile', async (req, res) => {
         const updatedUser = await user.save();
 
         res.json({
-            _id: updatedUser._id,
+            id: updatedUser.id,
             name: updatedUser.name,
             username: updatedUser.username,
             email: updatedUser.email,
             avatar: updatedUser.avatar,
             isAdmin: updatedUser.isAdmin,
-            token: generateToken(updatedUser._id),
+            token: generateToken(updatedUser.id),
         });
     } else {
         res.status(404);
@@ -277,7 +402,7 @@ router.get('/:id', async (req, res) => {
     for (let i = 0; i < comment_countList.length; i++)
         comment_count += comment_countList[i];
     const payload = {
-        id: user._id,
+        id: user.id,
         name: user.name,
         username: user.username,
         email: user.email,
@@ -302,7 +427,7 @@ router.get('/:id', async (req, res) => {
 // @route   PUT /api/users/:id
 // @access  Private/Admin
 router.put('/:id', async (req, res) => {
-    User.updateOne({ _id: req.params.id }, {
+    User.updateOne({ id: req.params.id }, {
         seller_rating: 0,
         ysr: 0,
         store: [],
@@ -329,7 +454,7 @@ router.put('/:id', async (req, res) => {
     //     // const updatedUser = await user.save();
 
     //     // res.json({
-    //     //     _id: updatedUser._id,
+    //     //     id: updatedUser.id,
     //     //     name: updatedUser.name,
     //     //     username: updatedUser.username,
     //     //     email: updatedUser.email,
@@ -459,12 +584,12 @@ router.post('/:id/cart/add', async (req, res) => {
     }
 });
 
-// @route    PUT api/users/:id/cart/:cart_id
+// @route    PUT api/users/:id/cart/:cartid
 // @desc     Edit a cart item
 // @access   Private
-router.put('/:id/cart/:cart_id', async (req, res) => {
+router.put('/:id/cart/:cartid', async (req, res) => {
     const user = await User.findById(req.params.id);
-    const editCartItem = user.cart.find(cartItem => cartItem._id == req.params.cart_id);
+    const editCartItem = user.cart.find(cartItem => cartItem.id == req.params.cartid);
     if (!editCartItem) {
         return res.status(401).json({ msg: 'Cart item does not exist!' })
     }
@@ -475,7 +600,7 @@ router.put('/:id/cart/:cart_id', async (req, res) => {
     console.log('edit cart item', req.body);
     const newData = { quantity: req.body.quantity, subtotal: req.body.subtotal }
     await Cart.findByIdAndUpdate(
-        req.params.cart_id,
+        req.params.cartid,
         { quantity: newData.quantity, subtotal: newData.subtotal },
         { new: true },
         async (err, cartItem) => {
@@ -491,18 +616,18 @@ router.put('/:id/cart/:cart_id', async (req, res) => {
     return res.json(user.cart);
 })
 
-// @route    DELETE api/users/:id/cart/:cart_id
+// @route    DELETE api/users/:id/cart/:cartid
 // @desc     Delete a cart item
 // @access   Private
-router.delete('/:id/cart/:cart_id', async (req, res) => {
+router.delete('/:id/cart/:cartid', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
-        const cartItem = await Cart.findById(req.params.cart_id);
-        const deleteCartItem = user.cart.find(cartItem => cartItem._id == req.params.cart_id);
+        const cartItem = await Cart.findById(req.params.cartid);
+        const deleteCartItem = user.cart.find(cartItem => cartItem.id == req.params.cartid);
         if (!deleteCartItem) {
             return res.status(404).json({ msg: 'Cart item does not exist!' });
         }
-        user.cart = user.cart.filter(cartItem => cartItem._id !== deleteCartItem._id);
+        user.cart = user.cart.filter(cartItem => cartItem.id !== deleteCartItem.id);
         cartItem.deleteOne(deleteCartItem);
         user.cart_count = user.cart.length;
         await user.save();
@@ -519,14 +644,14 @@ router.delete('/:id/cart/:cart_id', async (req, res) => {
 router.get("/logout", (req, res, next) => {
     const { signedCookies = {} } = req;
     const { refreshToken } = signedCookies;
-    console.log('logout refreshToken', refreshToken);
-    User.findById(req.user._id).then(
+    console.log('logout refreshToken', req.user);
+    User.findById(req.user.id).then(
         (user) => {
             const tokenIndex = user.refreshToken.findIndex(
                 (item) => item.refreshToken === refreshToken
             );
             if (tokenIndex !== -1) {
-                user.refreshToken.id(user.refreshToken[tokenIndex]._id).remove();
+                user.refreshToken.id(user.refreshToken[tokenIndex].id).remove();
             }
 
             user.save((err, user) => {

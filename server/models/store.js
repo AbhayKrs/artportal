@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 const storeSchema = new mongoose.Schema(
     {
+        id: { type: String, required: true, unique: true, index: true, default: mongoose.Types.ObjectId },
         title: {
             type: String,
             required: true,

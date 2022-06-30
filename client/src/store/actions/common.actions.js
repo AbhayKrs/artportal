@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { loginAPI, signUpAPI, tagsAPI, commonImagesAPI, userDetailsAPI, userExploreListAPI, userStoreListAPI, userCartListAPI, addUserCartAPI, updateUserCartAPI, deleteStoreItemAPI, awardListAPI } from '../../api';
+import { loginAPI, googleLoginAPI, signUpAPI, tagsAPI, commonImagesAPI, userDetailsAPI, userExploreListAPI, userStoreListAPI, userCartListAPI, addUserCartAPI, updateUserCartAPI, deleteStoreItemAPI, awardListAPI } from '../../api';
 import {
     SWITCH_THEME,
     SET_LOADER,
@@ -16,6 +16,7 @@ import {
     REFRESH_USER_DETAILS,
     LOAD_PROFILE_DETAILS,
     HANDLE_SIGNIN,
+    GOOGLE_AUTH,
     HANDLE_REFRESHTOKEN,
     HANDLE_SIGNUP,
     HANDLE_SIGNOUT,
@@ -130,6 +131,23 @@ export const handleSignUp = (userData) => async (dispatch, getState) => {
     })
 }
 
+export const handleGoogleAuth = () => async (dispatch, getState) => {
+    await googleLoginAPI().then(res => {
+        const data = res.data;
+        dispatch({ type: GOOGLE_AUTH, payload: data });
+        dispatch({ type: HANDLE_HEADER_DIALOG_CLOSE, payload: false });
+    }).catch(err => {
+        if (err.message) {
+            const error = {
+                open: true,
+                message: err.response.data,
+                type: 'inline'
+            }
+            dispatch(setError(error))
+        }
+    })
+}
+
 export const refreshUserDetails = (userID) => async (dispatch, getState) => {
     await userDetailsAPI(userID).then(res => {
         const { token } = res.data;
@@ -164,7 +182,7 @@ export const loadProfileDetails = (userID) => async (dispatch, getState) => {
     })
 }
 
-export const clearUserProfile = () => async (dispatch, getState) => {
+export const clearUserProfile = () => (dispatch, getState) => {
     dispatch({ type: LOAD_PROFILE_DETAILS, payload: initialState.viewed_user })
 }
 
@@ -237,7 +255,7 @@ export const handleCartAdd = (data) => async (dispatch, getState) => {
                 quantity,
                 subtotal
             }
-            const cartID = userCart.filter(item => item.title === data.title)[0]._id;
+            const cartID = userCart.filter(item => item.title === data.title)[0].id;
             await updateUserCartAPI(userID, cartID, cartData).then(res => {
                 dispatch(fetchCartList());
             }).catch(err => {
@@ -269,7 +287,7 @@ export const handleRemoveFromCart = (data) => async (dispatch, getState) => {
     let cartData;
     const userID = getState().common.user.id;
     const userCart = getState().common.user.cart;
-    const cartID = userCart.filter(item => item.title === data.title)[0]._id;
+    const cartID = userCart.filter(item => item.title === data.title)[0].id;
     try {
         if (userCart.filter(item => item.title === data.title)[0].quantity === 1) {
             await axios({
@@ -289,7 +307,7 @@ export const handleRemoveFromCart = (data) => async (dispatch, getState) => {
                 quantity,
                 subtotal
             }
-            const cartID = userCart.filter(item => item.title === data.title)[0]._id;
+            const cartID = userCart.filter(item => item.title === data.title)[0].id;
             await axios({
                 url: `http://localhost:5000/api/users/${userID}/cart/${cartID}`,
                 method: 'PUT',

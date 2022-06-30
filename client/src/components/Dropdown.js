@@ -6,9 +6,6 @@ const Dropdown = (props) => {
 
     useEffect(() => {
         let menuDiv = document.getElementById(props.name);
-        menuDiv.addEventListener('focusin', (ev) => {
-            setDropMenu(true)
-        })
         menuDiv.addEventListener('focusout', (ev) => {
             setDropMenu(false)
         })
@@ -18,10 +15,14 @@ const Dropdown = (props) => {
         props.onSelect(item);
     }
 
+    const toggleMenu = () => {
+        setDropMenu(!dropMenu);
+    }
+
     return (
         <div className="relative w-fit inline-block text-left z-10">
             <div className="rounded-md shadow-sm space-y-0.5">
-                <button id={props.name} className="inline-flex min-w-[10em] justify-between w-full px-3 py-1.5 text-sm font-medium leading-5 text-gray-700 dark:text-gray-400 transition duration-150 ease-in-out bg-white dark:bg-neutral-900 border border-gray-300 dark:border-neutral-900 rounded-md focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800" type="button" aria-haspopup="true" aria-expanded="true" aria-controls="headlessui-menu-items-117">
+                <button id={props.name} onClick={() => toggleMenu()} className="inline-flex min-w-[10em] justify-between w-full px-3 py-1.5 text-sm font-medium leading-5 text-gray-700 dark:text-gray-400 transition duration-150 ease-in-out bg-white dark:bg-neutral-900 border border-gray-300 dark:border-neutral-900 rounded-md focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800" type="button" aria-haspopup="true" aria-expanded="true" aria-controls="headlessui-menu-items-117">
                     <span>{props.selectedPeriod}</span>
                     {dropMenu ?
                         <MdKeyboardArrowUp className="w-5 h-5 ml-4 -mr-1" /> : <MdKeyboardArrowDown className="w-5 h-5 ml-4 -mr-1" />

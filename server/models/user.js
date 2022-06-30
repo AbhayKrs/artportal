@@ -3,6 +3,8 @@ import Explore from './explore.js';
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
+    id: { type: String, required: true, unique: true, index: true, default: mongoose.Types.ObjectId },
+    google_authenticated: { type: Boolean, default: false },
     name: {
         type: String,
         default: "",
@@ -29,6 +31,7 @@ const UserSchema = new Schema({
     },
     tokens: { type: Number, default: 0 },
     explore: [{
+        id: { type: String, required: true, unique: true, index: true, default: mongoose.Types.ObjectId },
         title: { type: String, required: true },
         author: {
             id: {
@@ -43,10 +46,6 @@ const UserSchema = new Schema({
         },
         description: { type: String, required: true },
         comments: [{
-            id: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Comment',
-            },
             content: { type: String },
             author: {
                 id: {

@@ -3,13 +3,11 @@ import { Routes, Route } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import setAuthToken from './utils/setAuthToken';
-import { setError, handleSignOut, handleVerifyUser, fetchUserExploreList, fetchUserStoreList, fetchCartList, fetchCommonImages } from './store/actions/common.actions';
+import { setError, setLoader, handleSignOut, handleVerifyUser, fetchUserExploreList, fetchUserStoreList, fetchCartList, fetchCommonImages } from './store/actions/common.actions';
 
-// import Loader from './components/Loader';
 // import ErrorPopup from './components/Error/ErrorPopup';
 import Header from './containers/Header';
 import Footer from './containers/Footer';
-import Alerts from './components/Alerts';
 import Home from './containers/Home';
 import Explore from './containers/Explore';
 import ExploreSearch from './containers/ExploreSearch';
@@ -18,9 +16,12 @@ import Show from './containers/Show';
 import Store from './containers/Store';
 import StoreAll from './containers/StoreAll';
 import Profile from './containers/Profile';
+import Google from './containers/splash/Google';
 
 // import ExploreUpload from './components/ExploreUpload';
+import Loader from './components/Loader';
 import SnackBarError from './components/SnackBarError';
+import Alerts from './components/Alerts';
 // import ExploreShow from './components/Explore/ExploreShow';
 // import About from './components/Help/About';
 // import Dashboard from './components/Dashboard/Dashboard';
@@ -55,9 +56,12 @@ const ArtystRoutes = (props) => {
         <div className={props.common.theme}>
             <Header />
             <div className='mt-14'></div>
+            <Loader open={props.common.loader} setLoader={props.setLoader} colorTheme={props.common.theme} />
             <SnackBarError error={props.common.error} setError={props.setError} />
             <Routes>
                 <Route path='/' exact element={<Home />} />
+                <Route path='/google_success' exact element={<Google header="Success" />} />
+                <Route path='/google_failed' exact element={<Google header="Failed" />} />
                 <Route path='/explore' exact element={<Explore />} />
                 <Route path='/explore/search' exact element={<ExploreSearch />} />
                 <Route path='/explore/:id' exact element={<Show.ExploreShow />} />
@@ -86,6 +90,7 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
     setError,
+    setLoader,
     handleVerifyUser,
     fetchUserExploreList,
     fetchUserStoreList,
