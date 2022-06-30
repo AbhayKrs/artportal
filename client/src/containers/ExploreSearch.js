@@ -28,7 +28,7 @@ const ExploreSearch = (props) => {
             <div className='flex flex-row'>
                 <Masonry>
                     {props.explore.exploreList.map((explore, index) => (
-                        <div onClick={() => navigate(`/explore/${explore.id}`)} className='relative group group-hover:block'>
+                        <div onClick={() => navigate(`/explore/${explore._id}`)} className='relative group group-hover:block'>
                             <img
                                 id={index}
                                 className='object-cover w-full h-full'

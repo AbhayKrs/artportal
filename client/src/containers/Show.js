@@ -8,7 +8,7 @@ import { clearExploreShow, fetchExploreList, fetchExploreItem, handleLikeExplore
 import { fetchStoreList, fetchStoreItem } from '../store/actions/store.actions';
 import { setLoader, fetchAwards, loadProfileDetails, refreshUserDetails, setError } from '../store/actions/common.actions';
 import { ExploreShowCarousel } from '../components/Carousel';
-import { AwardModal } from '../components/Modal';
+import { AwardModal, ShareModal } from '../components/Modal';
 
 import { IoEye, IoHeart, IoSend, IoShareSocialSharp, IoChatbox } from 'react-icons/io5';
 import { BsFillBookmarkFill, BsTrash, BsHeartFill } from 'react-icons/bs';
@@ -27,6 +27,7 @@ const ExploreShow = (props) => {
     const [editForm, setEditForm] = useState(false);
     const [editIndex, setEditIndex] = useState('');
     const [editComment, setEditComment] = useState('');
+    const [shareOpen, setShareOpen] = useState(false);
     const [awardOpen, setAwardOpen] = useState(false);
 
     const { id } = useParams();
@@ -56,24 +57,20 @@ const ExploreShow = (props) => {
             setLike(false);
         }
         props.explore.exploreList.forEach((item, index) => {
-            if (item.id === props.exploreShow.id) {
+            if (item._id === props.exploreShow._id) {
                 if (index > 0) {
-                    setPrev(props.explore.exploreList[index - 1].id)
+                    setPrev(props.explore.exploreList[index - 1]._id)
                 } else {
                     setPrev('');
                 }
                 if (index < len - 1) {
-                    setNext(props.explore.exploreList[index + 1].id)
+                    setNext(props.explore.exploreList[index + 1]._id)
                 } else {
                     setNext('')
                 }
             }
         })
-    }, [props.exploreShow.id]);
-
-    // useEffect(() => {
-    //     return () => props.clearExploreShow();
-    // }, [])
+    }, [props.exploreShow._id]);
 
     const handleToggleLike = async (likes) => {
         if (likes.includes(props.user.id)) {
@@ -203,7 +200,7 @@ const ExploreShow = (props) => {
                                     <ImPlus className="absolute bottom-0 right-0 text-[#D1853A] h-4 w-4" />
                                 </div>
                                 <BsHeartFill style={like ? { color: '#FF3980' } : { color: '#F190B3' }} className='h-7 w-7 cursor-pointer' onClick={props.common.isAuthenticated ? () => { setLike(!like); handleToggleLike(props.exploreShow.likes) } : handleInvalidUser} />
-                                <IoShareSocialSharp className='h-7 w-7 text-violet-500 dark:text-violet-500' />
+                                <IoShareSocialSharp onClick={() => setShareOpen(true)} className='h-7 w-7 cursor-pointer text-violet-500 dark:text-violet-500' />
                                 <BsFillBookmarkFill onClick={props.common.isAuthenticated ? () => console.log('bookmark!') : handleInvalidUser} className='h-7 w-7 text-violet-500 dark:text-violet-500' />
                             </div>
                             <div className='mr-3'>
@@ -309,6 +306,12 @@ const ExploreShow = (props) => {
                     onClose={() => setAwardOpen(false)}
                     onClick={() => setAwardOpen(false)}
                     handleAwardExplore={handleAwardExplore}
+                />
+                <ShareModal
+                    open={shareOpen}
+                    title='Share'
+                    onClose={() => setShareOpen(false)}
+                    onClick={() => setShareOpen(false)}
                 />
             </div>
         </div >

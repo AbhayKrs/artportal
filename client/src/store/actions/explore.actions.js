@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { exploreItemAPI, exploreListAPI, searchExploreListAPI, filterExploreListAPI, likeExploreAPI, dislikeExploreAPI, awardExploreAPI } from '../../api';
+import { exploreItemAPI, exploreListAPI, exploreUploadAPI, searchExploreListAPI, filterExploreListAPI, likeExploreAPI, dislikeExploreAPI, awardExploreAPI } from '../../api';
 import {
     FETCH_EXPLORE,
     FETCH_EXPLORELIST,
+    HANDLE_EXPLORE_UPLOAD,
     HANDLE_DIALOG_OPEN,
     HANDLE_DIALOG_CLOSE,
     HANDLE_TABCHANGE,
@@ -53,6 +54,14 @@ export const fetchExploreList = () => async (dispatch, getState) => {
         console.log('---error fetchExploreList', err);
     })
 };
+
+export const handleExploreUpload = (exploreData) => async (dispatch, getState) => {
+    await exploreUploadAPI(exploreData).then(res => {
+        dispatch({ type: HANDLE_EXPLORE_UPLOAD, payload: res.data });
+    }).catch(err => {
+        console.log('---error handleExploreUpload', err);
+    })
+}
 
 export const searchExploreList = (query, filter, period) => async (dispatch, getState) => {
     await searchExploreListAPI(query, filter, period).then(res => {

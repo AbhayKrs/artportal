@@ -87,14 +87,14 @@ export const AwardTabPanel = (props) => {
             </div>
             <div className="scrollbar grid max-h-96 gap-6 bg-gray-300 dark:bg-neutral-900 p-5 overflow-x-hidden rounded-b-md lg:grid-cols-6 xs:grid-cols-2" >
                 {props.awards.map((award, index) => {
-                    return <>
+                    return <Fragment key={index}>
                         {index === activeStatus && props.awards.map((award, index) => (
                             <button key={index} onClick={() => setConfirmData({ open: true, award })}>
-                                {/* <img style={{ width: '3em', height: '3em' }} src={fetchUserImages(award.icon)} /> */}
+                                <img style={{ width: '3em', height: '3em' }} src={fetchUserImages(award.icon)} />
                                 <p className="font-bold font-serif text-right text-neutral-700 dark:text-gray-300 text-sm">{award.value}</p>
                             </button>
                         ))}
-                    </>
+                    </Fragment>
                 })}
             </div>
             <AwardConfirmModal

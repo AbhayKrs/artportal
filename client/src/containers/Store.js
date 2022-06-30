@@ -129,7 +129,7 @@ const Store = (props) => {
                                     <div className='tracking-wide text-lg font-medium text-gray-500 font-josefinregular'>${item.price}</div>
                                     <div className='flex space-x-2'>
                                         <MdOutlineAddShoppingCart className='w-8 h-8 text-rose-500 hover:cursor-pointer' onClick={() => cartAdd(item)} />
-                                        <button onClick={() => navigate(`/store/${item.id}`)} className="bg-gradient-to-r font-caviar font-semibold from-violet-500 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Learn more</button>
+                                        <button onClick={() => navigate(`/store/${item._id}`)} className="bg-gradient-to-r font-caviar font-semibold from-violet-500 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Learn more</button>
                                     </div>
                                 </div>
                             </div>
@@ -153,7 +153,7 @@ const Store = (props) => {
                                     <div className='tracking-wide text-md font-medium text-gray-500 font-josefinregular'>${item.price}</div>
                                     <div className='flex space-x-2'>
                                         <MdOutlineAddShoppingCart className='w-8 h-8 text-rose-500 hover:cursor-pointer' onClick={() => cartAdd(item)} />
-                                        <button onClick={() => navigate(`/store/${item.id}`)} className="bg-gradient-to-r font-caviar font-semibold from-violet-500 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Learn more</button>
+                                        <button onClick={() => navigate(`/store/${item._id}`)} className="bg-gradient-to-r font-caviar font-semibold from-violet-500 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Learn more</button>
                                     </div>
                                 </div>
                             </div>
@@ -181,7 +181,7 @@ const Store = (props) => {
                                         <li className="flex flex-col text-sm"><span className="font-bold text-lg">YSR*</span>4.5</li>
                                     </ul>
                                     <div className="mb-3">
-                                        <button onClick={() => navigate(`/users/${seller.id}`)} className="bg-gradient-to-r font-caviar font-semibold from-yellow-300 to-amber-500 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg text-black">More Info</button>
+                                        <button onClick={() => navigate(`/users/${seller._id}`)} className="bg-gradient-to-r font-caviar font-semibold from-yellow-300 to-amber-500 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg text-black">More Info</button>
                                     </div>
                                     <div className='text-sm font-bold font-josefinlight text-rose-400'>* YSR - Year to Sales Rating</div>
                                 </div>

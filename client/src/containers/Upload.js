@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 
 import randomSentence from 'random-sentence';
 
-import { setError, getTags } from '../store/actions/common.actions';
-import { handleUploadExplore } from '../store/actions/upload.actions';
+import { setError, setLoader, getTags } from '../store/actions/common.actions';
+import { handleExploreUpload } from '../store/actions/explore.actions';
 import { handleStoreUpload } from '../store/actions/store.actions';
 
 import { MdClose } from 'react-icons/md';
@@ -113,7 +113,7 @@ const ExploreUpload = (props) => {
         formData.append('userID', userID);
         exploreTags.map(tag => formData.append('tags[]', tag));
 
-        props.handleUploadExplore(formData).then(() => {
+        props.handleExploreUpload(formData).then(() => {
             navigate(`/explore`)
             const errorData = {
                 open: true,
@@ -435,13 +435,14 @@ const StoreUpload = (props) => {
 const mapStateToProps = (state, props) => ({
     user: state.common.user,
     common: state.common,
-    uploadData: state.uploadData,
+    uploadData: state.explore.uploadData
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
     setError,
+    setLoader,
     getTags,
-    handleUploadExplore,
+    handleExploreUpload,
     handleStoreUpload
 }, dispatch);
 

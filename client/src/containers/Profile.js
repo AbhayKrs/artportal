@@ -94,7 +94,7 @@ const Profile = (props) => {
                             {activeView === 'portfolio' && props.viewed_user.explore && <div className='flex flex-row'>
                                 <Masonry>
                                     {props.viewed_user.explore.map((explore, index) => (
-                                        <div key={index} onClick={() => navigate(`/explore/${explore.id}`)} className='relative group group-hover:block'>
+                                        <div key={index} onClick={() => navigate(`/explore/${explore._id}`)} className='relative group group-hover:block'>
                                             <img
                                                 id={index}
                                                 className='object-cover w-full h-full'
@@ -132,11 +132,10 @@ const Profile = (props) => {
                                 </Masonry>
                             </div>}
                             {activeView === 'about' && <div className='text-4xl text-gray-400'>HELLO</div>}
-                            {console.log('liked images', props.explore.exploreList.filter(item => item.likes.indexOf(props.viewed_user.id) >= 0))}
                             {activeView === 'liked' && <div className='flex flex-row'>
                                 <Masonry>
                                     {props.explore.exploreList.filter(item => item.likes.indexOf(props.viewed_user.id) >= 0).map((explore, index) => (
-                                        <div key={index} onClick={() => navigate(`/explore/${explore.id}`)} className='relative group group-hover:block'>
+                                        <div key={index} onClick={() => navigate(`/explore/${explore._id}`)} className='relative group group-hover:block'>
                                             <img
                                                 id={index}
                                                 className='object-cover w-full h-full'

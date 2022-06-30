@@ -101,7 +101,7 @@ const StoreAll = (props) => {
                                         <div className='tracking-wide text-md font-medium text-gray-500 font-josefinregular'>${item.price}</div>
                                         <div className='flex space-x-2'>
                                             <MdOutlineAddShoppingCart className='w-8 h-8 text-rose-500 hover:cursor-pointer' onClick={() => cartAdd(item)} />
-                                            <button onClick={() => navigate(`/store/${item.id}`)} className="bg-gradient-to-r font-caviar font-semibold from-violet-500 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Learn more</button>
+                                            <button onClick={() => navigate(`/store/${item._id}`)} className="bg-gradient-to-r font-caviar font-semibold from-violet-500 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Learn more</button>
                                         </div>
                                     </div>
                                 </div>

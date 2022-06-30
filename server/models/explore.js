@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 
 const exploreSchema = new mongoose.Schema(
     {
-        id: { type: String, required: true, unique: true, index: true, default: mongoose.Types.ObjectId },
         files: [{ type: String, default: '' }],
         title: {
             type: String,

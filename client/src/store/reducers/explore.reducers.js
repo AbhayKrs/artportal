@@ -1,25 +1,9 @@
 export const FETCH_EXPLORE = 'FETCH_EXPLORE';
 export const FETCH_EXPLORELIST = 'FETCH_EXPLORELIST';
+export const HANDLE_EXPLORE_UPLOAD = 'HANDLE_EXPLORE_UPLOAD';
 export const HANDLE_DIALOG_OPEN = 'HANDLE_DIALOG_OPEN';
 export const HANDLE_DIALOG_CLOSE = 'HANDLE_DIALOG_CLOSE';
 export const HANDLE_TABCHANGE = 'HANDLE_TABCHANGE';
-
-export const SKETCH_DETAILS_FAIL = 'SKETCH_DETAILS_FAIL';
-export const SKETCH_DELETE_REQUEST = 'SKETCH_DELETE_REQUEST';
-export const SKETCH_DELETE_SUCCESS = 'SKETCH_DELETE_SUCCESS';
-export const SKETCH_DELETE_FAIL = 'SKETCH_DELETE_FAIL';
-export const SKETCH_CREATE_REQUEST = 'SKETCH_CREATE_REQUEST';
-export const SKETCH_CREATE_SUCCESS = 'SKETCH_CREATE_SUCCESS';
-export const SKETCH_CREATE_FAIL = 'SKETCH_CREATE_FAIL';
-export const SKETCH_CREATE_RESET = 'SKETCH_CREATE_RESET';
-export const SKETCH_UPDATE_REQUEST = 'SKETCH_UPDATE_REQUEST';
-export const SKETCH_UPDATE_SUCCESS = 'SKETCH_UPDATE_SUCCESS';
-export const SKETCH_UPDATE_FAIL = 'SKETCH_UPDATE_FAIL';
-export const SKETCH_UPDATE_RESET = 'SKETCH_UPDATE_RESET';
-export const SKETCH_CREATE_REVIEW_REQUEST = 'SKETCH_CREATE_REVIEW_REQUEST';
-export const SKETCH_CREATE_REVIEW_SUCCESS = 'SKETCH_CREATE_REVIEW_SUCCESS';
-export const SKETCH_CREATE_REVIEW_FAIL = 'SKETCH_CREATE_REVIEW_FAIL';
-export const SKETCH_CREATE_REVIEW_RESET = 'SKETCH_CREATE_REVIEW_RESET';
 
 export const initialState = {
     id: null,
@@ -36,12 +20,18 @@ export const initialState = {
         },
         files: [],
         comments: [],
-        id: '',
+        _id: '',
         title: '',
         description: '',
         likes: [],
         tags: [],
         awards: []
+    },
+    uploadData: {
+        file: '',
+        title: '',
+        description: '',
+        uploadStatus: ''
     },
     activeDialog: false
 }
@@ -55,6 +45,14 @@ export const exploreReducer = (state = initialState, { type, payload }) => {
             console.log('EXPLORELIST_REQUEST', payload);
             const exploreList = [...payload];
             return { ...state, exploreList }
+        }
+        case HANDLE_EXPLORE_UPLOAD: {
+            console.log('HANDLE_EXPLORE_UPLOAD', payload);
+            return {
+                ...state, uploadData: {
+                    file: payload.file, title: payload.title, description: payload.description, uploadStatus: 'success'
+                }
+            }
         }
         case HANDLE_DIALOG_OPEN: {
             console.log('HANDLE_DIALOG_OPEN', payload);

@@ -152,7 +152,7 @@ router.post("/login", async (req, res) => {
                     comment_count += comment_countList[i];
                 console.log('user details', comment_countList, comment_count);
                 const payload = {
-                    id: user.id,
+                    id: user._id,
                     name: user.name,
                     username: user.username,
                     email: user.email,
@@ -342,11 +342,11 @@ router.get('/googleAuth/callback', passport.authenticate('google', {
 // @route   GET /api/users/profile
 // @access  Private
 router.get('/profile', async (req, res) => {
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.user._id);
     console.log('user details', user);
     if (user) {
         res.json({
-            id: user.id,
+            _id: user._id,
             name: user.name,
             username: user.username,
             email: user.email,
@@ -363,7 +363,7 @@ router.get('/profile', async (req, res) => {
 // @route   PUT /api/users/profile
 // @access  Private
 router.put('/profile', async (req, res) => {
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.user._id);
 
     if (user) {
         user.name = req.body.name || user.name;
@@ -377,13 +377,13 @@ router.put('/profile', async (req, res) => {
         const updatedUser = await user.save();
 
         res.json({
-            id: updatedUser.id,
+            _id: updatedUser._id,
             name: updatedUser.name,
             username: updatedUser.username,
             email: updatedUser.email,
             avatar: updatedUser.avatar,
             isAdmin: updatedUser.isAdmin,
-            token: generateToken(updatedUser.id),
+            token: generateToken(updatedUser._id),
         });
     } else {
         res.status(404);
@@ -402,7 +402,7 @@ router.get('/:id', async (req, res) => {
     for (let i = 0; i < comment_countList.length; i++)
         comment_count += comment_countList[i];
     const payload = {
-        id: user.id,
+        id: user._id,
         name: user.name,
         username: user.username,
         email: user.email,
@@ -427,7 +427,7 @@ router.get('/:id', async (req, res) => {
 // @route   PUT /api/users/:id
 // @access  Private/Admin
 router.put('/:id', async (req, res) => {
-    User.updateOne({ id: req.params.id }, {
+    User.updateOne({ _id: req.params.id }, {
         seller_rating: 0,
         ysr: 0,
         store: [],
@@ -454,7 +454,7 @@ router.put('/:id', async (req, res) => {
     //     // const updatedUser = await user.save();
 
     //     // res.json({
-    //     //     id: updatedUser.id,
+    //     //     _id: updatedUser._id,
     //     //     name: updatedUser.name,
     //     //     username: updatedUser.username,
     //     //     email: updatedUser.email,
@@ -501,6 +501,31 @@ router.get('/:id/explore', async (req, res) => {
         res.status(500).send('Unable to fetch explore list');
     }
 });
+
+// @route       POST api/users/:id/bookmark
+// @desc        Bookmark an explore
+// @access      Private
+router.post('/:id/bookmark', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(400).send({ msg: 'User not found' });
+        }
+        const bookmarkData = {
+            id: req.body.id,
+            title: req.body.title,
+            author: req.body.author,
+            description: req.body.description
+        }
+        user.bookmarked.push(bookmarkData);
+        user.save();
+        res.json(bookmarkData);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Bookmark failed!');
+    }
+
+})
 
 // @route       GET api/users/:id/cart
 // @desc        Get all cart items
@@ -584,12 +609,12 @@ router.post('/:id/cart/add', async (req, res) => {
     }
 });
 
-// @route    PUT api/users/:id/cart/:cartid
+// @route    PUT api/users/:id/cart/:cart_id
 // @desc     Edit a cart item
 // @access   Private
-router.put('/:id/cart/:cartid', async (req, res) => {
+router.put('/:id/cart/:cart_id', async (req, res) => {
     const user = await User.findById(req.params.id);
-    const editCartItem = user.cart.find(cartItem => cartItem.id == req.params.cartid);
+    const editCartItem = user.cart.find(cartItem => cartItem._id == req.params.cart_id);
     if (!editCartItem) {
         return res.status(401).json({ msg: 'Cart item does not exist!' })
     }
@@ -600,7 +625,7 @@ router.put('/:id/cart/:cartid', async (req, res) => {
     console.log('edit cart item', req.body);
     const newData = { quantity: req.body.quantity, subtotal: req.body.subtotal }
     await Cart.findByIdAndUpdate(
-        req.params.cartid,
+        req.params.cart_id,
         { quantity: newData.quantity, subtotal: newData.subtotal },
         { new: true },
         async (err, cartItem) => {
@@ -616,18 +641,18 @@ router.put('/:id/cart/:cartid', async (req, res) => {
     return res.json(user.cart);
 })
 
-// @route    DELETE api/users/:id/cart/:cartid
+// @route    DELETE api/users/:id/cart/:cart_id
 // @desc     Delete a cart item
 // @access   Private
-router.delete('/:id/cart/:cartid', async (req, res) => {
+router.delete('/:id/cart/:cart_id', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
-        const cartItem = await Cart.findById(req.params.cartid);
-        const deleteCartItem = user.cart.find(cartItem => cartItem.id == req.params.cartid);
+        const cartItem = await Cart.findById(req.params.cart_id);
+        const deleteCartItem = user.cart.find(cartItem => cartItem._id == req.params.cart_id);
         if (!deleteCartItem) {
             return res.status(404).json({ msg: 'Cart item does not exist!' });
         }
-        user.cart = user.cart.filter(cartItem => cartItem.id !== deleteCartItem.id);
+        user.cart = user.cart.filter(cartItem => cartItem._id !== deleteCartItem._id);
         cartItem.deleteOne(deleteCartItem);
         user.cart_count = user.cart.length;
         await user.save();
@@ -645,13 +670,13 @@ router.get("/logout", (req, res, next) => {
     const { signedCookies = {} } = req;
     const { refreshToken } = signedCookies;
     console.log('logout refreshToken', req.user);
-    User.findById(req.user.id).then(
+    User.findById(req.user._id).then(
         (user) => {
             const tokenIndex = user.refreshToken.findIndex(
                 (item) => item.refreshToken === refreshToken
             );
             if (tokenIndex !== -1) {
-                user.refreshToken.id(user.refreshToken[tokenIndex].id).remove();
+                user.refreshToken.id(user.refreshToken[tokenIndex]._id).remove();
             }
 
             user.save((err, user) => {

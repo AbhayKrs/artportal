@@ -7,7 +7,6 @@ import { storeReducer } from './store.reducers';
 
 export default combineReducers({
     explore: exploreReducer,
-    uploadData: uploadReducer,
     common: commonReducer,
     store: storeReducer
     // exploreList: sketchListReducer,

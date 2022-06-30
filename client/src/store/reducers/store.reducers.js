@@ -27,7 +27,7 @@ export const initialState = {
             }
         },
         files: [],
-        id: '',
+        _id: '',
         title: '',
         description: '',
         category: '',

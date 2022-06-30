@@ -34,8 +34,10 @@ export const awardListAPI = () => get_api.get(`/users/awards`);
 //POST Request API's
 export const loginAPI = userData => post_api.post(`/users/login`, userData);
 export const signUpAPI = userData => post_api.post(`/users/signup`, userData);
-export const storeUploadAPI = storeData => form_api.post(`store/new`, storeData);
+export const exploreUploadAPI = exploreData => form_api.post(`/explore/new`, exploreData);
+export const storeUploadAPI = storeData => form_api.post(`/store/new`, storeData);
 export const addUserCartAPI = (userID, cartData) => get_api.post(`/users/${userID}/cart/add`, cartData);
+// export const bookmarkExploreAPI = ()
 
 //PUT Request API's
 export const likeExploreAPI = (exploreID, userData) => get_api.put(`/explore/${exploreID}/like`, userData);

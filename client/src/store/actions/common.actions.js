@@ -255,7 +255,7 @@ export const handleCartAdd = (data) => async (dispatch, getState) => {
                 quantity,
                 subtotal
             }
-            const cartID = userCart.filter(item => item.title === data.title)[0].id;
+            const cartID = userCart.filter(item => item.title === data.title)[0]._id;
             await updateUserCartAPI(userID, cartID, cartData).then(res => {
                 dispatch(fetchCartList());
             }).catch(err => {
@@ -287,7 +287,7 @@ export const handleRemoveFromCart = (data) => async (dispatch, getState) => {
     let cartData;
     const userID = getState().common.user.id;
     const userCart = getState().common.user.cart;
-    const cartID = userCart.filter(item => item.title === data.title)[0].id;
+    const cartID = userCart.filter(item => item.title === data.title)[0]._id;
     try {
         if (userCart.filter(item => item.title === data.title)[0].quantity === 1) {
             await axios({
@@ -307,7 +307,7 @@ export const handleRemoveFromCart = (data) => async (dispatch, getState) => {
                 quantity,
                 subtotal
             }
-            const cartID = userCart.filter(item => item.title === data.title)[0].id;
+            const cartID = userCart.filter(item => item.title === data.title)[0]._id;
             await axios({
                 url: `http://localhost:5000/api/users/${userID}/cart/${cartID}`,
                 method: 'PUT',
