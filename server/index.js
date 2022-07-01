@@ -25,6 +25,7 @@ dotenv.config();
 //Database Connection Established
 connectDB();
 
+
 const app = express();
 app.use(cors());
 if (process.env.NODE_ENV === 'development') {
@@ -34,6 +35,8 @@ if (process.env.NODE_ENV === 'development') {
 //Init Middleware
 app.use(express.json({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //User Authentication
 app.use(passport.initialize());

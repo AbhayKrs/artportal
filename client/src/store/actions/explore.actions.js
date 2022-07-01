@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { exploreItemAPI, exploreListAPI, exploreUploadAPI, searchExploreListAPI, filterExploreListAPI, likeExploreAPI, dislikeExploreAPI, awardExploreAPI } from '../../api';
+import { exploreItemAPI, exploreListAPI, exploreUploadAPI, searchExploreListAPI, filterExploreListAPI, likeExploreAPI, dislikeExploreAPI, awardExploreAPI, bookmarkExploreAPI } from '../../api';
 import {
     FETCH_EXPLORE,
     FETCH_EXPLORELIST,
@@ -60,6 +60,14 @@ export const handleExploreUpload = (exploreData) => async (dispatch, getState) =
         dispatch({ type: HANDLE_EXPLORE_UPLOAD, payload: res.data });
     }).catch(err => {
         console.log('---error handleExploreUpload', err);
+    })
+}
+
+export const bookmarkExploreItem = (userID, bookmarkData) => async (dispatch, getState) => {
+    await bookmarkExploreAPI(userID, bookmarkData).then(res => {
+        console.log('success bookmarkExploreItem', res.data);
+    }).catch(err => {
+        console.log('---error bookmarkExploreItem', err);
     })
 }
 

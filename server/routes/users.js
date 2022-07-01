@@ -408,6 +408,7 @@ router.get('/:id', async (req, res) => {
         email: user.email,
         avatar: user.avatar,
         tokens: user.tokens,
+        bookmarked: user.bookmarked,
         followers: user.followers,
         followers_count: user.followers_count,
         explore: user.explore,
@@ -507,12 +508,14 @@ router.get('/:id/explore', async (req, res) => {
 // @access      Private
 router.post('/:id/bookmark', async (req, res) => {
     try {
+        console.log('bookmark', req.body);
         const user = await User.findById(req.params.id);
         if (!user) {
             return res.status(400).send({ msg: 'User not found' });
         }
         const bookmarkData = {
-            id: req.body.id,
+            _id: req.body.id,
+            files: req.body.files,
             title: req.body.title,
             author: req.body.author,
             description: req.body.description

@@ -75,6 +75,7 @@ export const initialState = {
             category: ''
         },
         followers: [],
+        bookmarked: [],
         followers_count: 0,
         explore: [],
         explore_count: 0,

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import { fetchExploreImages, fetchUserImages, fetchStoreImages } from '../api';
-import { clearExploreShow, fetchExploreList, fetchExploreItem, handleLikeExplore, handleAwardExplore, handleDislikeExplore, handleAddComment, handleEditComment, handleDeleteComment, handleLikeComment, handleDislikeComment } from '../store/actions/explore.actions';
+import { clearExploreShow, fetchExploreList, fetchExploreItem, handleLikeExplore, handleAwardExplore, handleDislikeExplore, handleAddComment, handleEditComment, handleDeleteComment, handleLikeComment, handleDislikeComment, bookmarkExploreItem } from '../store/actions/explore.actions';
 import { fetchStoreList, fetchStoreItem } from '../store/actions/store.actions';
 import { setLoader, fetchAwards, loadProfileDetails, refreshUserDetails, setError } from '../store/actions/common.actions';
 import { ExploreShowCarousel } from '../components/Carousel';
@@ -152,6 +152,26 @@ const ExploreShow = (props) => {
         props.setError(error);
     }
 
+    const bookmarkIt = () => {
+        const bookmarkData = {
+            id: props.exploreShow._id,
+            files: props.exploreShow.files,
+            title: props.exploreShow.title,
+            author: props.exploreShow.author,
+            description: props.exploreShow.description
+        }
+        props.bookmarkExploreItem(props.user.id, bookmarkData).then(() => {
+            const errorData = {
+                open: true,
+                message: 'Added to Bookmarks!',
+                type: 'success'
+            }
+            props.setError(errorData);
+        }).catch(err => {
+            console.log('err', err)
+        })
+    }
+
     return (
         <div className='main-container grid min-h-screen gap-2 bg-gray-200 dark:bg-darkNavBg sm:grid-cols-1 lg:grid-cols-12'>
             <ExploreShowCarousel
@@ -201,7 +221,7 @@ const ExploreShow = (props) => {
                                 </div>
                                 <BsHeartFill style={like ? { color: '#FF3980' } : { color: '#F190B3' }} className='h-7 w-7 cursor-pointer' onClick={props.common.isAuthenticated ? () => { setLike(!like); handleToggleLike(props.exploreShow.likes) } : handleInvalidUser} />
                                 <IoShareSocialSharp onClick={() => setShareOpen(true)} className='h-7 w-7 cursor-pointer text-violet-500 dark:text-violet-500' />
-                                <BsFillBookmarkFill onClick={props.common.isAuthenticated ? () => console.log('bookmark!') : handleInvalidUser} className='h-7 w-7 text-violet-500 dark:text-violet-500' />
+                                <BsFillBookmarkFill onClick={props.common.isAuthenticated ? () => bookmarkIt() : handleInvalidUser} className='h-7 w-7 cursor-pointer text-violet-500 dark:text-violet-500' />
                             </div>
                             <div className='mr-3'>
                                 <div className='flex flex-col text-right justify-end py-1 text-neutral-900 dark:text-gray-400'>
@@ -419,7 +439,8 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     handleLikeComment,
     handleDislikeComment,
     fetchAwards,
-    setError
+    setError,
+    bookmarkExploreItem
 }, dispatch);
 
 export default {

@@ -30,6 +30,7 @@ const UserSchema = new Schema({
     },
     tokens: { type: Number, default: 0 },
     explore: [{
+        files: [{ type: String, default: '' }],
         title: { type: String, required: true },
         author: {
             id: {
@@ -102,7 +103,8 @@ const UserSchema = new Schema({
     }],
     cart_count: { type: Number, default: 0 },
     bookmarked: [{
-        id: { type: String, required: true, unique: true, index: true, default: mongoose.Types.ObjectId },
+        _id: { type: mongoose.Schema.Types.ObjectId, ref: 'Explore' },
+        files: [{ type: String, default: '' }],
         title: { type: String, required: true },
         author: {
             id: {
