@@ -24,6 +24,7 @@ export const HANDLE_SIGNOUT = 'HANDLE_SIGNOUT';
 export const FETCH_COMMON_IMAGES = 'FETCH_COMMON_IMAGES';
 export const FETCH_AVATARLIST = 'FETCH_AVATARLIST';
 export const FETCH_AWARDLIST = 'FETCH_AWARDLIST';
+export const RESET_BOOKMARK_LIST = 'RESET_BOOKMARK_LIST';
 
 export const initialState = {
     theme: 'dark',
@@ -54,6 +55,7 @@ export const initialState = {
         },
         tokens: 0,
         followers: [],
+        bookmarked: [],
         followers_count: 0,
         explore: [],
         explore_count: 0,
@@ -220,6 +222,9 @@ export const commonReducer = (state = initialState, { type, payload }) => {
         case HANDLE_SIGNOUT: {
             console.log('---HANDLE_SIGNOUT', payload);
             return { ...state, isAuthenticated: false, user: payload }
+        }
+        case RESET_BOOKMARK_LIST: {
+            return { ...state, viewed_user: { ...state.viewed_user, bookmarked: [...payload] } }
         }
         default:
             return state;

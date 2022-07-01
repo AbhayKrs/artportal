@@ -47,6 +47,7 @@ export const updateUserCartAPI = (userID, cartID, cartData) => get_api.put(`/use
 
 //DELETE Request API's
 export const deleteStoreItemAPI = (storeID, userID) => post_api.delete(`/store/${storeID}`, userID);
+export const deleteBookmarkAPI = (bookmarkID, userID) => post_api.delete(`/users/${userID}/bookmark/${bookmarkID}`);
 
 
 // export const likeExplore = exploreID => apis.put(`/explore/${exploreID}/like`, { user: getState().common.user })

@@ -150,7 +150,6 @@ router.post("/login", async (req, res) => {
                 const comment_countList = user.explore.map(item => item.comment_count);
                 for (let i = 0; i < comment_countList.length; i++)
                     comment_count += comment_countList[i];
-                console.log('user details', comment_countList, comment_count);
                 const payload = {
                     id: user._id,
                     name: user.name,
@@ -161,6 +160,7 @@ router.post("/login", async (req, res) => {
                     followers: user.followers,
                     followers_count: user.followers_count,
                     explore_count: user.explore_count,
+                    bookmarked: user.bookmarked,
                     comment_count
                 };
                 jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 31556926 },
@@ -343,7 +343,6 @@ router.get('/googleAuth/callback', passport.authenticate('google', {
 // @access  Private
 router.get('/profile', async (req, res) => {
     const user = await User.findById(req.user._id);
-    console.log('user details', user);
     if (user) {
         res.json({
             _id: user._id,
@@ -396,7 +395,6 @@ router.put('/profile', async (req, res) => {
 // @access  Private/Admin
 router.get('/:id', async (req, res) => {
     const user = await User.findById(req.params.id);
-    console.log('user', user)
     let comment_count = 0;
     const comment_countList = user.explore.map(item => item.comment_count);
     for (let i = 0; i < comment_countList.length; i++)
@@ -508,7 +506,6 @@ router.get('/:id/explore', async (req, res) => {
 // @access      Private
 router.post('/:id/bookmark', async (req, res) => {
     try {
-        console.log('bookmark', req.body);
         const user = await User.findById(req.params.id);
         if (!user) {
             return res.status(400).send({ msg: 'User not found' });
@@ -527,7 +524,26 @@ router.post('/:id/bookmark', async (req, res) => {
         console.error(err.message);
         res.status(500).send('Bookmark failed!');
     }
+})
 
+// @route       POST api/users/:id/bookmark/:bookmark_id
+// @desc        Bookmark an explore
+// @access      Private
+router.delete('/:user_id/bookmark/:bookmark_id', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.user_id);
+        const bookmark_toDelete = await user.bookmarked.find(bookmark => bookmark._id == req.params.bookmark_id);
+        console.log('delete', user, bookmark_toDelete);
+        if (!bookmark_toDelete) {
+            return res.status(400).send({ msg: 'Bookmark does not exist!' });
+        }
+        user.bookmarked = user.bookmarked.filter(bookmark => bookmark._id !== bookmark_toDelete._id);
+        await user.save();
+        res.json(user.bookmarked);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Bookmark failed!');
+    }
 })
 
 // @route       GET api/users/:id/cart

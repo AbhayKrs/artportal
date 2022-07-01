@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { loginAPI, googleLoginAPI, signUpAPI, tagsAPI, commonImagesAPI, userDetailsAPI, userExploreListAPI, userStoreListAPI, userCartListAPI, addUserCartAPI, updateUserCartAPI, deleteStoreItemAPI, awardListAPI } from '../../api';
+import { loginAPI, googleLoginAPI, signUpAPI, tagsAPI, commonImagesAPI, userDetailsAPI, userExploreListAPI, userStoreListAPI, userCartListAPI, addUserCartAPI, updateUserCartAPI, deleteStoreItemAPI, awardListAPI, deleteBookmarkAPI } from '../../api';
 import {
     SWITCH_THEME,
     SET_LOADER,
@@ -23,6 +23,7 @@ import {
     FETCH_COMMON_IMAGES,
     FETCH_AVATARLIST,
     FETCH_AWARDLIST,
+    RESET_BOOKMARK_LIST,
     initialState
 } from '../reducers/common.reducers';
 import jwt_decode from 'jwt-decode';
@@ -184,6 +185,21 @@ export const loadProfileDetails = (userID) => async (dispatch, getState) => {
 
 export const clearUserProfile = () => (dispatch, getState) => {
     dispatch({ type: LOAD_PROFILE_DETAILS, payload: initialState.viewed_user })
+}
+
+export const deleteBookmark = (bookmarkID, userID) => async (dispatch, getState) => {
+    await deleteBookmarkAPI(bookmarkID, userID).then(res => {
+        dispatch({ type: RESET_BOOKMARK_LIST, payload: res.data })
+    }).catch(err => {
+        if (err.response) {
+            const error = {
+                open: true,
+                message: err.response.data,
+                type: 'hight',
+            }
+            dispatch(setError(error))
+        }
+    })
 }
 
 export const fetchUserExploreList = () => async (dispatch, getState) => {
