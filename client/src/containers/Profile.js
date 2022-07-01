@@ -6,22 +6,26 @@ import moment from 'moment';
 import Masonry from '../components/Masonry';
 
 import { fetchExploreImages, fetchUserImages } from '../api';
-import { setLoader, loadProfileDetails, clearUserProfile, deleteBookmark } from '../store/actions/common.actions';
+import { setLoader, fetchAvatars, loadProfileDetails, clearUserProfile, deleteBookmark, handleEditUserAvatar } from '../store/actions/common.actions';
 import { fetchExploreList } from '../store/actions/explore.actions';
 
+import { MdAddAPhoto } from 'react-icons/md';
 import { BsHeart, BsChat, BsTrash } from 'react-icons/bs';
 import { BiTimeFive } from 'react-icons/bi';
 import { GoInfo } from 'react-icons/go';
+import { AvatarModal } from '../components/Modal';
 
 const Profile = (props) => {
     const { id } = useParams();
     let navigate = useNavigate();
+    const [avatarModal, setAvatarModal] = useState(false);
 
     useEffect(() => {
         props.setLoader(true);
         window.scrollTo(0, 0);
         props.loadProfileDetails(id);
         props.fetchExploreList();
+        props.fetchAvatars();
         return () => props.clearUserProfile();
     }, [])
 
@@ -38,7 +42,6 @@ const Profile = (props) => {
                     backgroundImage: `url('https://cdna.artstation.com/p/assets/images/images/049/944/404/large/gabriel-gomez-fghghfghfghfghfghfghfg.jpg?1653675686')`
                 }}>
                     <span id="blackOverlay" className="w-full h-full absolute opacity-25 bg-black"></span>
-
                 </div>
             </div>
             <div className="relative pt-20 pb-6">
@@ -63,8 +66,9 @@ const Profile = (props) => {
                                     </div>
                                 </div>
                                 <div className="w-full sm:w-3/12 px-4 flex justify-center">
-                                    <div className="relative">
-                                        <img src={fetchUserImages(props.viewed_user.avatar.icon)} className="h-auto align-middle absolute sm:-m-32 -m-[27rem] sm:-ml-28 -ml-[7.5rem]  max-w-[15rem]" />
+                                    <div className="relative h-fit align-middle sm:-m-32 -m-[27rem] sm:-ml-28 -ml-[7.5rem]  max-w-[15rem]">
+                                        <img src={fetchUserImages(props.viewed_user.avatar.icon)} />
+                                        <MdAddAPhoto onClick={() => setAvatarModal(true)} className='h-10 w-10 cursor-pointer text-gray-200 absolute bottom-2 right-2 z-30' />
                                     </div>
                                 </div>
                                 <div className="w-full sm:w-4/12 px-4 lg:text-right lg:self-center">
@@ -213,7 +217,14 @@ const Profile = (props) => {
                     </div>
                 </div>
             </div>
-        </div >
+            <AvatarModal
+                open={avatarModal}
+                title='Pick your Avatar'
+                avatarList={props.common.avatarList}
+                handleEditUserAvatar={props.handleEditUserAvatar}
+                onClose={() => setAvatarModal(false)}
+            />
+        </div>
     )
 }
 
@@ -225,10 +236,12 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
     setLoader,
+    fetchAvatars,
     fetchExploreList,
     loadProfileDetails,
     clearUserProfile,
-    deleteBookmark
+    deleteBookmark,
+    handleEditUserAvatar
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile)

@@ -11,10 +11,10 @@ import { ExploreShowCarousel } from '../components/Carousel';
 import { AwardModal, ShareModal } from '../components/Modal';
 
 import { IoEye, IoHeart, IoSend, IoShareSocialSharp, IoChatbox } from 'react-icons/io5';
-import { BsFillBookmarkFill, BsFillBookmarkCheckFill, BsTrash, BsHeartFill } from 'react-icons/bs';
+import { BsTrash, BsHeartFill } from 'react-icons/bs';
 import { IoIosSend } from "react-icons/io";
 import { AiFillLike, AiFillDislike } from 'react-icons/ai';
-import { MdEdit, MdEditOff } from 'react-icons/md';
+import { MdEdit, MdEditOff, MdBookmarkAdd, MdBookmarkAdded } from 'react-icons/md';
 import { ImPlus, ImStarFull } from 'react-icons/im';
 
 import AwardIcon from '../assets/images/gift.png';
@@ -222,9 +222,9 @@ const ExploreShow = (props) => {
                                 <BsHeartFill style={like ? { color: '#FF3980' } : { color: '#F190B3' }} className='h-7 w-7 cursor-pointer' onClick={props.common.isAuthenticated ? () => { setLike(!like); handleToggleLike(props.exploreShow.likes) } : handleInvalidUser} />
                                 <IoShareSocialSharp onClick={() => setShareOpen(true)} className='h-7 w-7 cursor-pointer text-violet-500 dark:text-violet-500' />
                                 {props.user && !!props.user.bookmarked.find(item => item._id === props.exploreShow._id) ?
-                                    <BsFillBookmarkCheckFill className='h-7 w-7 text-violet-500 dark:text-violet-500' />
+                                    <MdBookmarkAdded className='h-7 w-7 text-violet-500 dark:text-violet-500' />
                                     :
-                                    <BsFillBookmarkFill onClick={props.common.isAuthenticated ? () => bookmarkIt() : handleInvalidUser} className='h-7 w-7 cursor-pointer text-violet-500 dark:text-violet-500' />
+                                    <MdBookmarkAdd onClick={props.common.isAuthenticated ? () => bookmarkIt() : handleInvalidUser} className='h-7 w-7 cursor-pointer text-violet-500 dark:text-violet-500' />
                                 }
                             </div>
                             <div className='mr-3'>

@@ -105,15 +105,14 @@ const ExploreUpload = (props) => {
         }
 
         const userID = props.common.user.id;
-        const formData = new FormData();
+        const exploreUploadData = new FormData();
+        exploreFiles.map(file => exploreUploadData.append('files[]', file));
+        exploreUploadData.append('title', exploreTitle);
+        exploreUploadData.append('description', exploreDesc);
+        exploreUploadData.append('userID', userID);
+        exploreTags.map(tag => exploreUploadData.append('tags[]', tag));
 
-        exploreFiles.map(file => formData.append('files[]', file));
-        formData.append('title', exploreTitle);
-        formData.append('description', exploreDesc);
-        formData.append('userID', userID);
-        exploreTags.map(tag => formData.append('tags[]', tag));
-
-        props.handleExploreUpload(formData).then(() => {
+        props.handleExploreUpload(exploreUploadData).then(() => {
             navigate(`/explore`)
             const errorData = {
                 open: true,

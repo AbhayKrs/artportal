@@ -220,12 +220,12 @@ router.get('/:id', async (req, res) => {
 // @desc        Create an explore
 // @access      Private
 router.post('/new', upload.any(), async (req, res) => {
-    const user = await User.findOne({ id: req.body.userID });
+    const user = await User.findById(req.body.userID);
     const newExplore = new Explore({
         files: req.files.map(file => { return file.filename }),
         title: req.body.title,
         author: {
-            id: user.id,
+            id: user._id,
             username: user.username,
             avatar: user.avatar
         },
@@ -271,13 +271,22 @@ router.put('/:id', function (req, res) {
 // @route       Delete api/explore/:id
 // @desc        Delete an explore
 // @access      Private/Admin
-router.delete('/:id', [protect, admin, checkObjectId('id')], async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
+        const userID = '61cf54a666ee79691574815e';
+        const users = await User.find({});
         const explore = await Explore.findById(req.params.id);
+        const user = await User.findById(userID);
         if (!explore) {
             return res.status(404).send('Explore not found');
         }
         await explore.remove();
+        users.map(user => {
+            user.bookmarked.filter(item => item._id !== req.params.id);
+            user.save();
+        })
+        user.explore.filter(item => item._id !== req.params.id);
+        user.save();
         res.send('Explore removed successfully');
     } catch (err) {
         console.error(err.message);
@@ -482,23 +491,6 @@ router.put('/:id/comments/:comment_id/reply', async (req, res) => {
                     }
                 }
             );
-
-        // const newComment = new Comment({
-        //     comment: req.body.reply,
-        //     author: {
-        //         id: req.body.user.id,
-        //         username: req.body.user.username
-        //     },
-        // });
-        // Comment.create(newComment, (err, reply) => {
-        //     if (err) {
-        //         console.log(err)
-        //     } else {
-        //         explore.comments.filter(comment => comment._id === replyComment._id)[0].replies.push(reply);
-        //         explore.save();
-        //         console.log('repliedData', reply, explore.comments[0].replies);
-        //     }
-        // });
         return res.json(explore.comments);
     } catch (err) {
         console.error(err.message);
