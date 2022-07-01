@@ -7,9 +7,9 @@ import Masonry from '../components/Masonry';
 
 import { fetchExploreImages, fetchUserImages } from '../api';
 import { setLoader, fetchAvatars, loadProfileDetails, clearUserProfile, deleteBookmark, handleEditUserAvatar } from '../store/actions/common.actions';
-import { fetchExploreList } from '../store/actions/explore.actions';
+import { fetchExploreList, deleteExploreItem } from '../store/actions/explore.actions';
 
-import { MdAddAPhoto } from 'react-icons/md';
+import { MdAddAPhoto, MdClose } from 'react-icons/md';
 import { BsHeart, BsChat, BsTrash } from 'react-icons/bs';
 import { BiTimeFive } from 'react-icons/bi';
 import { GoInfo } from 'react-icons/go';
@@ -105,12 +105,16 @@ const Profile = (props) => {
                             {activeView === 'portfolio' && props.viewed_user.explore && <div className='flex flex-row'>
                                 <Masonry>
                                     {props.viewed_user.explore.map((explore, index) => (
-                                        <div key={index} onClick={() => navigate(`/explore/${explore._id}`)} className='relative group group-hover:block'>
+                                        // onClick={() => navigate(`/explore/${explore._id}`)}
+                                        <div key={index} className='relative group group-hover:block'>
                                             <img
                                                 id={index}
                                                 className='object-cover w-full h-full'
                                                 src={fetchExploreImages(explore.files[0])}
                                             />
+                                            <button onClick={() => props.deleteExploreItem(explore._id, props.common.user.id)} className='hidden group-hover:block bg-gray-300 absolute top-[-25px] rounded-t-lg right-0 z-50'>
+                                                <MdClose className=' h-6 w-6' />
+                                            </button>
                                             <div className='hidden absolute max-h-full bottom-0 p-2 pt-14 group-hover:flex group-hover:flex-row w-full bg-gradient-to-t from-black text-gray-200 group-hover:flex group-hover:justify-between'>
                                                 <div className="flex flex-col place-self-end max-w-[65%]">
                                                     <h3 className="text-md text-base font-bold leading-5 capitalize break-words">{explore.title + 'afsafokasfjhbasfbasbhfsbhf'}</h3>
@@ -216,7 +220,7 @@ const Profile = (props) => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
             <AvatarModal
                 open={avatarModal}
                 title='Pick your Avatar'
@@ -224,7 +228,7 @@ const Profile = (props) => {
                 handleEditUserAvatar={props.handleEditUserAvatar}
                 onClose={() => setAvatarModal(false)}
             />
-        </div>
+        </div >
     )
 }
 
@@ -238,6 +242,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     setLoader,
     fetchAvatars,
     fetchExploreList,
+    deleteExploreItem,
     loadProfileDetails,
     clearUserProfile,
     deleteBookmark,

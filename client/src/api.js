@@ -46,6 +46,7 @@ export const awardExploreAPI = (exploreID, userID, awardData) => get_api.put(`/e
 export const updateUserCartAPI = (userID, cartID, cartData) => get_api.put(`/users/${userID}/cart/${cartID}`, cartData);
 
 //DELETE Request API's
+export const deleteExploreItemAPI = (exploreID, userID) => post_api.delete(`/explore/${exploreID}`, userID);
 export const deleteStoreItemAPI = (storeID, userID) => post_api.delete(`/store/${storeID}`, userID);
 export const deleteBookmarkAPI = (bookmarkID, userID) => post_api.delete(`/users/${userID}/bookmark/${bookmarkID}`);
 

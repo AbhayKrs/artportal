@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { exploreItemAPI, exploreListAPI, exploreUploadAPI, searchExploreListAPI, filterExploreListAPI, likeExploreAPI, dislikeExploreAPI, awardExploreAPI, bookmarkExploreAPI } from '../../api';
+import { exploreItemAPI, exploreListAPI, exploreUploadAPI, searchExploreListAPI, filterExploreListAPI, likeExploreAPI, dislikeExploreAPI, awardExploreAPI, bookmarkExploreAPI, deleteExploreItemAPI } from '../../api';
 import {
     FETCH_EXPLORE,
     FETCH_EXPLORELIST,
@@ -84,6 +84,14 @@ export const filterExploreList = (filter, period) => async (dispatch, getState) 
         dispatch({ type: FETCH_EXPLORELIST, payload: res.data });
     }).catch(err => {
         console.log('---error filterExploreList', err);
+    })
+}
+
+export const deleteExploreItem = (exploreID, userID) => async (dispatch, getState) => {
+    await deleteExploreItemAPI(exploreID, userID).then(res => {
+        console.log('deleted Explore');
+    }).catch(err => {
+        console.log('---error deleteExploreItem', err);
     })
 }
 

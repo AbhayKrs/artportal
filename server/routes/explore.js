@@ -273,20 +273,21 @@ router.put('/:id', function (req, res) {
 // @access      Private/Admin
 router.delete('/:id', async (req, res) => {
     try {
-        const userID = '61cf54a666ee79691574815e';
         const users = await User.find({});
         const explore = await Explore.findById(req.params.id);
-        const user = await User.findById(userID);
+        const user = await User.findById(explore.author.id);
         if (!explore) {
             return res.status(404).send('Explore not found');
         }
+        user.explore = [...user.explore.filter(item => item._id != req.params.id)];
+        user.explore_count = user.explore_count - 1;
+        await user.save();
+        // users.map(async user => {
+        //     user.bookmarked.filter(item => item._id !== req.params.id);
+        //     await user.save();
+        // })
+        console.log('user', user.explore.filter(item => item._id != req.params.id), users)
         await explore.remove();
-        users.map(user => {
-            user.bookmarked.filter(item => item._id !== req.params.id);
-            user.save();
-        })
-        user.explore.filter(item => item._id !== req.params.id);
-        user.save();
         res.send('Explore removed successfully');
     } catch (err) {
         console.error(err.message);
