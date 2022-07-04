@@ -8,7 +8,7 @@ const Masonry = props => {
     const gap = 0;
     const result = [];
 
-    const [columns, setColumns] = useState(5);
+    const [columns, setColumns] = useState(props.cols);
 
     useEffect(() => {
         if (window.innerWidth < 640) {

@@ -26,7 +26,7 @@ const ExploreSearch = (props) => {
         <div className='main-container bg-gray-200 dark:bg-darkNavBg'>
             <SearchFilterPanel fetchExploreList={props.fetchExploreList} filterExploreList={props.filterExploreList} searchExploreList={props.searchExploreList} />
             <div className='flex flex-row'>
-                <Masonry>
+                <Masonry cols={5}>
                     {props.explore.exploreList.map((explore, index) => (
                         <div onClick={() => navigate(`/explore/${explore._id}`)} className='relative group group-hover:block'>
                             <img

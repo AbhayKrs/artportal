@@ -103,7 +103,7 @@ const Profile = (props) => {
                                 <div onClick={() => setActiveView('bookmarks')} className={`text-lg font-semibold ${activeView === 'bookmarks' ? 'text-violet-400 dark:text-violet-500' : 'text-gray-700 dark:text-gray-400'} font-caviar cursor-pointer`}>Bookmarks</div>
                             </div>
                             {activeView === 'portfolio' && props.viewed_user.explore && <div className='flex flex-row'>
-                                <Masonry>
+                                <Masonry cols={5}>
                                     {props.viewed_user.explore.map((explore, index) => (
                                         // onClick={() => navigate(`/explore/${explore._id}`)}
                                         <div key={index} className='relative group group-hover:block'>
@@ -148,7 +148,7 @@ const Profile = (props) => {
                             </div>}
                             {activeView === 'about' && <div className='text-4xl text-gray-400'>HELLO</div>}
                             {activeView === 'liked' && <div className='flex flex-row'>
-                                <Masonry>
+                                <Masonry cols={5}>
                                     {props.explore.exploreList.filter(item => item.likes.indexOf(props.viewed_user.id) >= 0).map((explore, index) => (
                                         <div key={index} onClick={() => navigate(`/explore/${explore._id}`)} className='relative group group-hover:block'>
                                             <img
@@ -188,7 +188,7 @@ const Profile = (props) => {
                                 </Masonry>
                             </div>}
                             {activeView === 'bookmarks' && <div className='flex flex-row'>
-                                <Masonry>
+                                <Masonry cols={5}>
                                     {props.viewed_user.bookmarked.map((explore, index) => (
                                         <div key={index} className='relative group group-hover:block'>
                                             <img

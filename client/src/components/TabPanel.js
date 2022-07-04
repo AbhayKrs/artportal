@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
-import ImageCard from './ImageCard';
+import { ImageCard } from './Card';
 import { AwardConfirmModal } from './Modal';
 import { MdUpload, MdClose } from 'react-icons/md';
 import Dropdown from './Dropdown';
@@ -51,17 +51,21 @@ export const HomeTabPanel = (props) => {
                     </svg>
                 </button>
             </div>
-            <div className="grid bg-gray-300 dark:bg-neutral-800 overflow-hidden rounded-b-md lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-3 xs:grid-cols-1">
-                {props.tags.map((tag, index) => {
-                    return <Fragment key={index}>
-                        {
-                            index === activeStatus && props.exploreList.filter(item => item.tags.includes(tag) === true).map((explore, index) => (
-                                <ImageCard key={index} explore={explore} author={explore.author} />
-                            ))
-                        }
-                    </Fragment>
-                })}
-            </div>
+            {props.exploreList.length > 0 ?
+                <div className="grid bg-gray-300 dark:bg-neutral-800 overflow-hidden rounded-b-md lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-3 xs:grid-cols-1">
+                    {props.tags.map((tag, index) => {
+                        return <Fragment key={index}>
+                            {
+                                index === activeStatus && props.exploreList.filter(item => item.tags.includes(tag) === true).map((explore, index) => (
+                                    <ImageCard key={index} explore={explore} author={explore.author} />
+                                ))
+                            }
+                        </Fragment>
+                    })}
+                </div>
+                :
+                <div className='flex justify-center items-center font-josefinlight text-lg text-gray-800 dark:text-gray-300 bg-gray-300 dark:bg-neutral-800 h-full min-h-[20em]'>No artworks found...</div>
+            }
         </div >
     )
 }
@@ -139,7 +143,7 @@ export const FilterPanel = (props) => {
             get: (searchParams, prop) => searchParams.get(prop),
         });
         if (params.filter || params.period) {
-            setActiveFilter(filters.indexOf(params.filter));
+            setActiveFilter(filters.map(x => { return x.value }).indexOf(params.filter));
             params.period ? setActivePeriod(params.period) : setActivePeriod('');
         }
     }, []);
@@ -149,7 +153,6 @@ export const FilterPanel = (props) => {
             periodOptions.find(item => item.value === activePeriod).label
             :
             'Select a time period'
-        console.log('tested', label);
         setActivePeriodLabel(label);
 
         if (activeFilter < 0) {
@@ -173,8 +176,9 @@ export const FilterPanel = (props) => {
             setActiveFilter(-1);
             setActivePeriod('')
         } else {
-            setActiveFilter(item)
+            setActiveFilter(item.id)
         }
+        console.log('activeFilter', activeFilter, item);
     }
 
     const handlePeriodChange = (popular) => {
@@ -198,7 +202,7 @@ export const FilterPanel = (props) => {
                 <div className='lg:flex hidden overflow-hidden'>
                     <ul id='tabSlider' className="flex space-x-2 items-center">
                         {filters.map((filter, index) => {
-                            return <li key={index} onClick={() => selectFilter(index)} className={index === activeFilter ? "font-caviar text-sm font-bold tracking-wider text-gray-700 bg-violet-300 rounded-lg h-fit shadow" : "font-caviar text-sm font-bold tracking-wider text-gray-700 dark:text-gray-400 bg-slate-200 dark:bg-neutral-900 flex items-center shadow cursor-pointer rounded-lg h-fit"}>
+                            return <li key={index} onClick={() => selectFilter(filter)} className={index === activeFilter ? "font-caviar text-sm font-bold tracking-wider text-gray-700 bg-violet-300 rounded-lg h-fit shadow" : "font-caviar text-sm font-bold tracking-wider text-gray-700 dark:text-gray-400 bg-slate-200 dark:bg-neutral-900 flex items-center shadow cursor-pointer rounded-lg h-fit"}>
                                 <div className="flex items-center">
                                     <span className="py-2 px-3 capitalize">{filter.label}</span>
                                 </div>
@@ -207,7 +211,7 @@ export const FilterPanel = (props) => {
                     </ul>
                 </div>
                 <div className="lg:hidden flex items-center cursor-pointer space-x-2">
-                    <Dropdown left name='filters' selectedPeriod={activeFilter === -1 ? 'Select a filter' : filters[activeFilter].label} options={filters} onSelect={selectFilter} />
+                    <Dropdown left name='filters' selectedPeriod={activeFilter === -1 ? 'Select a filter' : activeFilter >= 0 && filters[activeFilter].label} options={filters} onSelect={selectFilter} />
                 </div>
                 {activePeriod.length > 0 && <span className='text-gray-600 dark:text-gray-400 mx-2'>&#9679;</span>}
                 {activePeriod.length > 0 ?
@@ -221,7 +225,7 @@ export const FilterPanel = (props) => {
                     :
                     null}
             </div>
-            <div className='flex sm:ml-auto'>
+            <div className='flex w-full max-w-[25rem] sm:ml-auto'>
                 <SearchBar searchValue={exploreSearch} setSearchValue={setExploreSearch} handleSubmit={handleExploreSearch} />
                 <button type="button" className='btn ml-2 bg-violet-500 drop-shadow-xl p-2.5 items-center shadow-lg rounded-xl' onClick={() => navigate(`/explore/new `)}>
                     <MdUpload className='h-6 w-full text-white' />

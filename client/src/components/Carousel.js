@@ -7,7 +7,7 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 export const ExploreShowCarousel = (props) => {
   return (
     <div className="flex relative lg:col-span-8 w-full justify-center bg-gray-300 dark:bg-[#101010]">
-      <div className="flex flex-col my-3 mx-32 space-y-3 w-full justify-center">
+      <div className="flex flex-col my-3 mx-4 md:mx-32 space-y-3 w-full justify-center">
         <div className='flex w-fit self-center items-center place-content-center'>
           <div className='flex fixed top-14 right-0 lg:right-[33.5%]  m-5 space-x-3 p-1 bg-neutral-100 dark:bg-neutral-800 rounded'>
             {props.prevTrue ? <div onClick={props.prev} className='cursor-pointer flex justify-end py-0.5 space-x-2 text-gray-700 hover:text-violet-400 dark:text-gray-200 dark:hover:text-violet-500'>
@@ -50,6 +50,68 @@ export const HomeMultiCarousel = (props) => {
       </div>
       <GoChevronRight onClick={props.next} className='h-8 w-8 text-neutral-600' />
     </div>
+  )
+}
+
+export const HomeSingleCarousel = (props) => {
+  let count = 0;
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [fade, setFade] = useState(false);
+
+  useEffect(() => {
+    startSlider();
+  }, []);
+
+  useEffect(() => {
+    setFade(true);
+    setTimeout(() => {
+      setFade(false)
+    }, 3500)
+  }, [currentIndex])
+
+  const startSlider = () => {
+    setInterval(() => {
+      handleNextClick();
+    }, 4000)
+  }
+
+  const handleNextClick = () => {
+    count = (count + 1) % bannerCarousel.length;
+    setCurrentIndex(count);
+  }
+
+  const bannerCarousel = [
+    { id: 1, img: 'https://cdnb.artstation.com/p/assets/images/images/046/930/067/large/anato-finnstark-eledegian.jpg?1646323393', title: 'The Lost Giant', artist: 'Anato Finnstark' },
+    { id: 1, img: 'https://cdnb.artstation.com/p/assets/images/images/046/649/377/large/anato-finnstark-web-petit.jpg?1645623908', title: 'Fire Dragon God', artist: 'Anato Finnstark' },
+    { id: 1, img: 'https://cdna.artstation.com/p/assets/images/images/040/230/710/large/anato-finnstark-web-petit.jpg?1628237453', title: 'The Wolf Princess', artist: 'Anato Finnstark' }
+  ]
+  return (
+    <div className="relative h-full">
+      <div className="relative w-full h-full overflow-hidden">
+        <div className="active float-left w-full h-full">
+          <img
+            src={bannerCarousel[currentIndex].img}
+            className={`block w-full h-full transition-opacity duration-700 ease-in  ${fade ? 'opacity-100' : 'opacity-0'}`}
+            alt="Wild Landscape"
+          />
+          <div className='absolute h-full w-full bottom-0 bg-gradient-to-t from-black/70 to-black/10'>
+            <div className='h-fit w-full pb-2 pl-2 absolute bottom-0'>
+              <h1 className='text-3xl font-black font-josefinlight text-gray-200 text-end'>{bannerCarousel[currentIndex].title}</h1>
+              <h2 className='text-xl font-josefinregular text-gray-400 text-end'>{bannerCarousel[currentIndex].artist}</h2>
+              <div className='flex flex-row absolute space-x-1 bottom-2 right-20'>
+                {bannerCarousel.map((img, index) => (
+                  <label className="flex items-center cursor-pointer text-xl">
+                    <input type="radio" name="radio" className="hidden peer" checked={currentIndex === index} />
+                    <span className="w-3 h-3 inline-block rounded-full border border-blue-400 flex-no-shrink peer-checked:bg-blue-400"></span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div >
   )
 }
 

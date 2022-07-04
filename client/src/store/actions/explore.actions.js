@@ -87,6 +87,10 @@ export const filterExploreList = (filter, period) => async (dispatch, getState) 
     })
 }
 
+export const exploreVisited = () => async (dispatch, getState) => {
+    console.log('page visited');
+}
+
 export const deleteExploreItem = (exploreID, userID) => async (dispatch, getState) => {
     await deleteExploreItemAPI(exploreID, userID).then(res => {
         console.log('deleted Explore');

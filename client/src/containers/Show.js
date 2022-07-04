@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import { fetchExploreImages, fetchUserImages, fetchStoreImages } from '../api';
-import { clearExploreShow, fetchExploreList, fetchExploreItem, handleLikeExplore, handleAwardExplore, handleDislikeExplore, handleAddComment, handleEditComment, handleDeleteComment, handleLikeComment, handleDislikeComment, bookmarkExploreItem } from '../store/actions/explore.actions';
+import { exploreVisited, clearExploreShow, fetchExploreList, fetchExploreItem, handleLikeExplore, handleAwardExplore, handleDislikeExplore, handleAddComment, handleEditComment, handleDeleteComment, handleLikeComment, handleDislikeComment, bookmarkExploreItem } from '../store/actions/explore.actions';
 import { fetchStoreList, fetchStoreItem } from '../store/actions/store.actions';
 import { setLoader, fetchAwards, loadProfileDetails, refreshUserDetails, setError } from '../store/actions/common.actions';
 import { ExploreShowCarousel } from '../components/Carousel';
@@ -33,8 +33,16 @@ const ExploreShow = (props) => {
     const { id } = useParams();
     let navigate = useNavigate();
 
-    useEffect(async () => {
+    useEffect(() => {
         props.setLoader(true);
+        if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
+            console.info("This page is reloaded");
+        } else {
+            console.info("This page is not reloaded");
+        }
+    }, [id])
+
+    useEffect(async () => {
         window.scrollTo(0, 0)
         await props.fetchExploreList();
         props.fetchExploreItem(id);
@@ -432,6 +440,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     fetchExploreList,
     fetchStoreList,
     fetchStoreItem,
+    exploreVisited,
     loadProfileDetails,
     refreshUserDetails,
     handleLikeExplore,

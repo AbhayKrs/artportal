@@ -24,7 +24,6 @@ module.exports = {
       darkNavBg: '#1d1d1f',
       ...colors
     },
-
     extend: {},
   },
   plugins: [

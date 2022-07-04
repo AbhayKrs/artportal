@@ -29,7 +29,7 @@ const Explore = (props) => {
             <FilterPanel fetchExploreList={props.fetchExploreList} filterExploreList={props.filterExploreList} searchExploreList={props.searchExploreList} />
             {props.explore.exploreList.length > 0 ?
                 <div className='flex flex-row'>
-                    <Masonry>
+                    <Masonry cols={5}>
                         {props.explore.exploreList.map((explore, index) => (
                             <div key={index} onClick={() => navigate(`/explore/${explore._id}`)} className='relative group group-hover:block'>
                                 <img
@@ -71,7 +71,7 @@ const Explore = (props) => {
                 :
                 <div >
                     <div className='absolute inset-0 h-fit w-fit m-auto text-center text-gray-300'>
-                        <img className='h-64 w-64' src={PandaIcon} />
+                        <img className='h-32 w-full' src={PandaIcon} />
                         <h2 className='font-josefinregular text-2xl'>It's empty in here!</h2>
                     </div>
                 </div>

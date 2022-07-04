@@ -25,10 +25,10 @@ const ExploreUpload = (props) => {
     const [tagSearch, setTagSearch] = useState('');
     const [primaryFile, setPrimaryFile] = useState('');
 
-    useEffect(() => {
+    useEffect(async () => {
         props.setLoader(true);
         window.scrollTo(0, 0)
-        props.getTags();
+        await props.getTags();
         setExploreTitle(randomSentence({ min: 2, max: 8 }))
         setExploreDesc(randomSentence({ min: 5, max: 14 }))
         setExploreTags(props.common.tags.sort(() => 0.5 - Math.random()).slice(0, 10))
@@ -136,7 +136,7 @@ const ExploreUpload = (props) => {
                             <div className="flex flex-col justify-center items-center border-dashed space-y-2 rounded-lg border-2 border-gray-400 py-8" onDrop={(ev) => dropHandler(ev)} onDragOver={(ev) => dragOverHandler(ev)} >
                                 <p className="font-semibold text-gray-700 dark:text-gray-300 flex flex-wrap justify-center">Drag files</p>
                                 <p className="font-semibold text-gray-700 dark:text-gray-300">OR</p>
-                                <label for="file-upload" className='bg-violet-500 text-white font-caviar font-semibold py-1 px-2 rounded'>
+                                <label htmlFor="file-upload" className='bg-violet-500 text-white font-caviar font-semibold py-1 px-2 rounded'>
                                     Select files
                                 </label>
                                 <input id="file-upload" className='hidden' type="file" multiple onChange={onImageChange} />
@@ -367,7 +367,7 @@ const StoreUpload = (props) => {
                             <div className="flex flex-col justify-center items-center border-dashed space-y-2 rounded-lg border-2 border-gray-400 py-8" onDrop={(ev) => dropHandler(ev)} onDragOver={(ev) => dragOverHandler(ev)} >
                                 <p className="font-semibold text-gray-700 dark:text-gray-300 flex flex-wrap justify-center">Drag files</p>
                                 <p className="font-semibold text-gray-700 dark:text-gray-300">OR</p>
-                                <label for="file-upload" className='bg-violet-500 text-white font-caviar font-semibold py-1 px-2 rounded'>
+                                <label htmlFor="file-upload" className='bg-violet-500 text-white font-caviar font-semibold py-1 px-2 rounded'>
                                     Select files
                                 </label>
                                 <input id="file-upload" className='hidden' type="file" multiple onChange={onImageChange} />
