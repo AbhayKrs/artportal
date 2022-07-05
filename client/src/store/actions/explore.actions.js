@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { exploreItemAPI, exploreListAPI, exploreUploadAPI, searchExploreListAPI, filterExploreListAPI, likeExploreAPI, dislikeExploreAPI, awardExploreAPI, bookmarkExploreAPI, deleteExploreItemAPI } from '../../api';
+import { viewerIP, exploreItemViewedAPI, exploreItemAPI, exploreListAPI, exploreUploadAPI, searchExploreListAPI, filterExploreListAPI, likeExploreAPI, dislikeExploreAPI, awardExploreAPI, bookmarkExploreAPI, deleteExploreItemAPI } from '../../api';
 import {
     FETCH_EXPLORE,
     FETCH_EXPLORELIST,
@@ -34,8 +34,11 @@ const risingSort = (property) => {
     }
 }
 
+export const exploreItemViewed = (exploreID) => (dispatch, getState) => {
+    exploreItemViewedAPI(exploreID, getState().common.viewer_id);
+}
+
 export const clearExploreShow = () => (dispatch, getState) => {
-    console.log('clear', initialState.exploreData)
     dispatch({ type: FETCH_EXPLORE, payload: initialState.exploreData })
 }
 

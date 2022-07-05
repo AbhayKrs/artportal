@@ -3,11 +3,11 @@ import axios from 'axios'
 // const baseURL = 'https://artyst-web.herokuapp.com/api';
 const baseURL = 'http://localhost:5000/api';
 
-
 const get_api = axios.create({ baseURL });
 const post_api = axios.create({ baseURL, headers: { 'Content-Type': 'application/json' } })
 const form_api = axios.create({ baseURL, headers: { 'Content-Type': 'multipart/form-data' } })
 
+export const viewerIP = () => axios.get('https://api.ipify.org?format=json');
 
 export const fetchExploreImages = filename => baseURL + `/explore/image/${filename}`;
 export const fetchStoreImages = filename => baseURL + `/store/image/${filename}`;
@@ -40,6 +40,7 @@ export const bookmarkExploreAPI = (userID, bookmarkData) => post_api.post(`/user
 export const addUserCartAPI = (userID, cartData) => get_api.post(`/users/${userID}/cart/add`, cartData);
 
 //PUT Request API's
+export const exploreItemViewedAPI = (exploreID, viewerID) => get_api.put(`/explore/${exploreID}/viewed`, { viewer_id: viewerID });
 export const likeExploreAPI = (exploreID, userData) => get_api.put(`/explore/${exploreID}/like`, userData);
 export const dislikeExploreAPI = (exploreID, userData) => get_api.put(`/explore/${exploreID}/dislike`, userData);
 export const awardExploreAPI = (exploreID, userID, awardData) => get_api.put(`/explore/${exploreID}/award`, { userID: userID, ...awardData });

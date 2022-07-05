@@ -5,9 +5,6 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import passport from 'passport';
-import bcrypt from 'bcryptjs';
-import passportLocal from 'passport-local';
-// import flash from 'connect-flash';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 import connectDB from './config/db.js';
@@ -48,7 +45,7 @@ app.use('/api/store', store);
 app.use('/api/articles', articles);
 
 app.get('/', (req, res) => {
-    res.send('<a href="/api/users/googleAuth">Authenicate with Google</a>');
+    res.send('Server is running...');
 });
 
 app.use(notFound);

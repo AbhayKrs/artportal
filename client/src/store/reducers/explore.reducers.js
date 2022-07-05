@@ -25,7 +25,8 @@ export const initialState = {
         description: '',
         likes: [],
         tags: [],
-        awards: []
+        awards: [],
+        views: [],
     },
     uploadData: {
         file: '',

@@ -101,7 +101,7 @@ export const HomeSingleCarousel = (props) => {
               <div className='flex flex-row absolute space-x-1 bottom-2 right-20'>
                 {bannerCarousel.map((img, index) => (
                   <label className="flex items-center cursor-pointer text-xl">
-                    <input type="radio" name="radio" className="hidden peer" checked={currentIndex === index} />
+                    <input readOnly type="radio" name="radio" className="hidden peer" checked={currentIndex === index} />
                     <span className="w-3 h-3 inline-block rounded-full border border-blue-400 flex-no-shrink peer-checked:bg-blue-400"></span>
                   </label>
                 ))}

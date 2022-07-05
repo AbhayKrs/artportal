@@ -2,6 +2,7 @@ export const SWITCH_THEME = 'SWITCH_THEME';
 export const SET_ERROR = 'SET_ERROR';
 export const SET_LOADER = 'SET_LOADER';
 export const GET_TAGS = 'GET_TAGS';
+export const GET_VIEWER_IP = 'GET_VIEWER_IP';
 export const HANDLE_RESIZE = 'HANDLE_RESIZE';
 export const HANDLE_VERIFY_USER = 'HANDLE_VERIFY_USER';
 export const HANDLE_HEADER_DIALOG_OPEN = 'HANDLE_HEADER_DIALOG_OPEN';
@@ -34,6 +35,7 @@ export const initialState = {
         message: '',
         type: ''
     },
+    viewer_id: '',
     openLoginDialog: false,
     loginImage: '',
     openRegisterDialog: false,
@@ -128,6 +130,9 @@ export const commonReducer = (state = initialState, { type, payload }) => {
         }
         case SET_ERROR: {
             return { ...state, error: payload };
+        }
+        case GET_VIEWER_IP: {
+            return { ...state, viewer_id: payload }
         }
         case HANDLE_VERIFY_USER: {
             console.log('---HANDLE_VERIFY_USER', payload);

@@ -1,10 +1,11 @@
 import axios from 'axios';
-import { loginAPI, googleLoginAPI, signUpAPI, tagsAPI, commonImagesAPI, userDetailsAPI, userExploreListAPI, userStoreListAPI, userCartListAPI, addUserCartAPI, updateUserCartAPI, deleteStoreItemAPI, awardListAPI, deleteBookmarkAPI } from '../../api';
+import { viewerIP, loginAPI, googleLoginAPI, signUpAPI, tagsAPI, commonImagesAPI, userDetailsAPI, userExploreListAPI, userStoreListAPI, userCartListAPI, addUserCartAPI, updateUserCartAPI, deleteStoreItemAPI, awardListAPI, deleteBookmarkAPI } from '../../api';
 import {
     SWITCH_THEME,
     SET_LOADER,
     SET_ERROR,
     GET_TAGS,
+    GET_VIEWER_IP,
     HANDLE_HEADER_DIALOG_OPEN,
     HANDLE_HEADER_DIALOG_CLOSE,
     HANDLE_CART_OPEN,
@@ -43,6 +44,15 @@ export const setError = (errorData) => (dispatch) => {
     } catch (err) {
         console.log('---error setError', err);
     }
+}
+
+export const getViewerIP = () => (dispatch) => {
+    viewerIP().then(res => {
+        const ipAdr = res.data.ip.replaceAll('.', '');
+        dispatch({ type: GET_VIEWER_IP, payload: ipAdr })
+    }).catch(err => {
+        console.log('---error getViewerIP', err);
+    })
 }
 
 export const getTags = () => (dispatch) => {
@@ -230,24 +240,6 @@ export const deleteUserStoreItem = (storeID) => async (dispatch, getState) => {
             console.log('Signup fail:: ', err.response.status);
         }
     })
-    // try {
-    //     const storeStatus = await axios({
-    //         url: `http://localhost:5000/api/store/${storeID}`,
-    //         method: 'DELETE',
-    //         headers: { "Content-Type": "application/json" },
-    //         data: { userID: userID }
-    //     }).then(async res => {
-    //         console.log('res', res.status);
-    //         await dispatch({ type: FETCH_USER_STORELIST, payload: res.data });
-    //     }).catch(err => {
-    //         if (err.response) {
-    //             console.log('Signup fail:: ', err.response.status);
-    //         }
-    //     })
-    //     dispatch(fetchUserStoreList());
-    // } catch (err) {
-    //     console.log('---error deleteUserStoreItem', err);
-    // }
 }
 
 export const fetchCartList = () => async (dispatch, getState) => {

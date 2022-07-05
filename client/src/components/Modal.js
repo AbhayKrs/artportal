@@ -680,7 +680,6 @@ export const ShareModal = (props) => {
     const { open, value, title, onClose } = props;
     const [linkCopy, setLinkCopy] = useState(false);
     const shareURL = window.location.href;
-    console.log('share', shareURL);
 
     const copyLink = () => {
         setLinkCopy(true);

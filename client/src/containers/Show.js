@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import { fetchExploreImages, fetchUserImages, fetchStoreImages } from '../api';
-import { exploreVisited, clearExploreShow, fetchExploreList, fetchExploreItem, handleLikeExplore, handleAwardExplore, handleDislikeExplore, handleAddComment, handleEditComment, handleDeleteComment, handleLikeComment, handleDislikeComment, bookmarkExploreItem } from '../store/actions/explore.actions';
+import { exploreItemViewed, clearExploreShow, fetchExploreList, fetchExploreItem, handleLikeExplore, handleAwardExplore, handleDislikeExplore, handleAddComment, handleEditComment, handleDeleteComment, handleLikeComment, handleDislikeComment, bookmarkExploreItem } from '../store/actions/explore.actions';
 import { fetchStoreList, fetchStoreItem } from '../store/actions/store.actions';
-import { setLoader, fetchAwards, loadProfileDetails, refreshUserDetails, setError } from '../store/actions/common.actions';
+import { setLoader, getViewerIP, fetchAwards, loadProfileDetails, refreshUserDetails, setError } from '../store/actions/common.actions';
 import { ExploreShowCarousel } from '../components/Carousel';
 import { AwardModal, ShareModal } from '../components/Modal';
 
@@ -33,28 +33,14 @@ const ExploreShow = (props) => {
     const { id } = useParams();
     let navigate = useNavigate();
 
-    useEffect(() => {
-        props.setLoader(true);
-        if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
-            console.info("This page is reloaded");
-        } else {
-            console.info("This page is not reloaded");
-        }
-    }, [id])
-
     useEffect(async () => {
-        window.scrollTo(0, 0)
+        window.scrollTo(0, 0);
+        props.setLoader(true);
         await props.fetchExploreList();
-        props.fetchExploreItem(id);
-        props.fetchAwards();
-    }, [])
-
-    const submitComment = async (event) => {
-        event.preventDefault();
-        await props.handleAddComment(comment, id);
-        props.fetchExploreItem(id);
-        setComment('');
-    }
+        await props.fetchExploreItem(id);
+        await props.fetchAwards();
+        await props.exploreItemViewed(id);
+    }, [id])
 
     useEffect(() => {
         const len = props.explore.exploreList.length;
@@ -79,6 +65,13 @@ const ExploreShow = (props) => {
             }
         })
     }, [props.exploreShow._id]);
+
+    const submitComment = async (event) => {
+        event.preventDefault();
+        await props.handleAddComment(comment, id);
+        props.fetchExploreItem(id);
+        setComment('');
+    }
 
     const handleToggleLike = async (likes) => {
         if (likes.includes(props.user.id)) {
@@ -193,7 +186,7 @@ const ExploreShow = (props) => {
             />
             <div className='flex fixed m-5 space-x-3 py-1 px-2 bg-neutral-100 dark:bg-neutral-800 rounded'>
                 <div className='flex justify-end py-0.5 space-x-2 text-teal-500'>
-                    <h3 className='font-josefinlight text-lg self-center'>{new Intl.NumberFormat().format(props.exploreShow.likes.length)}</h3>
+                    <h3 className='font-josefinlight text-lg self-center'>{new Intl.NumberFormat().format(props.exploreShow.views.length)}</h3>
                     <IoEye className='h-6 w-6' />
                 </div>
                 <div className='flex justify-end py-0.5 space-x-2 text-violet-500 dark:text-violet-500'>
@@ -435,12 +428,13 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
     setLoader,
+    getViewerIP,
+    exploreItemViewed,
     clearExploreShow,
     fetchExploreItem,
     fetchExploreList,
     fetchStoreList,
     fetchStoreItem,
-    exploreVisited,
     loadProfileDetails,
     refreshUserDetails,
     handleLikeExplore,

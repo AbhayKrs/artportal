@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import setAuthToken from './utils/setAuthToken';
-import { setError, setLoader, handleSignOut, handleVerifyUser, fetchUserExploreList, fetchUserStoreList, fetchCartList, fetchCommonImages } from './store/actions/common.actions';
+import { setError, setLoader, handleSignOut, handleVerifyUser, getViewerIP, fetchUserExploreList, fetchUserStoreList, fetchCartList, fetchCommonImages } from './store/actions/common.actions';
 
 // import ErrorPopup from './components/Error/ErrorPopup';
 import Header from './containers/Header';
@@ -34,7 +34,8 @@ import Alerts from './components/Alerts';
 
 const ArtystRoutes = (props) => {
     useEffect(async () => {
-        props.fetchCommonImages();
+        console.log('loaded routes');
+        await props.getViewerIP();
         if (sessionStorage.jwtToken) {
             const token = sessionStorage.jwtToken;
             setAuthToken(token);
@@ -50,6 +51,7 @@ const ArtystRoutes = (props) => {
             await props.fetchUserStoreList();
             await props.fetchCartList();
         }
+        await props.fetchCommonImages();
     }, []);
 
     return (
@@ -92,6 +94,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     setError,
     setLoader,
     handleVerifyUser,
+    getViewerIP,
     fetchUserExploreList,
     fetchUserStoreList,
     fetchCartList,

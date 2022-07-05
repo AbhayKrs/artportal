@@ -319,12 +319,25 @@ router.get('/image/:filename', (req, res) => {
     });
 });
 
+router.put('/:id/viewed', async (req, res) => {
+    const exploreItem = await Explore.findById(req.params.id);
+    const viewer_ip = req.body.viewer_id;
+    console.log('viewer_ip', viewer_ip)
+    if (viewer_ip.length > 0) {
+        exploreItem.views.indexOf(viewer_ip) === -1 ?
+            exploreItem.views.push(viewer_ip)
+            :
+            null;
+        exploreItem.save();
+    }
+})
+
 // @route       PUT api/explore/:id/like
 // @desc        Like an explore
 // @access      Public
 router.put('/:id/like', async (req, res) => {
-    const fetchExplore = await Explore.findById(req.params.id);
-    const user = await User.findById(fetchExplore.author.id);
+    const exploreItem = await Explore.findById(req.params.id);
+    const user = await User.findById(exploreItem.author.id);
     try {
         Explore.findByIdAndUpdate(req.params.id, {
             $push: {

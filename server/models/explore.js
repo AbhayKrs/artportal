@@ -49,6 +49,9 @@ const exploreSchema = new mongoose.Schema(
             value: { type: Number, default: 0 },
             count: { type: Number, default: 0 }
         }],
+        views: [{
+            type: String
+        }],
         likes: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
