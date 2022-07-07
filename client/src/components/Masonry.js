@@ -17,7 +17,6 @@ const Masonry = props => {
             setColumns(3);
         }
         const handleResize = () => {
-            console.log('resized to: ', window.innerWidth, 'x', window.innerHeight)
             if (window.innerWidth <= 925) {
                 setColumns(3);
             } else if (window.innerWidth < 376) {

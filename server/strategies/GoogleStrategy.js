@@ -13,13 +13,12 @@ passport.use(
         passReqToCallback: true,
         proxy: true
     }, (request, accessToken, refreshToken, profile, done) => {
-        console.log('enter')
         //Check user table for anyone with the Google ID
         User.findOne({ email: profile.email }, (err, user) => {
             if (!user) {
                 console.log('test no existing user', user)
                 const newUser = new User({
-                    id: profile.id,
+                    google_id: profile.id,
                     google_authenticated: true,
                     name: profile.displayName,
                     email: profile.email,
@@ -40,9 +39,9 @@ passport.use(
                     })
                 })
             } else {
-                console.log('test existing user')
+                console.log('test existing user', user)
                 if (user.google_authenticated === false) {
-                    user.id = profile.id;
+                    user.google_id = profile.id;
                     user.google_authenticated = true;
                     user.save().then(res => {
                         return done(null, profile)

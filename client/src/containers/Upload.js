@@ -39,7 +39,7 @@ const ExploreUpload = (props) => {
             const error = {
                 open: true,
                 message: 'Only a maximum of 3 files may be selected.',
-                type: 'snackbar'
+                type: 'warning'
             }
             props.setError(error);
         }
@@ -57,7 +57,7 @@ const ExploreUpload = (props) => {
             const error = {
                 open: true,
                 message: 'Only a maximum of 3 files may be selected.',
-                type: 'snackbar'
+                type: 'warning'
             }
             props.setError(error);
         } else {
@@ -80,7 +80,7 @@ const ExploreUpload = (props) => {
                 const error = {
                     open: true,
                     message: 'Maximum number of tags assigned!',
-                    type: 'snackbar'
+                    type: 'warning'
                 }
                 props.setError(error);
             } else {
@@ -258,7 +258,7 @@ const StoreUpload = (props) => {
             const error = {
                 open: true,
                 message: 'Only a maximum of 3 files may be selected.',
-                type: 'snackbar'
+                type: 'warning'
             }
             props.setError(error);
         }
@@ -301,7 +301,7 @@ const StoreUpload = (props) => {
             const error = {
                 open: true,
                 message: 'Only a maximum of 3 files may be selected.',
-                type: 'snackbar'
+                type: 'warning'
             }
             props.setError(error);
         } else {

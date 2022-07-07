@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Artyst_logo from '../assets/images/artyst_header.svg';
 import DarkMode from '../assets/images/DarkMode.svg';
 import LightMode from '../assets/images/LightMode.svg';
 import TokenLogo from '../assets/images/money.png';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { IoAddCircleSharp, IoMenu, IoLogInOutline } from "react-icons/io5";
+import { IoAddCircleSharp, IoMenu } from "react-icons/io5";
 import { MdSettings } from "react-icons/md";
 import { RiFireFill } from "react-icons/ri";
 import { TokenModal, LoginModal, RegisterModal } from '../components/Modal';
@@ -20,8 +20,8 @@ const Header = (props) => {
     const [mobileMenu, setMobileMenu] = useState(false);
 
     const logout = () => {
-        props.handleSignOut()
-        navigate('/')
+        props.handleSignOut();
+        navigate('/');
     }
 
     useEffect(() => {
@@ -48,7 +48,7 @@ const Header = (props) => {
                         {props.common.isAuthenticated ?
                             <div className='relative group group-hover:block ml-1'>
                                 <div className='flex relative w-10 h-10 justify-center items-center text-xl group-hover:p-1 group-hover:scale-125 group-hover:rounded-b-lg group-hover:block group-hover:bg-slate-300 dark:group-hover:bg-[#313135] group-hover:rounded-full'>
-                                    {props.common.isAuthenticated && props.common.user && <img alt='user' src={fetchUserImages(props.user.avatar.icon)} className='mt-0.5' />}
+                                    {props.common.isAuthenticated ? <img alt='user' src={fetchUserImages(props.user.avatar.icon)} className='mt-0.5' /> : null}
                                 </div>
                                 <div className='container hidden fixed group-hover:block top-[3.25rem] w-52' style={{ right: window.innerWidth > 1024 ? '0.725rem' : '0.2rem' }}>
                                     <div className='grid grid-cols-1 space-y-2 bg-slate-300 dark:bg-[#313135] text-white rounded-tl-lg rounded-br-lg p-3 rounded-bl-lg group-hover:block'>
@@ -109,7 +109,7 @@ const Header = (props) => {
                                 <div className='grid grid-cols-1 w-full space-y-2 bg-slate-300 dark:bg-[#313135] text-white rounded-lg p-3 rounded-bl-lg group-hover:block'>
                                     <div className='flex place-content-between'>
                                         <div className='flex relative w-10 h-10 justify-center items-center text-xl group-hover:p-1 group-hover:scale-125 group-hover:rounded-b-lg group-hover:block group-hover:bg-slate-300 dark:group-hover:bg-[#313135] group-hover:rounded-full'>
-                                            {props.common.isAuthenticated && props.common.user && <img alt='user' src={fetchUserImages(props.user.avatar.icon)} className='mt-0.5' />}
+                                            {props.common.isAuthenticated ? <img alt='user' src={fetchUserImages(props.user.avatar.icon)} className='mt-0.5' /> : null}
                                         </div>
                                         <div className='block text-left'>
                                             <p className='text-gray-900 dark:text-gray-300 text-md font-caviar font-semibold'>{props.user.name}</p>
@@ -165,34 +165,38 @@ const Header = (props) => {
                     : null
                 }
             </div>
-            <LoginModal
-                open={props.common.openLoginDialog}
-                title={props.common.dialogTitle}
-                banner={props.common.loginImage}
-                error={props.common.error}
-                onClose={props.handleHeaderDialogClose}
-                onClick={props.handleHeaderDialogClose}
-                openRegister={() => props.handleHeaderDialogOpen('openRegisterDialog')}
-                handleSignIn={props.handleSignIn}
-            />
-            <RegisterModal
-                open={props.common.openRegisterDialog}
-                title={props.common.dialogTitle}
-                banner={props.common.signupImage}
-                error={props.common.error}
-                onClose={props.handleHeaderDialogClose}
-                onClick={props.handleHeaderDialogClose}
-                openLogin={() => props.handleHeaderDialogOpen('openLoginDialog')}
-                handleSignUp={props.handleSignUp}
-                handleGoogleAuth={props.handleGoogleAuth}
-            />
-            <TokenModal
-                open={tokenOpen}
-                user={props.user}
-                title='Get Tokens'
-                onClose={() => setTokenOpen(false)}
-                onClick={() => setTokenOpen(false)}
-            />
+            {props.common.openLoginDialog &&
+                <LoginModal
+                    open={props.common.openLoginDialog}
+                    title={props.common.dialogTitle}
+                    banner={props.common.loginImage}
+                    error={props.common.error}
+                    onClose={props.handleHeaderDialogClose}
+                    onClick={props.handleHeaderDialogClose}
+                    openRegister={() => props.handleHeaderDialogOpen('openRegisterDialog')}
+                    handleSignIn={props.handleSignIn}
+                />}
+            {props.common.openRegisterDialog &&
+                <RegisterModal
+                    open={props.common.openRegisterDialog}
+                    title={props.common.dialogTitle}
+                    banner={props.common.signupImage}
+                    error={props.common.error}
+                    onClose={props.handleHeaderDialogClose}
+                    onClick={props.handleHeaderDialogClose}
+                    openLogin={() => props.handleHeaderDialogOpen('openLoginDialog')}
+                    handleSignUp={props.handleSignUp}
+                    handleGoogleAuth={props.handleGoogleAuth}
+                />}
+            {tokenOpen &&
+                <TokenModal
+                    open={tokenOpen}
+                    user={props.user}
+                    title='Get Tokens'
+                    onClose={() => setTokenOpen(false)}
+                    onClick={() => setTokenOpen(false)}
+                />
+            }
         </nav >
     );
 };

@@ -96,11 +96,11 @@ export const HomeSingleCarousel = (props) => {
           />
           <div className='absolute h-full w-full bottom-0 bg-gradient-to-t from-black/70 to-black/10'>
             <div className='h-fit w-full pb-2 pl-2 absolute bottom-0'>
-              <h1 className='text-3xl font-black font-josefinlight text-gray-200 text-end'>{bannerCarousel[currentIndex].title}</h1>
-              <h2 className='text-xl font-josefinregular text-gray-400 text-end'>{bannerCarousel[currentIndex].artist}</h2>
+              <h1 className='text-3xl font-black font-josefinlight text-gray-200'>{bannerCarousel[currentIndex].title}</h1>
+              <h2 className='text-xl font-josefinregular text-gray-400'>{bannerCarousel[currentIndex].artist}</h2>
               <div className='flex flex-row absolute space-x-1 bottom-2 right-20'>
                 {bannerCarousel.map((img, index) => (
-                  <label className="flex items-center cursor-pointer text-xl">
+                  <label key={index} className="flex items-center cursor-pointer text-xl">
                     <input readOnly type="radio" name="radio" className="hidden peer" checked={currentIndex === index} />
                     <span className="w-3 h-3 inline-block rounded-full border border-blue-400 flex-no-shrink peer-checked:bg-blue-400"></span>
                   </label>

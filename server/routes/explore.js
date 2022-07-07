@@ -220,29 +220,33 @@ router.get('/:id', async (req, res) => {
 // @desc        Create an explore
 // @access      Private
 router.post('/new', upload.any(), async (req, res) => {
-    const user = await User.findById(req.body.userID);
-    const newExplore = new Explore({
-        files: req.files.map(file => { return file.filename }),
-        title: req.body.title,
-        author: {
-            id: user._id,
-            username: user.username,
-            avatar: user.avatar
-        },
-        description: req.body.description,
-        tags: req.body.tags
-    });
-    console.log('newExplore data', newExplore);
-    Explore.create(newExplore, (err, explore) => {
-        if (err) {
-            console.log(err);
-        } else {
-            user.explore.push(explore);
-            user.explore_count = user.explore.length;
-            user.save();
-            res.send(explore);
-        }
-    });
+    try {
+        const user = await User.findById(req.body.userID);
+        const newExplore = new Explore({
+            files: req.files.map(file => { return file.filename }),
+            title: req.body.title,
+            author: {
+                id: user._id,
+                username: user.username,
+                avatar: user.avatar
+            },
+            description: req.body.description,
+            tags: req.body.tags
+        });
+        console.log('newExplore data', newExplore);
+        Explore.create(newExplore, (err, explore) => {
+            if (err) {
+                console.log(err);
+            } else {
+                user.explore.push(explore);
+                user.explore_count = user.explore.length;
+                user.save();
+                res.send(explore);
+            }
+        });
+    } catch (err) {
+        return res.status(404).json({ msg: err.name });
+    }
 });
 
 
@@ -250,22 +254,26 @@ router.post('/new', upload.any(), async (req, res) => {
 // @desc        Edit an explore
 // @access      Private/Admin
 router.put('/:id', function (req, res) {
-    const newExploreDetails = {
-        title: req.body.title,
-        description: req.body.description,
-    };
-    console.log(newExploreDetails);
-    Explore.findByIdAndUpdate(
-        req.params.id,
-        { $set: newData },
-        function (err, explore) {
-            if (err) {
-                console.log(err);
-            } else {
-                res.send(explore);
+    try {
+        const newExploreDetails = {
+            title: req.body.title,
+            description: req.body.description,
+        };
+        console.log(newExploreDetails);
+        Explore.findByIdAndUpdate(
+            req.params.id,
+            { $set: newData },
+            function (err, explore) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.send(explore);
+                }
             }
-        }
-    );
+        );
+    } catch (err) {
+        return res.status(404).json({ msg: err.name });
+    }
 });
 
 // @route       Delete api/explore/:id
@@ -300,35 +308,43 @@ router.delete('/:id', async (req, res) => {
 // @desc    Image from gridFS storage
 // @access  Private
 router.get('/image/:filename', (req, res) => {
-    // /image/:filename?
-    gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
-        // Check if file
-        if (!file || file.length === 0) {
-            return res.status(404).json({ err: 'No file exists' });
-        }
-        // Check if image
-        if (file.contentType === 'image/jpg' || file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
-            // Read output to browser
-            const readstream = gfs.createReadStream({
-                filename: req.params.filename,
-            });
-            readstream.pipe(res);
-        } else {
-            res.status(404).json({ err: 'Not an image' });
-        }
-    });
+    try {
+        // /image/:filename?
+        gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+            // Check if file
+            if (!file || file.length === 0) {
+                return res.status(404).json({ err: 'No file exists' });
+            }
+            // Check if image
+            if (file.contentType === 'image/jpg' || file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
+                // Read output to browser
+                const readstream = gfs.createReadStream({
+                    filename: req.params.filename,
+                });
+                readstream.pipe(res);
+            } else {
+                res.status(404).json({ err: 'Not an image' });
+            }
+        });
+    } catch (err) {
+        return res.status(404).json({ msg: err.name });
+    }
 });
 
 router.put('/:id/viewed', async (req, res) => {
-    const exploreItem = await Explore.findById(req.params.id);
-    const viewer_ip = req.body.viewer_id;
-    console.log('viewer_ip', viewer_ip)
-    if (viewer_ip.length > 0) {
-        exploreItem.views.indexOf(viewer_ip) === -1 ?
-            exploreItem.views.push(viewer_ip)
-            :
-            null;
-        exploreItem.save();
+    try {
+        const exploreItem = await Explore.findById(req.params.id);
+        const viewer_ip = req.body.viewer_id;
+        console.log('viewer_ip', viewer_ip)
+        if (viewer_ip.length > 0) {
+            exploreItem.views.indexOf(viewer_ip) === -1 ?
+                exploreItem.views.push(viewer_ip)
+                :
+                null;
+            exploreItem.save();
+        }
+    } catch (err) {
+        return res.status(404).json({ msg: err.name });
     }
 })
 
@@ -336,27 +352,31 @@ router.put('/:id/viewed', async (req, res) => {
 // @desc        Like an explore
 // @access      Public
 router.put('/:id/like', async (req, res) => {
-    const exploreItem = await Explore.findById(req.params.id);
-    const user = await User.findById(exploreItem.author.id);
     try {
-        Explore.findByIdAndUpdate(req.params.id, {
-            $push: {
-                likes: req.body.id
-            }
-        }, {
-            new: true
-        }).exec((err, like) => {
-            if (err) {
-                res.status(500).send('Failed to like!');
-            } else {
-                user.explore.find(item => item._id == req.params.id).likes.push(req.body.id);
-                user.save();
-                res.send(like);
-            }
-        });
+        const exploreItem = await Explore.findById(req.params.id);
+        const user = await User.findById(exploreItem.author.id);
+        try {
+            Explore.findByIdAndUpdate(req.params.id, {
+                $push: {
+                    likes: req.body.id
+                }
+            }, {
+                new: true
+            }).exec((err, like) => {
+                if (err) {
+                    res.status(500).send('Failed to like!');
+                } else {
+                    user.explore.find(item => item._id == req.params.id).likes.push(req.body.id);
+                    user.save();
+                    res.send(like);
+                }
+            });
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).send('Failed to get likes count!');
+        }
     } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Failed to get likes count!');
+        return res.status(404).json({ msg: err.name });
     }
 })
 
@@ -364,30 +384,34 @@ router.put('/:id/like', async (req, res) => {
 // @desc        Like an explore
 // @access      Public
 router.put('/:id/dislike', async (req, res) => {
-    const fetchExplore = await Explore.findById(req.params.id);
-    const user = await User.findById(fetchExplore.author.id);
     try {
-        if (!req.body.id) {
-            return res.status(401).json({ msg: 'User not authorized!' })
+        const fetchExplore = await Explore.findById(req.params.id);
+        const user = await User.findById(fetchExplore.author.id);
+        try {
+            if (!req.body.id) {
+                return res.status(401).json({ msg: 'User not authorized!' })
+            }
+            Explore.findByIdAndUpdate(req.params.id, {
+                $pull: {
+                    likes: req.body.id
+                }
+            }, {
+                new: true
+            }).exec((err, dislike) => {
+                if (err) {
+                    res.status(500).send('Failed to like!');
+                } else {
+                    user.explore.find(item => item._id == req.params.id).likes.filter(item => item !== req.body.id);
+                    user.save();
+                    res.json(dislike);
+                }
+            });
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).send('Failed to get likes count!');
         }
-        Explore.findByIdAndUpdate(req.params.id, {
-            $pull: {
-                likes: req.body.id
-            }
-        }, {
-            new: true
-        }).exec((err, dislike) => {
-            if (err) {
-                res.status(500).send('Failed to like!');
-            } else {
-                user.explore.find(item => item._id == req.params.id).likes.filter(item => item !== req.body.id);
-                user.save();
-                res.json(dislike);
-            }
-        });
     } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Failed to get likes count!');
+        return res.status(404).json({ msg: err.name });
     }
 })
 
@@ -578,8 +602,8 @@ router.delete('/:id/comments/:comment_id', async (req, res) => {
 // @desc        Like a comment
 // @access      Public
 router.put('/:id/comments/:comment_id/like', async (req, res) => {
-    const explore = await Explore.findById(req.params.id);
     try {
+        const explore = await Explore.findById(req.params.id);
         Comment.findByIdAndUpdate(req.params.comment_id, {
             $push: {
                 likes: req.body.user.id
@@ -606,8 +630,8 @@ router.put('/:id/comments/:comment_id/like', async (req, res) => {
 // @desc        Dislike a comment
 // @access      Public
 router.put('/:id/comments/:comment_id/dislike', async (req, res) => {
-    const explore = await Explore.findById(req.params.id);
     try {
+        const explore = await Explore.findById(req.params.id);
         if (!req.body.user) {
             return res.status(401).json({ msg: 'User not authorized!' })
         }

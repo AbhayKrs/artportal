@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { viewerIP, loginAPI, googleLoginAPI, signUpAPI, tagsAPI, commonImagesAPI, userDetailsAPI, userExploreListAPI, userStoreListAPI, userCartListAPI, addUserCartAPI, updateUserCartAPI, deleteStoreItemAPI, awardListAPI, deleteBookmarkAPI } from '../../api';
+import { viewerIP, loginAPI, googleLoginAPI, signUpAPI, tagsAPI, commonImagesAPI, userDetailsAPI, userExploreListAPI, userStoreListAPI, userCartListAPI, addUserCartAPI, updateUserCartAPI, deleteStoreItemAPI, awardListAPI, deleteBookmarkAPI, avatarListAPI, deleteCartItemAPI, editAvatarAPI } from '../../api';
 import {
     SWITCH_THEME,
     SET_LOADER,
@@ -298,10 +298,7 @@ export const handleRemoveFromCart = (data) => async (dispatch, getState) => {
     const cartID = userCart.filter(item => item.title === data.title)[0]._id;
     try {
         if (userCart.filter(item => item.title === data.title)[0].quantity === 1) {
-            await axios({
-                url: `http://localhost:5000/api/users/${userID}/cart/${cartID}`,
-                method: 'DELETE',
-            }).then(async res => {
+            await deleteCartItemAPI(cartID, userID).then(res => {
                 dispatch(fetchCartList());
             }).catch(err => {
                 if (err.response) {
@@ -316,11 +313,7 @@ export const handleRemoveFromCart = (data) => async (dispatch, getState) => {
                 subtotal
             }
             const cartID = userCart.filter(item => item.title === data.title)[0]._id;
-            await axios({
-                url: `http://localhost:5000/api/users/${userID}/cart/${cartID}`,
-                method: 'PUT',
-                data: cartData,
-            }).then(async res => {
+            await deleteCartItemAPI(cartID, userID).then(res => {
                 dispatch(fetchCartList());
             }).catch(err => {
                 if (err.response) {
@@ -349,13 +342,12 @@ export const handleSignOut = () => async (dispatch, getState) => {
 
 export const fetchAvatars = () => async (dispatch, getState) => {
     console.log('fetchAvatars invoked');
-    try {
-        const avatarList = await axios.get('http://localhost:5000/api/users/avatars');
-        console.log('avatarList', avatarList);
-        await dispatch({ type: FETCH_AVATARLIST, payload: avatarList.data });
-    } catch (err) {
+    await avatarListAPI().then(res => {
+        console.log('avatarList', res);
+        dispatch({ type: FETCH_AVATARLIST, payload: res.data });
+    }).catch(err => {
         console.log('---error fetchAvatars', err);
-    }
+    });
 }
 
 export const fetchAwards = () => async (dispatch, getState) => {
@@ -392,19 +384,11 @@ export const handleUploadAsset = (assetData) => async (dispatch, getState) => {
 export const handleEditUserAvatar = (avatar) => async (dispatch, getState) => {
     const userID = getState().common.user.id;
     console.log('handleEditUserAvatar', avatar);
-    try {
-        await axios({
-            url: `http://localhost:5000/api/users/${userID}/avatar`,
-            method: 'POST',
-            data: avatar
-        }).then(async res => {
-            console.log('handleEditUserAvatar Successful!');
-        }).catch(err => {
-            if (err.response) {
-                console.log('Fail:: ', err.response.status);
-            }
-        })
-    } catch (err) {
-        console.log(err);
-    }
+    await editAvatarAPI(userID, avatar).then(res => {
+        console.log('handleEditUserAvatar Successful!');
+    }).catch(err => {
+        if (err.response) {
+            console.log('Fail:: ', err.response.status);
+        }
+    })
 }

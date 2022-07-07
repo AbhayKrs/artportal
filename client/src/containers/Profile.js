@@ -20,12 +20,12 @@ const Profile = (props) => {
     let navigate = useNavigate();
     const [avatarModal, setAvatarModal] = useState(false);
 
-    useEffect(() => {
+    useEffect(async () => {
         props.setLoader(true);
         window.scrollTo(0, 0);
-        props.loadProfileDetails(id);
-        props.fetchExploreList();
-        props.fetchAvatars();
+        await props.loadProfileDetails(id);
+        await props.fetchExploreList();
+        await props.fetchAvatars();
         return () => props.clearUserProfile();
     }, [])
 
@@ -67,7 +67,8 @@ const Profile = (props) => {
                                 </div>
                                 <div className="w-full sm:w-3/12 px-4 flex justify-center">
                                     <div className="relative h-fit align-middle sm:-m-32 -m-[27rem] sm:-ml-28 -ml-[7.5rem]  max-w-[15rem]">
-                                        <img src={fetchUserImages(props.viewed_user.avatar.icon)} />
+                                        {console.log('authenticated', props.common.isAuthenticated, props.viewed_user, props.viewed_user.avatar)}
+                                        {props.common.isAuthenticated ? <img src={fetchUserImages(props.viewed_user.avatar.icon)} /> : null}
                                         <MdAddAPhoto onClick={() => setAvatarModal(true)} className='h-10 w-10 cursor-pointer text-gray-200 absolute bottom-2 right-2 z-30' />
                                     </div>
                                 </div>
@@ -221,13 +222,14 @@ const Profile = (props) => {
                     </div>
                 </div>
             </div >
-            <AvatarModal
+            {avatarModal && <AvatarModal
                 open={avatarModal}
                 title='Pick your Avatar'
                 avatarList={props.common.avatarList}
                 handleEditUserAvatar={props.handleEditUserAvatar}
                 onClose={() => setAvatarModal(false)}
             />
+            }
         </div >
     )
 }

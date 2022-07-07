@@ -3,7 +3,7 @@ const colors = require("tailwindcss/colors");
 module.exports = {
   darkMode: 'class',
   content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
+    "./src/**/*.{js,jsx,ts,tsx,html}",
   ],
   theme: {
     screens: {
@@ -24,6 +24,7 @@ module.exports = {
       darkNavBg: '#1d1d1f',
       ...colors
     },
+
     extend: {},
   },
   plugins: [

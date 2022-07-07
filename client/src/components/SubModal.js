@@ -13,7 +13,7 @@ export const AwardConfirmModal = (props) => {
                 <div className='p-4 flex flex-col'>
                     <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute right-0 top-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                     <div className='flex items-center space-x-2 my-2'>
-                        <img className='h-12 w-12' src={fetchUserImages(awardData.icon)} />
+                        {awardData ? <img className='h-12 w-12' src={fetchUserImages(awardData.icon)} /> : null}
                         <div className='tracking-widest flex-row'>
                             <p className='text-violet-800 font-josefinregular text-2xl font-semibold '>testing award confirm</p>
                             <span className='flex items-center font-bold text-lg text-emerald-500'><img src={TokenIcon} className='h-5 w-5 mr-1' />500</span>

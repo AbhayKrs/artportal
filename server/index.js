@@ -5,6 +5,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import passport from 'passport';
+import path from 'path';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 import connectDB from './config/db.js';
@@ -25,9 +26,9 @@ connectDB();
 
 const app = express();
 app.use(cors());
-if (process.env.NODE_ENV === 'development') {
-    app.use(morgan('dev'));
-}
+// if (process.env.NODE_ENV === 'development') {
+//     app.use(morgan('dev'));
+// }
 
 //Init Middleware
 app.use(express.json({ extended: false }));
@@ -44,9 +45,22 @@ app.use('/api/users', users);
 app.use('/api/store', store);
 app.use('/api/articles', articles);
 
-app.get('/', (req, res) => {
-    res.send('Server is running...');
-});
+// app.get('/', (req, res) => {
+//     res.send('Server is running...');
+// });
+
+
+if (process.env.NODE_ENV === 'production') {
+    const __dirname = path.resolve();
+    app.use(express.static(path.join(__dirname, '/client/build')));
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+    })
+} else {
+    app.get("/", (req, res) => {
+        res.send("API is running..");
+    });
+}
 
 app.use(notFound);
 app.use(errorHandler);

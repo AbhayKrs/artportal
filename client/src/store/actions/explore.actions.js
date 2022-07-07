@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { viewerIP, exploreItemViewedAPI, exploreItemAPI, exploreListAPI, exploreUploadAPI, searchExploreListAPI, filterExploreListAPI, likeExploreAPI, dislikeExploreAPI, awardExploreAPI, bookmarkExploreAPI, deleteExploreItemAPI } from '../../api';
+import { viewerIP, exploreItemViewedAPI, exploreItemAPI, exploreListAPI, exploreUploadAPI, searchExploreListAPI, filterExploreListAPI, likeExploreAPI, dislikeExploreAPI, awardExploreAPI, bookmarkExploreAPI, deleteExploreItemAPI, exploreAddCommentAPI, exploreEditCommentAPI, exploreDeleteCommentAPI, exploreLikeCommentAPI, exploreDislikeCommentAPI } from '../../api';
 import {
     FETCH_EXPLORE,
     FETCH_EXPLORELIST,
@@ -68,6 +68,15 @@ export const handleExploreUpload = (exploreData) => async (dispatch, getState) =
 
 export const bookmarkExploreItem = (userID, bookmarkData) => async (dispatch, getState) => {
     await bookmarkExploreAPI(userID, bookmarkData).then(res => {
+        // if (sessionStorage.jwtToken) {
+        //     const token = sessionStorage.jwtToken;
+        //     setAuthToken(token);
+        //     dispatch(handleVerifyUser(token));
+        // } else if (localStorage.jwtToken) {
+        //     const token = localStorage.jwtToken;
+        //     setAuthToken(token);
+        //     dispatch(handleVerifyUser(token));
+        // }
         console.log('success bookmarkExploreItem', res.data);
     }).catch(err => {
         console.log('---error bookmarkExploreItem', err);
@@ -149,74 +158,47 @@ export const handleAwardExplore = (exploreID, userID, award) => async (dispatch,
 
 export const handleAddComment = (commentText, exploreID) => async (dispatch, getState) => {
     console.log('handleAddComment');
-    try {
-        const commentData = await axios({
-            url: `http://localhost:5000/api/explore/${exploreID}/comments/new`,
-            method: 'POST',
-            data: {
-                content: commentText,
-                user: getState().common.user
-            }
-        })
-        console.log('commentData', commentData);
-    } catch (err) {
+    await exploreAddCommentAPI(exploreID, commentText, getState().common.user).then(res => {
+        console.log('commentData', res.data);
+    }).catch(err => {
         console.log('---error handleAddComment', err);
-    }
+    })
 }
 
 export const handleEditComment = (newComment, exploreID, commentID) => async (dispatch, getState) => {
     console.log('handleEditComment', exploreID, commentID);
-    try {
-        const editStatus = await axios({
-            url: `http://localhost:5000/api/explore/${exploreID}/comments/${commentID}`,
-            method: 'PUT',
-            data: { content: newComment, user: getState().common.user }
-        });
-        console.log('editStatus', editStatus);
-    } catch (err) {
+    await exploreEditCommentAPI(exploreID, newComment, commentID, getState().common.user).then(res => {
+        console.log('editStatus', res.data);
+    }).catch(err => {
         console.log('---error handleEditComment', err);
-    }
+    })
 }
 
 export const handleDeleteComment = (exploreID, commentID) => async (dispatch, getState) => {
     console.log('handleDeleteComment', exploreID, commentID);
-    try {
-        const deleteStatus = await axios({
-            url: `http://localhost:5000/api/explore/${exploreID}/comments/${commentID}`,
-            method: 'DELETE',
-        });
-        console.log('deleteStatus', deleteStatus);
-    } catch (err) {
+    await exploreDeleteCommentAPI(exploreID, commentID).then(res => {
+        console.log('deleteStatus', res.data);
+    }).catch(err => {
         console.log('---error handleDeleteComement', err);
-    }
+    })
 }
 
 export const handleLikeComment = (exploreID, commentID) => async (dispatch, getState) => {
     console.log('handleLikeComment', exploreID, commentID);
-    try {
-        const likeCommentCount = await axios({
-            url: `http://localhost:5000/api/explore/${exploreID}/comments/${commentID}/like`,
-            method: 'PUT',
-            data: { user: getState().common.user }
-        });
-        console.log('likeCommentCount', likeCommentCount);
-    } catch (err) {
+    await exploreLikeCommentAPI(exploreID, commentID, getState().common.user).then(res => {
+        console.log('likeCommentCount', res.data);
+    }).catch(err => {
         console.log('---error handleLikeComment', err);
-    }
+    })
 }
 
 export const handleDislikeComment = (exploreID, commentID) => async (dispatch, getState) => {
     console.log('handleDislikeComment', exploreID, commentID);
-    try {
-        const dislikeCommentCount = await axios({
-            url: `http://localhost:5000/api/explore/${exploreID}/comments/${commentID}/dislike`,
-            method: 'PUT',
-            data: { user: getState().common.user }
-        });
-        console.log('dislikeCommentCount', dislikeCommentCount);
-    } catch (err) {
+    await exploreDislikeCommentAPI(exploreID, commentID, getState().common.user).then(res => {
+        console.log('dislikeCommentCount', res.data);
+    }).catch(err => {
         console.log('---error handleDislikeComment', err);
-    }
+    })
 }
 
 export const handleTabChange = (selectedTab) => async (dispatch, getState) => {

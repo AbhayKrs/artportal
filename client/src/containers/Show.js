@@ -147,7 +147,7 @@ const ExploreShow = (props) => {
         const error = {
             open: true,
             message: 'User not logged in. Please Sign In/Sign Up to perform the action.',
-            type: 'snackbar'
+            type: 'warning'
         }
         console.log('like error', error)
         props.setError(error);
@@ -231,9 +231,9 @@ const ExploreShow = (props) => {
                             <div className='mr-3'>
                                 <div className='flex flex-col text-right justify-end py-1 text-neutral-900 dark:text-gray-400'>
                                     <p className='font-josefinlight text-xl'>Posted By</p>
-                                    <div className="flex justify-end">
+                                    <div onClick={() => navigate(`/users/${props.exploreShow.author.id}`)} className="flex cursor-pointer justify-end">
                                         <div className="w-6 h-6 overflow-hidden">
-                                            <img src={fetchUserImages(props.exploreShow.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
+                                            {props.exploreShow.author ? <img src={fetchUserImages(props.exploreShow.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
                                         </div>
                                         <p className="font-josefinlight pt-0.5 font-medium text-lg mx-0.5">
                                             {props.exploreShow.author.username}
@@ -280,12 +280,14 @@ const ExploreShow = (props) => {
                                     <p className='font-josefinlight text-lg font-bold'>{comment.content}</p>
                                 }
                                 <div className='flex'>
-                                    <div className="w-5 h-5 overflow-hidden">
-                                        <img src={fetchUserImages(comment.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
+                                    <div onClick={() => navigate(`/users/${comment.author.id}`)} className='flex cursor-pointer'>
+                                        <div className="w-5 h-5 overflow-hidden">
+                                            <img src={fetchUserImages(comment.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
+                                        </div>
+                                        <p className="font-josefinlight text-sm mx-0.5">
+                                            {comment.author.username}
+                                        </p>
                                     </div>
-                                    <p className="font-josefinlight text-sm mx-0.5">
-                                        {comment.author.username}
-                                    </p>
                                     <p className='font-josefinlight text-sm'>{'- ' + moment(comment.createdAt).fromNow()}</p>
                                 </div>
                             </div>
@@ -322,22 +324,26 @@ const ExploreShow = (props) => {
                         </div>
                     ))}
                 </div>
-                <AwardModal
-                    open={awardOpen}
-                    title='Awards'
-                    awardList={props.common.awardList}
-                    user={props.user}
-                    exploreID={id}
-                    onClose={() => setAwardOpen(false)}
-                    onClick={() => setAwardOpen(false)}
-                    handleAwardExplore={handleAwardExplore}
-                />
-                <ShareModal
-                    open={shareOpen}
-                    title='Share'
-                    onClose={() => setShareOpen(false)}
-                    onClick={() => setShareOpen(false)}
-                />
+                {awardOpen &&
+                    <AwardModal
+                        open={awardOpen}
+                        title='Awards'
+                        awardList={props.common.awardList}
+                        user={props.user}
+                        exploreID={id}
+                        onClose={() => setAwardOpen(false)}
+                        onClick={() => setAwardOpen(false)}
+                        handleAwardExplore={handleAwardExplore}
+                    />
+                }
+                {shareOpen &&
+                    <ShareModal
+                        open={shareOpen}
+                        title='Share'
+                        onClose={() => setShareOpen(false)}
+                        onClick={() => setShareOpen(false)}
+                    />
+                }
             </div>
         </div >
     )
@@ -389,7 +395,7 @@ const StoreShow = (props) => {
                                     <p className='font-josefinlight text-xl'>Seller Details</p>
                                     <div className="flex justify-end">
                                         <div className="w-6 h-6 overflow-hidden">
-                                            <img src={fetchUserImages(props.storeShow.seller.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
+                                            {props.storeShow.seller ? <img src={fetchUserImages(props.storeShow.seller.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
                                         </div>
                                         <p className="font-josefinlight pt-0.5 font-medium text-lg mx-0.5">
                                             {props.storeShow.seller.username}

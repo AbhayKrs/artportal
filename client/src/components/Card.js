@@ -16,7 +16,7 @@ export const ImageCard = (props) => {
                     <h3 className="text-base font-bold leading-5 capitalize">{props.explore.title}</h3>
                     <div className="inline-flex items-center">
                         <div className="w-5 h-5 overflow-hidden mr-1">
-                            <img src={props.author && fetchUserImages(props.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
+                            {props.author ? <img src={fetchUserImages(props.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
                         </div>
                         <span className="font-base text-xs my-1 mr-1">
                             {props.author.username}
@@ -72,7 +72,7 @@ export const HorizontalCard = (props) => {
                         <h3 className="text-lg md:text-xl font-bold leading-5 capitalize">{props.explore.title}</h3>
                         <div className="inline-flex items-end">
                             <div className="w-5 h-5 overflow-hidden mr-1">
-                                <img src={props.author && fetchUserImages(props.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
+                                {props.author ? <img src={fetchUserImages(props.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
                             </div>
                             <span className="font-base text-xs mt-1 mr-1">
                                 {props.author.username}

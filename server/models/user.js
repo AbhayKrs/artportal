@@ -3,6 +3,7 @@ import Explore from './explore.js';
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
+    google_id: { type: String },
     google_authenticated: { type: Boolean, default: false },
     name: {
         type: String,

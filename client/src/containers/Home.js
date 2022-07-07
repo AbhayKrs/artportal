@@ -87,7 +87,7 @@ const Home = (props) => {
                     </div>
                     <div className='absolute bottom-0 right-0 w-full md:w-1/2 h-36 md:h-60 p-[50px 30px 10px] md:p-0 backdrop-sepia-0 bg-white/30 dark:bg-black/30' style={{ clipPath: 'polygon(5% 25%, 100% 4%, 100% 100%, 0% 100%)' }}>
                         <div className='h-full relative text-black dark:text-white'>
-                            <div className='flex absolute h-fit w-fit inset-0 mx-auto mt-auto mb-0 md:mb-9 items-center space-x-4'>
+                            <div className='flex absolute h-fit w-fit inset-0 mx-auto mt-auto mb-2 md:mb-9 items-center space-x-4'>
                                 <div className='h-24 w-24 md:h-32 md:w-32 bg-red-400'></div>
                                 <h2 className='font-caviar text-md md:text-2xl font-bold uppercase tracking-wider'>Download the app <br className='md:none' /> for <br /> <span className='text-2xl md:text-5xl font-black'>free!</span></h2>
                             </div>

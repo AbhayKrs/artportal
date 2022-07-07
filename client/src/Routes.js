@@ -20,8 +20,7 @@ import Google from './containers/splash/Google';
 
 // import ExploreUpload from './components/ExploreUpload';
 import Loader from './components/Loader';
-import SnackBarError from './components/SnackBarError';
-import Alerts from './components/Alerts';
+import Snackbar from './components/Snackbar';
 // import ExploreShow from './components/Explore/ExploreShow';
 // import About from './components/Help/About';
 // import Dashboard from './components/Dashboard/Dashboard';
@@ -34,7 +33,6 @@ import Alerts from './components/Alerts';
 
 const ArtystRoutes = (props) => {
     useEffect(async () => {
-        console.log('loaded routes');
         await props.getViewerIP();
         if (sessionStorage.jwtToken) {
             const token = sessionStorage.jwtToken;
@@ -59,20 +57,20 @@ const ArtystRoutes = (props) => {
             <Header />
             <div className='mt-14'></div>
             <Loader open={props.common.loader} setLoader={props.setLoader} colorTheme={props.common.theme} />
-            <SnackBarError error={props.common.error} setError={props.setError} />
+            <Snackbar error={props.common.error} setError={props.setError} />
             <Routes>
-                <Route path='/' exact element={<Home />} />
-                <Route path='/google_success' exact element={<Google header="Success" />} />
-                <Route path='/google_failed' exact element={<Google header="Failed" />} />
-                <Route path='/explore' exact element={<Explore />} />
-                <Route path='/explore/search' exact element={<ExploreSearch />} />
-                <Route path='/explore/:id' exact element={<Show.ExploreShow />} />
-                <Route path='/explore/new' exact element={<Upload.ExploreUpload />} />
-                <Route path='/store' exact element={<Store />} />
-                <Route path='/store/:id' exact element={<Show.StoreShow />} />
-                <Route path='/store/all' exact element={<StoreAll />} />
-                <Route path='/store/new' exact element={<Upload.StoreUpload />} />
-                <Route path='/users/:id' exact element={<Profile />} />
+                <Route path='/' element={<Home />} />
+                <Route path='/google_success' element={<Google header="Success" />} />
+                <Route path='/google_failed' element={<Google header="Failed" />} />
+                <Route path='/explore' element={<Explore />} />
+                <Route path='/explore/search' element={<ExploreSearch />} />
+                <Route path='/explore/:id' element={<Show.ExploreShow />} />
+                <Route path='/explore/new' element={<Upload.ExploreUpload />} />
+                <Route path='/store' element={<Store />} />
+                <Route path='/store/:id' element={<Show.StoreShow />} />
+                <Route path='/store/all' element={<StoreAll />} />
+                <Route path='/store/new' element={<Upload.StoreUpload />} />
+                <Route path='/users/:id' element={<Profile />} />
                 {/* <Route path='/about' exact component={About} />
                 <Route path='/dashboard' exact component={Dashboard} />
                 <Route path='/notification' exact component={Notification} />
@@ -80,7 +78,6 @@ const ArtystRoutes = (props) => {
                 <Route path='/upload' exact component={Upload} />
                 <Route path='/privacy' exact component={Privacy} /> */}
             </Routes>
-            <Alerts open={false} type='info' />
             <Footer />
         </div>
     )

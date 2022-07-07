@@ -101,14 +101,16 @@ export const AwardTabPanel = (props) => {
                     </Fragment>
                 })}
             </div>
-            <AwardConfirmModal
-                open={confirmData.open}
-                awardData={confirmData.award}
-                user={props.user}
-                exploreID={props.exploreID}
-                onClose={() => setConfirmData({ open: false, award: {} })}
-                handleAwardExplore={props.handleAwardExplore}
-            />
+            {confirmData.open &&
+                <AwardConfirmModal
+                    open={confirmData.open}
+                    awardData={confirmData.award}
+                    user={props.user}
+                    exploreID={props.exploreID}
+                    onClose={() => setConfirmData({ open: false, award: {} })}
+                    handleAwardExplore={props.handleAwardExplore}
+                />
+            }
         </div >
     )
 }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { googleRedirectURL } from '../api';
 import { IoCloseSharp, IoCloseCircle } from 'react-icons/io5';
 import { HiPlus, HiMinus, HiOutlineMail } from 'react-icons/hi';
 import { FaUser, FaLock } from 'react-icons/fa';
@@ -60,12 +61,12 @@ export const LoginModal = (props) => {
         <div className={`${open ? 'block' : 'hidden'} flex fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
             <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 lg:w-6/12 sm:w-11/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
                 <div className='grid sm:grid-cols-2 grid-cols-1'>
-                    <img className='h-full sm:flex hidden' src={fetchUserImages(banner)} />
+                    {banner ? <img className='h-full sm:flex hidden' src={fetchUserImages(banner)} /> : null}
                     <div className='p-4 pt-2 flex flex-col space-y-3'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                         <h1 className='text-violet-500 dark:text-violet-500 text-5xl font-semibold tracking-widest font-antipasto mt-10'>{title}</h1>
                         <p className='text-black dark:text-white text-md font-josefinlight'>Become an Artyst Member <button type='button' onClick={() => { onClose(); openRegister() }} className='text-sm font-bold text-violet-400'>JOIN</button></p>
-                        <a href="http://localhost:5000/api/users/googleAuth" className="focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-2 px-3 border rounded-lg border-gray-700 dark:border-gray-400 flex items-center w-full mt-10">
+                        <a href={googleRedirectURL} className="focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-2 px-3 border rounded-lg border-gray-700 dark:border-gray-400 flex items-center w-full mt-10">
                             <svg width="19" height="20" viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M18.9892 10.1871C18.9892 9.36767 18.9246 8.76973 18.7847 8.14966H9.68848V11.848H15.0277C14.9201 12.767 14.3388 14.1512 13.047 15.0812L13.0289 15.205L15.905 17.4969L16.1042 17.5173C17.9342 15.7789 18.9892 13.221 18.9892 10.1871Z" fill="#4285F4" />
                                 <path d="M9.68813 19.9314C12.3039 19.9314 14.4999 19.0455 16.1039 17.5174L13.0467 15.0813C12.2286 15.6682 11.1306 16.0779 9.68813 16.0779C7.12612 16.0779 4.95165 14.3395 4.17651 11.9366L4.06289 11.9465L1.07231 14.3273L1.0332 14.4391C2.62638 17.6946 5.89889 19.9314 9.68813 19.9314Z" fill="#34A853" />
@@ -182,7 +183,7 @@ export const RegisterModal = (props) => {
         <div className={`${open ? 'block' : 'hidden'} flex fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
             <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 lg:w-6/12 sm:w-11/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
                 <div className='grid sm:grid-cols-2 grid-cols-1'>
-                    <img className='h-full sm:flex hidden' src={fetchUserImages(banner)} />
+                    {banner ? <img className='h-full sm:flex hidden' src={fetchUserImages(banner)} /> : null}
                     <div className='p-4 pt-2 flex flex-col space-y-3'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                         <h1 className='text-violet-500 text-5xl font-semibold tracking-widest font-antipasto'>{title}</h1>
@@ -213,7 +214,7 @@ export const RegisterModal = (props) => {
                             <hr className="w-full border-1 border-gray-600 dark:border-gray-400" />
                         </div>
                         <div className='flex space-x-2'>
-                            <a href="http://localhost:5000/api/users/googleAuth" className="w-fit p-2 border rounded-lg dark:border-gray-400 flex items-center w-full shadow-md">
+                            <a href={googleRedirectURL} className="w-fit p-2 border rounded-lg dark:border-gray-400 flex items-center w-full shadow-md">
                                 <svg width="19" height="20" viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M18.9892 10.1871C18.9892 9.36767 18.9246 8.76973 18.7847 8.14966H9.68848V11.848H15.0277C14.9201 12.767 14.3388 14.1512 13.047 15.0812L13.0289 15.205L15.905 17.4969L16.1042 17.5173C17.9342 15.7789 18.9892 13.221 18.9892 10.1871Z" fill="#4285F4" />
                                     <path d="M9.68813 19.9314C12.3039 19.9314 14.4999 19.0455 16.1039 17.5174L13.0467 15.0813C12.2286 15.6682 11.1306 16.0779 9.68813 16.0779C7.12612 16.0779 4.95165 14.3395 4.17651 11.9366L4.06289 11.9465L1.07231 14.3273L1.0332 14.4391C2.62638 17.6946 5.89889 19.9314 9.68813 19.9314Z" fill="#34A853" />
@@ -270,7 +271,7 @@ export const AwardConfirmModal = (props) => {
                     <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute right-0 top-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                     <p className='text-violet-800 font-josefinregular text-2xl font-semibold '>Confirm Purchase?</p>
                     <div className='flex items-center space-x-3 my-2'>
-                        <img className='h-16 w-16' src={fetchUserImages(awardData.icon)} />
+                        {awardData ? <img className='h-16 w-16' src={fetchUserImages(awardData.icon)} /> : null}
                         <div className='flex-row'>
                             <div className='flex space-x-1 items-center'>
                                 <img src={TokenIcon} className='h-6 w-6' />
