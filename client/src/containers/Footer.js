@@ -13,7 +13,7 @@ const Footer = () => {
                 <div className='flex mx-auto w-9/12'>
                     <div className="w-80 flex-shrink-0 mr-auto">
                         <Link to='/'>
-                            <img className='block h-10 w-auto hover:cursor-pointer' src={Artyst_logo} alt='Artyst' />
+                            <img loading='lazy' className='block h-10 w-auto hover:cursor-pointer' src={Artyst_logo} alt='Artyst' />
                         </Link>
                         <p className="mt-2 text-xl font-bold text-gray-900 dark:text-gray-200">Focal point of everything art</p>
                     </div>
@@ -54,7 +54,7 @@ const Footer = () => {
                 <div className='flex w-full items-center justify-center pb-3 gap-4'>
                     <span className='flex items-center'>
                         <p className='text-2xl text-violet-700 pt-1'>&#169;</p>
-                        <img className='h-8 w-auto' src={Artyst_title} />
+                        <img loading='lazy' className='h-8 w-auto' src={Artyst_title} />
                     </span>
                     <span className='text-violet-700'>&#9679;</span>
                     <div className='flex'>
@@ -81,7 +81,7 @@ const Footer = () => {
             <div className="block">
                 <div className="items-center mx-2 p-1 flex flex-wrap flex-row">
                     <div className='flex'>
-                        <img onClick={() => navigate('/')} className='h-10 w-auto hover:cursor-pointer' src={Artyst_icon} alt='Artyst' />
+                        <img loading='lazy' onClick={() => navigate('/')} className='h-10 w-auto hover:cursor-pointer' src={Artyst_icon} alt='Artyst' />
                     </div>
                     {/* <span className="inline-flex ml-auto mt-0 mt-2 justify-start">
                         <Link to='/' className="text-violet-500">

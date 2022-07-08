@@ -34,6 +34,15 @@ const ExploreUpload = (props) => {
         setExploreTags(props.common.tags.sort(() => 0.5 - Math.random()).slice(0, 10))
     }, [])
 
+    const dataURLtoFile = (dataurl, filename) => {
+        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+            bstr = window.atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, { type: mime });
+    }
+
     const onImageChange = (ev) => {
         if (ev.target.files.length > 3 || exploreFiles.length > 2) {
             const error = {
@@ -45,7 +54,25 @@ const ExploreUpload = (props) => {
         }
         else {
             Object.keys(ev.target.files).map((key, index) => {
-                setExploreFiles(arr => [...arr, ev.target.files[key]])
+                let convertedFile;
+                let userImage = new Image();
+                console.log('userImage', userImage)
+
+                userImage.src = URL.createObjectURL(ev.target.files[key])
+
+                let canvas = document.createElement('canvas');
+                let ctx = canvas.getContext('2d');
+
+                userImage.onload = () => {
+                    canvas.width = userImage.width;
+                    canvas.height = userImage.height;
+                    ctx.drawImage(userImage, 0, 0);
+                    let convertedImg = canvas.toDataURL('image/webp');
+                    let newImage = new Image();
+                    newImage.src = convertedImg;
+                    convertedFile = dataURLtoFile(newImage.src, `${ev.target.files[key].name.split('.')[0]}.webp`)
+                    setExploreFiles(arr => [...arr, convertedFile])
+                }
             })
             setPrimaryFile(ev.target.files[0]);
         }
@@ -61,10 +88,28 @@ const ExploreUpload = (props) => {
             }
             props.setError(error);
         } else {
-            Object.keys(ev.dataTransfer.files).map((key, index) => {
-                setExploreFiles(arr => [...arr, ev.dataTransfer.files[key]])
+            Object.keys(ev.target.files).map((key, index) => {
+                let convertedFile;
+                let userImage = new Image();
+                console.log('userImage', userImage)
+
+                userImage.src = URL.createObjectURL(ev.target.files[key])
+
+                let canvas = document.createElement('canvas');
+                let ctx = canvas.getContext('2d');
+
+                userImage.onload = () => {
+                    canvas.width = userImage.width;
+                    canvas.height = userImage.height;
+                    ctx.drawImage(userImage, 0, 0);
+                    let convertedImg = canvas.toDataURL('image/webp');
+                    let newImage = new Image();
+                    newImage.src = convertedImg;
+                    convertedFile = dataURLtoFile(newImage.src, `${ev.target.files[key].name.split('.')[0]}.webp`)
+                    setExploreFiles(arr => [...arr, convertedFile])
+                }
             })
-            setPrimaryFile(ev.dataTransfer.files[0]);
+            setPrimaryFile(ev.target.files[0]);
         }
         ev.preventDefault();
     }
@@ -146,7 +191,7 @@ const ExploreUpload = (props) => {
                                 <div className="h-full w-full text-center flex flex-col items-center justify-center items-center">
                                     {exploreFiles.length === 0 ?
                                         <div>
-                                            <img className="mx-auto w-32" src="https://user-images.githubusercontent.com/507615/54591670-ac0a0180-4a65-11e9-846c-e55ffce0fe7b.png" alt="no data" />
+                                            <img loading='lazy' className="mx-auto w-32" src="https://user-images.githubusercontent.com/507615/54591670-ac0a0180-4a65-11e9-846c-e55ffce0fe7b.png" alt="no data" />
                                             <span className="text-small dark:text-gray-500">No files selected</span>
                                             <div className='font-josefinlight text-rose-400 font-semibold text-sm'>You may select a maximum of 3 files.</div>
                                         </div>
@@ -377,7 +422,7 @@ const StoreUpload = (props) => {
                                 <div className="h-full w-full text-center flex flex-col items-center justify-center items-center">
                                     {storeFiles.length === 0 ?
                                         <div>
-                                            <img className="mx-auto w-32" src="https://user-images.githubusercontent.com/507615/54591670-ac0a0180-4a65-11e9-846c-e55ffce0fe7b.png" alt="no data" />
+                                            <img loading='lazy' className="mx-auto w-32" src="https://user-images.githubusercontent.com/507615/54591670-ac0a0180-4a65-11e9-846c-e55ffce0fe7b.png" alt="no data" />
                                             <span className="text-small dark:text-gray-500">No files selected</span>
                                             <div className='font-josefinlight text-rose-400 font-semibold text-sm'>You may select a maximum of 3 files.</div>
                                         </div>

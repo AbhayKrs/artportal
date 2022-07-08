@@ -119,7 +119,7 @@ const Store = (props) => {
                 <div className='grid gap-5 sm:grid-cols-3 grid-cols-1 p-5'>
                     {props.store.storeList.map(item => (
                         <div className="drop-shadow-lg skew-y-2 rounded-xl bg-indigo-50 dark:bg-neutral-800 overflow-hidden">
-                            <img className="h-60 w-full object-cover object-center scale-110 transition-all duration-400 scale-100" src={fetchStoreImages(item.files[0])} />
+                            <img loading='lazy' className="h-60 w-full object-cover object-center scale-110 transition-all duration-400 scale-100" src={fetchStoreImages(item.files[0])} />
                             <div className="py-6 px-4">
                                 <h2 className="tracking-widest text-xs title-font font-medium text-gray-400 mb-2">CATEGORY: <span className='capitalize text-gray-700'>{item.category}</span></h2>
                                 <h1 className="title-font text-lg font-medium text-neutral-800 dark:text-neutral-300">{item.title}</h1>
@@ -143,7 +143,7 @@ const Store = (props) => {
                 <div className='grid gap-5 sm:grid-cols-3 grid-cols-1 p-5'>
                     {props.store.storeList.map(item => (
                         <div className="drop-shadow-lg -skew-y-2 rounded-xl bg-indigo-50 dark:bg-neutral-800 overflow-hidden">
-                            <img className="h-60 w-full object-cover object-center scale-110 transition-all duration-400 scale-100" src={fetchStoreImages(item.files[0])} />
+                            <img loading='lazy' className="h-60 w-full object-cover object-center scale-110 transition-all duration-400 scale-100" src={fetchStoreImages(item.files[0])} />
                             <div className="py-6 px-4">
                                 <h2 className="tracking-widest text-xs title-font font-medium text-gray-400 mb-2">CATEGORY: <span className='capitalize text-gray-700'>{item.category}</span></h2>
                                 <h1 className="title-font text-lg font-medium text-neutral-800 dark:text-neutral-300">{item.title}</h1>
@@ -168,7 +168,7 @@ const Store = (props) => {
                     {props.store.sellerList.map(seller => (
                         <div className="py-8 h-3/4 mt-auto cursor-pointer rounded-3xl bg-gray-100 dark:bg-neutral-900 transition duration-300 ease-in-out hover:scale-105">
                             <div className="-mb-14 -translate-y-36 transform">
-                                <img src={fetchUserImages(seller.avatar.icon)} alt="Kobe Bryant" title="Kobe Bryant" className="mx-auto max-h-[10em]" />
+                                <img loading='lazy' src={fetchUserImages(seller.avatar.icon)} alt="Kobe Bryant" title="Kobe Bryant" className="mx-auto max-h-[10em]" />
                             </div>
                             <div className="-translate-y-20">
                                 <div className="text-center dark:text-gray-300">

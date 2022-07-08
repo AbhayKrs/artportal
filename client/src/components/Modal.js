@@ -61,7 +61,7 @@ export const LoginModal = (props) => {
         <div className={`${open ? 'block' : 'hidden'} flex fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
             <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 lg:w-6/12 sm:w-11/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
                 <div className='grid sm:grid-cols-2 grid-cols-1'>
-                    {banner ? <img className='h-full sm:flex hidden' src={fetchUserImages(banner)} /> : null}
+                    {banner ? <img loading='lazy' className='h-full sm:flex hidden' src={fetchUserImages(banner)} /> : null}
                     <div className='p-4 pt-2 flex flex-col space-y-3'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                         <h1 className='text-violet-500 dark:text-violet-500 text-5xl font-semibold tracking-widest font-antipasto mt-10'>{title}</h1>
@@ -183,7 +183,7 @@ export const RegisterModal = (props) => {
         <div className={`${open ? 'block' : 'hidden'} flex fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
             <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 lg:w-6/12 sm:w-11/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
                 <div className='grid sm:grid-cols-2 grid-cols-1'>
-                    {banner ? <img className='h-full sm:flex hidden' src={fetchUserImages(banner)} /> : null}
+                    {banner ? <img loading='lazy' className='h-full sm:flex hidden' src={fetchUserImages(banner)} /> : null}
                     <div className='p-4 pt-2 flex flex-col space-y-3'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                         <h1 className='text-violet-500 text-5xl font-semibold tracking-widest font-antipasto'>{title}</h1>
@@ -271,10 +271,10 @@ export const AwardConfirmModal = (props) => {
                     <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute right-0 top-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                     <p className='text-violet-800 font-josefinregular text-2xl font-semibold '>Confirm Purchase?</p>
                     <div className='flex items-center space-x-3 my-2'>
-                        {awardData ? <img className='h-16 w-16' src={fetchUserImages(awardData.icon)} /> : null}
+                        {awardData ? <img loading='lazy' className='h-16 w-16' src={fetchUserImages(awardData.icon)} /> : null}
                         <div className='flex-row'>
                             <div className='flex space-x-1 items-center'>
-                                <img src={TokenIcon} className='h-6 w-6' />
+                                <img loading='lazy' src={TokenIcon} className='h-6 w-6' />
                                 <span className='flex items-center font-bold text-2xl text-emerald-500 font-caviar'>{awardData.value}</span>
                             </div>
                             <p className='text-gray-900 font-bold dark:text-gray-200 font-caviar text-md'>Awarded by {user.username}.</p>
@@ -284,7 +284,7 @@ export const AwardConfirmModal = (props) => {
 
                     <hr className='h-2 w-full px-2 mt-2' />
                     <div className='flex items-center place-content-between'>
-                        <p className='flex text-md text-gray-900 font-bold dark:text-gray-300 font-caviar'>Current Balance: <img src={TokenIcon} className='h-6 w-6 ml-1 mr-1' />{user.tokens}</p>
+                        <p className='flex text-md text-gray-900 font-bold dark:text-gray-300 font-caviar'>Current Balance: <img loading='lazy' src={TokenIcon} className='h-6 w-6 ml-1 mr-1' />{user.tokens}</p>
                         <button onClick={() => { handleAwardExplore(awardData); onClose() }} className='p-1.5 bg-yellow-400 w-fit rounded-md'>Confirm</button>
                     </div>
                 </div>
@@ -377,7 +377,7 @@ export const PurchaseModal = (props) => {
                         <p className='text-gray-500 text-xs'>By purchasing Coins and Awards, you agree to the <button type='button' className='text-xs font-bold text-violet-500'>Artyst User Agreement</button>.</p>
                         <hr className='my-3 border-gray-500 dark:border-gray-300' />
                         <div className='flex flex-row justify-between'>
-                            <h6 className='flex text-gray-700 dark:text-gray-300 text-md items-center'>Current Balance: <img src={TokenLogo} className='w-5 h-5 mx-1' />{new Intl.NumberFormat().format(props.user.tokens)}</h6>
+                            <h6 className='flex text-gray-700 dark:text-gray-300 text-md items-center'>Current Balance: <img loading='lazy' src={TokenLogo} className='w-5 h-5 mx-1' />{new Intl.NumberFormat().format(props.user.tokens)}</h6>
                             <button className='whitespace-nowrap text-center bg-amber-400 text-gray-900 hover:bg-amber-500 dark:hover:bg-amber-500 py-1 px-4 rounded-md text-sm font-caviar font-bold'>Add</button>
                         </div>
                     </div>
@@ -442,7 +442,7 @@ export const CartModal = (props) => {
                     {cartList && cartList.map(cartItem => (
                         <div className='flex sm:flex-row flex-col gap-5 py-2 font-caviar text-md'>
                             <div className='flex gap-4'>
-                                <img src={fetchStoreImages(cartItem.file)} className="w-20 h-20 object-cover rounded shadow-lg" alt="Thumbnail" />
+                                <img loading='lazy' src={fetchStoreImages(cartItem.file)} className="w-20 h-20 object-cover rounded shadow-lg" alt="Thumbnail" />
                                 <div className='flex flex-col'>
                                     <span>Title: {cartItem.title}</span>
                                     <span>Category: {cartItem.title}</span>
@@ -555,7 +555,7 @@ export const CartModal = (props) => {
                 <div className='p-4 space-y-3'>
                     <div className="flex">
                         <label for="type1" className="flex items-center cursor-pointer">
-                            <img src="https://leadershipmemphis.org/wp-content/uploads/2020/08/780370.png" className="h-8" />
+                            <img loading='lazy' src="https://leadershipmemphis.org/wp-content/uploads/2020/08/780370.png" className="h-8" />
                         </label>
                     </div>
                     <div>
@@ -746,7 +746,7 @@ export const AvatarModal = (props) => {
                         <h1 className='text-violet-500 dark:text-violet-800 text-3xl font-semibold tracking-wide font-josefinregular'>{title}</h1>
                         <div className='grid grid-rows-4 grid-flow-col gap-4'>
                             {avatarList.map(avatar => (
-                                <img onClick={() => handleEditUserAvatar(avatar)} id={avatar._id} src={fetchUserImages(avatar.icon)} />
+                                <img loading='lazy' onClick={() => handleEditUserAvatar(avatar)} id={avatar._id} src={fetchUserImages(avatar.icon)} />
                             ))}
                         </div>
                     </div>

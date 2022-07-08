@@ -94,7 +94,7 @@ export const AwardTabPanel = (props) => {
                     return <Fragment key={index}>
                         {index === activeStatus && props.awards.map((award, index) => (
                             <button key={index} onClick={() => setConfirmData({ open: true, award })}>
-                                <img style={{ width: '3em', height: '3em' }} src={fetchUserImages(award.icon)} />
+                                <img loading='lazy' style={{ width: '3em', height: '3em' }} src={fetchUserImages(award.icon)} />
                                 <p className="font-bold font-serif text-right text-neutral-700 dark:text-gray-300 text-sm">{award.value}</p>
                             </button>
                         ))}

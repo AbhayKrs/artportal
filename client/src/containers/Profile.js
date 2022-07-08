@@ -68,7 +68,7 @@ const Profile = (props) => {
                                 <div className="w-full sm:w-3/12 px-4 flex justify-center">
                                     <div className="relative h-fit align-middle sm:-m-32 -m-[27rem] sm:-ml-28 -ml-[7.5rem]  max-w-[15rem]">
                                         {console.log('authenticated', props.common.isAuthenticated, props.viewed_user, props.viewed_user.avatar)}
-                                        {props.common.isAuthenticated ? <img src={fetchUserImages(props.viewed_user.avatar.icon)} /> : null}
+                                        {props.common.isAuthenticated ? <img loading='lazy' src={fetchUserImages(props.viewed_user.avatar.icon)} /> : null}
                                         <MdAddAPhoto onClick={() => setAvatarModal(true)} className='h-10 w-10 cursor-pointer text-gray-200 absolute bottom-2 right-2 z-30' />
                                     </div>
                                 </div>
@@ -108,7 +108,7 @@ const Profile = (props) => {
                                     {props.viewed_user.explore.map((explore, index) => (
                                         // onClick={() => navigate(`/explore/${explore._id}`)}
                                         <div key={index} className='relative group group-hover:block'>
-                                            <img
+                                            <img loading='lazy'
                                                 id={index}
                                                 className='object-cover w-full h-full'
                                                 src={fetchExploreImages(explore.files[0])}
@@ -152,7 +152,7 @@ const Profile = (props) => {
                                 <Masonry cols={5}>
                                     {props.explore.exploreList.filter(item => item.likes.indexOf(props.viewed_user.id) >= 0).map((explore, index) => (
                                         <div key={index} onClick={() => navigate(`/explore/${explore._id}`)} className='relative group group-hover:block'>
-                                            <img
+                                            <img loading='lazy'
                                                 id={index}
                                                 className='object-cover w-full h-full'
                                                 src={fetchExploreImages(explore.files[0])}
@@ -192,7 +192,7 @@ const Profile = (props) => {
                                 <Masonry cols={5}>
                                     {props.viewed_user.bookmarked.map((explore, index) => (
                                         <div key={index} className='relative group group-hover:block'>
-                                            <img
+                                            <img loading='lazy'
                                                 id={index}
                                                 className='object-cover w-full h-full'
                                                 src={fetchExploreImages(explore.files[0])}

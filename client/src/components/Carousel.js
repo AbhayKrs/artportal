@@ -17,11 +17,11 @@ export const ExploreShowCarousel = (props) => {
               <FaChevronRight className='h-6 w-6' />
             </div> : ''}
           </div>
-          <img src={`${fetchExploreImages(props.currentImage)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
+          <img loading='lazy' src={`${fetchExploreImages(props.currentImage)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
         </div>
         <div className='flex w-fit flex-col self-center items-center space-y-3 place-content-center'>
           {props.secondaryImages.map((image, index) => (
-            <img key={index} src={`${fetchExploreImages(image)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
+            <img loading='lazy' key={index} src={`${fetchExploreImages(image)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
           ))}
         </div>
       </div>
@@ -37,7 +37,7 @@ export const HomeMultiCarousel = (props) => {
         <div id="slider" className="h-full flex space-x-2 items-center justify-start transition ease-out duration-700">
           {props.data.map((item, index) => {
             return <div key={index} className="flex h-56 w-56 flex-shrink-0 relative">
-              <img src={item.image} alt="black chair and white table" className="object-cover object-center w-full rounded-lg" />
+              <img loading='lazy' src={item.image} alt="black chair and white table" className="object-cover object-center w-full rounded-lg" />
               <div className="bg-gray-800 bg-gradient-to-t from-black rounded-lg bg-opacity-30 absolute w-full h-full p-2">
                 <div className="flex flex-col h-full justify-end">
                   <h3 className="text-xl lg:text-2xl font-josefinlight font-semibold leading-5 lg:leading-6 text-white dark:text-neutral-200">{item.title}</h3>
@@ -89,7 +89,7 @@ export const HomeSingleCarousel = (props) => {
     <div className="relative h-full">
       <div className="relative w-full h-full overflow-hidden">
         <div className="active float-left w-full h-full">
-          <img
+          <img loading='lazy'
             src={bannerCarousel[currentIndex].img}
             className={`block w-full h-full transition-opacity duration-700 ease-in  ${fade ? 'opacity-100' : 'opacity-0'}`}
             alt="Wild Landscape"
@@ -166,7 +166,7 @@ export const StoreMultiCarousel = (props) => {
           return (
             <div key={index} className="carousel-item rounded text-center relative w-56 h-56 snap-start">
               <div className='h-full w-full aspect-square block bg-origin-padding bg-left-top bg-cover bg-no-repeat z-0'>
-                <img src={item.image} alt={item.title} className="w-full aspect-square rounded" />
+                <img loading='lazy' src={item.image} alt={item.title} className="w-full aspect-square rounded" />
                 <div className="h-full w-full aspect-square block absolute top-0 left-0 transition-opacity duration-300 opacity-0 hover:opacity-75 bg-violet-500/75 z-10 rounded">
                   <h3 className="absolute font-caviar font-semibold bottom-0 text-white py-6 px-3 mx-auto text-xl">
                     {item.title}

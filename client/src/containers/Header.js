@@ -36,7 +36,7 @@ const Header = (props) => {
             <div className={`${mobileMenu ? 'h-screen' : 'h-14'} px-2 lg:px-4`}>
                 <div className={`flex ${mobileMenu ? 'h-14' : 'h-full'} items-center`}>
                     <Link to='/' onClick={() => setMobileMenu(false)}>
-                        <img className='block h-6 w-auto hover:cursor-pointer' src={Artyst_logo} alt='Artyst' />
+                        <img loading='lazy' className='block h-6 w-auto hover:cursor-pointer' src={Artyst_logo} alt='Artyst' />
                     </Link>
                     <div className='sm:flex hidden ml-auto'>
                         <Link to='/explore' className='self-center text-gray-900 dark:text-gray-200 hover:text-violet-500 px-3 py-1 rounded-md text-lg font-caviar font-bold dark:font-normal'>
@@ -48,7 +48,7 @@ const Header = (props) => {
                         {props.common.isAuthenticated ?
                             <div className='relative group group-hover:block ml-1'>
                                 <div className='flex relative w-10 h-10 justify-center items-center text-xl group-hover:p-1 group-hover:scale-125 group-hover:rounded-b-lg group-hover:block group-hover:bg-slate-300 dark:group-hover:bg-[#313135] group-hover:rounded-full'>
-                                    {props.common.isAuthenticated ? <img alt='user' src={fetchUserImages(props.user.avatar.icon)} className='mt-0.5' /> : null}
+                                    {props.common.isAuthenticated ? <img loading='lazy' alt='user' src={fetchUserImages(props.user.avatar.icon)} className='mt-0.5' /> : null}
                                 </div>
                                 <div className='container hidden fixed group-hover:block top-[3.25rem] w-52' style={{ right: window.innerWidth > 1024 ? '0.725rem' : '0.2rem' }}>
                                     <div className='grid grid-cols-1 space-y-2 bg-slate-300 dark:bg-[#313135] text-white rounded-tl-lg rounded-br-lg p-3 rounded-bl-lg group-hover:block'>
@@ -59,17 +59,17 @@ const Header = (props) => {
                                             </div>
                                             {props.common.theme === 'dark' ?
                                                 <button className='rounded px-1.5 py-0.5 m-1 shadow-sm bg-gray-300 border-gray-300' onClick={() => props.switchTheme('light')}>
-                                                    <img src={LightMode} />
+                                                    <img loading='lazy' src={LightMode} />
                                                 </button>
                                                 :
                                                 <button className='rounded px-1.5 py-0.5 m-1 shadow-sm bg-neutral-900 border-gray-300' onClick={() => props.switchTheme('dark')}>
-                                                    <img src={DarkMode} />
+                                                    <img loading='lazy' src={DarkMode} />
                                                 </button>
                                             }
                                         </div>
                                         <hr className='border-neutral-800 dark:border-neutral-200' />
                                         <div className='flex items-center'>
-                                            <img className='h-8' src={TokenLogo} />
+                                            <img loading='lazy' className='h-8' src={TokenLogo} />
                                             <div className='block text-left ml-1'>
                                                 <p className='text-gray-900 dark:text-gray-300 text-sm font-caviar font-semibold'>Tokens</p>
                                                 <p className='flex items-center text-gray-900 dark:text-gray-300 text-xs font-caviar'>{props.user.tokens} tokens <IoAddCircleSharp className='mx-1 text-base text-violet-500 cursor-pointer' onClick={() => setTokenOpen(true)} /></p>
@@ -109,7 +109,7 @@ const Header = (props) => {
                                 <div className='grid grid-cols-1 w-full space-y-2 bg-slate-300 dark:bg-[#313135] text-white rounded-lg p-3 rounded-bl-lg group-hover:block'>
                                     <div className='flex place-content-between'>
                                         <div className='flex relative w-10 h-10 justify-center items-center text-xl group-hover:p-1 group-hover:scale-125 group-hover:rounded-b-lg group-hover:block group-hover:bg-slate-300 dark:group-hover:bg-[#313135] group-hover:rounded-full'>
-                                            {props.common.isAuthenticated ? <img alt='user' src={fetchUserImages(props.user.avatar.icon)} className='mt-0.5' /> : null}
+                                            {props.common.isAuthenticated ? <img loading='lazy' alt='user' src={fetchUserImages(props.user.avatar.icon)} className='mt-0.5' /> : null}
                                         </div>
                                         <div className='block text-left'>
                                             <p className='text-gray-900 dark:text-gray-300 text-md font-caviar font-semibold'>{props.user.name}</p>
@@ -117,17 +117,17 @@ const Header = (props) => {
                                         </div>
                                         {props.common.theme === 'dark' ?
                                             <button className='rounded px-1.5 py-0.5 m-1 shadow-sm bg-gray-300 border-gray-300' onClick={() => props.switchTheme('light')}>
-                                                <img src={LightMode} />
+                                                <img loading='lazy' src={LightMode} />
                                             </button>
                                             :
                                             <button className='rounded px-1.5 py-0.5 m-1 shadow-sm bg-neutral-900 border-gray-300' onClick={() => props.switchTheme('dark')}>
-                                                <img src={DarkMode} />
+                                                <img loading='lazy' src={DarkMode} />
                                             </button>
                                         }
                                     </div>
                                     <hr className='border-neutral-800 dark:border-neutral-200' />
                                     <div className='flex items-center'>
-                                        <img className='h-8' src={TokenLogo} />
+                                        <img loading='lazy' className='h-8' src={TokenLogo} />
                                         <div className='block text-left ml-1'>
                                             <p className='text-gray-900 dark:text-gray-300 text-sm font-caviar font-semibold'>Tokens</p>
                                             <p className='flex items-center text-gray-900 dark:text-gray-300 text-xs font-caviar'>{props.user.tokens} tokens <IoAddCircleSharp className='mx-1 text-base text-violet-500 cursor-pointer' onClick={() => setTokenOpen(true)} /></p>

@@ -15,15 +15,13 @@ import path from 'path';
 
 //Import Schemas
 import Store from '../models/store.js';
-import Comment from '../models/comment.js';
 import User from '../models/user.js';
-import Cart from '../models/cart.js';
 
 //Connect gfs to database
 const conn = mongoose.connection;
 conn.once('open', () => {
     gfs = Grid(conn.db, mongoose.mongo);
-    gfs.collection('uploads');
+    gfs.collection('store_uploads');
 });
 
 let gfs;
@@ -41,7 +39,7 @@ const storage = new GridFsStorage({
                     buf.toString('hex') + path.extname(file.originalname);
                 const fileInfo = {
                     filename: filename,
-                    bucketName: 'uploads',
+                    bucketName: 'store_uploads'
                 };
                 resolve(fileInfo);
             });

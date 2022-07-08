@@ -29,7 +29,7 @@ const ExploreSearch = (props) => {
                 <Masonry cols={5}>
                     {props.explore.exploreList.map((explore, index) => (
                         <div onClick={() => navigate(`/explore/${explore._id}`)} className='relative group group-hover:block'>
-                            <img
+                            <img loading='lazy'
                                 id={index}
                                 className='object-cover w-full h-full'
                                 src={fetchExploreImages(explore.files[0])}

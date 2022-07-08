@@ -92,7 +92,7 @@ const StoreAll = (props) => {
                     <div className='grid gap-4 sm:grid-cols-3 grid-cols-1'>
                         {props.store.storeList.map(item => (
                             <div className="drop-shadow-lg rounded-xl bg-indigo-50 dark:bg-neutral-800 overflow-hidden">
-                                <img className="sm:h-full max-h-60 w-full object-cover object-center scale-110 transition-all duration-400 scale-100" src={fetchStoreImages(item.files[0])} />
+                                <img loading='lazy' className="sm:h-full max-h-60 w-full object-cover object-center scale-110 transition-all duration-400 scale-100" src={fetchStoreImages(item.files[0])} />
                                 <div className="py-6 px-4">
                                     <h2 className="tracking-widest text-xs title-font font-medium text-gray-400 mb-2">CATEGORY: <span className='capitalize text-gray-700'>{item.category}</span></h2>
                                     <h1 className="title-font text-lg font-medium text-neutral-800 dark:text-neutral-300">{item.title}</h1>

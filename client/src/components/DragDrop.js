@@ -18,7 +18,7 @@ const Image = (props) => {
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                 >
-                    <img src={URL.createObjectURL(props.image.content)} className='w-full h-full object-cover rounded' />
+                    <img loading='lazy' src={URL.createObjectURL(props.image.content)} className='w-full h-full object-cover rounded' />
                     {props.index === 0 ? <span className="absolute font-josefinlight text-white pt-0.5 px-2 rounded-tr-md bottom-0 left-0 bg-indigo-400">Primary</span> : ''}
                 </div>
             )

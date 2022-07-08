@@ -217,7 +217,7 @@ const ExploreShow = (props) => {
                         <div className='flex pl-1 justify-between'>
                             <div className='flex w-fit items-center space-x-3'>
                                 <div className="relative float-left flex">
-                                    <img onClick={props.common.isAuthenticated ? () => setAwardOpen(true) : handleInvalidUser} src={AwardIcon} className='h-12 w-12 cursor-pointer' />
+                                    <img loading='lazy' onClick={props.common.isAuthenticated ? () => setAwardOpen(true) : handleInvalidUser} src={AwardIcon} className='h-12 w-12 cursor-pointer' />
                                     <ImPlus className="absolute bottom-0 right-0 text-[#D1853A] h-4 w-4" />
                                 </div>
                                 <BsHeartFill style={like ? { color: '#FF3980' } : { color: '#F190B3' }} className='h-7 w-7 cursor-pointer' onClick={props.common.isAuthenticated ? () => { setLike(!like); handleToggleLike(props.exploreShow.likes) } : handleInvalidUser} />
@@ -233,7 +233,7 @@ const ExploreShow = (props) => {
                                     <p className='font-josefinlight text-xl'>Posted By</p>
                                     <div onClick={() => navigate(`/users/${props.exploreShow.author.id}`)} className="flex cursor-pointer justify-end">
                                         <div className="w-6 h-6 overflow-hidden">
-                                            {props.exploreShow.author ? <img src={fetchUserImages(props.exploreShow.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
+                                            {props.exploreShow.author ? <img loading='lazy' src={fetchUserImages(props.exploreShow.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
                                         </div>
                                         <p className="font-josefinlight pt-0.5 font-medium text-lg mx-0.5">
                                             {props.exploreShow.author.username}
@@ -250,7 +250,7 @@ const ExploreShow = (props) => {
                     <div id='award' className='flex overflow-x-hidden bg-slate-200 dark:bg-neutral-700 mx-2 p-2 rounded-lg space-x-2'>
                         {props.exploreShow.awards.map((award, index) => (
                             <div key={index} className="relative float-left mr-2 flex">
-                                <img draggable="false" className='max-w-fit h-12 w-12' src={fetchUserImages(award.icon)} />
+                                <img loading='lazy' draggable="false" className='max-w-fit h-12 w-12' src={fetchUserImages(award.icon)} />
                                 <span className="absolute font-bold top-0 right-0 inline-block rounded-full bg-violet-800 shadow-lg shadow-neutral-800 text-gray-300 px-1.5 py-0.5 text-xs">{award.count}</span>
                             </div>
                         ))}
@@ -282,7 +282,7 @@ const ExploreShow = (props) => {
                                 <div className='flex'>
                                     <div onClick={() => navigate(`/users/${comment.author.id}`)} className='flex cursor-pointer'>
                                         <div className="w-5 h-5 overflow-hidden">
-                                            <img src={fetchUserImages(comment.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
+                                            <img loading='lazy' src={fetchUserImages(comment.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
                                         </div>
                                         <p className="font-josefinlight text-sm mx-0.5">
                                             {comment.author.username}
@@ -365,7 +365,7 @@ const StoreShow = (props) => {
             <section className="text-gray-400 body-font overflow-hidden">
                 <div className="p-6 mx-auto">
                     <div className="lg:w-4/5 mx-auto flex flex-wrap">
-                        <img className="lg:w-1/2 w-full lg:h-auto h-96 object-cover object-center rounded" src={fetchStoreImages(props.storeShow.files[0])} />
+                        <img loading='lazy' className="lg:w-1/2 w-full lg:h-auto h-96 object-cover object-center rounded" src={fetchStoreImages(props.storeShow.files[0])} />
                         <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-4 lg:mt-0">
                             <div className="text-black dark:text-white text-4xl title-font font-medium mb-1">{props.storeShow.title}</div>
                             <h2 className="tracking-widest text-lg title-font font-medium text-gray-400 mb-2">CATEGORY: <span className='capitalize text-gray-700'>{props.storeShow.category}</span></h2>
@@ -395,7 +395,7 @@ const StoreShow = (props) => {
                                     <p className='font-josefinlight text-xl'>Seller Details</p>
                                     <div className="flex justify-end">
                                         <div className="w-6 h-6 overflow-hidden">
-                                            {props.storeShow.seller ? <img src={fetchUserImages(props.storeShow.seller.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
+                                            {props.storeShow.seller ? <img loading='lazy' src={fetchUserImages(props.storeShow.seller.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
                                         </div>
                                         <p className="font-josefinlight pt-0.5 font-medium text-lg mx-0.5">
                                             {props.storeShow.seller.username}

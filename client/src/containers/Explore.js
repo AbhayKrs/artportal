@@ -32,7 +32,7 @@ const Explore = (props) => {
                     <Masonry cols={5}>
                         {props.explore.exploreList.map((explore, index) => (
                             <div key={index} onClick={() => navigate(`/explore/${explore._id}`)} className='relative group group-hover:block'>
-                                <img
+                                <img loading='lazy'
                                     id={index}
                                     className='object-cover w-full h-full'
                                     src={fetchExploreImages(explore.files[0])}
@@ -71,7 +71,7 @@ const Explore = (props) => {
                 :
                 <div >
                     <div className='absolute inset-0 h-fit w-fit m-auto text-center text-gray-300'>
-                        <img className='h-32 w-full' src={PandaIcon} />
+                        <img loading='lazy' className='h-32 w-full' src={PandaIcon} />
                         <h2 className='font-josefinregular text-2xl'>It's empty in here!</h2>
                     </div>
                 </div>

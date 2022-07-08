@@ -24,7 +24,7 @@ let gfs;
 
 conn.once('open', () => {
     gfs = Grid(conn.db, mongoose.mongo);
-    gfs.collection('uploads');
+    gfs.collection('explore_uploads');
 });
 
 //Storage for image uploaded
@@ -36,11 +36,10 @@ const storage = new GridFsStorage({
                 if (err) {
                     return reject(err);
                 }
-                const filename =
-                    buf.toString('hex') + path.extname(file.originalname);
+                const filename = buf.toString('hex') + path.extname(file.originalname);
                 const fileInfo = {
                     filename: filename,
-                    bucketName: 'uploads'
+                    bucketName: 'explore_uploads'
                 };
                 resolve(fileInfo);
             });
@@ -48,6 +47,60 @@ const storage = new GridFsStorage({
     },
 });
 const upload = multer({ storage });
+
+
+// router.get('/images', (req, res) => {
+//     try {
+//         gfs.files.find().toArray((err, files) => {
+//             if (!files || files.length === 0) {
+//                 return res.status(200).json({
+//                     success: false,
+//                     message: 'No files found'
+//                 });
+//             }
+//             files.map(file => {
+//                 if (file.contentType === 'image/jpg' || file.contentType === 'image/jpeg' || file.contentType === 'image/png' || file.contentType === 'image/webp') {
+//                     file.isImage = true;
+//                 } else {
+//                     file.isImage = false;
+//                 }
+//             });
+//             res.status(200).json({
+//                 success: true,
+//                 files
+//             })
+//         })
+//     } catch (err) {
+//         return res.status(404).json(err);
+//     }
+// })
+
+// @route   Image Route
+// @desc    Image from gridFS storage
+// @access  Private
+router.get('/image/:filename', (req, res) => {
+    try {
+        // /image/:filename?
+        gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+            // Check if file
+            if (!file || file.length === 0) {
+                return res.status(404).json({ err: 'No file exists' });
+            }
+            // Check if image
+            if (file.contentType === 'image/jpg' || file.contentType === 'image/jpeg' || file.contentType === 'image/png' || file.contentType === 'image/webp') {
+                // Read output to browser
+                const readstream = gfs.createReadStream({
+                    filename: req.params.filename,
+                });
+                readstream.pipe(res);
+            } else {
+                res.status(404).json({ err: 'Not an image' });
+            }
+        });
+    } catch (err) {
+        return res.status(404).json({ msg: err.name });
+    }
+});
 
 // @route       GET api/explore
 // @desc        Get all explore
@@ -303,33 +356,6 @@ router.delete('/:id', async (req, res) => {
     }
 }
 );
-
-// @route   Image Route
-// @desc    Image from gridFS storage
-// @access  Private
-router.get('/image/:filename', (req, res) => {
-    try {
-        // /image/:filename?
-        gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
-            // Check if file
-            if (!file || file.length === 0) {
-                return res.status(404).json({ err: 'No file exists' });
-            }
-            // Check if image
-            if (file.contentType === 'image/jpg' || file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
-                // Read output to browser
-                const readstream = gfs.createReadStream({
-                    filename: req.params.filename,
-                });
-                readstream.pipe(res);
-            } else {
-                res.status(404).json({ err: 'Not an image' });
-            }
-        });
-    } catch (err) {
-        return res.status(404).json({ msg: err.name });
-    }
-});
 
 router.put('/:id/viewed', async (req, res) => {
     try {
