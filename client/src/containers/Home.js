@@ -21,53 +21,6 @@ const Home = (props) => {
         props.fetchExploreList();
         props.getTags();
     }, [])
-
-    const goNext = () => {
-        defaultTransform = defaultTransform - 398;
-        var slider = document.getElementById("slider");
-        if (Math.abs(defaultTransform) >= slider.scrollWidth / 1.7)
-            defaultTransform = 0;
-        slider.style.transform = "translateX(" + defaultTransform + "px)";
-    }
-    const goPrev = () => {
-        var slider = document.getElementById("slider");
-        if (Math.abs(defaultTransform) === 0) defaultTransform = 0;
-        else defaultTransform = defaultTransform + 398;
-        slider.style.transform = "translateX(" + defaultTransform + "px)";
-    }
-
-    const carouselData = [{
-        id: 1,
-        image: 'https://images.unsplash.com/photo-1644416598043-11c2816eec28?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80',
-        title: 'Library of Craft',
-        title2: 'Scroll through the pages that define craft.'
-    }, {
-        id: 2,
-        image: 'https://images.pexels.com/photos/161154/stained-glass-spiral-circle-pattern-161154.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260',
-        title: 'Mirror Spiral',
-        title2: 'Endless spiral of paint that each have a tale of its own.'
-    }, {
-        id: 3,
-        image: 'https://images.pexels.com/photos/1585325/pexels-photo-1585325.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-        title: 'World of Lost Colors',
-        title2: 'Mix of various techniques into the discovery of something unknown.'
-    }, {
-        id: 4,
-        image: 'https://images.pexels.com/photos/1646953/pexels-photo-1646953.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-        title: 'The Brush that Defines Art',
-        title2: 'Each brush tells the tale of the artist that held it for his mastery.'
-    }, {
-        id: 5,
-        image: 'https://images.pexels.com/photos/20967/pexels-photo.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-        title: 'Witness the Majestic Frames',
-        title2: 'A picture frame is a poem without words.'
-    }, {
-        id: 6,
-        image: 'https://images.pexels.com/photos/587958/pexels-photo-587958.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-        title: 'Blended Paint',
-        title2: 'All have beauty to it, not everyone perceives it the way presented.'
-    }]
-
     return (
         <div className='main-container bg-gray-200 dark:bg-darkNavBg'>
             <div className='flex flex-col gap-2 p-4 bg-cover bg-no-repeat' style={{
@@ -88,7 +41,11 @@ const Home = (props) => {
                     <div className='absolute bottom-0 right-0 w-full md:w-1/2 h-36 md:h-60 p-[50px 30px 10px] md:p-0 backdrop-sepia-0 bg-white/30 dark:bg-black/30' style={{ clipPath: 'polygon(5% 25%, 100% 4%, 100% 100%, 0% 100%)' }}>
                         <div className='h-full relative text-black dark:text-white'>
                             <div className='flex absolute h-fit w-fit inset-0 mx-auto mt-auto mb-2 md:mb-9 items-center space-x-4'>
-                                <div className='h-24 w-24 md:h-32 md:w-32 bg-red-400'></div>
+                                <div className='flex h-24 w-24 md:h-32 md:w-32 bg-blue-400/25 font-josefinregular'>
+                                    <span className='m-auto'>
+                                        Coming Soon!
+                                    </span>
+                                </div>
                                 <h2 className='font-caviar text-md md:text-2xl font-bold uppercase tracking-wider'>Download the app <br className='md:none' /> for <br /> <span className='text-2xl md:text-5xl font-black'>free!</span></h2>
                             </div>
                         </div>
@@ -116,13 +73,6 @@ const Home = (props) => {
                 </div>
             </div>
             <HomeTabPanel tags={props.common.tags} exploreList={props.explore.exploreList} />
-            {/* <div className="flex py-2 items-center justify-center w-full h-full">
-                <HomeMultiCarousel
-                    prev={() => goPrev()}
-                    next={() => goNext()}
-                    data={carouselData}
-                />
-            </div> */}
         </div >
     )
 }

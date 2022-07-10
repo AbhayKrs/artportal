@@ -1,5 +1,6 @@
 export const SWITCH_THEME = 'SWITCH_THEME';
 export const SET_ERROR = 'SET_ERROR';
+export const SET_AUTH_ERROR = 'SET_AUTH_ERROR';
 export const SET_LOADER = 'SET_LOADER';
 export const GET_TAGS = 'GET_TAGS';
 export const GET_VIEWER_IP = 'GET_VIEWER_IP';
@@ -34,6 +35,11 @@ export const initialState = {
         open: false,
         message: '',
         type: ''
+    },
+    authError: {
+        message: '',
+        login: false,
+        signup: false
     },
     viewer_id: '',
     openLoginDialog: false,
@@ -130,6 +136,9 @@ export const commonReducer = (state = initialState, { type, payload }) => {
         }
         case SET_ERROR: {
             return { ...state, error: payload };
+        }
+        case SET_AUTH_ERROR: {
+            return { ...state, authError: payload };
         }
         case GET_VIEWER_IP: {
             return { ...state, viewer_id: payload }

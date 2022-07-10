@@ -198,6 +198,19 @@ export const FilterPanel = (props) => {
         }
     }
 
+    const uploadBtnClick = () => {
+        if (props.authenticated)
+            navigate(`/explore/new `)
+        else {
+            const error = {
+                open: true,
+                message: 'User not logged in. Please Sign In/Sign Up to perform the action.',
+                type: 'error'
+            }
+            props.setError(error);
+        }
+    }
+
     return (
         <div className='flex sm:flex-row gap-2 flex-col w-full items-center bg-slate-100/75 dark:bg-darkNavBg/75 p-2 sticky top-14 z-20'>
             <div className='flex w-full items-center sm:justify-start justify-between'>
@@ -229,7 +242,7 @@ export const FilterPanel = (props) => {
             </div>
             <div className='flex w-full max-w-[25rem] sm:ml-auto'>
                 <SearchBar searchValue={exploreSearch} setSearchValue={setExploreSearch} handleSubmit={handleExploreSearch} />
-                <button type="button" className='btn ml-2 bg-violet-500 drop-shadow-xl p-2.5 items-center shadow-lg rounded-xl' onClick={() => navigate(`/explore/new `)}>
+                <button onClick={() => uploadBtnClick()} type="button" className='btn ml-2 bg-violet-500 drop-shadow-xl p-2.5 items-center shadow-lg rounded-xl'>
                     <MdUpload className='h-6 w-full text-white' />
                 </button>
             </div>

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { viewerIP, loginAPI, googleLoginAPI, signUpAPI, tagsAPI, commonImagesAPI, userDetailsAPI, userExploreListAPI, userStoreListAPI, userCartListAPI, addUserCartAPI, updateUserCartAPI, deleteStoreItemAPI, awardListAPI, deleteBookmarkAPI, avatarListAPI, deleteCartItemAPI, editAvatarAPI } from '../../api';
 import {
+    initialState,
     SWITCH_THEME,
     SET_LOADER,
     SET_ERROR,
@@ -25,7 +26,7 @@ import {
     FETCH_AVATARLIST,
     FETCH_AWARDLIST,
     RESET_BOOKMARK_LIST,
-    initialState
+    SET_AUTH_ERROR
 } from '../reducers/common.reducers';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from '../../utils/setAuthToken';
@@ -43,6 +44,17 @@ export const setError = (errorData) => (dispatch) => {
         dispatch({ type: SET_ERROR, payload: errorData })
     } catch (err) {
         console.log('---error setError', err);
+    }
+}
+
+export const setAuthError = (errorData) => (dispatch) => {
+    try {
+        if (errorData)
+            dispatch({ type: SET_AUTH_ERROR, payload: errorData })
+        else
+            dispatch({ type: SET_AUTH_ERROR, payload: initialState.authError })
+    } catch (err) {
+        console.log('---error setAuthError', err)
     }
 }
 
@@ -115,11 +127,11 @@ export const handleSignIn = (stayLoggedIn, userData) => async (dispatch, getStat
     }).catch(err => {
         if (err.response) {
             const error = {
-                open: true,
                 message: err.response.data,
-                type: 'inline',
+                login: true,
+                signup: false
             }
-            dispatch(setError(error))
+            dispatch(setAuthError(error))
         }
     })
 }
@@ -133,11 +145,11 @@ export const handleSignUp = (userData) => async (dispatch, getState) => {
     }).catch(err => {
         if (err.response) {
             const error = {
-                open: true,
                 message: err.response.data,
-                type: 'inline',
+                login: false,
+                signup: true
             }
-            dispatch(setError(error))
+            dispatch(setAuthError(error))
         }
     })
 }

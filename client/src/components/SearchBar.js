@@ -17,7 +17,7 @@ const SearchBar = (props) => {
                         <MdClose />
                     </button>
                 }
-                <button disabled={props.searchValue.length === 0} type="submit" onClick={() => props.handleSubmit()} className="absolute bg-violet-500 text-white dark:text-black dark:text-white right-0 top-0 h-full px-3 rounded-r-lg">
+                <button disabled={props.searchValue.length === 0} type="submit" onClick={() => props.handleSubmit()} className="absolute bg-violet-500 text-white dark:text-white right-0 top-0 h-full px-3 rounded-r-lg">
                     <BiSearch />
                 </button>
             </div>

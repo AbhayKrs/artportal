@@ -6,7 +6,7 @@ import moment from 'moment';
 import Masonry from '../components/Masonry';
 
 import { fetchExploreImages, fetchUserImages } from '../api';
-import { setLoader, fetchAvatars, loadProfileDetails, clearUserProfile, deleteBookmark, handleEditUserAvatar } from '../store/actions/common.actions';
+import { setError, setLoader, fetchAvatars, loadProfileDetails, clearUserProfile, deleteBookmark, handleEditUserAvatar } from '../store/actions/common.actions';
 import { fetchExploreList, deleteExploreItem } from '../store/actions/explore.actions';
 
 import { MdAddAPhoto, MdClose } from 'react-icons/md';
@@ -33,6 +33,45 @@ const Profile = (props) => {
 
     const deleteBookmark = (bookmarkID, userID) => {
         props.deleteBookmark(bookmarkID, userID);
+    }
+
+    const openAvatarModal = () => {
+        if (props.common.authenticated)
+            setAvatarModal(true)
+        else {
+            const error = {
+                open: true,
+                message: 'User not logged in. Please Sign In/Sign Up to perform the action.',
+                type: 'error'
+            }
+            props.setError(error);
+        }
+    }
+
+    const onFollowClick = () => {
+        if (props.common.authenticated)
+            console.log('follow clicked')
+        else {
+            const error = {
+                open: true,
+                message: 'User not logged in. Please Sign In/Sign Up to perform the action.',
+                type: 'error'
+            }
+            props.setError(error);
+        }
+    }
+
+    const onMessageClick = () => {
+        if (props.common.authenticated)
+            console.log('message clicked')
+        else {
+            const error = {
+                open: true,
+                message: 'User not logged in. Please Sign In/Sign Up to perform the action.',
+                type: 'error'
+            }
+            props.setError(error);
+        }
     }
 
     return (
@@ -67,9 +106,8 @@ const Profile = (props) => {
                                 </div>
                                 <div className="w-full sm:w-3/12 px-4 flex justify-center">
                                     <div className="relative h-fit align-middle sm:-m-32 -m-[27rem] sm:-ml-28 -ml-[7.5rem]  max-w-[15rem]">
-                                        {console.log('authenticated', props.common.isAuthenticated, props.viewed_user, props.viewed_user.avatar)}
-                                        {props.common.isAuthenticated ? <img loading='lazy' src={fetchUserImages(props.viewed_user.avatar.icon)} /> : null}
-                                        <MdAddAPhoto onClick={() => setAvatarModal(true)} className='h-10 w-10 cursor-pointer text-gray-200 absolute bottom-2 right-2 z-30' />
+                                        {props.viewed_user.avatar ? <img loading='lazy' src={fetchUserImages(props.viewed_user.avatar.icon)} /> : null}
+                                        <MdAddAPhoto onClick={() => openAvatarModal()} className='h-10 w-10 cursor-pointer text-gray-200 absolute bottom-2 right-2 z-30' />
                                     </div>
                                 </div>
                                 <div className="w-full sm:w-4/12 px-4 lg:text-right lg:self-center">
@@ -84,10 +122,10 @@ const Profile = (props) => {
                                             {props.viewed_user.email}
                                         </div>
                                         <div className="px-3 sm:mt-0">
-                                            <button className="bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150" type="button">
+                                            <button onClick={() => onFollowClick()} className="bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150" type="button">
                                                 Follow
                                             </button>
-                                            <button className="bg-teal-500 active:bg-teal-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150" type="button">
+                                            <button onClick={() => onMessageClick()} className="bg-teal-500 active:bg-teal-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150" type="button">
                                                 Message
                                             </button>
                                         </div>
@@ -241,6 +279,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
+    setError,
     setLoader,
     fetchAvatars,
     fetchExploreList,

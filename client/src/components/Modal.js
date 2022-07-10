@@ -32,7 +32,7 @@ import {
 import { fetchUserImages } from '../api';
 
 export const LoginModal = (props) => {
-    const { open, title, banner, error, onClose, openRegister, handleSignIn } = props;
+    const { open, title, banner, error, onClose, openRegister, handleSignIn, setAuthError } = props;
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [stayLoggedIn, setLoggedIn] = useState(false);
@@ -42,10 +42,12 @@ export const LoginModal = (props) => {
     };
 
     const handleUsernameChange = (event) => {
-        setUsername(event.target.value)
+        setUsername(event.target.value);
+        error.login && setAuthError()
     }
     const handlePasswordChange = (event) => {
-        setPassword(event.target.value)
+        setPassword(event.target.value);
+        error.login && setAuthError()
     }
 
     const onSubmitClick = () => {
@@ -120,10 +122,10 @@ export const LoginModal = (props) => {
                             <input type="checkbox" checked={stayLoggedIn} onChange={handleStayLoggedin} className="form-checkbox h-3.5 w-3.5 rounded bg-slate-300 text-violet-500 cursor-pointer mr-1" />
                             <p className='font-caviar text-sm text-gray-900 dark:text-gray-300'>Keep me logged in</p>
                         </label>
-                        {error.message && !username && !password ?
+                        {error.login && !username && !password ?
                             <div className='flex p-2 border-2 border-red-500 rounded-lg space-x-2'>
                                 <IoCloseCircle className='h-5 w-5 text-red-500' />
-                                <p className='font-caviar font-bold text-sm text-red-500'>{error.message}</p>
+                                <p className='font-semibold text-sm text-red-500'>{error.message}</p>
                             </div> :
                             null
                         }
@@ -137,7 +139,7 @@ export const LoginModal = (props) => {
 }
 
 export const RegisterModal = (props) => {
-    const { open, title, banner, error, onClose, openLogin, handleSignUp, handleGoogleAuth } = props;
+    const { open, title, banner, error, onClose, openLogin, handleSignUp, setAuthError } = props;
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
@@ -145,19 +147,24 @@ export const RegisterModal = (props) => {
     const [password2, setPassword2] = useState('');
 
     const handleNameChange = (event) => {
-        setName(event.target.value)
+        setName(event.target.value);
+        error.signup && setAuthError();
     }
     const handleUsernameChange = (event) => {
-        setUsername(event.target.value)
+        setUsername(event.target.value);
+        error.signup && setAuthError();
     }
     const handleEmailChange = (event) => {
-        setEmail(event.target.value)
+        setEmail(event.target.value);
+        error.signup && setAuthError();
     }
     const handlePasswordChange = (event) => {
-        setPassword(event.target.value)
+        setPassword(event.target.value);
+        error.signup && setAuthError();
     }
     const handleConfirmPasswordChange = (event) => {
-        setPassword2(event.target.value)
+        setPassword2(event.target.value);
+        error.signup && setAuthError();
     }
 
     const onSubmitClick = () => {
@@ -224,7 +231,7 @@ export const RegisterModal = (props) => {
                                 <p className="text-base font-medium ml-2 text-gray-800 dark:text-gray-400">Register with Google</p>
                             </a>
                         </div>
-                        {error.message ?
+                        {error.signup ?
                             <div className='flex p-2 border-2 border-red-500 rounded-lg space-x-2'>
                                 <IoCloseCircle className='h-5 w-5 text-red-500' />
                                 <p className='font-caviar font-bold text-sm text-red-500'>{error.message}</p>

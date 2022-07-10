@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { bindActionCreators } from 'redux';
-import { setLoader } from '../store/actions/common.actions';
+import { setError, setLoader } from '../store/actions/common.actions';
 import { fetchExploreList, searchExploreList, filterExploreList } from '../store/actions/explore.actions';
 import Masonry from '../components/Masonry';
 
-import PandaIcon from '../assets/images/lazyPanda2.png'
-
+import PandaIcon from '../assets/images/lazyPanda2.png';
 
 import { fetchExploreImages } from '../api';
 import moment from 'moment';
@@ -26,7 +25,7 @@ const Explore = (props) => {
 
     return (
         <div className='main-container bg-gray-200 dark:bg-darkNavBg'>
-            <FilterPanel fetchExploreList={props.fetchExploreList} filterExploreList={props.filterExploreList} searchExploreList={props.searchExploreList} />
+            <FilterPanel authenticated={props.common.isAuthenticated} setError={props.setError} fetchExploreList={props.fetchExploreList} filterExploreList={props.filterExploreList} searchExploreList={props.searchExploreList} />
             {props.explore.exploreList.length > 0 ?
                 <div className='flex flex-row'>
                     <Masonry cols={5}>
@@ -87,6 +86,7 @@ const mapStateToProps = (state, props) => ({
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
+    setError,
     setLoader,
     fetchExploreList,
     searchExploreList,

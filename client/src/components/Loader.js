@@ -9,7 +9,7 @@ const Loader = (props) => {
             document.querySelector("body").style.overflow = 'hidden';
             setTimeout(() => {
                 props.setLoader(false);
-            }, 3000)
+            }, 1500)
         } else {
             document.querySelector("body").style.overflow = 'auto';
         }

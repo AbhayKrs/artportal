@@ -11,7 +11,7 @@ import { MdSettings } from "react-icons/md";
 import { RiFireFill } from "react-icons/ri";
 import { TokenModal, LoginModal, RegisterModal } from '../components/Modal';
 
-import { switchTheme, handleHeaderDialogOpen, handleHeaderDialogClose, handleSignIn, handleSignUp, handleGoogleAuth, handleSignOut } from '../store/actions/common.actions';
+import { switchTheme, setAuthError, handleHeaderDialogOpen, handleHeaderDialogClose, handleSignIn, handleSignUp, handleGoogleAuth, handleSignOut } from '../store/actions/common.actions';
 import { fetchUserImages } from '../api';
 
 const Header = (props) => {
@@ -93,8 +93,18 @@ const Header = (props) => {
                             <>
                                 <button onClick={() => props.handleHeaderDialogOpen('openLoginDialog')} className='bg-violet-500 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 px-3 py-1 rounded-md text-lg font-caviar font-bold dark:font-normal'>Login</button>
                                 <button onClick={() => props.handleHeaderDialogOpen('openRegisterDialog')} className='bg-violet-500 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 px-3 py-1 ml-3 rounded-md text-lg font-caviar font-bold dark:font-normal'>Signup</button>
+                                {props.common.theme === 'dark' ?
+                                    <button className='rounded px-1.5 py-1 ml-3 shadow-sm bg-gray-300 border-gray-300' onClick={() => props.switchTheme('light')}>
+                                        <img loading='lazy' src={LightMode} />
+                                    </button>
+                                    :
+                                    <button className='rounded px-1.5 py-1 ml-1 shadow-sm bg-neutral-900 border-gray-300' onClick={() => props.switchTheme('dark')}>
+                                        <img loading='lazy' src={DarkMode} />
+                                    </button>
+                                }
                             </>
                         }
+
                     </div>
                     <div className='sm:hidden flex ml-auto'>
                         <button className='p-1' onClick={() => { setMobileMenu(!mobileMenu) }}>
@@ -115,15 +125,6 @@ const Header = (props) => {
                                             <p className='text-gray-900 dark:text-gray-300 text-md font-caviar font-semibold'>{props.user.name}</p>
                                             <Link to={`/users/${props.user.id}`} onClick={() => setMobileMenu(false)} className='text-gray-900 dark:text-gray-300 text-xs font-caviar font-semibold'>#{props.user.username}</Link>
                                         </div>
-                                        {props.common.theme === 'dark' ?
-                                            <button className='rounded px-1.5 py-0.5 m-1 shadow-sm bg-gray-300 border-gray-300' onClick={() => props.switchTheme('light')}>
-                                                <img loading='lazy' src={LightMode} />
-                                            </button>
-                                            :
-                                            <button className='rounded px-1.5 py-0.5 m-1 shadow-sm bg-neutral-900 border-gray-300' onClick={() => props.switchTheme('dark')}>
-                                                <img loading='lazy' src={DarkMode} />
-                                            </button>
-                                        }
                                     </div>
                                     <hr className='border-neutral-800 dark:border-neutral-200' />
                                     <div className='flex items-center'>
@@ -170,7 +171,8 @@ const Header = (props) => {
                     open={props.common.openLoginDialog}
                     title={props.common.dialogTitle}
                     banner={props.common.loginImage}
-                    error={props.common.error}
+                    error={props.common.authError}
+                    setAuthError={props.setAuthError}
                     onClose={props.handleHeaderDialogClose}
                     onClick={props.handleHeaderDialogClose}
                     openRegister={() => props.handleHeaderDialogOpen('openRegisterDialog')}
@@ -181,7 +183,8 @@ const Header = (props) => {
                     open={props.common.openRegisterDialog}
                     title={props.common.dialogTitle}
                     banner={props.common.signupImage}
-                    error={props.common.error}
+                    error={props.common.authError}
+                    setAuthError={props.setAuthError}
                     onClose={props.handleHeaderDialogClose}
                     onClick={props.handleHeaderDialogClose}
                     openLogin={() => props.handleHeaderDialogOpen('openLoginDialog')}
@@ -208,6 +211,7 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
     switchTheme,
+    setAuthError,
     handleHeaderDialogOpen,
     handleHeaderDialogClose,
     handleSignIn,

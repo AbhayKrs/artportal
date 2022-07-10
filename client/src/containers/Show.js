@@ -43,6 +43,7 @@ const ExploreShow = (props) => {
     }, [id])
 
     useEffect(() => {
+        console.log('id');
         const len = props.explore.exploreList.length;
         props.fetchExploreItem(id);
         if (props.exploreShow.likes.filter(item => item === props.user.id).length > 0) {
@@ -222,7 +223,7 @@ const ExploreShow = (props) => {
                                 </div>
                                 <BsHeartFill style={like ? { color: '#FF3980' } : { color: '#F190B3' }} className='h-7 w-7 cursor-pointer' onClick={props.common.isAuthenticated ? () => { setLike(!like); handleToggleLike(props.exploreShow.likes) } : handleInvalidUser} />
                                 <IoShareSocialSharp onClick={() => setShareOpen(true)} className='h-7 w-7 cursor-pointer text-violet-500 dark:text-violet-500' />
-                                {props.user && !!props.user.bookmarked.find(item => item._id === props.exploreShow._id) ?
+                                {props.user && props.user.bookmarked && !!props.user.bookmarked.find(item => item._id === props.exploreShow._id) ?
                                     <MdBookmarkAdded className='h-7 w-7 text-violet-500 dark:text-violet-500' />
                                     :
                                     <MdBookmarkAdd onClick={props.common.isAuthenticated ? () => bookmarkIt() : handleInvalidUser} className='h-7 w-7 cursor-pointer text-violet-500 dark:text-violet-500' />
