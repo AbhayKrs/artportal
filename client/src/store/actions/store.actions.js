@@ -6,10 +6,6 @@ import {
     FETCH_STOREITEM,
     HANDLE_STORE_UPLOAD,
     HANDLE_STORE_EXIT,
-    FETCH_CARTLIST,
-    HANDLE_CART_OPEN,
-    HANDLE_CART_CLOSE,
-    PUSH_TO_CART
 } from '../reducers/store.reducers';
 
 export const fetchSellerList = () => async (dispatch, getState) => {
@@ -55,7 +51,6 @@ export const handleStoreUpload = (storeData) => async (dispatch, getState) => {
 }
 
 export const handleStoreExit = () => async (dispatch, getState) => {
-    console.log('handleStoreExit invoked');
     try {
         await dispatch({ type: HANDLE_STORE_EXIT });
     } catch (err) {

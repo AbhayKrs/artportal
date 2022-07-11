@@ -56,7 +56,6 @@ const ExploreUpload = (props) => {
             Object.keys(ev.target.files).map((key, index) => {
                 let convertedFile;
                 let userImage = new Image();
-                console.log('userImage', userImage)
 
                 userImage.src = URL.createObjectURL(ev.target.files[key])
 
@@ -91,7 +90,6 @@ const ExploreUpload = (props) => {
             Object.keys(ev.target.files).map((key, index) => {
                 let convertedFile;
                 let userImage = new Image();
-                console.log('userImage', userImage)
 
                 userImage.src = URL.createObjectURL(ev.target.files[key])
 
@@ -166,7 +164,12 @@ const ExploreUpload = (props) => {
             }
             props.setError(errorData);
         }).catch(err => {
-            console.log('err', err);
+            const errorData = {
+                open: true,
+                message: 'Upload Failed!',
+                type: 'warning'
+            }
+            props.setError(errorData);
         });
     }
 
@@ -329,7 +332,6 @@ const StoreUpload = (props) => {
                     const srcEncoded = ctx.canvas.toDataURL(e.target, "image/jpeg");
 
                     // you can send srcEncoded to the server
-                    console.log('srcEncoded', srcEncoded);
                     document.querySelector("#output").src = srcEncoded;
                 }
             }
@@ -397,7 +399,12 @@ const StoreUpload = (props) => {
             }
             props.setError(errorData);
         }).catch(err => {
-            console.log('err', err);
+            const errorData = {
+                open: true,
+                message: 'Upload Failed!',
+                type: 'warning'
+            }
+            props.setError(errorData);
         });
     }
 

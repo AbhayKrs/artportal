@@ -44,7 +44,6 @@ export const storeReducer = (state = initialState, { type, payload }) => {
             return { ...state, sellerList }
         }
         case FETCH_STORELIST: {
-            console.log('FETCH_STORELIST', payload);
             const storeList = [...payload];
             return { ...state, storeList }
         }
@@ -52,7 +51,6 @@ export const storeReducer = (state = initialState, { type, payload }) => {
             return { ...state, storeItem: payload }
         }
         case HANDLE_STORE_UPLOAD: {
-            console.log('HANDLE_STORE_UPLOAD', payload);
             return { ...state, file: payload.file, title: payload.title, description: payload.description, uploadStatus: 'success' }
         }
         case HANDLE_STORE_EXIT: {

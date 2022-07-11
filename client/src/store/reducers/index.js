@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
 
 import { exploreReducer } from './explore.reducers';
-import { uploadReducer } from './upload.reducers';
 import { commonReducer } from './common.reducers';
 import { storeReducer } from './store.reducers';
 

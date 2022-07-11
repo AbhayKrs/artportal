@@ -43,7 +43,6 @@ const ExploreShow = (props) => {
     }, [id])
 
     useEffect(() => {
-        console.log('id');
         const len = props.explore.exploreList.length;
         props.fetchExploreItem(id);
         if (props.exploreShow.likes.filter(item => item === props.user.id).length > 0) {
@@ -84,7 +83,6 @@ const ExploreShow = (props) => {
     }
 
     const handleAwardExplore = async (award) => {
-        console.log('handleAwardExplore', award);
         await props.handleAwardExplore(id, props.user.id, award);
         setTimeout(() => {
             props.refreshUserDetails(props.user.id);
@@ -150,7 +148,6 @@ const ExploreShow = (props) => {
             message: 'User not logged in. Please Sign In/Sign Up to perform the action.',
             type: 'warning'
         }
-        console.log('like error', error)
         props.setError(error);
     }
 
@@ -170,7 +167,12 @@ const ExploreShow = (props) => {
             }
             props.setError(errorData);
         }).catch(err => {
-            console.log('err', err)
+            const errorData = {
+                open: true,
+                message: 'Add to Bookmark failed!',
+                type: 'warning'
+            }
+            props.setError(errorData);
         })
     }
 

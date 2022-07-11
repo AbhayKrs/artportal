@@ -9,8 +9,6 @@ import {
     GET_VIEWER_IP,
     HANDLE_HEADER_DIALOG_OPEN,
     HANDLE_HEADER_DIALOG_CLOSE,
-    HANDLE_CART_OPEN,
-    HANDLE_CART_CLOSE,
     HANDLE_VERIFY_USER,
     FETCH_USER_EXPLORELIST,
     FETCH_USER_STORELIST,
@@ -19,7 +17,6 @@ import {
     LOAD_PROFILE_DETAILS,
     HANDLE_SIGNIN,
     GOOGLE_AUTH,
-    HANDLE_REFRESHTOKEN,
     HANDLE_SIGNUP,
     HANDLE_SIGNOUT,
     FETCH_COMMON_IMAGES,
@@ -89,7 +86,7 @@ export const handleVerifyUser = (token) => (dispatch) => {
         const decoded = jwt_decode(token);
         dispatch({ type: HANDLE_VERIFY_USER, payload: decoded });
     } catch (err) {
-        console.log('err', err);
+        console.log('---error handleVerifyUser', err);
     }
 }
 
@@ -103,14 +100,14 @@ export const handleHeaderDialogOpen = (value) => (dispatch, getState) => {
             dispatch({ type: HANDLE_HEADER_DIALOG_OPEN, payload: value });
         }
     } catch (err) {
-        console.log('error', err)
+        console.log('---error handleHeaderDialogOpen', err)
     }
 }
 export const handleHeaderDialogClose = () => async (dispatch, getState) => {
     try {
         dispatch({ type: HANDLE_HEADER_DIALOG_CLOSE, payload: false });
     } catch (err) {
-        console.log('error', err)
+        console.log('---error handleHeaderDialogClose', err)
     }
 }
 
@@ -140,7 +137,6 @@ export const handleSignIn = (stayLoggedIn, userData) => async (dispatch, getStat
 export const handleSignUp = (userData) => async (dispatch, getState) => {
     await signUpAPI(userData).then(res => {
         const data = res.data;
-        // console.log('res data', data);
         dispatch({ type: HANDLE_SIGNUP, payload: data });
         dispatch({ type: HANDLE_HEADER_DIALOG_CLOSE, payload: false });
     }).catch(err => {
@@ -246,7 +242,6 @@ export const fetchUserStoreList = () => async (dispatch, getState) => {
 export const deleteUserStoreItem = (storeID) => async (dispatch, getState) => {
     const userID = getState().common.user.id;
     await deleteStoreItemAPI(storeID, userID).then(async res => {
-        console.log('res', res.status);
         await dispatch({ type: FETCH_USER_STORELIST, payload: res.data });
     }).catch(err => {
         if (err.response) {
@@ -283,7 +278,6 @@ export const handleCartAdd = (data) => async (dispatch, getState) => {
                 console.log('---error updateUserCartAPI', err);
             })
         } else {
-            console.log('handleCartAdd add', data);
             cartData = {
                 file: data.files[0],
                 title: data.title,
@@ -304,7 +298,6 @@ export const handleCartAdd = (data) => async (dispatch, getState) => {
 }
 
 export const handleRemoveFromCart = (data) => async (dispatch, getState) => {
-    console.log('handleRemoveFromCart');
     let cartData;
     const userID = getState().common.user.id;
     const userCart = getState().common.user.cart;
@@ -340,7 +333,6 @@ export const handleRemoveFromCart = (data) => async (dispatch, getState) => {
 }
 
 export const handleSignOut = () => async (dispatch, getState) => {
-    console.log('handleSignOut invoked');
     try {
         localStorage.hasOwnProperty('jwtToken') ?
             localStorage.removeItem('jwtToken')
@@ -354,7 +346,6 @@ export const handleSignOut = () => async (dispatch, getState) => {
 }
 
 export const fetchAvatars = () => async (dispatch, getState) => {
-    console.log('fetchAvatars invoked');
     await avatarListAPI().then(res => {
         console.log('avatarList', res);
         dispatch({ type: FETCH_AVATARLIST, payload: res.data });
@@ -364,7 +355,6 @@ export const fetchAvatars = () => async (dispatch, getState) => {
 }
 
 export const fetchAwards = () => async (dispatch, getState) => {
-    console.log('fetchAwards invoked');
     await awardListAPI().then(res => {
         console.log('awardList', res);
         dispatch({ type: FETCH_AWARDLIST, payload: res.data });
@@ -374,7 +364,6 @@ export const fetchAwards = () => async (dispatch, getState) => {
 }
 
 export const fetchLocations = () => async (dispatch, getState) => {
-    console.log('fetchLocations invoked');
     await locationsListAPI().then(res => {
         dispatch({ type: FETCH_LOCATIONS, payload: res.data });
     }).catch(err => {
@@ -383,7 +372,6 @@ export const fetchLocations = () => async (dispatch, getState) => {
 }
 
 export const handleUploadAsset = (assetData) => async (dispatch, getState) => {
-    console.log('handleUploadAsset invoked', assetData);
     try {
         await axios({
             url: 'http://localhost:5000/api/users/assets/new',
@@ -404,7 +392,6 @@ export const handleUploadAsset = (assetData) => async (dispatch, getState) => {
 
 export const handleEditUserAvatar = (avatar) => async (dispatch, getState) => {
     const userID = getState().common.user.id;
-    console.log('handleEditUserAvatar', avatar);
     await editAvatarAPI(userID, avatar).then(res => {
         console.log('handleEditUserAvatar Successful!');
     }).catch(err => {

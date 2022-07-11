@@ -147,11 +147,9 @@ export const commonReducer = (state = initialState, { type, payload }) => {
             return { ...state, viewer_id: payload }
         }
         case HANDLE_VERIFY_USER: {
-            console.log('---HANDLE_VERIFY_USER', payload);
             return { ...state, isAuthenticated: true, user: payload }
         }
         case HANDLE_HEADER_DIALOG_OPEN: {
-            console.log('---HANDLE_HEADER_DIALOG_OPEN', payload);
             if (payload.data) {
                 const { activeDialogName, dialogTitle } = openDialog(payload.value);
                 return { ...state, [`open${activeDialogName}`]: true, activeDialogName: activeDialogName, dialogTitle: dialogTitle, dialogData: payload.data };
@@ -162,16 +160,13 @@ export const commonReducer = (state = initialState, { type, payload }) => {
         }
         case HANDLE_HEADER_DIALOG_CLOSE: {
             const activeDialogName = state.activeDialogName;
-            console.log('activeDialog', activeDialogName)
             return { ...state, [`open${activeDialogName}`]: payload, activeDialogName: '', dialogTitle: '', dialogData: '' };
         }
         case FETCH_AVATARLIST: {
-            console.log('FETCH_AVATARLIST', payload);
             const avatarList = [...payload];
             return { ...state, avatarList }
         }
         case FETCH_AWARDLIST: {
-            console.log('FETCH_AWARDLIST', payload);
             const awardList = [...payload];
             return { ...state, awardList }
         }
@@ -179,23 +174,6 @@ export const commonReducer = (state = initialState, { type, payload }) => {
             const locationList = [...payload];
             return { ...state, locationList }
         }
-        // case PUSH_TO_CART: {
-        //     return { ...state, cartList: [...state.cartList, payload] }
-        // }
-        // case EDIT_CARTLIST: {
-        //     // const cartList = state.cartList.filter(item => item.explore === payload);
-        //     // cartList.quantity
-        //     // return { ...state, cartList: cart }
-        //     return {
-        //         ...state,
-        //         cartList: state.cartList.map(cartItem => cartItem.explore === payload.explore ?
-        //             { ...cartItem, quantity: payload.quantity, subtotal: payload.subtotal } : cartItem
-        //         )
-        //     };
-        // }
-        // case REMOVE_FROM_CART: {
-        //     return { ...state, cartList: state.cartList.filter(item => item !== payload) }
-        // }
         case FETCH_COMMON_IMAGES: {
             return { ...state, loginImage: payload.login, signupImage: payload.signup }
         }
@@ -227,7 +205,6 @@ export const commonReducer = (state = initialState, { type, payload }) => {
             return { ...state, viewed_user: payload }
         }
         case HANDLE_SIGNIN: {
-            console.log('---HANDLE_SIGNIN', payload);
             return { ...state, isAuthenticated: true, user: payload }
         }
         case HANDLE_REFRESHTOKEN: {
@@ -237,11 +214,9 @@ export const commonReducer = (state = initialState, { type, payload }) => {
             return { ...state, isAuthenticated: true, user: payload }
         }
         case HANDLE_SIGNUP: {
-            console.log('---HANDLE_SIGNUP', payload);
             return { ...state, isAuthenticated: true, user: payload }
         }
         case HANDLE_SIGNOUT: {
-            console.log('---HANDLE_SIGNOUT', payload);
             return { ...state, isAuthenticated: false, user: payload }
         }
         case RESET_BOOKMARK_LIST: {

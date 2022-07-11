@@ -180,7 +180,6 @@ export const FilterPanel = (props) => {
         } else {
             setActiveFilter(item.id)
         }
-        console.log('activeFilter', activeFilter, item);
     }
 
     const handlePeriodChange = (popular) => {

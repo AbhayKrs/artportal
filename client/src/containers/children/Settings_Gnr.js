@@ -47,7 +47,6 @@ export const Settings_Gnr = (props) => {
     }, [props.common.locationList])
 
     const handleCountryChange = (countryVal) => {
-        console.log(countryVal);
         if (!countryVal)
             setCountryLabel('Pick a country')
         else {

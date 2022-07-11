@@ -6,7 +6,6 @@ import {
     HANDLE_EXPLORE_UPLOAD,
     HANDLE_DIALOG_OPEN,
     HANDLE_DIALOG_CLOSE,
-    HANDLE_TABCHANGE,
     initialState
 } from '../reducers/explore.reducers';
 
@@ -112,7 +111,6 @@ export const deleteExploreItem = (exploreID, userID) => async (dispatch, getStat
 }
 
 export const handleDialogOpen = (value) => async (dispatch, getState) => {
-    console.log('explore dialog open :: true');
     try {
         dispatch({ type: HANDLE_DIALOG_OPEN, payload: { activeDialog: true, data: value } })
     } catch (err) {
@@ -121,7 +119,6 @@ export const handleDialogOpen = (value) => async (dispatch, getState) => {
 }
 
 export const handleDialogClose = () => async (dispatch, getState) => {
-    console.log('explore dialog close :: true');
     try {
         dispatch({ type: HANDLE_DIALOG_CLOSE, payload: false })
     } catch (err) {
@@ -130,7 +127,6 @@ export const handleDialogClose = () => async (dispatch, getState) => {
 }
 
 export const handleLikeExplore = (exploreID) => async (dispatch, getState) => {
-    console.log('handleLikesCount', exploreID);
     await likeExploreAPI(exploreID, getState().common.user).then(res => {
         console.log('likeCount', res.status);
     }).catch(err => {
@@ -139,7 +135,6 @@ export const handleLikeExplore = (exploreID) => async (dispatch, getState) => {
 }
 
 export const handleDislikeExplore = (exploreID, likeStatus) => async (dispatch, getState) => {
-    console.log('handleDislikeExplore', likeStatus, exploreID);
     await dislikeExploreAPI(exploreID, getState().common.user).then(res => {
         console.log('likeCount', res.status);
     }).catch(err => {
@@ -148,7 +143,6 @@ export const handleDislikeExplore = (exploreID, likeStatus) => async (dispatch, 
 }
 
 export const handleAwardExplore = (exploreID, userID, award) => async (dispatch, getState) => {
-    console.log('handleAwardExplore', award);
     await awardExploreAPI(exploreID, userID, award).then(res => {
         console.log('award', res.status);
     }).catch(err => {
@@ -157,7 +151,6 @@ export const handleAwardExplore = (exploreID, userID, award) => async (dispatch,
 }
 
 export const handleAddComment = (commentText, exploreID) => async (dispatch, getState) => {
-    console.log('handleAddComment');
     await exploreAddCommentAPI(exploreID, commentText, getState().common.user).then(res => {
         console.log('commentData', res.data);
     }).catch(err => {
@@ -166,7 +159,6 @@ export const handleAddComment = (commentText, exploreID) => async (dispatch, get
 }
 
 export const handleEditComment = (newComment, exploreID, commentID) => async (dispatch, getState) => {
-    console.log('handleEditComment', exploreID, commentID);
     await exploreEditCommentAPI(exploreID, newComment, commentID, getState().common.user).then(res => {
         console.log('editStatus', res.data);
     }).catch(err => {
@@ -175,7 +167,6 @@ export const handleEditComment = (newComment, exploreID, commentID) => async (di
 }
 
 export const handleDeleteComment = (exploreID, commentID) => async (dispatch, getState) => {
-    console.log('handleDeleteComment', exploreID, commentID);
     await exploreDeleteCommentAPI(exploreID, commentID).then(res => {
         console.log('deleteStatus', res.data);
     }).catch(err => {
@@ -184,7 +175,6 @@ export const handleDeleteComment = (exploreID, commentID) => async (dispatch, ge
 }
 
 export const handleLikeComment = (exploreID, commentID) => async (dispatch, getState) => {
-    console.log('handleLikeComment', exploreID, commentID);
     await exploreLikeCommentAPI(exploreID, commentID, getState().common.user).then(res => {
         console.log('likeCommentCount', res.data);
     }).catch(err => {
@@ -193,7 +183,6 @@ export const handleLikeComment = (exploreID, commentID) => async (dispatch, getS
 }
 
 export const handleDislikeComment = (exploreID, commentID) => async (dispatch, getState) => {
-    console.log('handleDislikeComment', exploreID, commentID);
     await exploreDislikeCommentAPI(exploreID, commentID, getState().common.user).then(res => {
         console.log('dislikeCommentCount', res.data);
     }).catch(err => {
@@ -202,12 +191,10 @@ export const handleDislikeComment = (exploreID, commentID) => async (dispatch, g
 }
 
 export const handleTabChange = (selectedTab) => async (dispatch, getState) => {
-    console.log('handleTabChange', selectedTab);
     switch (selectedTab) {
         case 'Latest': {
             let exploreList = getState().explore.exploreList;
             await dispatch({ type: FETCH_EXPLORELIST, payload: exploreList.sort(dynamicSort('createdAt')) });
-            console.log('exploreList', typeof exploreList[0].createdAt, exploreList.sort(dynamicSort('createdAt'))[0]);
             break;
         }
         case 'Trending': {
@@ -219,10 +206,8 @@ export const handleTabChange = (selectedTab) => async (dispatch, getState) => {
         case 'Rising': {
             let exploreList = getState().explore.exploreList;
             await dispatch({ type: FETCH_EXPLORELIST, payload: exploreList.sort(dynamicSort('title')) });
-            console.log('exploreList', typeof exploreList[0].createdAt, exploreList.sort(dynamicSort('title'))[0]);
             break;
         }
         default: break;
     }
-    dispatch({ type: HANDLE_TABCHANGE, payload: selectedTab })
 }

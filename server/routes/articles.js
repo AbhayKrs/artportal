@@ -81,7 +81,6 @@ router.get('/:id', async (req, res) => {
 
 router.get('/post', article.any(), async (req, res) => {
     const user = await User.findById(req.body.userID);
-    console.log('form data', req.files, req.body);
     const newExplore = new Explore({
         files: req.files.map(file => { return file.filename }),
         title: req.body.title,
@@ -93,7 +92,6 @@ router.get('/post', article.any(), async (req, res) => {
         description: req.body.description,
         tags: req.body.tags
     });
-    console.log('newExplore data', newExplore);
     Explore.create(newExplore, (err, explore) => {
         if (err) {
             console.log(err);

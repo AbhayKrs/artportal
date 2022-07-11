@@ -286,7 +286,6 @@ router.post('/new', upload.any(), async (req, res) => {
             description: req.body.description,
             tags: req.body.tags
         });
-        console.log('newExplore data', newExplore);
         Explore.create(newExplore, (err, explore) => {
             if (err) {
                 console.log(err);
@@ -312,7 +311,6 @@ router.put('/:id', function (req, res) {
             title: req.body.title,
             description: req.body.description,
         };
-        console.log(newExploreDetails);
         Explore.findByIdAndUpdate(
             req.params.id,
             { $set: newData },
@@ -347,7 +345,6 @@ router.delete('/:id', async (req, res) => {
         //     user.bookmarked.filter(item => item._id !== req.params.id);
         //     await user.save();
         // })
-        console.log('user', user.explore.filter(item => item._id != req.params.id), users)
         await explore.remove();
         res.send('Explore removed successfully');
     } catch (err) {
@@ -361,7 +358,6 @@ router.put('/:id/viewed', async (req, res) => {
     try {
         const exploreItem = await Explore.findById(req.params.id);
         const viewer_ip = req.body.viewer_id;
-        console.log('viewer_ip', viewer_ip)
         if (viewer_ip.length > 0) {
             exploreItem.views.indexOf(viewer_ip) === -1 ?
                 exploreItem.views.push(viewer_ip)
@@ -446,12 +442,10 @@ router.put('/:id/dislike', async (req, res) => {
 // @access      Public
 router.put('/:id/award', async (req, res) => {
     try {
-        console.log('test 1', req.body)
         const user = await User.findById(req.body.userID);
         const explore = await Explore.findById(req.params.id);
         const checkAward = explore.awards.find(award => award.icon == req.body.icon);
         if (checkAward) {
-            console.log('test', checkAward)
             explore.awards.find(award => award._id == req.body._id).count = explore.awards.find(award => award._id == req.body._id).count + 1;
             explore.save();
             res.send(explore);
@@ -485,7 +479,6 @@ router.post('/:id/comments/new', async (req, res) => {
     try {
         const explore = await Explore.findById(req.params.id);
         const user = await User.findById(explore.author.id);
-        console.log('body', req.body);
         if (!req.body.user) {
             return res.status(401).json({ msg: 'User not authorized!' })
         }
@@ -509,7 +502,6 @@ router.post('/:id/comments/new', async (req, res) => {
                 explore.comment_count = explore.comments.length;
                 user.save();
                 explore.save();
-                console.log('comment', comment);
                 res.json(comment);
             }
         });
@@ -584,7 +576,6 @@ router.put('/:id/comments/:comment_id', async (req, res) => {
                 } else {
                     const index = explore.comments.findIndex(comment => comment === editComment);
                     explore.comments[index] = comment;
-                    console.log('edited comment', comment, index, explore.comments);
                     explore.save();
                 }
             }
@@ -640,7 +631,6 @@ router.put('/:id/comments/:comment_id/like', async (req, res) => {
             if (err) {
                 res.status(500).send('Failed to like!');
             } else {
-                console.log('EXPLORE COMMENT', explore.comments.find(comment => { return comment._id.equals(likedComment._id) }))
                 explore.comments.find(comment => { return comment._id.equals(likedComment._id) }).likes.push(req.body.user.id);
                 explore.save();
                 res.send(likedComment);

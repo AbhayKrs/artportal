@@ -76,7 +76,6 @@ router.get('/', async (req, res) => {
 router.get("/tags", async (req, res) => {
     try {
         const common = await Common.find({});
-        console.log('common', common[0].tags);
         res.json(common[0].tags);
     } catch (err) {
         return res.status(404).json({ msg: err.name });
@@ -89,7 +88,6 @@ router.get("/tags", async (req, res) => {
 router.get("/commonImages", async (req, res) => {
     try {
         const common = await Common.find({});
-        console.log('loginImage', common[0].images);
         res.json(common[0].images);
     } catch (err) {
         return res.status(404).json({ msg: err.name });
@@ -193,7 +191,6 @@ router.post('/assets/new',
         // common.save();
 
         //Add locations
-        // console.log('body', req.body)
         // const common = await Common.findOne();
         // common.locations = req.body;
         // common.save();
@@ -313,7 +310,6 @@ router.get('/googleAuth/callback', passport.authenticate('google', {
     session: false
 }), async (req, res) => {
     const authenticatedUser = await User.findOne({ google_id: req.user.id });
-    console.log('authenticatedUser', authenticatedUser);
     let comment_count = 0;
     const comment_countList = authenticatedUser.explore.length > 0 && authenticatedUser.explore.map(item => item.comment_count);
     for (let i = 0; i < comment_countList.length; i++)
@@ -356,7 +352,6 @@ router.get('/facebookAuth/callback', passport.authenticate('facebook', {
     session: false
 }), async (req, res) => {
     const authenticatedUser = await User.findOne({ id: req.user.id });
-    console.log('authenticatedUser', authenticatedUser);
     let comment_count = 0;
     const comment_countList = authenticatedUser.explore.length > 0 && authenticatedUser.explore.map(item => item.comment_count);
     for (let i = 0; i < comment_countList.length; i++)
@@ -590,7 +585,6 @@ router.delete('/:user_id/bookmark/:bookmark_id', async (req, res) => {
     try {
         const user = await User.findById(req.params.user_id);
         const bookmark_toDelete = await user.bookmarked.find(bookmark => bookmark._id == req.params.bookmark_id);
-        console.log('delete', user, bookmark_toDelete);
         if (!bookmark_toDelete) {
             return res.status(400).send({ msg: 'Bookmark does not exist!' });
         }
@@ -652,7 +646,6 @@ router.get('/:id/cart', async (req, res) => {
 router.post('/:id/cart/add', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
-        console.log('body', req.body);
         if (!user) {
             return res.status(401).json({ msg: 'User not authorized!' })
         }
@@ -699,7 +692,6 @@ router.put('/:id/cart/:cart_id', async (req, res) => {
         // if (explore.author.id !== editComment.author.id) {
         //     return res.status(401).json({ msg: 'User not authorized!' });
         // }
-        console.log('edit cart item', req.body);
         const newData = { quantity: req.body.quantity, subtotal: req.body.subtotal }
         await Cart.findByIdAndUpdate(
             req.params.cart_id,
@@ -750,7 +742,6 @@ router.get("/logout", (req, res, next) => {
     try {
         const { signedCookies = {} } = req;
         const { refreshToken } = signedCookies;
-        console.log('logout refreshToken', req.user);
         User.findById(req.user._id).then(
             (user) => {
                 const tokenIndex = user.refreshToken.findIndex(
@@ -785,7 +776,6 @@ router.post('/:id/avatar', async (req, res) => {
         const user = await User.findById(req.params.id);
         const explore = await Explore.find({ "author.id": req.params.id });
 
-        console.log('tested', user, explore, req.body)
         explore.map(item => {
             item.author.avatar = { ...req.body };
             item.save();

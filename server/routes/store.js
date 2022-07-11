@@ -85,7 +85,6 @@ router.post('/new', upload.any(), async (req, res) => {
         rating: req.body.rating,
         category: req.body.category
     });
-    console.log('newStoreItem data', newStoreItem);
     Store.create(newStoreItem, (err, storeItem) => {
         if (err) {
             console.log(err);
@@ -124,7 +123,6 @@ router.put('/:id', function (req, res) {
         description: req.body.description,
         price: req.body.price
     };
-    console.log(newStoreItemDetails);
     Store.findByIdAndUpdate(
         req.params.id,
         { $set: newData },

@@ -69,7 +69,7 @@ const ArtystRoutes = (props) => {
                 <Route path='/' element={<Home />} />
                 <Route path='/google_success' element={<Google header="Success" />} />
                 <Route path='/google_failed' element={<Google header="Failed" />} />
-                <Route path='/explore' element={<Explore />} />
+                <Route path='/explore' element={<Explore />} ></Route>
                 <Route path='/explore/search' element={<ExploreSearch />} />
                 <Route path='/explore/:id' element={<Show.ExploreShow />} />
                 <Route path='/explore/new' element={<Upload.ExploreUpload />} />

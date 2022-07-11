@@ -16,7 +16,6 @@ passport.use(
         //Check user table for anyone with the Google ID
         User.findOne({ email: profile.email }, (err, user) => {
             if (!user) {
-                console.log('test no existing user', user)
                 const newUser = new User({
                     google_id: profile.id,
                     google_authenticated: true,
@@ -39,7 +38,6 @@ passport.use(
                     })
                 })
             } else {
-                console.log('test existing user', user)
                 if (user.google_authenticated === false) {
                     user.google_id = profile.id;
                     user.google_authenticated = true;
