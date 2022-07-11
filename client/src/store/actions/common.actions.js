@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { viewerIP, loginAPI, googleLoginAPI, signUpAPI, tagsAPI, commonImagesAPI, userDetailsAPI, userExploreListAPI, userStoreListAPI, userCartListAPI, addUserCartAPI, updateUserCartAPI, deleteStoreItemAPI, awardListAPI, deleteBookmarkAPI, avatarListAPI, deleteCartItemAPI, editAvatarAPI } from '../../api';
+import { viewerIP, loginAPI, googleLoginAPI, signUpAPI, tagsAPI, commonImagesAPI, userDetailsAPI, userExploreListAPI, userStoreListAPI, userCartListAPI, addUserCartAPI, updateUserCartAPI, deleteStoreItemAPI, awardListAPI, deleteBookmarkAPI, avatarListAPI, deleteCartItemAPI, editAvatarAPI, locationsListAPI } from '../../api';
 import {
     initialState,
     SWITCH_THEME,
@@ -25,6 +25,7 @@ import {
     FETCH_COMMON_IMAGES,
     FETCH_AVATARLIST,
     FETCH_AWARDLIST,
+    FETCH_LOCATIONS,
     RESET_BOOKMARK_LIST,
     SET_AUTH_ERROR
 } from '../reducers/common.reducers';
@@ -372,6 +373,14 @@ export const fetchAwards = () => async (dispatch, getState) => {
     });
 }
 
+export const fetchLocations = () => async (dispatch, getState) => {
+    console.log('fetchLocations invoked');
+    await locationsListAPI().then(res => {
+        dispatch({ type: FETCH_LOCATIONS, payload: res.data });
+    }).catch(err => {
+        console.log('---error fetchLocations', err);
+    })
+}
 
 export const handleUploadAsset = (assetData) => async (dispatch, getState) => {
     console.log('handleUploadAsset invoked', assetData);

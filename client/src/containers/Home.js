@@ -12,7 +12,6 @@ import { HorizontalCard } from '../components/Card';
 import Masonry from '../components/Masonry';
 
 const Home = (props) => {
-    let defaultTransform = 0;
     let navigate = useNavigate();
 
     useEffect(() => {

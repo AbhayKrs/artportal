@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import setAuthToken from './utils/setAuthToken';
@@ -17,6 +17,7 @@ import Store from './containers/Store';
 import StoreAll from './containers/StoreAll';
 import Profile from './containers/Profile';
 import Google from './containers/splash/Google';
+import Settings from './containers/Settings';
 
 // import ExploreUpload from './components/ExploreUpload';
 import Loader from './components/Loader';
@@ -30,6 +31,12 @@ import Snackbar from './components/Snackbar';
 // import StoreUpload from './components/Store/StoreUpload';
 // import Upload from './components/Explore/Upload';
 // import Privacy from './components/Help/Privacy';
+
+import Settings_Gnr from './containers/children/Settings_Gnr';
+import Settings_Acc from './containers/children/Settings_Acc';
+import Settings_Ntf from './containers/children/Settings_Ntf';
+import Settings_Cmt from './containers/children/Settings_Cmt';
+import Settings_Bill from './containers/children/Settings_Bill';
 
 const ArtystRoutes = (props) => {
     useEffect(async () => {
@@ -71,6 +78,14 @@ const ArtystRoutes = (props) => {
                 <Route path='/store/all' element={<StoreAll />} />
                 <Route path='/store/new' element={<Upload.StoreUpload />} />
                 <Route path='/users/:id' element={<Profile />} />
+                <Route path='/settings' element={<Settings />} >
+                    <Route index element={<Navigate to='general' />} />
+                    <Route path='general' element={<Settings_Gnr />} />
+                    <Route path='account' element={<Settings_Acc />} />
+                    <Route path='notifications' element={<Settings_Ntf />} />
+                    <Route path='community' element={<Settings_Cmt />} />
+                    <Route path='billing' element={<Settings_Bill />} />
+                </Route>
                 {/* <Route path='/about' exact component={About} />
                 <Route path='/dashboard' exact component={Dashboard} />
                 <Route path='/notification' exact component={Notification} />

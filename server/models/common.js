@@ -15,6 +15,11 @@ const commonSchema = new mongoose.Schema(
         avatars: [{
             icon: { type: String, default: '' },
             category: { type: String, default: '' }
+        }],
+        locations: [{
+            country: { type: String },
+            country_code: { type: String },
+            timezones: [{ type: String }]
         }]
     }
 );

@@ -108,6 +108,9 @@ router.get('/avatars', async (req, res) => {
     }
 });
 
+// @desc    Get all awards
+// @route   GET /api/users/awards/
+// @access  Public
 router.get('/awards', async (req, res) => {
     try {
         const common = await Common.findOne();
@@ -116,6 +119,18 @@ router.get('/awards', async (req, res) => {
         return res.status(404).json({ msg: err.name });
     }
 });
+
+// @desc    Get locations
+// @route   GET /api/users/locations/
+// @access  Public
+router.get('/locations', async (req, res) => {
+    try {
+        const common = await Common.findOne();
+        res.json(common.locations);
+    } catch (err) {
+        return res.status(404).json({ msg: err.name });
+    }
+})
 
 // @route   Image Route
 // @desc    Image from gridFS storage - /api/users/image/:filename
@@ -151,30 +166,38 @@ router.get('/image/:filename', (req, res) => {
 // @desc    Get all tags
 // @route   GET /api/users/assets/new
 // @access  Public
-router.post('/assets/new', asset.single('file'), async (req, res) => {
-    //Add awards
-    // const common = await Common.findOne();
-    // const asset = {
-    //     icon: req.file.filename,
-    //     title: ''
-    // }
-    // common.awards.push(asset);
-    // common.save();
+router.post('/assets/new',
+    // asset.single('file'),
+    async (req, res) => {
+        //Add awards
+        // const common = await Common.findOne();
+        // const asset = {
+        //     icon: req.file.filename,
+        //     title: ''
+        // }
+        // common.awards.push(asset);
+        // common.save();
 
-    //Add avatars
-    // const common = await Common.findOne();
-    // const asset = {
-    //     icon: req.file.filename,
-    //     category: 'Female'
-    // }
-    // common.avatars.push(asset);
-    // common.save();
+        //Add avatars
+        // const common = await Common.findOne();
+        // const asset = {
+        //     icon: req.file.filename,
+        //     category: 'Female'
+        // }
+        // common.avatars.push(asset);
+        // common.save();
 
-    //Add login and signup image
-    // const common = await Common.findOne();
-    // common.images.signup = req.file.filename;
-    // common.save();
-});
+        //Add login and signup image
+        // const common = await Common.findOne();
+        // common.images.signup = req.file.filename;
+        // common.save();
+
+        //Add locations
+        // console.log('body', req.body)
+        // const common = await Common.findOne();
+        // common.locations = req.body;
+        // common.save();
+    });
 
 // //@desc         Auth user and get token
 // //@route        POST /api/users/login
@@ -208,6 +231,7 @@ router.post("/login", async (req, res) => {
                         username: user.username,
                         email: user.email,
                         avatar: user.avatar,
+                        joinDate: user.date,
                         tokens: user.tokens,
                         followers: user.followers,
                         followers_count: user.followers_count,
@@ -232,7 +256,6 @@ router.post("/login", async (req, res) => {
         return res.status(404).json({ msg: err.name });
     }
 });
-
 
 //@desc         Register a new user 
 //@route        POST /api/users/register
@@ -301,6 +324,7 @@ router.get('/googleAuth/callback', passport.authenticate('google', {
         username: authenticatedUser.username,
         email: authenticatedUser.email,
         avatar: authenticatedUser.avatar,
+        joinDate: authenticatedUser.date,
         tokens: authenticatedUser.tokens,
         followers: authenticatedUser.followers,
         followers_count: authenticatedUser.followers_count,
@@ -328,47 +352,6 @@ router.get('/facebookAuth', passport.authenticate('facebook', {
 // @route   GET /api/users/googleAuth/success
 // @access  Private
 router.get('/facebookAuth/callback', passport.authenticate('facebook', {
-    failureRedirect: 'http://localhost:3000/google_failed',
-    session: false
-}), async (req, res) => {
-    const authenticatedUser = await User.findOne({ id: req.user.id });
-    console.log('authenticatedUser', authenticatedUser);
-    let comment_count = 0;
-    const comment_countList = authenticatedUser.explore.length > 0 && authenticatedUser.explore.map(item => item.comment_count);
-    for (let i = 0; i < comment_countList.length; i++)
-        comment_count += comment_countList[i];
-    const payload = {
-        id: authenticatedUser.id,
-        name: authenticatedUser.name,
-        username: authenticatedUser.username,
-        email: authenticatedUser.email,
-        avatar: authenticatedUser.avatar,
-        tokens: authenticatedUser.tokens,
-        followers: authenticatedUser.followers,
-        followers_count: authenticatedUser.followers_count,
-        explore_count: authenticatedUser.explore_count,
-        comment_count
-    };
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 31556926 },
-        (err, token) => {
-            let googleToken = "Bearer " + token
-            res.redirect('http://localhost:3000/google_success?auth=' + googleToken)
-        }
-    );
-})
-
-// @desc    Login via Google
-// @route   GET /api/users/googleAuth
-// @access  Private
-router.get('/googleAuth', passport.authenticate('google', {
-    scope: ['email', 'profile'],
-    prompt: 'select_account'
-}));
-
-// @desc    Login via Google
-// @route   GET /api/users/googleAuth/success
-// @access  Private
-router.get('/googleAuth/callback', passport.authenticate('google', {
     failureRedirect: 'http://localhost:3000/google_failed',
     session: false
 }), async (req, res) => {
@@ -468,6 +451,7 @@ router.get('/:id', async (req, res) => {
             username: user.username,
             email: user.email,
             avatar: user.avatar,
+            joinDate: user.date,
             tokens: user.tokens,
             bookmarked: user.bookmarked,
             followers: user.followers,

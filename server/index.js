@@ -45,11 +45,6 @@ app.use('/api/users', users);
 app.use('/api/store', store);
 app.use('/api/articles', articles);
 
-// app.get('/', (req, res) => {
-//     res.send('Server is running...');
-// });
-
-
 if (process.env.NODE_ENV === 'production') {
     const __dirname = path.resolve();
     app.use(express.static(path.join(__dirname, '/client/build')));

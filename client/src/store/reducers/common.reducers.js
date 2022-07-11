@@ -26,6 +26,7 @@ export const HANDLE_SIGNOUT = 'HANDLE_SIGNOUT';
 export const FETCH_COMMON_IMAGES = 'FETCH_COMMON_IMAGES';
 export const FETCH_AVATARLIST = 'FETCH_AVATARLIST';
 export const FETCH_AWARDLIST = 'FETCH_AWARDLIST';
+export const FETCH_LOCATIONS = 'FETCH_LOCATIONS';
 export const RESET_BOOKMARK_LIST = 'RESET_BOOKMARK_LIST';
 
 export const initialState = {
@@ -61,6 +62,7 @@ export const initialState = {
             icon: '',
             category: ''
         },
+        joinDate: '',
         tokens: 0,
         followers: [],
         bookmarked: [],
@@ -102,7 +104,8 @@ export const initialState = {
     cartTotal: 0,
     cartList: [],
     avatarList: [],
-    awardList: []
+    awardList: [],
+    locationList: []
 }
 
 const openDialog = (value) => {
@@ -171,6 +174,10 @@ export const commonReducer = (state = initialState, { type, payload }) => {
             console.log('FETCH_AWARDLIST', payload);
             const awardList = [...payload];
             return { ...state, awardList }
+        }
+        case FETCH_LOCATIONS: {
+            const locationList = [...payload];
+            return { ...state, locationList }
         }
         // case PUSH_TO_CART: {
         //     return { ...state, cartList: [...state.cartList, payload] }

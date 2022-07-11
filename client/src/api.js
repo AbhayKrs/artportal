@@ -32,6 +32,7 @@ export const commonImagesAPI = () => get_api.get(`/users/commonImages`);
 export const userDetailsAPI = userID => get_api.get(`/users/${userID}`);
 export const avatarListAPI = () => get_api.get(`/users/avatars`);
 export const awardListAPI = () => get_api.get(`/users/awards`);
+export const locationsListAPI = () => get_api.get(`/users/locations`);
 
 //POST Request API's
 export const loginAPI = userData => post_api.post(`/users/login`, userData);
