@@ -376,60 +376,6 @@ router.get('/facebookAuth/callback', passport.authenticate('facebook', {
     );
 })
 
-// @desc    Get user profile
-// @route   GET /api/users/profile
-// @access  Private
-router.get('/profile', async (req, res) => {
-    try {
-        const user = await User.findById(req.user._id);
-        res.json({
-            _id: user._id,
-            name: user.name,
-            username: user.username,
-            email: user.email,
-            avatar: user.avatar,
-            isAdmin: user.isAdmin,
-        });
-    } catch (err) {
-        return res.status(404).json({ msg: err.name });
-    }
-});
-
-// @desc    Update user profile
-// @route   PUT /api/users/profile
-// @access  Private
-router.put('/profile', async (req, res) => {
-    try {
-        const user = await User.findById(req.user._id);
-        if (user) {
-            user.name = req.body.name || user.name;
-            user.username = req.body.username || user.username;
-            user.email = req.body.email || user.email;
-            user.avatar = req.body.avatar || user.avatar;
-            if (req.body.password) {
-                user.password = req.body.password;
-            }
-
-            const updatedUser = await user.save();
-
-            res.json({
-                _id: updatedUser._id,
-                name: updatedUser.name,
-                username: updatedUser.username,
-                email: updatedUser.email,
-                avatar: updatedUser.avatar,
-                isAdmin: updatedUser.isAdmin,
-                token: generateToken(updatedUser._id),
-            });
-        } else {
-            res.status(404);
-            throw new Error('User not found');
-        }
-    } catch (err) {
-        return res.status(404).json({ msg: err.name });
-    }
-});
-
 // @desc    Get user by ID
 // @route   GET /api/users/:id
 // @access  Private/Admin
@@ -581,9 +527,9 @@ router.post('/:id/bookmark', async (req, res) => {
 // @route       POST api/users/:id/bookmark/:bookmark_id
 // @desc        Bookmark an explore
 // @access      Private
-router.delete('/:user_id/bookmark/:bookmark_id', async (req, res) => {
+router.delete('/:id/bookmark/:bookmark_id', async (req, res) => {
     try {
-        const user = await User.findById(req.params.user_id);
+        const user = await User.findById(req.params.id);
         const bookmark_toDelete = await user.bookmarked.find(bookmark => bookmark._id == req.params.bookmark_id);
         if (!bookmark_toDelete) {
             return res.status(400).send({ msg: 'Bookmark does not exist!' });

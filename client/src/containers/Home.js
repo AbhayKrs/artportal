@@ -9,7 +9,6 @@ import { MultipleCarousel, HomeMultiCarousel, HomeSingleCarousel } from '../comp
 
 import HomeWallpaper from '../assets/images/homeWallpaper.jpg'
 import { HorizontalCard } from '../components/Card';
-import Masonry from '../components/Masonry';
 
 const Home = (props) => {
     let navigate = useNavigate();

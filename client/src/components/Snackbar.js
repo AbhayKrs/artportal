@@ -7,7 +7,7 @@ const Snackbar = (props) => {
         if (props.error.type.length > 0) {
             setTimeout(() => {
                 closeSnack();
-            }, 500000)
+            }, 5000)
         }
     })
 

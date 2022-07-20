@@ -36,7 +36,7 @@ const Profile = (props) => {
     }
 
     const openAvatarModal = () => {
-        if (props.common.authenticated)
+        if (props.common.isAuthenticated)
             setAvatarModal(true)
         else {
             const error = {
@@ -266,8 +266,7 @@ const Profile = (props) => {
                 avatarList={props.common.avatarList}
                 handleEditUserAvatar={props.handleEditUserAvatar}
                 onClose={() => setAvatarModal(false)}
-            />
-            }
+            />}
         </div >
     )
 }

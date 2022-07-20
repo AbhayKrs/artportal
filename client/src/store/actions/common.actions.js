@@ -171,6 +171,12 @@ export const handleGoogleAuth = () => async (dispatch, getState) => {
 export const refreshUserDetails = (userID) => async (dispatch, getState) => {
     await userDetailsAPI(userID).then(res => {
         const { token } = res.data;
+        if (sessionStorage.jwtToken) {
+            sessionStorage.setItem('jwtToken', token)
+        } else if (localStorage.jwtToken) {
+            localStorage.setItem('jwtToken', token)
+        }
+        setAuthToken(token);
         const userData = jwt_decode(token);
         dispatch({ type: REFRESH_USER_DETAILS, payload: userData });
     }).catch(err => {

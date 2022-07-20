@@ -9,6 +9,8 @@ import {
     initialState
 } from '../reducers/explore.reducers';
 
+import { refreshUserDetails } from './common.actions';
+
 const dynamicSort = (property) => {
     return (a, b) => {
         var result = (a[property].toLowerCase() < b[property].toLowerCase()) ? -1 : (a[property].toLowerCase() > b[property].toLowerCase()) ? 1 : 0;
@@ -67,15 +69,11 @@ export const handleExploreUpload = (exploreData) => async (dispatch, getState) =
 
 export const bookmarkExploreItem = (userID, bookmarkData) => async (dispatch, getState) => {
     await bookmarkExploreAPI(userID, bookmarkData).then(res => {
-        // if (sessionStorage.jwtToken) {
-        //     const token = sessionStorage.jwtToken;
-        //     setAuthToken(token);
-        //     dispatch(handleVerifyUser(token));
-        // } else if (localStorage.jwtToken) {
-        //     const token = localStorage.jwtToken;
-        //     setAuthToken(token);
-        //     dispatch(handleVerifyUser(token));
-        // }
+        if (sessionStorage.jwtToken) {
+            dispatch(refreshUserDetails(userID));
+        } else if (localStorage.jwtToken) {
+            dispatch(refreshUserDetails(userID));
+        }
         console.log('success bookmarkExploreItem', res.data);
     }).catch(err => {
         console.log('---error bookmarkExploreItem', err);
