@@ -69,7 +69,7 @@ const ExploreShow = (props) => {
     const submitComment = async (event) => {
         event.preventDefault();
         await props.handleAddComment(comment, id);
-        props.fetchExploreItem(id);
+        setTimeout(() => props.fetchExploreItem(id), 2000)
         setComment('');
     }
 
