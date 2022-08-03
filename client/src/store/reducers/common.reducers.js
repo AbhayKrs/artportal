@@ -1,5 +1,5 @@
 export const SWITCH_THEME = 'SWITCH_THEME';
-export const SET_ERROR = 'SET_ERROR';
+export const SET_SNACKMSG = 'SET_SNACKMSG';
 export const SET_AUTH_ERROR = 'SET_AUTH_ERROR';
 export const SET_LOADER = 'SET_LOADER';
 export const GET_TAGS = 'GET_TAGS';
@@ -31,7 +31,7 @@ export const RESET_BOOKMARK_LIST = 'RESET_BOOKMARK_LIST';
 export const initialState = {
     theme: 'dark',
     loader: false,
-    error: {
+    snackmsg: {
         open: false,
         message: '',
         type: ''
@@ -61,6 +61,7 @@ export const initialState = {
             icon: '',
             category: ''
         },
+        bio: '',
         joinDate: '',
         tokens: 0,
         followers: [],
@@ -85,6 +86,7 @@ export const initialState = {
             icon: '',
             category: ''
         },
+        bio: '',
         followers: [],
         bookmarked: [],
         followers_count: 0,
@@ -136,8 +138,8 @@ export const commonReducer = (state = initialState, { type, payload }) => {
         case SET_LOADER: {
             return { ...state, loader: payload }
         }
-        case SET_ERROR: {
-            return { ...state, error: payload };
+        case SET_SNACKMSG: {
+            return { ...state, snackmsg: payload };
         }
         case SET_AUTH_ERROR: {
             return { ...state, authError: payload };

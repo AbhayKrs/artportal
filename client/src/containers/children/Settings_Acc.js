@@ -3,45 +3,57 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { AiOutlineLink } from 'react-icons/ai';
 import { FaEdit, FaRegUserCircle } from 'react-icons/fa';
-import { MdAlternateEmail } from 'react-icons/md';
+import { MdAlternateEmail, MdEditOff, MdDownloadDone } from 'react-icons/md';
 import { FcGoogle } from 'react-icons/fc';
+import { MdAddAPhoto, MdClose } from 'react-icons/md';
 
-import { setError, loadProfileDetails } from '../../store/actions/common.actions';
+import { setSnackMessage, fetchAvatars, loadProfileDetails, updateUserProfile, refreshUserDetails } from '../../store/actions/common.actions';
 import { fetchExploreImages, fetchUserImages } from '../../api';
-import { AvatarModal } from '../../components/Modal';
-
+import { AvatarModal, ConfirmModal } from '../../components/Modal';
 
 export const Settings_Acc = (props) => {
-    const [username, setUsername] = useState('');
-    const [profileName, setProfileName] = useState('');
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
+    const [bio, setBio] = useState('');
     const [avatarModal, setAvatarModal] = useState(false);
+    const [confirmModal, setConfirmModal] = useState(false);
+
+    const [editStatus, setEditStatus] = useState(false);
 
     useEffect(() => {
         if (!props.common.user.id) {
         } else {
+            props.fetchAvatars();
             props.loadProfileDetails(props.common.user.id);
             setUsername(props.user.username);
-            setProfileName(props.user.name);
+            setName(props.user.name);
             setEmail(props.user.email)
+            setBio(props.user.bio)
         }
     }, [props.common.user])
-
-    const handleUsernameChange = (val) => {
-        console.log(val);
-    }
 
     const openAvatarModal = () => {
         if (props.common.isAuthenticated)
             setAvatarModal(true)
         else {
-            const error = {
+            const msgData = {
                 open: true,
                 message: 'User not logged in. Please Sign In/Sign Up to perform the action.',
                 type: 'error'
             }
-            props.setError(error);
+            props.setSnackMessage(msgData);
         }
+    }
+
+    const updateUserData = () => {
+        let userData;
+        userData = { name: name, username: username, bio: bio }
+        props.updateUserProfile(props.user.id, userData);
+        setEditStatus(false);
+        setTimeout(() => {
+            props.refreshUserDetails(props.user.id);
+        }, 2000);
     }
 
     return (
@@ -49,33 +61,39 @@ export const Settings_Acc = (props) => {
             <h1 className='text-4xl font-antipasto tracking-wider font-bold dark:text-purple-500'>Account Settings</h1>
             <h3 className='text-lg font-josefinlight tracking-wide font-bold dark:text-gray-400'>Update your personal account details here.</h3>
             <div className='grid grid-cols-3 gap-4 p-3'>
-                <div className='col-span-2 flex flex-col rounded gap-4 py-4 px-6 bg-neutral-800/75'>
+                <div className='relative col-span-2 flex flex-col rounded gap-4 py-4 px-6 bg-neutral-800/75'>
+                    {!editStatus ?
+                        <FaEdit onClick={() => setEditStatus(true)} className='absolute top-0 right-0 m-2 h-6 w-6 text-rose-400 cursor-pointer' />
+                        :
+                        <div className='absolute top-0 right-0 flex m-2 space-x-1'>
+                            <MdEditOff onClick={() => setEditStatus(false)} className='h-6 w-6 text-rose-400 cursor-pointer' />
+                            <MdDownloadDone onClick={() => setConfirmModal(true)} className='h-7 w-7 text-green-400 cursor-pointer' />
+                        </div>
+                    }
                     <div className='grid grid-cols-4'>
                         <div className='flex items-center'>
-                            <div className='flex gap-2'>
+                            <div className='flex gap-2 relative'>
                                 {props.user.avatar ? <img loading='lazy' className='w-28' src={fetchUserImages(props.user.avatar.icon)} /> : null}
-                                <FaEdit onClick={() => openAvatarModal()} className='h-5 w-5 text-rose-400 cursor-pointer' />
+                                {editStatus && <MdAddAPhoto onClick={() => openAvatarModal()} className='absolute bottom-0 right-0 h-6 w-6 cursor-pointer text-gray-200' />}
                             </div>
                         </div>
                         <div className='col-span-3 flex flex-col'>
                             <div className=''>
                                 <div className='flex gap-2'>
                                     <h2 className='text-lg font-josefinlight font-semibold dark:text-gray-300'>Full name</h2>
-                                    <FaEdit className='h-5 w-5 text-rose-400 cursor-pointer' />
                                 </div>
                                 <div className='flex relative items-center gap-2'>
                                     <FaRegUserCircle className='absolute h-5 w-5 text-gray-400 ml-2' />
-                                    <input disabled={true} type="text" name="search" value={profileName} onChange={(ev) => handleUsernameChange(ev.target.value)} className="placeholder-gray-600 w-full dark:placeholder-gray-300 text-black dark:text-white bg-slate-300 dark:bg-neutral-700 h-10 pl-9 pr-16 rounded-lg text-sm focus:outline-none" />
+                                    <input disabled={!editStatus} type="text" name="search" value={name} onChange={(ev) => setName(ev.target.value)} className="placeholder-gray-600 w-full dark:placeholder-gray-300 text-black dark:text-white bg-slate-300 dark:bg-neutral-700 dark:disabled:bg-neutral-900 h-10 pl-9 pr-16 rounded-lg text-sm focus:outline-none" />
                                 </div>
                             </div>
                             <div className=''>
                                 <div className='flex gap-2'>
                                     <h2 className='text-lg font-josefinlight font-semibold dark:text-gray-300'>Username</h2>
-                                    <FaEdit className='h-5 w-5 text-rose-400 cursor-pointer' />
                                 </div>
                                 <div className='flex relative items-center gap-2'>
                                     <AiOutlineLink className='absolute h-5 w-5 text-gray-400 ml-2' />
-                                    <input disabled={true} type="text" name="search" value={username} onChange={(ev) => handleUsernameChange(ev.target.value)} className="placeholder-gray-600 w-full dark:placeholder-gray-300 text-black dark:text-white bg-slate-300 dark:bg-neutral-700 h-10 pl-9 pr-16 rounded-lg text-sm focus:outline-none" />
+                                    <input disabled={!editStatus} type="text" name="search" value={username} onChange={(ev) => setUsername(ev.target.value)} className="placeholder-gray-600 w-full dark:placeholder-gray-300 text-black dark:text-white bg-slate-300 dark:bg-neutral-700 dark:disabled:bg-neutral-900 h-10 pl-9 pr-16 rounded-lg text-sm focus:outline-none" />
                                 </div>
                             </div>
                         </div>
@@ -83,20 +101,18 @@ export const Settings_Acc = (props) => {
                     <div className=''>
                         <div className='flex gap-2'>
                             <h2 className='text-lg font-josefinlight font-semibold dark:text-gray-300'>Email address</h2>
-                            <FaEdit className='h-5 w-5 text-rose-400 cursor-pointer' />
                         </div>
                         <div className='flex relative items-center gap-2'>
                             <MdAlternateEmail className='absolute h-5 w-5 text-gray-400 ml-2' />
-                            <input disabled={true} type="text" name="search" value={email} onChange={(ev) => handleUsernameChange(ev.target.value)} className="placeholder-gray-600 w-full dark:placeholder-gray-300 text-black dark:text-white bg-slate-300 dark:bg-neutral-700 h-10 pl-9 pr-16 rounded-lg text-sm focus:outline-none" />
+                            <input disabled type="text" name="search" value={email} onChange={(ev) => setEmail(ev.target.value)} className="placeholder-gray-600 w-full dark:placeholder-gray-300 text-black dark:text-white bg-slate-300 dark:bg-neutral-700 dark:disabled:bg-neutral-900 h-10 pl-9 pr-16 rounded-lg text-sm focus:outline-none" />
                         </div>
                     </div>
                     <div className=''>
                         <div className='flex gap-2'>
                             <h2 className='text-lg font-josefinlight font-semibold dark:text-gray-300'>Profile bio</h2>
-                            <FaEdit className='h-5 w-5 text-rose-400 cursor-pointer' />
                         </div>
                         <div className='flex items-center gap-2'>
-                            <textarea rows='4' disabled={true} value={email} onChange={(ev) => handleUsernameChange(ev.target.value)} className="placeholder-gray-600 w-full dark:placeholder-gray-300 text-black dark:text-white bg-slate-300 dark:bg-neutral-700 p-3 pr-16 rounded-lg text-sm focus:outline-none" />
+                            <textarea rows='4' disabled={!editStatus} value={bio} placeholder="Enter a brief description about yourself and what your art signifies." onChange={(ev) => setBio(ev.target.value)} className="placeholder-gray-600 w-full dark:placeholder-gray-400 text-black dark:text-white bg-slate-300 dark:bg-neutral-700 dark:disabled:bg-neutral-900 p-3 pr-16 rounded-lg text-sm focus:outline-none" />
                         </div>
                     </div>
                 </div>
@@ -140,6 +156,12 @@ export const Settings_Acc = (props) => {
                 handleEditUserAvatar={props.handleEditUserAvatar}
                 onClose={() => setAvatarModal(false)}
             />}
+            {confirmModal && <ConfirmModal
+                open={confirmModal}
+                title='Do you confirm to edit your user details?'
+                onClose={() => setConfirmModal(false)}
+                onConfirm={() => updateUserData()}
+            />}
         </div >
     )
 }
@@ -150,8 +172,11 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-    setError,
-    loadProfileDetails
+    setSnackMessage,
+    fetchAvatars,
+    loadProfileDetails,
+    updateUserProfile,
+    refreshUserDetails
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Settings_Acc)

@@ -332,21 +332,30 @@ router.put('/:id', function (req, res) {
 // @access      Private/Admin
 router.delete('/:id', async (req, res) => {
     try {
-        const users = await User.find({});
-        const explore = await Explore.findById(req.params.id);
-        const user = await User.findById(explore.author.id);
-        if (!explore) {
-            return res.status(404).send('Explore not found');
-        }
-        user.explore = [...user.explore.filter(item => item._id != req.params.id)];
-        user.explore_count = user.explore_count - 1;
-        await user.save();
-        // users.map(async user => {
-        //     user.bookmarked.filter(item => item._id !== req.params.id);
-        //     await user.save();
-        // })
-        await explore.remove();
-        res.send('Explore removed successfully');
+        gfs.remove({ _id: req.params.id, root: 'explore_uploads' }, async (err, files) => {
+            if (err) {
+                return res.status(404).json({ err: err })
+            } else {
+                const users = await User.find({});
+                const explore = await Explore.findById(req.params.id);
+                const user = await User.findById(explore.author.id);
+                if (!explore) {
+                    return res.status(404).send('Explore not found');
+                }
+                user.explore = [...user.explore.filter(item => item._id != req.params.id)];
+                user.explore_count = user.explore_count - 1;
+                await user.save();
+                users.map(user => {
+                    if (user.bookmarked.some(item => item._id === req.params.id)) {
+                        user.bookmarked = [...user.bookmarked.filter(item => item._id != req.params.id)];
+                        console.log('test', user.bookmarked)
+                        user.save();
+                    }
+                })
+                await explore.remove();
+                res.send('Explore removed successfully');
+            }
+        })
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Explore removal failed');

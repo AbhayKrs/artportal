@@ -228,6 +228,7 @@ router.post("/login", async (req, res) => {
                         username: user.username,
                         email: user.email,
                         avatar: user.avatar,
+                        bio: user.bio,
                         joinDate: user.date,
                         tokens: user.tokens,
                         followers: user.followers,
@@ -319,6 +320,7 @@ router.get('/googleAuth/callback', passport.authenticate('google', {
         name: authenticatedUser.name,
         username: authenticatedUser.username,
         email: authenticatedUser.email,
+        bio: authenticatedUser.bio,
         avatar: authenticatedUser.avatar,
         joinDate: authenticatedUser.date,
         tokens: authenticatedUser.tokens,
@@ -361,6 +363,7 @@ router.get('/facebookAuth/callback', passport.authenticate('facebook', {
         name: authenticatedUser.name,
         username: authenticatedUser.username,
         email: authenticatedUser.email,
+        bio: authenticatedUser.bio,
         avatar: authenticatedUser.avatar,
         tokens: authenticatedUser.tokens,
         followers: authenticatedUser.followers,
@@ -391,6 +394,7 @@ router.get('/:id', async (req, res) => {
             name: user.name,
             username: user.username,
             email: user.email,
+            bio: user.bio,
             avatar: user.avatar,
             joinDate: user.date,
             tokens: user.tokens,
@@ -418,46 +422,21 @@ router.get('/:id', async (req, res) => {
 // @access  Private/Admin
 router.put('/:id', async (req, res) => {
     try {
-        User.updateOne({ _id: req.params.id }, {
-            seller_rating: 0,
-            ysr: 0,
-            store: [],
-            store_count: 0
-        }, { multi: true }, function (err, raw) {
+        console.log('req.body', req.body)
+        User.findByIdAndUpdate(req.params.id, {
+            name: req.body.name,
+            username: req.body.username,
+            bio: req.body.bio
+        }, function (err, data) {
             if (err) {
-                console.log(err);
+                console.log('error:', err);
             } else {
-                console.log(raw)
+                return res.json(data)
             }
         });
-        const user = User.findById(req.params.id);
-        res.json(user)
     } catch (err) {
         return res.status(404).json({ msg: err.name });
     }
-    // if (user) {
-    //     user.seller = true;
-    //     user.seller_rating = 0;
-    //     res.json(user);
-    //     // user.name = req.body.name || user.name;
-    //     // user.username = req.body.username || user.username;
-    //     // user.email = req.body.email || user.email;
-    //     // user.avatar = req.body.avatar || user.avatar;
-    //     // user.isAdmin = req.body.isAdmin;
-    //     // const updatedUser = await user.save();
-
-    //     // res.json({
-    //     //     _id: updatedUser._id,
-    //     //     name: updatedUser.name,
-    //     //     username: updatedUser.username,
-    //     //     email: updatedUser.email,
-    //     //     avatar: updatedUser.avatar,
-    //     //     isAdmin: updatedUser.isAdmin,
-    //     // });
-    // } else {
-    //     res.status(404);
-    //     throw new Error('User not found');
-    // }
 });
 
 // @desc    Delete user

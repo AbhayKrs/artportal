@@ -201,12 +201,12 @@ export const FilterPanel = (props) => {
         if (props.authenticated)
             navigate(`/explore/new `)
         else {
-            const error = {
+            const msg = {
                 open: true,
                 message: 'User not logged in. Please Sign In/Sign Up to perform the action.',
                 type: 'error'
             }
-            props.setError(error);
+            props.setSnackMessage(msg);
         }
     }
 

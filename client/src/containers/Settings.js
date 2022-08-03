@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import moment from 'moment';
 
 import { fetchExploreImages, fetchUserImages } from '../api';
-import { setError, setLoader } from '../store/actions/common.actions';
+import { setSnackMessage, setLoader } from '../store/actions/common.actions';
 import { MdSettings } from 'react-icons/md';
 
 export const Settings = (props) => {
@@ -68,7 +68,7 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
     setLoader,
-    setError
+    setSnackMessage
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Settings)

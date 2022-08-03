@@ -4,7 +4,7 @@ import { MdError } from 'react-icons/md';
 
 const Snackbar = (props) => {
     useEffect(() => {
-        if (props.error.type.length > 0) {
+        if (props.msgdata.type.length > 0) {
             setTimeout(() => {
                 closeSnack();
             }, 5000)
@@ -12,18 +12,18 @@ const Snackbar = (props) => {
     })
 
     const closeSnack = () => {
-        const error = {
+        const data = {
             open: false,
             message: '',
             type: ''
         }
-        props.setError(error);
+        props.setMessage(data);
     }
 
     const selectedAlert = (type) => {
         switch (type) {
             case 'error': return <div className="alert fixed z-50 bottom-3 left-3 bg-neutral-900 m-2 rounded border-b-2 border-red-500">
-                <div className='relative p-3 flex flex-row items-center '>
+                <div className='relative min-w-[250px] w-full p-3 flex flex-row items-center '>
                     <IoCloseSharp onClick={closeSnack} className='w-5 h-5 z-10 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                     <div className='relative flex flex-row items-center '>
                         <div className="alert-icon flex items-center bg-red-500 border-2 border-red-500 justify-center h-6 w-6 flex-shrink-0 rounded-full">
@@ -38,7 +38,7 @@ const Snackbar = (props) => {
                                 Error
                             </div>
                             <div className="alert-description text-xs text-gray-400">
-                                {props.error.message}
+                                {props.msgdata.message}
                             </div>
                         </div>
                     </div>
@@ -46,7 +46,7 @@ const Snackbar = (props) => {
             </div>;
 
             case 'success': return <div className="alert fixed z-50 bottom-3 left-3 bg-neutral-900 m-2 rounded border-b-2 border-green-500">
-                <div className='relative p-3 flex flex-row items-center '>
+                <div className='relative min-w-[250px] w-full p-3 flex flex-row items-center '>
                     <IoCloseSharp onClick={closeSnack} className='w-5 h-5 z-10 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                     <div className="alert-icon flex items-center bg-green-500 border-2 border-green-500 justify-center h-6 w-6 flex-shrink-0 rounded-full">
                         <span className="text-white">
@@ -60,14 +60,14 @@ const Snackbar = (props) => {
                             Success
                         </div>
                         <div className="alert-description text-xs text-gray-400">
-                            {props.error.message}
+                            {props.msgdata.message}
                         </div>
                     </div>
                 </div>
             </div>
 
             case 'warning': return <div className="alert fixed z-50 bottom-3 left-3 bg-neutral-900 m-2 rounded border-b-2 border-yellow-500">
-                <div className='relative p-3 flex flex-row items-center '>
+                <div className='relative min-w-[250px] w-full p-3 flex flex-row items-center '>
                     <IoCloseSharp onClick={closeSnack} className='w-5 h-5 z-10 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                     <div className="alert-icon flex items-center bg-yellow-500 border-2 border-yellow-500 justify-center h-6 w-6 flex-shrink-0 rounded-full">
                         <span className="text-white">
@@ -81,14 +81,14 @@ const Snackbar = (props) => {
                             Warning
                         </div>
                         <div className="alert-description text-xs text-gray-400">
-                            {props.error.message}
+                            {props.msgdata.message}
                         </div>
                     </div>
                 </div>
             </div>
 
             case 'info': return <div className="alert fixed z-50 bottom-3 left-3 bg-neutral-900 m-2 rounded border-b-2 border-blue-500">
-                <div className='relative p-3 flex flex-row items-center '>
+                <div className='relative min-w-[250px] w-full p-3 flex flex-row items-center '>
                     <IoCloseSharp onClick={closeSnack} className='w-5 h-5 z-10 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                     <div className="alert-icon flex items-center bg-blue-400 text-white border-2 border-blue-400 justify-center h-6 w-6 flex-shrink-0 rounded-full">
                         <span className="text-white">
@@ -102,7 +102,7 @@ const Snackbar = (props) => {
                             Info
                         </div>
                         <div className="alert-description text-xs text-gray-400">
-                            {props.error.message}
+                            {props.msgdata.message}
                         </div>
                     </div>
                 </div>
@@ -113,7 +113,7 @@ const Snackbar = (props) => {
     }
     return (
         <>
-            {props.error.open ? selectedAlert(props.error.type) : null}
+            {props.msgdata.open ? selectedAlert(props.msgdata.type) : null}
         </>
     )
 }

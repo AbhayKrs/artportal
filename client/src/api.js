@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const baseURL = 'https://artyst-web.herokuapp.com/api';
-// const baseURL = 'http://localhost:5000/api';
+// const baseURL = 'https://artyst-web.herokuapp.com/api';
+const baseURL = 'http://localhost:5000/api';
 
 const get_api = axios.create({ baseURL });
 const post_api = axios.create({ baseURL, headers: { 'Content-Type': 'application/json' } });
@@ -52,10 +52,11 @@ export const dislikeExploreAPI = (exploreID, userData) => get_api.put(`/explore/
 export const exploreLikeCommentAPI = (exploreID, commentID, userData) => get_api.put(`/explore/${exploreID}/comments/${commentID}/like`, { user: userData });
 export const exploreDislikeCommentAPI = (exploreID, commentID, userData) => get_api.put(`/explore/${exploreID}/comments/${commentID}/dislike`, { user: userData });
 export const awardExploreAPI = (exploreID, userID, awardData) => get_api.put(`/explore/${exploreID}/award`, { userID: userID, ...awardData });
+export const updateUserDataAPI = (userID, userData) => get_api.put(`/users/${userID}`, userData);
 export const updateUserCartAPI = (userID, cartID, cartData) => get_api.put(`/users/${userID}/cart/${cartID}`, cartData);
 
 //DELETE Request API's
-export const deleteExploreItemAPI = (exploreID, userID) => post_api.delete(`/explore/${exploreID}`, userID);
+export const deleteExploreItemAPI = (exploreID) => post_api.delete(`/explore/${exploreID}`);
 export const exploreDeleteCommentAPI = (exploreID, commentID) => get_api.delete(`/explore/${exploreID}/comments/${commentID}`);
 export const deleteStoreItemAPI = (storeID, userID) => post_api.delete(`/store/${storeID}`, userID);
 export const deleteBookmarkAPI = (bookmarkID, userID) => get_api.delete(`/users/${userID}/bookmark/${bookmarkID}`);

@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { viewerIP, loginAPI, googleLoginAPI, signUpAPI, tagsAPI, commonImagesAPI, userDetailsAPI, userExploreListAPI, userStoreListAPI, userCartListAPI, addUserCartAPI, updateUserCartAPI, deleteStoreItemAPI, awardListAPI, deleteBookmarkAPI, avatarListAPI, deleteCartItemAPI, editAvatarAPI, locationsListAPI } from '../../api';
+import { viewerIP, loginAPI, googleLoginAPI, signUpAPI, tagsAPI, commonImagesAPI, userDetailsAPI, userExploreListAPI, userStoreListAPI, userCartListAPI, addUserCartAPI, updateUserCartAPI, deleteStoreItemAPI, awardListAPI, deleteBookmarkAPI, avatarListAPI, deleteCartItemAPI, editAvatarAPI, locationsListAPI, updateUserDataAPI } from '../../api';
 import {
     initialState,
     SWITCH_THEME,
     SET_LOADER,
-    SET_ERROR,
+    SET_SNACKMSG,
     GET_TAGS,
     GET_VIEWER_IP,
     HANDLE_HEADER_DIALOG_OPEN,
@@ -37,11 +37,11 @@ export const setLoader = (loaderData) => (dispatch) => {
     dispatch({ type: SET_LOADER, payload: loaderData })
 }
 
-export const setError = (errorData) => (dispatch) => {
+export const setSnackMessage = (msgData) => (dispatch) => {
     try {
-        dispatch({ type: SET_ERROR, payload: errorData })
+        dispatch({ type: SET_SNACKMSG, payload: msgData })
     } catch (err) {
-        console.log('---error setError', err);
+        console.log('---error setSnackMessage', err);
     }
 }
 
@@ -158,12 +158,12 @@ export const handleGoogleAuth = () => async (dispatch, getState) => {
         dispatch({ type: HANDLE_HEADER_DIALOG_CLOSE, payload: false });
     }).catch(err => {
         if (err.message) {
-            const error = {
+            const msgData = {
                 open: true,
                 message: err.response.data,
                 type: 'inline'
             }
-            dispatch(setError(error))
+            dispatch(setSnackMessage(msgData))
         }
     })
 }
@@ -181,12 +181,12 @@ export const refreshUserDetails = (userID) => async (dispatch, getState) => {
         dispatch({ type: REFRESH_USER_DETAILS, payload: userData });
     }).catch(err => {
         if (err.response) {
-            const error = {
+            const msgData = {
                 open: true,
                 message: err.response.data,
                 type: 'high',
             }
-            dispatch(setError(error))
+            dispatch(setSnackMessage(msgData))
         }
     })
 }
@@ -198,12 +198,27 @@ export const loadProfileDetails = (userID) => async (dispatch, getState) => {
         dispatch({ type: LOAD_PROFILE_DETAILS, payload: loginData });
     }).catch(err => {
         if (err.response) {
-            const error = {
+            const msgData = {
                 open: true,
                 message: err.response.data,
                 type: 'high',
             }
-            dispatch(setError(error))
+            dispatch(setSnackMessage(msgData))
+        }
+    })
+}
+
+export const updateUserProfile = (userID, userData) => async (dispatch, getState) => {
+    await updateUserDataAPI(userID, userData).then(res => {
+        console.log('updated user data', res.data)
+    }).catch(err => {
+        if (err.response) {
+            const msgData = {
+                open: true,
+                message: err.response.data,
+                type: 'high',
+            }
+            dispatch(setSnackMessage(msgData))
         }
     })
 }
@@ -217,12 +232,12 @@ export const deleteBookmark = (bookmarkID, userID) => async (dispatch, getState)
         dispatch({ type: RESET_BOOKMARK_LIST, payload: res.data })
     }).catch(err => {
         if (err.response) {
-            const error = {
+            const msgData = {
                 open: true,
                 message: err.response.data,
                 type: 'hight',
             }
-            dispatch(setError(error))
+            dispatch(setSnackMessage(msgData))
         }
     })
 }

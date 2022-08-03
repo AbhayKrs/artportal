@@ -100,8 +100,8 @@ export const exploreVisited = () => async (dispatch, getState) => {
     console.log('page visited');
 }
 
-export const deleteExploreItem = (exploreID, userID) => async (dispatch, getState) => {
-    await deleteExploreItemAPI(exploreID, userID).then(res => {
+export const deleteExploreItem = (exploreID) => async (dispatch, getState) => {
+    await deleteExploreItemAPI(exploreID).then(res => {
         console.log('deleted Explore');
     }).catch(err => {
         console.log('---error deleteExploreItem', err);

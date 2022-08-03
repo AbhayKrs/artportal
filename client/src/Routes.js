@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import setAuthToken from './utils/setAuthToken';
-import { setError, setLoader, handleSignOut, handleVerifyUser, getViewerIP, fetchUserExploreList, fetchUserStoreList, fetchCartList, fetchCommonImages } from './store/actions/common.actions';
+import { setSnackMessage, setLoader, handleSignOut, handleVerifyUser, getViewerIP, fetchUserExploreList, fetchUserStoreList, fetchCartList, fetchCommonImages } from './store/actions/common.actions';
 
 // import ErrorPopup from './components/Error/ErrorPopup';
 import Header from './containers/Header';
@@ -64,7 +64,7 @@ const ArtystRoutes = (props) => {
             <Header />
             <div className='mt-14'></div>
             <Loader open={props.common.loader} setLoader={props.setLoader} colorTheme={props.common.theme} />
-            <Snackbar error={props.common.error} setError={props.setError} />
+            <Snackbar msgdata={props.common.snackmsg} setMessage={props.setSnackMessage} />
             <Routes>
                 <Route path='/' element={<Home />} />
                 <Route path='/google_success' element={<Google header="Success" />} />
@@ -103,7 +103,7 @@ const mapStateToProps = (state, props) => ({
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-    setError,
+    setSnackMessage,
     setLoader,
     handleVerifyUser,
     getViewerIP,

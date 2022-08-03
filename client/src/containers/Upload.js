@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import randomSentence from 'random-sentence';
 
-import { setError, setLoader, getTags } from '../store/actions/common.actions';
+import { setSnackMessage, setLoader, getTags } from '../store/actions/common.actions';
 import { handleExploreUpload } from '../store/actions/explore.actions';
 import { handleStoreUpload } from '../store/actions/store.actions';
 
@@ -45,12 +45,12 @@ const ExploreUpload = (props) => {
 
     const onImageChange = (ev) => {
         if (ev.target.files.length > 3 || exploreFiles.length > 2) {
-            const error = {
+            const msgData = {
                 open: true,
                 message: 'Only a maximum of 3 files may be selected.',
                 type: 'warning'
             }
-            props.setError(error);
+            props.setSnackMessage(msgData);
         }
         else {
             Object.keys(ev.target.files).map((key, index) => {
@@ -80,12 +80,12 @@ const ExploreUpload = (props) => {
     const dropHandler = (ev) => {
         ev.nativeEvent.preventDefault();
         if (ev.dataTransfer.files.length > 3 || exploreFiles.length > 2) {
-            const error = {
+            const msgData = {
                 open: true,
                 message: 'Only a maximum of 3 files may be selected.',
                 type: 'warning'
             }
-            props.setError(error);
+            props.setSnackMessage(msgData);
         } else {
             Object.keys(ev.target.files).map((key, index) => {
                 let convertedFile;
@@ -120,12 +120,12 @@ const ExploreUpload = (props) => {
         if (exploreTags.filter(item => item == selectedTag).length === 0) {
             if (exploreTags.length === 10) {
                 setTagSearch('');
-                const error = {
+                const msgData = {
                     open: true,
                     message: 'Maximum number of tags assigned!',
                     type: 'warning'
                 }
-                props.setError(error);
+                props.setSnackMessage(msgData);
             } else {
                 setExploreTags(tags => [...tags, selectedTag])
             }
@@ -138,12 +138,12 @@ const ExploreUpload = (props) => {
 
     const handleUpload = () => {
         if (exploreFiles.length === 0 || exploreTitle.length === 0 || exploreDesc.length === 0 || exploreTags.length === 0) {
-            const errorData = {
+            const msgData = {
                 open: true,
                 message: 'Please fill all the required fields!',
                 type: 'error'
             }
-            props.setError(errorData)
+            props.setSnackMessage(msgData)
             return;
         }
 
@@ -157,19 +157,19 @@ const ExploreUpload = (props) => {
 
         props.handleExploreUpload(exploreUploadData).then(() => {
             navigate(`/explore`)
-            const errorData = {
+            const msgData = {
                 open: true,
                 message: 'Successfully Uploaded!',
                 type: 'success'
             }
-            props.setError(errorData);
+            props.setSnackMessage(msgData);
         }).catch(err => {
-            const errorData = {
+            const msgData = {
                 open: true,
                 message: 'Upload Failed!',
                 type: 'warning'
             }
-            props.setError(errorData);
+            props.setSnackMessage(msgData);
         });
     }
 
@@ -303,12 +303,12 @@ const StoreUpload = (props) => {
 
     const onImageChange = (ev) => {
         if (ev.target.files.length > 3 || storeFiles.length > 2) {
-            const error = {
+            const msgData = {
                 open: true,
                 message: 'Only a maximum of 3 files may be selected.',
                 type: 'warning'
             }
-            props.setError(error);
+            props.setSnackMessage(msgData);
         }
         else {
             const reader = new FileReader();
@@ -345,12 +345,12 @@ const StoreUpload = (props) => {
     const dropHandler = (ev) => {
         ev.nativeEvent.preventDefault();
         if (ev.dataTransfer.files.length > 3 || storeFiles.length > 2) {
-            const error = {
+            const msgData = {
                 open: true,
                 message: 'Only a maximum of 3 files may be selected.',
                 type: 'warning'
             }
-            props.setError(error);
+            props.setSnackMessage(msgData);
         } else {
             Object.keys(ev.dataTransfer.files).map((key, index) => {
                 setStoreFiles(arr => [...arr, ev.dataTransfer.files[key]])
@@ -371,12 +371,12 @@ const StoreUpload = (props) => {
 
     const handleUpload = () => {
         if (storeFiles.length === 0 || storeTitle.length === 0 || storeDesc.length === 0) {
-            const errorData = {
+            const msgData = {
                 open: true,
                 message: 'Please fill all the required fields!',
                 type: 'error'
             }
-            props.setError(errorData)
+            props.setSnackMessage(msgData)
             return;
         }
 
@@ -392,19 +392,19 @@ const StoreUpload = (props) => {
 
         props.handleStoreUpload(formData).then(() => {
             navigate(`/store`)
-            const errorData = {
+            const msgData = {
                 open: true,
                 message: 'Successfully listed product!',
                 type: 'success'
             }
-            props.setError(errorData);
+            props.setSnackMessage(msgData);
         }).catch(err => {
-            const errorData = {
+            const msgData = {
                 open: true,
                 message: 'Upload Failed!',
                 type: 'warning'
             }
-            props.setError(errorData);
+            props.setSnackMessage(msgData);
         });
     }
 
@@ -490,7 +490,7 @@ const mapStateToProps = (state, props) => ({
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-    setError,
+    setSnackMessage,
     setLoader,
     getTags,
     handleExploreUpload,

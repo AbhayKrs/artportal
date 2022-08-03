@@ -6,7 +6,7 @@ import moment from 'moment';
 import { fetchExploreImages, fetchUserImages, fetchStoreImages } from '../api';
 import { exploreItemViewed, clearExploreShow, fetchExploreList, fetchExploreItem, handleLikeExplore, handleAwardExplore, handleDislikeExplore, handleAddComment, handleEditComment, handleDeleteComment, handleLikeComment, handleDislikeComment, bookmarkExploreItem } from '../store/actions/explore.actions';
 import { fetchStoreList, fetchStoreItem } from '../store/actions/store.actions';
-import { setLoader, getViewerIP, fetchAwards, loadProfileDetails, refreshUserDetails, setError } from '../store/actions/common.actions';
+import { setLoader, getViewerIP, fetchAwards, loadProfileDetails, refreshUserDetails, setSnackMessage } from '../store/actions/common.actions';
 import { ExploreShowCarousel } from '../components/Carousel';
 import { AwardModal, ShareModal } from '../components/Modal';
 
@@ -143,12 +143,12 @@ const ExploreShow = (props) => {
     }
 
     const handleInvalidUser = () => {
-        const error = {
+        const msgData = {
             open: true,
             message: 'User not logged in. Please Sign In/Sign Up to perform the action.',
             type: 'warning'
         }
-        props.setError(error);
+        props.setSnackMessage(msgData);
     }
 
     const bookmarkIt = () => {
@@ -160,19 +160,23 @@ const ExploreShow = (props) => {
             description: props.exploreShow.description
         }
         props.bookmarkExploreItem(props.user.id, bookmarkData).then(() => {
-            const errorData = {
+            const msgData = {
                 open: true,
                 message: 'Added to Bookmarks!',
                 type: 'success'
             }
-            props.setError(errorData);
+            props.setSnackMessage(msgData);
+            setTimeout(() => {
+                props.refreshUserDetails(props.user.id);
+                props.fetchExploreItem(id);
+            }, 2000)
         }).catch(err => {
-            const errorData = {
+            const msgData = {
                 open: true,
                 message: 'Add to Bookmark failed!',
                 type: 'warning'
             }
-            props.setError(errorData);
+            props.setSnackMessage(msgData);
         })
     }
 
@@ -455,7 +459,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     handleLikeComment,
     handleDislikeComment,
     fetchAwards,
-    setError,
+    setSnackMessage,
     bookmarkExploreItem
 }, dispatch);
 

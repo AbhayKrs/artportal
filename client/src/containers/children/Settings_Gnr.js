@@ -18,16 +18,16 @@ export const Settings_Gnr = (props) => {
             label: 'English',
             value: 'en'
         },
-        {
-            id: 1,
-            label: 'French',
-            value: 'fr'
-        }
+        // {
+        //     id: 1,
+        //     label: 'French',
+        //     value: 'fr'
+        // }
     ]);
 
     const [countryLabel, setCountryLabel] = useState('Pick a country');
     const [tzLabel, setTZLabel] = useState('Pick a timezone');
-    const [activeLang, setActiveLang] = useState(-1);
+    const [activeLang, setActiveLang] = useState(0);
 
     useEffect(() => {
         props.fetchLocations();
@@ -89,7 +89,7 @@ export const Settings_Gnr = (props) => {
                 </div> */}
                 <div className=''>
                     <h2 className='text-2xl font-josefinlight font-semibold dark:text-gray-300'>Language</h2>
-                    <h6 className='text-lg font-josefinlight text-gray-500 dark:text-gray-400'>Pick </h6>
+                    <h6 className='text-lg font-josefinlight text-gray-500 dark:text-gray-400'>Pick your preferred language to view the website.</h6>
                     <div className='flex py-2 px-4'>
                         <ul id='tabSlider' className="flex space-x-2 items-center">
                             {langList.map((lang, index) => {

@@ -374,7 +374,7 @@ export const PurchaseModal = (props) => {
 
     return (
         <div className={`${open ? 'block' : 'hidden'} flex  fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
-            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 sm:w-8/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
+            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 md:w-4/12 sm:w-8/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
                 <div className='grid'>
                     <div className='p-4 flex flex-col'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
@@ -755,6 +755,26 @@ export const AvatarModal = (props) => {
                             {avatarList.map(avatar => (
                                 <img loading='lazy' onClick={() => handleEditUserAvatar(avatar)} id={avatar._id} src={fetchUserImages(avatar.icon)} />
                             ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export const ConfirmModal = (props) => {
+    const { open, title, onClose, onConfirm } = props;
+
+    return (
+        <div className={`${open ? 'block' : 'hidden'} flex  fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
+            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 md:w-4/12 sm:w-8/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
+                <div className='grid'>
+                    <div className='p-4 flex flex-col items-center'>
+                        <h1 className='text-violet-500 dark:text-violet-800 text-xl font-semibold tracking-wide font-josefinregular'>{title}</h1>
+                        <div className='flex space-x-4 mt-3'>
+                            <button onClick={onClose} className='text-white dark:text-violet-500 bg-gray-600 dark:bg-gray-200 hover:text-violet-500 dark:hover:text-violet-500 px-4 py-2 rounded-md font-caviar font-bold dark:font-normal'>Cancel</button>
+                            <button onClick={() => { onConfirm(); onClose() }} className='bg-violet-500 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 px-4 py-2 rounded-md font-caviar font-bold dark:font-normal'>Confirm</button>
                         </div>
                     </div>
                 </div>
