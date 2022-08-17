@@ -116,9 +116,9 @@ const Store = (props) => {
             {/* Highlights of the Day section */}
             <div className='p-4 space-y-2'>
                 <div className='text-3xl font-antipasto font-bold dark:text-neutral-400'>Highlights of the Day</div>
-                <div className='grid gap-5 sm:grid-cols-3 grid-cols-1 p-5'>
+                <div className='grid gap-5 sm:grid-cols-4 grid-cols-1 p-5'>
                     {props.store.storeList.map(item => (
-                        <div className="drop-shadow-lg skew-y-2 rounded-xl bg-indigo-50 dark:bg-neutral-800 overflow-hidden">
+                        <div className="drop-shadow-lg rounded-xl bg-indigo-50 dark:bg-neutral-800 overflow-hidden">
                             <img loading='lazy' className="h-60 w-full object-cover object-center scale-110 transition-all duration-400 scale-100" src={fetchStoreImages(item.files[0])} />
                             <div className="py-6 px-4">
                                 <h2 className="tracking-widest text-xs title-font font-medium text-gray-400 mb-2">CATEGORY: <span className='capitalize text-gray-700'>{item.category}</span></h2>
@@ -140,9 +140,9 @@ const Store = (props) => {
             {/* Featured */}
             <div className='p-4 space-y-2'>
                 <div className='text-3xl font-antipasto font-bold dark:text-neutral-400'>Featured</div>
-                <div className='grid gap-5 sm:grid-cols-3 grid-cols-1 p-5'>
+                <div className='grid gap-5 sm:grid-cols-4 grid-cols-1 p-5'>
                     {props.store.storeList.map(item => (
-                        <div className="drop-shadow-lg -skew-y-2 rounded-xl bg-indigo-50 dark:bg-neutral-800 overflow-hidden">
+                        <div className="drop-shadow-lg rounded-xl bg-indigo-50 dark:bg-neutral-800 overflow-hidden">
                             <img loading='lazy' className="h-60 w-full object-cover object-center scale-110 transition-all duration-400 scale-100" src={fetchStoreImages(item.files[0])} />
                             <div className="py-6 px-4">
                                 <h2 className="tracking-widest text-xs title-font font-medium text-gray-400 mb-2">CATEGORY: <span className='capitalize text-gray-700'>{item.category}</span></h2>
@@ -164,7 +164,7 @@ const Store = (props) => {
             {/* Artists of the Month */}
             <div className='p-4'>
                 <div className='text-3xl font-antipasto font-bold dark:text-neutral-400 pb-10'>Trending Sellers</div>
-                <div className='grid gap-4 sm:grid-cols-3 grid-cols-1'>
+                <div className='grid gap-4 sm:grid-cols-4 grid-cols-1'>
                     {props.store.sellerList.map(seller => (
                         <div className="py-8 h-3/4 mt-auto cursor-pointer rounded-3xl bg-gray-100 dark:bg-neutral-900 transition duration-300 ease-in-out hover:scale-105">
                             <div className="-mb-14 -translate-y-36 transform">

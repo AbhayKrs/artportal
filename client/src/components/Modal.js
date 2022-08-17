@@ -64,7 +64,7 @@ export const LoginModal = (props) => {
             <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 lg:w-6/12 sm:w-11/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
                 <div className='grid sm:grid-cols-2 grid-cols-1'>
                     {banner ? <img loading='lazy' className='h-full sm:flex hidden' src={fetchUserImages(banner)} /> : null}
-                    <div className='p-4 pt-2 flex flex-col space-y-3'>
+                    <div className='p-8 pt-4 flex flex-col space-y-3'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                         <h1 className='text-violet-500 dark:text-violet-500 text-5xl font-semibold tracking-widest font-antipasto mt-10'>{title}</h1>
                         <p className='text-black dark:text-white text-md font-josefinlight'>Become an Artyst Member <button type='button' onClick={() => { onClose(); openRegister() }} className='text-sm font-bold text-violet-400'>JOIN</button></p>
@@ -191,7 +191,7 @@ export const RegisterModal = (props) => {
             <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 lg:w-6/12 sm:w-11/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
                 <div className='grid sm:grid-cols-2 grid-cols-1'>
                     {banner ? <img loading='lazy' className='h-full sm:flex hidden' src={fetchUserImages(banner)} /> : null}
-                    <div className='p-4 pt-2 flex flex-col space-y-3'>
+                    <div className='p-8 pt-4 flex flex-col space-y-3'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                         <h1 className='text-violet-500 text-5xl font-semibold tracking-widest font-antipasto'>{title}</h1>
                         <p className='text-black dark:text-white text-md font-josefinlight'>Already an Artyst Member? <button type='button' onClick={() => { onClose(); openLogin() }} className='text-sm font-bold text-violet-400'>SIGN IN</button></p>

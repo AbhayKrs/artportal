@@ -33,6 +33,7 @@ export const initialState = {
         category: '',
         rating: 0,
         price: 0,
+        reviews: [],
     },
     activeDialog: false
 }

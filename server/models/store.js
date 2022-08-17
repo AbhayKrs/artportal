@@ -37,14 +37,25 @@ const storeSchema = new mongoose.Schema(
                 maximum: 5
             }
         },
-        price: {
-            type: Number,
-            default: 0
-        },
-        rating: {
-            type: Number,
-            default: 0
-        }
+        price: { type: Number, default: 0 },
+        rating: { type: Number, default: 0 },
+        reviews: [{
+            content: { type: String },
+            author: {
+                id: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'User',
+                },
+                username: { type: String, default: '' },
+                avatar: {
+                    icon: { type: String, default: '' },
+                    category: { type: String, default: '' }
+                },
+            },
+            rating: { type: Number, default: 0 },
+            createdAt: { type: Date },
+            updatedAt: { type: Date }
+        }],
     },
     {
         timestamps: true,

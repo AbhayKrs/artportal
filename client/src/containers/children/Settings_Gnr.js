@@ -70,8 +70,8 @@ export const Settings_Gnr = (props) => {
     }
 
     return (
-        <div className='flex flex-col col-span-3'>
-            <h1 className='text-4xl font-antipasto tracking-wider font-bold dark:text-purple-500'>General Settings</h1>
+        <div className='flex flex-col col-span-3 p-2'>
+            <h1 className='text-4xl font-antipasto tracking-wider font-bold text-purple-500'>General Settings</h1>
             <div className='flex flex-col gap-2 py-4 px-6'>
                 {/* <div className=''>
                     <h2 className='text-2xl font-josefinlight font-semibold text-gray-800 dark:text-gray-300'>Location</h2>

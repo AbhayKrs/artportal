@@ -13,11 +13,13 @@ import { AwardModal, ShareModal } from '../components/Modal';
 import { IoEye, IoHeart, IoSend, IoShareSocialSharp, IoChatbox } from 'react-icons/io5';
 import { BsTrash, BsHeartFill } from 'react-icons/bs';
 import { IoIosSend } from "react-icons/io";
-import { AiFillLike, AiFillDislike } from 'react-icons/ai';
-import { MdEdit, MdEditOff, MdBookmarkAdd, MdBookmarkAdded } from 'react-icons/md';
+import { AiFillLike, AiFillDislike, AiOutlineDown, AiOutlineUp, AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai';
+import { MdEdit, MdEditOff, MdBookmarkAdd, MdBookmarkAdded, MdOutlineAddShoppingCart } from 'react-icons/md';
 import { ImPlus, ImStarFull } from 'react-icons/im';
+import { TiInfoLarge } from 'react-icons/ti';
 
 import AwardIcon from '../assets/images/gift.png';
+import Ratings from '../components/Ratings';
 
 const ExploreShow = (props) => {
     const [prev, setPrev] = useState('');
@@ -216,7 +218,7 @@ const ExploreShow = (props) => {
                         </div>
                         <div className='flex flex-wrap px-1'>
                             {props.exploreShow.tags.map((item, index) => (
-                                <div key={index} className="flex w-fit justify-center items-center m-0.5 font-medium py-1.5 px-2 bg-indigo-50 dark:bg-violet-500/25 rounded-full text-gray-600 dark:text-gray-300 shadow">
+                                <div key={index} className="flex w-fit justify-center items-center m-0.5 font-medium py-1.5 px-2 bg-indigo-50 dark:bg-violet-800 rounded-full text-gray-600 dark:text-gray-300 shadow">
                                     <div className="text-xs font-medium leading-none">{item}</div>
                                 </div>
                             ))}
@@ -298,7 +300,7 @@ const ExploreShow = (props) => {
                                     <p className='font-josefinlight text-sm'>{'- ' + moment(comment.createdAt).fromNow()}</p>
                                 </div>
                             </div>
-                            <div className="flex basis-2/12 items-center justify-end relative ">
+                            <div className="flex basis-2/12 items-center justify-end relative">
                                 <div className='flex space-x-1'>
                                     {comment.likes.filter(item => item === props.user.id).length > 0 ?
                                         <button disabled>
@@ -359,68 +361,143 @@ const ExploreShow = (props) => {
 const StoreShow = (props) => {
     const { id } = useParams();
     let navigate = useNavigate();
+    const [activeImg, setActiveImg] = useState('');
 
     useEffect(async () => {
         props.setLoader(true);
         window.scrollTo(0, 0)
         await props.fetchStoreList();
-        props.fetchStoreItem(id);
+        await props.fetchStoreItem(id);
     }, [])
 
+    useEffect(() => {
+        setActiveImg(props.storeShow.files[0])
+    }, [props.storeShow])
+
     return (
-        <div className='main-container bg-gray-200 dark:bg-darkNavBg max-100vh'>
+        <div className='main-container bg-gray-200 dark:bg-darkNavBg max-100vh pt-5'>
+            <div className="text-black dark:text-white text-4xl title-font font-medium mx-5">{props.storeShow.title}</div>
+            <p className='font-josefinlight text-gray-600 dark:text-gray-400 whitespace-nowrap text-sm mx-5'>- Listed on {moment(props.storeShow.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</p>
+            <p className="text-gray-700 dark:text-gray-400 text-xl leading-relaxed mx-5">{props.storeShow.description}</p>
             <section className="text-gray-400 body-font overflow-hidden">
-                <div className="p-6 mx-auto">
-                    <div className="lg:w-4/5 mx-auto flex flex-wrap">
-                        <img loading='lazy' className="lg:w-1/2 w-full lg:h-auto h-96 object-cover object-center rounded" src={fetchStoreImages(props.storeShow.files[0])} />
-                        <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-4 lg:mt-0">
-                            <div className="text-black dark:text-white text-4xl title-font font-medium mb-1">{props.storeShow.title}</div>
-                            <h2 className="tracking-widest text-lg title-font font-medium text-gray-400 mb-2">CATEGORY: <span className='capitalize text-gray-700'>{props.storeShow.category}</span></h2>
-                            <p className="text-gray-500 leading-relaxed">{props.storeShow.description}</p>
-                            <div className="flex my-2">
-                                <span className="flex items-center">
-                                    <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-5 h-5 text-indigo-400" viewBox="0 0 24 24">
-                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                                    </svg>
-                                    <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-5 h-5 text-indigo-400" viewBox="0 0 24 24">
-                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                                    </svg>
-                                    <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-5 h-5 text-indigo-400" viewBox="0 0 24 24">
-                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                                    </svg>
-                                    <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-5 h-5 text-indigo-400" viewBox="0 0 24 24">
-                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                                    </svg>
-                                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-5 h-5 text-indigo-400" viewBox="0 0 24 24">
-                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                                    </svg>
-                                    <span className="ml-3 text-lg text-gray-600">{Number.parseFloat(props.storeShow.rating).toFixed(1)} / 5.0</span>
-                                </span>
-                            </div>
-                            <div className='mr-3'>
-                                <div className='flex flex-col text-right justify-end py-1 text-neutral-900 dark:text-gray-400'>
-                                    <p className='font-josefinlight text-xl'>Seller Details</p>
-                                    <div className="flex justify-end">
-                                        <div className="w-6 h-6 overflow-hidden">
-                                            {props.storeShow.seller ? <img loading='lazy' src={fetchUserImages(props.storeShow.seller.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
-                                        </div>
-                                        <p className="font-josefinlight pt-0.5 font-medium text-lg mx-0.5">
-                                            {props.storeShow.seller.username}
-                                        </p>
-                                        <svg className="stroke-current stroke-1 text-blue-600 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
-                                        </svg>
+                <div className="p-4 mx-auto">
+                    <div className="mx-auto flex flex-col lg:flex-row gap-3">
+                        <div className="order-2 lg:order-1 lg:w-3/12 w-full mt-4 lg:mt-0 space-y-2">
+                            <h2 className="tracking-widest text-lg title-font font-medium text-gray-400 mb-2">CATEGORY: <span className='capitalize'>{props.storeShow.category}</span></h2>
+                            <div className='flex relative flex-col p-3 text-left justify-start text-neutral-900 dark:text-gray-400 bg-slate-300 dark:bg-neutral-900 rounded-md'>
+                                <TiInfoLarge onClick={() => navigate(`/users/${props.storeShow.seller.id}`)} className='absolute cursor-pointer h-4 w-4 top-0 right-0 m-2' />
+                                <div className="flex">
+                                    <div className="w-6 h-6 overflow-hidden">
+                                        {props.storeShow.seller ? <img loading='lazy' src={fetchUserImages(props.storeShow.seller.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
                                     </div>
-                                    <div className='flex justify-end text-md items-center text-josefinlight'>Rating: {Number.parseFloat(props.storeShow.seller.seller_rating).toFixed(1)} <ImStarFull className='ml-1 text-indigo-500' /></div>
-                                    <p className='font-josefinlight whitespace-nowrap text-sm'>{moment(props.storeShow.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</p>
+                                    <p className="font-josefinlight pt-0.5 font-medium text-lg mx-0.5">
+                                        {props.storeShow.seller.username}
+                                    </p>
+                                    <svg className="stroke-current stroke-1 text-blue-600 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
+                                    </svg>
+                                </div>
+                                <div className='flex text-md items-center text-josefinlight'>Seller Rating: <span className='flex ml-2 items-center text-indigo-500'>{Number.parseFloat(props.storeShow.seller.seller_rating).toFixed(1)}<ImStarFull className='ml-1 text-indigo-500' /></span></div>
+                            </div>
+                            <span className="flex flex-col text-2xl text-neutral-700 dark:text-gray-300">
+                                ${Number.parseFloat(props.storeShow.price).toFixed(2)}
+                                <span className='text-xs text-rose-400'>including shipping & taxes</span>
+                            </span>
+                            <div className='flex space-x-3'>
+                                <button className="flex items-center font-caviar font-bold text-violet-500 bg-transparent border-2 border-violet-500 py-2 px-6 focus:outline-none hover:bg-violet-500 hover:text-gray-600 rounded-md">Add to Cart</button>
+                                <button className="flex items-center font-caviar font-bold text-gray-300 bg-violet-500 py-2 px-6 focus:outline-none hover:bg-violet-500 hover:text-gray-600 rounded-md">Checkout</button>
+                            </div>
+                            {/*<div className='pt-5 pr-3 space-y-2'>
+                                <hr className='rounded border-1 bg-neutral-700 dark:bg-neutral-300 border-neutral-700 dark:border-neutral-300 dark:border-neutral-200' />
+                                <p className="text-black dark:text-gray-200 text-lg title-font font-medium mb-1">
+                                    More from {props.storeShow.seller.username}
+                                </p>
+                            </div>
+                             <div className='grid grid-cols-2 gap-2 mr-3'>
+                                {[0, 1, 2, 3].map(item => <div className="drop-shadow-lg rounded-xl bg-indigo-50 dark:bg-neutral-800 overflow-hidden h-fit">
+                                    <img loading='lazy' className="h-40 w-full object-cover object-center scale-110 transition-all duration-400 scale-100" src={fetchStoreImages(activeImg)} />
+                                    <div className="py-4 px-2">
+                                        <h2 className="tracking-widest text-xs title-font font-medium text-gray-400">CATEGORY: <span className='capitalize text-gray-700'>category</span></h2>
+                                        <h1 className="title-font text-lg font-medium text-neutral-800 dark:text-neutral-300">title</h1>
+                                        <div className="flex items-center flex-wrap justify-between">
+                                            <div className='tracking-wide text-md font-medium text-gray-500 font-josefinregular'>$price</div>
+                                            <button className="bg-gradient-to-r font-caviar font-semibold from-violet-500 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-2 py-1 rounded-lg">Learn more</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                )}
+                            </div> */}
+                        </div>
+                        <div className='order-1 lg:order-2 flex flex-col gap-2 lg:w-6/12 lg:h-full rounded'>
+                            <img loading='lazy' className="w-full h-full object-cover object-center" src={fetchStoreImages(activeImg)} />
+                            <div className='grid grid-cols-3 gap-2'>
+                                {props.storeShow.files.map((file, index) =>
+                                    <img key={index} onClick={() => setActiveImg(file)} loading='lazy' className={`w-full object-cover object-center rounded ${activeImg === file ? 'border-4 border-violet-500 dark:border-violet-400' : ''}`} src={fetchStoreImages(file)} />
+                                )}
+                            </div>
+                        </div>
+                        <div className='order-3 lg:order-3 lg:w-3/12 w-full lg:h-auto object-cover object-center rounded'>
+                            <div className='flex flex-col justify-between'>
+                                <p className="text-black dark:text-white text-2xl title-font font-medium mb-1">Ratings & Reviews</p>
+                                <div className='flex space-x-2 items-center text-black dark:text-gray-300'>
+                                    <p className='text-md title-font'>Sort by:</p>
+                                    <div className='flex items-center space-x-1'>
+                                        <p>Ratings</p>
+                                        <div className='block'>
+                                            <AiOutlineUp className='w-2 h-2' />
+                                            <AiOutlineDown className='w-2 h-2' />
+                                            {/*
+                                                    <AiOutlineArrowUp className='w-3 h-3' />
+                                                    <AiOutlineArrowDown className='w-3 h-3' />   
+                                               */}
+                                        </div>
+                                    </div>
+                                    <div className='flex items-center space-x-1'>
+                                        <p>Date</p>
+                                        <div className='block'>
+                                            <AiOutlineUp className='w-2 h-2' />
+                                            <AiOutlineDown className='w-2 h-2' />
+                                            {/*
+                                                    <AiOutlineArrowUp className='w-3 h-3' />
+                                                    <AiOutlineArrowDown className='w-3 h-3' />   
+                                               */}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="flex">
-                                <span className="flex flex-col font-medium text-3xl text-neutral-700 dark:text-gray-300">
-                                    ${Number.parseFloat(props.storeShow.price).toFixed(2)}
-                                    <span className='text-xs text-rose-400'>including shipping & taxes</span>
-                                </span>
-                                <button className="flex ml-auto  items-center font-caviar font-bold text-violet-500 bg-transparent border-2 border-violet-500 py-2 px-6 focus:outline-none hover:bg-violet-500 hover:text-gray-600 rounded-md">Add to Cart</button>
+                            <div className="bg-gray-300 dark:bg-neutral-900 p-4 mt-2 rounded-md">
+                                <p className="text-black dark:text-gray-200 text-xl title-font font-medium mb-1">Customer Ratings</p>
+                                <Ratings size='lg' withBg withValues rating={props.storeShow.rating} color='text-gray-200' />
+                                <div className='flex flex-col mt-2 px-2 space-y-2'>
+                                    <Ratings withReview reviews={24} rating={5} color='text-indigo-400' />
+                                    <Ratings withReview reviews={4} rating={4} color='text-indigo-400' />
+                                    <Ratings withReview reviews={14} rating={3} color='text-indigo-400' />
+                                    <Ratings withReview reviews={6} rating={2} color='text-indigo-400' />
+                                    <Ratings withReview reviews={1} rating={1} color='text-indigo-400' />
+                                </div>
+                                <hr className='m-3 rounded border-1 bg-neutral-700 dark:bg-neutral-300 border-neutral-700 dark:border-neutral-300 dark:border-neutral-200' />
+                                <p className="text-black dark:text-gray-200 text-lg title-font font-medium mb-1">
+                                    {props.storeShow.reviews.length} Reviews
+                                </p>
+                                {props.storeShow.reviews.map((review, index) => (
+                                    <div key={index} className='flex flex-col rounded-lg bg-gray-300 dark:bg-neutral-800 text-neutral-700 dark:text-gray-300 py-2 px-4 mb-2 space-y-1'>
+                                        <div className='flex items-center justify-between'>
+                                            <div onClick={() => navigate(`/users/${review.author.id}`)} className='flex cursor-pointer'>
+                                                <div className="w-6 h-6 overflow-hidden">
+                                                    <img loading='lazy' src={fetchUserImages(review.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
+                                                </div>
+                                                <p className="font-josefinlight text-lg mx-0.5">
+                                                    {review.author.username}
+                                                </p>
+                                            </div>
+                                            <div className='flex flex-col'>
+                                                <Ratings size='sm' withSingleValue rating={review.rating} color='text-indigo-400' />
+                                                <p className='font-josefinlight text-sm'>{'- ' + moment(review.createdAt).fromNow()}</p>
+                                            </div>
+                                        </div>
+                                        <p className='font-josefinlight text-md font-bold'>{review.content}</p>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
