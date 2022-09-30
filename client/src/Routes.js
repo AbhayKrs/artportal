@@ -38,6 +38,7 @@ import Settings_Acc from './containers/children/Settings_Acc';
 import Settings_Ntf from './containers/children/Settings_Ntf';
 import Settings_Cmt from './containers/children/Settings_Cmt';
 import Settings_Bill from './containers/children/Settings_Bill';
+import Edit from './containers/Edit';
 
 const usePageViews = () => {
     let location = useLocation();
@@ -87,6 +88,7 @@ const ArtystRoutes = (props) => {
                 <Route path='/explore/search' element={<ExploreSearch />} />
                 <Route path='/explore/:id' element={<Show.ExploreShow />} />
                 <Route path='/explore/new' element={<Upload.ExploreUpload />} />
+                <Route path='/explore/:id/edit' element={<Edit.ExploreEdit />} />
                 <Route path='/store' element={<Store />} />
                 <Route path='/store/:id' element={<Show.StoreShow />} />
                 <Route path='/store/all' element={<StoreAll />} />

@@ -9,14 +9,15 @@ import { connect } from 'react-redux';
 import { IoAddCircleSharp, IoMenu } from "react-icons/io5";
 import { MdSettings } from "react-icons/md";
 import { RiFireFill } from "react-icons/ri";
-import { TokenModal, LoginModal, RegisterModal } from '../components/Modal';
+import { TokenModal, LoginModal, RegisterModal, SignupSuccessModal } from '../components/Modal';
 
-import { switchTheme, setAuthError, handleHeaderDialogOpen, handleHeaderDialogClose, handleSignIn, handleSignUp, handleGoogleAuth, handleSignOut } from '../store/actions/common.actions';
+import { switchTheme, setAuthError, handleHeaderDialogOpen, handleHeaderDialogClose, handleSignIn, handleSignUp, handleGoogleAuth, handleSignOut, handleSignupSuccessMsgClose } from '../store/actions/common.actions';
 import { fetchUserImages } from '../api';
 
 const Header = (props) => {
     let navigate = useNavigate();
     const [tokenOpen, setTokenOpen] = useState(false);
+    const [signupSuccess, setSignupSuccess] = useState(false);
     const [mobileMenu, setMobileMenu] = useState(false);
 
     const logout = () => {
@@ -200,6 +201,15 @@ const Header = (props) => {
                     onClick={() => setTokenOpen(false)}
                 />
             }
+            {props.common.signupSuccess &&
+                <SignupSuccessModal
+                    open={props.common.signupSuccess}
+                    user={props.user}
+                    title='Welcome!'
+                    onClose={props.handleSignupSuccessMsgClose}
+                    onClick={props.handleSignupSuccessMsgClose}
+                />
+            }
         </nav >
     );
 };
@@ -217,7 +227,8 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     handleSignIn,
     handleSignUp,
     handleGoogleAuth,
-    handleSignOut
+    handleSignOut,
+    handleSignupSuccessMsgClose
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

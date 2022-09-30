@@ -45,6 +45,7 @@ export const addUserCartAPI = (userID, cartData) => get_api.post(`/users/${userI
 export const editAvatarAPI = (userID, avatar) => get_api.post(`/users/${userID}/avatar`, avatar);
 
 //PUT Request API's
+export const exploreItemEditAPI = (exploreID, updatedData) => get_api.put(`/explore/${exploreID}`, updatedData)
 export const exploreItemViewedAPI = (exploreID, viewerID) => get_api.put(`/explore/${exploreID}/viewed`, { viewer_id: viewerID });
 export const exploreEditCommentAPI = (exploreID, newComment, commentID, userData) => get_api.put(`/explore/${exploreID}/comments/${commentID}`, { content: newComment, user: userData })
 export const likeExploreAPI = (exploreID, userData) => get_api.put(`/explore/${exploreID}/like`, userData);

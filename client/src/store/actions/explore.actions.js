@@ -1,9 +1,10 @@
 import axios from 'axios';
-import { viewerIP, exploreItemViewedAPI, exploreItemAPI, exploreListAPI, exploreUploadAPI, searchExploreListAPI, filterExploreListAPI, likeExploreAPI, dislikeExploreAPI, awardExploreAPI, bookmarkExploreAPI, deleteExploreItemAPI, exploreAddCommentAPI, exploreEditCommentAPI, exploreDeleteCommentAPI, exploreLikeCommentAPI, exploreDislikeCommentAPI } from '../../api';
+import { viewerIP, exploreItemViewedAPI, exploreItemAPI, exploreListAPI, exploreUploadAPI, exploreItemEditAPI, searchExploreListAPI, filterExploreListAPI, likeExploreAPI, dislikeExploreAPI, awardExploreAPI, bookmarkExploreAPI, deleteExploreItemAPI, exploreAddCommentAPI, exploreEditCommentAPI, exploreDeleteCommentAPI, exploreLikeCommentAPI, exploreDislikeCommentAPI } from '../../api';
 import {
     FETCH_EXPLORE,
     FETCH_EXPLORELIST,
     HANDLE_EXPLORE_UPLOAD,
+    HANDLE_EXPLORE_EDITED,
     HANDLE_DIALOG_OPEN,
     HANDLE_DIALOG_CLOSE,
     initialState
@@ -64,6 +65,14 @@ export const handleExploreUpload = (exploreData) => async (dispatch, getState) =
         dispatch({ type: HANDLE_EXPLORE_UPLOAD, payload: res.data });
     }).catch(err => {
         console.log('---error handleExploreUpload', err);
+    })
+}
+
+export const handleExploreEdit = (exploreID, updatedData) => async (dispatch, getState) => {
+    await exploreItemEditAPI(exploreID, updatedData).then(res => {
+        dispatch({ type: HANDLE_EXPLORE_EDITED, payload: res.data });
+    }).catch(err => {
+        console.log('---error handleExploreEdit', err);
     })
 }
 

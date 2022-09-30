@@ -231,13 +231,14 @@ router.post("/login", async (req, res) => {
                         bio: user.bio,
                         joinDate: user.date,
                         tokens: user.tokens,
+                        google_authenticated: user.google_authenticated,
                         followers: user.followers,
                         followers_count: user.followers_count,
                         explore_count: user.explore_count,
                         bookmarked: user.bookmarked,
                         comment_count
                     };
-                    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 31556926 },
+                    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 300000 },
                         (err, token) => {
                             res.json({
                                 success: true,
@@ -277,14 +278,44 @@ router.post("/signup", (req, res) => {
                     avatar: {
                         icon: '92845b9c51df0d6bf3cf693393cc0905.png',
                         category: 'None'
-                    }
+                    },
+                    tokens: 5000
                 });
                 bcrypt.genSalt(10, (err, salt) => {
                     bcrypt.hash(newUser.password, salt, (err, hash) => {
                         if (err) throw err;
                         newUser.password = hash;
                         newUser.save()
-                            .then(user => res.json(user))
+                            .then(user => {
+                                console.log('user', user);
+                                let comment_count = 0;
+                                const comment_countList = user.explore.map(item => item.comment_count);
+                                for (let i = 0; i < comment_countList.length; i++)
+                                    comment_count += comment_countList[i];
+                                const payload = {
+                                    id: user._id,
+                                    name: user.name,
+                                    username: user.username,
+                                    email: user.email,
+                                    avatar: user.avatar,
+                                    bio: user.bio,
+                                    joinDate: user.date,
+                                    tokens: user.tokens,
+                                    followers: user.followers,
+                                    followers_count: user.followers_count,
+                                    explore_count: user.explore_count,
+                                    bookmarked: user.bookmarked,
+                                    comment_count
+                                };
+                                jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 300000 },
+                                    (err, token) => {
+                                        res.json({
+                                            success: true,
+                                            token: "Bearer " + token
+                                        });
+                                    }
+                                )
+                            })
                             .catch(err => console.log(err));
                     })
                 })
@@ -324,6 +355,7 @@ router.get('/googleAuth/callback', passport.authenticate('google', {
         avatar: authenticatedUser.avatar,
         joinDate: authenticatedUser.date,
         tokens: authenticatedUser.tokens,
+        google_authenticated: authenticatedUser.google_authenticated,
         followers: authenticatedUser.followers,
         followers_count: authenticatedUser.followers_count,
         explore_count: authenticatedUser.explore_count,

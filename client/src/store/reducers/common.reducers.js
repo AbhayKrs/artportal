@@ -8,6 +8,7 @@ export const HANDLE_RESIZE = 'HANDLE_RESIZE';
 export const HANDLE_VERIFY_USER = 'HANDLE_VERIFY_USER';
 export const HANDLE_HEADER_DIALOG_OPEN = 'HANDLE_HEADER_DIALOG_OPEN';
 export const HANDLE_HEADER_DIALOG_CLOSE = 'HANDLE_HEADER_DIALOG_CLOSE';
+export const HANDLE_SIGNUPSUCCESS_CLOSE = 'HANDLE_SIGNUPSUCCESS_CLOSE';
 export const HANDLE_CART_OPEN = 'HANDLE_CART_OPEN';
 export const HANDLE_CART_CLOSE = 'HANDLE_CART_CLOSE';
 export const FETCH_USER_EXPLORELIST = 'FETCH_USER_EXPLORELIST';
@@ -48,6 +49,7 @@ export const initialState = {
     signupImage: '',
     openTokenDialog: false,
     openPurchaseDialog: false,
+    signupSuccess: false,
     tags: [],
     dialogTitle: '',
     dialogData: '',
@@ -64,6 +66,7 @@ export const initialState = {
         bio: '',
         joinDate: '',
         tokens: 0,
+        google_authenticated: false,
         followers: [],
         bookmarked: [],
         followers_count: 0,
@@ -163,6 +166,9 @@ export const commonReducer = (state = initialState, { type, payload }) => {
             const activeDialogName = state.activeDialogName;
             return { ...state, [`open${activeDialogName}`]: payload, activeDialogName: '', dialogTitle: '', dialogData: '' };
         }
+        case HANDLE_SIGNUPSUCCESS_CLOSE: {
+            return { ...state, signupSuccess: payload }
+        }
         case FETCH_AVATARLIST: {
             const avatarList = [...payload];
             return { ...state, avatarList }
@@ -212,7 +218,7 @@ export const commonReducer = (state = initialState, { type, payload }) => {
             return { ...state, isAuthenticated: true, user: payload }
         }
         case HANDLE_SIGNUP: {
-            return { ...state, isAuthenticated: true, user: payload }
+            return { ...state, isAuthenticated: true, signupSuccess: true, user: payload }
         }
         case HANDLE_SIGNOUT: {
             return { ...state, isAuthenticated: false, user: payload }
