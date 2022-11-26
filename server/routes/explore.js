@@ -277,6 +277,7 @@ router.post('/new', upload.any(), async (req, res) => {
         const user = await User.findById(req.body.userID);
         const newExplore = new Explore({
             files: req.files.map(file => { return file.filename }),
+            categories: req.body.categories,
             title: req.body.title,
             author: {
                 id: user._id,

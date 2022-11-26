@@ -141,11 +141,17 @@ export const LoginModal = (props) => {
 
 export const RegisterModal = (props) => {
     const { open, title, banner, error, onClose, openLogin, handleSignUp, onSuccess, setAuthError } = props;
-    const [name, setName] = useState('asd');
-    const [email, setEmail] = useState('asd@ga.com');
-    const [username, setUsername] = useState('asdsad');
-    const [password, setPassword] = useState('Test@12345');
-    const [password2, setPassword2] = useState('Test@12345');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [password2, setPassword2] = useState('');
+
+    // const [name, setName] = useState('asd');
+    // const [email, setEmail] = useState('asd@ga.com');
+    // const [username, setUsername] = useState('asdsad');
+    // const [password, setPassword] = useState('Test@12345');
+    // const [password2, setPassword2] = useState('Test@12345');
 
     const handleNameChange = (event) => {
         setName(event.target.value);

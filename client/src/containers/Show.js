@@ -226,7 +226,7 @@ const ExploreShow = (props) => {
                         <div className='flex pl-1 justify-between'>
                             <div className='flex w-fit items-center space-x-3'>
                                 {props.exploreShow.author.id === props.common.user.id ?
-                                    <div onClick={() => navigate(`/explore/${props.exploreShow._id}/edit`)} className='rounded-lg bg-violet-500 p-3 cursor-pointer ml-2'>
+                                    <div onClick={() => navigate(`/explore/${props.exploreShow._id}/edit`)} className='rounded-lg bg-violet-500 p-2 cursor-pointer ml-2'>
                                         <MdEdit className="text-gray-200 h-6 w-6" />
                                     </div>
                                     : <div className="relative float-left flex">

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Artyst_logo from '../assets/images/artyst_header.svg';
 import DarkMode from '../assets/images/DarkMode.svg';
 import LightMode from '../assets/images/LightMode.svg';
@@ -16,14 +16,20 @@ import { fetchUserImages } from '../api';
 
 const Header = (props) => {
     let navigate = useNavigate();
+    const location = useLocation();
     const [tokenOpen, setTokenOpen] = useState(false);
     const [signupSuccess, setSignupSuccess] = useState(false);
     const [mobileMenu, setMobileMenu] = useState(false);
+    const [activeRoute, setActiveRoute] = useState('');
 
     const logout = () => {
         props.handleSignOut();
         navigate('/');
     }
+
+    useEffect(() => {
+        setActiveRoute(location.pathname);
+    }, [location.pathname])
 
     useEffect(() => {
         mobileMenu ?
@@ -40,11 +46,13 @@ const Header = (props) => {
                         <img loading='lazy' className='block h-6 w-auto hover:cursor-pointer' src={Artyst_logo} alt='Artyst' />
                     </Link>
                     <div className='sm:flex hidden ml-auto'>
-                        <Link to='/explore' className='self-center text-gray-900 dark:text-gray-200 hover:text-violet-500 px-3 py-1 rounded-md text-lg font-caviar font-bold dark:font-normal'>
+                        <Link to='/explore' className='relative self-center text-gray-900 dark:text-gray-200 hover:text-violet-500 px-3 py-1 rounded-md text-lg font-caviar font-bold dark:font-normal'>
                             Explore
+                            {activeRoute.includes('/explore') ? <span className='absolute bottom-[-10px] left-2 text-2xl text-violet-500'>&#9866;</span> : null}
                         </Link>
-                        <Link to='/store' className='self-center text-gray-900 dark:text-gray-200 hover:text-violet-500 px-3 py-1 rounded-md text-lg font-caviar font-bold dark:font-normal'>
+                        <Link to='/store' className='relative self-center text-gray-900 dark:text-gray-200 hover:text-violet-500 px-3 py-1 rounded-md text-lg font-caviar font-bold dark:font-normal'>
                             Store
+                            {activeRoute.includes('/store') ? <span className='absolute bottom-[-10px] left-2 text-2xl text-violet-500'>&#9866;</span> : null}
                         </Link>
                         {props.common.isAuthenticated ?
                             <div className='relative group group-hover:block ml-1'>
@@ -79,9 +87,9 @@ const Header = (props) => {
                                         <div className='flex flex-col'>
                                             <Link to='/settings' className='flex items-center text-gray-900 dark:text-gray-200 text-base font-caviar font-bold dark:font-normal'><MdSettings className='mr-1 text-lg' /> Settings</Link>
                                         </div>
-                                        <div className='flex flex-col'>
+                                        {/* <div className='flex flex-col'>
                                             <Link to='/' className='flex items-center text-gray-900 dark:text-gray-200 text-base font-caviar font-bold dark:font-normal'><RiFireFill className='mr-1 text-lg' /> Premium</Link>
-                                        </div>
+                                        </div> */}
                                         <div className='flex flex-col'>
                                             <button onClick={logout} className="bg-violet-500 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 px-3 py-1 rounded-md text-lg font-caviar font-bold dark:font-normal">
                                                 Sign Out
@@ -167,7 +175,8 @@ const Header = (props) => {
                     : null
                 }
             </div>
-            {props.common.openLoginDialog &&
+            {
+                props.common.openLoginDialog &&
                 <LoginModal
                     open={props.common.openLoginDialog}
                     title={props.common.dialogTitle}
@@ -178,8 +187,10 @@ const Header = (props) => {
                     onClick={props.handleHeaderDialogClose}
                     openRegister={() => props.handleHeaderDialogOpen('openRegisterDialog')}
                     handleSignIn={props.handleSignIn}
-                />}
-            {props.common.openRegisterDialog &&
+                />
+            }
+            {
+                props.common.openRegisterDialog &&
                 <RegisterModal
                     open={props.common.openRegisterDialog}
                     title={props.common.dialogTitle}
@@ -191,8 +202,10 @@ const Header = (props) => {
                     openLogin={() => props.handleHeaderDialogOpen('openLoginDialog')}
                     handleSignUp={props.handleSignUp}
                     handleGoogleAuth={props.handleGoogleAuth}
-                />}
-            {tokenOpen &&
+                />
+            }
+            {
+                tokenOpen &&
                 <TokenModal
                     open={tokenOpen}
                     user={props.user}
@@ -201,7 +214,8 @@ const Header = (props) => {
                     onClick={() => setTokenOpen(false)}
                 />
             }
-            {props.common.signupSuccess &&
+            {
+                props.common.signupSuccess &&
                 <SignupSuccessModal
                     open={props.common.signupSuccess}
                     user={props.user}
