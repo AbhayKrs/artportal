@@ -53,11 +53,19 @@ export const fetchExploreItem = (exploreID) => async (dispatch, getState) => {
 }
 
 export const fetchExploreList = () => async (dispatch, getState) => {
-    await exploreListAPI().then(res => {
+    await axios({
+        url: 'https://artyst-web.vercel.app/api/explore',
+        method: 'GET',
+    }).then(async res => {
         dispatch({ type: FETCH_EXPLORELIST, payload: res.data });
     }).catch(err => {
         console.log('---error fetchExploreList', err);
     })
+    // await exploreListAPI().then(res => {
+    //     dispatch({ type: FETCH_EXPLORELIST, payload: res.data });
+    // }).catch(err => {
+    //     console.log('---error fetchExploreList', err);
+    // })
 };
 
 export const handleExploreUpload = (exploreData) => async (dispatch, getState) => {
