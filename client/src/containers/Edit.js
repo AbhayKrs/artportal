@@ -33,6 +33,7 @@ const ExploreEdit = (props) => {
         await props.getTags();
         await props.fetchExploreList();
         await props.fetchExploreItem(id);
+        console.log('test')
     }, [id])
 
     useEffect(() => {
