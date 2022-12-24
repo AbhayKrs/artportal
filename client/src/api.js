@@ -1,8 +1,9 @@
 import axios from 'axios';
 
-// const baseURL = 'https://artyst-web.herokuapp.com/api';
-const baseURL = 'http://localhost:5000/api';
-export const taggerURL = 'http://localhost:5000/api/tagger/model.json';
+const baseURL = 'https://artyst-web.vercel.app/api';
+export const taggerURL = 'https://artyst-web.vercel.app/tagger/model.json';
+// const baseURL = 'http://localhost:5000/api';
+// export const taggerURL = 'http://localhost:5000/api/tagger/model.json';
 
 const get_api = axios.create({ baseURL });
 const post_api = axios.create({ baseURL, headers: { 'Content-Type': 'application/json' } });
