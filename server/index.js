@@ -43,7 +43,7 @@ app.use(passport.initialize());
 app.use('/api/tagger/:filename', async (req, res) => {
     try {
         const __dirname = path.resolve();
-        res.sendFile(__dirname + '/server/utils/tagger/' + req.params.filename);
+        res.sendFile(__dirname + '/tagger/' + req.params.filename);
     } catch (err) {
         console.log(err)
         res.status(500).send('Unable to fetch explore');
