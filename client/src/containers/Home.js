@@ -9,6 +9,7 @@ import { MultipleCarousel, HomeMultiCarousel, HomeSingleCarousel } from '../comp
 
 import HomeWallpaper from '../assets/images/homeWallpaper.jpg'
 import { HorizontalCard } from '../components/Card';
+import { taggerURL } from '../api';
 
 const Home = (props) => {
     let navigate = useNavigate();
@@ -18,6 +19,7 @@ const Home = (props) => {
         window.scrollTo(0, 0);
         props.fetchExploreList();
         props.getTags();
+        console.log('taggerURL', taggerURL);
     }, [])
     return (
         <div className='main-container bg-gray-200 dark:bg-darkNavBg'>
