@@ -18,7 +18,7 @@ export const googleRedirectURL = baseURL + `/users/googleAuth`;
 
 //GET Request API's
 export const googleLoginAPI = () => get_api.get(`/users/googleAuth`);
-export const exploreListAPI = () => { console.log('check explore URL', baseURL); get_api.get(`/explore`) }
+export const exploreListAPI = () => get_api.get(`/explore`);
 export const exploreItemAPI = exploreID => get_api.get(`/explore/${exploreID}`);
 export const searchExploreListAPI = (query, filter, period) => get_api.get(`/explore/search?query=${query}&filter=${filter}&period=${period}`);
 export const filterExploreListAPI = (filter, period) => get_api.get(`/explore?filter=${filter}&period=${period}`);
