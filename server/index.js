@@ -40,15 +40,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 
 // Define Routes
-// app.use('/api/tagger/:filename', async (req, res) => {
-//     try {
-//         const __dirname = path.resolve();
-//         res.sendFile(__dirname + '/tagger/' + req.params.filename);
-//     } catch (err) {
-//         console.log(err)
-//         res.status(500).send('Unable to fetch explore');
-//     }
-// })
+app.use('/api/tagger/:filename', async (req, res) => {
+    try {
+        const __dirname = path.resolve();
+        res.sendFile(__dirname + '/tagger/' + req.params.filename);
+    } catch (err) {
+        console.log(err)
+        res.status(500).send('Unable to fetch explore');
+    }
+})
 app.use('/api/explore', explore);
 app.use('/api/users', users);
 app.use('/api/store', store);
