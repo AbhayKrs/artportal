@@ -64,9 +64,6 @@ const tagger = multer({ storage });
 // @access  Private
 router.get('/:filename', (req, res) => {
     try {
-        gfs.files.find((err, files) => {
-            console.log('files', files);
-        })
         gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
             // Check if file
             if (!file || file.length === 0) {
