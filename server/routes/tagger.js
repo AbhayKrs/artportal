@@ -81,6 +81,7 @@ router.get('/:filename', (req, res) => {
             }
         });
     } catch (err) {
+        console.log('Error', err);
         return res.status(404).json({ msg: err });
     }
 });
