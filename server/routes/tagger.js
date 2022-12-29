@@ -62,9 +62,9 @@ const tagger = multer({ storage });
 // @route   Image Route
 // @desc    Image from gridFS storage
 // @access  Private
-router.get('/:filename', async (req, res) => {
+router.get('/:filename', (req, res) => {
     try {
-        await gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+        gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
             // Check if file
             if (!file || file.length === 0) {
                 return res.status(404).json({ err: 'No file exists' });
@@ -81,7 +81,6 @@ router.get('/:filename', async (req, res) => {
             }
         });
     } catch (err) {
-        alert(err);
         return res.status(404).json({ msg: err });
     }
 });
