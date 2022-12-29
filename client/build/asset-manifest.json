@@ -1,0 +1,30 @@
+{
+  "files": {
+    "main.css": "/static/css/main.4d25c27b.css",
+    "main.js": "/static/js/main.ca87b161.js",
+    "static/media/homeWallpaper.jpg": "/static/media/homeWallpaper.d2c7ae2dd8ab0af8491d.jpg",
+    "static/media/AntipastoProRegular.ttf": "/static/media/AntipastoProRegular.5c2e25aa997d4f2315f1.ttf",
+    "static/media/successgif.gif": "/static/media/successgif.6e505448a6f57e2a49d4.gif",
+    "static/media/JosefinSansLight.ttf": "/static/media/JosefinSansLight.8c489346b904245e77b8.ttf",
+    "static/media/JosefinSansRegular.ttf": "/static/media/JosefinSansRegular.9a9558c2798e8a2f8c5c.ttf",
+    "static/media/loader_light.gif": "/static/media/loader_light.99520ee3c7588dfcd68b.gif",
+    "static/media/CaviarDreams.ttf": "/static/media/CaviarDreams.70bebd2a13d7abe8547c.ttf",
+    "static/media/gift.png": "/static/media/gift.281261d417f08c8a6a69.png",
+    "static/media/Calypsoka.ttf": "/static/media/Calypsoka.13524c571fd46e8e79c3.ttf",
+    "static/media/money.png": "/static/media/money.7ab8bb3f4d5b925c97df.png",
+    "static/media/loader_dark.gif": "/static/media/loader_dark.74539547d627cc664894.gif",
+    "static/media/lazyPanda2.png": "/static/media/lazyPanda2.d0e24140b257ae43d60f.png",
+    "static/media/artyst_header.svg": "/static/media/artyst_header.b1a606effc75b44aff847d0fb6ad1a37.svg",
+    "static/media/artyst_title.svg": "/static/media/artyst_title.6e508bef253b98d8b0517b476edbdf37.svg",
+    "static/media/artyst_logo.svg": "/static/media/artyst_logo.826bc4f4d0a91b23545888e9aff78659.svg",
+    "index.html": "/index.html",
+    "static/media/LightMode.svg": "/static/media/LightMode.8359c4207d30e2b71e3f399c3b12d3fc.svg",
+    "static/media/DarkMode.svg": "/static/media/DarkMode.b5da687d3cea419f0b6986ee3cc284ed.svg",
+    "main.4d25c27b.css.map": "/static/css/main.4d25c27b.css.map",
+    "main.ca87b161.js.map": "/static/js/main.ca87b161.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4d25c27b.css",
+    "static/js/main.ca87b161.js"
+  ]
+}
