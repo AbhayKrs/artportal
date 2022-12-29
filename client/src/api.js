@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const baseURL = 'https://artyst-web.vercel.app/api';
-export const taggerURL = 'https://artyst-web.vercel.app/tagger/model.json';
+export const taggerURL = 'https://artyst-web.vercel.app/api/tagger/model.json';
 // const baseURL = 'http://localhost:5000/api';
 // export const taggerURL = 'http://localhost:5000/api/tagger/model.json';
 
