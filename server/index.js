@@ -14,6 +14,7 @@ import './strategies/GoogleStrategy.js';
 import './utils/authenticate.js';
 
 //Importing routes
+import tagger from './routes/tagger.js';
 import users from './routes/users.js';
 import explore from './routes/explore.js';
 import store from './routes/store.js';
@@ -40,15 +41,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 
 // Define Routes
-app.use('/api/tagger/:filename', async (req, res) => {
-    try {
-        const __dirname = path.resolve();
-        res.sendFile(__dirname + '/tagger/' + req.params.filename);
-    } catch (err) {
-        console.log(err)
-        res.status(500).send('Unable to fetch explore');
-    }
-})
+// app.use('/api/tagger/:filename', async (req, res) => {
+//     try {
+//         const __dirname = path.resolve();
+//         res.sendFile(__dirname + '/tagger/' + req.params.filename);
+//     } catch (err) {
+//         console.log(err);
+//         res.status(500).send('Unable to fetch explore');
+//     }
+// })
+app.use('/api/tagger', tagger);
 app.use('/api/explore', explore);
 app.use('/api/users', users);
 app.use('/api/store', store);
