@@ -18,6 +18,7 @@ import Dropdown from '../components/Dropdown';
 const ExploreUpload = (props) => {
     let navigate = useNavigate();
 
+    const [exploreCategories, setExploreCategories] = useState([]);
     const [exploreFiles, setExploreFiles] = useState([]);
     const [exploreTitle, setExploreTitle] = useState('');
     const [exploreDesc, setExploreDesc] = useState('');
@@ -29,9 +30,9 @@ const ExploreUpload = (props) => {
         props.setLoader(true);
         window.scrollTo(0, 0)
         await props.getTags();
-        setExploreTitle(randomSentence({ min: 2, max: 8 }))
-        setExploreDesc(randomSentence({ min: 5, max: 14 }))
-        setExploreTags(props.common.tags.sort(() => 0.5 - Math.random()).slice(0, 10))
+        // setExploreTitle(randomSentence({ min: 2, max: 8 }))
+        // setExploreDesc(randomSentence({ min: 5, max: 14 }))
+        // setExploreTags(props.common.tags.sort(() => 0.5 - Math.random()).slice(0, 10))
     }, [])
 
     const dataURLtoFile = (dataurl, filename) => {
@@ -150,6 +151,7 @@ const ExploreUpload = (props) => {
         const userID = props.common.user.id;
         const exploreUploadData = new FormData();
         exploreFiles.map(file => exploreUploadData.append('files[]', file));
+        exploreCategories.map(category => exploreUploadData.append('categories[]', category));
         exploreUploadData.append('title', exploreTitle);
         exploreUploadData.append('description', exploreDesc);
         exploreUploadData.append('userID', userID);
@@ -193,13 +195,13 @@ const ExploreUpload = (props) => {
                                 <h1 className="font-bold sm:text-lg text-gray-800 dark:text-gray-400">Upload Files</h1>
                                 <div className="h-full w-full text-center flex flex-col items-center justify-center items-center">
                                     {exploreFiles.length === 0 ?
-                                        <div>
+                                        <div className='w-full'>
                                             <img loading='lazy' className="mx-auto w-32" src="https://user-images.githubusercontent.com/507615/54591670-ac0a0180-4a65-11e9-846c-e55ffce0fe7b.png" alt="no data" />
                                             <span className="text-small dark:text-gray-500">No files selected</span>
                                             <div className='font-josefinlight text-rose-400 font-semibold text-sm'>You may select a maximum of 3 files.</div>
                                         </div>
                                         :
-                                        <div className=''>
+                                        <div className='w-full'>
                                             <DragDrop
                                                 selectedImages={exploreFiles.map((explore, index) => {
                                                     return {
@@ -208,6 +210,7 @@ const ExploreUpload = (props) => {
                                                     }
                                                 })}
                                                 setReorderedFiles={setExploreFiles}
+                                                setCategories={(categories) => setExploreCategories(imageCategories => [...new Set([...imageCategories, ...categories])])}
                                             />
                                         </div>
                                     }
@@ -216,6 +219,19 @@ const ExploreUpload = (props) => {
                         </div>
                     </div>
                     <div className='w-full space-y-2'>
+                        {exploreCategories.length === 0 ? '' : <div className='flex flex-col'>
+                            <span className='font-josefinlight font-semibold text-gray-700 dark:text-gray-300'>Categories:</span>
+                            <div className="w-full inline-flex flex-col justify-center relative text-gray-500">
+                                <div id='category_menu' className='flex flex-wrap space-x-1'>
+                                    {exploreCategories.map(category => (
+                                        <div className="flex justify-center items-center m-1 font-medium py-1 px-2 rounded-full text-indigo-100 bg-violet-500 border border-violet-700 ">
+                                            <div className="text-xs font-normal leading-none max-w-full flex-initial">{category}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                        }
                         <div className='flex flex-col'>
                             <span className='font-josefinlight font-semibold text-gray-700 dark:text-gray-300'>Title<span className='font-josefinlight text-rose-400 text-md'>*</span></span>
                             <input type="text" value={exploreTitle} onChange={(ev) => setExploreTitle(ev.target.value)} className="py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 focus:outline-none rounded-md w-full" placeholder='Title' />
@@ -269,7 +285,7 @@ const ExploreUpload = (props) => {
                     <button onClick={() => navigate(`/explore`)} className="rounded-md px-3 py-1 bg-gray-300 focus:shadow-outline focus:outline-none">
                         Cancel
                     </button>
-                    <button onClick={handleUpload} className="ml-3 rounded-md px-3 py-1 bg-blue-700 hover:bg-blue-500 text-white focus:shadow-outline focus:outline-none">
+                    <button onClick={handleUpload} className="ml-3 rounded-md px-3 py-1 bg-rose-500 hover:bg-rose-600 text-white focus:shadow-outline focus:outline-none">
                         Apply
                     </button>
                 </div>

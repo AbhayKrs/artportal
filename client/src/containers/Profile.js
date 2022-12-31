@@ -214,7 +214,7 @@ const Profile = (props) => {
             <div className="relative pt-20 pb-6">
                 <div className="mx-auto px-4">
                     <div className="relative flex flex-col min-w-0 break-words bg-neutral-100 dark:bg-neutral-800 w-full shadow-xl rounded-lg -mt-64">
-                        <div className="px-6">
+                        <div className="px-6 pb-6">
                             <div className="flex flex-wrap justify-center mb-7">
                                 <div className="w-full sm:w-4/12 px-4">
                                     <div className="grid grid-cols-2 lg:grid-cols-4 justify-center sm:pt-4 pt-16">
@@ -233,7 +233,7 @@ const Profile = (props) => {
                                     </div>
                                 </div>
                                 <div className="w-full sm:w-3/12 px-4 flex justify-center">
-                                    <div className="relative h-fit align-middle sm:-m-32 -m-[27rem] sm:-ml-28 -ml-[7.5rem]  max-w-[15rem]">
+                                    <div className="relative h-fit align-middle -m-[27rem] -ml-[27.5rem] sm:-m-32 sm:-ml-28 max-w-[15rem]">
                                         {props.viewed_user.avatar ? <img loading='lazy' src={fetchUserImages(props.viewed_user.avatar.icon)} /> : null}
                                     </div>
                                 </div>
@@ -271,7 +271,7 @@ const Profile = (props) => {
                                     </div>
                                 </div>
                             </div>
-                            <div className='flex space-x-3 py-3 items-center'>
+                            <div className='flex space-x-3 py-3 items-center justify-start xs:flex-wrap xs:justify-center'>
                                 <div onClick={() => setActiveView('portfolio')} className={`text-lg font-semibold ${activeView === 'portfolio' ? 'text-violet-400 dark:text-violet-500' : 'text-gray-700 dark:text-gray-400'} font-caviar cursor-pointer`}>Portfolio</div>
                                 <span className='text-gray-700 dark:text-gray-400'>&#9679;</span>
                                 <div onClick={() => setActiveView('about')} className={`text-lg font-semibold ${activeView === 'about' ? 'text-violet-400 dark:text-violet-500' : 'text-gray-700 dark:text-gray-400'} font-caviar cursor-pointer`}>About</div>

@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import ReactGA from 'react-ga';
 import setAuthToken from './utils/setAuthToken';
 import { setSnackMessage, setLoader, handleSignOut, handleVerifyUser, getViewerIP, fetchUserExploreList, fetchUserStoreList, fetchCartList, fetchCommonImages } from './store/actions/common.actions';
 
@@ -37,8 +38,22 @@ import Settings_Acc from './containers/children/Settings_Acc';
 import Settings_Ntf from './containers/children/Settings_Ntf';
 import Settings_Cmt from './containers/children/Settings_Cmt';
 import Settings_Bill from './containers/children/Settings_Bill';
+import Edit from './containers/Edit';
+
+const usePageViews = () => {
+    let location = useLocation();
+    useEffect(() => {
+        if (!window.GA_INITIALIZED) {
+            ReactGA.initialize('UA-180342030-1');
+            window.GA_INITIALIZED = true;
+        }
+        ReactGA.set({ page: location.pathname });
+        ReactGA.pageview(location.pathname);
+    }, [location])
+}
 
 const ArtystRoutes = (props) => {
+    usePageViews();
     useEffect(async () => {
         await props.getViewerIP();
         if (sessionStorage.jwtToken) {
@@ -73,6 +88,7 @@ const ArtystRoutes = (props) => {
                 <Route path='/explore/search' element={<ExploreSearch />} />
                 <Route path='/explore/:id' element={<Show.ExploreShow />} />
                 <Route path='/explore/new' element={<Upload.ExploreUpload />} />
+                <Route path='/explore/:id/edit' element={<Edit.ExploreEdit />} />
                 <Route path='/store' element={<Store />} />
                 <Route path='/store/:id' element={<Show.StoreShow />} />
                 <Route path='/store/all' element={<StoreAll />} />

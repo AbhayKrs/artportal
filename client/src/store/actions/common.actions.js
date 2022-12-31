@@ -9,6 +9,7 @@ import {
     GET_VIEWER_IP,
     HANDLE_HEADER_DIALOG_OPEN,
     HANDLE_HEADER_DIALOG_CLOSE,
+    HANDLE_SIGNUPSUCCESS_CLOSE,
     HANDLE_VERIFY_USER,
     FETCH_USER_EXPLORELIST,
     FETCH_USER_STORELIST,
@@ -136,8 +137,11 @@ export const handleSignIn = (stayLoggedIn, userData) => async (dispatch, getStat
 
 export const handleSignUp = (userData) => async (dispatch, getState) => {
     await signUpAPI(userData).then(res => {
-        const data = res.data;
-        dispatch({ type: HANDLE_SIGNUP, payload: data });
+        const { token } = res.data;
+        sessionStorage.setItem('jwtToken', token);
+        setAuthToken(token);
+        const userData = jwt_decode(token);
+        dispatch({ type: HANDLE_SIGNUP, payload: userData });
         dispatch({ type: HANDLE_HEADER_DIALOG_CLOSE, payload: false });
     }).catch(err => {
         if (err.response) {
@@ -149,6 +153,14 @@ export const handleSignUp = (userData) => async (dispatch, getState) => {
             dispatch(setAuthError(error))
         }
     })
+}
+
+export const handleSignupSuccessMsgClose = () => async (dispatch, getState) => {
+    try {
+        dispatch({ type: HANDLE_SIGNUPSUCCESS_CLOSE, payload: false })
+    } catch (err) {
+        console.log('---error handleSignupSuccessMsgClose', err)
+    }
 }
 
 export const handleGoogleAuth = () => async (dispatch, getState) => {

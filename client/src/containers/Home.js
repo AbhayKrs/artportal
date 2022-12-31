@@ -40,7 +40,7 @@ const Home = (props) => {
                         <div className='h-full relative text-black dark:text-white'>
                             <div className='flex absolute h-fit w-fit inset-0 mx-auto mt-auto mb-2 md:mb-9 items-center space-x-4'>
                                 <div className='flex h-24 w-24 md:h-32 md:w-32 bg-blue-400/25 font-josefinregular'>
-                                    <span className='m-auto'>
+                                    <span className='m-auto text-center'>
                                         Coming Soon!
                                     </span>
                                 </div>

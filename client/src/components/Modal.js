@@ -9,6 +9,7 @@ import Stepper from './Stepper';
 
 import TokenLogo from '../assets/images/money.png';
 import TokenIcon from '../assets/images/money.png';
+import Success from '../assets/images/successgif.gif';
 
 import {
     EmailIcon,
@@ -139,12 +140,18 @@ export const LoginModal = (props) => {
 }
 
 export const RegisterModal = (props) => {
-    const { open, title, banner, error, onClose, openLogin, handleSignUp, setAuthError } = props;
+    const { open, title, banner, error, onClose, openLogin, handleSignUp, onSuccess, setAuthError } = props;
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [password2, setPassword2] = useState('');
+
+    // const [name, setName] = useState('asd');
+    // const [email, setEmail] = useState('asd@ga.com');
+    // const [username, setUsername] = useState('asdsad');
+    // const [password, setPassword] = useState('Test@12345');
+    // const [password2, setPassword2] = useState('Test@12345');
 
     const handleNameChange = (event) => {
         setName(event.target.value);
@@ -175,7 +182,7 @@ export const RegisterModal = (props) => {
             password: password,
             password2: password2
         }
-        handleSignUp(signupInput);
+        handleSignUp(signupInput).then(res => console.log('res', res));
     }
 
     const onReset = () => {
@@ -260,7 +267,7 @@ export const AwardModal = (props) => {
                     <div className='p-4 pt-2 flex flex-col space-y-3'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                         <h1 className='text-violet-500 dark:text-violet-800 text-4xl font-semibold tracking-widest font-antipasto'>{title}</h1>
-                        <AwardTabPanel awards={awardList} user={user} exploreID={exploreID} handleAwardExplore={handleAwardExplore} />
+                        <AwardTabPanel awards={awardList} user={user} exploreID={exploreID} handleAwardExplore={handleAwardExplore} awardClose={onClose} />
                     </div>
                 </div>
             </div>
@@ -269,11 +276,11 @@ export const AwardModal = (props) => {
 }
 
 export const AwardConfirmModal = (props) => {
-    const { open, awardData, user, onClose, exploreID, handleAwardExplore } = props;
+    const { open, awardData, user, onClose, awardClose, exploreID, handleAwardExplore } = props;
 
     return (
         <div className={`${open ? 'block' : 'hidden'} flex  fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
-            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 sm:w-8/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
+            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 lg:w-4/12 md:w-6/12 sm:w-8/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
                 <div className='p-4 flex flex-col'>
                     <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute right-0 top-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                     <p className='text-violet-800 font-josefinregular text-2xl font-semibold '>Confirm Purchase?</p>
@@ -288,11 +295,10 @@ export const AwardConfirmModal = (props) => {
                             <p className='text-gray-400 text-sm italic'>By purchasing the award, you understand the mentioned total will be deducted from your balance.</p>
                         </div>
                     </div>
-
                     <hr className='h-2 w-full px-2 mt-2' />
                     <div className='flex items-center place-content-between'>
                         <p className='flex text-md text-gray-900 font-bold dark:text-gray-300 font-caviar'>Current Balance: <img loading='lazy' src={TokenIcon} className='h-6 w-6 ml-1 mr-1' />{user.tokens}</p>
-                        <button onClick={() => { handleAwardExplore(awardData); onClose() }} className='p-1.5 bg-yellow-400 w-fit rounded-md'>Confirm</button>
+                        <button onClick={() => { handleAwardExplore(awardData); onClose(); awardClose() }} className='p-1.5 bg-yellow-400 w-fit rounded-md'>Confirm</button>
                     </div>
                 </div>
             </div>
@@ -310,13 +316,14 @@ export const TokenModal = (props) => {
 
     return (
         <div className={`${open ? 'block' : 'hidden'} flex fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
-            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 lg:w-8/12 sm:w-11/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
+            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 lg:w-5/12 sm:w-11/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
                 <div className='grid'>
                     <div className='p-4 flex flex-col'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                         <h1 className='text-violet-500 dark:text-violet-800 text-4xl font-semibold tracking-widest font-antipasto'>{title}</h1>
                         <div className='text-black dark:text-white text-md font-josefinlight'>Tokens are used to purchase awards, badges and profile avatars. You can gift your tokens to artists you admire as well!</div>
-                        <ul className='py-2 px-5 space-y-2 text-gray-700 dark:text-gray-400'>
+                        <h1 className='text-3xl font-caviar m-2 text-rose-400 dark:text-rose-600'>*Feature to be added soon.</h1>
+                        {/* <ul className='py-2 px-5 space-y-2 text-gray-700 dark:text-gray-400'>
                             <li className='flex justify-between place-items-center'>
                                 <div className='text-lg font-caviar'>250 tokens</div>
                                 <button onClick={() => setPurchaseDialog({ open: true, value: 250, price: 100 })} className='w-20 bg-violet-500/75 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 p-2 rounded-md text-sm font-caviar font-bold dark:font-normal'>&#8377;100</button>
@@ -353,7 +360,7 @@ export const TokenModal = (props) => {
                                 <p className='text-gray-500 text-sm'>Get 1000 tokens/month. No Ads & more!</p>
                             </div>
                             <button className='whitespace-nowrap text-center bg-violet-500/75 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 py-1 px-4 rounded-md font-caviar font-bold dark:font-normal'>Go Premium</button>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
@@ -776,6 +783,27 @@ export const ConfirmModal = (props) => {
                             <button onClick={onClose} className='text-white dark:text-violet-500 bg-gray-600 dark:bg-gray-200 hover:text-violet-500 dark:hover:text-violet-500 px-4 py-2 rounded-md font-caviar font-bold dark:font-normal'>Cancel</button>
                             <button onClick={() => { onConfirm(); onClose() }} className='bg-violet-500 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 px-4 py-2 rounded-md font-caviar font-bold dark:font-normal'>Confirm</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export const SignupSuccessModal = (props) => {
+    const { open, onClose, title } = props;
+
+    return (
+        <div className={`${open ? 'block' : 'hidden'} flex fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
+            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 lg:w-5/12 sm:w-11/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
+                <div className='grid'>
+                    <div className='p-4 items-center text-center flex flex-col'>
+                        <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
+                        <h1 className='text-violet-500 dark:text-violet-800 text-4xl font-semibold tracking-widest font-antipasto'>{title}</h1>
+                        <img src={Success} />
+                        <div className='text-black dark:text-white text-lg font-josefinlight'>Thank you for joining the community! Have fun and enjoy your art journey here.</div>
+                        <h1 className='text-xl font-caviar font-bold m-2 text-rose-400 dark:text-rose-600'>5000 tokens have been added to your account to celebrate the occation. Enjoy!</h1>
+                        <h6 className='flex text-gray-700 dark:text-gray-300 text-md items-center'>Token Balance: <img loading='lazy' src={TokenLogo} className='w-5 h-5 mx-1' />{new Intl.NumberFormat().format(props.user.tokens)}</h6>
                     </div>
                 </div>
             </div>

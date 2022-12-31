@@ -277,6 +277,7 @@ router.post('/new', upload.any(), async (req, res) => {
         const user = await User.findById(req.body.userID);
         const newExplore = new Explore({
             files: req.files.map(file => { return file.filename }),
+            categories: req.body.categories,
             title: req.body.title,
             author: {
                 id: user._id,
@@ -307,13 +308,15 @@ router.post('/new', upload.any(), async (req, res) => {
 // @access      Private/Admin
 router.put('/:id', function (req, res) {
     try {
-        const newExploreDetails = {
+        const updatedDetails = {
             title: req.body.title,
             description: req.body.description,
+            tags: req.body.tags
         };
+        console.log(updatedDetails)
         Explore.findByIdAndUpdate(
             req.params.id,
-            { $set: newData },
+            { $set: updatedDetails },
             function (err, explore) {
                 if (err) {
                     console.log(err);

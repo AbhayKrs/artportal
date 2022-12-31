@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 const exploreSchema = new mongoose.Schema(
     {
         files: [{ type: String, default: '' }],
+        categories: [{ type: String, default: '' }],
         title: {
             type: String,
             required: true,

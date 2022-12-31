@@ -1,6 +1,7 @@
 export const FETCH_EXPLORE = 'FETCH_EXPLORE';
 export const FETCH_EXPLORELIST = 'FETCH_EXPLORELIST';
 export const HANDLE_EXPLORE_UPLOAD = 'HANDLE_EXPLORE_UPLOAD';
+export const HANDLE_EXPLORE_EDITED = 'HANDLE_EXPLORE_EDITED';
 export const HANDLE_DIALOG_OPEN = 'HANDLE_DIALOG_OPEN';
 export const HANDLE_DIALOG_CLOSE = 'HANDLE_DIALOG_CLOSE';
 
@@ -51,6 +52,9 @@ export const exploreReducer = (state = initialState, { type, payload }) => {
                     file: payload.file, title: payload.title, description: payload.description, uploadStatus: 'success'
                 }
             }
+        }
+        case HANDLE_EXPLORE_EDITED: {
+            return { ...state, exploreData: payload }
         }
         case HANDLE_DIALOG_OPEN: {
             const selectedData = payload.data;

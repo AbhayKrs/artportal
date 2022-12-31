@@ -7,7 +7,7 @@ import { MdAlternateEmail, MdEditOff, MdDownloadDone } from 'react-icons/md';
 import { FcGoogle } from 'react-icons/fc';
 import { MdAddAPhoto, MdClose } from 'react-icons/md';
 
-import { setSnackMessage, fetchAvatars, loadProfileDetails, updateUserProfile, refreshUserDetails } from '../../store/actions/common.actions';
+import { setSnackMessage, fetchAvatars, loadProfileDetails, updateUserProfile, refreshUserDetails, handleEditUserAvatar } from '../../store/actions/common.actions';
 import { fetchExploreImages, fetchUserImages } from '../../api';
 import { AvatarModal, ConfirmModal } from '../../components/Modal';
 
@@ -124,12 +124,12 @@ export const Settings_Acc = (props) => {
                             <FcGoogle className='h-10 w-10' />
                             <h5 className='font-josefinlight text-md text-black dark:text-gray-300 font-semibold'>Use Google to sign in to your account. Learn more</h5>
                         </div>
-                        {true ?
+                        {props.user.google_authenticated ?
                             <button disabled className="bg-green-200 text-green-500 px-3 py-1 w-fit rounded-md text-md font-caviar font-bold">
                                 Connected!
                             </button> :
-                            <button className="bg-violet-500 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 px-3 py-1 rounded-md text-lg font-caviar font-bold dark:font-normal">
-                                Sign Out
+                            <button className="bg-green-500 text-gray-900 dark:text-gray-200 hover:bg-green-600 dark:hover:bg-green-600 px-3 py-1 rounded-md text-lg font-caviar font-bold dark:font-normal">
+                                Link Account to Google
                             </button>
                         }
                     </div>
@@ -176,7 +176,8 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     fetchAvatars,
     loadProfileDetails,
     updateUserProfile,
-    refreshUserDetails
+    refreshUserDetails,
+    handleEditUserAvatar
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Settings_Acc)

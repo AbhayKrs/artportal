@@ -108,6 +108,7 @@ export const AwardTabPanel = (props) => {
                     user={props.user}
                     exploreID={props.exploreID}
                     onClose={() => setConfirmData({ open: false, award: {} })}
+                    awardClose={props.awardClose}
                     handleAwardExplore={props.handleAwardExplore}
                 />
             }
@@ -329,26 +330,30 @@ export const SearchFilterPanel = (props) => {
     }
 
     return (
-        <div className='flex w-full items-center bg-slate-100/75 dark:bg-darkNavBg/75 p-2 sticky top-14 z-20'>
-            <div className='flex overflow-hidden'>
-                <ul id='tabSlider' className="flex space-x-2 items-center">
-                    {filters.map((filter, index) => {
-                        return <li key={index} onClick={() => selectFilter(index)} className={index === activeFilter ? "font-caviar text-sm font-bold tracking-wider text-gray-700 bg-violet-300 rounded-lg h-fit shadow" : "font-caviar text-sm font-bold tracking-wider text-gray-700 dark:text-gray-400 bg-slate-200 dark:bg-neutral-900 flex items-center shadow cursor-pointer rounded-lg h-fit"}>
-                            <div className="flex items-center">
-                                <span className="py-2 px-3 capitalize">{filter}</span>
-                            </div>
-                        </li>
-                    })}
-                </ul>
+        <div className='flex justify-between sm:flex-row xs:flex-col w-full items-center bg-slate-100/75 dark:bg-darkNavBg/75 p-2 sticky top-14 z-20'>
+            <div className='flex'>
+                <div className='flex overflow-hidden'>
+                    <ul id='tabSlider' className="flex space-x-2 items-center">
+                        {filters.map((filter, index) => {
+                            return <li key={index} onClick={() => selectFilter(index)} className={index === activeFilter ? "font-caviar text-sm font-bold tracking-wider text-gray-700 bg-violet-300 rounded-lg h-fit shadow" : "font-caviar text-sm font-bold tracking-wider text-gray-700 dark:text-gray-400 bg-slate-200 dark:bg-neutral-900 flex items-center shadow cursor-pointer rounded-lg h-fit"}>
+                                <div className="flex items-center">
+                                    <span className="py-2 px-3 capitalize">{filter}</span>
+                                </div>
+                            </li>
+                        })}
+                    </ul>
+                </div>
+                <span className='text-gray-600 dark:text-gray-400 mx-2'>&#9679;</span>
+                <div className="flex items-center cursor-pointer space-x-2">
+                    <Dropdown left name='period' selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
+                </div>
             </div>
-            <span className='text-gray-600 dark:text-gray-400 mx-2'>&#9679;</span>
-            <div className="flex items-center cursor-pointer space-x-2">
-                <Dropdown left name='period' selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
+            <div className='flex'>
+                <SearchBar searchValue={exploreSearch} setSearchValue={setExploreSearch} handleSubmit={handleExploreSearch} />
+                <button type="button" className='btn ml-2 bg-violet-700 drop-shadow-xl p-2.5 items-center shadow-lg rounded-xl' onClick={() => navigate(`/explore/new `)}>
+                    <MdUpload className='h-6 w-full text-gray-200' />
+                </button>
             </div>
-            <SearchBar searchValue={exploreSearch} setSearchValue={setExploreSearch} handleSubmit={handleExploreSearch} />
-            <button type="button" className='btn ml-2 bg-violet-700 drop-shadow-xl p-2.5 items-center shadow-lg rounded-xl' onClick={() => navigate(`/explore/new `)}>
-                <MdUpload className='h-6 w-full text-gray-200' />
-            </button>
         </div>
     )
 }

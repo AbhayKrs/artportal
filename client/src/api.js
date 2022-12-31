@@ -1,7 +1,9 @@
-import axios from 'axios'
+import axios from 'axios';
 
-// const baseURL = 'https://artyst-web.herokuapp.com/api';
-const baseURL = 'http://localhost:5000/api';
+const baseURL = 'https://artystweb.onrender.com/api';
+export const taggerURL = 'https://artystweb.onrender.com/api/tagger/model.json';
+// const baseURL = 'http://localhost:5000/api';
+// export const taggerURL = 'http://localhost:5000/api/tagger/model.json';
 
 const get_api = axios.create({ baseURL });
 const post_api = axios.create({ baseURL, headers: { 'Content-Type': 'application/json' } });
@@ -45,6 +47,7 @@ export const addUserCartAPI = (userID, cartData) => get_api.post(`/users/${userI
 export const editAvatarAPI = (userID, avatar) => get_api.post(`/users/${userID}/avatar`, avatar);
 
 //PUT Request API's
+export const exploreItemEditAPI = (exploreID, updatedData) => get_api.put(`/explore/${exploreID}`, updatedData)
 export const exploreItemViewedAPI = (exploreID, viewerID) => get_api.put(`/explore/${exploreID}/viewed`, { viewer_id: viewerID });
 export const exploreEditCommentAPI = (exploreID, newComment, commentID, userData) => get_api.put(`/explore/${exploreID}/comments/${commentID}`, { content: newComment, user: userData })
 export const likeExploreAPI = (exploreID, userData) => get_api.put(`/explore/${exploreID}/like`, userData);

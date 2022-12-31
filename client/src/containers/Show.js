@@ -183,7 +183,7 @@ const ExploreShow = (props) => {
     }
 
     return (
-        <div className='main-container grid min-h-screen gap-2 bg-gray-200 dark:bg-darkNavBg sm:grid-cols-1 lg:grid-cols-12'>
+        <div className='main-container sm:grid min-h-screen gap-2 bg-gray-200 dark:bg-darkNavBg sm:grid-cols-1 lg:grid-cols-12 xs:flex xs:flex-col'>
             <ExploreShowCarousel
                 prevTrue={prev.length > 0}
                 nextTrue={next.length > 0}
@@ -225,10 +225,14 @@ const ExploreShow = (props) => {
                         </div>
                         <div className='flex pl-1 justify-between'>
                             <div className='flex w-fit items-center space-x-3'>
-                                <div className="relative float-left flex">
-                                    <img loading='lazy' onClick={props.common.isAuthenticated ? () => setAwardOpen(true) : handleInvalidUser} src={AwardIcon} className='h-12 w-12 cursor-pointer' />
-                                    <ImPlus className="absolute bottom-0 right-0 text-[#D1853A] h-4 w-4" />
-                                </div>
+                                {props.exploreShow.author.id === props.common.user.id ?
+                                    <div onClick={() => navigate(`/explore/${props.exploreShow._id}/edit`)} className='rounded-lg bg-violet-500 p-2 cursor-pointer ml-2'>
+                                        <MdEdit className="text-gray-200 h-6 w-6" />
+                                    </div>
+                                    : <div className="relative float-left flex">
+                                        <img loading='lazy' onClick={props.common.isAuthenticated ? () => setAwardOpen(true) : handleInvalidUser} src={AwardIcon} className='h-12 w-12 cursor-pointer' />
+                                        <ImPlus className="absolute bottom-0 right-0 text-[#D1853A] h-4 w-4" />
+                                    </div>}
                                 <BsHeartFill style={like ? { color: '#FF3980' } : { color: '#F190B3' }} className='h-7 w-7 cursor-pointer' onClick={props.common.isAuthenticated ? () => { setLike(!like); handleToggleLike(props.exploreShow.likes) } : handleInvalidUser} />
                                 <IoShareSocialSharp onClick={() => setShareOpen(true)} className='h-7 w-7 cursor-pointer text-violet-500 dark:text-violet-500' />
                                 {props.user && props.user.bookmarked && !!props.user.bookmarked.find(item => item._id === props.exploreShow._id) ?
@@ -256,14 +260,16 @@ const ExploreShow = (props) => {
                             </div>
                         </div>
                     </div>
-                    <div id='award' className='flex overflow-x-hidden bg-slate-200 dark:bg-neutral-700 mx-2 p-2 rounded-lg space-x-2'>
-                        {props.exploreShow.awards.map((award, index) => (
-                            <div key={index} className="relative float-left mr-2 flex">
-                                <img loading='lazy' draggable="false" className='max-w-fit h-12 w-12' src={fetchUserImages(award.icon)} />
-                                <span className="absolute font-bold top-0 right-0 inline-block rounded-full bg-violet-800 shadow-lg shadow-neutral-800 text-gray-300 px-1.5 py-0.5 text-xs">{award.count}</span>
-                            </div>
-                        ))}
-                    </div>
+                    {props.exploreShow.awards.length > 0 ?
+                        <div id='award' className='flex overflow-x-hidden bg-slate-200 dark:bg-neutral-700 mx-2 p-2 rounded-lg space-x-2'>
+                            {props.exploreShow.awards.map((award, index) => (
+                                <div key={index} className="relative float-left mr-2 flex">
+                                    <img loading='lazy' draggable="false" className='max-w-fit h-12 w-12' src={fetchUserImages(award.icon)} />
+                                    <span className="absolute font-bold top-0 right-0 inline-block rounded-full bg-violet-800 shadow-lg shadow-neutral-800 text-gray-300 px-1.5 py-0.5 text-xs">{award.count}</span>
+                                </div>
+                            ))}
+                        </div>
+                        : ''}
                 </div>
                 {props.common.isAuthenticated ?
                     <div className='m-2 rounded flex bg-gray-300 dark:bg-neutral-700'>
