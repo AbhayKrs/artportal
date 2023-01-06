@@ -23,6 +23,7 @@ export const initialState = {
         _id: '',
         title: '',
         description: '',
+        categories: [],
         likes: [],
         tags: [],
         awards: [],

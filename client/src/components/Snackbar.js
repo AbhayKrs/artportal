@@ -2,9 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { IoCloseSharp } from 'react-icons/io5';
 import { MdError } from 'react-icons/md';
 
+import TaggerStartGif from '../assets/images/taggerstartgif.gif';
+import TaggerStopGif from '../assets/images/taggerdonegif.gif';
+
+
 const Snackbar = (props) => {
     useEffect(() => {
-        if (props.msgdata.type.length > 0) {
+        if (props.msgdata.type.length > 0 && props.msgdata.type !== 'tagger_start') {
             setTimeout(() => {
                 closeSnack();
             }, 5000)
@@ -102,6 +106,34 @@ const Snackbar = (props) => {
                             Info
                         </div>
                         <div className="alert-description text-xs text-gray-400">
+                            {props.msgdata.message}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            case 'tagger_start': return <div className="alert fixed md:w-[30em] z-50 bottom-3 right-3 bg-[#90d5de] m-2 rounded">
+                <div className='relative min-w-[250px] pr-3 w-full flex flex-row items-center '>
+                    <img loading='lazy' src={TaggerStartGif} className='xs:h-16 md:h-20 ml-1 mr-1' />
+                    <div className="alert-content xs:p-2 md:p-0 ml-2">
+                        <div className="alert-title font-bold text-base text-black">
+                            Assigning categories
+                        </div>
+                        <div className="alert-description font-semibold text-xs text-neutral-800">
+                            {props.msgdata.message}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            case 'tagger_stop': return <div className="alert fixed md:w-[30em] z-50 bottom-3 right-3 bg-[#90d5de] m-2 rounded">
+                <div className='relative min-w-[250px] pr-3 w-full flex flex-row items-center '>
+                    <img loading='lazy' src={TaggerStopGif} className='xs:h-16 md:h-20 ml-1 mr-1' />
+                    <div className="alert-content xs:p-2 md:p-0 ml-2">
+                        <div className="alert-title font-bold text-base text-black">
+                            Success
+                        </div>
+                        <div className="alert-description font-semibold text-xs text-neutral-800">
                             {props.msgdata.message}
                         </div>
                     </div>

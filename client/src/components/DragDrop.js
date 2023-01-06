@@ -12,6 +12,11 @@ const reorder = (list, startIndex, endIndex) => {
 
 const Image = (props) => {
     useEffect(async () => {
+        props.setSnackMessage({
+            open: true,
+            message: 'Please give it a few seconds while the system auto-assigns the categories for your upload.',
+            type: 'tagger_start'
+        });
         const model = await tf.loadLayersModel(taggerURL);
         const imgElem = document.getElementById('uploadImg' + props.index);
         const img = await tf.browser.fromPixels(imgElem);
@@ -38,6 +43,11 @@ const Image = (props) => {
             final.push(predicted_class[p_ind[i]]);
         }
         props.setCategories(final);
+        props.setSnackMessage({
+            open: true,
+            message: 'Categories for your upload were successfully added!',
+            type: 'tagger_stop'
+        });
     }, [props.image.id])
 
     return (
@@ -60,7 +70,7 @@ const Image = (props) => {
 
 const ImageList = (props) => {
     return props.images.map((image, index) => (
-        <Image image={image} index={index} key={image.id} setCategories={props.setCategories} />
+        <Image image={image} index={index} key={image.id} setCategories={props.setCategories} setSnackMessage={props.setSnackMessage} />
     ));
 }
 
@@ -91,7 +101,7 @@ const DragDrop = (props) => {
                         ref={provided.innerRef}
                         className='scrollbar flex p-2 overflow-auto space-x-2'
                         {...provided.droppableProps}>
-                        <ImageList images={images} setCategories={props.setCategories} />
+                        <ImageList images={images} setCategories={props.setCategories} setSnackMessage={props.setSnackMessage} />
                         {provided.placeholder}
                     </div>
                 )}

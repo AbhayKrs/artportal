@@ -216,10 +216,18 @@ const ExploreShow = (props) => {
                                 <p className='font-josefinlight text-lg tex-gray-800 dark:text-gray-300'>{props.exploreShow.description}</p>
                             </div>
                         </div>
+                        <div className='flex flex-wrap w-fit ml-1 p-2 bg-neutral-200 dark:bg-neutral-900 rounded-full'>
+                            <div className="flex m-0.5 font-medium py-1.5 px-2 w-fit justify-center items-center text-xs font-medium leading-none text-gray-600 dark:text-gray-300">Categories:</div>
+                            {props.exploreShow.categories.map((item, index) => (
+                                <div key={index} className="flex w-fit justify-center items-center m-0.5 font-medium py-1.5 px-2 bg-teal-500 dark:bg-teal-600 rounded-full text-gray-600 dark:text-gray-300 shadow">
+                                    <div className="text-xs font-medium leading-none">{item}</div>
+                                </div>
+                            ))}
+                        </div>
                         <div className='flex flex-wrap px-1'>
                             {props.exploreShow.tags.map((item, index) => (
-                                <div key={index} className="flex w-fit justify-center items-center m-0.5 font-medium py-1.5 px-2 bg-indigo-50 dark:bg-violet-800 rounded-full text-gray-600 dark:text-gray-300 shadow">
-                                    <div className="text-xs font-medium leading-none">{item}</div>
+                                <div key={index} className="flex w-fit justify-center items-center m-0.5 font-medium py-1.5 px-2 rounded-full text-violet-500 dark:text-violet-500">
+                                    <div className="text-xs font-medium leading-none">#{item}</div>
                                 </div>
                             ))}
                         </div>

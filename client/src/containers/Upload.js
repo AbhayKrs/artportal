@@ -180,7 +180,7 @@ const ExploreUpload = (props) => {
             <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-5">
                 <span className='font-caviar text-3xl text-gray-700 dark:text-gray-300'>Upload</span>
                 <div className='flex lg:flex-row flex-col mt-3 lg:space-x-4 md:space-y-2'>
-                    <div className='w-full'>
+                    <div className='w-full xs:mb-2 md:mb-0'>
                         <span className='font-josefinlight font-semibold text-gray-700 dark:text-gray-300'>Files<span className='font-josefinlight text-rose-400 text-md'>*</span></span>
                         <div className="flex flex-col space-y-3">
                             <div className="flex flex-col justify-center items-center border-dashed space-y-2 rounded-lg border-2 border-gray-400 py-8" onDrop={(ev) => dropHandler(ev)} onDragOver={(ev) => dragOverHandler(ev)} >
@@ -211,6 +211,7 @@ const ExploreUpload = (props) => {
                                                 })}
                                                 setReorderedFiles={setExploreFiles}
                                                 setCategories={(categories) => setExploreCategories(imageCategories => [...new Set([...imageCategories, ...categories])])}
+                                                setSnackMessage={(msgData) => props.setSnackMessage(msgData)}
                                             />
                                         </div>
                                     }
@@ -223,8 +224,8 @@ const ExploreUpload = (props) => {
                             <span className='font-josefinlight font-semibold text-gray-700 dark:text-gray-300'>Categories:</span>
                             <div className="w-full inline-flex flex-col justify-center relative text-gray-500">
                                 <div id='category_menu' className='flex flex-wrap space-x-1'>
-                                    {exploreCategories.map(category => (
-                                        <div className="flex justify-center items-center m-1 font-medium py-1 px-2 rounded-full text-indigo-100 bg-violet-500 border border-violet-700 ">
+                                    {exploreCategories.map((category, index) => (
+                                        <div key={index} className="flex justify-center items-center m-1 font-medium py-1 px-2 rounded-full text-indigo-100 bg-violet-500 border border-violet-700 ">
                                             <div className="text-xs font-normal leading-none max-w-full flex-initial">{category}</div>
                                         </div>
                                     ))}
