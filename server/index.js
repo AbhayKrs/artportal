@@ -56,6 +56,10 @@ app.use('/api/users', users);
 app.use('/api/store', store);
 app.use('/api/articles', articles);
 
+app.use('/app/download', (req, res) => {
+    res.download('./server/public/app-release.apk');
+})
+
 if (process.env.NODE_ENV === 'production') {
     const __dirname = path.resolve();
     app.use(express.static(path.join(__dirname, '/client/build')));
