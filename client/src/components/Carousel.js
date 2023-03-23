@@ -91,7 +91,7 @@ export const HomeSingleCarousel = (props) => {
         <div className="active float-left w-full h-full">
           <img loading='lazy'
             src={bannerCarousel[currentIndex].img}
-            className={`block w-full h-full transition-opacity duration-700 ease-in  ${fade ? 'opacity-100' : 'opacity-0'}`}
+            className={`block w-full h-full object-cover transition-opacity duration-700 ease-in  ${fade ? 'opacity-100' : 'opacity-0'}`}
             alt="Wild Landscape"
           />
           <div className='absolute h-full w-full bottom-0 bg-gradient-to-t from-black/70 to-black/10'>

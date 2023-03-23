@@ -77,7 +77,7 @@ const ArtystRoutes = (props) => {
     return (
         <div className={props.common.theme}>
             <Header />
-            <div className='mt-14'></div>
+            <div className='mt-12'></div>
             <Loader open={props.common.loader} setLoader={props.setLoader} colorTheme={props.common.theme} />
             <Snackbar msgdata={props.common.snackmsg} setMessage={props.setSnackMessage} />
             <Routes>

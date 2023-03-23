@@ -212,7 +212,7 @@ export const FilterPanel = (props) => {
     }
 
     return (
-        <div className='flex sm:flex-row gap-2 flex-col w-full items-center bg-slate-100/75 dark:bg-darkNavBg/75 p-2 sticky top-14 z-20'>
+        <div className='flex sm:flex-row gap-2 flex-col w-full items-center bg-slate-100/75 dark:bg-darkNavBg/75 p-1 sticky top-12 z-20'>
             <div className='flex w-full items-center sm:justify-start justify-between'>
                 <div className='lg:flex hidden overflow-hidden'>
                     <ul id='tabSlider' className="flex space-x-2 items-center">
@@ -242,7 +242,7 @@ export const FilterPanel = (props) => {
             </div>
             <div className='flex w-full max-w-[25rem] sm:ml-auto'>
                 <SearchBar searchValue={exploreSearch} setSearchValue={setExploreSearch} handleSubmit={handleExploreSearch} />
-                <button onClick={() => uploadBtnClick()} type="button" className='btn ml-2 bg-violet-500 drop-shadow-xl p-2.5 items-center shadow-lg rounded-xl'>
+                <button onClick={() => uploadBtnClick()} type="button" className='btn ml-2 bg-violet-500 drop-shadow-xl p-2 items-center shadow-lg rounded-xl'>
                     <MdUpload className='h-6 w-full text-white' />
                 </button>
             </div>
@@ -330,7 +330,7 @@ export const SearchFilterPanel = (props) => {
     }
 
     return (
-        <div className='flex justify-between sm:flex-row xs:flex-col w-full items-center bg-slate-100/75 dark:bg-darkNavBg/75 p-2 sticky top-14 z-20'>
+        <div className='flex justify-between sm:flex-row xs:flex-col w-full items-center bg-slate-100/75 dark:bg-darkNavBg/75 p-1 sticky top-12 z-20'>
             <div className='flex'>
                 <div className='flex overflow-hidden'>
                     <ul id='tabSlider' className="flex space-x-2 items-center">

@@ -7,7 +7,7 @@ import TokenLogo from '../assets/images/money.png';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { IoAddCircleSharp, IoMenu } from "react-icons/io5";
-import { MdSettings } from "react-icons/md";
+import { MdUpload, MdSettings } from "react-icons/md";
 import { RiFireFill } from "react-icons/ri";
 import { TokenModal, LoginModal, RegisterModal, SignupSuccessModal } from '../components/Modal';
 
@@ -39,9 +39,9 @@ const Header = (props) => {
     }, [mobileMenu])
 
     return (
-        <nav className='bg-slate-100 dark:bg-darkNavHeader w-full fixed top-0 z-50 shadow-[0_4px_3px_rgba(175,175,175,0.55),_0_2px_2px_rgba(175,175,175,0.5)] dark:shadow-[0_4px_3px_rgba(45,45,45,0.55),_0_2px_2px_rgba(45,45,45,0.5)]'>
-            <div className={`${mobileMenu ? 'h-screen' : 'h-14'} px-2 lg:px-4`}>
-                <div className={`flex ${mobileMenu ? 'h-14' : 'h-full'} items-center`}>
+        <nav className='bg-slate-100 dark:bg-darkNavHeader w-full fixed top-0 z-50 shadow-[0_4px_3px_rgba(175,175,175,0.55),_0_2px_2px_rgba(175,175,175,0.5)] dark:shadow-[0_4px_3px_rgba(10,10,10,0.55),_0_2px_2px_rgba(10,10,10,0.5)]'>
+            <div className={`${mobileMenu ? 'h-screen' : 'h-12'} px-2 lg:px-4`}>
+                <div className={`flex ${mobileMenu ? 'h-12' : 'h-full'} items-center`}>
                     <Link to='/' onClick={() => setMobileMenu(false)}>
                         <img loading='lazy' className='block h-6 w-auto hover:cursor-pointer' src={Artyst_logo} alt='Artyst' />
                     </Link>
@@ -53,6 +53,9 @@ const Header = (props) => {
                         <Link to='/store' className='relative self-center text-gray-900 dark:text-gray-200 hover:text-violet-500 px-3 py-1 rounded-md text-lg font-caviar font-bold dark:font-normal'>
                             Store
                             {activeRoute.includes('/store') ? <span className='absolute bottom-[-10px] left-2 text-2xl text-violet-500'>&#9866;</span> : null}
+                        </Link>
+                        <Link to='/explore/new' className='relative self-center text-gray-900 dark:text-gray-200 hover:text-violet-500 px-3 py-1 rounded-md text-lg font-caviar font-bold dark:font-normal'>
+                            <MdUpload className='h-6 w-full text-white' />
                         </Link>
                         {props.common.isAuthenticated ?
                             <div className='relative group group-hover:block ml-1'>

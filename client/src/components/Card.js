@@ -63,10 +63,10 @@ export const HorizontalCard = (props) => {
 
     return (
         <div className='flex h-40 relative'>
-            <div className='flex absolute left-0 h-full w-[40%] md:w-72' style={{ clipPath: 'polygon(0% 0%, 100% 0%, 77% 100%, 2.5% 100%)' }}>
+            <div className='flex absolute left-0 h-full w-[45%]' style={{ clipPath: 'polygon(0% 0%, 100% 0%, 80% 100%, 2.5% 100%)' }}>
                 <img loading='lazy' className='h-full w-full object-cover object-top' src={fetchExploreImages(props.explore.files[0])} />
             </div>
-            <div className='flex flex-col absolute right-0 h-full w-2/3 md:w-[27em] text-gray-700 dark:text-gray-300 backdrop-sepia-0 bg-slate-300/75 dark:bg-neutral-700/30' style={{ clipPath: 'polygon(15% 0%, 100% 4%, 100% 100%, 0% 100%)' }}>
+            <div className='flex flex-col absolute right-0 h-full w-[60%] text-gray-700 dark:text-gray-300 backdrop-sepia-0 bg-slate-300/75 dark:bg-neutral-700/30' style={{ clipPath: 'polygon(15% 0%, 100% 4%, 100% 100%, 0% 100%)' }}>
                 <div className='flex flex-col max-w-[85%] h-full w-full p-4 absolute inset-y-0 right-0 m-auto justify-between'>
                     <div className='space-y-2'>
                         <h3 className="text-lg md:text-xl font-bold leading-5 capitalize">{props.explore.title}</h3>
