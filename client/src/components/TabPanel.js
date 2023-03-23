@@ -89,11 +89,11 @@ export const AwardTabPanel = (props) => {
                     </ul>
                 </div>
             </div>
-            <div className="scrollbar grid max-h-96 gap-6 bg-gray-300 dark:bg-neutral-900 p-5 overflow-x-hidden rounded-b-md lg:grid-cols-6 xs:grid-cols-2" >
+            <div className="scrollbar w-fit grid max-h-96 gap-6 bg-gray-300 dark:bg-neutral-900 p-5 overflow-x-hidden rounded-b-md lg:grid-cols-6 xs:grid-cols-4" >
                 {props.awards.map((award, index) => {
                     return <Fragment key={index}>
                         {index === activeStatus && props.awards.map((award, index) => (
-                            <button key={index} onClick={() => setConfirmData({ open: true, award })}>
+                            <button className='flex flex-col items-center' key={index} onClick={() => setConfirmData({ open: true, award })}>
                                 <img loading='lazy' style={{ width: '3em', height: '3em' }} src={fetchUserImages(award.icon)} />
                                 <p className="font-bold font-serif text-right text-neutral-700 dark:text-gray-300 text-sm">{award.value}</p>
                             </button>
@@ -119,7 +119,6 @@ export const AwardTabPanel = (props) => {
 export const FilterPanel = (props) => {
     let navigate = useNavigate();
 
-    const [exploreSearch, setExploreSearch] = useState('');
     const [activeFilter, setActiveFilter] = useState(-1);
     const [activePeriod, setActivePeriod] = useState('');
     const [activePeriodLabel, setActivePeriodLabel] = useState('Select a time period');
@@ -187,17 +186,6 @@ export const FilterPanel = (props) => {
         setActivePeriod(popular.value)
     }
 
-    const handleExploreSearch = () => {
-        if (activeFilter < 0) {
-            navigate(`/explore/search?query=${exploreSearch}`);
-        } else if (activeFilter === 0 || activeFilter === 2 || activeFilter === 3) {
-            navigate(`/explore/search?query=${exploreSearch}&filter=${filters[activeFilter].value.replace(/\s+/g, '+')}`);
-
-        } else {
-            navigate(`/explore/search?query=${exploreSearch}&filter=${filters[activeFilter].value.replace(/\s+/g, '+')}&period=${activePeriod}`);
-        }
-    }
-
     const uploadBtnClick = () => {
         if (props.authenticated)
             navigate(`/explore/new `)
@@ -212,12 +200,12 @@ export const FilterPanel = (props) => {
     }
 
     return (
-        <div className='flex sm:flex-row gap-2 flex-col w-full items-center bg-slate-100/75 dark:bg-darkNavBg/75 p-1 sticky top-12 z-20'>
+        <div className='flex sm:flex-row gap-2 flex-col w-full items-center bg-slate-100/75 dark:bg-darkNavBg/75 p-2 sticky top-12 z-20'>
             <div className='flex w-full items-center sm:justify-start justify-between'>
                 <div className='lg:flex hidden overflow-hidden'>
                     <ul id='tabSlider' className="flex space-x-2 items-center">
                         {filters.map((filter, index) => {
-                            return <li key={index} onClick={() => selectFilter(filter)} className={index === activeFilter ? "font-caviar text-sm font-bold tracking-wider text-gray-700 bg-violet-300 rounded-lg h-fit shadow" : "font-caviar text-sm font-bold tracking-wider text-gray-700 dark:text-gray-400 bg-slate-200 dark:bg-neutral-900 flex items-center shadow cursor-pointer rounded-lg h-fit"}>
+                            return <li key={index} onClick={() => selectFilter(filter)} className={`font-caviar text-sm font-bold tracking-wider ${index === activeFilter ? 'text-neutral-900 bg-violet-500 dark:bg-violet-400' : 'text-gray-700 dark:text-gray-300 bg-slate-300 dark:bg-zinc-700'}   flex items-center shadow cursor-pointer rounded-lg h-fit`}>
                                 <div className="flex items-center">
                                     <span className="py-2 px-3 capitalize">{filter.label}</span>
                                 </div>
@@ -239,12 +227,6 @@ export const FilterPanel = (props) => {
                     </div>
                     :
                     null}
-            </div>
-            <div className='flex w-full max-w-[25rem] sm:ml-auto'>
-                <SearchBar searchValue={exploreSearch} setSearchValue={setExploreSearch} handleSubmit={handleExploreSearch} />
-                <button onClick={() => uploadBtnClick()} type="button" className='btn ml-2 bg-violet-500 drop-shadow-xl p-2 items-center shadow-lg rounded-xl'>
-                    <MdUpload className='h-6 w-full text-white' />
-                </button>
             </div>
         </div>
     )

@@ -62,14 +62,19 @@ export const HorizontalCard = (props) => {
     let navigate = useNavigate();
 
     return (
-        <div className='flex h-40 relative'>
-            <div className='flex absolute left-0 h-full w-[45%]' style={{ clipPath: 'polygon(0% 0%, 100% 0%, 80% 100%, 2.5% 100%)' }}>
-                <img loading='lazy' className='h-full w-full object-cover object-top' src={fetchExploreImages(props.explore.files[0])} />
-            </div>
-            <div className='flex flex-col absolute right-0 h-full w-[60%] text-gray-700 dark:text-gray-300 backdrop-sepia-0 bg-slate-300/75 dark:bg-neutral-700/30' style={{ clipPath: 'polygon(15% 0%, 100% 4%, 100% 100%, 0% 100%)' }}>
+        <div className='flex h-36 relative'>
+            <div className='flex absolute left-0 h-full w-[50%] rounded-l-lg' style={{
+                clipPath: 'polygon(0% 0%, 100% 0%, 80% 100%, 2% 100%)',
+                backgroundImage: `url(${fetchExploreImages(props.explore.files[0])})`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                backgroundSize: 'cover',
+                position: 'relative'
+            }} />
+            <div className='flex flex-col absolute right-0 h-full w-[60%] rounded-r-lg text-gray-700 dark:text-gray-300 backdrop-sepia-0 bg-slate-300/75 dark:bg-neutral-700/25' style={{ clipPath: 'polygon(17% 0%, 100% 0%, 100% 100%, 0% 100%)' }}>
                 <div className='flex flex-col max-w-[85%] h-full w-full p-4 absolute inset-y-0 right-0 m-auto justify-between'>
                     <div className='space-y-2'>
-                        <h3 className="text-lg md:text-xl font-bold leading-5 capitalize">{props.explore.title}</h3>
+                        <h3 className="lg:text-lg md:text-md sm:text-sm font-bold lg:leading-5 md:leading-5 sm:leading-5 capitalize">{props.explore.title}</h3>
                         <div className="inline-flex items-end">
                             <div className="w-5 h-5 overflow-hidden mr-1">
                                 {props.author ? <img loading='lazy' src={fetchUserImages(props.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}

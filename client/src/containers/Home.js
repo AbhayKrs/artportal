@@ -10,6 +10,7 @@ import { MultipleCarousel, HomeMultiCarousel, HomeSingleCarousel } from '../comp
 import HomeWallpaper from '../assets/images/homeWallpaper.jpg'
 import AppQR from '../assets/images/artyst_appQR.png';
 import { HorizontalCard } from '../components/Card';
+import HighlightList from '../components/HighlightList';
 
 const Home = (props) => {
     let navigate = useNavigate();
@@ -42,7 +43,7 @@ const Home = (props) => {
                             <div className='flex absolute h-fit w-fit inset-0 mx-auto mt-auto mb-2 md:mb-9 items-center space-x-4'>
                                 <div className='flex h-24 w-24 md:h-32 md:w-32'>
                                     <span className='m-auto text-center'>
-                                        <img src={AppQR} />
+                                        <img className='rounded-md' src={AppQR} />
                                     </span>
                                 </div>
                                 <h2 className='font-caviar text-md md:text-2xl font-bold uppercase tracking-wider'>Download the app <br className='md:none' /> for <br /> <span className='text-2xl md:text-5xl font-black'>free!</span></h2>
@@ -51,25 +52,10 @@ const Home = (props) => {
                     </div>
                 </div>
             </div>
-            <div className='flex flex-col md:flex-row gap-5 py-5 px-2 md:px-20'>
-                <div className='flex flex-col w-full'>
-                    <h2 className='font-josefinlight font-bold text-3xl text-violet-500'>New & Trending</h2>
-                    <div className='h-1 bg-violet-500 w-10 mb-2 rounded'></div>
-                    <div className='flex flex-col space-y-2'>
-                        {props.explore.exploreList.sort(() => 0.5 - Math.random()).slice(0, 3).map((explore, index) => (
-                            <HorizontalCard key={index} explore={explore} author={explore.author} />
-                        ))}
-                    </div>
-                </div>
-                <div className='flex flex-col w-full'>
-                    <h2 className='font-josefinlight font-bold text-3xl text-violet-500'>Highlights of the Month</h2>
-                    <div className='h-1 bg-violet-500 w-10 mb-2 rounded'></div>
-                    <div className='flex flex-col space-y-2'>
-                        {props.explore.exploreList.sort(() => 0.5 - Math.random()).slice(0, 3).map((explore, index) => (
-                            <HorizontalCard key={index} explore={explore} author={explore.author} />
-                        ))}
-                    </div>
-                </div>
+            <div className='flex flex-col md:flex-row gap-5 p-5'>
+                <HighlightList type="new" title="Newly Added" list={props.explore.exploreList.sort(() => 0.5 - Math.random()).slice(0, 3)} />
+                <HighlightList type="trending" title="Trending" list={props.explore.exploreList.sort(() => 0.4 - Math.random()).slice(0, 3)} />
+                <HighlightList type="popular" title="Highlights of the Month" list={props.explore.exploreList.sort(() => 0.4 - Math.random()).slice(0, 3)} />
             </div>
             <HomeTabPanel tags={props.common.tags} exploreList={props.explore.exploreList} />
         </div >

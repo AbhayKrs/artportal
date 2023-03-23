@@ -55,6 +55,6 @@ code {
 	}
 
 	.main-container {
-		min-height: calc(100vh - 104px);
+		min-height: calc(100vh - 97px);
 	}
 }

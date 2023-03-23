@@ -261,8 +261,8 @@ export const AwardModal = (props) => {
     const { open, onClose, title, awardList, user, exploreID, handleAwardExplore } = props;
 
     return (
-        <div className={`${open ? 'block' : 'hidden'} flex  fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
-            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 lg:w-8/12 sm:w-11/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
+        <div className={`${open ? 'block' : 'hidden'} flex fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
+            <div className="relative m-auto xs:m-5 bg-slate-100 dark:bg-neutral-800 max-w-11/12 rounded-xl z-50 overflow-y-auto">
                 <div className='grid'>
                     <div className='p-4 pt-2 flex flex-col space-y-3'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />

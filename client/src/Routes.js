@@ -39,6 +39,7 @@ import Settings_Ntf from './containers/children/Settings_Ntf';
 import Settings_Cmt from './containers/children/Settings_Cmt';
 import Settings_Bill from './containers/children/Settings_Bill';
 import Edit from './containers/Edit';
+import Cart from './containers/Cart';
 
 const usePageViews = () => {
     let location = useLocation();
@@ -93,6 +94,7 @@ const ArtystRoutes = (props) => {
                 <Route path='/store/:id' element={<Show.StoreShow />} />
                 <Route path='/store/all' element={<StoreAll />} />
                 <Route path='/store/new' element={<Upload.StoreUpload />} />
+                <Route path='/store/cart' element={<Cart />} />
                 <Route path='/users/:id' element={<Profile />} />
                 <Route path='/settings' element={<Settings />} >
                     <Route index element={<Navigate to='general' />} />

@@ -7,7 +7,7 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 export const ExploreShowCarousel = (props) => {
   return (
     <div className="flex relative lg:col-span-8 w-full justify-center bg-gray-300 dark:bg-[#101010]">
-      <div className="flex flex-col my-3 mx-4 md:mx-32 space-y-3 w-full justify-center">
+      <div className="flex flex-col my-3 mx-4 md:mx-12 space-y-3 w-full justify-center">
         <div className='flex w-fit self-center items-center place-content-center'>
           <div className='flex fixed top-14 right-0 lg:right-[33.5%]  m-5 space-x-3 p-1 bg-neutral-100 dark:bg-neutral-800 rounded'>
             {props.prevTrue ? <div onClick={props.prev} className='cursor-pointer flex justify-end py-0.5 space-x-2 text-gray-700 hover:text-violet-400 dark:text-gray-200 dark:hover:text-violet-500'>

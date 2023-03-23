@@ -183,7 +183,7 @@ const ExploreShow = (props) => {
     }
 
     return (
-        <div className='main-container sm:grid min-h-screen gap-2 bg-gray-200 dark:bg-darkNavBg sm:grid-cols-1 lg:grid-cols-12 xs:flex xs:flex-col'>
+        <div className='main-container min-h-screen sm:grid gap-2 bg-gray-200 dark:bg-darkNavBg sm:grid-cols-1 lg:grid-cols-12 xs:flex xs:flex-col'>
             <ExploreShowCarousel
                 prevTrue={prev.length > 0}
                 nextTrue={next.length > 0}
@@ -194,37 +194,42 @@ const ExploreShow = (props) => {
                 next={() => { navigate(`/explore/${next}`); props.fetchExploreItem(next); }}
             />
             <div className='flex fixed m-5 space-x-3 py-1 px-2 bg-neutral-100 dark:bg-neutral-800 rounded'>
-                <div className='flex justify-end py-0.5 space-x-2 text-teal-500'>
-                    <h3 className='font-josefinlight text-lg self-center'>{new Intl.NumberFormat().format(props.exploreShow.views.length)}</h3>
+                <div className='flex items-center justify-end py-0.5 space-x-1 text-teal-500'>
                     <IoEye className='h-6 w-6' />
+                    <h3 className='font-josefinregular text-lg self-center'>{new Intl.NumberFormat().format(props.exploreShow.views.length)}</h3>
+
                 </div>
-                <div className='flex justify-end py-0.5 space-x-2 text-violet-500 dark:text-violet-500'>
-                    <h3 className='font-josefinlight text-lg self-center'>{new Intl.NumberFormat().format(props.exploreShow.likes.length)}</h3>
+                <div className='flex items-center justify-end py-0.5 space-x-1 text-violet-500 dark:text-violet-500'>
                     <IoHeart className='h-6 w-6' />
+                    <h3 className='font-josefinregular text-lg self-center'>{new Intl.NumberFormat().format(props.exploreShow.likes.length)}</h3>
+
                 </div>
-                <div className='flex justify-end py-0.5 space-x-2 text-violet-500 dark:text-violet-500'>
-                    <h3 className='font-josefinlight text-lg self-center'>{new Intl.NumberFormat().format(props.exploreShow.comment_count)}</h3>
+                <div className='flex items-center justify-end py-0.5 space-x-1 text-violet-500 dark:text-violet-500'>
                     <IoChatbox className='h-6 w-6' />
+                    <h3 className='font-josefinregular text-lg self-center'>{new Intl.NumberFormat().format(props.exploreShow.comment_count)}</h3>
+
                 </div>
             </div>
             <div className='lg:col-span-4 md:mt-3 sm:mt-0 bg-fixed'>
                 <div className='flex flex-col rounded-md bg-neutral-50 dark:bg-neutral-800 mr-2 ml-2 lg:ml-0 py-3'>
-                    <div className='flex flex-col space-y-2'>
+                    <div className='flex flex-col space-y-1 p-2'>
                         <div className='flex flex-row space-x-2'>
-                            <div className='flex flex-col w-full space-y-2 px-2'>
+                            <div className='flex px-2 flex-col w-full space-y-1'>
                                 <h1 className='font-caviar text-2xl tex-gray-900 dark:text-gray-200 font-bold'>{props.exploreShow.title}</h1>
                                 <p className='font-josefinlight text-lg tex-gray-800 dark:text-gray-300'>{props.exploreShow.description}</p>
                             </div>
                         </div>
-                        <div className='flex flex-wrap w-fit ml-1 p-2 bg-neutral-200 dark:bg-neutral-900 rounded-full'>
-                            <div className="flex m-0.5 font-medium py-1.5 px-2 w-fit justify-center items-center text-xs font-medium leading-none text-gray-600 dark:text-gray-300">Categories:</div>
-                            {props.exploreShow.categories.map((item, index) => (
-                                <div key={index} className="flex w-fit justify-center items-center m-0.5 font-medium py-1.5 px-2 bg-teal-500 dark:bg-teal-600 rounded-full text-gray-600 dark:text-gray-300 shadow">
-                                    <div className="text-xs font-medium leading-none">{item}</div>
-                                </div>
-                            ))}
+                        <div className='flex flex-col w-full p-2 bg-neutral-200 dark:bg-neutral-900 rounded-xl space-y-2'>
+                            <div className="font-medium text-xs font-medium text-gray-600 dark:text-gray-300">Categories</div>
+                            <div className='flex flex-row space-x-1.5'>
+                                {props.exploreShow.categories.map((item, index) => (
+                                    <div key={index} className="flex w-fit justify-center items-center font-medium py-1.5 px-2 bg-teal-500 dark:bg-teal-600 rounded-full text-gray-600 dark:text-gray-300 shadow">
+                                        <div className="text-xs font-medium leading-none">{item}</div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                        <div className='flex flex-wrap px-1'>
+                        <div className='flex flex-wrap'>
                             {props.exploreShow.tags.map((item, index) => (
                                 <div key={index} className="flex w-fit justify-center items-center m-0.5 font-medium py-1.5 px-2 rounded-full text-violet-500 dark:text-violet-500">
                                     <div className="text-xs font-medium leading-none">#{item}</div>

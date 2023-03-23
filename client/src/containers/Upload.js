@@ -138,7 +138,7 @@ const ExploreUpload = (props) => {
     }
 
     const handleUpload = () => {
-        if (exploreFiles.length === 0 || exploreTitle.length === 0 || exploreDesc.length === 0 || exploreTags.length === 0) {
+        if (exploreFiles.length === 0 || exploreTitle.length === 0 || exploreDesc.length === 0) {
             const msgData = {
                 open: true,
                 message: 'Please fill all the required fields!',
@@ -286,7 +286,7 @@ const ExploreUpload = (props) => {
                     <button onClick={() => navigate(`/explore`)} className="rounded-md px-3 py-1 bg-gray-300 focus:shadow-outline focus:outline-none">
                         Cancel
                     </button>
-                    <button onClick={handleUpload} className="ml-3 rounded-md px-3 py-1 bg-rose-500 hover:bg-rose-600 text-white focus:shadow-outline focus:outline-none">
+                    <button disabled={exploreFiles.length === 0 || exploreCategories.length === 0 || exploreTitle.length === 0 || exploreDesc.length === 0} onClick={handleUpload} className="ml-3 rounded-md px-3 py-1 bg-rose-500 hover:bg-rose-600 text-white focus:shadow-outline focus:outline-none disabled:opacity-40">
                         Apply
                     </button>
                 </div>
