@@ -5,11 +5,10 @@ import { bindActionCreators } from 'redux';
 import { HomeTabPanel } from '../components/TabPanel';
 import { fetchExploreList } from '../store/actions/explore.actions';
 import { setLoader, getTags } from '../store/actions/common.actions';
-import { MultipleCarousel, HomeMultiCarousel, HomeSingleCarousel } from '../components/Carousel';
+import { HomeSingleCarousel } from '../components/Carousel';
 
 import HomeWallpaper from '../assets/images/homeWallpaper.jpg'
 import AppQR from '../assets/images/artyst_appQR.png';
-import { HorizontalCard } from '../components/Card';
 import HighlightList from '../components/HighlightList';
 
 const Home = (props) => {
@@ -21,14 +20,22 @@ const Home = (props) => {
         props.fetchExploreList();
         props.getTags();
     }, [])
+
     return (
         <div className='main-container bg-gray-200 dark:bg-darkNavBg'>
-            <div className='flex flex-col gap-2 p-4 bg-cover bg-no-repeat' style={{
-                backgroundImage: `linear-gradient(rgba(255,255,255,0.5), rgba(0,0,0,0.8)), url(${HomeWallpaper})`,
-            }}>
+            <div className='flex flex-col gap-2 p-4 bg-cover bg-no-repeat' style={{ backgroundImage: `linear-gradient(rgba(255,255,255,0.5), rgba(0,0,0,0.8)), url(${HomeWallpaper})` }}>
                 <div className='flex flex-col md:flex-row h-[29.5rem] md:h-96 relative'>
                     <div className='absolute xs:w-full md:w-[52%] h-48 md:h-full inset-y-0 left-0' style={{ clipPath: 'polygon(0 0, 100% 0, 90% 100%, 0 100%)' }}>
-                        <HomeSingleCarousel />
+                        <HomeSingleCarousel
+                            itemCount="3"
+                            images={props.explore.exploreList.sort(() => 0.5 - Math.random()).slice(0, 3).map((item, index) => {
+                                return {
+                                    id: index,
+                                    file: item.files[0],
+                                    title: item.title,
+                                    artist: item.author.username
+                                }
+                            })} />
                     </div>
                     <div className='absolute top-[12.5rem] md:top-0 right-0 w-full md:w-1/2 h-40 p-2 md:p-0 md:h-48 backdrop-sepia-0 bg-white/50 dark:bg-black/50' style={{ clipPath: 'polygon(8% 0%, 100% 0px, 85% 75%, 2.5% 100%)' }}>
                         <div className='h-full relative text-black dark:text-white'>

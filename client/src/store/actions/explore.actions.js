@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { viewerIP, exploreItemViewedAPI, exploreItemAPI, exploreListAPI, exploreUploadAPI, exploreItemEditAPI, searchExploreListAPI, filterExploreListAPI, likeExploreAPI, dislikeExploreAPI, awardExploreAPI, bookmarkExploreAPI, deleteExploreItemAPI, exploreAddCommentAPI, exploreEditCommentAPI, exploreDeleteCommentAPI, exploreLikeCommentAPI, exploreDislikeCommentAPI } from '../../api';
+import { viewerIP, exploreItemViewedAPI, exploreItemAPI, exploreListAPI, exploreUploadAPI, exploreItemEditAPI, searchExploreListAPI, searchFilterExploreListAPI, filterExploreListAPI, likeExploreAPI, dislikeExploreAPI, awardExploreAPI, bookmarkExploreAPI, deleteExploreItemAPI, exploreAddCommentAPI, exploreEditCommentAPI, exploreDeleteCommentAPI, exploreLikeCommentAPI, exploreDislikeCommentAPI } from '../../api';
 import {
     FETCH_EXPLORE,
     FETCH_EXPLORELIST,
@@ -90,11 +90,20 @@ export const bookmarkExploreItem = (userID, bookmarkData) => async (dispatch, ge
 }
 
 export const searchExploreList = (query, filter, period) => async (dispatch, getState) => {
-    await searchExploreListAPI(query, filter, period).then(res => {
-        dispatch({ type: FETCH_EXPLORELIST, payload: res.data });
-    }).catch(err => {
-        console.log('---error searchExploreList', err);
-    })
+    if (!filter && !period) {
+        await searchExploreListAPI(query).then(res => {
+            console.log('test search', res.data);
+            dispatch({ type: FETCH_EXPLORELIST, payload: res.data });
+        }).catch(err => {
+            console.log('---error searchExploreList', err);
+        })
+    } else {
+        await searchFilterExploreListAPI(query, filter, period).then(res => {
+            dispatch({ type: FETCH_EXPLORELIST, payload: res.data });
+        }).catch(err => {
+            console.log('---error searchExploreList', err);
+        })
+    }
 }
 
 export const filterExploreList = (filter, period) => async (dispatch, getState) => {

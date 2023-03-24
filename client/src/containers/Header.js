@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import { IoAddCircleSharp, IoMenu } from "react-icons/io5";
 import { AiFillNotification } from "react-icons/ai";
 import { MdUpload, MdSettings, MdShoppingCart } from "react-icons/md";
-import { RiFireFill } from "react-icons/ri";
 import { TokenModal, LoginModal, RegisterModal, SignupSuccessModal } from '../components/Modal';
 
 import { switchTheme, setAuthError, handleHeaderDialogOpen, handleHeaderDialogClose, handleSignIn, handleSignUp, handleGoogleAuth, handleSignOut, handleSignupSuccessMsgClose } from '../store/actions/common.actions';
@@ -21,7 +20,6 @@ const Header = (props) => {
     let navigate = useNavigate();
     const location = useLocation();
     const [tokenOpen, setTokenOpen] = useState(false);
-    const [signupSuccess, setSignupSuccess] = useState(false);
     const [mobileMenu, setMobileMenu] = useState(false);
     const [activeRoute, setActiveRoute] = useState('');
     const [exploreSearch, setExploreSearch] = useState('');
@@ -33,6 +31,9 @@ const Header = (props) => {
 
     useEffect(() => {
         setActiveRoute(location.pathname);
+        if (location.pathname != '/explore/search') {
+            setExploreSearch('');
+        }
     }, [location.pathname])
 
     useEffect(() => {
@@ -63,60 +64,63 @@ const Header = (props) => {
                             Store
                             {activeRoute.includes('/store') ? <span className='absolute bottom-[-10px] left-2 text-2xl text-violet-500'>&#9866;</span> : null}
                         </Link>
-                        <Link to='/store/cart' className='relative self-center px-3 py-1 rounded-md'>
-                            <MdShoppingCart className='w-6 h-6 text-gray-900 dark:text-gray-300 hover:cursor-pointer' />
-                            {props.user.cart && props.user.cart.length > 0 && <div className='absolute top-0 right-1 px-1 bg-rose-500 font-bold text-gray-200 rounded-full text-xs'>{props.user.cart.length}</div>}
-                        </Link>
-                        <Link to='/explore/new' className='relative self-center text-gray-900 px-2 py-1 hover:cursor-pointer'>
-                            <AiFillNotification className='h-6 w-6 text-gray-900 dark:text-gray-200' />
-                        </Link>
-                        <Link to='/explore/new' className='relative self-center text-gray-900 px-2 py-1 hover:cursor-pointer'>
-                            <MdUpload className='h-7 w-7 text-gray-900 dark:text-gray-200' />
-                        </Link>
                         {props.common.isAuthenticated ?
-                            <div className='relative group self-center group-hover:block ml-1'>
-                                <div className='flex relative w-8 h-8 justify-center items-center group-hover:p-1 group-hover:scale-125 group-hover:rounded-b-lg group-hover:block group-hover:bg-slate-300 dark:group-hover:bg-[#313135] group-hover:rounded-full'>
-                                    {props.common.isAuthenticated ? <img loading='lazy' alt='user' src={fetchUserImages(props.user.avatar.icon)} className='mt-0.5' /> : null}
-                                </div>
-                                <div className='container hidden fixed group-hover:block top-[2.75rem] w-52' style={{ right: window.innerWidth > 1024 ? '0.725rem' : '0.2rem' }}>
-                                    <div className='grid grid-cols-1 space-y-2 bg-slate-300 dark:bg-[#313135] text-white rounded-tl-lg rounded-br-lg p-3 rounded-bl-lg group-hover:block'>
-                                        <div className='flex place-content-between'>
-                                            <div className='block text-left'>
-                                                <p className='text-gray-900 dark:text-gray-300 text-md font-caviar font-semibold'>{props.user.name}</p>
-                                                <Link to={`/users/${props.user.id}`} className='text-gray-900 dark:text-gray-300 text-xs font-caviar font-semibold'>#{props.user.username}</Link>
+                            <>
+                                <Link to='/store/cart' className='relative self-center px-3 py-1 rounded-md'>
+                                    <MdShoppingCart className='w-6 h-6 text-gray-900 dark:text-gray-300 hover:cursor-pointer' />
+                                    {props.user.cart && props.user.cart.length > 0 && <div className='absolute top-0 right-1 px-1 bg-rose-500 font-bold text-gray-200 rounded-full text-xs'>{props.user.cart.length}</div>}
+                                </Link>
+                                <Link to='/notifications' className='relative self-center text-gray-900 px-2 py-1 hover:cursor-pointer'>
+                                    <AiFillNotification className='h-6 w-6 text-gray-900 dark:text-gray-200' />
+                                </Link>
+                                <Link to='/explore/new' className='relative self-center text-gray-900 px-2 py-1 hover:cursor-pointer'>
+                                    <MdUpload className='h-7 w-7 text-gray-900 dark:text-gray-200' />
+                                </Link>
+
+                                <div className='relative group self-center group-hover:block ml-1'>
+                                    <div className='flex relative w-8 h-8 justify-center items-center group-hover:p-1 group-hover:scale-125 group-hover:rounded-b-lg group-hover:block group-hover:bg-slate-300 dark:group-hover:bg-[#313135] group-hover:rounded-full'>
+                                        {props.common.isAuthenticated ? <img loading='lazy' alt='user' src={fetchUserImages(props.user.avatar.icon)} className='mt-0.5' /> : null}
+                                    </div>
+                                    <div className='container hidden fixed group-hover:block top-[2.75rem] w-52' style={{ right: window.innerWidth > 1024 ? '0.725rem' : '0.2rem' }}>
+                                        <div className='grid grid-cols-1 space-y-2 bg-slate-300 dark:bg-[#313135] text-white rounded-tl-lg rounded-br-lg p-3 rounded-bl-lg group-hover:block'>
+                                            <div className='flex place-content-between'>
+                                                <div className='block text-left'>
+                                                    <p className='text-gray-900 dark:text-gray-300 text-md font-caviar font-semibold'>{props.user.name}</p>
+                                                    <Link to={`/users/${props.user.id}`} className='text-gray-900 dark:text-gray-300 text-xs font-caviar font-semibold'>#{props.user.username}</Link>
+                                                </div>
+                                                {props.common.theme === 'dark' ?
+                                                    <button className='h-fit self-center rounded p-1.5 ml-3 shadow-sm bg-gray-300 border-gray-300' onClick={() => props.switchTheme('light')}>
+                                                        <img className='h-5 w-5' loading='lazy' src={LightMode} />
+                                                    </button>
+                                                    :
+                                                    <button className='h-fit self-center rounded p-1.5 ml-1 shadow-sm bg-neutral-900 border-gray-300' onClick={() => props.switchTheme('dark')}>
+                                                        <img className='h-6 w-6' loading='lazy' src={DarkMode} />
+                                                    </button>
+                                                }
                                             </div>
-                                            {props.common.theme === 'dark' ?
-                                                <button className='h-fit self-center rounded p-1.5 ml-3 shadow-sm bg-gray-300 border-gray-300' onClick={() => props.switchTheme('light')}>
-                                                    <img className='h-5 w-5' loading='lazy' src={LightMode} />
-                                                </button>
-                                                :
-                                                <button className='h-fit self-center rounded p-1.5 ml-1 shadow-sm bg-neutral-900 border-gray-300' onClick={() => props.switchTheme('dark')}>
-                                                    <img className='h-6 w-6' loading='lazy' src={DarkMode} />
-                                                </button>
-                                            }
-                                        </div>
-                                        <hr className='border-neutral-800 dark:border-neutral-200' />
-                                        <div className='flex items-center'>
-                                            <img loading='lazy' className='h-8' src={TokenLogo} />
-                                            <div className='block text-left ml-1'>
-                                                <p className='text-gray-900 dark:text-gray-300 text-sm font-caviar font-semibold'>Tokens</p>
-                                                <p className='flex items-center text-gray-900 dark:text-gray-300 text-xs font-caviar'>{props.user.tokens} tokens <IoAddCircleSharp className='mx-1 text-base text-violet-500 cursor-pointer' onClick={() => setTokenOpen(true)} /></p>
+                                            <hr className='border-neutral-800 dark:border-neutral-200' />
+                                            <div className='flex items-center'>
+                                                <img loading='lazy' className='h-8' src={TokenLogo} />
+                                                <div className='block text-left ml-1'>
+                                                    <p className='text-gray-900 dark:text-gray-300 text-sm font-caviar font-semibold'>Tokens</p>
+                                                    <p className='flex items-center text-gray-900 dark:text-gray-300 text-xs font-caviar'>{props.user.tokens} tokens <IoAddCircleSharp className='mx-1 text-base text-violet-500 cursor-pointer' onClick={() => setTokenOpen(true)} /></p>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className='flex flex-col'>
-                                            <Link to='/settings' className='flex items-center text-gray-900 dark:text-gray-200 text-base font-caviar font-bold dark:font-normal'><MdSettings className='mr-1 text-lg' /> Settings</Link>
-                                        </div>
-                                        {/* <div className='flex flex-col'>
+                                            <div className='flex flex-col'>
+                                                <Link to='/settings' className='flex items-center text-gray-900 dark:text-gray-200 text-base font-caviar font-bold dark:font-normal'><MdSettings className='mr-1 text-lg' /> Settings</Link>
+                                            </div>
+                                            {/* <div className='flex flex-col'>
                                             <Link to='/' className='flex items-center text-gray-900 dark:text-gray-200 text-base font-caviar font-bold dark:font-normal'><RiFireFill className='mr-1 text-lg' /> Premium</Link>
                                         </div> */}
-                                        <div className='flex flex-col'>
-                                            <button onClick={logout} className="bg-violet-500 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 px-3 py-1 rounded-md text-lg font-caviar font-bold dark:font-normal">
-                                                Sign Out
-                                            </button>
+                                            <div className='flex flex-col'>
+                                                <button onClick={logout} className="bg-violet-500 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 px-3 py-1 rounded-md text-lg font-caviar font-bold dark:font-normal">
+                                                    Sign Out
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </>
                             :
                             <>
                                 <button onClick={() => props.handleHeaderDialogOpen('openLoginDialog')} className='h-fit self-center bg-violet-500 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 py-1 px-3 rounded-md text-lg font-caviar font-bold dark:font-normal'>Login</button>

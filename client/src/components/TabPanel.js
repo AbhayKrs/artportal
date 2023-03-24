@@ -7,6 +7,7 @@ import Dropdown from './Dropdown';
 import SearchBar from './SearchBar';
 
 import { fetchUserImages } from '../api';
+import { awardTabPanelHeaders, exploreFilters, explorePeriodOptions } from '../constants';
 
 export const HomeTabPanel = (props) => {
     const [activeStatus, setActiveStatus] = useState(0);
@@ -79,7 +80,7 @@ export const AwardTabPanel = (props) => {
             <div className='flex'>
                 <div className='flex w-full overflow-hidden bg-gray-100 dark:bg-neutral-800'>
                     <ul id='tabSlider' className="flex ">
-                        {['Artyst Specials', 'Community Made', 'Premium'].map((awardType, index) => {
+                        {awardTabPanelHeaders.map((awardType, index) => {
                             return <li key={index} onClick={() => setActiveStatus(index)} className={index === activeStatus ? "text-sm text-gray-900 dark:font-medium bg-violet-500 mr-1 rounded-t-md" : "text-sm text-gray-600 rounded-t-md dark:text-gray-400 dark:bg-neutral-700 flex items-center mr-1 hover:text-indigo-700 cursor-pointer"}>
                                 <div className="font-josefinregular flex items-center uppercase">
                                     <span className="p-2 pb-1">{awardType}</span>
@@ -119,59 +120,69 @@ export const AwardTabPanel = (props) => {
 export const FilterPanel = (props) => {
     let navigate = useNavigate();
 
+    const [exploreSearch, setExploreSearch] = useState('');
     const [activeFilter, setActiveFilter] = useState(-1);
     const [activePeriod, setActivePeriod] = useState('');
     const [activePeriodLabel, setActivePeriodLabel] = useState('Select a time period');
-
-    const filters = [
-        { id: 0, label: 'Trending', value: 'trending' },
-        { id: 1, label: 'Popular', value: 'popular' },
-        { id: 2, label: 'New', value: 'new' },
-        { id: 3, label: 'Rising', value: 'rising' },
-        { id: 4, label: 'Most Discussed', value: 'most discussed' }
-    ];
-
-    const periodOptions = [
-        { id: 1, label: 'Past hour', value: 'hour' },
-        { id: 2, label: 'Past 24 hours', value: 'day' },
-        { id: 3, label: 'Past week', value: 'week' },
-        { id: 4, label: 'Past month', value: 'month' },
-        { id: 5, label: 'Past year', value: 'year' },
-        { id: 6, label: 'All time', value: 'all time' }
-    ]
 
     useEffect(() => {
         const params = new Proxy(new URLSearchParams(window.location.search), {
             get: (searchParams, prop) => searchParams.get(prop),
         });
+        if (!params.query) {
+            navigate('/explore');
+        } else {
+            setExploreSearch(params.query);
+        }
         if (params.filter || params.period) {
-            setActiveFilter(filters.map(x => { return x.value }).indexOf(params.filter));
+            setActiveFilter(exploreFilters.map(x => { return x.value }).indexOf(params.filter));
             params.period ? setActivePeriod(params.period) : setActivePeriod('');
         }
-    }, []);
+    }, [window.location.search]);
 
     useEffect(() => {
-        let label = activePeriod && periodOptions.find(item => item.value === activePeriod) ?
-            periodOptions.find(item => item.value === activePeriod).label
+        let label = activePeriod && explorePeriodOptions.find(item => item.value === activePeriod) ?
+            explorePeriodOptions.find(item => item.value === activePeriod).label
             :
             'Select a time period'
         setActivePeriodLabel(label);
 
-        if (activeFilter < 0) {
-            props.fetchExploreList();
-            navigate('/explore');
-        } else {
-            if (activeFilter === 0 || activeFilter === 2 || activeFilter === 3) {
-                setActivePeriod('')
-                navigate(`?filter=${filters[activeFilter].value.replace(/\s+/g, '+')}`);
-                props.filterExploreList(filters[activeFilter].value.replace(/\s+/g, '+'));
+        if (!props.search) {
+            console.log('test no search');
+            if (activeFilter < 0) {
+                props.fetchExploreList();
+                navigate('/explore');
             } else {
-                activePeriod.length <= 0 && setActivePeriod('month')
-                navigate(`?filter=${filters[activeFilter].value.replace(/\s+/g, '+')}&period=${activePeriod}`);
-                props.filterExploreList(filters[activeFilter].value.replace(/\s+/g, '+'), activePeriod);
+                if (activeFilter === 0 || activeFilter === 2 || activeFilter === 3) {
+                    setActivePeriod('')
+                    navigate(`?filter=${exploreFilters[activeFilter].value.replace(/\s+/g, '+')}`);
+                    props.filterExploreList(exploreFilters[activeFilter].value.replace(/\s+/g, '+'));
+                } else {
+                    activePeriod.length <= 0 && setActivePeriod('month')
+                    navigate(`?filter=${exploreFilters[activeFilter].value.replace(/\s+/g, '+')}&period=${activePeriod}`);
+                    props.filterExploreList(exploreFilters[activeFilter].value.replace(/\s+/g, '+'), activePeriod);
+                }
+            }
+        } else {
+            console.log('test yes search');
+            if (exploreSearch.length > 0) {
+                if (activeFilter < 0) {
+                    props.searchExploreList(exploreSearch);
+                    navigate(`/explore/search?query=${exploreSearch}`);
+                } else {
+                    if (activeFilter === 0 || activeFilter === 2 || activeFilter === 3) {
+                        console.log('test', exploreSearch, exploreFilters, activeFilter)
+                        navigate(`/explore/search?query=${exploreSearch}&filter=${exploreFilters[activeFilter].value.replace(/\s+/g, '+')}`);
+                        props.searchExploreList(exploreSearch, exploreFilters[activeFilter].value.replace(/\s+/g, '+'));
+                    } else {
+                        setActivePeriod('month')
+                        navigate(`/explore/search?query=${exploreSearch}&filter=${exploreFilters[activeFilter].value.replace(/\s+/g, '+')}&period=${activePeriod}`);
+                        props.searchExploreList(exploreSearch, exploreFilters[activeFilter].value.replace(/\s+/g, '+'), activePeriod);
+                    }
+                }
             }
         }
-    }, [activeFilter, activePeriod])
+    }, [exploreSearch, activeFilter, activePeriod])
 
     const selectFilter = (item) => {
         if (activeFilter === item) {
@@ -186,43 +197,30 @@ export const FilterPanel = (props) => {
         setActivePeriod(popular.value)
     }
 
-    const uploadBtnClick = () => {
-        if (props.authenticated)
-            navigate(`/explore/new `)
-        else {
-            const msg = {
-                open: true,
-                message: 'User not logged in. Please Sign In/Sign Up to perform the action.',
-                type: 'error'
-            }
-            props.setSnackMessage(msg);
-        }
-    }
-
     return (
         <div className='flex sm:flex-row gap-2 flex-col w-full items-center bg-slate-100/75 dark:bg-darkNavBg/75 p-2 sticky top-12 z-20'>
             <div className='flex w-full items-center sm:justify-start justify-between'>
                 <div className='lg:flex hidden overflow-hidden'>
                     <ul id='tabSlider' className="flex space-x-2 items-center">
-                        {filters.map((filter, index) => {
+                        {exploreFilters.map((filter, index) => {
                             return <li key={index} onClick={() => selectFilter(filter)} className={`font-caviar text-sm font-bold tracking-wider ${index === activeFilter ? 'text-neutral-900 bg-violet-500 dark:bg-violet-400' : 'text-gray-700 dark:text-gray-300 bg-slate-300 dark:bg-zinc-700'}   flex items-center shadow cursor-pointer rounded-lg h-fit`}>
                                 <div className="flex items-center">
-                                    <span className="py-2 px-3 capitalize">{filter.label}</span>
+                                    <span className="py-[0.4rem] px-3 capitalize">{filter.label}</span>
                                 </div>
                             </li>
                         })}
                     </ul>
                 </div>
                 <div className="lg:hidden flex items-center cursor-pointer space-x-2">
-                    <Dropdown left name='filters' selectedPeriod={activeFilter === -1 ? 'Select a filter' : activeFilter >= 0 && filters[activeFilter].label} options={filters} onSelect={selectFilter} />
+                    <Dropdown left name='filters' selectedPeriod={activeFilter === -1 ? 'Select a filter' : activeFilter >= 0 && exploreFilters[activeFilter].label} options={exploreFilters} onSelect={selectFilter} />
                 </div>
                 {activePeriod.length > 0 && <span className='text-gray-600 dark:text-gray-400 mx-2'>&#9679;</span>}
                 {activePeriod.length > 0 ?
                     <div className="flex items-center cursor-pointer space-x-2">
                         {window.innerWidth > 640 ?
-                            <Dropdown left name='period' selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
+                            <Dropdown left name='period' selectedPeriod={activePeriodLabel} options={explorePeriodOptions} onSelect={handlePeriodChange} />
                             :
-                            <Dropdown right name='period' selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
+                            <Dropdown right name='period' selectedPeriod={activePeriodLabel} options={explorePeriodOptions} onSelect={handlePeriodChange} />
                         }
                     </div>
                     :
@@ -232,110 +230,45 @@ export const FilterPanel = (props) => {
     )
 }
 
-export const SearchFilterPanel = (props) => {
-    let navigate = useNavigate();
-
-    const [exploreSearch, setExploreSearch] = useState('');
-    const [activeFilter, setActiveFilter] = useState(-1);
-    const [activePeriod, setActivePeriod] = useState('');
-    const [activePeriodLabel, setActivePeriodLabel] = useState('Select a time period');
-
-    const filters = ['trending', 'popular', 'new', 'rising', 'most discussed'];
-
-    const periodOptions = [
-        { id: 1, label: 'Past hour', value: 'hour' },
-        { id: 2, label: 'Past 24 hours', value: 'day' },
-        { id: 3, label: 'Past week', value: 'week' },
-        { id: 4, label: 'Past month', value: 'month' },
-        { id: 5, label: 'Past year', value: 'year' },
-        { id: 6, label: 'All time', value: 'all time' }
-    ]
-
-    const handlePeriodChange = (popular) => {
-        setActivePeriod(popular.value)
-    }
-
-    useEffect(() => {
-        const params = new Proxy(new URLSearchParams(window.location.search), {
-            get: (searchParams, prop) => searchParams.get(prop),
-        });
-        setExploreSearch(params.query);
-        if (params.filter || params.period) {
-            params.filter && setActiveFilter(filters.indexOf(params.filter));
-            params.period ? setActivePeriod(params.period) : setActivePeriod('');
-        }
-    }, []);
-
-    useEffect(() => {
-        let label = activePeriod && periodOptions.find(item => item.value === activePeriod) ?
-            periodOptions.find(item => item.value === activePeriod).label
-            :
-            'Select a time period'
-        setActivePeriodLabel(label);
-        if (exploreSearch.length === 0) {
-            props.fetchExploreList();
-            navigate('/explore');
-        }
-        if (activeFilter < 0) {
-            props.searchExploreList(exploreSearch);
-            navigate(`/explore/search?query=${exploreSearch}`);
-        } else {
-            if (activeFilter === 0 || activeFilter === 2 || activeFilter === 3) {
-                navigate(`/explore/search?query=${exploreSearch}&filter=${filters[activeFilter].replace(/\s+/g, '+')}`);
-                props.searchExploreList(exploreSearch, filters[activeFilter].replace(/\s+/g, '+'));
-            } else {
-                setActivePeriod('month')
-                navigate(`/explore/search?query=${exploreSearch}&filter=${filters[activeFilter].replace(/\s+/g, '+')}&period=${activePeriod}`);
-                props.searchExploreList(exploreSearch, filters[activeFilter].replace(/\s+/g, '+'), activePeriod);
-            }
-        }
-    }, [exploreSearch, activeFilter, activePeriod])
-
-    const selectFilter = (index) => {
-        if (activeFilter === index) {
-            setActiveFilter(-1);
-            setActivePeriod('')
-        } else {
-            setActiveFilter(index)
-        }
-    }
-
-    const handleExploreSearch = () => {
-        if (activeFilter < 0) {
-            navigate(`/explore/search?query=${exploreSearch}`);
-        } else if (activeFilter === 0 || activeFilter === 2 || activeFilter === 3) {
-            navigate(`/explore/search?query=${exploreSearch}&filter=${filters[activeFilter].replace(/\s+/g, '+')}`);
-
-        } else {
-            navigate(`/explore/search?query=${exploreSearch}&filter=${filters[activeFilter].replace(/\s+/g, '+')}&period=${activePeriod}`);
-        }
-    }
-
+export const NotificationTabPanel = () => {
     return (
-        <div className='flex justify-between sm:flex-row xs:flex-col w-full items-center bg-slate-100/75 dark:bg-darkNavBg/75 p-1 sticky top-12 z-20'>
-            <div className='flex'>
-                <div className='flex overflow-hidden'>
-                    <ul id='tabSlider' className="flex space-x-2 items-center">
-                        {filters.map((filter, index) => {
-                            return <li key={index} onClick={() => selectFilter(index)} className={index === activeFilter ? "font-caviar text-sm font-bold tracking-wider text-gray-700 bg-violet-300 rounded-lg h-fit shadow" : "font-caviar text-sm font-bold tracking-wider text-gray-700 dark:text-gray-400 bg-slate-200 dark:bg-neutral-900 flex items-center shadow cursor-pointer rounded-lg h-fit"}>
-                                <div className="flex items-center">
-                                    <span className="py-2 px-3 capitalize">{filter}</span>
+        <div className="p-2 h-fit bg-slate-100 dark:bg-neutral-800">
+            {/* <div className='flex'>
+                <div className='flex w-full overflow-hidden bg-gray-100 dark:bg-neutral-800'>
+                    <ul id='tabSlider' className="flex ">
+                        {['Artyst Specials', 'Community Made', 'Premium'].map((awardType, index) => {
+                            return <li key={index} onClick={() => setActiveStatus(index)} className={index === activeStatus ? "text-sm text-gray-900 dark:font-medium bg-violet-500 mr-1 rounded-t-md" : "text-sm text-gray-600 rounded-t-md dark:text-gray-400 dark:bg-neutral-700 flex items-center mr-1 hover:text-indigo-700 cursor-pointer"}>
+                                <div className="font-josefinregular flex items-center uppercase">
+                                    <span className="p-2 pb-1">{awardType}</span>
                                 </div>
                             </li>
                         })}
                     </ul>
                 </div>
-                <span className='text-gray-600 dark:text-gray-400 mx-2'>&#9679;</span>
-                <div className="flex items-center cursor-pointer space-x-2">
-                    <Dropdown left name='period' selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
-                </div>
             </div>
-            <div className='flex'>
-                <SearchBar searchValue={exploreSearch} setSearchValue={setExploreSearch} handleSubmit={handleExploreSearch} />
-                <button type="button" className='btn ml-2 bg-violet-700 drop-shadow-xl p-2.5 items-center shadow-lg rounded-xl' onClick={() => navigate(`/explore/new `)}>
-                    <MdUpload className='h-6 w-full text-gray-200' />
-                </button>
+            <div className="scrollbar w-fit grid max-h-96 gap-6 bg-gray-300 dark:bg-neutral-900 p-5 overflow-x-hidden rounded-b-md lg:grid-cols-6 xs:grid-cols-4" >
+                {props.awards.map((award, index) => {
+                    return <Fragment key={index}>
+                        {index === activeStatus && props.awards.map((award, index) => (
+                            <button className='flex flex-col items-center' key={index} onClick={() => setConfirmData({ open: true, award })}>
+                                <img loading='lazy' style={{ width: '3em', height: '3em' }} src={fetchUserImages(award.icon)} />
+                                <p className="font-bold font-serif text-right text-neutral-700 dark:text-gray-300 text-sm">{award.value}</p>
+                            </button>
+                        ))}
+                    </Fragment>
+                })}
             </div>
-        </div>
+            {confirmData.open &&
+                <AwardConfirmModal
+                    open={confirmData.open}
+                    awardData={confirmData.award}
+                    user={props.user}
+                    exploreID={props.exploreID}
+                    onClose={() => setConfirmData({ open: false, award: {} })}
+                    awardClose={props.awardClose}
+                    handleAwardExplore={props.handleAwardExplore}
+                />
+            } */}
+        </div >
     )
 }

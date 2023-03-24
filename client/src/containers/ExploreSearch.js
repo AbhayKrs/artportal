@@ -12,7 +12,7 @@ import moment from 'moment';
 
 import { BsHeart, BsChat } from 'react-icons/bs';
 import { BiTimeFive } from 'react-icons/bi';
-import { SearchFilterPanel } from '../components/TabPanel';
+import { FilterPanel } from '../components/TabPanel';
 
 const ExploreSearch = (props) => {
     let navigate = useNavigate();
@@ -24,7 +24,7 @@ const ExploreSearch = (props) => {
 
     return (
         <div className='main-container bg-gray-200 dark:bg-darkNavBg'>
-            <SearchFilterPanel fetchExploreList={props.fetchExploreList} filterExploreList={props.filterExploreList} searchExploreList={props.searchExploreList} />
+            <FilterPanel search fetchExploreList={props.fetchExploreList} filterExploreList={props.filterExploreList} searchExploreList={props.searchExploreList} />
             <div className='flex flex-row'>
                 <Masonry cols={5}>
                     {props.explore.exploreList.map((explore, index) => (

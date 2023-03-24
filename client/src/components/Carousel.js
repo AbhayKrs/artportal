@@ -66,40 +66,36 @@ export const HomeSingleCarousel = (props) => {
     setFade(true);
     setTimeout(() => {
       setFade(false)
-    }, 3500)
+    }, 9500)
   }, [currentIndex])
 
   const startSlider = () => {
     setInterval(() => {
       handleNextClick();
-    }, 4000)
+    }, 10000)
   }
 
   const handleNextClick = () => {
-    count = (count + 1) % bannerCarousel.length;
+    count = (count + 1) % props.itemCount;
     setCurrentIndex(count);
   }
 
-  const bannerCarousel = [
-    { id: 1, img: 'https://cdnb.artstation.com/p/assets/images/images/046/930/067/large/anato-finnstark-eledegian.jpg?1646323393', title: 'The Lost Giant', artist: 'Anato Finnstark' },
-    { id: 1, img: 'https://cdnb.artstation.com/p/assets/images/images/046/649/377/large/anato-finnstark-web-petit.jpg?1645623908', title: 'Fire Dragon God', artist: 'Anato Finnstark' },
-    { id: 1, img: 'https://cdna.artstation.com/p/assets/images/images/040/230/710/large/anato-finnstark-web-petit.jpg?1628237453', title: 'The Wolf Princess', artist: 'Anato Finnstark' }
-  ]
   return (
     <div className="relative h-full">
       <div className="relative w-full h-full overflow-hidden">
-        <div className="active float-left w-full h-full">
-          <img loading='lazy'
-            src={bannerCarousel[currentIndex].img}
+        {props.images.length > 0 && props.images[currentIndex].file && <div className="active float-left w-full h-full">
+          <img
+            loading='lazy'
+            src={fetchExploreImages(props.images[currentIndex].file)}
             className={`block w-full h-full object-cover transition-opacity duration-700 ease-in  ${fade ? 'opacity-100' : 'opacity-0'}`}
             alt="Wild Landscape"
           />
           <div className='absolute h-full w-full bottom-0 bg-gradient-to-t from-black/70 to-black/10'>
             <div className='h-fit w-full pb-2 pl-2 absolute bottom-0'>
-              <h1 className='text-3xl font-black font-josefinlight text-gray-200'>{bannerCarousel[currentIndex].title}</h1>
-              <h2 className='text-xl font-josefinregular text-gray-400'>{bannerCarousel[currentIndex].artist}</h2>
+              <h1 className='text-3xl font-black font-josefinlight text-gray-200 capitalize'>{props.images[currentIndex].title}</h1>
+              <h2 className='text-xl font-josefinregular text-gray-400'>{props.images[currentIndex].artist}</h2>
               <div className='flex flex-row absolute space-x-1 bottom-2 right-20'>
-                {bannerCarousel.map((img, index) => (
+                {props.images.map((img, index) => (
                   <label key={index} className="flex items-center cursor-pointer text-xl">
                     <input readOnly type="radio" name="radio" className="hidden peer" checked={currentIndex === index} />
                     <span className="w-3 h-3 inline-block rounded-full border border-blue-400 flex-no-shrink peer-checked:bg-blue-400"></span>
@@ -108,9 +104,8 @@ export const HomeSingleCarousel = (props) => {
               </div>
             </div>
           </div>
-        </div>
+        </div>}
       </div>
-
     </div >
   )
 }

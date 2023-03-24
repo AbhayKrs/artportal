@@ -177,12 +177,11 @@ router.get('/search', async (req, res) => {
         const query = req.query.query;
         const filter = req.query.filter;
         const period = req.query.period;
-        if (!filter && !period) {
-            exploreData = await Explore.find({});
-            exploreSearch = exploreData.filter(item => (item.title.indexOf(query) != -1) || (item.tags.find(a => a.includes(query))))
-        } else {
-            const exploreData = await Explore.find({});
-            exploreSearch = exploreData.filter(item => (item.title.indexOf(query) != -1) || (item.tags.find(a => a.includes(query))))
+        console.log("test", query, !!filter, !!period);
+        const exploreData = await Explore.find({});
+        exploreSearch = exploreData.filter(item => (item.title.indexOf(query) != -1) || (item.tags.find(a => a.includes(query))))
+
+        if (!!filter && !!period) {
             const getPeriod = (label) => {
                 let value = 0;
                 switch (label) {

@@ -40,6 +40,7 @@ import Settings_Cmt from './containers/children/Settings_Cmt';
 import Settings_Bill from './containers/children/Settings_Bill';
 import Edit from './containers/Edit';
 import Cart from './containers/Cart';
+import Notifications from './containers/Notifications';
 
 const usePageViews = () => {
     let location = useLocation();
@@ -104,6 +105,7 @@ const ArtystRoutes = (props) => {
                     <Route path='community' element={<Settings_Cmt />} />
                     <Route path='billing' element={<Settings_Bill />} />
                 </Route>
+                <Route path='/notifications' element={<Notifications />} />
                 {/* <Route path='/about' exact component={About} />
                 <Route path='/dashboard' exact component={Dashboard} />
                 <Route path='/notification' exact component={Notification} />
