@@ -35,7 +35,7 @@ Artyst Web is built upon the MERN stack framework along with [TailwindCSS](https
 
 **Key Features**:
  - **Artyst Tagger & Classification Model**- An image recognition based classification model based on Residual Neural Network (ResNet) and keras prediciton layers to categorically tag image uploads. In addition, the model also categorizes adult content under the "Mature" category with an image filter censoring.
- - **GridFS-Multer enhcanced storage engine** - An optimized storage logic using the GridFS storage engine to store files directly to MongoDB using Multer middleware along with an image compression function to reduce file size load.
+ - **GridFS-Multer image storage engine** - An optimized storage logic using the GridFS storage engine to store files directly to MongoDB using Multer middleware along with an image compression function to reduce file size load.
  
 ## :man_technologist:&nbsp;About Me :
 
