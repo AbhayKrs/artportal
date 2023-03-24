@@ -31,20 +31,17 @@ The project is a multi platform application built using the mentioned tech stack
 <img src="https://img.shields.io/badge/-tensorflow-red" />
 </p>
 
-Artyst web is built upon the MERN stack framework along with [TailwindCSS](https://github.com/tailwindlabs/tailwindcss) as the CSS framework, [Passport.js](https://github.com/jaredhanson/passport) as the authentication middleware and uses the [Multer GridFS](https://github.com/devconcept/multer-gridfs-storage) storage specification.
+Artyst Web is built upon the MERN stack framework along with [TailwindCSS](https://github.com/tailwindlabs/tailwindcss) as the CSS framework, [Passport.js](https://github.com/jaredhanson/passport) as the authentication middleware and uses the [Multer GridFS](https://github.com/devconcept/multer-gridfs-storage) storage specification.
 
-**Highlight features**:
- - Artyst Tagging and Classification Model is a image classification keras model built and used within the Artyst application to automate tagging and categorize uploads under a fixed number of labels. In addition, the model also categorizes adult content and enables a filter censoring of such content to younger users.
- - Artyst file storage is optimized using the GridFS storage engine to store files directly to MongoDB along with image compression to reduce file size load.
- - A token based reward system (not crypto) to enable greater enagagement and sustainable growth for the Artyst members.
+**Key Features**:
+ - **Artyst Tagger & Classification Model**- An image recognition based classification model based on Residual Neural Network (ResNet) and keras prediciton layers to categorically tag image uploads. In addition, the model also categorizes adult content under the "Mature" category with an image filter censoring.
+ - **GridFS-Multer enhcanced storage engine** - An optimized storage logic using the GridFS storage engine to store files directly to MongoDB using Multer middleware along with an image compression function to reduce file size load.
  
-## :woman_technologist: &nbsp;About Me :
+## :man_technologist:&nbsp;About Me :
 
-I am a Full Stack Developer <img src="https://media.giphy.com/media/WUlplcMpOCEmTGBtBW/giphy.gif" width="30"> from India.
-
-- 🔭 I am a Software Engineer with over 2.5+ years experience in multiplatform application development and architecture design.
+- <img src="https://media.giphy.com/media/WUlplcMpOCEmTGBtBW/giphy.gif" width="30"> I am a Software Engineer with over 2.5+ years experience in multiplatform application development and architecture design.
 - 🌱 I build applications for fun!
-- ⚡ I enjoy challenging myself with alogrithms in LeetCode and CodeForces.
-- 📫 How to reach me: &nbsp; [![Linkedin Badge](https://img.shields.io/badge/-abhaykrs-blue?style=flat&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/abhaykrs/)
+- ⚡ I enjoy working on challenging problems and developing complex applications.
+- 📫 Reach me: &nbsp; [![Linkedin Badge](https://img.shields.io/badge/-abhaykrs-blue?style=flat&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/abhaykrs/)
 
 ---
