@@ -48,6 +48,7 @@ export const setSnackMessage = (msgData) => (dispatch) => {
 
 export const setAuthError = (errorData) => (dispatch) => {
     try {
+        console.log('error', errorData);
         if (errorData)
             dispatch({ type: SET_AUTH_ERROR, payload: errorData })
         else

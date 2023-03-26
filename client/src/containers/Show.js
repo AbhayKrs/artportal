@@ -39,7 +39,6 @@ const ExploreShow = (props) => {
         window.scrollTo(0, 0);
         props.setLoader(true);
         await props.fetchExploreList();
-        await props.fetchExploreItem(id);
         await props.fetchAwards();
         await props.exploreItemViewed(id);
     }, [id])
