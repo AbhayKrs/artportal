@@ -4,7 +4,7 @@
 <p align="center">
   Hey, Welcome to the Artyst Hub. This is an individual effort project for an all things Art platform.
 
-> **Current version is Artyst v2. If you are intersted in checking out the application, please check [Artyst Web](https://artystweb.onrender.com/) for more details.**
+> **Current version is Artyst v2. If you are interested in checking out the application, please check [Artyst Web](https://artystweb.onrender.com/) for more details.**
 
 > **The project is also available in app version, you may check the following repo [Artyst App](https://github.com/AbhayKrs/ArtystAPP) for details.**
 </p>
