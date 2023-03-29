@@ -120,8 +120,9 @@ export const AwardTabPanel = (props) => {
 export const FilterPanel = (props) => {
     let navigate = useNavigate();
 
+    const [triggerEffect, setTriggerEffect] = useState(false);
     const [exploreSearch, setExploreSearch] = useState('');
-    const [activeFilter, setActiveFilter] = useState(-1);
+    const [activeFilter, setActiveFilter] = useState('');
     const [activePeriod, setActivePeriod] = useState('');
     const [activePeriodLabel, setActivePeriodLabel] = useState('Select a time period');
 
@@ -129,67 +130,90 @@ export const FilterPanel = (props) => {
         const params = new Proxy(new URLSearchParams(window.location.search), {
             get: (searchParams, prop) => searchParams.get(prop),
         });
-        if (!params.query) {
-            navigate('/explore');
-        } else {
+        console.log('init', params);
+
+        if (props.search && params.query) {
             setExploreSearch(params.query);
         }
+
         if (params.filter || params.period) {
-            setActiveFilter(exploreFilters.map(x => { return x.value }).indexOf(params.filter));
-            params.period ? setActivePeriod(params.period) : setActivePeriod('');
+            params.filter ? setActiveFilter(params.filter) : setActiveFilter('');
+
+            console.log('test', params.filter, params.period);
+
+            if (params.filter == 'trending' || params.filter == 'new' || params.filter == 'rising') {
+                setActivePeriod('');
+            } else {
+                params.period ? setActivePeriod(params.period) : setActivePeriod('month')
+            }
+
+            let label = params.period && explorePeriodOptions.find(item => item.value === params.period) ?
+                explorePeriodOptions.find(item => item.value === params.period).label
+                :
+                'Select a time period'
+            setActivePeriodLabel(label);
         }
-    }, [window.location.search]);
+        setTriggerEffect(true);
+    }, []);
 
     useEffect(() => {
-        let label = activePeriod && explorePeriodOptions.find(item => item.value === activePeriod) ?
-            explorePeriodOptions.find(item => item.value === activePeriod).label
-            :
-            'Select a time period'
-        setActivePeriodLabel(label);
+        if (triggerEffect) {
+            //case 1 - No search / No Filter / No Period
+            console.log('case1', exploreSearch.length == 0 && activeFilter.length == 0 && activePeriod.length == 0)
+            if (exploreSearch.length == 0 && activeFilter.length == 0 && activePeriod.length == 0) {
+                navigate('/explore?filter=trending');
+                props.filterExploreList('trending');
+            }
 
-        if (!props.search) {
-            console.log('test no search');
-            if (activeFilter < 0) {
-                props.fetchExploreList();
-                navigate('/explore');
-            } else {
-                if (activeFilter === 0 || activeFilter === 2 || activeFilter === 3) {
-                    setActivePeriod('')
-                    navigate(`?filter=${exploreFilters[activeFilter].value.replace(/\s+/g, '+')}`);
-                    props.filterExploreList(exploreFilters[activeFilter].value.replace(/\s+/g, '+'));
-                } else {
-                    activePeriod.length <= 0 && setActivePeriod('month')
-                    navigate(`?filter=${exploreFilters[activeFilter].value.replace(/\s+/g, '+')}&period=${activePeriod}`);
-                    props.filterExploreList(exploreFilters[activeFilter].value.replace(/\s+/g, '+'), activePeriod);
-                }
+            //case 2 - Search / No Filter / No Period
+            console.log('case2', exploreSearch.length > 0 && activeFilter.length == 0 && activePeriod.length == 0)
+            if (exploreSearch.length > 0 && activeFilter.length == 0 && activePeriod.length == 0) {
+                navigate(`/explore/search?query=${exploreSearch}`);
+                props.searchExploreList(exploreSearch);
             }
-        } else {
-            console.log('test yes search');
-            if (exploreSearch.length > 0) {
-                if (activeFilter < 0) {
-                    props.searchExploreList(exploreSearch);
-                    navigate(`/explore/search?query=${exploreSearch}`);
-                } else {
-                    if (activeFilter === 0 || activeFilter === 2 || activeFilter === 3) {
-                        console.log('test', exploreSearch, exploreFilters, activeFilter)
-                        navigate(`/explore/search?query=${exploreSearch}&filter=${exploreFilters[activeFilter].value.replace(/\s+/g, '+')}`);
-                        props.searchExploreList(exploreSearch, exploreFilters[activeFilter].value.replace(/\s+/g, '+'));
-                    } else {
-                        setActivePeriod('month')
-                        navigate(`/explore/search?query=${exploreSearch}&filter=${exploreFilters[activeFilter].value.replace(/\s+/g, '+')}&period=${activePeriod}`);
-                        props.searchExploreList(exploreSearch, exploreFilters[activeFilter].value.replace(/\s+/g, '+'), activePeriod);
-                    }
-                }
+
+            //case 3 - Search / Filter / No Period
+            console.log('case3', exploreSearch.length > 0 && activeFilter.length > 0 && activePeriod.length == 0)
+            if (exploreSearch.length > 0 && activeFilter.length > 0 && activePeriod.length == 0) {
+                navigate(`/explore/search?query=${exploreSearch}&filter=${activeFilter.replace(/\s+/g, '+')}`);
+                props.searchExploreList(exploreSearch, activeFilter.replace(/\s+/g, '+'));
             }
+
+            //case 4 - Search / Filter / Period
+            console.log('case4', exploreSearch.length > 0 && activeFilter.length > 0 && activePeriod.length > 0)
+            if (exploreSearch.length > 0 && activeFilter.length > 0 && activePeriod.length > 0) {
+                navigate(`/explore/search?query=${exploreSearch}&filter=${activeFilter.replace(/\s+/g, '+')}&period=${activePeriod.replace(/\s+/g, '+')}`);
+                props.searchExploreList(exploreSearch, activeFilter.replace(/\s+/g, '+'), activePeriod.replace(/\s+/g, '+'));
+            }
+
+            //case 5 - No Search / Filter / No Period
+            console.log('case5', exploreSearch.length == 0 && activeFilter.length > 0 && activePeriod.length == 0)
+            if (exploreSearch.length == 0 && activeFilter.length > 0 && activePeriod.length == 0) {
+                navigate(`?filter=${activeFilter.replace(/\s+/g, '+')}`);
+                props.filterExploreList(activeFilter.replace(/\s+/g, '+'));
+            }
+
+            //case 6 - No Search / Filter / Period
+            console.log('case6', exploreSearch.length == 0 && activeFilter.length > 0 && activePeriod.length > 0)
+            if (exploreSearch.length == 0 && activeFilter.length > 0 && activePeriod.length > 0) {
+                navigate(`?filter=${activeFilter.replace(/\s+/g, '+')}&period=${activePeriod.replace(/\s+/g, '+')}`);
+                props.filterExploreList(activeFilter.replace(/\s+/g, '+'), activePeriod.replace(/\s+/g, '+'));
+            }
+
         }
-    }, [exploreSearch, activeFilter, activePeriod])
+    }, [triggerEffect, exploreSearch, activeFilter, activePeriod])
 
     const selectFilter = (item) => {
         if (activeFilter === item) {
-            setActiveFilter(-1);
-            setActivePeriod('')
+            setActiveFilter('');
+            setActivePeriod('');
         } else {
-            setActiveFilter(item.id)
+            if (item == 'trending' || item == 'new' || item == 'rising') {
+                setActivePeriod('');
+            } else {
+                setActivePeriod('month');
+            }
+            setActiveFilter(item)
         }
     }
 
@@ -203,7 +227,7 @@ export const FilterPanel = (props) => {
                 <div className='lg:flex hidden overflow-hidden'>
                     <ul id='tabSlider' className="flex space-x-2 items-center">
                         {exploreFilters.map((filter, index) => {
-                            return <li key={index} onClick={() => selectFilter(filter)} className={`font-caviar text-sm font-bold tracking-wider ${index === activeFilter ? 'text-neutral-900 bg-violet-500 dark:bg-violet-400' : 'text-gray-700 dark:text-gray-300 bg-slate-300 dark:bg-zinc-700'}   flex items-center shadow cursor-pointer rounded-lg h-fit`}>
+                            return <li key={index} onClick={() => selectFilter(filter.value)} className={`font-caviar text-sm font-bold tracking-wider ${filter.value === activeFilter ? 'text-neutral-900 bg-violet-500 dark:bg-violet-400' : 'text-gray-700 dark:text-gray-300 bg-slate-300 dark:bg-zinc-700'}   flex items-center shadow cursor-pointer rounded-lg h-fit`}>
                                 <div className="flex items-center">
                                     <span className="py-[0.4rem] px-3 capitalize">{filter.label}</span>
                                 </div>
@@ -212,7 +236,7 @@ export const FilterPanel = (props) => {
                     </ul>
                 </div>
                 <div className="lg:hidden flex items-center cursor-pointer space-x-2">
-                    <Dropdown left name='filters' selectedPeriod={activeFilter === -1 ? 'Select a filter' : activeFilter >= 0 && exploreFilters[activeFilter].label} options={exploreFilters} onSelect={selectFilter} />
+                    <Dropdown left name='filters' selectedPeriod={activeFilter === '' ? 'Select a filter' : activeFilter.length >= 0 && exploreFilters.find(item => item.value === activeFilter) && exploreFilters.find(item => item.value === activeFilter).label} options={exploreFilters} onSelect={selectFilter} />
                 </div>
                 {activePeriod.length > 0 && <span className='text-gray-600 dark:text-gray-400 mx-2'>&#9679;</span>}
                 {activePeriod.length > 0 ?
