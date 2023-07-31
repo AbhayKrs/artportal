@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ReactGA from 'react-ga';
 import setAuthToken from './utils/setAuthToken';
-import { setSnackMessage, setLoader, handleSignOut, handleVerifyUser, getViewerIP, fetchUserExploreList, fetchUserStoreList, fetchCartList, fetchCommonImages } from './store/actions/common.actions';
+import { setSnackMessage, setLoader, getTags, handleSignOut, handleVerifyUser, getViewerIP, fetchUserExploreList, fetchUserStoreList, fetchCartList, fetchCommonImages } from './store/actions/common.actions';
 
 // import ErrorPopup from './components/Error/ErrorPopup';
 import Header from './containers/Header';
@@ -74,47 +74,50 @@ const ArtystRoutes = (props) => {
             await props.fetchCartList();
         }
         await props.fetchCommonImages();
+        await props.getTags();
     }, []);
 
     return (
-        <div className={props.common.theme}>
-            <Header />
-            <div className='mt-12'></div>
-            <Loader open={props.common.loader} setLoader={props.setLoader} colorTheme={props.common.theme} />
-            <Snackbar msgdata={props.common.snackmsg} setMessage={props.setSnackMessage} />
-            <Routes>
-                <Route path='/' element={<Home />} />
-                <Route path='/google_success' element={<Google header="Success" />} />
-                <Route path='/google_failed' element={<Google header="Failed" />} />
-                <Route path='/explore' element={<Explore />} ></Route>
-                <Route path='/explore/search' element={<ExploreSearch />} />
-                <Route path='/explore/:id' element={<Show.ExploreShow />} />
-                <Route path='/explore/new' element={<Upload.ExploreUpload />} />
-                <Route path='/explore/:id/edit' element={<Edit.ExploreEdit />} />
-                <Route path='/store' element={<Store />} />
-                <Route path='/store/:id' element={<Show.StoreShow />} />
-                <Route path='/store/all' element={<StoreAll />} />
-                <Route path='/store/new' element={<Upload.StoreUpload />} />
-                <Route path='/store/cart' element={<Cart />} />
-                <Route path='/users/:id' element={<Profile />} />
-                <Route path='/settings' element={<Settings />} >
-                    <Route index element={<Navigate to='general' />} />
-                    <Route path='general' element={<Settings_Gnr />} />
-                    <Route path='account' element={<Settings_Acc />} />
-                    <Route path='notifications' element={<Settings_Ntf />} />
-                    <Route path='community' element={<Settings_Cmt />} />
-                    <Route path='billing' element={<Settings_Bill />} />
-                </Route>
-                <Route path='/notifications' element={<Notifications />} />
-                {/* <Route path='/about' exact component={About} />
+        <main className={props.common.theme}>
+            <div className='bg-gray-200 dark:bg-darkNavBg'>
+                <Header />
+                <div className='mt-[3.75rem]'></div>
+                <Loader open={props.common.loader} setLoader={props.setLoader} colorTheme={props.common.theme} />
+                <Snackbar msgdata={props.common.snackmsg} setMessage={props.setSnackMessage} />
+                <Routes>
+                    <Route path='/' element={<Home />} />
+                    <Route path='/google_success' element={<Google header="Success" />} />
+                    <Route path='/google_failed' element={<Google header="Failed" />} />
+                    <Route path='/explore' element={<Explore />} ></Route>
+                    <Route path='/explore/search' element={<ExploreSearch />} />
+                    <Route path='/explore/:id' element={<Show.ExploreShow />} />
+                    <Route path='/explore/new' element={<Upload.ExploreUpload />} />
+                    <Route path='/explore/:id/edit' element={<Edit.ExploreEdit />} />
+                    <Route path='/store' element={<Store />} />
+                    <Route path='/store/:id' element={<Show.StoreShow />} />
+                    <Route path='/store/all' element={<StoreAll />} />
+                    <Route path='/store/new' element={<Upload.StoreUpload />} />
+                    <Route path='/store/cart' element={<Cart />} />
+                    <Route path='/users/:id' element={<Profile />} />
+                    <Route path='/settings' element={<Settings />} >
+                        <Route index element={<Navigate to='general' />} />
+                        <Route path='general' element={<Settings_Gnr />} />
+                        <Route path='account' element={<Settings_Acc />} />
+                        <Route path='notifications' element={<Settings_Ntf />} />
+                        <Route path='community' element={<Settings_Cmt />} />
+                        <Route path='billing' element={<Settings_Bill />} />
+                    </Route>
+                    <Route path='/notifications' element={<Notifications />} />
+                    {/* <Route path='/about' exact component={About} />
                 <Route path='/dashboard' exact component={Dashboard} />
                 <Route path='/notification' exact component={Notification} />
                 <Route path='/store/upload' exact component={StoreUpload} />
                 <Route path='/upload' exact component={Upload} />
                 <Route path='/privacy' exact component={Privacy} /> */}
-            </Routes>
-            <Footer />
-        </div>
+                </Routes>
+                {/* <Footer /> */}
+            </div>
+        </main >
     )
 }
 
@@ -131,7 +134,8 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     fetchUserStoreList,
     fetchCartList,
     handleSignOut,
-    fetchCommonImages
+    fetchCommonImages,
+    getTags
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArtystRoutes);

@@ -101,9 +101,9 @@ const Footer = () => {
                             </svg>
                         </Link>
                     </span> */}
-                    <span className='font-caviar text-md ml-auto mt-0 mt-2 items-center text-violet-400 dark:text-violet-500 font-caviar font-semibold'>
+                    <span className='font-josefinlight font-semibold text-md ml-auto mt-0 mt-2 items-center text-violet-400 dark:text-violet-500'>
                         {/* <a target="_blank" href='https://github.com/AbhayKrs' className='text-violet-400 dark:text-violet-500'>@ Abhay Kumar</a> */}
-                        Artyst Pvt. Ltd.
+                        &#169; 2023 Artyst Private Limited
                     </span>
                 </div>
             </div>

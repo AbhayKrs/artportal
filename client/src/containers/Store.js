@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { bindActionCreators } from 'redux';
+import { Helmet } from 'react-helmet';
 
 import { fetchStoreImages } from '../api';
 import { StoreMultiCarousel } from '../components/Carousel';
@@ -48,6 +49,9 @@ const Store = (props) => {
 
     return (
         <div className='main-container bg-gray-200 dark:bg-darkNavBg'>
+            <Helmet>
+                <title>Artyst | Store</title>
+            </Helmet>
             <div className='pt-3 px-2'>
                 <div className='text-2xl font-antipasto font-bold tracking-wider text-violet-500 dark:text-violet-400'>Welcome to the Artyst Store</div>
                 <div className='text-md font-caviar text-gray-800 dark:text-neutral-300'>Find the best of the artworld with artistic pieces, merch and products of everything art.</div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { bindActionCreators } from 'redux';
-import { fetchExploreList, searchExploreList, filterExploreList } from '../store/actions/explore.actions';
+import { fetchExploreList, filterExploreList } from '../store/actions/explore.actions';
 import { setLoader } from '../store/actions/common.actions';
 import Masonry from '../components/Masonry';
 
@@ -12,7 +12,7 @@ import moment from 'moment';
 
 import { BsHeart, BsChat } from 'react-icons/bs';
 import { BiTimeFive } from 'react-icons/bi';
-import { FilterPanel } from '../components/TabPanel';
+import { ExplorePanel } from '../components/TabPanel';
 
 const ExploreSearch = (props) => {
     let navigate = useNavigate();
@@ -24,7 +24,7 @@ const ExploreSearch = (props) => {
 
     return (
         <div className='main-container bg-gray-200 dark:bg-darkNavBg'>
-            <FilterPanel search fetchExploreList={props.fetchExploreList} filterExploreList={props.filterExploreList} searchExploreList={props.searchExploreList} />
+            <ExplorePanel search fetchExploreList={props.fetchExploreList} filterExploreList={props.filterExploreList} />
             <div className='flex flex-row'>
                 <Masonry cols={5}>
                     {props.explore.exploreList.map((explore, index) => (
@@ -78,7 +78,6 @@ const mapStateToProps = (state, props) => ({
 const mapDispatchToProps = (dispatch) => bindActionCreators({
     setLoader,
     fetchExploreList,
-    searchExploreList,
     filterExploreList
 }, dispatch);
 

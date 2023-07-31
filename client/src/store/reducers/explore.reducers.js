@@ -12,6 +12,7 @@ export const initialState = {
     exploreData: {
         author: {
             id: '',
+            name: '',
             username: '',
             avatar: {
                 icon: '',

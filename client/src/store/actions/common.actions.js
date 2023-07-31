@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { viewerIP, loginAPI, googleLoginAPI, signUpAPI, tagsAPI, commonImagesAPI, userDetailsAPI, userExploreListAPI, userStoreListAPI, userCartListAPI, addUserCartAPI, updateUserCartAPI, deleteStoreItemAPI, awardListAPI, deleteBookmarkAPI, avatarListAPI, deleteCartItemAPI, editAvatarAPI, locationsListAPI, updateUserDataAPI } from '../../api';
+import { viewerIP, loginAPI, googleLoginAPI, signUpAPI, tagsAPI, commonImagesAPI, userDetailsAPI, userExploreListAPI, userStoreListAPI, userCartListAPI, addUserCartAPI, updateUserCartAPI, deleteStoreItemAPI, awardListAPI, deleteBookmarkAPI, avatarListAPI, deleteCartItemAPI, editAvatarAPI, locationsListAPI, updateUserDataAPI, searchAPI } from '../../api';
 import {
     initialState,
     SWITCH_THEME,
@@ -25,7 +25,10 @@ import {
     FETCH_AWARDLIST,
     FETCH_LOCATIONS,
     RESET_BOOKMARK_LIST,
-    SET_AUTH_ERROR
+    SET_AUTH_ERROR,
+    SET_SEARCH_TYPE,
+    FETCH_SEARCHLIST,
+    CLEAR_SEARCHLIST
 } from '../reducers/common.reducers';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from '../../utils/setAuthToken';
@@ -253,6 +256,24 @@ export const deleteBookmark = (bookmarkID, userID) => async (dispatch, getState)
             dispatch(setSnackMessage(msgData))
         }
     })
+}
+
+export const setSearchType = (type) => async (dispatch, getState) => {
+    dispatch({ type: SET_SEARCH_TYPE, payload: type });
+}
+
+export const fetchSearchList = (type, value) => async (dispatch, getState) => {
+    console.log('---trigger', type, value)
+    await searchAPI(type, value).then(res => {
+        console.log('---fetch', res)
+        dispatch({ type: FETCH_SEARCHLIST, payload: { type: type, list: res.data } });
+    }).catch(err => {
+        console.log('---error fetchSearchList', err);
+    })
+}
+
+export const clearSearchList = () => async (dispatch, getState) => {
+    dispatch({ type: CLEAR_SEARCHLIST });
 }
 
 export const fetchUserExploreList = () => async (dispatch, getState) => {

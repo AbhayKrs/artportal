@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const baseURL = 'https://artystweb.onrender.com/api';
-export const taggerURL = 'https://artystweb.onrender.com/api/tagger/model.json';
-// const baseURL = 'http://localhost:5000/api';
-// export const taggerURL = 'http://localhost:5000/api/tagger/model.json';
+// const baseURL = 'https://artystweb.onrender.com/api';
+// export const taggerURL = 'https://artystweb.onrender.com/api/tagger/model.json';
+const baseURL = 'http://localhost:5000/api';
+export const taggerURL = 'http://localhost:5000/api/tagger/model.json';
 
 const get_api = axios.create({ baseURL });
 const post_api = axios.create({ baseURL, headers: { 'Content-Type': 'application/json' } });
@@ -19,10 +19,10 @@ export const googleRedirectURL = baseURL + `/users/googleAuth`;
 //GET Request API's
 export const googleLoginAPI = () => get_api.get(`/users/googleAuth`);
 export const exploreListAPI = () => get_api.get(`/explore`);
+export const searchAPI = (type, value) => get_api.get(`/search?type=${type}&value=${value}`);
 export const exploreItemAPI = exploreID => get_api.get(`/explore/${exploreID}`);
-export const searchExploreListAPI = (query) => get_api.get(`/explore/search?query=${query}`)
-export const searchFilterExploreListAPI = (query, filter, period) => get_api.get(`/explore/search?query=${query}&filter=${filter}&period=${period}`);
 export const filterExploreListAPI = (filter, period) => get_api.get(`/explore?filter=${filter}&period=${period}`);
+export const searchFilterExploreListAPI = (type, value, filter, period) => get_api.get(`/explore/search?type=${type}&value=${value}&filter=${filter}&period=${period}`);
 export const sellerListAPI = () => get_api.get('/users?type=seller');
 export const storeListAPI = () => get_api.get(`/store`);
 export const storeItemAPI = storeID => get_api.get(`/store/${storeID}`);

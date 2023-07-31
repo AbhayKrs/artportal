@@ -35,6 +35,8 @@ const Masonry = props => {
     // divide children into columns
     for (let i = 0; i < props.children.length; i++) {
         const columnIndex = i % columns;
+        console.log('children', i, columns, columnIndex)
+
         columnWrapper[`column${columnIndex}`].push(
             <div key={i} style={{ marginBottom: `${gap}px` }}>
                 {props.children[i]}

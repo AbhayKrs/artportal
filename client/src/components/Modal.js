@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import { googleRedirectURL } from '../api';
 import { IoCloseSharp, IoCloseCircle } from 'react-icons/io5';
 import { HiPlus, HiMinus, HiOutlineMail } from 'react-icons/hi';
@@ -6,10 +7,13 @@ import { FaUser, FaLock } from 'react-icons/fa';
 import { AwardTabPanel } from './TabPanel';
 import AddressMap from './AddressMap';
 import Stepper from './Stepper';
+import { fetchExploreImages, fetchUserImages } from '../api';
 
 import TokenLogo from '../assets/images/money.png';
 import TokenIcon from '../assets/images/money.png';
 import Success from '../assets/images/successgif.gif';
+import { FaChevronRight, FaHashtag, FaGreaterThan } from 'react-icons/fa6';
+import { FiAtSign } from 'react-icons/fi';
 
 import {
     EmailIcon,
@@ -29,8 +33,6 @@ import {
     WhatsappIcon,
     WhatsappShareButton,
 } from "react-share";
-
-import { fetchUserImages } from '../api';
 
 export const LoginModal = (props) => {
     const { open, title, banner, error, onClose, openRegister, handleSignIn, setAuthError } = props;
@@ -120,7 +122,7 @@ export const LoginModal = (props) => {
                             />
                         </div>
                         <label className="flex items-center cursor-pointer space-x-1">
-                            <input type="checkbox" checked={stayLoggedIn} onChange={handleStayLoggedin} className="form-checkbox h-3.5 w-3.5 rounded bg-slate-300 text-violet-500 cursor-pointer mr-1" />
+                            <input type="checkbox" checked={stayLoggedIn} onChange={handleStayLoggedin} className="form-checkbox h-4 w-4 rounded bg-slate-300 text-violet-500 accent-violet-500 cursor-pointer mr-1" />
                             <p className='font-caviar text-sm text-gray-900 dark:text-gray-300'>Keep me logged in</p>
                         </label>
                         {error.login && !username && !password ?
@@ -764,6 +766,94 @@ export const AvatarModal = (props) => {
                             ))}
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export const SearchModal = (props) => {
+    let navigate = useNavigate();
+    const { open, searchVal, activeSearch, searchList, fetchSearchList, clearSearch } = props;
+
+    return (
+        <div className={`${open ? 'flex' : 'hidden'} scrollbar fixed mx-auto top-14 z-50 inset-0 h-fit  bg-slate-100 dark:bg-neutral-800 w-11/12 sm:w-8/12 md:w-9/12 rounded-xl`}>
+            <div className='flex flex-col w-full px-4 pb-4'>
+                <div className='sticky border-t-2 border-neutral-900 md:border-0 bottom-0 inset-x-0 flex flex-col md:flex-row items-center justify-center w-full p-2 bg-slate-300 dark:bg-neutral-800 font-antipasto space-x-2'>
+                    <button disabled={activeSearch === 'artwork'} onClick={() => { fetchSearchList('artwork', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'artwork' ? 'text-red-400' : 'text-gray-300 hover:text-red-400'}`}>
+                        <FiAtSign className='h-4 w-4' />
+                        <span>artwork based search</span>
+                    </button>
+                    <span className='hidden md:flex text-gray-300'>&#8226;</span>
+                    <button disabled={activeSearch === 'tag'} onClick={() => { fetchSearchList('tag', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'tag' ? 'text-red-400' : 'text-gray-300 hover:text-red-400'}`}>
+                        <FaHashtag className='h-4 w-4' />
+                        <span>tag based search</span>
+                    </button>
+                    <span className='hidden md:flex text-gray-300'>&#8226;</span>
+                    <button disabled={activeSearch === 'artist'} onClick={() => { fetchSearchList('artist', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'artist' ? 'text-red-400' : 'text-gray-300 hover:text-red-400'}`}>
+                        <FaGreaterThan className='h-4 w-4' />
+                        <span>artist based search</span>
+                    </button>
+                </div>
+                <div className='scrollbar max-h-full md:max-h-[30rem] overflow-y-auto'>
+                    {activeSearch === 'artwork' &&
+                        <div className='flex flex-col gap-2 pr-2'>
+                            {searchList.length > 0 ? searchList.map((item, index) => (
+                                <div key={index} className='flex items-center gap-4 rounded-lg text-gray-200 bg-neutral-900 py-2 px-5'>
+                                    <img src={fetchExploreImages(item.files[0])} className='object-cover w-10 h-10 md:w-14 md:h-14 rounded' />
+                                    <span className='text-base md:text-xl font-semibold leading-5 capitalize'>{item.title}</span>
+                                    <FaChevronRight onClick={() => { navigate(`/explore/${item._id}`); clearSearch() }} className="ml-auto h-6 w-6 cursor-pointer" />
+                                </div>
+                            ))
+                                :
+                                <div className='flex flex-col space-y-2 items-center justify-center p-4'>
+                                    <FiAtSign className='h-8 w-8 text-neutral-800 dark:text-gray-300' />
+                                    <div className='flex flex-col items-center'>
+                                        <span className='text-gray-200 font-semibold leading-5'>No artworks found.</span>
+                                        <span className='text-gray-400 text-sm font-semibold'>"{searchVal}" did not match any artworks in our database. Please try again.</span>
+                                    </div>
+                                </div>}
+                        </div>
+                    }
+                    {activeSearch === 'artist' &&
+                        <div className='flex flex-col pr-2'>
+                            {console.log('test', searchList)}
+                            {searchList.length > 0 ? searchList.map((item, index) => (
+                                <div key={index} onClick={() => { navigate(`/users/${item.id}`); clearSearch() }} className='flex items-center gap-5 cursor-pointer rounded-lg hover:bg-neutral-900 py-3 px-5'>
+                                    <img src={fetchUserImages(item.avatar.icon)} className='object-cover w-10 h-10' />
+                                    <div className='flex flex-col'>
+                                        <span className='text-gray-200 text-lg font-semibold'>{item.name}</span>
+                                        <span className='text-gray-200 text-sm font-semibold'>@{item.username}</span>
+                                    </div>
+                                </div>
+                            )) :
+                                <div className='flex flex-col space-y-2 items-center justify-center p-4'>
+                                    <FaGreaterThan className='h-8 w-8 text-neutral-800 dark:text-gray-300' />
+                                    <div className='flex flex-col items-center'>
+                                        <span className='text-gray-200 font-semibold leading-5'>No artists found.</span>
+                                        <span className='text-gray-400 text-sm font-semibold'>"{searchVal}" did not match any artists in our database. Please try again.</span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    {activeSearch === 'tag' &&
+                        <div className='flex flex-col pr-2'>
+                            {searchList.length > 0 ? searchList.map((item, index) => (
+                                <div key={index} onClick={() => { navigate(`/explore`); clearSearch() }} className='flex cursor-pointer items-center gap-4 rounded-lg hover:bg-neutral-900 p-4'>
+                                    <FaHashtag className='text-gray-200 h-5 w-5' />
+                                    <span className='text-gray-200 font-semibold leading-5'>{item}</span>
+                                </div>
+                            )) :
+                                <div className='flex flex-col space-y-2 items-center justify-center p-4'>
+                                    <FaHashtag className='h-8 w-8 text-neutral-800 dark:text-gray-300' />
+                                    <div className='flex flex-col items-center'>
+                                        <span className='text-gray-200 font-semibold leading-5'>No tags found.</span>
+                                        <span className='text-gray-400 text-sm font-semibold'>"{searchVal}" did not match any tags in our database. Please try again.</span>
+                                    </div>
+                                </div>}
+                        </div>
+                    }
                 </div>
             </div>
         </div>

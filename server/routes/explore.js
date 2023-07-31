@@ -174,61 +174,80 @@ router.get('/', async (req, res) => {
 router.get('/search', async (req, res) => {
     try {
         let exploreSearch = [];
-        const query = req.query.query;
+        const type = req.query.type;
+        const value = req.query.value;
         const filter = req.query.filter;
         const period = req.query.period;
-        console.log("test", query, !!filter, !!period);
+        console.log("test", type, value, !!filter, !!period);
         const exploreData = await Explore.find({});
-        exploreSearch = exploreData.filter(item => (item.title.indexOf(query) != -1) || (item.tags.find(a => a.includes(query))))
 
-        if (!!filter && !!period) {
-            const getPeriod = (label) => {
-                let value = 0;
-                switch (label) {
-                    case 'hour': { value = 3600000; break; }
-                    case 'day': { value = 86400000; break; }
-                    case 'week': { value = 604800000; break; }
-                    case 'month': { value = 2592000000; break; }
-                    case 'year': { value = 31556952000; break; }
-                    default: break;
-                }
-                return value;
+        console.log('---exploreData', exploreData)
+
+        switch (type) {
+            case 'artwork': {
+                exploreSearch = exploreData.filter(item => item.title.toLowerCase().indexOf(value.toLowerCase()) != -1)
+                break;
             }
-
-            switch (filter) {
-                case 'trending': { exploreSearch = exploreSearch; break; }
-                case 'popular': {
-                    let filteredByPeriod = [];
-                    if (period === 'all time') {
-                        filteredByPeriod = exploreSearch;
-                    } else {
-                        filteredByPeriod = exploreSearch.filter(item => (Date.now() - item.createdAt) <= getPeriod(period));
-                    }
-                    exploreSearch = filteredByPeriod.sort((item1, item2) => item2.likes.length - item1.likes.length)
-                    break;
-                }
-                case 'new': {
-                    exploreSearch = exploreSearch.sort((item1, item2) => item2.createdAt - item1.createdAt)
-                    break;
-                }
-                case 'rising': {
-                    const explore30d = exploreSearch.filter(item => (Date.now() - item.createdAt) <= 2592000000);
-                    exploreSearch = explore30d.sort((item1, item2) => item2.likes.length - item1.likes.length)
-                    break;
-                }
-                case 'most discussed': {
-                    let filteredByPeriod = [];
-                    if (period === 'all time') {
-                        filteredByPeriod = exploreSearch;
-                    } else {
-                        filteredByPeriod = exploreSearch.filter(item => (Date.now() - item.createdAt) <= getPeriod(period));
-                    }
-                    exploreSearch = filteredByPeriod.sort((item1, item2) => item2.comments.length - item1.comments.length)
-                    break;
-                }
-                default: break;
+            case 'tag': {
+                exploreSearch = exploreData.filter(item => item.tags.find(a => a.includes(value)))
+                break;
+            }
+            case 'artist': {
+                exploreSearch = exploreData.filter(item => item.author.name.toLowerCase().indexOf(value.toLowerCase()) != -1 || item.author.username.toLowerCase().indexOf(value.toLowerCase()) != -1)
+                break;
             }
         }
+
+        // exploreSearch = exploreData.filter(item => (item.title.indexOf(query) != -1) || (item.tags.find(a => a.includes(query))))
+
+        // if (!!filter && !!period) {
+        //     const getPeriod = (label) => {
+        //         let value = 0;
+        //         switch (label) {
+        //             case 'hour': { value = 3600000; break; }
+        //             case 'day': { value = 86400000; break; }
+        //             case 'week': { value = 604800000; break; }
+        //             case 'month': { value = 2592000000; break; }
+        //             case 'year': { value = 31556952000; break; }
+        //             default: break;
+        //         }
+        //         return value;
+        //     }
+
+        //     switch (filter) {
+        //         case 'trending': { exploreSearch = exploreSearch; break; }
+        //         case 'popular': {
+        //             let filteredByPeriod = [];
+        //             if (period === 'all time') {
+        //                 filteredByPeriod = exploreSearch;
+        //             } else {
+        //                 filteredByPeriod = exploreSearch.filter(item => (Date.now() - item.createdAt) <= getPeriod(period));
+        //             }
+        //             exploreSearch = filteredByPeriod.sort((item1, item2) => item2.likes.length - item1.likes.length)
+        //             break;
+        //         }
+        //         case 'new': {
+        //             exploreSearch = exploreSearch.sort((item1, item2) => item2.createdAt - item1.createdAt)
+        //             break;
+        //         }
+        //         case 'rising': {
+        //             const explore30d = exploreSearch.filter(item => (Date.now() - item.createdAt) <= 2592000000);
+        //             exploreSearch = explore30d.sort((item1, item2) => item2.likes.length - item1.likes.length)
+        //             break;
+        //         }
+        //         case 'most discussed': {
+        //             let filteredByPeriod = [];
+        //             if (period === 'all time') {
+        //                 filteredByPeriod = exploreSearch;
+        //             } else {
+        //                 filteredByPeriod = exploreSearch.filter(item => (Date.now() - item.createdAt) <= getPeriod(period));
+        //             }
+        //             exploreSearch = filteredByPeriod.sort((item1, item2) => item2.comments.length - item1.comments.length)
+        //             break;
+        //         }
+        //         default: break;
+        //     }
+        // }
         res.json(exploreSearch);
     } catch (err) {
         // console.error(err.message);
@@ -280,8 +299,9 @@ router.post('/new', upload.any(), async (req, res) => {
             title: req.body.title,
             author: {
                 id: user._id,
+                name: user.name,
                 username: user.username,
-                avatar: user.avatar
+                avatar: user.avatar,
             },
             description: req.body.description,
             tags: req.body.tags
@@ -497,6 +517,7 @@ router.post('/:id/comments/new', async (req, res) => {
             content: req.body.content,
             author: {
                 id: req.body.user.id,
+                name: req.body.user.name,
                 username: req.body.user.username,
                 avatar: req.body.user.avatar
             }
@@ -540,10 +561,6 @@ router.put('/:id/comments/:comment_id/reply', async (req, res) => {
                     $push: {
                         "replies": {
                             comment: req.body.reply,
-                            author: {
-                                id: req.body.user.id,
-                                username: req.body.user.username
-                            }
                         }
                     }
                 },

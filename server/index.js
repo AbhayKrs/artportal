@@ -17,6 +17,7 @@ import './utils/authenticate.js';
 import tagger from './routes/tagger.js';
 import users from './routes/users.js';
 import explore from './routes/explore.js';
+import search from './routes/search.js';
 import store from './routes/store.js';
 import articles from './routes/articles.js';
 
@@ -55,10 +56,12 @@ app.use('/api/explore', explore);
 app.use('/api/users', users);
 app.use('/api/store', store);
 app.use('/api/articles', articles);
+app.use('/api/search', search);
 
 app.use('/app/download', (req, res) => {
     res.download('./server/public/app-release.apk');
 })
+
 
 if (process.env.NODE_ENV === 'production') {
     const __dirname = path.resolve();
@@ -67,7 +70,7 @@ if (process.env.NODE_ENV === 'production') {
         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
     })
 } else {
-    app.get("/", (req, res) => {
+    app.get("/api", (req, res) => {
         res.send("API is running..");
     });
 }

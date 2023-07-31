@@ -18,6 +18,7 @@ const exploreSchema = new mongoose.Schema(
                 icon: { type: String, default: '' },
                 category: { type: String, default: '' }
             },
+            name: { type: String, default: '' }
         },
         description: {
             type: String,

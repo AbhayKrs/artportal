@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { ImageCard } from './Card';
 import { AwardConfirmModal } from './Modal';
 import { MdUpload, MdClose } from 'react-icons/md';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import Dropdown from './Dropdown';
 import SearchBar from './SearchBar';
 
@@ -58,7 +59,7 @@ export const HomeTabPanel = (props) => {
                         return <Fragment key={index}>
                             {
                                 index === activeStatus && props.exploreList.filter(item => item.tags.includes(tag) === true).map((explore, index) => (
-                                    <ImageCard key={index} explore={explore} author={explore.author} />
+                                    <ImageCard size='l' key={index} explore={explore} author={explore.author} />
                                 ))
                             }
                         </Fragment>
@@ -117,7 +118,7 @@ export const AwardTabPanel = (props) => {
     )
 }
 
-export const FilterPanel = (props) => {
+export const ExplorePanel = (props) => {
     let navigate = useNavigate();
 
     const [triggerEffect, setTriggerEffect] = useState(false);
@@ -125,6 +126,7 @@ export const FilterPanel = (props) => {
     const [activeFilter, setActiveFilter] = useState('');
     const [activePeriod, setActivePeriod] = useState('');
     const [activePeriodLabel, setActivePeriodLabel] = useState('Select a time period');
+    const [activeStatus, setActiveStatus] = useState(-1);
 
     useEffect(() => {
         const params = new Proxy(new URLSearchParams(window.location.search), {
@@ -169,21 +171,21 @@ export const FilterPanel = (props) => {
             console.log('case2', exploreSearch.length > 0 && activeFilter.length == 0 && activePeriod.length == 0)
             if (exploreSearch.length > 0 && activeFilter.length == 0 && activePeriod.length == 0) {
                 navigate(`/explore/search?query=${exploreSearch}`);
-                props.searchExploreList(exploreSearch);
+                // props.searchExploreList(exploreSearch);
             }
 
             //case 3 - Search / Filter / No Period
             console.log('case3', exploreSearch.length > 0 && activeFilter.length > 0 && activePeriod.length == 0)
             if (exploreSearch.length > 0 && activeFilter.length > 0 && activePeriod.length == 0) {
                 navigate(`/explore/search?query=${exploreSearch}&filter=${activeFilter.replace(/\s+/g, '+')}`);
-                props.searchExploreList(exploreSearch, activeFilter.replace(/\s+/g, '+'));
+                // props.searchExploreList(exploreSearch, activeFilter.replace(/\s+/g, '+'));
             }
 
             //case 4 - Search / Filter / Period
             console.log('case4', exploreSearch.length > 0 && activeFilter.length > 0 && activePeriod.length > 0)
             if (exploreSearch.length > 0 && activeFilter.length > 0 && activePeriod.length > 0) {
                 navigate(`/explore/search?query=${exploreSearch}&filter=${activeFilter.replace(/\s+/g, '+')}&period=${activePeriod.replace(/\s+/g, '+')}`);
-                props.searchExploreList(exploreSearch, activeFilter.replace(/\s+/g, '+'), activePeriod.replace(/\s+/g, '+'));
+                // props.searchExploreList(exploreSearch, activeFilter.replace(/\s+/g, '+'), activePeriod.replace(/\s+/g, '+'));
             }
 
             //case 5 - No Search / Filter / No Period
@@ -221,16 +223,25 @@ export const FilterPanel = (props) => {
         setActivePeriod(popular.value)
     }
 
+    const sliderBtnClick = (dist) => {
+        document.getElementById('tagSlider').scrollBy({
+            top: 0,
+            left: dist,
+            behavior: 'smooth'
+        })
+    }
+
     return (
-        <div className='flex sm:flex-row gap-2 flex-col w-full items-center bg-slate-100/75 dark:bg-darkNavBg/75 p-2 sticky top-12 z-20'>
+        <div className='flex sm:flex-row gap-2 flex-col w-full items-center bg-slate-100/75 dark:bg-darkNavBg/75 p-2 sticky top-14 z-20'>
             <div className='flex w-full items-center sm:justify-start justify-between'>
-                <div className='lg:flex hidden overflow-hidden'>
-                    <ul id='tabSlider' className="flex space-x-2 items-center">
+                <div className='lg:flex hidden'>
+                    <ul id='tabSlider' className="flex space-x-1 items-center whitespace-nowrap">
                         {exploreFilters.map((filter, index) => {
-                            return <li key={index} onClick={() => selectFilter(filter.value)} className={`font-caviar text-sm font-bold tracking-wider ${filter.value === activeFilter ? 'text-neutral-900 bg-violet-500 dark:bg-violet-400' : 'text-gray-700 dark:text-gray-300 bg-slate-300 dark:bg-zinc-700'}   flex items-center shadow cursor-pointer rounded-lg h-fit`}>
-                                <div className="flex items-center">
-                                    <span className="py-[0.4rem] px-3 capitalize">{filter.label}</span>
-                                </div>
+                            return <li key={index} onClick={() => selectFilter(filter.value)} className={`flex items-center font-caviar text-sm font-bold tracking-wider ${filter.value === activeFilter ? 'text-violet-500' : 'text-gray-700 dark:text-gray-300'} h-fit`}>
+                                <span className="flex items-center py-[0.4rem] px-3 capitalize">
+                                    {filter.value === activeFilter && <div className='h-3.5 bg-violet-500 w-1 mr-1'></div>}
+                                    {filter.label}
+                                </span>
                             </li>
                         })}
                     </ul>

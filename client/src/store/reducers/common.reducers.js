@@ -28,6 +28,9 @@ export const FETCH_AVATARLIST = 'FETCH_AVATARLIST';
 export const FETCH_AWARDLIST = 'FETCH_AWARDLIST';
 export const FETCH_LOCATIONS = 'FETCH_LOCATIONS';
 export const RESET_BOOKMARK_LIST = 'RESET_BOOKMARK_LIST';
+export const SET_SEARCH_TYPE = 'SET_SEARCH_TYPE';
+export const FETCH_SEARCHLIST = 'FETCH_SEARCHLIST';
+export const CLEAR_SEARCHLIST = 'CLEAR_SEARCHLIST';
 
 export const initialState = {
     theme: 'dark',
@@ -106,6 +109,8 @@ export const initialState = {
     cartOpen: false,
     cartEmpty: true,
     cartTotal: 0,
+    activeSearch: '',
+    searchList: [],
     cartList: [],
     avatarList: [],
     awardList: [],
@@ -172,6 +177,17 @@ export const commonReducer = (state = initialState, { type, payload }) => {
         case FETCH_AVATARLIST: {
             const avatarList = [...payload];
             return { ...state, avatarList }
+        }
+        case SET_SEARCH_TYPE: {
+            return { ...state, activeSearch: payload }
+        }
+        case FETCH_SEARCHLIST: {
+            const searchList = [...payload.list];
+            return { ...state, activeSearch: payload.type, searchList }
+        }
+        case CLEAR_SEARCHLIST: {
+            const searchList = [];
+            return { ...state, activeSearch: '', searchList }
         }
         case FETCH_AWARDLIST: {
             const awardList = [...payload];

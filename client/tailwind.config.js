@@ -20,8 +20,7 @@ module.exports = {
       'josefinregular': 'JosefinSansRegular'
     },
     colors: {
-      darkNavHeader: '#1a1a1c',
-      darkNavBg: '#1d1d1f',
+      darkNavBg: '#1a1a1c',
       ...colors
     },
 

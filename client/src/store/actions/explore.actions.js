@@ -89,22 +89,22 @@ export const bookmarkExploreItem = (userID, bookmarkData) => async (dispatch, ge
     })
 }
 
-export const searchExploreList = (query, filter, period) => async (dispatch, getState) => {
-    if (!filter && !period) {
-        await searchExploreListAPI(query).then(res => {
-            console.log('test search', res.data);
-            dispatch({ type: FETCH_EXPLORELIST, payload: res.data });
-        }).catch(err => {
-            console.log('---error searchExploreList', err);
-        })
-    } else {
-        await searchFilterExploreListAPI(query, filter, period).then(res => {
-            dispatch({ type: FETCH_EXPLORELIST, payload: res.data });
-        }).catch(err => {
-            console.log('---error searchExploreList', err);
-        })
-    }
-}
+// export const searchExploreList = (query, filter, period) => async (dispatch, getState) => {
+//     if (!filter && !period) {
+//         await searchExploreListAPI(query).then(res => {
+//             console.log('test search', res.data);
+//             dispatch({ type: FETCH_EXPLORELIST, payload: res.data });
+//         }).catch(err => {
+//             console.log('---error searchExploreList', err);
+//         })
+//     } else {
+//         await searchFilterExploreListAPI(query, filter, period).then(res => {
+//             dispatch({ type: FETCH_EXPLORELIST, payload: res.data });
+//         }).catch(err => {
+//             console.log('---error searchExploreList', err);
+//         })
+//     }
+// }
 
 export const filterExploreList = (filter, period) => async (dispatch, getState) => {
     await filterExploreListAPI(filter, period).then(res => {

@@ -1,38 +1,95 @@
-import React, { useState } from 'react';
-import { BiSearch } from 'react-icons/bi';
-import { MdClose } from 'react-icons/md';
+import React, { useRef, useState, useEffect } from 'react';
+import { FaGreaterThan, FaHashtag } from 'react-icons/fa6';
+import { MdSearch, MdClose } from 'react-icons/md';
+import { FiAtSign } from 'react-icons/fi';
+import { SearchModal } from './Modal';
+
+const useSearchModalView = (ref, clearSearch) => {
+    useEffect(() => {
+        const handleOutsideClick = (event) => {
+            if (ref.current && !ref.current.contains(event.target)) {
+                clearSearch();
+            }
+        }
+
+        document.addEventListener("mousedown", handleOutsideClick);
+        return () => {
+            document.removeEventListener("mousedown", handleOutsideClick);
+        }
+    }, [ref]);
+}
 
 const SearchBar = (props) => {
-    const handleSearch = (val) => props.setSearchValue(val);
+    const [searchVal, setSearchVal] = useState('');
+
+    const searchModalRef = useRef(null);
+    useSearchModalView(searchModalRef, props.clearSearchList);
+
+    const handleSearch = (val) => {
+        setSearchVal(val);
+        val.length > 0 ?
+            props.fetchSearchList(props.activeSearch, val)
+            :
+            props.clearSearchList()
+    }
+
+    const clearSearch = () => {
+        props.clearSearchList();
+        setSearchVal('');
+    }
 
     return (
-        <div className="col-12 w-[40%] items-center justify-content-center flex space-x-2">
-            <div className="relative flex text-gray-300 dark:text-gray-600 w-full">
+        <div className='relative flex text-gray-300 dark:text-gray-600 w-full items-center'>
+            <div
+                ref={searchModalRef}
+                onClick={() => {
+                    if (props.activeSearch === '') {
+                        props.fetchSearchList('artwork', searchVal)
+                        props.setSearchType('artwork');
+                    }
+                }}
+                className="flex w-full items-center bg-slate-300 dark:bg-neutral-800 h-10 rounded-xl"
+            >
+                <div className="flex relative items-center justify-center text-neutral-800 dark:text-gray-300 h-8 pl-2 pr-1">
+                    <MdSearch className='h-6 w-6' />
+                </div>
+                {props.activeSearch != '' && <div className="flex relative items-center justify-center rounded border-[1px] border-solid border-gray-200 text-neutral-800 dark:text-gray-300 h-7 w-7 mr-2">
+                    {props.activeSearch === 'artwork' && <FiAtSign className='h-4 w-4' />}
+                    {props.activeSearch === 'tag' && <FaHashtag className='h-4 w-4' />}
+                    {props.activeSearch === 'artist' && <FaGreaterThan className='h-4 w-4' />}
+                </div>}
                 <input
                     type="text"
                     name="search"
-                    value={props.searchValue}
-                    placeholder="Search"
+                    value={searchVal}
+                    placeholder="Search..."
                     autoComplete="off"
-                    className="placeholder-gray-600 dark:placeholder-gray-300 w-full text-black dark:text-white bg-slate-300 dark:bg-neutral-800 h-10 px-3 pr-16 rounded-xl text-sm focus:outline-none"
+                    className="w-full font-caviar font-semibold tracking-wide bg-transparent text-black dark:text-white placeholder-gray-600 dark:placeholder-gray-300 h-10 text-lg focus:outline-none"
                     onChange={(ev) => handleSearch(ev.target.value)}
-                    onKeyPress={(event) => {
-                        if (event.key === 'Enter') {
-                            props.handleSubmit()
+                    onKeyPress={(ev) => {
+                        if (ev.key === 'Enter') {
+                            props.fetchSearchList(props.activeSearch, searchVal)
                         }
                     }}
                 />
-                {props.searchValue.length === 0 ?
+                {searchVal.length === 0 ?
                     '' :
-                    <button type="submit" className="absolute text-black dark:text-white right-6 top-0 mt-3 mr-3" onClick={() => props.setSearchValue('')}>
-                        <MdClose />
+                    <button className="flex items-center justify-center text-neutral-800 dark:text-gray-300 h-full w-12" onClick={() => setSearchVal('')}>
+                        <MdClose className='h-5 w-5' />
                     </button>
                 }
-                <button disabled={props.searchValue.length === 0} type="submit" onClick={() => props.handleSubmit()} className="absolute text-white dark:text-white right-0 top-0 h-full px-3 rounded-r-lg">
-                    <BiSearch />
-                </button>
+                <SearchModal
+                    open={props.activeSearch.length > 0}
+                    searchVal={searchVal}
+                    explore={props.explore}
+                    searchList={props.searchList}
+                    setSearchVal={setSearchVal}
+                    activeSearch={props.activeSearch}
+                    fetchSearchList={props.fetchSearchList}
+                    clearSearch={clearSearch}
+                />
             </div>
-        </div>
+        </div >
     )
 }
 

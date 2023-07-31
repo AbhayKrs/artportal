@@ -32,7 +32,7 @@ export const ExploreShowCarousel = (props) => {
 export const HomeMultiCarousel = (props) => {
   return (
     <div className="w-full relative flex items-center justify-center">
-      <GoChevronLeft onClick={props.prev} className='h-8 w-8 text-neutral-600' />
+      <GoChevronLeft onClick={props.goPrev} className='h-8 w-8 text-neutral-600' />
       <div className="w-full h-full overflow-x-hidden overflow-y-hidden">
         <div id="slider" className="h-full flex space-x-2 items-center justify-start transition ease-out duration-700">
           {props.data.map((item, index) => {
@@ -48,7 +48,7 @@ export const HomeMultiCarousel = (props) => {
           })}
         </div>
       </div>
-      <GoChevronRight onClick={props.next} className='h-8 w-8 text-neutral-600' />
+      <GoChevronRight onClick={props.goNext} className='h-8 w-8 text-neutral-600' />
     </div>
   )
 }
@@ -81,8 +81,8 @@ export const HomeSingleCarousel = (props) => {
   }
 
   return (
-    <div className="relative h-full">
-      <div className="relative w-full h-full overflow-hidden">
+    <div className="relative rounded-[inherit] h-full">
+      <div className="relative rounded-[inherit] w-full h-full overflow-hidden">
         {props.images.length > 0 && props.images[currentIndex].file && <div className="active float-left w-full h-full">
           <img
             loading='lazy'
@@ -94,7 +94,7 @@ export const HomeSingleCarousel = (props) => {
             <div className='h-fit w-full pb-2 pl-2 absolute bottom-0'>
               <h1 className='text-3xl font-black font-josefinlight text-gray-200 capitalize'>{props.images[currentIndex].title}</h1>
               <h2 className='text-xl font-josefinregular text-gray-400'>{props.images[currentIndex].artist}</h2>
-              <div className='flex flex-row absolute space-x-1 bottom-2 right-20'>
+              <div className='flex flex-row absolute space-x-1 bottom-4 right-4'>
                 {props.images.map((img, index) => (
                   <label key={index} className="flex items-center cursor-pointer text-xl">
                     <input readOnly type="radio" name="radio" className="hidden peer" checked={currentIndex === index} />

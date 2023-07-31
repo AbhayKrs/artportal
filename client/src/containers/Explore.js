@@ -3,17 +3,18 @@ import { connect } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { bindActionCreators } from 'redux';
 import { setSnackMessage, setLoader } from '../store/actions/common.actions';
-import { fetchExploreList, searchExploreList, filterExploreList } from '../store/actions/explore.actions';
+import { fetchExploreList, filterExploreList } from '../store/actions/explore.actions';
 import Masonry from '../components/Masonry';
 
-import PandaIcon from '../assets/images/lazyPanda2.png';
+import emptyIcon from '../assets/images/lazyPanda2.png';
 
 import { fetchExploreImages } from '../api';
 import moment from 'moment';
 
 import { BsHeart, BsChat } from 'react-icons/bs';
 import { BiTimeFive } from 'react-icons/bi';
-import { FilterPanel } from '../components/TabPanel';
+import { ExplorePanel } from '../components/TabPanel';
+import { Helmet } from 'react-helmet';
 
 const Explore = (props) => {
     let navigate = useNavigate();
@@ -25,7 +26,10 @@ const Explore = (props) => {
 
     return (
         <div className='main-container bg-gray-200 dark:bg-darkNavBg'>
-            <FilterPanel authenticated={props.common.isAuthenticated} setSnackMessage={props.setSnackMessage} fetchExploreList={props.fetchExploreList} filterExploreList={props.filterExploreList} searchExploreList={props.searchExploreList} />
+            <Helmet>
+                <title>Artyst | Explore</title>
+            </Helmet>
+            <ExplorePanel authenticated={props.common.isAuthenticated} setSnackMessage={props.setSnackMessage} fetchExploreList={props.fetchExploreList} filterExploreList={props.filterExploreList} tags={props.common.tags} />
             {props.explore.exploreList.length > 0 ?
                 <div className='flex flex-row'>
                     <Masonry cols={5}>
@@ -70,7 +74,7 @@ const Explore = (props) => {
                 :
                 <div >
                     <div className='absolute inset-0 h-fit w-fit m-auto text-center text-gray-300'>
-                        <img loading='lazy' className='h-32 w-full' src={PandaIcon} />
+                        <img loading='lazy' className='h-32 w-auto' src={emptyIcon} />
                         <h2 className='font-josefinregular text-2xl'>It's empty in here!</h2>
                     </div>
                 </div>
@@ -89,7 +93,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     setSnackMessage,
     setLoader,
     fetchExploreList,
-    searchExploreList,
     filterExploreList
 }, dispatch);
 
