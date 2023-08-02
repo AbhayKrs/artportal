@@ -3,6 +3,9 @@ import { viewerIP, exploreItemViewedAPI, exploreItemAPI, exploreListAPI, explore
 import {
     FETCH_EXPLORE,
     FETCH_EXPLORELIST,
+    FETCH_EXPLORE_TRENDING,
+    FETCH_EXPLORE_NEW,
+    FETCH_EXPLORE_MONTHHIGHLIGHTS,
     HANDLE_EXPLORE_UPLOAD,
     HANDLE_EXPLORE_EDITED,
     HANDLE_DIALOG_OPEN,
@@ -55,6 +58,30 @@ export const fetchExploreItem = (exploreID) => async (dispatch, getState) => {
 export const fetchExploreList = () => async (dispatch, getState) => {
     await exploreListAPI().then(res => {
         dispatch({ type: FETCH_EXPLORELIST, payload: res.data });
+    }).catch(err => {
+        console.log('---error fetchExploreList', err);
+    })
+};
+
+export const fetchTrendingList = () => async (dispatch, getState) => {
+    await exploreListAPI().then(res => {
+        dispatch({ type: FETCH_EXPLORE_TRENDING, payload: res.data.sort(() => 0.4 - Math.random()).slice(0, 12) });
+    }).catch(err => {
+        console.log('---error fetchExploreList', err);
+    })
+};
+
+export const fetchNewlyAddedList = () => async (dispatch, getState) => {
+    await exploreListAPI().then(res => {
+        dispatch({ type: FETCH_EXPLORE_NEW, payload: res.data.sort(() => 0.4 - Math.random()).slice(0, 12) });
+    }).catch(err => {
+        console.log('---error fetchExploreList', err);
+    })
+};
+
+export const fetchMonthHighlightsList = () => async (dispatch, getState) => {
+    await exploreListAPI().then(res => {
+        dispatch({ type: FETCH_EXPLORE_MONTHHIGHLIGHTS, payload: res.data.sort(() => 0.4 - Math.random()).slice(0, 12) });
     }).catch(err => {
         console.log('---error fetchExploreList', err);
     })

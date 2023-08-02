@@ -71,19 +71,20 @@ export const HomeSingleCarousel = (props) => {
 
   const startSlider = () => {
     setInterval(() => {
-      handleNextClick();
+      count++;
+      if (count == 3) count = 0;
+      handleNextClick(count);
     }, 10000)
   }
 
-  const handleNextClick = () => {
-    count = (count + 1) % props.itemCount;
-    setCurrentIndex(count);
+  const handleNextClick = (index) => {
+    setCurrentIndex(index);
   }
 
   return (
     <div className="relative rounded-[inherit] h-full">
       <div className="relative rounded-[inherit] w-full h-full overflow-hidden">
-        {props.images.length > 0 && props.images[currentIndex].file && <div className="active float-left w-full h-full">
+        {props.images.length > 0 && props.images[currentIndex]?.file && <div className="active float-left w-full h-full">
           <img
             loading='lazy'
             src={fetchExploreImages(props.images[currentIndex].file)}
@@ -96,7 +97,7 @@ export const HomeSingleCarousel = (props) => {
               <h2 className='text-xl font-josefinregular text-gray-400'>{props.images[currentIndex].artist}</h2>
               <div className='flex flex-row absolute space-x-1 bottom-4 right-4'>
                 {props.images.map((img, index) => (
-                  <label key={index} className="flex items-center cursor-pointer text-xl">
+                  <label key={index} onClick={() => handleNextClick(index)} className="flex items-center cursor-pointer text-xl">
                     <input readOnly type="radio" name="radio" className="hidden peer" checked={currentIndex === index} />
                     <span className="w-3 h-3 inline-block rounded-full border border-blue-400 flex-no-shrink peer-checked:bg-blue-400"></span>
                   </label>

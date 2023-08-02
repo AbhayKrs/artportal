@@ -4,11 +4,17 @@ export const HANDLE_EXPLORE_UPLOAD = 'HANDLE_EXPLORE_UPLOAD';
 export const HANDLE_EXPLORE_EDITED = 'HANDLE_EXPLORE_EDITED';
 export const HANDLE_DIALOG_OPEN = 'HANDLE_DIALOG_OPEN';
 export const HANDLE_DIALOG_CLOSE = 'HANDLE_DIALOG_CLOSE';
+export const FETCH_EXPLORE_TRENDING = 'FETCH_EXPLORE_TRENDING';
+export const FETCH_EXPLORE_NEW = 'FETCH_EXPLORE_NEW';
+export const FETCH_EXPLORE_MONTHHIGHLIGHTS = 'FETCH_EXPLORE_MONTHHIGHLIGHTS';
 
 export const initialState = {
     id: null,
     openExploreDialog: false,
     exploreList: [],
+    trending_exploreList: [],
+    new_exploreList: [],
+    monthHighlight_exploreList: [],
     exploreData: {
         author: {
             id: '',
@@ -47,6 +53,18 @@ export const exploreReducer = (state = initialState, { type, payload }) => {
         case FETCH_EXPLORELIST: {
             const exploreList = [...payload];
             return { ...state, exploreList }
+        }
+        case FETCH_EXPLORE_TRENDING: {
+            const list = [...payload];
+            return { ...state, trending_exploreList: list }
+        }
+        case FETCH_EXPLORE_NEW: {
+            const list = [...payload];
+            return { ...state, new_exploreList: list }
+        }
+        case FETCH_EXPLORE_MONTHHIGHLIGHTS: {
+            const list = [...payload];
+            return { ...state, monthHighlight_exploreList: list }
         }
         case HANDLE_EXPLORE_UPLOAD: {
             return {

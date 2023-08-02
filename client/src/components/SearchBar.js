@@ -1,10 +1,13 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { useNavigate, } from 'react-router-dom';
+
 import { FaGreaterThan, FaHashtag } from 'react-icons/fa6';
 import { MdSearch, MdClose } from 'react-icons/md';
 import { FiAtSign } from 'react-icons/fi';
 import { SearchModal } from './Modal';
 
 const useSearchModalView = (ref, clearSearch) => {
+
     useEffect(() => {
         const handleOutsideClick = (event) => {
             if (ref.current && !ref.current.contains(event.target)) {
@@ -20,6 +23,7 @@ const useSearchModalView = (ref, clearSearch) => {
 }
 
 const SearchBar = (props) => {
+    let navigate = useNavigate();
     const [searchVal, setSearchVal] = useState('');
 
     const searchModalRef = useRef(null);
@@ -36,6 +40,12 @@ const SearchBar = (props) => {
     const clearSearch = () => {
         props.clearSearchList();
         setSearchVal('');
+    }
+
+
+    const handleExploreSearch = () => {
+        navigate(`/explore/search?query=${searchVal}`);
+        props.clearSearchList();
     }
 
     return (
@@ -87,6 +97,7 @@ const SearchBar = (props) => {
                     activeSearch={props.activeSearch}
                     fetchSearchList={props.fetchSearchList}
                     clearSearch={clearSearch}
+                    handleExploreSearch={handleExploreSearch}
                 />
             </div>
         </div >

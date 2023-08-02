@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { googleRedirectURL } from '../api';
-import { IoCloseSharp, IoCloseCircle } from 'react-icons/io5';
-import { HiPlus, HiMinus, HiOutlineMail } from 'react-icons/hi';
-import { FaUser, FaLock } from 'react-icons/fa';
+
 import { AwardTabPanel } from './TabPanel';
 import AddressMap from './AddressMap';
 import Stepper from './Stepper';
@@ -12,6 +10,10 @@ import { fetchExploreImages, fetchUserImages } from '../api';
 import TokenLogo from '../assets/images/money.png';
 import TokenIcon from '../assets/images/money.png';
 import Success from '../assets/images/successgif.gif';
+import { IoCloseSharp, IoCloseCircle } from 'react-icons/io5';
+import { HiPlus, HiMinus, HiOutlineMail } from 'react-icons/hi';
+import { FaUser, FaLock } from 'react-icons/fa';
+import { BsArrowUpRightSquare } from 'react-icons/bs';
 import { FaChevronRight, FaHashtag, FaGreaterThan } from 'react-icons/fa6';
 import { FiAtSign } from 'react-icons/fi';
 
@@ -774,26 +776,35 @@ export const AvatarModal = (props) => {
 
 export const SearchModal = (props) => {
     let navigate = useNavigate();
-    const { open, searchVal, activeSearch, searchList, fetchSearchList, clearSearch } = props;
+    const { open, searchVal, activeSearch, searchList, fetchSearchList, clearSearch, handleExploreSearch } = props;
 
     return (
         <div className={`${open ? 'flex' : 'hidden'} scrollbar fixed mx-auto top-14 z-50 inset-0 h-fit  bg-slate-100 dark:bg-neutral-800 w-11/12 sm:w-8/12 md:w-9/12 rounded-xl`}>
             <div className='flex flex-col w-full px-4 pb-4'>
-                <div className='sticky border-t-2 border-neutral-900 md:border-0 bottom-0 inset-x-0 flex flex-col md:flex-row items-center justify-center w-full p-2 bg-slate-300 dark:bg-neutral-800 font-antipasto space-x-2'>
-                    <button disabled={activeSearch === 'artwork'} onClick={() => { fetchSearchList('artwork', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'artwork' ? 'text-red-400' : 'text-gray-300 hover:text-red-400'}`}>
-                        <FiAtSign className='h-4 w-4' />
-                        <span>artwork based search</span>
-                    </button>
-                    <span className='hidden md:flex text-gray-300'>&#8226;</span>
-                    <button disabled={activeSearch === 'tag'} onClick={() => { fetchSearchList('tag', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'tag' ? 'text-red-400' : 'text-gray-300 hover:text-red-400'}`}>
-                        <FaHashtag className='h-4 w-4' />
-                        <span>tag based search</span>
-                    </button>
-                    <span className='hidden md:flex text-gray-300'>&#8226;</span>
-                    <button disabled={activeSearch === 'artist'} onClick={() => { fetchSearchList('artist', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'artist' ? 'text-red-400' : 'text-gray-300 hover:text-red-400'}`}>
-                        <FaGreaterThan className='h-4 w-4' />
-                        <span>artist based search</span>
-                    </button>
+                <div className='sticky bottom-0 inset-x-0 flex flex-col md:flex-row items-center justify-between w-full p-2 bg-slate-300 dark:bg-neutral-800 font-antipasto space-x-2'>
+                    <div className='flex flex-row p-2 bg-slate-300 dark:bg-neutral-800 font-antipasto space-x-2'>
+                        <button disabled={activeSearch === 'artwork'} onClick={() => { fetchSearchList('artwork', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'artwork' ? 'text-red-400' : 'text-gray-300 hover:text-red-400'}`}>
+                            <FiAtSign className='h-5 w-5' />
+                        </button>
+                        <span className='flex text-gray-300'>&#8226;</span>
+                        <button disabled={activeSearch === 'tag'} onClick={() => { fetchSearchList('tag', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'tag' ? 'text-red-400' : 'text-gray-300 hover:text-red-400'}`}>
+                            <FaHashtag className='h-5 w-5' />
+                        </button>
+                        <span className='flex text-gray-300'>&#8226;</span>
+                        <button disabled={activeSearch === 'artist'} onClick={() => { fetchSearchList('artist', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'artist' ? 'text-red-400' : 'text-gray-300 hover:text-red-400'}`}>
+                            <FaGreaterThan className='h-5 w-5' />
+                        </button>
+                    </div>
+                    <div className='flex flex-col md:flex-row p-2 bg-slate-300 dark:bg-neutral-800 font-antipasto space-x-2'>
+                        <button onClick={() => { handleExploreSearch() }} className='flex text-lg gap-2 items-center tracking-wide text-gray-300 hover:text-red-400'>
+                            {searchVal.length > 0 &&
+                                <>
+                                    Search {activeSearch}s for '{searchVal}'
+                                    <BsArrowUpRightSquare className='h-5 w-5' />
+                                </>
+                            }
+                        </button>
+                    </div>
                 </div>
                 <div className='scrollbar max-h-full md:max-h-[30rem] overflow-y-auto'>
                     {activeSearch === 'artwork' &&

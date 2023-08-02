@@ -42,7 +42,6 @@ const Header = (props) => {
     const [tokenOpen, setTokenOpen] = useState(false);
     const [mobileMenu, setMobileMenu] = useState(false);
     const [activeRoute, setActiveRoute] = useState('');
-    const [exploreSearch, setExploreSearch] = useState('');
     const [userMenuActive, setUserMenuActive] = useState(false);
 
     const userMenuRef = useRef(null);
@@ -55,22 +54,11 @@ const Header = (props) => {
     }
 
     useEffect(() => {
-        setActiveRoute(location.pathname);
-        if (location.pathname != '/explore/search') {
-            setExploreSearch('');
-        }
-    }, [location.pathname])
-
-    useEffect(() => {
         mobileMenu ?
             document.body.style.overflow = 'hidden'
             :
             document.body.style.removeProperty('overflow');
     }, [mobileMenu])
-
-    const handleExploreSearch = () => {
-        navigate(`/explore/search?query=${exploreSearch}`);
-    }
 
     const toggleTheme = () => {
         const lightBtn = document.querySelector('#light');

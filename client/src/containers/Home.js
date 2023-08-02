@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { bindActionCreators } from 'redux';
 import { HomeTabPanel } from '../components/TabPanel';
-import { fetchExploreList } from '../store/actions/explore.actions';
+import { fetchExploreList, fetchTrendingList, fetchNewlyAddedList, fetchMonthHighlightsList } from '../store/actions/explore.actions';
 import { setLoader } from '../store/actions/common.actions';
 import { HomeSingleCarousel } from '../components/Carousel';
 
@@ -17,6 +17,9 @@ const Home = (props) => {
         window.scrollTo(0, 0);
         props.setLoader(true);
         props.fetchExploreList();
+        props.fetchTrendingList();
+        props.fetchNewlyAddedList();
+        props.fetchMonthHighlightsList();
     }, [])
 
     return (
@@ -26,7 +29,7 @@ const Home = (props) => {
                     <div className='w-full md:w-3/5 h-48 md:h-full rounded-lg'>
                         <HomeSingleCarousel
                             itemCount="3"
-                            images={props.explore.exploreList.sort(() => 0.5 - Math.random()).slice(0, 3).map((item, index) => {
+                            images={props.explore.exploreList.slice(0, 3).map((item, index) => {
                                 return {
                                     id: index,
                                     file: item.files[0],
@@ -59,12 +62,11 @@ const Home = (props) => {
                     </div>
                 </div>
             </div>
-            <div className='flex flex-col'>
-                <HighlightList type="new" title="Newly Added" list={props.explore.exploreList.sort(() => 0.5 - Math.random()).slice(0, 8)} />
-                <HighlightList type="trending" title="Trending" list={props.explore.exploreList.sort(() => 0.4 - Math.random()).slice(0, 12)} />
-                <HighlightList type="popular" title="Highlights of the Month" list={props.explore.exploreList.sort(() => 0.4 - Math.random()).slice(0, 8)} />
+            <div className='flex flex-col mt-4'>
+                <HighlightList type="trending" title="Trending" list={props.explore.exploreList} />
+                <HighlightList type="new" title="Newly Added" list={props.explore.new_exploreList} />
+                <HighlightList type="popular" title="Highlights of the Month" list={props.explore.monthHighlight_exploreList} />
             </div>
-            {/* <HomeTabPanel tags={props.common.tags} exploreList={props.explore.exploreList} /> */}
         </div >
     )
 }
@@ -78,6 +80,9 @@ const mapStateToProps = (state, props) => ({
 const mapDispatchToProps = (dispatch) => bindActionCreators({
     setLoader,
     fetchExploreList,
+    fetchTrendingList,
+    fetchNewlyAddedList,
+    fetchMonthHighlightsList
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

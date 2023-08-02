@@ -11,23 +11,6 @@ const HighlightList = (props) => {
     let defaultTransform = 0;
     let navigate = useNavigate();
 
-    const right = () => {
-        defaultTransform = defaultTransform - 398;
-        var slider = document.getElementById(props.type);
-        console.log('test', Math.abs(defaultTransform), slider.scrollWidth / 1.7)
-
-        if (Math.abs(defaultTransform) >= slider.scrollWidth / 1.7) {
-            defaultTransform = 0;
-        }
-        slider.style.transform = "translateX(" + defaultTransform + "px)";
-    }
-    const left = () => {
-        var slider = document.getElementById(props.type);
-        if (Math.abs(defaultTransform) === 0) defaultTransform = 0;
-        else defaultTransform = defaultTransform + 398;
-        slider.style.transform = "translateX(" + defaultTransform + "px)";
-    }
-
     const responsive = {
         superLargeDesktop: {
             // the naming can be any, depends on you.
@@ -48,31 +31,31 @@ const HighlightList = (props) => {
         }
     };
 
-    const CustomLeftArrow = ({ onClick }) => {
-        return <button className='absolute transition-all opacity-50 hover:opacity-100 bg-neutral-800 dark:bg-gray-300 p-3 rounded-full left-0' onClick={() => onClick()}>
-            <FaChevronLeft className='h-6 w-6 text-gray-300 dark:text-neutral-700' />
-        </button>;
-    };
-
-    const CustomRightArrow = ({ onClick }) => {
-        return <button className='absolute transition-all opacity-50 hover:opacity-100 bg-neutral-800 dark:bg-gray-300 p-3 rounded-full right-0' onClick={() => onClick()}>
-            <FaChevronRight className='h-6 w-6 text-gray-300 dark:text-neutral-700' />
-        </button>;
-    };
-
     return (
         <div className='flex flex-col p-4 rounded-md w-full'>
             <div className='relative w-fit justify-between mb-2'>
-                <h2 className='font-josefinlight font-bold text-2xl text-gray-300'>{props.title}</h2>
+                <h2 className='font-josefinlight font-bold text-3xl text-gray-300'>{props.title}</h2>
                 <div className='absolute h-1 w-8 bottom-0 left-0 text-2xl bg-gray-300'></div>
             </div>
 
-            <Carousel responsive={responsive} removeArrowOnDeviceType={['mobile']} customLeftArrow={<CustomLeftArrow />} customRightArrow={<CustomRightArrow />}>
+            <Carousel
+                responsive={responsive}
+                removeArrowOnDeviceType={['mobile']}
+                customLeftArrow={
+                    <button className='absolute z-10 transition-all opacity-50 hover:opacity-100 bg-neutral-800 dark:bg-gray-300 p-3 rounded-full left-0'>
+                        <FaChevronLeft className='h-6 w-6 text-gray-300 dark:text-neutral-700' />
+                    </button>}
+                customRightArrow={
+                    <button
+                        className='absolute z-10 transition-all opacity-50 hover:opacity-100 bg-neutral-800 dark:bg-gray-300 p-3 rounded-full right-0'>
+                        <FaChevronRight className='h-6 w-6 text-gray-300 dark:text-neutral-700' />
+                    </button>
+                }>
                 {props.list.map((item, index) => {
                     return <ImageCard size="l" key={index} explore={item} author={item.author} />
                 })}
             </Carousel>
-        </div>
+        </div >
     )
 }
 
