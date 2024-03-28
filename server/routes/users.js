@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import User from '../models/user.js';
-import Explore from '../models/explore.js';
+import Catalog from '../models/catalog.js';
 import Comment from '../models/comment.js';
 import Common from '../models/common.js';
 import Cart from '../models/cart.js';
@@ -196,231 +196,12 @@ router.post('/assets/new',
         // common.save();
     });
 
-// //@desc         Auth user and get token
-// //@route        POST /api/users/login
-// //@access       Public
-router.post("/login", async (req, res) => {
-    try {
-        let userList = [];
-        const username = req.body.username;
-        const password = req.body.password;
-
-        await User.find({}).then(users => {
-            userList.push(...users)
-        });
-
-        const { errors, isValid } = validateLoginInput(userList, req.body);
-        if (!isValid) { return res.status(400).json(errors) }
-
-        User.findOne({ username }).then(user => {
-            if (!user) {
-                return res.status(404).json('User not found!')
-            }
-            bcrypt.compare(password, user.password).then((isMatch) => {
-                if (isMatch) {
-                    let comment_count = 0;
-                    const comment_countList = user.explore.map(item => item.comment_count);
-                    for (let i = 0; i < comment_countList.length; i++)
-                        comment_count += comment_countList[i];
-                    const payload = {
-                        id: user._id,
-                        name: user.name,
-                        username: user.username,
-                        email: user.email,
-                        avatar: user.avatar,
-                        bio: user.bio,
-                        joinDate: user.date,
-                        tokens: user.tokens,
-                        google_authenticated: user.google_authenticated,
-                        followers: user.followers,
-                        followers_count: user.followers_count,
-                        explore_count: user.explore_count,
-                        bookmarked: user.bookmarked,
-                        comment_count
-                    };
-                    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 300000 },
-                        (err, token) => {
-                            res.json({
-                                success: true,
-                                token: "Bearer " + token
-                            });
-                        }
-                    );
-                } else {
-                    return res.status(400).json("Incorrect Password. Please try again!");
-                }
-            });
-        });
-    } catch (err) {
-        return res.status(404).json({ msg: err.name });
-    }
-});
-
-//@desc         Register a new user 
-//@route        POST /api/users/register
-//@access       Public
-router.post("/signup", (req, res) => {
-    try {
-        // Verify that first name is not empty
-        const { errors, isValid } = validateRegisterInput(req.body);
-        if (!isValid) {
-            return res.status(400).json(errors);
-        }
-        User.findOne({ username: req.body.username }).then(user => {
-            if (user) {
-                return res.status(400).json('User already exists');
-            } else {
-                const newUser = new User({
-                    name: req.body.name,
-                    email: req.body.email,
-                    username: req.body.username,
-                    password: req.body.password,
-                    avatar: {
-                        icon: '92845b9c51df0d6bf3cf693393cc0905.png',
-                        category: 'None'
-                    },
-                    tokens: 5000
-                });
-                bcrypt.genSalt(10, (err, salt) => {
-                    bcrypt.hash(newUser.password, salt, (err, hash) => {
-                        if (err) throw err;
-                        newUser.password = hash;
-                        newUser.save()
-                            .then(user => {
-                                console.log('user', user);
-                                let comment_count = 0;
-                                const comment_countList = user.explore.map(item => item.comment_count);
-                                for (let i = 0; i < comment_countList.length; i++)
-                                    comment_count += comment_countList[i];
-                                const payload = {
-                                    id: user._id,
-                                    name: user.name,
-                                    username: user.username,
-                                    email: user.email,
-                                    avatar: user.avatar,
-                                    bio: user.bio,
-                                    joinDate: user.date,
-                                    tokens: user.tokens,
-                                    followers: user.followers,
-                                    followers_count: user.followers_count,
-                                    explore_count: user.explore_count,
-                                    bookmarked: user.bookmarked,
-                                    comment_count
-                                };
-                                jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 300000 },
-                                    (err, token) => {
-                                        res.json({
-                                            success: true,
-                                            token: "Bearer " + token
-                                        });
-                                    }
-                                )
-                            })
-                            .catch(err => console.log(err));
-                    })
-                })
-            }
-        })
-    } catch (err) {
-        return res.status(404).json({ msg: err.name });
-    }
-});
-
-// @desc    Login via Google
-// @route   GET /api/users/googleAuth
-// @access  Private
-router.get('/googleAuth', passport.authenticate('google', {
-    scope: ['email', 'profile'],
-    prompt: 'select_account'
-}));
-
-// @desc    Login via Google
-// @route   GET /api/users/googleAuth/success
-// @access  Private
-router.get('/googleAuth/callback', passport.authenticate('google', {
-    failureRedirect: 'http://localhost:3000/google_failed',
-    session: false
-}), async (req, res) => {
-    const authenticatedUser = await User.findOne({ google_id: req.user.id });
-    let comment_count = 0;
-    const comment_countList = authenticatedUser.explore.length > 0 && authenticatedUser.explore.map(item => item.comment_count);
-    for (let i = 0; i < comment_countList.length; i++)
-        comment_count += comment_countList[i];
-    const payload = {
-        id: authenticatedUser._id,
-        name: authenticatedUser.name,
-        username: authenticatedUser.username,
-        email: authenticatedUser.email,
-        bio: authenticatedUser.bio,
-        avatar: authenticatedUser.avatar,
-        joinDate: authenticatedUser.date,
-        tokens: authenticatedUser.tokens,
-        google_authenticated: authenticatedUser.google_authenticated,
-        followers: authenticatedUser.followers,
-        followers_count: authenticatedUser.followers_count,
-        explore_count: authenticatedUser.explore_count,
-        comment_count,
-        bookmarked: authenticatedUser.bookmarked
-    };
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 31556926 },
-        (err, token) => {
-            let googleToken = "Bearer " + token
-            res.redirect('http://localhost:3000/google_success?auth=' + googleToken)
-        }
-    );
-})
-
-// @desc    Login via Facebook
-// @route   GET /api/users/facebookAuth
-// @access  Private
-router.get('/facebookAuth', passport.authenticate('facebook', {
-    scope: ['email', 'profile'],
-    prompt: 'select_account'
-}));
-
-// @desc    Login via Google
-// @route   GET /api/users/googleAuth/success
-// @access  Private
-router.get('/facebookAuth/callback', passport.authenticate('facebook', {
-    failureRedirect: 'http://localhost:3000/google_failed',
-    session: false
-}), async (req, res) => {
-    const authenticatedUser = await User.findOne({ id: req.user.id });
-    let comment_count = 0;
-    const comment_countList = authenticatedUser.explore.length > 0 && authenticatedUser.explore.map(item => item.comment_count);
-    for (let i = 0; i < comment_countList.length; i++)
-        comment_count += comment_countList[i];
-    const payload = {
-        id: authenticatedUser.id,
-        name: authenticatedUser.name,
-        username: authenticatedUser.username,
-        email: authenticatedUser.email,
-        bio: authenticatedUser.bio,
-        avatar: authenticatedUser.avatar,
-        tokens: authenticatedUser.tokens,
-        followers: authenticatedUser.followers,
-        followers_count: authenticatedUser.followers_count,
-        explore_count: authenticatedUser.explore_count,
-        comment_count
-    };
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 31556926 },
-        (err, token) => {
-            let googleToken = "Bearer " + token
-            res.redirect('http://localhost:3000/google_success?auth=' + googleToken)
-        }
-    );
-})
-
 // @desc    Get user by ID
 // @route   GET /api/users/:id
 // @access  Private/Admin
 router.get('/:id', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
-        let comment_count = 0;
-        const comment_countList = user.explore.map(item => item.comment_count);
-        for (let i = 0; i < comment_countList.length; i++)
-            comment_count += comment_countList[i];
         const payload = {
             id: user._id,
             name: user.name,
@@ -428,15 +209,11 @@ router.get('/:id', async (req, res) => {
             email: user.email,
             bio: user.bio,
             avatar: user.avatar,
-            joinDate: user.date,
+            created_on: user.createdAt,
             tokens: user.tokens,
-            bookmarked: user.bookmarked,
+            bookmarks: user.bookmarks,
             followers: user.followers,
-            followers_count: user.followers_count,
-            explore: user.explore,
-            explore_count: user.explore_count,
             likes: user.likes,
-            comment_count
         };
         jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 31556926 }, (err, token) => {
             res.json({
@@ -454,7 +231,6 @@ router.get('/:id', async (req, res) => {
 // @access  Private/Admin
 router.put('/:id', async (req, res) => {
     try {
-        console.log('req.body', req.body)
         User.findByIdAndUpdate(req.params.id, {
             name: req.body.name,
             username: req.body.username,
@@ -466,6 +242,7 @@ router.put('/:id', async (req, res) => {
                 return res.json(data)
             }
         });
+
     } catch (err) {
         return res.status(404).json({ msg: err.name });
     }
@@ -493,20 +270,22 @@ router.delete('/:id', async (req, res) => {
 // @route       GET api/users/:id/cart
 // @desc        Get all cart items
 // @access      Public
-router.get('/:id/explore', async (req, res) => {
+router.get('/:id/catalog', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
-        if (!user.explore) {
-            return res.status(400).send({ msg: 'Explorelist not found' });
+        if (!user) {
+            return res.status(400).send({ msg: 'User not found' });
         }
-        const exploreData = {
-            explore: user.explore,
-            explore_count: user.explore_count
+
+        const catalogList = await Catalog.find({ "user_id": req.params.id });
+        const catalogData = {
+            catalog: catalogList,
+            catalog_count: catalogList.length
         }
-        res.json(exploreData);
+        res.json(catalogData);
     } catch (err) {
         console.error(err.message);
-        res.status(500).send('Unable to fetch explore list');
+        res.status(500).send('Unable to fetch catalog list');
     }
 });
 
@@ -541,7 +320,7 @@ router.post('/:id/bookmark', async (req, res) => {
 router.delete('/:id/bookmark/:bookmark_id', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
-        const bookmark_toDelete = await user.bookmarked.find(bookmark => bookmark._id == req.params.bookmark_id);
+        const bookmark_toDelete = await user.bookmarked.find(bookmark => bookmark._id === req.params.bookmark_id);
         if (!bookmark_toDelete) {
             return res.status(400).send({ msg: 'Bookmark does not exist!' });
         }
@@ -641,7 +420,7 @@ router.post('/:id/cart/add', async (req, res) => {
 router.put('/:id/cart/:cart_id', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
-        const editCartItem = user.cart.find(cartItem => cartItem._id == req.params.cart_id);
+        const editCartItem = user.cart.find(cartItem => cartItem._id === req.params.cart_id);
         if (!editCartItem) {
             return res.status(401).json({ msg: 'Cart item does not exist!' })
         }
@@ -677,7 +456,7 @@ router.delete('/:id/cart/:cart_id', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
         const cartItem = await Cart.findById(req.params.cart_id);
-        const deleteCartItem = user.cart.find(cartItem => cartItem._id == req.params.cart_id);
+        const deleteCartItem = user.cart.find(cartItem => cartItem._id === req.params.cart_id);
         if (!deleteCartItem) {
             return res.status(404).json({ msg: 'Cart item does not exist!' });
         }
@@ -731,13 +510,13 @@ router.get("/logout", (req, res, next) => {
 router.post('/:id/avatar', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
-        const explore = await Explore.find({ "author.id": req.params.id });
+        const catalogItem = await Catalog.find({ "author.id": req.params.id });
 
-        explore.map(item => {
+        catalogItem.map(item => {
             item.author.avatar = { ...req.body };
             item.save();
         });
-        Explore.updateMany(
+        Catalog.updateMany(
             { 'comments.author.id': req.params.id },
             { $set: { "comments.$[comment].author.avatar": req.body } },
             { arrayFilters: [{ 'comment.author.id': { $in: req.params.id } }] }
@@ -748,10 +527,10 @@ router.post('/:id/avatar', async (req, res) => {
         });
         user.avatar = { ...req.body };
         user.save();
-        res.json(explore);
+        res.json(catalogItem);
     } catch (err) {
         return res.status(404).json({ msg: err.name });
     }
-})
+});
 
 export default router;

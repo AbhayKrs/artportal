@@ -23,7 +23,7 @@ const dynamicSort = (property) => {
 }
 
 // function trendingCheck() {
-//     var createdAt = new Date(getState().explore.exploreList[0].createdAt)
+//     var createdAt = new Date(getState().explore.catalogList[0].createdAt)
 //     console.log('Trending', createdAt.getTime(), Date.now(), Date.now() - createdAt.getTime())
 //     // return function (a, b) {
 
@@ -236,19 +236,19 @@ export const handleDislikeComment = (exploreID, commentID) => async (dispatch, g
 export const handleTabChange = (selectedTab) => async (dispatch, getState) => {
     switch (selectedTab) {
         case 'Latest': {
-            let exploreList = getState().explore.exploreList;
-            await dispatch({ type: FETCH_EXPLORELIST, payload: exploreList.sort(dynamicSort('createdAt')) });
+            let catalogList = getState().explore.catalogList;
+            await dispatch({ type: FETCH_EXPLORELIST, payload: catalogList.sort(dynamicSort('createdAt')) });
             break;
         }
         case 'Trending': {
-            let exploreList = getState().explore.exploreList;
+            let catalogList = getState().explore.catalogList;
 
-            await dispatch({ type: FETCH_EXPLORELIST, payload: exploreList.sort(dynamicSort('title')) });
+            await dispatch({ type: FETCH_EXPLORELIST, payload: catalogList.sort(dynamicSort('title')) });
             break;
         }
         case 'Rising': {
-            let exploreList = getState().explore.exploreList;
-            await dispatch({ type: FETCH_EXPLORELIST, payload: exploreList.sort(dynamicSort('title')) });
+            let catalogList = getState().explore.catalogList;
+            await dispatch({ type: FETCH_EXPLORELIST, payload: catalogList.sort(dynamicSort('title')) });
             break;
         }
         default: break;

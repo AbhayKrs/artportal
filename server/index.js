@@ -15,11 +15,11 @@ import './utils/authenticate.js';
 
 //Importing routes
 import tagger from './routes/tagger.js';
+import auth from './routes/auth.js';
 import users from './routes/users.js';
-import explore from './routes/explore.js';
+import catalog from './routes/catalog.js';
 import search from './routes/search.js';
 import store from './routes/store.js';
-import articles from './routes/articles.js';
 
 dotenv.config();
 //Database Connection Established
@@ -41,6 +41,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //User Authentication
 app.use(passport.initialize());
 
+const currentVersion = 'v1';
+
 // Define Routes
 // app.use('/api/tagger/:filename', async (req, res) => {
 //     try {
@@ -51,12 +53,13 @@ app.use(passport.initialize());
 //         res.status(500).send('Unable to fetch explore');
 //     }
 // })
-app.use('/api/tagger', tagger);
-app.use('/api/explore', explore);
-app.use('/api/users', users);
-app.use('/api/store', store);
-app.use('/api/articles', articles);
-app.use('/api/search', search);
+
+app.use(`/api/${currentVersion}/tagger`, tagger);
+app.use(`/api/${currentVersion}/catalog`, catalog);
+app.use(`/api/${currentVersion}/auth`, auth);
+app.use(`/api/${currentVersion}/users`, users);
+app.use(`/api/${currentVersion}/store`, store);
+app.use(`/api/${currentVersion}/search`, search);
 
 app.use('/app/download', (req, res) => {
     res.download('./server/public/app-release.apk');
@@ -70,7 +73,7 @@ if (process.env.NODE_ENV === 'production') {
         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
     })
 } else {
-    app.get("/api", (req, res) => {
+    app.get(`/api/${currentVersion}`, (req, res) => {
         res.send("API is running..");
     });
 }

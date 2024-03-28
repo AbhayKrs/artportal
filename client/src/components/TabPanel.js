@@ -53,13 +53,13 @@ export const HomeTabPanel = (props) => {
                     </svg>
                 </button>
             </div>
-            {props.exploreList.length > 0 ?
+            {props.catalogList.length > 0 ?
                 <div className="grid bg-gray-300 dark:bg-neutral-800 overflow-hidden rounded-b-md lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-3 xs:grid-cols-1">
                     {props.tags.map((tag, index) => {
                         return <Fragment key={index}>
                             {
-                                index === activeStatus && props.exploreList.filter(item => item.tags.includes(tag) === true).map((explore, index) => (
-                                    <ImageCard size='l' key={index} explore={explore} author={explore.author} />
+                                index === activeStatus && props.catalogList.filter(item => item.tags.includes(tag) === true).map((explore, index) => (
+                                    <ImageCard size='l' key={index} explore={explore} artist={explore.artist} />
                                 ))
                             }
                         </Fragment>
@@ -126,13 +126,12 @@ export const ExplorePanel = (props) => {
     const [activeFilter, setActiveFilter] = useState('');
     const [activePeriod, setActivePeriod] = useState('');
     const [activePeriodLabel, setActivePeriodLabel] = useState('Select a time period');
-    const [activeStatus, setActiveStatus] = useState(-1);
 
     useEffect(() => {
         const params = new Proxy(new URLSearchParams(window.location.search), {
             get: (searchParams, prop) => searchParams.get(prop),
         });
-        console.log('init', params);
+        console.log('init', params.filter);
 
         if (props.search && params.query) {
             setExploreSearch(params.query);
@@ -143,7 +142,7 @@ export const ExplorePanel = (props) => {
 
             console.log('test', params.filter, params.period);
 
-            if (params.filter == 'trending' || params.filter == 'new' || params.filter == 'rising') {
+            if (params.filter === 'trending' || params.filter === 'new' || params.filter === 'rising') {
                 setActivePeriod('');
             } else {
                 params.period ? setActivePeriod(params.period) : setActivePeriod('month')
@@ -161,22 +160,22 @@ export const ExplorePanel = (props) => {
     useEffect(() => {
         if (triggerEffect) {
             //case 1 - No search / No Filter / No Period
-            console.log('case1', exploreSearch.length == 0 && activeFilter.length == 0 && activePeriod.length == 0)
-            if (exploreSearch.length == 0 && activeFilter.length == 0 && activePeriod.length == 0) {
+            console.log('case1', exploreSearch.length === 0 && activeFilter.length === 0 && activePeriod.length === 0)
+            if (exploreSearch.length === 0 && activeFilter.length === 0 && activePeriod.length === 0) {
                 navigate('/explore?filter=trending');
                 props.filterExploreList('trending');
             }
 
             //case 2 - Search / No Filter / No Period
-            console.log('case2', exploreSearch.length > 0 && activeFilter.length == 0 && activePeriod.length == 0)
-            if (exploreSearch.length > 0 && activeFilter.length == 0 && activePeriod.length == 0) {
+            console.log('case2', exploreSearch.length > 0 && activeFilter.length === 0 && activePeriod.length === 0)
+            if (exploreSearch.length > 0 && activeFilter.length === 0 && activePeriod.length === 0) {
                 navigate(`/explore/search?query=${exploreSearch}`);
                 // props.searchExploreList(exploreSearch);
             }
 
             //case 3 - Search / Filter / No Period
-            console.log('case3', exploreSearch.length > 0 && activeFilter.length > 0 && activePeriod.length == 0)
-            if (exploreSearch.length > 0 && activeFilter.length > 0 && activePeriod.length == 0) {
+            console.log('case3', exploreSearch.length > 0 && activeFilter.length > 0 && activePeriod.length === 0)
+            if (exploreSearch.length > 0 && activeFilter.length > 0 && activePeriod.length === 0) {
                 navigate(`/explore/search?query=${exploreSearch}&filter=${activeFilter.replace(/\s+/g, '+')}`);
                 // props.searchExploreList(exploreSearch, activeFilter.replace(/\s+/g, '+'));
             }
@@ -189,15 +188,15 @@ export const ExplorePanel = (props) => {
             }
 
             //case 5 - No Search / Filter / No Period
-            console.log('case5', exploreSearch.length == 0 && activeFilter.length > 0 && activePeriod.length == 0)
-            if (exploreSearch.length == 0 && activeFilter.length > 0 && activePeriod.length == 0) {
+            console.log('case5', exploreSearch.length === 0 && activeFilter.length > 0 && activePeriod.length === 0)
+            if (exploreSearch.length === 0 && activeFilter.length > 0 && activePeriod.length === 0) {
                 navigate(`?filter=${activeFilter.replace(/\s+/g, '+')}`);
                 props.filterExploreList(activeFilter.replace(/\s+/g, '+'));
             }
 
             //case 6 - No Search / Filter / Period
-            console.log('case6', exploreSearch.length == 0 && activeFilter.length > 0 && activePeriod.length > 0)
-            if (exploreSearch.length == 0 && activeFilter.length > 0 && activePeriod.length > 0) {
+            console.log('case6', exploreSearch.length === 0 && activeFilter.length > 0 && activePeriod.length > 0)
+            if (exploreSearch.length === 0 && activeFilter.length > 0 && activePeriod.length > 0) {
                 navigate(`?filter=${activeFilter.replace(/\s+/g, '+')}&period=${activePeriod.replace(/\s+/g, '+')}`);
                 props.filterExploreList(activeFilter.replace(/\s+/g, '+'), activePeriod.replace(/\s+/g, '+'));
             }
@@ -210,7 +209,7 @@ export const ExplorePanel = (props) => {
             setActiveFilter('');
             setActivePeriod('');
         } else {
-            if (item == 'trending' || item == 'new' || item == 'rising') {
+            if (item === 'trending' || item === 'new' || item === 'rising') {
                 setActivePeriod('');
             } else {
                 setActivePeriod('month');
@@ -221,14 +220,6 @@ export const ExplorePanel = (props) => {
 
     const handlePeriodChange = (popular) => {
         setActivePeriod(popular.value)
-    }
-
-    const sliderBtnClick = (dist) => {
-        document.getElementById('tagSlider').scrollBy({
-            top: 0,
-            left: dist,
-            behavior: 'smooth'
-        })
     }
 
     return (

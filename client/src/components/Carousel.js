@@ -72,7 +72,7 @@ export const HomeSingleCarousel = (props) => {
   const startSlider = () => {
     setInterval(() => {
       count++;
-      if (count == 3) count = 0;
+      if (count === 3) count = 0;
       handleNextClick(count);
     }, 10000)
   }

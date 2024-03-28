@@ -2,7 +2,7 @@ import express from 'express';
 const router = express.Router();
 
 //Import Schemas
-import Explore from '../models/explore.js';
+import Catalog from '../models/catalog.js';
 import User from '../models/user.js';
 import Common from '../models/common.js';
 
@@ -12,13 +12,13 @@ router.get('/', async (req, res) => {
         const type = req.query.type;
         const value = req.query.value;
 
-        const exploreData = await Explore.find({});
+        const catalogData = await Catalog.find({});
         const userData = await User.find({});
         const commonData = await Common.find({});
 
         switch (type) {
             case 'artwork': {
-                searchList = exploreData.filter(item => item.title.toLowerCase().indexOf(value.toLowerCase()) != -1)
+                searchList = catalogData.filter(item => item.title.toLowerCase().indexOf(value.toLowerCase()) != -1)
                 break;
             }
             case 'tag': {

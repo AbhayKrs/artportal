@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { viewerIP, loginAPI, googleLoginAPI, signUpAPI, tagsAPI, commonImagesAPI, userDetailsAPI, userExploreListAPI, userStoreListAPI, userCartListAPI, addUserCartAPI, updateUserCartAPI, deleteStoreItemAPI, awardListAPI, deleteBookmarkAPI, avatarListAPI, deleteCartItemAPI, editAvatarAPI, locationsListAPI, updateUserDataAPI, searchAPI } from '../../api';
+import { viewerIP, loginAPI, googleLoginAPI, signUpAPI, tagsAPI, commonImagesAPI, userDetailsAPI, userExploreListAPI, userStoreListAPI, userCartListAPI, addUserCartAPI, updateUserCartAPI, deleteStoreItemAPI, awardListAPI, deleteBookmarkAPI, avatarListAPI, deleteCartItemAPI, editAvatarAPI, locationsListAPI, updateUserDataAPI, searchAPI, updateUserThemeAPI } from '../../api';
 import {
     initialState,
     SWITCH_THEME,
@@ -33,8 +33,11 @@ import {
 import jwt_decode from 'jwt-decode';
 import setAuthToken from '../../utils/setAuthToken';
 
-export const switchTheme = (theme) => (dispatch) => {
-    dispatch({ type: SWITCH_THEME, payload: theme })
+export const switchTheme = () => (dispatch) => {
+    const theme = localStorage.getItem("theme");
+    const value = theme === "light" ? "dark" : "light";
+    dispatch({ type: SWITCH_THEME, payload: value });
+    localStorage.setItem("theme", value);
 }
 
 export const setLoader = (loaderData) => (dispatch) => {

@@ -19,6 +19,7 @@ import { switchTheme, setAuthError, setSearchType, fetchSearchList, clearSearchL
 import { fetchUserImages } from '../api';
 
 import SearchBar from '../components/SearchBar';
+import { ThemeToggle } from '../components/Toggle';
 
 const useUserMenuOut = (ref, active, setActive) => {
     useEffect(() => {
@@ -54,29 +55,15 @@ const Header = (props) => {
     }
 
     useEffect(() => {
+        setActiveRoute(location.pathname);
+    }, [location.pathname])
+
+    useEffect(() => {
         mobileMenu ?
             document.body.style.overflow = 'hidden'
             :
             document.body.style.removeProperty('overflow');
     }, [mobileMenu])
-
-    const toggleTheme = () => {
-        const lightBtn = document.querySelector('#light');
-        const darkBtn = document.querySelector('#dark');
-        const toggleBtn = document.querySelector('#toggle');
-
-        lightBtn.addEventListener('change', () => {
-            props.switchTheme('dark');
-            toggleBtn.classList.remove('left-2');
-            toggleBtn.classList.add('right-2');
-        })
-
-        darkBtn.addEventListener('change', () => {
-            props.switchTheme('light');
-            toggleBtn.classList.remove('right-2');
-            toggleBtn.classList.add('left-2');
-        })
-    }
 
     return (
         <nav className='fixed top-0 z-50 bg-gray-200 w-full dark:bg-darkNavBg'>
@@ -146,7 +133,7 @@ const Header = (props) => {
                                                     <div className='inline-flex flex-row items-center gap-1'>
                                                         <p className='text-gray-900 dark:text-gray-200 text-sm font-caviar font-semibold tracking-wide'>#{props.user.username}</p>
                                                         <svg className="stroke-current stroke-1 text-emerald-500 dark:text-emerald-600 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                            <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                                            <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                                                         </svg>
                                                         <img loading='lazy' className='h-auto w-6' src={premium_logo} alt='Artyst' />
                                                     </div>
@@ -173,22 +160,7 @@ const Header = (props) => {
                                             <FaPlus className='h-7 w-7 text-violet-500 cursor-pointer' onClick={() => setTokenOpen(true)} />
                                         </div>
                                     </> : null}
-                                <div className='flex flex-row justify-between items-center rounded-md py-1 px-4'>
-                                    <p className='text-lg font-caviar font-semibold text-gray-900 dark:text-gray-200'>Theme</p>
-                                    <div className='flex gap-2'>
-                                        <div className="w-16 flex justify-between items-center flex-col bg-slate-400 dark:bg-neutral-800 rounded-xl py-1.5 px-2 relative">
-                                            <div className="relative w-full">
-                                                <input type="radio" name="theme" value="dark" id="dark" onChange={toggleTheme} className="absolute left-0 h-5 w-5 opacity-0 z-50 cursor-pointer" />
-                                                <input type="radio" name="theme" value="light" id="light" defaultChecked onChange={toggleTheme} className="absolute right-0 h-5 w-5 opacity-0 z-50 cursor-pointer" />
-                                            </div>
-                                            <div className="w-full flex justify-between items-center">
-                                                <FaMoon className='h-5 w-auto text-gray-200' />
-                                                <IoSunny className='h-5 w-auto text-neutral-800' />
-                                            </div>
-                                            <div id="toggle" className="bg-white h-5 w-5 rounded-full absolute right-2 top-1.5 transition ease-in-out delay-500"></div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <ThemeToggle value={props.common.theme} toggle={props.switchTheme} />
                                 {props.common.isAuthenticated ?
                                     <>
                                         <hr className='border-2 border-gray-400 dark:border-neutral-800 my-1.5 mx-2' />
@@ -275,7 +247,7 @@ const Header = (props) => {
                                         <div className='inline-flex flex-row items-center gap-1'>
                                             <p className='text-gray-900 dark:text-gray-200 text-xs font-caviar font-semibold tracking-wide'>#{props.user.username}</p>
                                             <svg className="stroke-current stroke-1 text-emerald-500 dark:text-emerald-600 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                                <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                                             </svg>
                                             <img loading='lazy' className='h-auto w-6' src={premium_logo} alt='Artyst' />
                                         </div>
@@ -424,7 +396,7 @@ const Header = (props) => {
                 <SignupSuccessModal
                     open={props.common.signupSuccess}
                     user={props.user}
-                    title='Welcome!'
+                    title={`Welcome to Artyst, ${props.user.name}!`}
                     onClose={props.handleSignupSuccessMsgClose}
                     onClick={props.handleSignupSuccessMsgClose}
                 />

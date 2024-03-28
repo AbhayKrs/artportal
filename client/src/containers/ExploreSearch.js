@@ -27,7 +27,7 @@ const ExploreSearch = (props) => {
             <ExplorePanel search fetchExploreList={props.fetchExploreList} filterExploreList={props.filterExploreList} />
             <div className='flex flex-row'>
                 <Masonry cols={5}>
-                    {props.explore.exploreList.map((explore, index) => (
+                    {props.explore.catalogList.map((explore, index) => (
                         <div onClick={() => navigate(`/explore/${explore._id}`)} className='relative group group-hover:block'>
                             <img loading='lazy'
                                 id={index}

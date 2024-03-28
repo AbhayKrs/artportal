@@ -143,7 +143,7 @@ router.delete('/:id', async (req, res) => {
     try {
         const storeItem = await Store.findById(req.params.id);
         const user = await User.findById(req.body.userID);
-        const deleteListing = user.store.find(storeItem => storeItem._id == req.params.id);
+        const deleteListing = user.store.find(storeItem => storeItem._id === req.params.id);
 
         if (!storeItem) {
             return res.status(404).send('Store item not found');

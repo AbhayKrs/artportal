@@ -902,9 +902,9 @@ export const SignupSuccessModal = (props) => {
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                         <h1 className='text-violet-500 dark:text-violet-800 text-4xl font-semibold tracking-widest font-antipasto'>{title}</h1>
                         <img src={Success} />
-                        <div className='text-black dark:text-white text-lg font-josefinlight'>Thank you for joining the community! Have fun and enjoy your art journey here.</div>
-                        <h1 className='text-xl font-caviar font-bold m-2 text-rose-400 dark:text-rose-600'>5000 tokens have been added to your account to celebrate the occation. Enjoy!</h1>
-                        <h6 className='flex text-gray-700 dark:text-gray-300 text-md items-center'>Token Balance: <img loading='lazy' src={TokenLogo} className='w-5 h-5 mx-1' />{new Intl.NumberFormat().format(props.user.tokens)}</h6>
+                        <div className='text-black dark:text-white text-2xl font-bold font-caviar'>Thank you for joining the community! Have fun and enjoy your art journey here.</div>
+                        <h1 className='text-md font-caviar font-bold mt-2 text-rose-400 dark:text-rose-600'>5000 tokens have been added to your account to celebrate the occation. Enjoy!</h1>
+                        <h6 className='flex text-gray-700 dark:text-gray-300 text-md font-caviar font-bold items-center'>Token Balance: <img loading='lazy' src={TokenLogo} className='w-5 h-5 mx-1' />{new Intl.NumberFormat().format(props.user.tokens)}</h6>
                     </div>
                 </div>
             </div>

@@ -9,7 +9,6 @@ import { fetchExploreImages, fetchUserImages } from '../api';
 import { setSnackMessage, setLoader, refreshUserDetails, loadProfileDetails, clearUserProfile, deleteBookmark, handleEditUserAvatar } from '../store/actions/common.actions';
 import { fetchExploreList, deleteExploreItem } from '../store/actions/explore.actions';
 
-import { MdAddAPhoto, MdClose } from 'react-icons/md';
 import { BsHeart, BsChat, BsTrash } from 'react-icons/bs';
 import { FaUserEdit } from 'react-icons/fa';
 import { BiTimeFive } from 'react-icons/bi';
@@ -130,7 +129,7 @@ const Profile = (props) => {
             case 'about': return <div className='text-4xl text-gray-400'>HELLO</div>
             case 'liked': return <div className='flex flex-row'>
                 <Masonry cols={5}>
-                    {props.explore.exploreList.filter(item => item.likes.indexOf(props.viewed_user.id) >= 0).map((explore, index) => (
+                    {props.explore.catalogList.filter(item => item.likes.indexOf(props.viewed_user.id) >= 0).map((explore, index) => (
                         <div key={index} onClick={() => navigate(`/explore/${explore._id}`)} className='relative group group-hover:block'>
                             <img loading='lazy'
                                 id={index}

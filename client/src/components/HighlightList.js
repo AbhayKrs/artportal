@@ -52,7 +52,7 @@ const HighlightList = (props) => {
                     </button>
                 }>
                 {props.list.map((item, index) => {
-                    return <ImageCard size="l" key={index} explore={item} author={item.author} />
+                    return <ImageCard size="l" key={index} explore={item} artist={item.artist} />
                 })}
             </Carousel>
         </div >

@@ -44,22 +44,22 @@ const ExploreShow = (props) => {
     }, [id])
 
     useEffect(() => {
-        const len = props.explore.exploreList.length;
+        const len = props.explore.catalogList.length;
         props.fetchExploreItem(id);
         if (props.exploreShow.likes.filter(item => item === props.user.id).length > 0) {
             setLike(true);
         } else {
             setLike(false);
         }
-        props.explore.exploreList.forEach((item, index) => {
+        props.explore.catalogList.forEach((item, index) => {
             if (item._id === props.exploreShow._id) {
                 if (index > 0) {
-                    setPrev(props.explore.exploreList[index - 1]._id)
+                    setPrev(props.explore.catalogList[index - 1]._id)
                 } else {
                     setPrev('');
                 }
                 if (index < len - 1) {
-                    setNext(props.explore.exploreList[index + 1]._id)
+                    setNext(props.explore.catalogList[index + 1]._id)
                 } else {
                     setNext('')
                 }
@@ -186,7 +186,7 @@ const ExploreShow = (props) => {
             <ExploreShowCarousel
                 prevTrue={prev.length > 0}
                 nextTrue={next.length > 0}
-                data={props.explore.exploreList}
+                data={props.explore.catalogList}
                 currentImage={props.exploreShow.files[0]}
                 secondaryImages={props.exploreShow.files.filter((image, index) => index !== 0)}
                 prev={() => { navigate(`/explore/${prev}`); props.fetchExploreItem(prev); }}

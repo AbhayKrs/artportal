@@ -30,10 +30,10 @@ const Explore = (props) => {
                 <title>Artyst | Explore</title>
             </Helmet>
             <ExplorePanel authenticated={props.common.isAuthenticated} setSnackMessage={props.setSnackMessage} fetchExploreList={props.fetchExploreList} filterExploreList={props.filterExploreList} tags={props.common.tags} />
-            {props.explore.exploreList.length > 0 ?
+            {props.explore.catalogList.length > 0 ?
                 <div className='flex flex-row'>
                     <Masonry cols={5}>
-                        {props.explore.exploreList.map((explore, index) => (
+                        {props.explore.catalogList.map((explore, index) => (
                             <div key={index} onClick={() => navigate(`/explore/${explore._id}`)} className='relative group group-hover:block cursor-pointer'>
                                 <img loading='lazy'
                                     id={index}
@@ -45,7 +45,7 @@ const Explore = (props) => {
                                         <h4 className="text-md text-base font-josefinregular font-bold leading-5 capitalize break-words">{explore.title}</h4>
                                         <div className='flex'>
                                             <span className="font-base text-xs my-1 mr-1">
-                                                {explore.author.username}
+                                                {explore.artist.username}
                                             </span>
                                             <svg className="stroke-current stroke-1 text-violet-400 dark:text-violet-500 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />

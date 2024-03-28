@@ -60,7 +60,7 @@ const SearchBar = (props) => {
                 }}
                 className="flex w-full items-center bg-slate-300 dark:bg-neutral-800 h-10 rounded-xl"
             >
-                <div className="flex relative items-center justify-center text-neutral-800 dark:text-gray-300 h-8 pl-2 pr-1">
+                <div className="flex relative items-center justify-center text-neutral-800 dark:text-gray-300 h-8 px-2">
                     <MdSearch className='h-6 w-6' />
                 </div>
                 {props.activeSearch != '' && <div className="flex relative items-center justify-center rounded border-[1px] border-solid border-gray-200 text-neutral-800 dark:text-gray-300 h-7 w-7 mr-2">

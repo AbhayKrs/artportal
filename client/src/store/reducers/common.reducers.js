@@ -33,7 +33,7 @@ export const FETCH_SEARCHLIST = 'FETCH_SEARCHLIST';
 export const CLEAR_SEARCHLIST = 'CLEAR_SEARCHLIST';
 
 export const initialState = {
-    theme: 'dark',
+    theme: localStorage.getItem("theme") ? localStorage.getItem("theme") : "dark",
     loader: false,
     snackmsg: {
         open: false,
@@ -67,21 +67,22 @@ export const initialState = {
             category: ''
         },
         bio: '',
-        joinDate: '',
+        created_on: '',
         tokens: 0,
         google_authenticated: false,
         followers: [],
-        bookmarked: [],
+        bookmarks: [],
         followers_count: 0,
-        explore: [],
-        explore_count: 0,
+        catalog: [],
+        catalog_count: 0,
+        comments: [],
         comment_count: 0,
+        isSeller: false,
+        seller_rating: 0,
         store: [],
         store_count: 0,
         cart: [],
         cart_count: 0,
-        seller: false,
-        seller_rating: 0
     },
     viewed_user: {
         id: '',
@@ -156,7 +157,7 @@ export const commonReducer = (state = initialState, { type, payload }) => {
             return { ...state, viewer_id: payload }
         }
         case HANDLE_VERIFY_USER: {
-            return { ...state, isAuthenticated: true, user: payload }
+            return { ...state, isAuthenticated: true, user: { ...payload } }
         }
         case HANDLE_HEADER_DIALOG_OPEN: {
             if (payload.data) {
@@ -201,8 +202,8 @@ export const commonReducer = (state = initialState, { type, payload }) => {
             return { ...state, loginImage: payload.login, signupImage: payload.signup }
         }
         case FETCH_USER_EXPLORELIST: {
-            const exploreList = [...payload.explore];
-            return { ...state, user: { ...state.user, explore: exploreList, explore_count: payload.explore_count } }
+            const catalogItems = [...payload.catalog];
+            return { ...state, user: { ...state.user, catalog: catalogItems, catalog_count: payload.catalog_count } }
         }
         case FETCH_USER_STORELIST: {
             const storeList = [...payload.store];

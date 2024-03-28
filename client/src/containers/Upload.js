@@ -148,7 +148,7 @@ const ExploreUpload = (props) => {
     }
 
     const handleSelectTag = (selectedTag) => {
-        if (exploreTags.filter(item => item == selectedTag).length === 0) {
+        if (exploreTags.filter(item => item === selectedTag).length === 0) {
             if (exploreTags.length === 10) {
                 setTagSearch('');
                 const msgData = {

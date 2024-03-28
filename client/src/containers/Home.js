@@ -29,12 +29,12 @@ const Home = (props) => {
                     <div className='w-full md:w-3/5 h-48 md:h-full rounded-lg'>
                         <HomeSingleCarousel
                             itemCount="3"
-                            images={props.explore.exploreList.slice(0, 3).map((item, index) => {
+                            images={props.explore.catalogList.slice(0, 3).map((item, index) => {
                                 return {
                                     id: index,
                                     file: item.files[0],
                                     title: item.title,
-                                    artist: item.author.username
+                                    artist: item.artist.username
                                 }
                             })} />
                     </div>
@@ -63,9 +63,9 @@ const Home = (props) => {
                 </div>
             </div>
             <div className='flex flex-col mt-4'>
-                <HighlightList type="trending" title="Trending" list={props.explore.exploreList} />
-                <HighlightList type="new" title="Newly Added" list={props.explore.new_exploreList} />
-                <HighlightList type="popular" title="Highlights of the Month" list={props.explore.monthHighlight_exploreList} />
+                <HighlightList type="trending" title="Trending" list={props.explore.catalogList} />
+                <HighlightList type="new" title="Newly Added" list={props.explore.new_catalogList} />
+                <HighlightList type="popular" title="Highlights of the Month" list={props.explore.monthHighlight_catalogList} />
             </div>
         </div >
     )

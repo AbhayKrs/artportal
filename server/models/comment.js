@@ -5,21 +5,14 @@ const commentSchema = new mongoose.Schema(
         content: {
             type: String
         },
-        author: {
-            id: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'User',
-            },
-            username: { type: String, default: '' },
-            avatar: {
-                icon: { type: String, default: '' },
-                category: { type: String, default: '' }
-            }
-        },
-        likes: [{
+        user_id: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
-        }]
+            ref: 'User',
+        },
+        parent_comment_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Comment',
+        },
     },
     {
         timestamps: true

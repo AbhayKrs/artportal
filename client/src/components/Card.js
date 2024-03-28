@@ -17,10 +17,10 @@ export const ImageCard = (props) => {
                     <h3 className={`${props.size === 'l' ? 'text-base' : 'text-sm'} font-bold leading-5 capitalize`}>{props.explore.title}</h3>
                     <div className="inline-flex items-center">
                         <div className="w-5 h-5 overflow-hidden mr-1">
-                            {props.author ? <img loading='lazy' src={fetchUserImages(props.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
+                            {props.artist ? <img loading='lazy' src={fetchUserImages(props.artist.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
                         </div>
                         <span className="font-base text-xs my-1 mr-1">
-                            {props.author.username}
+                            {props.artist.username}
                         </span>
                         <svg className="stroke-current stroke-1 text-violet-400 dark:text-violet-500 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
@@ -32,13 +32,13 @@ export const ImageCard = (props) => {
                                 <svg className="w-4" xmlns="http://www.w3.org/2000/svg" fill="#e5e7eb" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                 </svg>
-                                <span className="text-xs ml-1 antialiased">{props.explore.likes.length}</span>
+                                <span className="text-xs ml-1 antialiased">{props.explore?.likes?.length}</span>
                             </div>
                             <div className="w-max inline-flex ml-2 items-center">
                                 <svg className="w-4" xmlns="http://www.w3.org/2000/svg" fill="#e5e7eb" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                                 </svg>
-                                <span className="text-xs ml-1 antialiased">{props.explore.comment_count}</span>
+                                <span className="text-xs ml-1 antialiased">{props.explore?.comment_count}</span>
                             </div>
                             <div className="w-max inline-flex ml-2 items-center">
                                 <svg className="w-4" xmlns="http://www.w3.org/2000/svg" fill="#e5e7eb" viewBox="0 0 24 24" stroke="currentColor">
@@ -73,10 +73,10 @@ export const HorizontalCard = (props) => {
                         <h3 className="lg:text-lg md:text-md sm:text-sm font-bold lg:leading-5 md:leading-5 sm:leading-5 capitalize">{props.explore.title}</h3>
                         <div className="inline-flex items-end">
                             <div className="w-5 h-5 overflow-hidden mr-1">
-                                {props.author ? <img loading='lazy' src={fetchUserImages(props.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
+                                {props.artist ? <img loading='lazy' src={fetchUserImages(props.artist.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
                             </div>
                             <span className="font-base text-xs mt-1 mr-1">
-                                {props.author.username}
+                                {props.artist.username}
                             </span>
                             <svg className="stroke-current stroke-1 text-violet-400 dark:text-violet-500 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
@@ -109,10 +109,10 @@ export const HorizontalCard = (props) => {
         //             <h3 className="text-base font-bold leading-5 capitalize">{props.explore.title}</h3>
         //             <div className="inline-flex items-center">
         //                 <div className="w-5 h-5 overflow-hidden mr-1">
-        //                     <img loading='lazy' src={props.author && fetchUserImages(props.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
+        //                     <img loading='lazy' src={props.artist && fetchUserImages(props.artist.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
         //                 </div>
         //                 <span className="font-base text-xs my-1 mr-1">
-        //                     {props.author.username}
+        //                     {props.artist.username}
         //                 </span>
         //                 <svg className="stroke-current stroke-1 text-violet-400 dark:text-violet-500 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
         //                     <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />

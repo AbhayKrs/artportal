@@ -11,11 +11,11 @@ export const FETCH_EXPLORE_MONTHHIGHLIGHTS = 'FETCH_EXPLORE_MONTHHIGHLIGHTS';
 export const initialState = {
     id: null,
     openExploreDialog: false,
-    exploreList: [],
-    trending_exploreList: [],
-    new_exploreList: [],
-    monthHighlight_exploreList: [],
-    exploreData: {
+    catalogList: [],
+    trending_catalogList: [],
+    new_catalogList: [],
+    monthHighlight_catalogList: [],
+    catalogItem: {
         author: {
             id: '',
             name: '',
@@ -48,23 +48,23 @@ export const initialState = {
 export const exploreReducer = (state = initialState, { type, payload }) => {
     switch (type) {
         case FETCH_EXPLORE: {
-            return { ...state, exploreData: payload }
+            return { ...state, catalogItem: payload }
         }
         case FETCH_EXPLORELIST: {
-            const exploreList = [...payload];
-            return { ...state, exploreList }
+            const catalogList = [...payload];
+            return { ...state, catalogList }
         }
         case FETCH_EXPLORE_TRENDING: {
             const list = [...payload];
-            return { ...state, trending_exploreList: list }
+            return { ...state, trending_catalogList: list }
         }
         case FETCH_EXPLORE_NEW: {
             const list = [...payload];
-            return { ...state, new_exploreList: list }
+            return { ...state, new_catalogList: list }
         }
         case FETCH_EXPLORE_MONTHHIGHLIGHTS: {
             const list = [...payload];
-            return { ...state, monthHighlight_exploreList: list }
+            return { ...state, monthHighlight_catalogList: list }
         }
         case HANDLE_EXPLORE_UPLOAD: {
             return {
@@ -74,7 +74,7 @@ export const exploreReducer = (state = initialState, { type, payload }) => {
             }
         }
         case HANDLE_EXPLORE_EDITED: {
-            return { ...state, exploreData: payload }
+            return { ...state, catalogItem: payload }
         }
         case HANDLE_DIALOG_OPEN: {
             const selectedData = payload.data;
