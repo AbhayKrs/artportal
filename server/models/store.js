@@ -1,61 +1,26 @@
 import mongoose from 'mongoose';
 
+const reviewSchema = new mongoose.Schema(
+    {
+        reviewer_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Reference to the user who left the review
+        rating: { type: Number, min: 1, max: 5, required: true }, // Rating from 1 to 5
+        comment: { type: String }, // Optional comment from the user
+    },
+    {
+        timestamps: true
+    }
+);
+
 const storeSchema = new mongoose.Schema(
     {
-        title: {
-            type: String,
-            required: true,
-        },
-        category: {
-            type: String,
-            required: true,
-        },
-        files: [{ type: String, default: '' }],
-        description: {
-            type: String,
-            required: true,
-        },
-        seller: {
-            id: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'User',
-            },
-            username: {
-                type: String,
-            },
-            avatar: {
-                icon: { type: String, default: '' },
-                category: { type: String, default: '' }
-            },
-            isSeller: {
-                type: Boolean
-            },
-            seller_rating: {
-                type: Number,
-                default: 0,
-                minimum: 0,
-                maximum: 5
-            }
-        },
+        name: { type: String, required: true },
+        description: { type: String, required: true },
+        size: { type: String, required: true },
+        files: [{ type: String, required: true }],
+        artist: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
         price: { type: Number, default: 0 },
-        rating: { type: Number, default: 0 },
-        reviews: [{
-            content: { type: String },
-            author: {
-                id: {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: 'User',
-                },
-                username: { type: String, default: '' },
-                avatar: {
-                    icon: { type: String, default: '' },
-                    category: { type: String, default: '' }
-                },
-            },
-            rating: { type: Number, default: 0 },
-            createdAt: { type: Date },
-            updatedAt: { type: Date }
-        }],
+        categories: [{ type: String, default: '' }],
+        reviews: [reviewSchema],
     },
     {
         timestamps: true,

@@ -1,20 +1,21 @@
 import mongoose from 'mongoose';
 
-const commonSchema = new mongoose.Schema(
+const sharedSchema = new mongoose.Schema(
     {
-        tags: [{ type: String, default: '' }],
+        artwork_tags: [{ type: String, default: '' }],
         images: {
             login: { type: String, default: '' },
             signup: { type: String, default: '' }
         },
-        awards: [{
-            id: { type: mongoose.Schema.Types.ObjectId },
+        stickers: [{
+            _id: { type: mongoose.Schema.Types.ObjectId },
             icon: { type: String, default: '' },
-            value: { type: String, default: '' }
+            cost: { type: String, default: '' }
         }],
-        avatars: [{
+        user_avatars: [{
+            _id: { type: mongoose.Schema.Types.ObjectId },
             icon: { type: String, default: '' },
-            category: { type: String, default: '' }
+            identity: { type: String, default: '' }
         }],
         locations: [{
             country: { type: String },
@@ -24,5 +25,5 @@ const commonSchema = new mongoose.Schema(
     }
 );
 
-const Common = mongoose.model('Common', commonSchema);
-export default Common;
+const Shared = mongoose.model('Shared', sharedSchema);
+export default Shared;

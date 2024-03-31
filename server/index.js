@@ -16,9 +16,9 @@ import './utils/authenticate.js';
 //Importing routes
 import tagger from './routes/tagger.js';
 import auth from './routes/auth.js';
-import users from './routes/users.js';
-import catalog from './routes/catalog.js';
-import search from './routes/search.js';
+// import users from './routes/users.js';
+import artworks from './routes/artworks.js';
+// import search from './routes/search.js';
 import store from './routes/store.js';
 
 dotenv.config();
@@ -55,11 +55,11 @@ const currentVersion = 'v1';
 // })
 
 app.use(`/api/${currentVersion}/tagger`, tagger);
-app.use(`/api/${currentVersion}/catalog`, catalog);
+app.use(`/api/${currentVersion}/artworks`, artworks);
 app.use(`/api/${currentVersion}/auth`, auth);
-app.use(`/api/${currentVersion}/users`, users);
+// app.use(`/api/${currentVersion}/users`, users);
 app.use(`/api/${currentVersion}/store`, store);
-app.use(`/api/${currentVersion}/search`, search);
+// app.use(`/api/${currentVersion}/search`, search);
 
 app.use('/app/download', (req, res) => {
     res.download('./server/public/app-release.apk');

@@ -2,7 +2,7 @@ import express from 'express';
 const router = express.Router();
 
 //Import Schemas
-import Catalog from '../models/catalog.js';
+import Artwork from '../models/artwork.js';
 import User from '../models/user.js';
 import Common from '../models/common.js';
 
@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
         const type = req.query.type;
         const value = req.query.value;
 
-        const catalogData = await Catalog.find({});
+        const catalogData = await Artwork.find({});
         const userData = await User.find({});
         const commonData = await Common.find({});
 

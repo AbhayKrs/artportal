@@ -73,8 +73,8 @@ const ArtystRoutes = (props) => {
             await props.fetchUserStoreList();
             await props.fetchCartList();
         }
-        await props.fetchCommonImages();
-        await props.getTags();
+        // await props.fetchCommonImages();
+        // await props.getTags();
     }, []);
 
     return (

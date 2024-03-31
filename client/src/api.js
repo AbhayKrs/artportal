@@ -40,7 +40,7 @@ export const locationsListAPI = () => get_api.get(`/users/locations`);
 //POST Request API's
 export const loginAPI = userData => post_api.post(`/auth/login`, userData);
 export const signUpAPI = userData => post_api.post(`/auth/signup`, userData);
-export const exploreUploadAPI = exploreData => form_api.post(`/catalog/new`, exploreData);
+export const exploreUploadAPI = exploreData => form_api.post(`/artworks/new`, exploreData);
 export const exploreAddCommentAPI = (exploreID, commentText, userData) => post_api.post(`/catalog/${exploreID}/comments/new`, { content: commentText, user: userData })
 export const storeUploadAPI = storeData => form_api.post(`/store/new`, storeData);
 export const bookmarkExploreAPI = (userID, bookmarkData) => post_api.post(`/users/${userID}/bookmark`, bookmarkData);

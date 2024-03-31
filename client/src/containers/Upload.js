@@ -30,7 +30,7 @@ const ExploreUpload = (props) => {
     useEffect(async () => {
         props.setLoader(true);
         window.scrollTo(0, 0)
-        await props.getTags();
+        // await props.getTags();
         // setExploreTitle(randomSentence({ min: 2, max: 8 }))
         // setExploreDesc(randomSentence({ min: 5, max: 14 }))
         // setExploreTags(props.common.tags.sort(() => 0.5 - Math.random()).slice(0, 10))

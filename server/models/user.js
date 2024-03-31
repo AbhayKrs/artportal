@@ -12,23 +12,20 @@ const UserSchema = new Schema(
         tokens: { type: Number, default: 0 },
         google_id: { type: String },
         google_authenticated: { type: Boolean, default: false },
-        awards: [{
-            id: { type: mongoose.Schema.Types.ObjectId },
-            awarder_id: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-            catalog_id: { type: mongoose.Schema.Types.ObjectId, ref: "Catalog" },
-            count: { type: Number, default: 0 }
-        }],
-        followers: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
-        }],
-        bookmarks: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Catalog"
-        }],
         isAdmin: { type: Boolean, default: false },
         isSeller: { type: Boolean, default: false },
-        seller_rating: { type: Number },
+        isPremium: { type: Boolean, default: false },
+        premiumValidity: { type: Date },
+        received_gifts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Gift' }],
+        followers: [{
+            _id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+            followedOn: { type: Date }
+        }],
+        following: [{
+            _id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+            followedOn: { type: Date }
+        }],
+        bookmarks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Artwork" }]
     },
     {
         timestamps: true,
