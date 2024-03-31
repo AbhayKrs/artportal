@@ -550,9 +550,7 @@ router.delete('/:id/comments/:comment_id', protect, async (req, res) => {
     }
 });
 
-// @route       PUT api/artworks/:id/comments/:comment_id/like
-// @desc        Like a comment
-// @access      Public
+// @route   PUT api/artworks/:id/comments/:comment_id/like --- Like a comment --- Private
 router.put('/:id/comments/:comment_id/like', protect, async (req, res) => {
     try {
         const artwork = await Artwork.findById(req.params.id);
@@ -577,9 +575,7 @@ router.put('/:id/comments/:comment_id/like', protect, async (req, res) => {
     }
 })
 
-// @route       PUT api/artworks/:id/comments/:comment_id/dislike
-// @desc        Dislike a comment
-// @access      Public
+// @route   PUT api/artworks/:id/comments/:comment_id/dislike --- Dislike a comment --- Private
 router.put('/:id/comments/:comment_id/dislike', protect, async (req, res) => {
     try {
         const artwork = await Artwork.findById(req.params.id);
