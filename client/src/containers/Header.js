@@ -111,7 +111,7 @@ const Header = (props) => {
                     <div ref={userMenuRef} className='relative group w-10 h-12'>
                         {props.common.isAuthenticated ?
                             <button onClick={() => setUserMenuActive(!userMenuActive)} className={`flex absolute w-[3.25rem] h-[3.25rem] inset-0 m-auto justify-center items-center ${userMenuActive ? 'bg-slate-300 dark:bg-[#313135] rounded-full' : null}`} >
-                                <img loading='lazy' alt='user' src={fetchUserImages(props.user.avatar.icon)} className='w-8 h-8 mx-auto' />
+                                {props.user.avatar.icon.length > 0 && <img loading='lazy' alt='user' src={fetchUserImages(props.user.avatar.icon)} className='w-8 h-8 mx-auto' />}
                             </button>
                             :
                             <button onClick={() => setUserMenuActive(!userMenuActive)} className={`flex absolute h-11 inset-0 m-auto justify-center items-center ${userMenuActive ? 'bg-slate-300 dark:bg-[#313135] rounded-full' : null}`} >

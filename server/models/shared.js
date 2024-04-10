@@ -1,29 +1,53 @@
 import mongoose from 'mongoose';
 
-const sharedSchema = new mongoose.Schema(
+const tagSchema = new mongoose.Schema(
     {
-        artwork_tags: [{ type: String, default: '' }],
-        images: {
-            login: { type: String, default: '' },
-            signup: { type: String, default: '' }
-        },
-        stickers: [{
-            _id: { type: mongoose.Schema.Types.ObjectId },
-            icon: { type: String, default: '' },
-            cost: { type: String, default: '' }
-        }],
-        user_avatars: [{
-            _id: { type: mongoose.Schema.Types.ObjectId },
-            icon: { type: String, default: '' },
-            identity: { type: String, default: '' }
-        }],
-        locations: [{
-            country: { type: String },
-            country_code: { type: String },
-            timezones: [{ type: String }]
-        }]
+        value: { type: String, unique: true, trim: true }
+    },
+    {
+        timestamps: true
     }
 );
 
-const Shared = mongoose.model('Shared', sharedSchema);
-export default Shared;
+const stickerSchema = new mongoose.Schema(
+    {
+        icon: { type: String, default: '' },
+        cost: { type: String, default: '' }
+    },
+    {
+        timestamps: true
+    }
+);
+
+const avatarSchema = new mongoose.Schema(
+    {
+        icon: { type: String, default: '' },
+        identity: { type: String, default: '' }
+    },
+    {
+        timestamps: true
+    }
+);
+
+const locationSchema = new mongoose.Schema(
+    {
+        country: { type: String },
+        country_code: { type: String },
+        timezones: [{ type: String }]
+    },
+    {
+        timestamps: true
+    }
+);
+
+const Tag = mongoose.model('Tag', tagSchema);
+const Sticker = mongoose.model('Sticker', stickerSchema);
+const Avatar = mongoose.model('Avatar', avatarSchema);
+const Location = mongoose.model('Location', locationSchema);
+
+export default {
+    Tag,
+    Sticker,
+    Avatar,
+    Location
+};

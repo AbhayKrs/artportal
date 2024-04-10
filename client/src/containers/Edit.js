@@ -8,7 +8,7 @@ import randomSentence from 'random-sentence';
 import { exploreItemViewed, clearExploreShow, fetchExploreList, fetchExploreItem, handleLikeExplore, handleAwardExplore, handleDislikeExplore, handleAddComment, handleEditComment, handleDeleteComment, handleLikeComment, handleDislikeComment, bookmarkExploreItem, handleExploreEdit } from '../store/actions/explore.actions';
 import { setSnackMessage, fetchAwards, setLoader, getTags } from '../store/actions/common.actions';
 import { handleStoreUpload } from '../store/actions/store.actions';
-import { fetchExploreImages } from '../api';
+import { fetchArtworkImages } from '../api';
 
 import { MdClose } from 'react-icons/md';
 import { BsHash } from 'react-icons/bs';
@@ -113,10 +113,10 @@ const ExploreEdit = (props) => {
                 <div className='flex lg:flex-row flex-col mt-3 lg:space-x-4 md:space-y-2'>
                     <div className='scrollbar w-full max-h-[37.5em] overflow-y-auto'>
                         <div className="flex flex-col space-y-3">
-                            <img loading='lazy' src={`${fetchExploreImages(props.exploreShow.files[0])}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
+                            <img loading='lazy' src={`${fetchArtworkImages(props.exploreShow.files[0])}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
                             <div className='flex w-fit flex-col self-center items-center space-y-3 place-content-center'>
                                 {props.exploreShow.files.filter((image, index) => index !== 0).map((image, index) => (
-                                    <img loading='lazy' key={index} src={`${fetchExploreImages(image)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
+                                    <img loading='lazy' key={index} src={`${fetchArtworkImages(image)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
                                 ))}
                             </div>
                         </div>

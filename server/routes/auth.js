@@ -38,12 +38,13 @@ router.post("/login", async (req, res) => {
                         email: user.email,
                         avatar: user.avatar,
                         bio: user.bio,
-                        created_on: user.createdAt,
                         tokens: user.tokens,
                         google_authenticated: user.google_authenticated,
+                        isPremium: user.isPremium,
                         followers: user.followers,
+                        followering: user.following,
                         bookmarks: user.bookmarks,
-                        theme: user.theme
+                        created_on: user.createdAt
                     };
                     jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 43200000 },
                         (err, token) => {
@@ -102,10 +103,12 @@ router.post("/signup", (req, res) => {
                                     email: user.email,
                                     avatar: user.avatar,
                                     bio: user.bio,
-                                    created_on: user.createdAt,
                                     tokens: user.tokens,
+                                    isPremium: user.isPremium,
                                     followers: user.followers,
-                                    bookmarks: user.bookmarks
+                                    followering: user.following,
+                                    bookmarks: user.bookmarks,
+                                    created_on: user.createdAt,
                                 };
                                 jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 43200000 },
                                     (err, token) => {

@@ -9,15 +9,19 @@ export const FETCH_EXPLORE_NEW = 'FETCH_EXPLORE_NEW';
 export const FETCH_EXPLORE_MONTHHIGHLIGHTS = 'FETCH_EXPLORE_MONTHHIGHLIGHTS';
 
 export const initialState = {
-    id: null,
     openExploreDialog: false,
-    catalogList: [],
-    trending_catalogList: [],
-    new_catalogList: [],
-    monthHighlight_catalogList: [],
-    catalogItem: {
-        author: {
-            id: '',
+    artworks: [],
+    trending_artworks: [],
+    new_artworks: [],
+    highlight_artworks: [],
+    artwork: {
+        _id: '',
+        title: '',
+        description: '',
+        files: [],
+        categories: [],
+        artist: {
+            _id: '',
             name: '',
             username: '',
             avatar: {
@@ -25,16 +29,11 @@ export const initialState = {
                 category: ''
             }
         },
-        files: [],
-        comments: [],
-        _id: '',
-        title: '',
-        description: '',
-        categories: [],
         likes: [],
+        comments: [],
         tags: [],
         awards: [],
-        views: [],
+        views: []
     },
     uploadData: {
         file: '',
@@ -48,23 +47,23 @@ export const initialState = {
 export const exploreReducer = (state = initialState, { type, payload }) => {
     switch (type) {
         case FETCH_EXPLORE: {
-            return { ...state, catalogItem: payload }
+            return { ...state, artwork: payload }
         }
         case FETCH_EXPLORELIST: {
-            const catalogList = [...payload];
-            return { ...state, catalogList }
+            const artworks = [...payload];
+            return { ...state, artworks }
         }
         case FETCH_EXPLORE_TRENDING: {
             const list = [...payload];
-            return { ...state, trending_catalogList: list }
+            return { ...state, trending_artworks: list }
         }
         case FETCH_EXPLORE_NEW: {
             const list = [...payload];
-            return { ...state, new_catalogList: list }
+            return { ...state, new_artworks: list }
         }
         case FETCH_EXPLORE_MONTHHIGHLIGHTS: {
             const list = [...payload];
-            return { ...state, monthHighlight_catalogList: list }
+            return { ...state, highlight_artworks: list }
         }
         case HANDLE_EXPLORE_UPLOAD: {
             return {
@@ -74,7 +73,7 @@ export const exploreReducer = (state = initialState, { type, payload }) => {
             }
         }
         case HANDLE_EXPLORE_EDITED: {
-            return { ...state, catalogItem: payload }
+            return { ...state, artwork: payload }
         }
         case HANDLE_DIALOG_OPEN: {
             const selectedData = payload.data;

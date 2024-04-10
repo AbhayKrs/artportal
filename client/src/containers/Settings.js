@@ -5,7 +5,7 @@ import { matchRoutes, Outlet, useLocation, useNavigate } from "react-router-dom"
 import { useEffect } from 'react';
 import moment from 'moment';
 
-import { fetchExploreImages, fetchUserImages } from '../api';
+import { fetchArtworkImages, fetchUserImages } from '../api';
 import { setSnackMessage, setLoader } from '../store/actions/common.actions';
 import { MdSettings } from 'react-icons/md';
 

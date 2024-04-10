@@ -8,7 +8,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { MdAddAPhoto, MdClose } from 'react-icons/md';
 
 import { setSnackMessage, fetchAvatars, loadProfileDetails, updateUserProfile, refreshUserDetails, handleEditUserAvatar } from '../../store/actions/common.actions';
-import { fetchExploreImages, fetchUserImages } from '../../api';
+import { fetchArtworkImages, fetchUserImages } from '../../api';
 import { AvatarModal, ConfirmModal } from '../../components/Modal';
 
 export const Settings_Acc = (props) => {

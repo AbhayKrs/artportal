@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { viewerIP, exploreItemViewedAPI, exploreItemAPI, exploreListAPI, exploreUploadAPI, exploreItemEditAPI, searchExploreListAPI, searchFilterExploreListAPI, filterExploreListAPI, likeExploreAPI, dislikeExploreAPI, awardExploreAPI, bookmarkExploreAPI, deleteExploreItemAPI, exploreAddCommentAPI, exploreEditCommentAPI, exploreDeleteCommentAPI, exploreLikeCommentAPI, exploreDislikeCommentAPI } from '../../api';
+import { viewerIP, exploreItemViewedAPI, exploreItemAPI, artworkListAPI, exploreUploadAPI, exploreItemEditAPI, searchExploreListAPI, searchFilterExploreListAPI, filterExploreListAPI, likeExploreAPI, dislikeExploreAPI, awardExploreAPI, bookmarkArtworkAPI, deleteExploreItemAPI, addArtworkCommentAPI, exploreEditCommentAPI, exploreDeleteCommentAPI, exploreLikeCommentAPI, exploreDislikeCommentAPI } from '../../api';
 import {
     FETCH_EXPLORE,
     FETCH_EXPLORELIST,
@@ -23,7 +23,7 @@ const dynamicSort = (property) => {
 }
 
 // function trendingCheck() {
-//     var createdAt = new Date(getState().explore.catalogList[0].createdAt)
+//     var createdAt = new Date(getState().explore.artworks[0].createdAt)
 //     console.log('Trending', createdAt.getTime(), Date.now(), Date.now() - createdAt.getTime())
 //     // return function (a, b) {
 
@@ -48,15 +48,18 @@ export const clearExploreShow = () => (dispatch, getState) => {
 }
 
 export const fetchExploreItem = (exploreID) => async (dispatch, getState) => {
-    await exploreItemAPI(exploreID).then(res => {
-        dispatch({ type: FETCH_EXPLORE, payload: res.data })
+    const userID = getState().common.user.id;
+
+    await exploreItemAPI(exploreID, { _id: userID }).then(res => {
+        dispatch({ type: FETCH_EXPLORE, payload: res.data });
     }).catch(err => {
         console.log('---error fetchExploreItem', err);
     })
 }
 
 export const fetchExploreList = () => async (dispatch, getState) => {
-    await exploreListAPI().then(res => {
+    await artworkListAPI().then(res => {
+        console.log('---success fetchExploreList', res.data);
         dispatch({ type: FETCH_EXPLORELIST, payload: res.data });
     }).catch(err => {
         console.log('---error fetchExploreList', err);
@@ -64,7 +67,7 @@ export const fetchExploreList = () => async (dispatch, getState) => {
 };
 
 export const fetchTrendingList = () => async (dispatch, getState) => {
-    await exploreListAPI().then(res => {
+    await artworkListAPI().then(res => {
         dispatch({ type: FETCH_EXPLORE_TRENDING, payload: res.data.sort(() => 0.4 - Math.random()).slice(0, 12) });
     }).catch(err => {
         console.log('---error fetchExploreList', err);
@@ -72,7 +75,7 @@ export const fetchTrendingList = () => async (dispatch, getState) => {
 };
 
 export const fetchNewlyAddedList = () => async (dispatch, getState) => {
-    await exploreListAPI().then(res => {
+    await artworkListAPI().then(res => {
         dispatch({ type: FETCH_EXPLORE_NEW, payload: res.data.sort(() => 0.4 - Math.random()).slice(0, 12) });
     }).catch(err => {
         console.log('---error fetchExploreList', err);
@@ -80,7 +83,7 @@ export const fetchNewlyAddedList = () => async (dispatch, getState) => {
 };
 
 export const fetchMonthHighlightsList = () => async (dispatch, getState) => {
-    await exploreListAPI().then(res => {
+    await artworkListAPI().then(res => {
         dispatch({ type: FETCH_EXPLORE_MONTHHIGHLIGHTS, payload: res.data.sort(() => 0.4 - Math.random()).slice(0, 12) });
     }).catch(err => {
         console.log('---error fetchExploreList', err);
@@ -104,7 +107,7 @@ export const handleExploreEdit = (exploreID, updatedData) => async (dispatch, ge
 }
 
 export const bookmarkExploreItem = (userID, bookmarkData) => async (dispatch, getState) => {
-    await bookmarkExploreAPI(userID, bookmarkData).then(res => {
+    await bookmarkArtworkAPI(userID, bookmarkData).then(res => {
         if (sessionStorage.jwtToken) {
             dispatch(refreshUserDetails(userID));
         } else if (localStorage.jwtToken) {
@@ -194,7 +197,7 @@ export const handleAwardExplore = (exploreID, userID, award) => async (dispatch,
 }
 
 export const handleAddComment = (commentText, exploreID) => async (dispatch, getState) => {
-    await exploreAddCommentAPI(exploreID, commentText, getState().common.user).then(res => {
+    await addArtworkCommentAPI(exploreID, commentText, getState().common.user).then(res => {
         console.log('commentData', res.data);
     }).catch(err => {
         console.log('---error handleAddComment', err);
@@ -236,19 +239,19 @@ export const handleDislikeComment = (exploreID, commentID) => async (dispatch, g
 export const handleTabChange = (selectedTab) => async (dispatch, getState) => {
     switch (selectedTab) {
         case 'Latest': {
-            let catalogList = getState().explore.catalogList;
-            await dispatch({ type: FETCH_EXPLORELIST, payload: catalogList.sort(dynamicSort('createdAt')) });
+            let artworks = getState().explore.artworks;
+            await dispatch({ type: FETCH_EXPLORELIST, payload: artworks.sort(dynamicSort('createdAt')) });
             break;
         }
         case 'Trending': {
-            let catalogList = getState().explore.catalogList;
+            let artworks = getState().explore.artworks;
 
-            await dispatch({ type: FETCH_EXPLORELIST, payload: catalogList.sort(dynamicSort('title')) });
+            await dispatch({ type: FETCH_EXPLORELIST, payload: artworks.sort(dynamicSort('title')) });
             break;
         }
         case 'Rising': {
-            let catalogList = getState().explore.catalogList;
-            await dispatch({ type: FETCH_EXPLORELIST, payload: catalogList.sort(dynamicSort('title')) });
+            let artworks = getState().explore.artworks;
+            await dispatch({ type: FETCH_EXPLORELIST, payload: artworks.sort(dynamicSort('title')) });
             break;
         }
         default: break;

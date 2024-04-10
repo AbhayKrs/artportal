@@ -1,18 +1,10 @@
 import express from 'express';
-const router = express.Router();
-import User from '../models/user.js';
-import Catalog from '../models/artwork.js';
-import Comment from '../models/comment.js';
-import Common from '../models/common.js';
-import Cart from '../models/cart.js';
-import passport from 'passport';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
-import {
-    validateLoginInput,
-    validateRegisterInput
-} from '../utils/authenticate.js';
 import mongoose from 'mongoose';
+const router = express.Router();
+
+//Middleware
+import { protect, admin } from '../middleware/authMiddleware.js';
+import { checkObjectId } from '../middleware/checkObjectId.js';
 
 //Importing gfs database
 import multer from 'multer';
@@ -21,14 +13,23 @@ import { GridFsStorage } from 'multer-gridfs-storage';
 import crypto from 'crypto';
 import path from 'path';
 
+import User from '../models/user.js';
+import Artworks from '../models/artwork.js';
+import Shared from '../models/shared.js';
+import Cart from '../models/cart.js';
+const { Artwork, Comment } = Artworks;
+const { Tag, Sticker, Avatar, Location } = Shared;
+
+import jwt from 'jsonwebtoken';
+
 //Connect gfs to database
 const conn = mongoose.connection;
+let gfs;
+
 conn.once('open', () => {
     gfs = Grid(conn.db, mongoose.mongo);
-    gfs.collection('assets');
+    gfs.collection('shareduploads');
 });
-
-let gfs;
 
 //Storage for image uploaded
 const storage = new GridFsStorage({
@@ -43,14 +44,14 @@ const storage = new GridFsStorage({
                     buf.toString('hex') + path.extname(file.originalname);
                 const fileInfo = {
                     filename: filename,
-                    bucketName: 'assets',
+                    bucketName: 'shareduploads',
                 };
                 resolve(fileInfo);
             });
         });
     },
 });
-const asset = multer({ storage });
+const upload = multer({ storage });
 
 // @desc    Get all users
 // @route   GET /api/users
@@ -75,8 +76,8 @@ router.get('/', async (req, res) => {
 // @access  Public
 router.get("/tags", async (req, res) => {
     try {
-        const common = await Common.find({});
-        res.json(common[0].tags);
+        const tags = await Tag.find({});
+        res.json(tags);
     } catch (err) {
         return res.status(404).json({ msg: err.name });
     }
@@ -85,22 +86,22 @@ router.get("/tags", async (req, res) => {
 // @desc    Get all tags
 // @route   GET /api/users/commonImages
 // @access  Public
-router.get("/commonImages", async (req, res) => {
-    try {
-        const common = await Common.find({});
-        res.json(common[0].images);
-    } catch (err) {
-        return res.status(404).json({ msg: err.name });
-    }
-});
+// router.get("/commonImages", async (req, res) => {
+//     try {
+//         const shared = await Shared.findOne({});
+//         res.json(shared.images);
+//     } catch (err) {
+//         return res.status(404).json({ msg: err.name });
+//     }
+// });
 
 // @desc    Get all tags
 // @route   GET /api/users/assets/
 // @access  Public
 router.get('/avatars', async (req, res) => {
     try {
-        const common = await Common.findOne();
-        res.json(common.avatars);
+        const avatars = await Avatar.find({});
+        res.json(avatars);
     } catch (err) {
         return res.status(404).json({ msg: err.name });
     }
@@ -109,22 +110,22 @@ router.get('/avatars', async (req, res) => {
 // @desc    Get all awards
 // @route   GET /api/users/awards/
 // @access  Public
-router.get('/awards', async (req, res) => {
-    try {
-        const common = await Common.findOne();
-        res.json(common.awards);
-    } catch (err) {
-        return res.status(404).json({ msg: err.name });
-    }
-});
+// router.get('/awards', async (req, res) => {
+//     try {
+//         const shared = await Shared.findOne();
+//         res.json(shared.awards);
+//     } catch (err) {
+//         return res.status(404).json({ msg: err.name });
+//     }
+// });
 
 // @desc    Get locations
 // @route   GET /api/users/locations/
 // @access  Public
 router.get('/locations', async (req, res) => {
     try {
-        const common = await Common.findOne();
-        res.json(common.locations);
+        const locations = await Location.findOne();
+        res.json(locations);
     } catch (err) {
         return res.status(404).json({ msg: err.name });
     }
@@ -164,37 +165,44 @@ router.get('/image/:filename', (req, res) => {
 // @desc    Get all tags
 // @route   GET /api/users/assets/new
 // @access  Public
-router.post('/assets/new',
-    // asset.single('file'),
-    async (req, res) => {
-        //Add awards
-        // const common = await Common.findOne();
-        // const asset = {
-        //     icon: req.file.filename,
-        //     title: ''
-        // }
-        // common.awards.push(asset);
-        // common.save();
+router.post('/assets/new', upload.any(), async (req, res) => {
+    try {
+        console.log("test", req.files.length);
+        req.files.map(file => {
+            // // Add awards
+            // const award_asset = {
+            //     icon: file.filename,
+            //     title: ''
+            // }
+            // shared.awards.push(award_asset);
+            // shared.save();
 
-        //Add avatars
-        // const common = await Common.findOne();
-        // const asset = {
-        //     icon: req.file.filename,
-        //     category: 'Female'
-        // }
-        // common.avatars.push(asset);
-        // common.save();
+            // Add avatars
+            const newAvatar = new Avatar({
+                icon: file.filename,
+                identity: 'Female'
+            });
+            Avatar.create(newAvatar, (err, data) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    res.send(data);
+                }
+            });
 
-        //Add login and signup image
-        // const common = await Common.findOne();
-        // common.images.signup = req.file.filename;
-        // common.save();
+            // // Add login and signup image
+            // shared.images.signup = file.filename;
+            // shared.save();
 
-        //Add locations
-        // const common = await Common.findOne();
-        // common.locations = req.body;
-        // common.save();
-    });
+            // // Add locations
+            // shared.locations = req.body;
+            // shared.save();
+        });
+    } catch (err) {
+        console.log("error", err)
+        return res.status(404).json({ msg: err.name });
+    }
+});
 
 // @desc    Get user by ID
 // @route   GET /api/users/:id
@@ -277,10 +285,10 @@ router.get('/:id/catalog', async (req, res) => {
             return res.status(400).send({ msg: 'User not found' });
         }
 
-        const catalogList = await Catalog.find({ "user_id": req.params.id });
+        const artworks = await Catalog.find({ "user_id": req.params.id });
         const catalogData = {
-            catalog: catalogList,
-            catalog_count: catalogList.length
+            catalog: artworks,
+            catalog_count: artworks.length
         }
         res.json(catalogData);
     } catch (err) {
@@ -510,9 +518,9 @@ router.get("/logout", (req, res, next) => {
 router.post('/:id/avatar', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
-        const catalogItem = await Catalog.find({ "author.id": req.params.id });
+        const artwork = await Catalog.find({ "author.id": req.params.id });
 
-        catalogItem.map(item => {
+        artwork.map(item => {
             item.author.avatar = { ...req.body };
             item.save();
         });
@@ -527,7 +535,7 @@ router.post('/:id/avatar', async (req, res) => {
         });
         user.avatar = { ...req.body };
         user.save();
-        res.json(catalogItem);
+        res.json(artwork);
     } catch (err) {
         return res.status(404).json({ msg: err.name });
     }

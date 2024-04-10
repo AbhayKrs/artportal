@@ -7,7 +7,6 @@ import multer from 'multer';
 import Grid from 'gridfs-stream';
 import { GridFsStorage } from 'multer-gridfs-storage';
 import crypto from 'crypto';
-import path from 'path';
 
 //Connect gfs to database
 const conn = mongoose.connection;
@@ -38,7 +37,6 @@ const storage = new GridFsStorage({
     },
 });
 const tagger = multer({ storage });
-
 
 // router.get('/', (req, res) => {
 //     try {
@@ -85,16 +83,16 @@ router.get('/:filename', (req, res) => {
     }
 });
 
-// @route       POST api/tagger/new
-// @desc        Create an tagger
-// @access      Private
-router.post('/new', tagger.any(), async (req, res) => {
-    try {
-        console.log('tagger successfully uploaded');
-        res.send('success');
-    } catch (err) {
-        return res.status(404).json({ msg: err.name });
-    }
-});
+// // @route       POST api/tagger/new
+// // @desc        Create an tagger
+// // @access      Private
+// router.post('/new', tagger.any(), async (req, res) => {
+//     try {
+//         console.log('tagger successfully uploaded');
+//         res.send('success');
+//     } catch (err) {
+//         return res.status(404).json({ msg: err.name });
+//     }
+// });
 
 export default router;

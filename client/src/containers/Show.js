@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
-import { fetchExploreImages, fetchUserImages, fetchStoreImages } from '../api';
+import { fetchArtworkImages, fetchUserImages, fetchStoreImages } from '../api';
 import { exploreItemViewed, clearExploreShow, fetchExploreList, fetchExploreItem, handleLikeExplore, handleAwardExplore, handleDislikeExplore, handleAddComment, handleEditComment, handleDeleteComment, handleLikeComment, handleDislikeComment, bookmarkExploreItem } from '../store/actions/explore.actions';
 import { fetchStoreList, fetchStoreItem } from '../store/actions/store.actions';
 import { setLoader, getViewerIP, fetchAwards, loadProfileDetails, refreshUserDetails, setSnackMessage } from '../store/actions/common.actions';
@@ -39,33 +39,33 @@ const ExploreShow = (props) => {
         window.scrollTo(0, 0);
         props.setLoader(true);
         await props.fetchExploreList();
-        await props.fetchAwards();
-        await props.exploreItemViewed(id);
+        await props.fetchExploreItem(id);
+        // await props.fetchAwards();
+        // await props.exploreItemViewed(id);
     }, [id])
 
     useEffect(() => {
-        const len = props.explore.catalogList.length;
-        props.fetchExploreItem(id);
-        if (props.exploreShow.likes.filter(item => item === props.user.id).length > 0) {
+        const len = props.explore.artworks.length;
+        if (props.artwork.likes.filter(item => item === props.user.id).length > 0) {
             setLike(true);
         } else {
             setLike(false);
         }
-        props.explore.catalogList.forEach((item, index) => {
-            if (item._id === props.exploreShow._id) {
+        props.explore.artworks.forEach((item, index) => {
+            if (item._id === props.artwork._id) {
                 if (index > 0) {
-                    setPrev(props.explore.catalogList[index - 1]._id)
+                    setPrev(props.explore.artworks[index - 1]._id)
                 } else {
                     setPrev('');
                 }
                 if (index < len - 1) {
-                    setNext(props.explore.catalogList[index + 1]._id)
+                    setNext(props.explore.artworks[index + 1]._id)
                 } else {
                     setNext('')
                 }
             }
         })
-    }, [props.exploreShow._id]);
+    }, [props.artwork._id]);
 
     const submitComment = async (event) => {
         event.preventDefault();
@@ -154,11 +154,11 @@ const ExploreShow = (props) => {
 
     const bookmarkIt = () => {
         const bookmarkData = {
-            id: props.exploreShow._id,
-            files: props.exploreShow.files,
-            title: props.exploreShow.title,
-            author: props.exploreShow.author,
-            description: props.exploreShow.description
+            id: props.artwork._id,
+            files: props.artwork.files,
+            title: props.artwork.title,
+            author: props.artwork.artist,
+            description: props.artwork.description
         }
         props.bookmarkExploreItem(props.user.id, bookmarkData).then(() => {
             const msgData = {
@@ -186,26 +186,26 @@ const ExploreShow = (props) => {
             <ExploreShowCarousel
                 prevTrue={prev.length > 0}
                 nextTrue={next.length > 0}
-                data={props.explore.catalogList}
-                currentImage={props.exploreShow.files[0]}
-                secondaryImages={props.exploreShow.files.filter((image, index) => index !== 0)}
+                data={props.explore.artworks}
+                currentImage={props.artwork.files[0]}
+                secondaryImages={props.artwork.files.filter((image, index) => index !== 0)}
                 prev={() => { navigate(`/explore/${prev}`); props.fetchExploreItem(prev); }}
                 next={() => { navigate(`/explore/${next}`); props.fetchExploreItem(next); }}
             />
             <div className='flex fixed m-5 space-x-3 py-1 px-2 bg-neutral-100 dark:bg-neutral-800 rounded'>
                 <div className='flex items-center justify-end py-0.5 space-x-1 text-teal-500'>
                     <IoEye className='h-6 w-6' />
-                    <h3 className='font-josefinregular text-lg self-center'>{new Intl.NumberFormat().format(props.exploreShow.views.length)}</h3>
+                    <h3 className='font-josefinregular text-lg self-center'>{new Intl.NumberFormat().format(props.artwork.views.length)}</h3>
 
                 </div>
                 <div className='flex items-center justify-end py-0.5 space-x-1 text-violet-500 dark:text-violet-500'>
                     <IoHeart className='h-6 w-6' />
-                    <h3 className='font-josefinregular text-lg self-center'>{new Intl.NumberFormat().format(props.exploreShow.likes.length)}</h3>
+                    <h3 className='font-josefinregular text-lg self-center'>{new Intl.NumberFormat().format(props.artwork.likes.length)}</h3>
 
                 </div>
                 <div className='flex items-center justify-end py-0.5 space-x-1 text-violet-500 dark:text-violet-500'>
                     <IoChatbox className='h-6 w-6' />
-                    <h3 className='font-josefinregular text-lg self-center'>{new Intl.NumberFormat().format(props.exploreShow.comment_count)}</h3>
+                    <h3 className='font-josefinregular text-lg self-center'>{new Intl.NumberFormat().format(props.artwork.comments.length)}</h3>
 
                 </div>
             </div>
@@ -214,14 +214,14 @@ const ExploreShow = (props) => {
                     <div className='flex flex-col space-y-1 p-2'>
                         <div className='flex flex-row space-x-2'>
                             <div className='flex px-2 flex-col w-full space-y-1'>
-                                <h1 className='font-caviar text-2xl tex-gray-900 dark:text-gray-200 font-bold'>{props.exploreShow.title}</h1>
-                                <p className='font-josefinlight text-lg tex-gray-800 dark:text-gray-300'>{props.exploreShow.description}</p>
+                                <h1 className='font-caviar text-2xl tex-gray-900 dark:text-gray-200 font-bold'>{props.artwork.title}</h1>
+                                <p className='font-josefinlight text-lg tex-gray-800 dark:text-gray-300'>{props.artwork.description}</p>
                             </div>
                         </div>
                         <div className='flex flex-col w-full p-2 bg-neutral-200 dark:bg-neutral-900 rounded-xl space-y-2'>
                             <div className="font-medium text-xs font-medium text-gray-600 dark:text-gray-300">Categories</div>
                             <div className='flex flex-row space-x-1.5'>
-                                {props.exploreShow.categories.map((item, index) => (
+                                {props.artwork.categories.map((item, index) => (
                                     <div key={index} className="flex w-fit justify-center items-center font-medium py-1.5 px-2 bg-teal-500 dark:bg-teal-600 rounded-full text-gray-600 dark:text-gray-300 shadow">
                                         <div className="text-xs font-medium leading-none">{item}</div>
                                     </div>
@@ -229,7 +229,7 @@ const ExploreShow = (props) => {
                             </div>
                         </div>
                         <div className='flex flex-wrap'>
-                            {props.exploreShow.tags.map((item, index) => (
+                            {props.artwork.tags.map((item, index) => (
                                 <div key={index} className="flex w-fit justify-center items-center m-0.5 font-medium py-1.5 px-2 rounded-full text-violet-500 dark:text-violet-500">
                                     <div className="text-xs font-medium leading-none">#{item}</div>
                                 </div>
@@ -237,65 +237,93 @@ const ExploreShow = (props) => {
                         </div>
                         <div className='flex pl-1 justify-between'>
                             <div className='flex w-fit items-center space-x-3'>
-                                {props.exploreShow.author.id === props.common.user.id ?
-                                    <div onClick={() => navigate(`/explore/${props.exploreShow._id}/edit`)} className='rounded-lg bg-violet-500 p-2 cursor-pointer ml-2'>
+                                {props.artwork.artist.id === props.common.user.id ?
+                                    <div onClick={() => navigate(`/explore/${props.artwork._id}/edit`)} className='rounded-lg bg-violet-500 p-2 cursor-pointer ml-2'>
                                         <MdEdit className="text-gray-200 h-6 w-6" />
                                     </div>
                                     : <div className="relative float-left flex">
-                                        <img loading='lazy' onClick={props.common.isAuthenticated ? () => setAwardOpen(true) : handleInvalidUser} src={AwardIcon} className='h-12 w-12 cursor-pointer' />
+                                        <img
+                                            loading='lazy'
+                                            src={AwardIcon}
+                                            className='h-12 w-12 cursor-pointer'
+                                            onClick={() => {
+                                                props.common.isAuthenticated ?
+                                                    setAwardOpen(true)
+                                                    :
+                                                    handleInvalidUser()
+                                            }}
+                                        />
                                         <ImPlus className="absolute bottom-0 right-0 text-[#D1853A] h-4 w-4" />
                                     </div>}
-                                <BsHeartFill style={like ? { color: '#FF3980' } : { color: '#F190B3' }} className='h-7 w-7 cursor-pointer' onClick={props.common.isAuthenticated ? () => { setLike(!like); handleToggleLike(props.exploreShow.likes) } : handleInvalidUser} />
+                                <BsHeartFill
+                                    style={like ? { color: '#FF3980' } : { color: '#F190B3' }}
+                                    className='h-7 w-7 cursor-pointer'
+                                    onClick={() => {
+                                        props.common.isAuthenticated ?
+                                            // setLike(!like);
+                                            handleToggleLike(props.artwork.likes)
+                                            :
+                                            handleInvalidUser()
+                                    }}
+                                />
                                 <IoShareSocialSharp onClick={() => setShareOpen(true)} className='h-7 w-7 cursor-pointer text-violet-500 dark:text-violet-500' />
-                                {props.user && props.user.bookmarked && !!props.user.bookmarked.find(item => item._id === props.exploreShow._id) ?
+                                {props.user && props.user.bookmarked && !!props.user.bookmarked.find(item => item._id === props.artwork._id) ?
                                     <MdBookmarkAdded className='h-7 w-7 text-violet-500 dark:text-violet-500' />
                                     :
-                                    <MdBookmarkAdd onClick={props.common.isAuthenticated ? () => bookmarkIt() : handleInvalidUser} className='h-7 w-7 cursor-pointer text-violet-500 dark:text-violet-500' />
+                                    <MdBookmarkAdd
+                                        className='h-7 w-7 cursor-pointer text-violet-500 dark:text-violet-500'
+                                        onClick={() => {
+                                            props.common.isAuthenticated ?
+                                                bookmarkIt()
+                                                :
+                                                handleInvalidUser()
+                                        }}
+                                    />
                                 }
                             </div>
                             <div className='mr-3'>
                                 <div className='flex flex-col text-right justify-end py-1 text-neutral-900 dark:text-gray-400'>
                                     <p className='font-josefinlight text-xl'>Posted By</p>
-                                    <div onClick={() => navigate(`/users/${props.exploreShow.author.id}`)} className="flex cursor-pointer justify-end">
+                                    <div onClick={() => navigate(`/users/${props.artwork.artist.id}`)} className="flex cursor-pointer justify-end">
                                         <div className="w-6 h-6 overflow-hidden">
-                                            {props.exploreShow.author ? <img loading='lazy' src={fetchUserImages(props.exploreShow.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
+                                            {props.artwork.artist ? <img loading='lazy' src={fetchUserImages(props.artwork.artist.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
                                         </div>
                                         <p className="font-josefinlight pt-0.5 font-medium text-lg mx-0.5">
-                                            {props.exploreShow.author.username}
+                                            {props.artwork.artist.username}
                                         </p>
                                         <svg className="stroke-current stroke-1 text-blue-600 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                             <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
                                         </svg>
                                     </div>
-                                    <p className='font-josefinlight whitespace-nowrap text-sm'>{moment(props.exploreShow.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</p>
+                                    <p className='font-josefinlight whitespace-nowrap text-sm'>{moment(props.artwork.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {props.exploreShow.awards.length > 0 ?
+                    {/* {props.artwork.awards.length > 0 ?
                         <div id='award' className='flex overflow-x-hidden bg-slate-200 dark:bg-neutral-700 mx-2 p-2 rounded-lg space-x-2'>
-                            {props.exploreShow.awards.map((award, index) => (
+                            {props.artwork.awards.map((award, index) => (
                                 <div key={index} className="relative float-left mr-2 flex">
                                     <img loading='lazy' draggable="false" className='max-w-fit h-12 w-12' src={fetchUserImages(award.icon)} />
                                     <span className="absolute font-bold top-0 right-0 inline-block rounded-full bg-violet-800 shadow-lg shadow-neutral-800 text-gray-300 px-1.5 py-0.5 text-xs">{award.count}</span>
                                 </div>
                             ))}
                         </div>
-                        : ''}
+                        : ''} */}
                 </div>
                 {props.common.isAuthenticated ?
                     <div className='m-2 rounded flex bg-gray-300 dark:bg-neutral-700'>
-                        {comment.length > 0 ?
+                        {props.artwork.comments.length > 0 ?
                             <IoIosSend onClick={(ev) => submitComment(ev)} className='h-7 w-7 text-gray-600 dark:text-gray-300 cursor-pointer self-center ml-2' />
                             :
                             <IoIosSend className='h-7 w-7 text-neutral-700 dark:text-gray-300 self-center ml-2' />
                         }
-                        <input type="text" name="comment" value={comment} onChange={(ev) => setComment(ev.target.value)} onKeyPress={(ev) => { if (ev.key === 'Enter') { submitComment(ev) } }} placeholder={`Hey ${props.user.username}, Let the artist know your thoughts...`} className="font-josefinlight w-full mx-2 my-3 font-bold text-md placeholder:text-neutral-700 dark:placeholder:text-gray-300 text-gray-600 dark:text-gray-300 outline-none bg-gray-300 dark:bg-neutral-700 border-b-2 border-b-gray-700 dark:border-b-gray-300" />
+                        <input type="text" name="comment" value={props.artwork.comments} onChange={(ev) => setComment(ev.target.value)} onKeyPress={(ev) => { if (ev.key === 'Enter') { submitComment(ev) } }} placeholder={`Hey ${props.user.username}, Let the artist know your thoughts...`} className="font-josefinlight w-full mx-2 my-3 font-bold text-md placeholder:text-neutral-700 dark:placeholder:text-gray-300 text-gray-600 dark:text-gray-300 outline-none bg-gray-300 dark:bg-neutral-700 border-b-2 border-b-gray-700 dark:border-b-gray-300" />
                     </div>
                     :
                     ''}
                 <div className='m-2 ml-6'>
-                    {props.exploreShow.comments.map((comment, index) => (
+                    {props.artwork.comments.map((comment, index) => (
                         <div key={index} className='flex rounded-lg items-center bg-gray-300 dark:bg-neutral-700 text-neutral-700 dark:text-gray-300 py-2 px-4 mb-2 space-x-2'>
                             <div className='flex flex-col basis-10/12'>
                                 {editForm && index === editIndex ?
@@ -325,14 +353,28 @@ const ExploreShow = (props) => {
                                             <AiFillLike className='w-5 h-5 text-violet-500' />
                                         </button>
                                         :
-                                        <button onClick={props.common.isAuthenticated ? () => handleToggleCommentLike(true, comment) : handleInvalidUser}>
+                                        <button
+                                            onClick={() => {
+                                                props.common.isAuthenticated ?
+                                                    handleToggleCommentLike(true, comment)
+                                                    :
+                                                    handleInvalidUser()
+                                            }}
+                                        >
                                             <AiFillLike className='w-5 h-5 text-neutral-500' />
                                         </button>
                                     }
                                     <div className="text-sm">
                                         {comment.likes.length}
                                     </div>
-                                    <button onClick={props.common.isAuthenticated ? () => handleToggleCommentLike(false, comment) : handleInvalidUser}>
+                                    <button
+                                        onClick={() => {
+                                            props.common.isAuthenticated ?
+                                                handleToggleCommentLike(false, comment)
+                                                :
+                                                handleInvalidUser()
+                                        }}
+                                    >
                                         <AiFillDislike className='w-5 h-5' />
                                     </button>
                                 </div>
@@ -529,7 +571,7 @@ const mapStateToProps = (state, props) => ({
     user: state.common.user,
     common: state.common,
     explore: state.explore,
-    exploreShow: state.explore.exploreData,
+    artwork: state.explore.artwork,
     store: state.store,
     storeShow: state.store.storeItem
 })

@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import Masonry from '../components/Masonry';
 
-import { fetchExploreImages, fetchUserImages } from '../api';
+import { fetchArtworkImages, fetchUserImages } from '../api';
 import { setSnackMessage, setLoader, refreshUserDetails, loadProfileDetails, clearUserProfile, deleteBookmark, handleEditUserAvatar } from '../store/actions/common.actions';
 import { fetchExploreList, deleteExploreItem } from '../store/actions/explore.actions';
 
@@ -89,7 +89,7 @@ const Profile = (props) => {
                             <img loading='lazy'
                                 id={index}
                                 className='object-cover w-full h-full'
-                                src={fetchExploreImages(explore.files[0])}
+                                src={fetchArtworkImages(explore.files[0])}
                             />
                             <div className='absolute z-30 hidden group-hover:flex top-0 right-0 m-2 space-x-1'>
                                 {props.common.user.id === props.viewed_user.id && <BsTrash onClick={() => deleteExploreItem(explore._id)} className=' h-6 w-6 cursor-pointer text-gray-200' />}
@@ -129,12 +129,12 @@ const Profile = (props) => {
             case 'about': return <div className='text-4xl text-gray-400'>HELLO</div>
             case 'liked': return <div className='flex flex-row'>
                 <Masonry cols={5}>
-                    {props.explore.catalogList.filter(item => item.likes.indexOf(props.viewed_user.id) >= 0).map((explore, index) => (
+                    {props.explore.artworks.filter(item => item.likes.indexOf(props.viewed_user.id) >= 0).map((explore, index) => (
                         <div key={index} onClick={() => navigate(`/explore/${explore._id}`)} className='relative group group-hover:block'>
                             <img loading='lazy'
                                 id={index}
                                 className='object-cover w-full h-full'
-                                src={fetchExploreImages(explore.files[0])}
+                                src={fetchArtworkImages(explore.files[0])}
                             />
                             <div className='hidden absolute max-h-full bottom-0 p-2 pt-14 group-hover:flex group-hover:flex-row w-full bg-gradient-to-t from-black text-gray-200 group-hover:flex group-hover:justify-between'>
                                 <div className="flex flex-col place-self-end max-w-[65%]">
@@ -174,7 +174,7 @@ const Profile = (props) => {
                             <img loading='lazy'
                                 id={index}
                                 className='object-cover w-full h-full'
-                                src={fetchExploreImages(explore.files[0])}
+                                src={fetchArtworkImages(explore.files[0])}
                             />
                             <IoCloseCircle onClick={() => deleteBookmark(explore._id, props.common.user.id)} className='hidden group-hover:flex absolute z-30 top-0 right-0 h-8 w-8 m-2 cursor-pointer text-gray-200' />
                             <div className='hidden absolute max-h-full bottom-0 p-2 pt-14 group-hover:flex group-hover:flex-row w-full bg-gradient-to-t from-black text-gray-200 group-hover:flex group-hover:justify-between'>

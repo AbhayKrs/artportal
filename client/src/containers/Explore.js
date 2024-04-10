@@ -8,7 +8,7 @@ import Masonry from '../components/Masonry';
 
 import emptyIcon from '../assets/images/lazyPanda2.png';
 
-import { fetchExploreImages } from '../api';
+import { fetchArtworkImages } from '../api';
 import moment from 'moment';
 
 import { BsHeart, BsChat } from 'react-icons/bs';
@@ -30,15 +30,15 @@ const Explore = (props) => {
                 <title>Artyst | Explore</title>
             </Helmet>
             <ExplorePanel authenticated={props.common.isAuthenticated} setSnackMessage={props.setSnackMessage} fetchExploreList={props.fetchExploreList} filterExploreList={props.filterExploreList} tags={props.common.tags} />
-            {props.explore.catalogList.length > 0 ?
+            {props.explore.artworks.length > 0 ?
                 <div className='flex flex-row'>
                     <Masonry cols={5}>
-                        {props.explore.catalogList.map((explore, index) => (
+                        {props.explore.artworks.map((explore, index) => (
                             <div key={index} onClick={() => navigate(`/explore/${explore._id}`)} className='relative group group-hover:block cursor-pointer'>
                                 <img loading='lazy'
                                     id={index}
                                     className='object-cover w-full h-full'
-                                    src={fetchExploreImages(explore.files[0])}
+                                    src={fetchArtworkImages(explore.files[0])}
                                 />
                                 <div className='opacity-0 flex transition-all delay-200 absolute bottom-0 p-2 pt-14 group-hover:opacity-100 w-full bg-gradient-to-t from-black text-gray-200 justify-between'>
                                     <div className="flex flex-col place-self-end max-w-[65%]">

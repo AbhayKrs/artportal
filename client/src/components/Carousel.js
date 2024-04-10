@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { fetchExploreImages } from '../api';
+import { fetchArtworkImages } from '../api';
 
 import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
@@ -17,11 +17,11 @@ export const ExploreShowCarousel = (props) => {
               <FaChevronRight className='h-6 w-6' />
             </div> : ''}
           </div>
-          <img loading='lazy' src={`${fetchExploreImages(props.currentImage)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
+          <img loading='lazy' src={`${fetchArtworkImages(props.currentImage)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
         </div>
         <div className='flex w-fit flex-col self-center items-center space-y-3 place-content-center'>
           {props.secondaryImages.map((image, index) => (
-            <img loading='lazy' key={index} src={`${fetchExploreImages(image)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
+            <img loading='lazy' key={index} src={`${fetchArtworkImages(image)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
           ))}
         </div>
       </div>
@@ -87,7 +87,7 @@ export const HomeSingleCarousel = (props) => {
         {props.images.length > 0 && props.images[currentIndex]?.file && <div className="active float-left w-full h-full">
           <img
             loading='lazy'
-            src={fetchExploreImages(props.images[currentIndex].file)}
+            src={fetchArtworkImages(props.images[currentIndex].file)}
             className={`block w-full h-full object-cover transition-opacity duration-700 ease-in  ${fade ? 'opacity-100' : 'opacity-0'}`}
             alt="Wild Landscape"
           />

@@ -29,40 +29,9 @@ const artworkSchema = new mongoose.Schema(
     }
 );
 
-commentSchema.pre("save", async (next) => {
-    try {
-        const comment = this;
-        await comment.populate('author', 'name username avatar').execPopulate();
-
-        if (comment.author) {
-            comment.authorName = doc.author.name;
-            comment.authorUsername = doc.author.username;
-            comment.authorAvatar = doc.author.avatar;
-        }
-
-        next();
-    } catch (err) {
-        next(err);
-    }
-})
-
-artworkSchema.pre("save", async (next) => {
-    try {
-        const artwork = this;
-        await artwork.populate('artist', 'name username avatar').execPopulate();
-
-        if (artwork.artist) {
-            artwork.artistName = doc.artist.name;
-            artwork.artistUsername = doc.artist.username;
-            artwork.artistAvatar = doc.artist.avatar;
-        }
-
-        next();
-    } catch (err) {
-        next(err);
-    }
-})
-
 const Comment = mongoose.model('Comment', commentSchema);
 const Artwork = mongoose.model('Artwork', artworkSchema);
-export default { Artwork, Comment };
+export default {
+    Artwork,
+    Comment
+};

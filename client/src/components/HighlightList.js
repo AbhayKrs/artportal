@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { ImageCard } from './Card';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import { fetchExploreImages } from '../api';
+import { fetchArtworkImages } from '../api';
 
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';

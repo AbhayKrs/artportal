@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
-import { fetchExploreImages, fetchUserImages } from '../api';
+import { fetchArtworkImages, fetchUserImages } from '../api';
 import moment from 'moment';
 
 import { AiFillClockCircle, AiFillHeart } from 'react-icons/ai';
@@ -11,7 +11,7 @@ export const ImageCard = (props) => {
 
     return (
         <div className={`group flex relative cursor-pointer ${props.size === 'l' ? 'h-56 w-auto' : 'h-36 w-auto'}`} onClick={() => navigate(`/explore/${props.explore._id}`)}>
-            <img src={fetchExploreImages(props.explore.files[0])} className='object-cover w-full h-full' />
+            <img src={fetchArtworkImages(props.explore.files[0])} className='object-cover w-full h-full' />
             <div className="hidden items-end h-full w-full group-hover:absolute group-hover:top-0 group-hover:flex group-hover:flex-row">
                 <div className="flex flex-col w-full pb-2 pt-14 px-2 bg-gradient-to-t from-black text-gray-200 group-hover:flex" >
                     <h3 className={`${props.size === 'l' ? 'text-base' : 'text-sm'} font-bold leading-5 capitalize`}>{props.explore.title}</h3>
@@ -61,7 +61,7 @@ export const HorizontalCard = (props) => {
         <div className='flex h-36 relative'>
             <div className='flex absolute left-0 h-full w-[50%] rounded-l-lg' style={{
                 clipPath: 'polygon(0% 0%, 100% 0%, 80% 100%, 2% 100%)',
-                backgroundImage: `url(${fetchExploreImages(props.explore.files[0])})`,
+                backgroundImage: `url(${fetchArtworkImages(props.explore.files[0])})`,
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center',
                 backgroundSize: 'cover',
@@ -103,7 +103,7 @@ export const HorizontalCard = (props) => {
                 </div>
             </div>
         </div>
-        // <div style={{ backgroundImage: `url(${fetchExploreImages(props.explore.files[0])})` }} className="bg-gray-100 m-auto w-full h-64 bg-top bg-no-repeat bg-cover">
+        // <div style={{ backgroundImage: `url(${fetchArtworkImages(props.explore.files[0])})` }} className="bg-gray-100 m-auto w-full h-64 bg-top bg-no-repeat bg-cover">
         //     <div className="hidden items-end h-full w-full group-hover:flex group-hover:flex-row">
         //         <div className="flex flex-col w-full pb-2 pt-14 px-2 bg-gradient-to-t from-black text-gray-200 group-hover:flex" >
         //             <h3 className="text-base font-bold leading-5 capitalize">{props.explore.title}</h3>

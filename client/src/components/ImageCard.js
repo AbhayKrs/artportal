@@ -1,13 +1,13 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
-import { fetchExploreImages, fetchUserImages } from '../api';
+import { fetchArtworkImages, fetchUserImages } from '../api';
 import moment from 'moment';
 
 const ImageCard = (props) => {
     let navigate = useNavigate();
 
     return (
-        <div style={{ backgroundImage: `url(${fetchExploreImages(props.explore.files[0])})` }} className="group bg-gray-100 m-auto w-full h-64 bg-top bg-no-repeat bg-cover group-hover:block">
+        <div style={{ backgroundImage: `url(${fetchArtworkImages(props.explore.files[0])})` }} className="group bg-gray-100 m-auto w-full h-64 bg-top bg-no-repeat bg-cover group-hover:block">
             <div className="hidden items-end h-full w-full group-hover:flex group-hover:flex-row">
                 <div className="flex flex-col w-full pb-2 pt-14 px-2 bg-gradient-to-t from-black text-gray-200 group-hover:flex" >
                     <h3 className="text-base font-bold leading-5 capitalize">{props.explore.title}</h3>

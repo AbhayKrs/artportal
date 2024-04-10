@@ -53,12 +53,12 @@ export const HomeTabPanel = (props) => {
                     </svg>
                 </button>
             </div>
-            {props.catalogList.length > 0 ?
+            {props.artworks.length > 0 ?
                 <div className="grid bg-gray-300 dark:bg-neutral-800 overflow-hidden rounded-b-md lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-3 xs:grid-cols-1">
                     {props.tags.map((tag, index) => {
                         return <Fragment key={index}>
                             {
-                                index === activeStatus && props.catalogList.filter(item => item.tags.includes(tag) === true).map((explore, index) => (
+                                index === activeStatus && props.artworks.filter(item => item.tags.includes(tag) === true).map((explore, index) => (
                                     <ImageCard size='l' key={index} explore={explore} artist={explore.artist} />
                                 ))
                             }

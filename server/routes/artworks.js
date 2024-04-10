@@ -14,10 +14,11 @@ import crypto from 'crypto';
 import path from 'path';
 
 //Import Schemas
-import { Artwork, Comment } from '../models/artwork.js';
+import Artworks from '../models/artwork.js';
 import User from '../models/user.js';
 import Shared from '../models/shared.js';
 import Gift from '../models/gift.js';
+const { Artwork, Comment } = Artworks;
 
 //Connect gfs to database
 const conn = mongoose.connection;
@@ -108,9 +109,9 @@ router.get('/', async (req, res) => {
         const filter = req.query.filter;
         const period = req.query.period;
         if (!filter && !period) {
-            response = await Artwork.find({});
+            response = await Artwork.find({}).populate('artist', 'name username avatar');
         } else {
-            const artworkList = await Artwork.find({});
+            const artworkList = await Artwork.find({}).populate('artist', 'name username avatar');
             const getPeriod = (label) => {
                 let value = 0;
                 switch (label) {
@@ -163,7 +164,7 @@ router.get('/', async (req, res) => {
         }
         res.json(response);
     } catch (err) {
-        // console.error(err.message);
+        console.error(err.message);
         res.status(500).send('Unable to fetch catalog data');
     }
 });
@@ -178,7 +179,7 @@ router.get('/search', async (req, res) => {
         const period = req.query.period;
         console.log("test", type, value, !!filter, !!period);
 
-        const artworkList = await Artwork.find({});
+        const artworkList = await Artwork.find({}).populate('artist', 'name username avatar');
         console.log('---artworkList', artworkList)
 
         switch (type) {
@@ -256,28 +257,30 @@ router.get('/search', async (req, res) => {
 // @route   Get api/artworks/:id --- Fetch Artwork by ID along with next and prev artwork reference --- Public
 router.get('/:id', async (req, res) => {
     try {
-        const artwork = await Artwork.findById(req.params.id);
-        const viewer = req.body._id;
+        const artwork = await Artwork.findById(req.params.id).populate('artist', 'name username avatar');
+        // const viewer_id = req.body._id;
 
-        if (!artwork) return res.status(400).send({ msg: 'Artwork not found' });
+        // console.log("viewer_id", viewer_id);
 
-        if (viewer.length > 0) {
-            artwork.views.indexOf(viewer) > -1 ? null : artwork.views.push(viewer)
-            artwork.save();
-        }
+        // if (!artwork) return res.status(400).send({ msg: 'Artwork not found' });
+
+        // if (viewer_id) {
+        //     artwork.views.indexOf(viewer_id) > -1 ? null : artwork.views.push(viewer_id);
+        //     artwork.save();
+        // }
 
         res.json(artwork);
     } catch (err) {
-        // console.error(err.message);
+        console.error(err.message);
         res.status(500).send('Unable to fetch artwork item');
     }
 });
 
-// @route   POST api/artworks/new --- Create a catalog entry --- Private
+// @route   POST api/artworks/new --- Create a new artwork entry --- Private
 router.post('/new', protect, upload.any(), async (req, res) => {
     try {
         const user = await User.findById(req.body.userID);
-        const newArtwork = new Catalog({
+        const newArtwork = new Artwork({
             artist: user._id,
             title: req.body.title,
             description: req.body.description,
@@ -285,6 +288,7 @@ router.post('/new', protect, upload.any(), async (req, res) => {
             categories: req.body.categories,
             tags: req.body.tags,
             views: [],
+            likes: [],
             comments: []
         });
         Artwork.create(newArtwork, (err, data) => {
@@ -299,13 +303,40 @@ router.post('/new', protect, upload.any(), async (req, res) => {
     }
 });
 
+router.post('/new1', protect, async (req, res) => {
+    try {
+        const user = await User.findById(req.body.userID);
+        const newArtwork = new Artwork({
+            artist: user._id,
+            title: "asfsafas asdsa",
+            description: "hfdhf dfdsfa saasf ss",
+            files: ["53dd44985ce075419e886fb676ab36c7.jpg"],
+            categories: ["concept_art"],
+            tags: ["art", "myart"],
+            views: [],
+            likes: [],
+            comments: []
+        });
+        Artwork.create(newArtwork, (err, data) => {
+            if (err) {
+                console.log(err);
+            } else {
+                res.send(data);
+            }
+        });
+    } catch (err) {
+        console.log("err", err.message);
+        return res.status(404).json({ msg: err.name });
+    }
+});
+
 // @route   POST api/artworks/new --- Create a new artwork entry --- Private
 router.post('/upload', protect, upload.any(), async (req, res) => {
     try {
         const user = await User.findById(req.body.userID);
 
         req.files.map(file => {
-            const newArtwork = new Catalog({
+            const newArtwork = new Artwork({
                 artist: user._id,
                 title: "title_" + file.filename,
                 description: "description_" + file.filename,

@@ -5,7 +5,7 @@ import { googleRedirectURL } from '../api';
 import { AwardTabPanel } from './TabPanel';
 import AddressMap from './AddressMap';
 import Stepper from './Stepper';
-import { fetchExploreImages, fetchUserImages } from '../api';
+import { fetchArtworkImages, fetchUserImages } from '../api';
 
 import TokenLogo from '../assets/images/money.png';
 import TokenIcon from '../assets/images/money.png';
@@ -811,7 +811,7 @@ export const SearchModal = (props) => {
                         <div className='flex flex-col gap-2 pr-2'>
                             {searchList.length > 0 ? searchList.map((item, index) => (
                                 <div key={index} className='flex items-center gap-4 rounded-lg text-gray-200 bg-neutral-900 py-2 px-5'>
-                                    <img src={fetchExploreImages(item.files[0])} className='object-cover w-10 h-10 md:w-14 md:h-14 rounded' />
+                                    <img src={fetchArtworkImages(item.files[0])} className='object-cover w-10 h-10 md:w-14 md:h-14 rounded' />
                                     <span className='text-base md:text-xl font-semibold leading-5 capitalize'>{item.title}</span>
                                     <FaChevronRight onClick={() => { navigate(`/explore/${item._id}`); clearSearch() }} className="ml-auto h-6 w-6 cursor-pointer" />
                                 </div>

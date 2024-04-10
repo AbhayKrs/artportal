@@ -7,7 +7,7 @@ import { setLoader } from '../store/actions/common.actions';
 import Masonry from '../components/Masonry';
 
 
-import { fetchExploreImages } from '../api';
+import { fetchArtworkImages } from '../api';
 import moment from 'moment';
 
 import { BsHeart, BsChat } from 'react-icons/bs';
@@ -27,12 +27,12 @@ const ExploreSearch = (props) => {
             <ExplorePanel search fetchExploreList={props.fetchExploreList} filterExploreList={props.filterExploreList} />
             <div className='flex flex-row'>
                 <Masonry cols={5}>
-                    {props.explore.catalogList.map((explore, index) => (
+                    {props.explore.artworks.map((explore, index) => (
                         <div onClick={() => navigate(`/explore/${explore._id}`)} className='relative group group-hover:block'>
                             <img loading='lazy'
                                 id={index}
                                 className='object-cover w-full h-full'
-                                src={fetchExploreImages(explore.files[0])}
+                                src={fetchArtworkImages(explore.files[0])}
                             />
                             <div className='hidden absolute bottom-0 p-2 pt-14 group-hover:flex group-hover:flex-row w-full bg-gradient-to-t from-black text-gray-200 group-hover:flex group-hover:justify-between'>
                                 <div className="flex flex-col place-self-end max-w-[65%]">
