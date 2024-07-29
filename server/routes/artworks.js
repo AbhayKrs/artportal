@@ -303,58 +303,34 @@ router.post('/new', protect, upload.any(), async (req, res) => {
     }
 });
 
-router.post('/new1', protect, async (req, res) => {
-    try {
-        const user = await User.findById(req.body.userID);
-        const newArtwork = new Artwork({
-            artist: user._id,
-            title: "asfsafas asdsa",
-            description: "hfdhf dfdsfa saasf ss",
-            files: ["53dd44985ce075419e886fb676ab36c7.jpg"],
-            categories: ["concept_art"],
-            tags: ["art", "myart"],
-            views: [],
-            likes: [],
-            comments: []
-        });
-        Artwork.create(newArtwork, (err, data) => {
-            if (err) {
-                console.log(err);
-            } else {
-                res.send(data);
-            }
-        });
-    } catch (err) {
-        console.log("err", err.message);
-        return res.status(404).json({ msg: err.name });
-    }
-});
-
 // @route   POST api/artworks/new --- Create a new artwork entry --- Private
-router.post('/upload', protect, upload.any(), async (req, res) => {
+router.post('/multiupload', protect, upload.any(), async (req, res) => {
     try {
         const user = await User.findById(req.body.userID);
-
+        let proms = [];
         req.files.map(file => {
-            const newArtwork = new Artwork({
-                artist: user._id,
-                title: "title_" + file.filename,
-                description: "description_" + file.filename,
-                files: file.filename,
-                categories: ["concept_art", "architectural_art"],
-                tags: ["art", "myart"],
-                views: [],
-                comments: []
-            });
-            Artwork.create(newArtwork, (err, data) => {
-                if (err) {
-                    console.log(err);
-                } else {
-                    res.send(data);
-                }
-            });
+            const prom = new Promise((resolve, reject) => {
+                const newArtwork = new Artwork({
+                    artist: "661043788107e53980e355d1",
+                    title: "title_" + file.filename,
+                    description: "description_" + file.filename,
+                    files: [file.filename],
+                    categories: ["concept_art"],
+                    tags: ["art", "myart"],
+                    views: [],
+                    likes: [],
+                    comments: []
+                });
+                Artwork.create(newArtwork);
+            })
+            proms.push(prom);
+        })
+        Promise.all(proms).then(() => {
+            console.log("done");
+            res.send("done");
         })
     } catch (err) {
+        console.log("--- error ", err);
         return res.status(404).json({ msg: err.name });
     }
 });

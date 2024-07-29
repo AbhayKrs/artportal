@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-// const baseURL = 'https://artystweb.onrender.com/api';
-// export const taggerURL = 'https://artystweb.onrender.com/api/tagger/model.json';
-const baseURL = 'http://localhost:5000/api/v1';
-export const taggerURL = 'http://localhost:5000/api/v1/tagger/model.json';
+const baseURL = 'https://artystweb.onrender.com/api';
+export const taggerURL = 'https://artystweb.onrender.com/api/tagger/model.json';
+// const baseURL = 'http://localhost:5000/api/v1';
+// export const taggerURL = 'http://localhost:5000/api/v1/tagger/model.json';
 
 const get_api = axios.create({ baseURL });
 const post_api = axios.create({ baseURL, headers: { 'Content-Type': 'application/json' } });

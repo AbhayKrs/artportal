@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 
 const Masonry = props => {
     const columnWrapper = {};
-    const gap = 0;
+    const gap = 5;
     const result = [];
 
     const [columns, setColumns] = useState(props.cols);

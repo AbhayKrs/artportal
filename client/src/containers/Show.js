@@ -192,23 +192,6 @@ const ExploreShow = (props) => {
                 prev={() => { navigate(`/explore/${prev}`); props.fetchExploreItem(prev); }}
                 next={() => { navigate(`/explore/${next}`); props.fetchExploreItem(next); }}
             />
-            <div className='flex fixed m-5 space-x-3 py-1 px-2 bg-neutral-100 dark:bg-neutral-800 rounded'>
-                <div className='flex items-center justify-end py-0.5 space-x-1 text-teal-500'>
-                    <IoEye className='h-6 w-6' />
-                    <h3 className='font-josefinregular text-lg self-center'>{new Intl.NumberFormat().format(props.artwork.views.length)}</h3>
-
-                </div>
-                <div className='flex items-center justify-end py-0.5 space-x-1 text-violet-500 dark:text-violet-500'>
-                    <IoHeart className='h-6 w-6' />
-                    <h3 className='font-josefinregular text-lg self-center'>{new Intl.NumberFormat().format(props.artwork.likes.length)}</h3>
-
-                </div>
-                <div className='flex items-center justify-end py-0.5 space-x-1 text-violet-500 dark:text-violet-500'>
-                    <IoChatbox className='h-6 w-6' />
-                    <h3 className='font-josefinregular text-lg self-center'>{new Intl.NumberFormat().format(props.artwork.comments.length)}</h3>
-
-                </div>
-            </div>
             <div className='lg:col-span-4 md:mt-3 sm:mt-0 bg-fixed'>
                 <div className='flex flex-col rounded-md bg-neutral-50 dark:bg-neutral-800 mr-2 ml-2 lg:ml-0 py-3'>
                     <div className='flex flex-col space-y-1 p-2'>
@@ -216,6 +199,23 @@ const ExploreShow = (props) => {
                             <div className='flex px-2 flex-col w-full space-y-1'>
                                 <h1 className='font-caviar text-2xl tex-gray-900 dark:text-gray-200 font-bold'>{props.artwork.title}</h1>
                                 <p className='font-josefinlight text-lg tex-gray-800 dark:text-gray-300'>{props.artwork.description}</p>
+                            </div>
+                        </div>
+                        <div className='flex space-x-3 py-1 px-2 bg-neutral-100 dark:bg-neutral-800 rounded'>
+                            <div className='flex items-center justify-end py-0.5 space-x-1 text-teal-500'>
+                                <IoEye className='h-6 w-6' />
+                                <h3 className='font-josefinregular text-lg self-center'>{new Intl.NumberFormat().format(props.artwork.views.length)}</h3>
+
+                            </div>
+                            <div className='flex items-center justify-end py-0.5 space-x-1 text-violet-500 dark:text-violet-500'>
+                                <IoHeart className='h-6 w-6' />
+                                <h3 className='font-josefinregular text-lg self-center'>{new Intl.NumberFormat().format(props.artwork.likes.length)}</h3>
+
+                            </div>
+                            <div className='flex items-center justify-end py-0.5 space-x-1 text-violet-500 dark:text-violet-500'>
+                                <IoChatbox className='h-6 w-6' />
+                                <h3 className='font-josefinregular text-lg self-center'>{new Intl.NumberFormat().format(props.artwork.comments.length)}</h3>
+
                             </div>
                         </div>
                         <div className='flex flex-col w-full p-2 bg-neutral-200 dark:bg-neutral-900 rounded-xl space-y-2'>

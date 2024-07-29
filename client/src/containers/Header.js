@@ -108,9 +108,9 @@ const Header = (props) => {
                             <button onClick={() => props.handleHeaderDialogOpen('openRegisterDialog')} className='h-fit self-center bg-violet-500 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 py-1 px-3 ml-3 rounded-md text-lg font-caviar font-bold dark:font-normal'>Signup</button>
                         </>
                     }
-                    <div ref={userMenuRef} className='relative group w-10 h-12'>
+                    <div ref={userMenuRef} className='relative group w-[3.25rem] h-12'>
                         {props.common.isAuthenticated ?
-                            <button onClick={() => setUserMenuActive(!userMenuActive)} className={`flex absolute w-[3.25rem] h-[3.25rem] inset-0 m-auto justify-center items-center ${userMenuActive ? 'bg-slate-300 dark:bg-[#313135] rounded-full' : null}`} >
+                            <button onClick={() => setUserMenuActive(!userMenuActive)} className={`flex absolute inset-0 m-auto justify-center items-center ${userMenuActive ? 'bg-slate-300 dark:bg-[#313135] rounded-full' : null}`} >
                                 {props.user.avatar.icon.length > 0 && <img loading='lazy' alt='user' src={fetchUserImages(props.user.avatar.icon)} className='w-8 h-8 mx-auto' />}
                             </button>
                             :

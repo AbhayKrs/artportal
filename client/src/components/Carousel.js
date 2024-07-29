@@ -19,11 +19,13 @@ export const ExploreShowCarousel = (props) => {
           </div>
           <img loading='lazy' src={`${fetchArtworkImages(props.currentImage)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
         </div>
-        <div className='flex w-fit flex-col self-center items-center space-y-3 place-content-center'>
-          {props.secondaryImages.map((image, index) => (
-            <img loading='lazy' key={index} src={`${fetchArtworkImages(image)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
-          ))}
-        </div>
+        {props.secondaryImages.length > 0 &&
+          <div className='flex w-fit flex-col self-center items-center space-y-3 place-content-center'>
+            {props.secondaryImages.map((image, index) => (
+              <img loading='lazy' key={index} src={`${fetchArtworkImages(image)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
+            ))}
+          </div>
+        }
       </div>
     </div>
   )

@@ -37,7 +37,7 @@ const Explore = (props) => {
                             <div key={index} onClick={() => navigate(`/explore/${explore._id}`)} className='relative group group-hover:block cursor-pointer'>
                                 <img loading='lazy'
                                     id={index}
-                                    className='object-cover w-full h-full'
+                                    className='object-cover w-full h-full rounded'
                                     src={fetchArtworkImages(explore.files[0])}
                                 />
                                 <div className='opacity-0 flex transition-all delay-200 absolute bottom-0 p-2 pt-14 group-hover:opacity-100 w-full bg-gradient-to-t from-black text-gray-200 justify-between'>
