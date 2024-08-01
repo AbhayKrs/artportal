@@ -1,5 +1,5 @@
 import passport from 'passport';
-import googlestrategy from 'passport-google-oauth2';
+import googlestrategy from 'passport-google-oauth20';
 import User from '../models/user.js';
 import bcrypt from 'bcryptjs';
 
@@ -9,19 +9,20 @@ passport.use(
     new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: "/api/v1/users/googleAuth/callback",
+        callbackURL: "/api/v1.01/auth/google/callback",
         passReqToCallback: true,
         proxy: true
     }, (request, accessToken, refreshToken, profile, done) => {
         //Check user table for anyone with the Google ID
         User.findOne({ email: profile.email }, (err, user) => {
+            console.log("substring", profile)
             if (!user) {
                 const newUser = new User({
                     google_id: profile.id,
                     google_authenticated: true,
                     name: profile.displayName,
-                    email: profile.email,
-                    username: profile.email.substring(0, profile.email.indexOf("@")),
+                    email: profile.emails[0].value,
+                    username: profile.emails[0].value.substring(0, profile.emails[0].value.indexOf("@")),
                     password: 'test12',
                     avatar: {
                         icon: '92845b9c51df0d6bf3cf693393cc0905.png',

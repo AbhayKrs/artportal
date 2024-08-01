@@ -10,7 +10,7 @@ import {
 } from '../utils/authenticate.js';
 
 // //@desc         Auth user and get token
-// //@route        POST /api/users/login
+// //@route        POST /api/v1.01/auth/login
 // //@access       Public
 router.post("/login", async (req, res) => {
     try {
@@ -65,7 +65,7 @@ router.post("/login", async (req, res) => {
 });
 
 //@desc         Register a new user 
-//@route        POST /api/users/register
+//@route        POST /api/v1.01/auth/register
 //@access       Public
 router.post("/signup", (req, res) => {
     try {
@@ -130,18 +130,18 @@ router.post("/signup", (req, res) => {
 });
 
 // @desc    Login via Google
-// @route   GET /api/users/googleAuth
+// @route   GET /api/v1.01/auth/googleAuth
 // @access  Private
-router.get('/googleAuth', passport.authenticate('google', {
+router.get('/google', passport.authenticate('google', {
     scope: ['email', 'profile'],
-    prompt: 'select_account'
+    // prompt: 'select_account'
 }));
 
 // @desc    Login via Google
-// @route   GET /api/users/googleAuth/success
+// @route   GET /api/v1.01/auth/googleAuth/success
 // @access  Private
-router.get('/googleAuth/callback', passport.authenticate('google', {
-    failureRedirect: 'http://localhost:3000/google_failed',
+router.get('/google/callback', passport.authenticate('google', {
+    failureRedirect: '/login',
     session: false
 }), async (req, res) => {
     const authenticatedUser = await User.findOne({ google_id: req.user.id });
@@ -167,17 +167,17 @@ router.get('/googleAuth/callback', passport.authenticate('google', {
 })
 
 // @desc    Login via Facebook
-// @route   GET /api/users/facebookAuth
+// @route   GET /api/v1.01/auth/facebookAuth
 // @access  Private
-router.get('/facebookAuth', passport.authenticate('facebook', {
+router.get('/facebook', passport.authenticate('facebook', {
     scope: ['email', 'profile'],
     prompt: 'select_account'
 }));
 
 // @desc    Login via Google
-// @route   GET /api/users/googleAuth/success
+// @route   GET /api/v1.01/auth/googleAuth/success
 // @access  Private
-router.get('/facebookAuth/callback', passport.authenticate('facebook', {
+router.get('/facebook/callback', passport.authenticate('facebook', {
     failureRedirect: 'http://localhost:3000/google_failed',
     session: false
 }), async (req, res) => {

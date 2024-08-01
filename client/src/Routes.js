@@ -81,7 +81,7 @@ const ArtystRoutes = (props) => {
         <main className={props.common.theme}>
             <div className='bg-gray-200 dark:bg-darkNavBg'>
                 <Header />
-                <div className='mt-[3.75rem]'></div>
+                <div className='mt-[5.75rem]'></div>
                 <Loader open={props.common.loader} setLoader={props.setLoader} colorTheme={props.common.theme} />
                 <Snackbar msgdata={props.common.snackmsg} setMessage={props.setSnackMessage} />
                 <Routes>

@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const router = express.Router();
 
 //Middleware
-import { protect, admin } from '../middleware/authMiddleware.js';
+import { protect, admin } from '../middleware/authMw.js';
 import { checkObjectId } from '../middleware/checkObjectId.js';
 
 //Importing gfs database
@@ -53,26 +53,8 @@ const storage = new GridFsStorage({
 });
 const upload = multer({ storage });
 
-// @desc    Get all users
-// @route   GET /api/users
-// @access  Private/Admin
-router.get('/', async (req, res) => {
-    try {
-        const type = req.query.type;
-        const users = await User.find({});
-        if (type === 'seller') {
-            let sellers = users.filter(user => user.seller);
-            res.json(sellers);
-        } else {
-            res.json(users);
-        }
-    } catch (err) {
-        return res.status(404).json({ msg: err.name });
-    }
-});
-
 // @desc    Get all tags
-// @route   GET /api/users/tags
+// @route   GET /api/v1.01/users/tags
 // @access  Public
 router.get("/tags", async (req, res) => {
     try {
@@ -84,7 +66,7 @@ router.get("/tags", async (req, res) => {
 });
 
 // @desc    Get all tags
-// @route   GET /api/users/commonImages
+// @route   GET /api/v1.01/users/commonImages
 // @access  Public
 // router.get("/commonImages", async (req, res) => {
 //     try {
@@ -96,7 +78,7 @@ router.get("/tags", async (req, res) => {
 // });
 
 // @desc    Get all tags
-// @route   GET /api/users/assets/
+// @route   GET /api/v1.01/users/assets/
 // @access  Public
 router.get('/avatars', async (req, res) => {
     try {
@@ -108,7 +90,7 @@ router.get('/avatars', async (req, res) => {
 });
 
 // @desc    Get all awards
-// @route   GET /api/users/awards/
+// @route   GET /api/v1.01/users/awards/
 // @access  Public
 // router.get('/awards', async (req, res) => {
 //     try {
@@ -120,7 +102,7 @@ router.get('/avatars', async (req, res) => {
 // });
 
 // @desc    Get locations
-// @route   GET /api/users/locations/
+// @route   GET /api/v1.01/users/locations/
 // @access  Public
 router.get('/locations', async (req, res) => {
     try {
@@ -163,7 +145,7 @@ router.get('/image/:filename', (req, res) => {
 });
 
 // @desc    Get all tags
-// @route   GET /api/users/assets/new
+// @route   GET /api/v1.01/users/assets/new
 // @access  Public
 router.post('/assets/new', upload.any(), async (req, res) => {
     try {
@@ -205,7 +187,7 @@ router.post('/assets/new', upload.any(), async (req, res) => {
 });
 
 // @desc    Get user by ID
-// @route   GET /api/users/:id
+// @route   GET /api/v1.01/users/:id
 // @access  Private/Admin
 router.get('/:id', async (req, res) => {
     try {
@@ -235,7 +217,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // @desc    Update user
-// @route   PUT /api/users/:id
+// @route   PUT /api/v1.01/users/:id
 // @access  Private/Admin
 router.put('/:id', async (req, res) => {
     try {
@@ -257,7 +239,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // @desc    Delete user
-// @route   DELETE /api/users/:id
+// @route   DELETE /api/v1.01/users/:id
 // @access  Private/Admin
 router.delete('/:id', async (req, res) => {
     try {
@@ -480,7 +462,7 @@ router.delete('/:id/cart/:cart_id', async (req, res) => {
 });
 
 // @desc    Logout user
-// @route   GET /api/users/logout
+// @route   GET /api/v1.01/users/logout
 // @access  Public
 router.get("/logout", (req, res, next) => {
     try {
@@ -513,7 +495,7 @@ router.get("/logout", (req, res, next) => {
 });
 
 // @route   Edit User Avatar
-// @desc    POST /api/users/:id/avatar
+// @desc    POST /api/v1.01/users/:id/avatar
 // @access  Private
 router.post('/:id/avatar', async (req, res) => {
     try {

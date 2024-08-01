@@ -5,7 +5,7 @@ const tagSchema = new mongoose.Schema(
         value: { type: String, unique: true, trim: true }
     },
     {
-        timestamps: true
+        timestamps: false
     }
 );
 

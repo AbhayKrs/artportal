@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const baseURL = 'https://artystweb.onrender.com/api';
-export const taggerURL = 'https://artystweb.onrender.com/api/tagger/model.json';
-// const baseURL = 'http://localhost:5000/api/v1';
-// export const taggerURL = 'http://localhost:5000/api/v1/tagger/model.json';
+// const baseURL = 'https://artystweb.onrender.com/api/v1';
+// export const taggerURL = 'https://artystweb.onrender.com/api/v1.01/tagger/model.json';
+const baseURL = 'http://localhost:5000/api/v1';
+export const taggerURL = 'http://localhost:5000/api/v1.01/tagger/model.json';
 
 const get_api = axios.create({ baseURL });
 const post_api = axios.create({ baseURL, headers: { 'Content-Type': 'application/json' } });
@@ -14,10 +14,10 @@ export const viewerIP = () => axios.get('https://api.ipify.org?format=json');
 export const fetchArtworkImages = filename => baseURL + `/artworks/image/${filename}`;
 export const fetchStoreImages = filename => baseURL + `/store/image/${filename}`;
 export const fetchUserImages = filename => baseURL + `/users/image/${filename}`;
-export const googleRedirectURL = baseURL + `/auth/googleAuth`;
+export const googleRedirectURL = baseURL + `/auth/google`;
 
 //GET Request API's
-export const googleLoginAPI = () => get_api.get(`/auth/googleAuth`);
+export const googleLoginAPI = () => get_api.get(`/auth/google`);
 export const artworkListAPI = () => get_api.get(`/artworks`);
 export const searchAPI = (type, value) => get_api.get(`/search?type=${type}&value=${value}`);
 export const exploreItemAPI = (id, payload) => get_api.get(`/artworks/${id}`, payload);

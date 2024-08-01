@@ -6,7 +6,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import passport from 'passport';
 import path from 'path';
-import { notFound, errorHandler } from './middleware/errorMiddleware.js';
+import { notFound, errorHandler } from './middleware/errorMw.js';
 
 import connectDB from './config/db.js';
 import './strategies/JwtStrategy.js';
@@ -14,12 +14,12 @@ import './strategies/GoogleStrategy.js';
 import './utils/authenticate.js';
 
 //Importing routes
-import tagger from './routes/tagger.js';
 import auth from './routes/auth.js';
 import users from './routes/users.js';
 import artworks from './routes/artworks.js';
 // import search from './routes/search.js';
 import store from './routes/store.js';
+import admin from './routes/admin.js';
 
 dotenv.config();
 //Database Connection Established
@@ -41,25 +41,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //User Authentication
 app.use(passport.initialize());
 
-const currentVersion = 'v1';
+const currentVersion = 'v1.01';
+const adminVersion = 'v1.01';
 
 // Define Routes
-// app.use('/api/tagger/:filename', async (req, res) => {
-//     try {
-//         const __dirname = path.resolve();
-//         res.sendFile(__dirname + '/tagger/' + req.params.filename);
-//     } catch (err) {
-//         console.log(err);
-//         res.status(500).send('Unable to fetch explore');
-//     }
-// })
-
-app.use(`/api/${currentVersion}/tagger`, tagger);
 app.use(`/api/${currentVersion}/artworks`, artworks);
 app.use(`/api/${currentVersion}/auth`, auth);
 app.use(`/api/${currentVersion}/users`, users);
 app.use(`/api/${currentVersion}/store`, store);
 // app.use(`/api/${currentVersion}/search`, search);
+
+/* ################# ADMIN ROUTES ################# */
+app.use(`/admin/${currentVersion}`, admin);
 
 app.use('/app/download', (req, res) => {
     res.download('./server/public/app-release.apk');

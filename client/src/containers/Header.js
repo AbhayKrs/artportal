@@ -67,6 +67,7 @@ const Header = (props) => {
 
     return (
         <nav className='fixed top-0 z-50 bg-gray-200 w-full dark:bg-darkNavBg'>
+            <div className='flex flex-row w-full py-1 justify-center bg-amber-500 font-caviar font-semibold'>This site is currently in Beta.</div>
             <div className='flex flex-row items-center py-1.5 px-2 sm:px-3 space-x-6 lg:space-x-12'>
                 <div className='flex flex-row space-x-6'>
                     <Link to='/' onClick={() => setMobileMenu(false)} className='flex items-center justify-center w-12 h-12'>
@@ -104,8 +105,8 @@ const Header = (props) => {
                         </>
                         :
                         <>
-                            <button onClick={() => props.handleHeaderDialogOpen('openLoginDialog')} className='h-fit self-center bg-violet-500 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 py-1 px-3 rounded-md text-lg font-caviar font-bold dark:font-normal'>Login</button>
-                            <button onClick={() => props.handleHeaderDialogOpen('openRegisterDialog')} className='h-fit self-center bg-violet-500 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 py-1 px-3 ml-3 rounded-md text-lg font-caviar font-bold dark:font-normal'>Signup</button>
+                            <button onClick={() => props.handleHeaderDialogOpen('openLoginDialog')} className='h-fit self-center bg-violet-500 text-gray-200 dark:text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 py-1 px-3 rounded-md text-lg font-caviar font-bold tracking-wide'>Login</button>
+                            <button onClick={() => props.handleHeaderDialogOpen('openRegisterDialog')} className='h-fit self-center bg-violet-500 text-gray-200 dark:text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 py-1 px-3 ml-3 rounded-md text-lg font-caviar font-bold tracking-wide'>Signup</button>
                         </>
                     }
                     <div ref={userMenuRef} className='relative group w-[3.25rem] h-12'>
@@ -118,7 +119,7 @@ const Header = (props) => {
                                 <FaEllipsisVertical className='w-7 h-7 text-neutral-800 dark:text-gray-300' />
                             </button>
                         }
-                        <div className={`container fixed top-16 ${props.common.isAuthenticated ? 'w-96' : 'w-72'} p-1 ${userMenuActive ? 'visible opacity-100' : 'invisible opacity-0'} bg-slate-300 dark:bg-[#313135] rounded-lg`} style={{ right: window.innerWidth >= 1024 ? '0.75rem' : '0.2rem' }}>
+                        <div className={`container fixed top-24 ${props.common.isAuthenticated ? 'w-96' : 'w-72'} p-1 ${userMenuActive ? 'visible opacity-100' : 'invisible opacity-0'} bg-slate-300 dark:bg-[#313135] rounded-lg`} style={{ right: window.innerWidth >= 1024 ? '0.75rem' : '0.2rem' }}>
                             <div className='flex flex-col scrollbar overflow-auto p-1 pr-2 h-full' style={{ maxHeight: 'calc(100vh - 5rem)' }}>
                                 {props.common.isAuthenticated ?
                                     <>
