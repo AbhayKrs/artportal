@@ -31,7 +31,7 @@ conn.once('open', () => {
     gfs.collection('shareduploads');
 });
 
-//Storage for image uploaded
+//GridFs Storage DB - Shared files
 const storage = new GridFsStorage({
     url: process.env.MONGO_URI,
     file: (req, file) => {
@@ -233,25 +233,6 @@ router.put('/:id', async (req, res) => {
             }
         });
 
-    } catch (err) {
-        return res.status(404).json({ msg: err.name });
-    }
-});
-
-// @desc    Delete user
-// @route   DELETE /api/v1.01/users/:id
-// @access  Private/Admin
-router.delete('/:id', async (req, res) => {
-    try {
-        const user = await User.findById(req.params.id);
-
-        if (user) {
-            await user.remove();
-            res.json({ message: 'User removed' });
-        } else {
-            res.status(404);
-            throw new Error('User not found');
-        }
     } catch (err) {
         return res.status(404).json({ msg: err.name });
     }

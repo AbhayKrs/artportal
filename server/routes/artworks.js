@@ -29,7 +29,7 @@ conn.once('open', () => {
     gfs.collection('artworkuploads');
 });
 
-//Storage for image uploaded
+//GridFs Storage DB - Artwork image files
 const storage = new GridFsStorage({
     url: process.env.MONGO_URI,
     file: (req, file) => {
@@ -49,33 +49,6 @@ const storage = new GridFsStorage({
     },
 });
 const upload = multer({ storage });
-
-
-// router.get('/images', (req, res) => {
-//     try {
-//         gfs.files.find().toArray((err, files) => {
-//             if (!files || files.length === 0) {
-//                 return res.status(200).json({
-//                     success: false,
-//                     message: 'No files found'
-//                 });
-//             }
-//             files.map(file => {
-//                 if (file.contentType === 'image/jpg' || file.contentType === 'image/jpeg' || file.contentType === 'image/png' || file.contentType === 'image/webp') {
-//                     file.isImage = true;
-//                 } else {
-//                     file.isImage = false;
-//                 }
-//             });
-//             res.status(200).json({
-//                 success: true,
-//                 files
-//             })
-//         })
-//     } catch (err) {
-//         return res.status(404).json(err);
-//     }
-// })
 
 // @route   Image Route --- Image from gridFS storage --- Private
 router.get('/image/:filename', (req, res) => {

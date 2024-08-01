@@ -64,6 +64,23 @@ router.get('/users', adminKey, async (req, res) => {
     }
 });
 
+// @route   GET admin/v1.01/users --- Delete a user --- ADMIN
+router.delete('/users/:id', adminKey, async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+
+        if (user) {
+            await user.remove();
+            res.json({ message: 'User removed' });
+        } else {
+            res.status(404);
+            throw new Error('User not found');
+        }
+    } catch (err) {
+        return res.status(404).json({ msg: err.name });
+    }
+});
+
 // @route   GET admin/v1.01/artworks --- Fetch all artworks --- ADMIN
 router.get('/artworks', adminKey, async (req, res) => {
     try {
