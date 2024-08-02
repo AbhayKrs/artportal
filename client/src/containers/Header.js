@@ -19,7 +19,7 @@ import { switchTheme, setAuthError, setSearchType, fetchSearchList, clearSearchL
 import { fetchUserImages } from '../api';
 
 import SearchBar from '../components/SearchBar';
-import { ThemeToggle } from '../components/Toggle';
+import ThemeToggle from '../components/ThemeToggle';
 
 const useUserMenuOut = (ref, active, setActive) => {
     useEffect(() => {
@@ -76,11 +76,11 @@ const Header = (props) => {
                     <Link to='/' onClick={() => setMobileMenu(false)} className='flex items-center justify-center w-12 h-12'>
                         <img loading='lazy' className='h-auto w-8 hover:cursor-pointer' src={Artyst_logo} alt='Artyst' />
                     </Link>
-                    <Link to='/explore' className='relative hidden sm:flex self-center text-gray-900 dark:text-gray-200 hover:text-violet-500 rounded-md text-lg font-caviar font-semibold'>
+                    <Link to='/explore' className='relative hidden sm:flex self-center text-gray-900 dark:text-gray-200 hover:text-violet-500 rounded-md text-lg font-caviar font-bold'>
                         Explore
                         {activeRoute.includes('/explore') ? <div className='absolute h-1 w-2/6 bottom-[-2px] left-0 text-2xl bg-violet-500'></div> : null}
                     </Link>
-                    <Link to='/store' className='relative hidden sm:flex self-center text-gray-900 dark:text-gray-200 hover:text-violet-500 rounded-md text-lg font-caviar font-semibold'>
+                    <Link to='/store' className='relative hidden sm:flex self-center text-gray-900 dark:text-gray-200 hover:text-violet-500 rounded-md text-lg font-caviar font-bold'>
                         Store
                         {activeRoute.includes('/store') ? <div className='absolute h-1 w-2/6 bottom-[-2px] left-0 text-2xl bg-violet-500'></div> : null}
                     </Link>
@@ -108,8 +108,8 @@ const Header = (props) => {
                         </>
                         :
                         <>
-                            <button onClick={() => props.handleHeaderDialogOpen('openLoginDialog')} className='h-fit self-center bg-neutral-800 dark:bg-gray-300 text-gray-200 dark:text-neutral-800 dark:text-gray-200 hover:bg-neutral-700 dark:hover:bg-gray-200 shadow-md py-1.5 px-3 rounded-md font-caviar font-bold tracking-wide'>Login</button>
-                            <button onClick={() => props.handleHeaderDialogOpen('openRegisterDialog')} className='h-fit self-center border border-gray-800 dark:border-gray-300 text-gray-900 dark:text-gray-200 dark:text-gray-200 hover:bg-slate-300 dark:hover:bg-gray-300/10 shadow-md py-1.5 px-3 ml-3 rounded-md font-caviar font-bold tracking-wide'>Signup</button>
+                            <button onClick={() => props.handleHeaderDialogOpen('openLoginDialog')} className='h-fit self-center bg-neutral-800 dark:bg-gray-300 text-gray-200 dark:text-neutral-800 dark:text-gray-200 hover:bg-neutral-700 dark:hover:bg-gray-200 py-1 px-3 rounded-md font-caviar font-bold'>Login</button>
+                            <button onClick={() => props.handleHeaderDialogOpen('openRegisterDialog')} className='h-fit self-center border border-gray-800 dark:border-gray-300 text-neutral-800 dark:text-gray-200 dark:text-gray-200 hover:bg-slate-300 dark:hover:bg-gray-300/10 py-1 px-3 ml-3 rounded-md font-caviar font-bold'>Signup</button>
                         </>
                     }
                     <div ref={userMenuRef} className='relative group w-[2.25rem] h-10'>

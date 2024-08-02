@@ -33,11 +33,15 @@ import Snackbar from './components/Snackbar';
 // import Upload from './components/Explore/Upload';
 // import Privacy from './components/Help/Privacy';
 
-import Settings_Gnr from './containers/children/Settings_Gnr';
-import Settings_Acc from './containers/children/Settings_Acc';
-import Settings_Ntf from './containers/children/Settings_Ntf';
-import Settings_Cmt from './containers/children/Settings_Cmt';
-import Settings_Bill from './containers/children/Settings_Bill';
+import General from './containers/children/General';
+import Account from './containers/children/Account';
+import Notification from './containers/children/Notification';
+import Community from './containers/children/Community';
+import Billing from './containers/children/Billing';
+import About from './containers/children/About';
+import TOS from './containers/children/TOS';
+import Privacy from './containers/children/Privacy';
+
 import Edit from './containers/Edit';
 import Cart from './containers/Cart';
 import Notifications from './containers/Notifications';
@@ -81,9 +85,8 @@ const ArtystRoutes = (props) => {
 
     return (
         <main className={props.common.theme}>
-            <div className='bg-gray-200 dark:bg-darkNavBg'>
-                <Header betaMsg={betaMsg} setBetaMsg={setBetaMsg} />
-                <div className={`${betaMsg === true ? 'mt-[5.5rem]' : 'mt-[3.5]'}`}></div>
+            <Header betaMsg={betaMsg} setBetaMsg={setBetaMsg} />
+            <div className={`h-screen flex flex-col bg-gray-200 dark:bg-darkNavBg ${betaMsg === true ? 'pt-[5.5rem]' : 'pt-[3.75rem]'}`}>
                 <Loader open={props.common.loader} setLoader={props.setLoader} colorTheme={props.common.theme} />
                 <Snackbar msgdata={props.common.snackmsg} setMessage={props.setSnackMessage} />
                 <Routes>
@@ -103,21 +106,18 @@ const ArtystRoutes = (props) => {
                     <Route path='/users/:id' element={<Profile />} />
                     <Route path='/settings' element={<Settings />} >
                         <Route index element={<Navigate to='general' />} />
-                        <Route path='general' element={<Settings_Gnr />} />
-                        <Route path='account' element={<Settings_Acc />} />
-                        <Route path='notifications' element={<Settings_Ntf />} />
-                        <Route path='community' element={<Settings_Cmt />} />
-                        <Route path='billing' element={<Settings_Bill />} />
+                        <Route path='general' element={<General />} />
+                        <Route path='account' element={<Account />} />
+                        <Route path='notifications' element={<Notification />} />
+                        <Route path='community' element={<Community />} />
+                        <Route path='billing' element={<Billing />} />
+                        <Route path='about' element={<About />} />
+                        <Route path='tos' element={<TOS />} />
+                        <Route path='privacy' element={<Privacy />} />
                     </Route>
                     <Route path='/notifications' element={<Notifications />} />
-                    {/* <Route path='/about' exact component={About} />
-                <Route path='/dashboard' exact component={Dashboard} />
-                <Route path='/notification' exact component={Notification} />
-                <Route path='/store/upload' exact component={StoreUpload} />
-                <Route path='/upload' exact component={Upload} />
-                <Route path='/privacy' exact component={Privacy} /> */}
                 </Routes>
-                {/* <Footer /> */}
+                <Footer />
             </div>
         </main >
     )

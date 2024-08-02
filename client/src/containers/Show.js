@@ -182,7 +182,7 @@ const ExploreShow = (props) => {
     }
 
     return (
-        <div className='main-container min-h-screen sm:grid gap-2 bg-gray-200 dark:bg-darkNavBg sm:grid-cols-1 lg:grid-cols-12 xs:flex xs:flex-col'>
+        <div className=' min-h-screen sm:grid gap-2 bg-gray-200 dark:bg-darkNavBg sm:grid-cols-1 lg:grid-cols-12 xs:flex xs:flex-col'>
             <ExploreShowCarousel
                 prevTrue={prev.length > 0}
                 nextTrue={next.length > 0}
@@ -435,7 +435,7 @@ const StoreShow = (props) => {
     }, [props.storeShow])
 
     return (
-        <div className='main-container bg-gray-200 dark:bg-darkNavBg max-100vh pt-5'>
+        <div className=' bg-gray-200 dark:bg-darkNavBg max-100vh pt-5'>
             <div className="text-black dark:text-white text-4xl title-font font-medium mx-5">{props.storeShow.title}</div>
             <p className='font-josefinlight text-gray-600 dark:text-gray-400 whitespace-nowrap text-sm mx-5'>- Listed on {moment(props.storeShow.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</p>
             <p className="text-gray-700 dark:text-gray-400 text-xl leading-relaxed mx-5">{props.storeShow.description}</p>

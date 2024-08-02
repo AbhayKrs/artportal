@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // const baseURL = 'https://artystweb.onrender.com/api/v1';
 // export const taggerURL = 'https://artystweb.onrender.com/api/v1.01/tagger/model.json';
-const baseURL = 'http://localhost:5000/api/v1';
+const baseURL = 'http://localhost:5000/api/v1.01';
 export const taggerURL = 'http://localhost:5000/api/v1.01/tagger/model.json';
 
 const get_api = axios.create({ baseURL });

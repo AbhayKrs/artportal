@@ -47,8 +47,4 @@ code {
 	.dark .scrollbar::-webkit-scrollbar-thumb:hover {
 		background: #6b7280;
 	}
-
-	.main-container {
-		min-height: calc(100vh - 60px);
-	}
 }

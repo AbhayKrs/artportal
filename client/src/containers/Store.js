@@ -48,7 +48,7 @@ const Store = (props) => {
     }
 
     return (
-        <div className='main-container bg-gray-200 dark:bg-darkNavBg'>
+        <div className=' bg-gray-200 dark:bg-darkNavBg'>
             <Helmet>
                 <title>Artyst | Store</title>
             </Helmet>
