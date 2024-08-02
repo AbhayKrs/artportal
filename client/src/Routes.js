@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -55,6 +55,8 @@ const usePageViews = () => {
 }
 
 const ArtystRoutes = (props) => {
+    const [betaMsg, setBetaMsg] = useState(true);
+
     usePageViews();
     useEffect(async () => {
         await props.getViewerIP();
@@ -80,8 +82,8 @@ const ArtystRoutes = (props) => {
     return (
         <main className={props.common.theme}>
             <div className='bg-gray-200 dark:bg-darkNavBg'>
-                <Header />
-                <div className='mt-[5.75rem]'></div>
+                <Header betaMsg={betaMsg} setBetaMsg={setBetaMsg} />
+                <div className={`${betaMsg === true ? 'mt-[5.5rem]' : 'mt-[3.5]'}`}></div>
                 <Loader open={props.common.loader} setLoader={props.setLoader} colorTheme={props.common.theme} />
                 <Snackbar msgdata={props.common.snackmsg} setMessage={props.setSnackMessage} />
                 <Routes>

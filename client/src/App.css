@@ -1,41 +1,27 @@
 @font-face {
-	font-family: 'Calypsoka';
-	src: url('./assets/fonts/Calypsoka.ttf');
+	font-family: "Caviar";
+	src: url("./assets/fonts/Caviar.ttf");
 	font-weight: normal;
 	font-style: normal;
-	font-display: swap;
+}
+@font-face {
+	font-family: "Caviar";
+	src: url("./assets/fonts/CaviarBold.ttf");
+	font-weight: bold;
+	font-style: normal;
 }
 
 @font-face {
-	font-family: 'CaviarDreams';
-	src: url('./assets/fonts/CaviarDreams.ttf');
+	font-family: "Nunito";
+	src: url("./assets/fonts/Nunito.ttf");
 	font-weight: normal;
 	font-style: normal;
-	font-display: swap;
 }
-
 @font-face {
-	font-family: 'AntipastoProRegular';
-	src: url('./assets/fonts/AntipastoProRegular.ttf');
-	font-weight: normal;
+	font-family: "Nunito";
+	src: url("./assets/fonts/NunitoBold.ttf");
+	font-weight: bold;
 	font-style: normal;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: 'JosefinSansLight';
-	src: url('./assets/fonts/JosefinSansLight.ttf');
-	font-weight: normal;
-	font-style: normal;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: 'JosefinSansRegular';
-	src: url('./assets/fonts/JosefinSansRegular.ttf');
-	font-weight: normal;
-	font-style: normal;
-	font-display: swap;
 }
 
 .leaflet-container {

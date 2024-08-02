@@ -14,10 +14,8 @@ module.exports = {
       'xl': '1920px'
     },
     fontFamily: {
-      'antipasto': 'AntipastoProRegular',
-      'caviar': 'CaviarDreams',
-      'josefinlight': 'JosefinSansLight',
-      'josefinregular': 'JosefinSansRegular'
+      'caviar': 'Caviar',
+      'nunito': 'Nunito'
     },
     colors: {
       darkNavBg: '#1a1a1c',

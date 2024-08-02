@@ -46,6 +46,7 @@ const storage = new GridFsStorage({
 });
 const tagger = multer({ storage });
 
+// @route   GET admin/v1.01/ --- Admin API active --- ADMIN
 router.get('/', adminKey, async (req, res) => {
     try {
         res.send("Admin API access approved...");

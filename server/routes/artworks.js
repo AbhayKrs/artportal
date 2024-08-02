@@ -50,7 +50,7 @@ const storage = new GridFsStorage({
 });
 const upload = multer({ storage });
 
-// @route   Image Route --- Image from gridFS storage --- Private
+// @route   Image Route --- Image from gridFS storage --- Public
 router.get('/image/:filename', (req, res) => {
     try {
         // /image/:filename?
@@ -249,7 +249,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// @route   POST api/artworks/new --- Create a new artwork entry --- Private
+// @route   POST api/artworks/new --- Create an artwork entry --- Private
 router.post('/new', protect, upload.any(), async (req, res) => {
     try {
         const user = await User.findById(req.body.userID);
@@ -276,7 +276,7 @@ router.post('/new', protect, upload.any(), async (req, res) => {
     }
 });
 
-// @route   POST api/artworks/new --- Create a new artwork entry --- Private
+// @route   POST api/artworks/new --- Create multiple new artwork entries --- Private
 router.post('/multiupload', protect, upload.any(), async (req, res) => {
     try {
         const user = await User.findById(req.body.userID);
@@ -308,7 +308,7 @@ router.post('/multiupload', protect, upload.any(), async (req, res) => {
     }
 });
 
-// @route   PUT Edit api/artworks/:id --- Edit artwork details --- Private/Admin
+// @route   PUT Edit api/artworks/:id --- Edit artwork details --- Private
 router.put('/:id', protect, function (req, res) {
     try {
         const updatedArtwork = {
@@ -328,7 +328,7 @@ router.put('/:id', protect, function (req, res) {
     }
 });
 
-// @route   Delete api/artworks/:id --- Delete an artwork --- Private/Admin
+// @route   Delete api/artworks/:id --- Delete an artwork --- Private
 router.delete('/:id', protect, async (req, res) => {
     try {
         gfs.remove({ _id: req.params.id, root: 'artworkuploads' }, async (err, files) => {
@@ -437,6 +437,16 @@ router.post('/:id/gift', protect, async (req, res) => {
     } catch (err) {
         console.log(err.message);
         res.status(500).send('Failed to gift the artist!');
+    }
+});
+
+// @route   GET api/artworks/:id/comments --- Fetch artwork comments --- Public
+router.get('/:id/comments', async (req, res) => {
+    try {
+        const artwork = await Artwork.findById(req.params.id);
+        res.send(artwork.comments);
+    } catch (err) {
+        res.status(500).send('Adding a comment failed');
     }
 });
 

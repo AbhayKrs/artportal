@@ -67,7 +67,10 @@ const Header = (props) => {
 
     return (
         <nav className='fixed top-0 z-50 bg-gray-200 w-full dark:bg-darkNavBg'>
-            <div className='flex flex-row w-full py-1 justify-center bg-amber-500 font-caviar font-semibold'>This site is currently in Beta.</div>
+            {props.betaMsg && <div className='relative flex flex-row w-full py-1.5 justify-center bg-amber-500 font-caviar font-semibold text-xs tracking-wide'>
+                <span>This site is currently in Beta.</span>
+                <IoClose onClick={() => { props.setBetaMsg(!props.betaMsg) }} className='absolute m-auto inset-y-0 right-0 w-6 h-6 cursor-pointer text-neutral-800' />
+            </div>}
             <div className='flex flex-row items-center py-1.5 px-2 sm:px-3 space-x-6 lg:space-x-12'>
                 <div className='flex flex-row space-x-6'>
                     <Link to='/' onClick={() => setMobileMenu(false)} className='flex items-center justify-center w-12 h-12'>
@@ -105,21 +108,21 @@ const Header = (props) => {
                         </>
                         :
                         <>
-                            <button onClick={() => props.handleHeaderDialogOpen('openLoginDialog')} className='h-fit self-center bg-violet-500 text-gray-200 dark:text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 py-1 px-3 rounded-md text-lg font-caviar font-bold tracking-wide'>Login</button>
-                            <button onClick={() => props.handleHeaderDialogOpen('openRegisterDialog')} className='h-fit self-center bg-violet-500 text-gray-200 dark:text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 py-1 px-3 ml-3 rounded-md text-lg font-caviar font-bold tracking-wide'>Signup</button>
+                            <button onClick={() => props.handleHeaderDialogOpen('openLoginDialog')} className='h-fit self-center bg-neutral-800 dark:bg-gray-300 text-gray-200 dark:text-neutral-800 dark:text-gray-200 hover:bg-neutral-700 dark:hover:bg-gray-200 shadow-md py-1.5 px-3 rounded-md font-caviar font-bold tracking-wide'>Login</button>
+                            <button onClick={() => props.handleHeaderDialogOpen('openRegisterDialog')} className='h-fit self-center border border-gray-800 dark:border-gray-300 text-gray-900 dark:text-gray-200 dark:text-gray-200 hover:bg-slate-300 dark:hover:bg-gray-300/10 shadow-md py-1.5 px-3 ml-3 rounded-md font-caviar font-bold tracking-wide'>Signup</button>
                         </>
                     }
-                    <div ref={userMenuRef} className='relative group w-[3.25rem] h-12'>
+                    <div ref={userMenuRef} className='relative group w-[2.25rem] h-10'>
                         {props.common.isAuthenticated ?
-                            <button onClick={() => setUserMenuActive(!userMenuActive)} className={`flex absolute inset-0 m-auto justify-center items-center ${userMenuActive ? 'bg-slate-300 dark:bg-[#313135] rounded-full' : null}`} >
+                            <button onClick={() => setUserMenuActive(!userMenuActive)} className={`flex w-full absolute inset-0 m-auto justify-center items-center ${userMenuActive ? 'bg-slate-300 dark:bg-[#313135] rounded-md' : null}`} >
                                 {props.user.avatar.icon.length > 0 && <img loading='lazy' alt='user' src={fetchUserImages(props.user.avatar.icon)} className='w-8 h-8 mx-auto' />}
                             </button>
                             :
-                            <button onClick={() => setUserMenuActive(!userMenuActive)} className={`flex absolute h-11 inset-0 m-auto justify-center items-center ${userMenuActive ? 'bg-slate-300 dark:bg-[#313135] rounded-full' : null}`} >
-                                <FaEllipsisVertical className='w-7 h-7 text-neutral-800 dark:text-gray-300' />
+                            <button onClick={() => setUserMenuActive(!userMenuActive)} className={`flex w-full absolute h-10 inset-0 m-auto justify-center items-center ${userMenuActive ? 'bg-slate-300 dark:bg-[#313135] rounded-md' : null}`} >
+                                <FaEllipsisVertical className='w-6 h-6 text-neutral-800 dark:text-gray-300' />
                             </button>
                         }
-                        <div className={`container fixed top-24 ${props.common.isAuthenticated ? 'w-96' : 'w-72'} p-1 ${userMenuActive ? 'visible opacity-100' : 'invisible opacity-0'} bg-slate-300 dark:bg-[#313135] rounded-lg`} style={{ right: window.innerWidth >= 1024 ? '0.75rem' : '0.2rem' }}>
+                        <div className={`container fixed top-[5.25rem] ${props.common.isAuthenticated ? 'w-96' : 'w-72'} p-1 ${userMenuActive ? 'visible opacity-100' : 'invisible opacity-0'} bg-slate-300 dark:bg-[#313135] rounded-lg`} style={{ right: window.innerWidth >= 1024 ? '0.75rem' : '0.2rem' }}>
                             <div className='flex flex-col scrollbar overflow-auto p-1 pr-2 h-full' style={{ maxHeight: 'calc(100vh - 5rem)' }}>
                                 {props.common.isAuthenticated ?
                                     <>
@@ -276,8 +279,8 @@ const Header = (props) => {
                             </div>
                         </div> :
                         <div className='flex flex-row w-full space-x-3 mb-2'>
-                            <button onClick={() => props.handleHeaderDialogOpen('openLoginDialog')} className='w-full bg-violet-500 text-gray-900 dark:text-gray-200 px-3 py-1 rounded-md text-lg tracking-wide font-caviar font-bold dark:font-normal'>Login</button>
-                            <button onClick={() => props.handleHeaderDialogOpen('openRegisterDialog')} className='w-full bg-violet-500 text-gray-900 dark:text-gray-200 px-3 py-1 rounded-md text-lg tracking-wide font-caviar font-bold dark:font-normal'>Signup</button>
+                            <button onClick={() => props.handleHeaderDialogOpen('openLoginDialog')} className='w-full bg-gray-200 dark:bg-neutral-800 text-gray-900 dark:text-gray-200 px-3 py-1 rounded-md text-lg tracking-wide font-caviar font-bold dark:font-normal'>Login</button>
+                            <button onClick={() => props.handleHeaderDialogOpen('openRegisterDialog')} className='w-full border border-gray-200 dark:border-neutral-800 text-gray-900 dark:text-gray-200 px-3 py-1 rounded-md text-lg tracking-wide font-caviar font-bold dark:font-normal'>Signup</button>
                         </div>
                     }
                     <div className='flex flex-row justify-between items-center rounded-md px-2'>

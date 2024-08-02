@@ -58,7 +58,6 @@ app.use('/app/download', (req, res) => {
     res.download('./server/public/app-release.apk');
 })
 
-
 if (process.env.NODE_ENV === 'production') {
     const __dirname = path.resolve();
     app.use(express.static(path.join(__dirname, '/client/build')));
