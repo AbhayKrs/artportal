@@ -16,7 +16,7 @@ const Loader = (props) => {
     }, [props.open])
 
     return (
-        <div className={`${props.open ? 'flex' : 'hidden'} absolute inset-0 z-[100] h-full w-full bg-slate-200 dark:bg-darkNavBg pointer-events-none`}>
+        <div className={`${props.open ? 'flex' : 'hidden'} absolute inset-0 z-[100] h-full w-full bg-slate-200 dark:bg-darkBg pointer-events-none`}>
             {props.colorTheme === 'dark' ?
                 <img loading='lazy' className='m-auto h-48' src={LoaderDarkGif} />
                 :

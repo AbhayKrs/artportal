@@ -20,6 +20,7 @@ import artworks from './routes/artworks.js';
 // import search from './routes/search.js';
 import store from './routes/store.js';
 import admin from './routes/admin.js';
+import common from './routes/common.js';
 
 dotenv.config();
 //Database Connection Established
@@ -49,7 +50,7 @@ app.use(`/api/${currentVersion}/artworks`, artworks);
 app.use(`/api/${currentVersion}/auth`, auth);
 app.use(`/api/${currentVersion}/users`, users);
 app.use(`/api/${currentVersion}/store`, store);
-// app.use(`/api/${currentVersion}/search`, search);
+app.use(`/api/${currentVersion}/common`, common);
 
 /* ################# ADMIN ROUTES ################# */
 app.use(`/admin/${currentVersion}`, admin);

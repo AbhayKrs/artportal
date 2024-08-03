@@ -8,7 +8,7 @@ const Footer = () => {
     let navigate = useNavigate();
 
     return (
-        <footer className="flex flex-row w-full mt-auto bg-slate-100 dark:bg-darkNavBg py-3 px-4 justify-between">
+        <footer className="flex flex-row w-full mt-auto bg-slate-100 dark:bg-darkBg py-3 px-4 justify-between">
             <span className='font-nunito text-xs items-center text-gray-400 dark:text-gray-400/50'>
                 Copyright &#169; 2024 Artyst Inc.
             </span>

@@ -202,7 +202,7 @@ const Profile = (props) => {
     }
 
     return (
-        <div className=' bg-gray-200 dark:bg-darkNavBg'>
+        <div className=' bg-gray-200 dark:bg-darkBg'>
             <div className="relative block h-96">
                 <div className="absolute top-0 w-full h-full bg-center bg-cover" style={{
                     backgroundImage: `url('https://cdna.artstation.com/p/assets/images/images/049/944/404/large/gabriel-gomez-fghghfghfghfghfghfghfg.jpg?1653675686')`

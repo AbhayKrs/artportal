@@ -23,7 +23,7 @@ const Home = (props) => {
     }, [])
 
     return (
-        <div className=' bg-gray-200 dark:bg-darkNavBg'>
+        <div className=' bg-gray-200 dark:bg-darkBg'>
             <div className='flex flex-col gap-2 px-4 bg-cover bg-no-repeat pt-2 lg:pt-0'>
                 <div className='flex flex-col gap-4 md:flex-row md:h-96'>
                     <div className='w-full md:w-3/5 h-48 md:h-full rounded-lg'>

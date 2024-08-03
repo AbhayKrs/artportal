@@ -29,7 +29,7 @@ export const HomeTabPanel = (props) => {
     }
 
     return (
-        <div className="p-2 h-fit bg-gray-200 dark:bg-darkNavBg">
+        <div className="p-2 h-fit bg-gray-200 dark:bg-darkBg">
             <div className='flex'>
                 <button onClick={() => goPrev()} aria-label="slide backward" className="px-1.5 z-30 left-0 cursor-pointer bg-gray-400/50 dark:bg-neutral-700 rounded-tl-md">
                     <svg className="dark:text-gray-200 h-3 w-3" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -223,7 +223,7 @@ export const ExplorePanel = (props) => {
     }
 
     return (
-        <div className='flex sm:flex-row gap-2 flex-col w-full items-center bg-slate-100/75 dark:bg-darkNavBg/75 p-2 sticky top-14 z-20'>
+        <div className='flex sm:flex-row gap-2 flex-col w-full items-center bg-slate-100/75 dark:bg-darkBg/75 p-2 sticky top-14 z-20'>
             <div className='flex w-full items-center sm:justify-start justify-between'>
                 <div className='lg:flex hidden'>
                     <ul id='tabSlider' className="flex space-x-1 items-center whitespace-nowrap">

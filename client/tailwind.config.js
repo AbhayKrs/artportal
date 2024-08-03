@@ -18,7 +18,7 @@ module.exports = {
       'nunito': 'Nunito'
     },
     colors: {
-      darkNavBg: '#1a1a1c',
+      darkBg: '#1a1a1c',
       ...colors
     },
 

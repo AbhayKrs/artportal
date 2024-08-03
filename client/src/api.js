@@ -13,11 +13,11 @@ export const viewerIP = () => axios.get('https://api.ipify.org?format=json');
 
 export const fetchArtworkImages = filename => baseURL + `/artworks/image/${filename}`;
 export const fetchStoreImages = filename => baseURL + `/store/image/${filename}`;
-export const fetchUserImages = filename => baseURL + `/users/image/${filename}`;
-export const googleRedirectURL = baseURL + `/auth/google`;
+export const fetchUserImages = filename => baseURL + `/common/files/${filename}`;
+export const googleRedirectURL = baseURL + `/auth/google/login`;
 
 //GET Request API's
-export const googleLoginAPI = () => get_api.get(`/auth/google`);
+export const googleLoginAPI = () => get_api.get(`/auth/google/login`);
 export const artworkListAPI = () => get_api.get(`/artworks`);
 export const searchAPI = (type, value) => get_api.get(`/search?type=${type}&value=${value}`);
 export const exploreItemAPI = (id, payload) => get_api.get(`/artworks/${id}`, payload);
@@ -30,12 +30,11 @@ export const categorizedStoreListAPI = (category) => get_api.get(`/store?categor
 export const userExploreListAPI = userID => get_api.get(`/users/${userID}/artworks`);
 export const userStoreListAPI = userID => get_api.get(`/users/${userID}/store`);
 export const userCartListAPI = userID => get_api.get(`/users/${userID}/cart`);
-export const tagsAPI = () => get_api.get(`/users/tags`);
-export const commonImagesAPI = () => get_api.get(`/users/commonImages`);
+export const tagsAPI = () => get_api.get(`/common/tags`);
 export const userDetailsAPI = userID => get_api.get(`/users/${userID}`);
-export const avatarListAPI = () => get_api.get(`/users/avatars`);
-export const awardListAPI = () => get_api.get(`/users/awards`);
-export const locationsListAPI = () => get_api.get(`/users/locations`);
+export const avatarListAPI = () => get_api.get(`/common/avatars`);
+export const awardListAPI = () => get_api.get(`/common/stickers`);
+export const locationsListAPI = () => get_api.get(`/common/locations`);
 
 //POST Request API's
 export const loginAPI = userData => post_api.post(`/auth/login`, userData);

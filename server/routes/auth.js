@@ -1,17 +1,14 @@
 import express from 'express';
-const router = express.Router();
-import User from '../models/user.js';
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import {
-    validateLoginInput,
-    validateRegisterInput
-} from '../utils/authenticate.js';
 
-// //@desc         Auth user and get token
-// //@route        POST /api/v1.01/auth/login
-// //@access       Public
+const router = express.Router();
+
+import User from '../models/user.js';
+import { validateLoginInput, validateRegisterInput } from '../utils/authenticate.js';
+
+// @route   GET api/v1.01/auth/login --- Login user and fetch authentication token --- PUBLIC
 router.post("/login", async (req, res) => {
     try {
         let userList = [];
@@ -64,9 +61,7 @@ router.post("/login", async (req, res) => {
     }
 });
 
-//@desc         Register a new user 
-//@route        POST /api/v1.01/auth/register
-//@access       Public
+// @route   GET api/v1.01/auth/signup --- Signup user and fetch authentication token --- PUBLIC
 router.post("/signup", (req, res) => {
     try {
         // Verify that first name is not empty
@@ -84,7 +79,7 @@ router.post("/signup", (req, res) => {
                     username: req.body.username,
                     password: req.body.password,
                     avatar: {
-                        icon: '92845b9c51df0d6bf3cf693393cc0905.png',
+                        icon: '6cbaa37fa59b0caee31dc4b8cdd67d72.png',
                         category: 'None'
                     },
                     tokens: 5000
@@ -129,17 +124,13 @@ router.post("/signup", (req, res) => {
     }
 });
 
-// @desc    Login via Google
-// @route   GET /api/v1.01/auth/googleAuth
-// @access  Private
-router.get('/google', passport.authenticate('google', {
+// @route   GET api/v1.01/auth/google/login --- Authenticate user via Google --- PUBLIC
+router.get('/google/login', passport.authenticate('google', {
     scope: ['email', 'profile'],
     // prompt: 'select_account'
 }));
 
-// @desc    Login via Google
-// @route   GET /api/v1.01/auth/googleAuth/success
-// @access  Private
+// @route   GET api/v1.01/auth/google/callback --- Google Authenticatation callback --- PUBLIC
 router.get('/google/callback', passport.authenticate('google', {
     failureRedirect: '/login',
     session: false
@@ -166,17 +157,13 @@ router.get('/google/callback', passport.authenticate('google', {
     );
 })
 
-// @desc    Login via Facebook
-// @route   GET /api/v1.01/auth/facebookAuth
-// @access  Private
-router.get('/facebook', passport.authenticate('facebook', {
+// @route   GET api/v1.01/auth/facebook/login --- Authenticate user via Facebook --- PUBLIC
+router.get('/facebook/login', passport.authenticate('facebook', {
     scope: ['email', 'profile'],
     prompt: 'select_account'
 }));
 
-// @desc    Login via Google
-// @route   GET /api/v1.01/auth/googleAuth/success
-// @access  Private
+// @route   GET api/v1.01/auth/facebook/callback --- Facebook Authenticatation callback --- PUBLIC
 router.get('/facebook/callback', passport.authenticate('facebook', {
     failureRedirect: 'http://localhost:3000/google_failed',
     session: false

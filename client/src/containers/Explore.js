@@ -25,7 +25,7 @@ const Explore = (props) => {
     }, []);
 
     return (
-        <div className=' bg-gray-200 dark:bg-darkNavBg'>
+        <div className=' bg-gray-200 dark:bg-darkBg'>
             <Helmet>
                 <title>Artyst | Explore</title>
             </Helmet>

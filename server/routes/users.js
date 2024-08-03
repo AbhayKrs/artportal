@@ -6,189 +6,14 @@ const router = express.Router();
 import { protect, admin } from '../middleware/authMw.js';
 import { checkObjectId } from '../middleware/checkObjectId.js';
 
-//Importing gfs database
-import multer from 'multer';
-import Grid from 'gridfs-stream';
-import { GridFsStorage } from 'multer-gridfs-storage';
-import crypto from 'crypto';
-import path from 'path';
-
 import User from '../models/user.js';
 import Artworks from '../models/artwork.js';
-import Shared from '../models/shared.js';
 import Cart from '../models/cart.js';
 const { Artwork, Comment } = Artworks;
-const { Tag, Sticker, Avatar, Location } = Shared;
 
 import jwt from 'jsonwebtoken';
 
-//Connect gfs to database
-const conn = mongoose.connection;
-let gfs;
-
-conn.once('open', () => {
-    gfs = Grid(conn.db, mongoose.mongo);
-    gfs.collection('shareduploads');
-});
-
-//GridFs Storage DB - Shared files
-const storage = new GridFsStorage({
-    url: process.env.MONGO_URI,
-    file: (req, file) => {
-        return new Promise((resolve, reject) => {
-            crypto.randomBytes(16, (err, buf) => {
-                if (err) {
-                    return reject(err);
-                }
-                const filename =
-                    buf.toString('hex') + path.extname(file.originalname);
-                const fileInfo = {
-                    filename: filename,
-                    bucketName: 'shareduploads',
-                };
-                resolve(fileInfo);
-            });
-        });
-    },
-});
-const upload = multer({ storage });
-
-// @desc    Get all tags
-// @route   GET /api/v1.01/users/tags
-// @access  Public
-router.get("/tags", async (req, res) => {
-    try {
-        const tags = await Tag.find({});
-        res.json(tags);
-    } catch (err) {
-        return res.status(404).json({ msg: err.name });
-    }
-});
-
-// @desc    Get all tags
-// @route   GET /api/v1.01/users/commonImages
-// @access  Public
-// router.get("/commonImages", async (req, res) => {
-//     try {
-//         const shared = await Shared.findOne({});
-//         res.json(shared.images);
-//     } catch (err) {
-//         return res.status(404).json({ msg: err.name });
-//     }
-// });
-
-// @desc    Get all tags
-// @route   GET /api/v1.01/users/assets/
-// @access  Public
-router.get('/avatars', async (req, res) => {
-    try {
-        const avatars = await Avatar.find({});
-        res.json(avatars);
-    } catch (err) {
-        return res.status(404).json({ msg: err.name });
-    }
-});
-
-// @desc    Get all awards
-// @route   GET /api/v1.01/users/awards/
-// @access  Public
-// router.get('/awards', async (req, res) => {
-//     try {
-//         const shared = await Shared.findOne();
-//         res.json(shared.awards);
-//     } catch (err) {
-//         return res.status(404).json({ msg: err.name });
-//     }
-// });
-
-// @desc    Get locations
-// @route   GET /api/v1.01/users/locations/
-// @access  Public
-router.get('/locations', async (req, res) => {
-    try {
-        const locations = await Location.findOne();
-        res.json(locations);
-    } catch (err) {
-        return res.status(404).json({ msg: err.name });
-    }
-})
-
-// @route   Image Route
-// @desc    Image from gridFS storage - /api/users/image/:filename
-// @access  Private
-router.get('/image/:filename', (req, res) => {
-    try {
-        gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
-            // Check if file
-            if (!file || file.length === 0) {
-                return res.status(404).json({ err: 'No file exists' });
-            }
-            // Check if image
-            if (
-                file.contentType === 'image/jpg' ||
-                file.contentType === 'image/jpeg' ||
-                file.contentType === 'image/png'
-            ) {
-                // Read output to browser
-                const readstream = gfs.createReadStream({
-                    filename: req.params.filename,
-                });
-                readstream.pipe(res);
-            } else {
-                res.status(404).json({ err: 'Not an image' });
-            }
-        });
-    } catch (err) {
-        console.error(err.message);
-        return res.status(500).send('Unable to fetch image');
-    }
-});
-
-// @desc    Get all tags
-// @route   GET /api/v1.01/users/assets/new
-// @access  Public
-router.post('/assets/new', upload.any(), async (req, res) => {
-    try {
-        console.log("test", req.files.length);
-        req.files.map(file => {
-            // // Add awards
-            // const award_asset = {
-            //     icon: file.filename,
-            //     title: ''
-            // }
-            // shared.awards.push(award_asset);
-            // shared.save();
-
-            // Add avatars
-            const newAvatar = new Avatar({
-                icon: file.filename,
-                identity: 'Female'
-            });
-            Avatar.create(newAvatar, (err, data) => {
-                if (err) {
-                    console.log(err);
-                } else {
-                    res.send(data);
-                }
-            });
-
-            // // Add login and signup image
-            // shared.images.signup = file.filename;
-            // shared.save();
-
-            // // Add locations
-            // shared.locations = req.body;
-            // shared.save();
-        });
-    } catch (err) {
-        console.log("error", err)
-        return res.status(404).json({ msg: err.name });
-    }
-});
-
-// @desc    Get user by ID
-// @route   GET /api/v1.01/users/:id
-// @access  Private/Admin
+// @route   GET api/v1.01/users/:id ---  Get user by ID --- PUBLIC
 router.get('/:id', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
@@ -216,10 +41,8 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// @desc    Update user
-// @route   PUT /api/v1.01/users/:id
-// @access  Private/Admin
-router.put('/:id', async (req, res) => {
+// @route   PUT api/v1.01/users/:id ---  Update user with ID --- PRIVATE
+router.put('/:id', protect, async (req, res) => {
     try {
         User.findByIdAndUpdate(req.params.id, {
             name: req.body.name,
@@ -238,9 +61,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-// @route       GET api/users/:id/cart
-// @desc        Get all cart items
-// @access      Public
+// @route   GET api/v1.01/users/:id/catalog --- Get all cart items --- PUBLIC
 router.get('/:id/catalog', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);

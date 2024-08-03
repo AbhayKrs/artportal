@@ -16,9 +16,10 @@ import path from 'path';
 //Import Schemas
 import Artworks from '../models/artwork.js';
 import User from '../models/user.js';
-import Shared from '../models/shared.js';
+import Common from '../models/common.js';
 import Gift from '../models/gift.js';
 const { Artwork, Comment } = Artworks;
+const { Sticker } = Common;
 
 //Connect gfs to database
 const conn = mongoose.connection;
@@ -26,7 +27,7 @@ let gfs;
 
 conn.once('open', () => {
     gfs = Grid(conn.db, mongoose.mongo);
-    gfs.collection('artworkuploads');
+    gfs.collection('artworks');
 });
 
 //GridFs Storage DB - Artwork image files
@@ -41,7 +42,7 @@ const storage = new GridFsStorage({
                 const filename = buf.toString('hex') + path.extname(file.originalname);
                 const fileInfo = {
                     filename: filename,
-                    bucketName: 'artworkuploads'
+                    bucketName: 'artworks'
                 };
                 resolve(fileInfo);
             });
@@ -137,7 +138,7 @@ router.get('/', async (req, res) => {
         }
         res.json(response);
     } catch (err) {
-        console.error(err.message);
+        console.error("MY error", err, err.message);
         res.status(500).send('Unable to fetch catalog data');
     }
 });
@@ -415,7 +416,7 @@ router.put('/:id/dislike', protect, async (req, res) => {
 router.post('/:id/gift', protect, async (req, res) => {
     try {
         const artwork = await Artwork.findById(req.params.id);
-        const sticker = await Shared.findById(req.body.giftID, 'stickers');
+        const sticker = await Sticker.findById(req.body.giftID, 'stickers');
 
         if (!sticker) return res.status(400).send({ msg: 'Gift not found' });
 

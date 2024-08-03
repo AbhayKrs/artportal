@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ReactGA from 'react-ga';
 import setAuthToken from './utils/setAuthToken';
-import { setSnackMessage, setLoader, getTags, handleSignOut, handleVerifyUser, getViewerIP, fetchUserExploreList, fetchUserStoreList, fetchCartList, fetchCommonImages } from './store/actions/common.actions';
+import { setSnackMessage, setLoader, getTags, handleSignOut, handleVerifyUser, getViewerIP, fetchUserExploreList, fetchUserStoreList, fetchCartList } from './store/actions/common.actions';
 
 // import ErrorPopup from './components/Error/ErrorPopup';
 import Header from './containers/Header';
@@ -79,14 +79,13 @@ const ArtystRoutes = (props) => {
             await props.fetchUserStoreList();
             await props.fetchCartList();
         }
-        // await props.fetchCommonImages();
         // await props.getTags();
     }, []);
 
     return (
         <main className={props.common.theme}>
             <Header betaMsg={betaMsg} setBetaMsg={setBetaMsg} />
-            <div className={`h-screen flex flex-col bg-gray-200 dark:bg-darkNavBg ${betaMsg === true ? 'pt-[5.5rem]' : 'pt-[3.75rem]'}`}>
+            <div className={`h-screen flex flex-col bg-gray-200 dark:bg-darkBg ${betaMsg === true ? 'pt-[5.5rem]' : 'pt-[3.75rem]'}`}>
                 <Loader open={props.common.loader} setLoader={props.setLoader} colorTheme={props.common.theme} />
                 <Snackbar msgdata={props.common.snackmsg} setMessage={props.setSnackMessage} />
                 <Routes>
@@ -136,7 +135,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     fetchUserStoreList,
     fetchCartList,
     handleSignOut,
-    fetchCommonImages,
     getTags
 }, dispatch);
 

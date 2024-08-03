@@ -289,7 +289,7 @@ const Cart = (props) => {
     }
 
     return (
-        <div className=' bg-gray-200 dark:bg-darkNavBg flex w-full justify-center'>
+        <div className=' bg-gray-200 dark:bg-darkBg flex w-full justify-center'>
             <div className="scrollbar w-full m-5 bg-slate-100 dark:bg-neutral-800 rounded-xl">
                 <div className='p-4 h-full flex flex-col'>
                     <h1 className='text-violet-500 dark:text-violet-500 text-5xl font-semibold tracking-widest font-antipasto'>Cart</h1>

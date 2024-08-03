@@ -25,7 +25,7 @@ passport.use(
                     username: profile.emails[0].value.substring(0, profile.emails[0].value.indexOf("@")),
                     password: 'test12',
                     avatar: {
-                        icon: '92845b9c51df0d6bf3cf693393cc0905.png',
+                        icon: '6cbaa37fa59b0caee31dc4b8cdd67d72.png',
                         category: 'None'
                     }
                 })

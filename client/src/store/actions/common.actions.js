@@ -81,14 +81,6 @@ export const getTags = () => (dispatch) => {
     })
 }
 
-export const fetchCommonImages = () => (dispatch) => {
-    commonImagesAPI().then(res => {
-        dispatch({ type: FETCH_COMMON_IMAGES, payload: res.data });
-    }).catch(err => {
-        console.log('---error getTags', err);
-    })
-}
-
 export const handleVerifyUser = (token) => (dispatch) => {
     try {
         const decoded = jwt_decode(token);

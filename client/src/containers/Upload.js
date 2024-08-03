@@ -207,7 +207,7 @@ const ExploreUpload = (props) => {
     }
 
     return (
-        <div className="main-container bg-gray-200 dark:bg-darkNavBg py-8 px-20">
+        <div className="main-container bg-gray-200 dark:bg-darkBg py-8 px-20">
             <Helmet>
                 <title>Artyst | Upload</title>
             </Helmet>
@@ -465,7 +465,7 @@ const StoreUpload = (props) => {
     }
 
     return (
-        <div className="main-container bg-gray-200 dark:bg-darkNavBg p-5">
+        <div className="main-container bg-gray-200 dark:bg-darkBg p-5">
             <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-5">
                 <span className='font-caviar text-3xl text-gray-700 dark:text-gray-300'>List Product to Store</span>
                 <div className='flex lg:flex-row flex-col mt-3 lg:space-x-4 md:space-y-2'>
