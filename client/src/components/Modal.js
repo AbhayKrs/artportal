@@ -794,98 +794,100 @@ export const AvatarModal = (props) => {
 
 export const SearchModal = (props) => {
     let navigate = useNavigate();
-    const { open, betaMsg, searchVal, activeSearch, searchList, fetchSearchList, clearSearch, handleExploreSearch } = props;
+    const { open, handleClose, betaMsg, searchVal, activeSearch, searchList, fetchSearchList, clearSearch, handleExploreSearch } = props;
 
     return (
-        <div className={`${open ? 'flex' : 'hidden'} scrollbar fixed mx-auto ${betaMsg === true ? 'top-20' : 'top-14'} z-50 inset-0 h-fit  bg-slate-100 dark:bg-neutral-800 w-11/12 sm:w-8/12 md:w-9/12 rounded-xl`}>
-            <div className='flex flex-col w-full px-4 pb-4'>
-                <div className='sticky bottom-0 inset-x-0 flex flex-col md:flex-row items-center justify-between w-full p-2 bg-slate-300 dark:bg-neutral-800 font-antipasto space-x-2'>
-                    <div className='flex flex-row p-2 bg-slate-300 dark:bg-neutral-800 font-antipasto space-x-2'>
-                        <button disabled={activeSearch === 'artwork'} onClick={() => { fetchSearchList('artwork', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'artwork' ? 'text-indigo-600' : 'text-gray-300 hover:text-indigo-600'}`}>
-                            <FiAtSign className='h-4 w-4' />
-                            <span className='font-nunito font-semibold text-base'>Artworks</span>
-                        </button>
-                        <span className='flex text-gray-300'>&#8226;</span>
-                        <button disabled={activeSearch === 'tag'} onClick={() => { fetchSearchList('tag', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'tag' ? 'text-indigo-600' : 'text-gray-300 hover:text-indigo-600'}`}>
-                            <FaHashtag className='h-4 w-4' />
-                            <span className='font-nunito font-semibold text-base'>Tags</span>
-                        </button>
-                        <span className='flex text-gray-300'>&#8226;</span>
-                        <button disabled={activeSearch === 'artist'} onClick={() => { fetchSearchList('artist', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'artist' ? 'text-indigo-600' : 'text-gray-300 hover:text-indigo-600'}`}>
-                            <FaGreaterThan className='h-4 w-4' />
-                            <span className='font-nunito font-semibold text-base'>Artists</span>
-                        </button>
+        <div className={`${open ? 'flex' : 'hidden'}`}>
+            <div onClick={handleClose} className='fixed inset-0 w-screen h-screen'></div>
+            <div className={`scrollbar fixed mx-auto ${betaMsg === true ? 'top-20' : 'top-14'} z-50 inset-0 h-fit bg-slate-300 dark:bg-neutral-800 w-11/12 sm:w-8/12 md:w-9/12 rounded-xl`}>
+                <div className='flex flex-col w-full px-4 pb-4'>
+                    <div className='sticky bottom-0 inset-x-0 flex flex-col md:flex-row items-center justify-between w-full p-2 bg-slate-300 dark:bg-neutral-800 font-antipasto space-x-2'>
+                        <div className='flex flex-row p-2 bg-slate-300 dark:bg-neutral-800 font-antipasto space-x-2'>
+                            <button disabled={activeSearch === 'artwork'} onClick={() => { fetchSearchList('artwork', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'artwork' ? 'text-indigo-600' : 'text-neutral-700 dark:text-gray-300 hover:text-indigo-600'}`}>
+                                <FiAtSign className='h-4 w-4' />
+                                <span className='font-nunito font-semibold text-base'>Artworks</span>
+                            </button>
+                            <span className='flex text-neutral-700 dark:text-gray-300'>&#8226;</span>
+                            <button disabled={activeSearch === 'tag'} onClick={() => { fetchSearchList('tag', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'tag' ? 'text-indigo-600' : 'text-neutral-700 dark:text-gray-300 hover:text-indigo-600'}`}>
+                                <FaHashtag className='h-4 w-4' />
+                                <span className='font-nunito font-semibold text-base'>Tags</span>
+                            </button>
+                            <span className='flex text-neutral-700 text-gray-300'>&#8226;</span>
+                            <button disabled={activeSearch === 'artist'} onClick={() => { fetchSearchList('artist', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'artist' ? 'text-indigo-600' : 'text-neutral-700 dark:text-gray-300 hover:text-indigo-600'}`}>
+                                <FaGreaterThan className='h-4 w-4' />
+                                <span className='font-nunito font-semibold text-base'>Artists</span>
+                            </button>
+                        </div>
+                        <div className='flex flex-col md:flex-row p-2 bg-slate-300 dark:bg-neutral-800 font-antipasto space-x-2'>
+                            <button onClick={() => { handleExploreSearch() }} className='flex font-nunito font-normal text-base gap-2 items-center tracking-wide text-neutral-700 dark:text-gray-300 hover:text-indigo-600'>
+                                {searchVal.length > 0 &&
+                                    <>
+                                        Search {activeSearch}s for '{searchVal}'
+                                        <BsArrowUpRightSquare className='h-4 w-4' />
+                                    </>
+                                }
+                            </button>
+                        </div>
                     </div>
-                    <div className='flex flex-col md:flex-row p-2 bg-slate-300 dark:bg-neutral-800 font-antipasto space-x-2'>
-                        <button onClick={() => { handleExploreSearch() }} className='flex font-nunito font-normal text-base gap-2 items-center tracking-wide text-gray-300 hover:text-indigo-600'>
-                            {searchVal.length > 0 &&
-                                <>
-                                    Search {activeSearch}s for '{searchVal}'
-                                    <BsArrowUpRightSquare className='h-4 w-4' />
-                                </>
-                            }
-                        </button>
+                    <div className='scrollbar max-h-full md:max-h-[30rem] overflow-y-auto'>
+                        {activeSearch === 'artwork' &&
+                            <div className='flex flex-col gap-2 pr-2'>
+                                {searchList.length > 0 ? searchList.map((item, index) => (
+                                    <div key={index} className='flex items-center gap-4 rounded-lg text-neutral-700 dark:text-gray-200 bg-gray-100 dark:bg-neutral-900 py-2 px-5'>
+                                        <img src={fetchArtworkImages(item.files[0])} className='object-cover w-10 h-10 md:w-14 md:h-14 rounded' />
+                                        <span className='text-base md:text-xl font-semibold leading-5 capitalize'>{item.title}</span>
+                                        <FaChevronRight onClick={() => { navigate(`/explore/${item._id}`); clearSearch() }} className="ml-auto h-6 w-6 cursor-pointer" />
+                                    </div>
+                                ))
+                                    :
+                                    <div className='flex flex-col space-y-2 items-center justify-center p-4'>
+                                        <FiAtSign className='h-8 w-8 text-neutral-800 dark:text-gray-300' />
+                                        <div className='flex flex-col items-center'>
+                                            <span className='text-neutral-800 dark:text-gray-200 font-nunito font-semibold leading-5'>No artworks found.</span>
+                                            <span className='text-neutral-500 dark:text-gray-400 font-nunito text-sm'>"{searchVal}" did not match any artworks in our database. Please try again.</span>
+                                        </div>
+                                    </div>}
+                            </div>
+                        }
+                        {activeSearch === 'artist' &&
+                            <div className='flex flex-col pr-2'>
+                                {searchList.length > 0 ? searchList.map((item, index) => (
+                                    <div key={index} onClick={() => { navigate(`/users/${item.id}`); clearSearch() }} className='flex items-center gap-5 cursor-pointer rounded-lg text-neutral-700 dark:text-gray-200 bg-gray-100 dark:bg-neutral-900 py-3 px-5'>
+                                        <img src={fetchUserImages(item.avatar.icon)} className='object-cover w-10 h-10' />
+                                        <div className='flex flex-col'>
+                                            <span className='text-lg font-semibold'>{item.name}</span>
+                                            <span className='text-sm font-semibold'>@{item.username}</span>
+                                        </div>
+                                    </div>
+                                )) :
+                                    <div className='flex flex-col space-y-2 items-center justify-center p-4'>
+                                        <FaGreaterThan className='h-8 w-8 text-neutral-800 dark:text-gray-300' />
+                                        <div className='flex flex-col items-center'>
+                                            <span className='text-neutral-800 dark:text-gray-200 font-nunito font-semibold leading-5'>No artists found.</span>
+                                            <span className='text-neutral-500 dark:text-gray-400 font-nunito text-sm'>"{searchVal}" did not match any artists in our database. Please try again.</span>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        {activeSearch === 'tag' &&
+                            <div className='flex flex-col pr-2'>
+                                {searchList.length > 0 ? searchList.map((item, index) => (
+                                    <div key={index} onClick={() => { navigate(`/explore`); clearSearch() }} className='flex cursor-pointer items-center gap-4 rounded-lg text-neutral-700 dark:text-gray-200 bg-gray-100 dark:bg-neutral-900 p-4'>
+                                        <FaHashtag className='h-5 w-5' />
+                                        <span className=' font-semibold leading-5'>{item}</span>
+                                    </div>
+                                )) :
+                                    <div className='flex flex-col space-y-2 items-center justify-center p-4'>
+                                        <FaHashtag className='h-8 w-8 text-neutral-800 dark:text-gray-300' />
+                                        <div className='flex flex-col items-center'>
+                                            <span className='text-neutral-800 dark:text-gray-200 font-nunito font-semibold leading-5'>No tags found.</span>
+                                            <span className='text-neutral-500 dark:text-gray-400 font-nunito text-sm'>"{searchVal}" did not match any tags in our database. Please try again.</span>
+                                        </div>
+                                    </div>}
+                            </div>
+                        }
                     </div>
-                </div>
-                <div className='scrollbar max-h-full md:max-h-[30rem] overflow-y-auto'>
-                    {activeSearch === 'artwork' &&
-                        <div className='flex flex-col gap-2 pr-2'>
-                            {searchList.length > 0 ? searchList.map((item, index) => (
-                                <div key={index} className='flex items-center gap-4 rounded-lg text-gray-200 bg-neutral-900 py-2 px-5'>
-                                    <img src={fetchArtworkImages(item.files[0])} className='object-cover w-10 h-10 md:w-14 md:h-14 rounded' />
-                                    <span className='text-base md:text-xl font-semibold leading-5 capitalize'>{item.title}</span>
-                                    <FaChevronRight onClick={() => { navigate(`/explore/${item._id}`); clearSearch() }} className="ml-auto h-6 w-6 cursor-pointer" />
-                                </div>
-                            ))
-                                :
-                                <div className='flex flex-col space-y-2 items-center justify-center p-4'>
-                                    <FiAtSign className='h-8 w-8 text-neutral-800 dark:text-gray-300' />
-                                    <div className='flex flex-col items-center'>
-                                        <span className='text-gray-200 font-nunito font-semibold leading-5'>No artworks found.</span>
-                                        <span className='text-gray-400 font-nunito text-sm font-semibold'>"{searchVal}" did not match any artworks in our database. Please try again.</span>
-                                    </div>
-                                </div>}
-                        </div>
-                    }
-                    {activeSearch === 'artist' &&
-                        <div className='flex flex-col pr-2'>
-                            {console.log('test', searchList)}
-                            {searchList.length > 0 ? searchList.map((item, index) => (
-                                <div key={index} onClick={() => { navigate(`/users/${item.id}`); clearSearch() }} className='flex items-center gap-5 cursor-pointer rounded-lg hover:bg-neutral-900 py-3 px-5'>
-                                    <img src={fetchUserImages(item.avatar.icon)} className='object-cover w-10 h-10' />
-                                    <div className='flex flex-col'>
-                                        <span className='text-gray-200 text-lg font-semibold'>{item.name}</span>
-                                        <span className='text-gray-200 text-sm font-semibold'>@{item.username}</span>
-                                    </div>
-                                </div>
-                            )) :
-                                <div className='flex flex-col space-y-2 items-center justify-center p-4'>
-                                    <FaGreaterThan className='h-8 w-8 text-neutral-800 dark:text-gray-300' />
-                                    <div className='flex flex-col items-center'>
-                                        <span className='text-gray-200 font-semibold leading-5'>No artists found.</span>
-                                        <span className='text-gray-400 text-sm font-semibold'>"{searchVal}" did not match any artists in our database. Please try again.</span>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    }
-                    {activeSearch === 'tag' &&
-                        <div className='flex flex-col pr-2'>
-                            {searchList.length > 0 ? searchList.map((item, index) => (
-                                <div key={index} onClick={() => { navigate(`/explore`); clearSearch() }} className='flex cursor-pointer items-center gap-4 rounded-lg hover:bg-neutral-900 p-4'>
-                                    <FaHashtag className='text-gray-200 h-5 w-5' />
-                                    <span className='text-gray-200 font-semibold leading-5'>{item}</span>
-                                </div>
-                            )) :
-                                <div className='flex flex-col space-y-2 items-center justify-center p-4'>
-                                    <FaHashtag className='h-8 w-8 text-neutral-800 dark:text-gray-300' />
-                                    <div className='flex flex-col items-center'>
-                                        <span className='text-gray-200 font-semibold leading-5'>No tags found.</span>
-                                        <span className='text-gray-400 text-sm font-semibold'>"{searchVal}" did not match any tags in our database. Please try again.</span>
-                                    </div>
-                                </div>}
-                        </div>
-                    }
                 </div>
             </div>
         </div>

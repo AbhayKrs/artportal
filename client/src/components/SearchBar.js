@@ -25,16 +25,19 @@ const useSearchModalView = (ref, clearSearch) => {
 const SearchBar = (props) => {
     let navigate = useNavigate();
     const [searchVal, setSearchVal] = useState('');
+    const [searchModal, setSearchModal] = useState(false);
 
     const searchModalRef = useRef(null);
     useSearchModalView(searchModalRef, props.clearSearchList);
 
     const handleSearch = (val) => {
         setSearchVal(val);
-        val.length > 0 ?
-            props.fetchSearchList(props.activeSearch, val)
-            :
+        if (val.length > 0) {
+            props.fetchSearchList(props.activeSearch, val);
+            setSearchModal(true);
+        } else {
             props.clearSearchList()
+        }
     }
 
     const clearSearch = () => {
@@ -55,6 +58,9 @@ const SearchBar = (props) => {
                 onClick={() => {
                     if (props.activeSearch === '') {
                         props.setSearchType('artwork');
+                    }
+                    if (searchVal.length > 0) {
+                        setSearchModal(true);
                     }
                 }}
                 className="flex w-full items-center bg-slate-300 dark:bg-neutral-800 rounded-xl p-0.5"
@@ -87,19 +93,20 @@ const SearchBar = (props) => {
                         <MdClose className='h-5 w-5' />
                     </button>
                 }
-                <SearchModal
-                    open={searchVal.length > 0}
-                    betaMsg={props.betaMsg}
-                    searchVal={searchVal}
-                    explore={props.explore}
-                    searchList={props.searchList}
-                    setSearchVal={setSearchVal}
-                    activeSearch={props.activeSearch}
-                    fetchSearchList={props.fetchSearchList}
-                    clearSearch={clearSearch}
-                    handleExploreSearch={handleExploreSearch}
-                />
             </div>
+            <SearchModal
+                open={searchModal}
+                handleClose={() => setSearchModal(false)}
+                betaMsg={props.betaMsg}
+                searchVal={searchVal}
+                explore={props.explore}
+                searchList={props.searchList}
+                setSearchVal={setSearchVal}
+                activeSearch={props.activeSearch}
+                fetchSearchList={props.fetchSearchList}
+                clearSearch={clearSearch}
+                handleExploreSearch={handleExploreSearch}
+            />
         </div >
     )
 }
