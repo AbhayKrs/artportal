@@ -1,51 +1,10 @@
 import express from 'express';
-import mongoose from 'mongoose';
-import passport from 'passport';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
+import { commongfs, commonUpl } from '../config/gridfsconfig.js';
 
 const router = express.Router();
 
-//Importing gfs database
-import multer from 'multer';
-import Grid from 'gridfs-stream';
-import { GridFsStorage } from 'multer-gridfs-storage';
-import crypto from 'crypto';
-import path from 'path';
-
 import Common from '../models/common.js';
 const { Tag, Sticker, Avatar, Location } = Common;
-
-//Connect gfs to database
-const conn = mongoose.connection;
-let gfs;
-
-conn.once('open', () => {
-    gfs = Grid(conn.db, mongoose.mongo);
-    gfs.collection('commons');
-});
-
-//GridFs Storage DB - Shared files
-const storage = new GridFsStorage({
-    url: process.env.MONGO_URI,
-    file: (req, file) => {
-        return new Promise((resolve, reject) => {
-            crypto.randomBytes(16, (err, buf) => {
-                if (err) {
-                    return reject(err);
-                }
-                const filename =
-                    buf.toString('hex') + path.extname(file.originalname);
-                const fileInfo = {
-                    filename: filename,
-                    bucketName: 'commons',
-                };
-                resolve(fileInfo);
-            });
-        });
-    },
-});
-const upload = multer({ storage });
 
 // @route   GET api/v1.01/common/tags --- Fetch tags --- PUBLIC
 router.get("/tags", async (req, res) => {
@@ -102,7 +61,7 @@ router.post("/tags/add", async (req, res) => {
 // @route   GET api/v1.01/common/files --- Fetch all files --- PUBLIC
 router.get("/files", async (req, res) => {
     try {
-        gfs.files.find().toArray((err, files) => {
+        commongfs.files.find().toArray((err, files) => {
             if (!files || files.length === 0) {
                 return res.status(200).json({
                     success: false,
@@ -122,7 +81,7 @@ router.get("/files", async (req, res) => {
 // @route   GET api/v1.01/common/files/:filename --- Fetch file from common uploads db --- PUBLIC
 router.get('/files/:filename', (req, res) => {
     try {
-        gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+        commongfs.files.findOne({ filename: req.params.filename }, (err, file) => {
             // Check if file
             if (!file || file.length === 0) {
                 return res.status(404).json({ err: 'No file exists' });
@@ -134,7 +93,7 @@ router.get('/files/:filename', (req, res) => {
                 file.contentType === 'image/png'
             ) {
                 // Read output to browser
-                const readstream = gfs.createReadStream({
+                const readstream = commongfs.createReadStream({
                     filename: req.params.filename,
                 });
                 readstream.pipe(res);
@@ -149,7 +108,7 @@ router.get('/files/:filename', (req, res) => {
 });
 
 // @route   POST api/v1.01/common/files/:filename --- Upload a new file to common uploads db --- PUBLIC
-router.post('/files/upload', upload.any(), async (req, res) => {
+router.post('/files/upload', commonUpl.any(), async (req, res) => {
     try {
         const type = req.query.type;
         let proms = [];

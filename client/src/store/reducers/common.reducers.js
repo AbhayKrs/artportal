@@ -73,8 +73,8 @@ export const initialState = {
         followers: [],
         bookmarks: [],
         followers_count: 0,
-        catalog: [],
-        catalog_count: 0,
+        artworks: [],
+        artworks_count: 0,
         comments: [],
         comment_count: 0,
         isSeller: false,
@@ -202,8 +202,8 @@ export const commonReducer = (state = initialState, { type, payload }) => {
             return { ...state, loginImage: payload.login, signupImage: payload.signup }
         }
         case FETCH_USER_EXPLORELIST: {
-            const catalogItems = [...payload.catalog];
-            return { ...state, user: { ...state.user, catalog: catalogItems, catalog_count: payload.catalog_count } }
+            const artworksItems = [...payload.artworks];
+            return { ...state, user: { ...state.user, artworks: artworksItems, artworks_count: payload.artworks_count } }
         }
         case FETCH_USER_STORELIST: {
             const storeList = [...payload.store];

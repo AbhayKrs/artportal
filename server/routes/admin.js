@@ -1,12 +1,6 @@
 import express from 'express';
-import mongoose from 'mongoose';
+import { taggergfs, taggerUpl } from '../config/gridfsconfig.js';
 const router = express.Router();
-
-//Importing gfs database
-import multer from 'multer';
-import Grid from 'gridfs-stream';
-import { GridFsStorage } from 'multer-gridfs-storage';
-import crypto from 'crypto';
 
 //Import Schemas
 import User from '../models/user.js';
@@ -15,36 +9,6 @@ import Store from '../models/store.js';
 const { Artwork, Comment } = Artworks;
 
 import { adminKey } from '../middleware/adminMw.js';
-
-//Connect gfs to database
-const conn = mongoose.connection;
-let gfs;
-
-conn.once('open', () => {
-    gfs = Grid(conn.db, mongoose.mongo);
-    gfs.collection('tagger');
-});
-
-//GridFs Storage DB - Artwork Categorisation model files
-const storage = new GridFsStorage({
-    url: process.env.MONGO_URI,
-    file: (req, file) => {
-        return new Promise((resolve, reject) => {
-            crypto.randomBytes(16, (err, buf) => {
-                if (err) {
-                    return reject(err);
-                }
-                // const filename = buf.toString('hex') + path.extname(file.originalname);
-                const fileInfo = {
-                    filename: file.originalname,
-                    bucketName: 'tagger'
-                };
-                resolve(fileInfo);
-            });
-        });
-    },
-});
-const tagger = multer({ storage });
 
 // @route   GET admin/v1.01/ --- Admin API active --- ADMIN
 router.get('/', adminKey, async (req, res) => {
@@ -105,7 +69,7 @@ router.get('/store', adminKey, async (req, res) => {
 // @route   GET admin/v1.01/model_categories --- Fetch categorisation model files --- ADMIN
 router.get('/model_categories', adminKey, (req, res) => {
     try {
-        gfs.files.find().toArray((err, files) => {
+        taggergfs.files.find().toArray((err, files) => {
             if (!files || files.length === 0) {
                 return res.status(200).json({
                     success: false,
@@ -125,14 +89,14 @@ router.get('/model_categories', adminKey, (req, res) => {
 // @route   GET admin/v1.01/model_categories/:filename --- Fetch categorisation model image --- ADMIN
 router.get('/model_categories/:filename', adminKey, (req, res) => {
     try {
-        gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+        taggergfs.files.findOne({ filename: req.params.filename }, (err, file) => {
             // Check if file
             if (!file || file.length === 0) {
                 return res.status(404).json({ err: 'No file exists' });
             }
             if (file.contentType === 'application/octet-stream' || file.contentType === 'application/json') {
                 // Read output to browser
-                const readstream = gfs.createReadStream({
+                const readstream = taggergfs.createReadStream({
                     filename: req.params.filename,
                 });
                 console.log(readstream);
@@ -147,7 +111,7 @@ router.get('/model_categories/:filename', adminKey, (req, res) => {
 });
 
 // @route   GET admin/v1.01/model_categories/new --- Add categorisation model image --- ADMIN
-router.post('/model_categories/new', adminKey, tagger.any(), async (req, res) => {
+router.post('/model_categories/new', adminKey, taggerUpl.any(), async (req, res) => {
     try {
         console.log('categorisation model image uploaded successfully...');
         res.send('success');

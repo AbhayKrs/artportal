@@ -1,6 +1,5 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import morgan from 'morgan';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
@@ -9,6 +8,7 @@ import path from 'path';
 import { notFound, errorHandler } from './middleware/errorMw.js';
 
 import connectDB from './config/db.js';
+
 import './strategies/JwtStrategy.js';
 import './strategies/GoogleStrategy.js';
 import './utils/authenticate.js';
@@ -26,6 +26,7 @@ dotenv.config();
 //Database Connection Established
 connectDB();
 
+import { taggergfs } from './config/gridfsconfig.js';
 
 const app = express();
 app.use(cors());
@@ -51,6 +52,36 @@ app.use(`/api/${currentVersion}/auth`, auth);
 app.use(`/api/${currentVersion}/users`, users);
 app.use(`/api/${currentVersion}/store`, store);
 app.use(`/api/${currentVersion}/common`, common);
+
+app.get(`/api/${currentVersion}/tagger/:filename`, (req, res) => {
+    try {
+        // /image/:filename?
+        taggergfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+            // Check if json or bin file
+            if (file.contentType === 'application/json' || file.contentType === 'application/octet-stream') {
+                // Read output to browser
+                const readstream = taggergfs.createReadStream({
+                    filename: req.params.filename,
+                });
+                readstream.pipe(res);
+            } else {
+                res.status(404).json({ err: 'Not a tagger file' });
+            }
+        });
+    } catch (err) {
+        return res.status(404).json({ msg: err.name });
+    }
+});
+
+// app.use('/api/tagger/:filename', async (req, res) => {
+//     try {
+//         const __dirname = path.resolve();
+//         res.sendFile(__dirname + '/tagger/' + req.params.filename);
+//     } catch (err) {
+//         console.log(err);
+//         res.status(500).send('Unable to fetch explore');
+//     }
+// })
 
 /* ################# ADMIN ROUTES ################# */
 app.use(`/admin/${currentVersion}`, admin);

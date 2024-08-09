@@ -1,52 +1,15 @@
 import express from 'express';
-import mongoose from 'mongoose';
 const router = express.Router();
+
+import { storegfs, storeUpl } from '../config/gridfsconfig.js'
 
 //Middleware
 import { protect, admin } from '../middleware/authMw.js';
 import { checkObjectId } from '../middleware/checkObjectId.js';
 
-//Importing gfs database
-import multer from 'multer';
-import Grid from 'gridfs-stream';
-import { GridFsStorage } from 'multer-gridfs-storage';
-import crypto from 'crypto';
-import path from 'path';
-
 //Import Schemas
 import Store from '../models/store.js';
 import User from '../models/user.js';
-
-//Connect gfs to database
-const conn = mongoose.connection;
-conn.once('open', () => {
-    gfs = Grid(conn.db, mongoose.mongo);
-    gfs.collection('store_uploads');
-});
-
-let gfs;
-
-//Storage for image uploaded
-const storage = new GridFsStorage({
-    url: process.env.MONGO_URI,
-    file: (req, file) => {
-        return new Promise((resolve, reject) => {
-            crypto.randomBytes(16, (err, buf) => {
-                if (err) {
-                    return reject(err);
-                }
-                const filename =
-                    buf.toString('hex') + path.extname(file.originalname);
-                const fileInfo = {
-                    filename: filename,
-                    bucketName: 'store_uploads'
-                };
-                resolve(fileInfo);
-            });
-        });
-    },
-});
-const upload = multer({ storage });
 
 // @route       GET api/store
 // @desc        Get all store items
@@ -70,7 +33,7 @@ router.get('/', async (req, res) => {
 // @route       POST api/store/new
 // @desc        Publish on store
 // @access      Private
-router.post('/new', upload.any(), async (req, res) => {
+router.post('/new', storeUpl.any(), async (req, res) => {
     const user = await User.findById(req.body.userID);
     const newStoreItem = new Store({
         title: req.body.title,
@@ -164,7 +127,7 @@ router.delete('/:id', async (req, res) => {
 // @desc    Image from gridFS storage
 // @access  Private
 router.get('/image/:filename', (req, res) => {
-    gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+    storegfs.files.findOne({ filename: req.params.filename }, (err, file) => {
         // Check if file
         if (!file || file.length === 0) {
             return res.status(404).json({ err: 'No file exists' });
@@ -176,7 +139,7 @@ router.get('/image/:filename', (req, res) => {
             file.contentType === 'image/png'
         ) {
             // Read output to browser
-            const readstream = gfs.createReadStream({
+            const readstream = storegfs.createReadStream({
                 filename: req.params.filename,
             });
             readstream.pipe(res);

@@ -1,17 +1,11 @@
 import express from 'express';
-import mongoose from 'mongoose';
 const router = express.Router();
+
+import { artworkgfs, artworkUpl } from '../config/gridfsconfig.js';
 
 //Middleware
 import { protect, admin } from '../middleware/authMw.js';
 import { checkObjectId } from '../middleware/checkObjectId.js';
-
-//Importing gfs database
-import multer from 'multer';
-import Grid from 'gridfs-stream';
-import { GridFsStorage } from 'multer-gridfs-storage';
-import crypto from 'crypto';
-import path from 'path';
 
 //Import Schemas
 import Artworks from '../models/artwork.js';
@@ -21,41 +15,12 @@ import Gift from '../models/gift.js';
 const { Artwork, Comment } = Artworks;
 const { Sticker } = Common;
 
-//Connect gfs to database
-const conn = mongoose.connection;
-let gfs;
-
-conn.once('open', () => {
-    gfs = Grid(conn.db, mongoose.mongo);
-    gfs.collection('artworks');
-});
-
-//GridFs Storage DB - Artwork image files
-const storage = new GridFsStorage({
-    url: process.env.MONGO_URI,
-    file: (req, file) => {
-        return new Promise((resolve, reject) => {
-            crypto.randomBytes(16, (err, buf) => {
-                if (err) {
-                    return reject(err);
-                }
-                const filename = buf.toString('hex') + path.extname(file.originalname);
-                const fileInfo = {
-                    filename: filename,
-                    bucketName: 'artworks'
-                };
-                resolve(fileInfo);
-            });
-        });
-    },
-});
-const upload = multer({ storage });
 
 // @route   Image Route --- Image from gridFS storage --- Public
 router.get('/image/:filename', (req, res) => {
     try {
         // /image/:filename?
-        gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+        artworkgfs.files.findOne({ filename: req.params.filename }, (err, file) => {
             // Check if file
             if (!file || file.length === 0) {
                 return res.status(404).json({ err: 'No file exists' });
@@ -63,7 +28,7 @@ router.get('/image/:filename', (req, res) => {
             // Check if image
             if (file.contentType === 'image/jpg' || file.contentType === 'image/jpeg' || file.contentType === 'image/png' || file.contentType === 'image/webp') {
                 // Read output to browser
-                const readstream = gfs.createReadStream({
+                const readstream = artworkgfs.createReadStream({
                     filename: req.params.filename,
                 });
                 readstream.pipe(res);
@@ -139,7 +104,7 @@ router.get('/', async (req, res) => {
         res.json(response);
     } catch (err) {
         console.error("MY error", err, err.message);
-        res.status(500).send('Unable to fetch catalog data');
+        res.status(500).send('Unable to fetch artworks data');
     }
 });
 
@@ -204,8 +169,8 @@ router.get('/search', async (req, res) => {
         //             break;
         //         }
         //         case 'rising': {
-        //             const catalogData_30d = searchResponse.filter(item => (Date.now() - item.createdAt) <= 2592000000);
-        //             searchResponse = catalogData_30d.sort((item1, item2) => item2.likes.length - item1.likes.length)
+        //             const artworksData_30d = searchResponse.filter(item => (Date.now() - item.createdAt) <= 2592000000);
+        //             searchResponse = artworksData_30d.sort((item1, item2) => item2.likes.length - item1.likes.length)
         //             break;
         //         }
         //         case 'most discussed': {
@@ -251,7 +216,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // @route   POST api/artworks/new --- Create an artwork entry --- Private
-router.post('/new', protect, upload.any(), async (req, res) => {
+router.post('/new', protect, artworkUpl.any(), async (req, res) => {
     try {
         const user = await User.findById(req.body.userID);
         const newArtwork = new Artwork({
@@ -278,14 +243,14 @@ router.post('/new', protect, upload.any(), async (req, res) => {
 });
 
 // @route   POST api/artworks/new --- Create multiple new artwork entries --- Private
-router.post('/multiupload', protect, upload.any(), async (req, res) => {
+router.post('/multiupload', protect, artworkUpl.any(), async (req, res) => {
     try {
-        const user = await User.findById(req.body.userID);
+        const user = await User.findById(req.query.userID);
         let proms = [];
         req.files.map(file => {
             const prom = new Promise((resolve, reject) => {
                 const newArtwork = new Artwork({
-                    artist: "661043788107e53980e355d1",
+                    artist: user._id,
                     title: "title_" + file.filename,
                     description: "description_" + file.filename,
                     files: [file.filename],
@@ -296,6 +261,7 @@ router.post('/multiupload', protect, upload.any(), async (req, res) => {
                     comments: []
                 });
                 Artwork.create(newArtwork);
+                resolve();
             })
             proms.push(prom);
         })
@@ -332,7 +298,7 @@ router.put('/:id', protect, function (req, res) {
 // @route   Delete api/artworks/:id --- Delete an artwork --- Private
 router.delete('/:id', protect, async (req, res) => {
     try {
-        gfs.remove({ _id: req.params.id, root: 'artworkuploads' }, async (err, files) => {
+        artworkgfs.remove({ _id: req.params.id, root: 'artworks' }, async (err, files) => {
             if (err) {
                 return res.status(404).json({ err: err })
             } else {

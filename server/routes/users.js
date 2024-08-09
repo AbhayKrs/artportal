@@ -61,23 +61,23 @@ router.put('/:id', protect, async (req, res) => {
     }
 });
 
-// @route   GET api/v1.01/users/:id/catalog --- Get all cart items --- PUBLIC
-router.get('/:id/catalog', async (req, res) => {
+// @route   GET api/v1.01/users/:id/artworks --- Get all cart items --- PUBLIC
+router.get('/:id/artworks', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
         if (!user) {
             return res.status(400).send({ msg: 'User not found' });
         }
 
-        const artworks = await Catalog.find({ "user_id": req.params.id });
-        const catalogData = {
-            catalog: artworks,
-            catalog_count: artworks.length
+        const artworks = await Artwork.find({ "user_id": req.params.id });
+        const artworksData = {
+            artworks: artworks,
+            artworks_count: artworks.length
         }
-        res.json(catalogData);
+        res.json(artworksData);
     } catch (err) {
         console.error(err.message);
-        res.status(500).send('Unable to fetch catalog list');
+        res.status(500).send('Unable to fetch artworks list');
     }
 });
 
@@ -302,13 +302,13 @@ router.get("/logout", (req, res, next) => {
 router.post('/:id/avatar', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
-        const artwork = await Catalog.find({ "author.id": req.params.id });
+        const artwork = await Artwork.find({ "author.id": req.params.id });
 
         artwork.map(item => {
             item.author.avatar = { ...req.body };
             item.save();
         });
-        Catalog.updateMany(
+        Artwork.updateMany(
             { 'comments.author.id': req.params.id },
             { $set: { "comments.$[comment].author.avatar": req.body } },
             { arrayFilters: [{ 'comment.author.id': { $in: req.params.id } }] }

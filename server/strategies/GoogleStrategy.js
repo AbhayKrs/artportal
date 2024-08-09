@@ -14,7 +14,7 @@ passport.use(
         proxy: true
     }, (request, accessToken, refreshToken, profile, done) => {
         //Check user table for anyone with the Google ID
-        User.findOne({ email: profile.email }, (err, user) => {
+        User.findOne({ email: profile.emails[0].value }, (err, user) => {
             console.log("substring", profile)
             if (!user) {
                 const newUser = new User({
