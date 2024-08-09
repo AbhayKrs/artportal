@@ -58,11 +58,22 @@ const usePageViews = () => {
     }, [location])
 }
 
-const ArtystRoutes = (props) => {
+const PageRoutes = (props) => {
     const [betaMsg, setBetaMsg] = useState(true);
 
     usePageViews();
     useEffect(async () => {
+        if (localStorage.getItem('theme') === null) {
+            const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+            if (systemTheme) {
+                localStorage.setItem('theme', "dark");
+            } else {
+                localStorage.setItem('theme', "light");
+            }
+        }
+
+        console.log(localStorage.getItem('theme'))
+
         await props.getViewerIP();
         if (sessionStorage.jwtToken) {
             const token = sessionStorage.jwtToken;
@@ -138,4 +149,4 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     getTags
 }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(ArtystRoutes);
+export default connect(mapStateToProps, mapDispatchToProps)(PageRoutes);

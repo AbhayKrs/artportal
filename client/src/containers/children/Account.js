@@ -125,10 +125,10 @@ export const Account = (props) => {
                             <h5 className='font-josefinlight text-md text-black dark:text-gray-300 font-semibold'>Use Google to sign in to your account. Learn more</h5>
                         </div>
                         {props.user.google_authenticated ?
-                            <button disabled className="bg-green-200 text-green-500 px-3 py-1 w-fit rounded-md text-md font-caviar font-bold">
+                            <button disabled className="bg-green-200 text-green-500 px-3 py-1 w-fit rounded-md text-md font-nunito font-bold">
                                 Connected!
                             </button> :
-                            <button className="bg-green-500 text-gray-900 dark:text-gray-200 hover:bg-green-600 dark:hover:bg-green-600 px-3 py-1 rounded-md text-lg font-caviar font-bold dark:font-normal">
+                            <button className="bg-green-500 text-gray-900 dark:text-gray-200 hover:bg-green-600 dark:hover:bg-green-600 px-3 py-1 rounded-md text-lg font-nunito font-bold dark:font-normal">
                                 Link Account to Google
                             </button>
                         }
@@ -137,10 +137,10 @@ export const Account = (props) => {
                         <div className='flex justify-between'>
                             <h1 className='flex text-xl font-md text-gray-200'><FcGoogle className='h-6 w-6' /> Google</h1>
                             {false ?
-                                <button disabled className="bg-green-200 text-green-500 px-3 py-1 rounded-md text-md font-caviar font-bold">
+                                <button disabled className="bg-green-200 text-green-500 px-3 py-1 rounded-md text-md font-nunito font-bold">
                                     Connected!
                                 </button> :
-                                <button className="bg-violet-500 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 px-3 py-1 rounded-md text-lg font-caviar font-bold dark:font-normal">
+                                <button className="bg-indigo-600 text-gray-900 dark:text-gray-200 hover:bg-indigo-600 dark:hover:bg-indigo-600 px-3 py-1 rounded-md text-lg font-nunito font-bold dark:font-normal">
                                     Sign in
                                 </button>
                             }

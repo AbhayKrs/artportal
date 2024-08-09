@@ -16,6 +16,7 @@ import { FaUser, FaLock } from 'react-icons/fa';
 import { BsArrowUpRightSquare } from 'react-icons/bs';
 import { FaChevronRight, FaHashtag, FaGreaterThan } from 'react-icons/fa6';
 import { FiAtSign } from 'react-icons/fi';
+import { ReactComponent as GoogleIcon } from '../assets/icons/google-icon.svg';
 
 import {
     EmailIcon,
@@ -66,33 +67,28 @@ export const LoginModal = (props) => {
     }
     return (
         <div className={`${open ? 'block' : 'hidden'} flex fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
-            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 lg:w-6/12 sm:w-11/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
-                <div className='flex flex-col my-10 mx-auto space-y-3 max-w-xl'>
-                    <IoCloseSharp onClick={() => { onClose(); props.setAuthError() }} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
-                    <h1 className='font-caviar text-4xl font-bold text-violet-500 dark:text-violet-500'>{title}</h1>
-                    <p className='text-black dark:text-white text-md font-josefinlight'>Become an Artyst Member <button type='button' onClick={() => { onClose(); openRegister() }} className='text-sm font-bold text-violet-400'>JOIN</button></p>
-                    <a href={googleRedirectURL} className="focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-2 px-3 border rounded-lg border-gray-700 dark:border-gray-400 flex items-center w-full mt-10">
-                        <svg width="19" height="20" viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M18.9892 10.1871C18.9892 9.36767 18.9246 8.76973 18.7847 8.14966H9.68848V11.848H15.0277C14.9201 12.767 14.3388 14.1512 13.047 15.0812L13.0289 15.205L15.905 17.4969L16.1042 17.5173C17.9342 15.7789 18.9892 13.221 18.9892 10.1871Z" fill="#4285F4" />
-                            <path d="M9.68813 19.9314C12.3039 19.9314 14.4999 19.0455 16.1039 17.5174L13.0467 15.0813C12.2286 15.6682 11.1306 16.0779 9.68813 16.0779C7.12612 16.0779 4.95165 14.3395 4.17651 11.9366L4.06289 11.9465L1.07231 14.3273L1.0332 14.4391C2.62638 17.6946 5.89889 19.9314 9.68813 19.9314Z" fill="#34A853" />
-                            <path d="M4.17667 11.9366C3.97215 11.3165 3.85378 10.6521 3.85378 9.96562C3.85378 9.27905 3.97215 8.6147 4.16591 7.99463L4.1605 7.86257L1.13246 5.44363L1.03339 5.49211C0.37677 6.84302 0 8.36005 0 9.96562C0 11.5712 0.37677 13.0881 1.03339 14.4391L4.17667 11.9366Z" fill="#FBBC05" />
-                            <path d="M9.68807 3.85336C11.5073 3.85336 12.7344 4.66168 13.4342 5.33718L16.1684 2.59107C14.4892 0.985496 12.3039 0 9.68807 0C5.89885 0 2.62637 2.23672 1.0332 5.49214L4.16573 7.99466C4.95162 5.59183 7.12608 3.85336 9.68807 3.85336Z" fill="#EB4335" />
-                        </svg>
-                        <p className="text-base font-medium ml-4 text-gray-800 dark:text-gray-400">Continue with Google</p>
+            <div className="relative m-auto bg-slate-200 dark:bg-neutral-800 xs:w-11/12 sm:w-8/12 lg:w-6/12 rounded-xl z-50 overflow-y-auto">
+                <div className='flex flex-col my-10 mx-auto gap-4 xs:w-10/12 md:w-8/12'>
+                    <IoCloseSharp onClick={() => { onClose(); props.setAuthError() }} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-500' />
+                    <div className='flex flex-col'>
+                        <h1 className="font-nunito text-4xl font-bold text-neutral-800 dark:text-gray-300">{title}</h1>
+                        <p className="font-nunito text-base font-normal text-neutral-700 dark:text-gray-100/50">Don't have an account? <span className='font-semibold text-indigo-600 tracking-wide cursor-pointer' onClick={() => { onClose(); openRegister() }}>Sign up</span></p>
+                    </div>
+                    <a href={googleRedirectURL} className="flex items-center justify-center w-full mt-6 py-2 px-3 rounded-lg border-2 border-neutral-700 dark:border-slate-400">
+                        <GoogleIcon />
+                        <p className="font-nunito font-bold tracking-wider ml-4 text-gray-800 dark:text-gray-300">Sign in with Google</p>
                     </a>
                     <div className='flex items-center justify-between'>
                         <hr className="w-full border-1 border-gray-600 dark:border-gray-400" />
-                        <p className="text-base font-medium leading-4 px-2.5 text-gray-600 dark:text-gray-400">OR</p>
+                        <p className="font-nunito text-base font-bold leading-4 px-2.5 text-gray-600 dark:text-gray-400">OR</p>
                         <hr className="w-full border-1 border-gray-600 dark:border-gray-400" />
                     </div>
-                    <div className="flex items-center">
-                        <div className='px-3 py-2.5 bg-gray-300 rounded-l'>
-                            <FaUser className="h-5 w-5 text-violet-500" />
-                        </div>
+                    <div className="relative flex items-center">
+                        <FaUser className="absolute right-2 h-5 w-5 text-indigo-600 dark:text-indigo-600" />
                         <input
                             name="username"
                             value={username}
-                            className="rounded-r p-2 w-full focus:outline-none"
+                            className="font-nunito bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 text-neutral-500 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-4 pr-9 w-full focus:outline-none"
                             type="text"
                             placeholder="Username"
                             onChange={handleUsernameChange}
@@ -103,14 +99,12 @@ export const LoginModal = (props) => {
                             }}
                         />
                     </div>
-                    <div className="flex items-center">
-                        <div className='px-3 py-2.5 bg-gray-300 rounded-l'>
-                            <FaLock className="h-5 w-5 text-violet-500" />
-                        </div>
+                    <div className="relative flex items-center">
+                        <FaLock className="absolute right-2 h-5 w-5 text-indigo-600 dark:text-indigo-600" />
                         <input
                             name="password"
                             value={password}
-                            className="rounded-r p-2 w-full focus:outline-none"
+                            className="font-nunito bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 text-neutral-500 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-4 pr-9 w-full focus:outline-none"
                             type="password"
                             placeholder="Password"
                             onChange={handlePasswordChange}
@@ -121,9 +115,14 @@ export const LoginModal = (props) => {
                             }}
                         />
                     </div>
-                    <label className="flex items-center cursor-pointer space-x-1">
-                        <input type="checkbox" checked={stayLoggedIn} onChange={handleStayLoggedin} className="form-checkbox h-4 w-4 rounded bg-slate-300 text-violet-500 accent-violet-500 cursor-pointer mr-1" />
-                        <p className='font-caviar text-sm text-gray-900 dark:text-gray-300'>Keep me logged in</p>
+                    <label className="flex items-center cursor-pointer space-x-2">
+                        <input type="checkbox" checked={stayLoggedIn} onChange={handleStayLoggedin}
+                            style={{
+                                '-webkit-appearance': 'none',
+                            }}
+                            className="h-4 w-4 appearance-none align-middle rounded-md outline-none bg-slate-300 dark:bg-neutral-700 checked:bg-indigo-600 dark:checked:bg-indigo-600 cursor-pointer"
+                        />
+                        <p className='font-nunito tracking-wide text-sm text-neutral-700 dark:text-neutral-400'>Keep me logged in</p>
                     </label>
                     {error.login && !username && !password ?
                         <div className='flex p-2 border-2 border-red-500 rounded-lg space-x-2'>
@@ -132,11 +131,11 @@ export const LoginModal = (props) => {
                         </div> :
                         null
                     }
-                    <button onClick={onSubmitClick} className='w-20 bg-violet-500 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 px-4 py-2 rounded-md text-lg font-caviar font-bold dark:font-normal'>Login</button>
-                    <p className='text-gray-700 dark:text-gray-500 text-sm'>By clicking Sign In, I confirm that I have read and agree to the Artyst <button type='button' className='text-sm font-bold text-violet-500'>Terms of Service</button> and <button type='button' className='text-sm font-bold text-violet-500'>Privacy Policy</button>.</p>
+                    <button onClick={onSubmitClick} className='w-fit font-nunito font-bold text-lg tracking-wide bg-indigo-600 hover:bg-indigo-600/75 text-gray-200 px-6 py-1 rounded-md'>Sign In</button>
+                    <p className='font-nunito font-semibold text-neutral-700 dark:text-gray-400 text-sm'>By clicking Sign In, I confirm that I have read and agree to the artportal <button type='button' className='text-sm font-bold text-indigo-600'>Terms of Service</button> and <button type='button' className='text-sm font-bold text-indigo-600'>Privacy Policy</button>.</p>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 
@@ -196,62 +195,84 @@ export const RegisterModal = (props) => {
 
     return (
         <div className={`${open ? 'block' : 'hidden'} flex fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
-            <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 lg:w-6/12 sm:w-11/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
-                <div className='grid sm:grid-cols-2 grid-cols-1'>
-                    {banner ? <img loading='lazy' className='h-full sm:flex hidden' src={fetchUserImages(banner)} /> : null}
-                    <div className='p-8 pt-4 flex flex-col space-y-3'>
-                        <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
-                        <h1 className='text-violet-500 text-5xl font-semibold tracking-widest font-antipasto'>{title}</h1>
-                        <p className='text-black dark:text-white text-md font-josefinlight'>Already an Artyst Member? <button type='button' onClick={() => { onClose(); openLogin() }} className='text-sm font-bold text-violet-400'>SIGN IN</button></p>
-                        <div className="flex items-center">
-                            <div className='px-1 py-2 h-full bg-violet-500 rounded-l'></div>
-                            <input name="name" value={name} className="rounded-r p-1.5 w-full focus:outline-none" type="text" placeholder="Name" onChange={handleNameChange} />
-                        </div>
-                        <div className="flex items-center">
-                            <div className='px-1 py-2 h-full bg-violet-500 rounded-l'></div>
-                            <input name="username" value={username} className="rounded-r p-1.5 w-full focus:outline-none" type="text" placeholder="Username" onChange={handleUsernameChange} />
-                        </div>
-                        <div className="flex items-center">
-                            <div className='px-1 py-2 h-full bg-violet-500 rounded-l'></div>
-                            <input name="email" value={email} className="rounded-r p-1.5 w-full focus:outline-none" type="email" placeholder="Email" onChange={handleEmailChange} />
-                        </div>
-                        <div className="flex items-center">
-                            <div className='px-1 py-2 h-full bg-violet-500 rounded-l'></div>
-                            <input name="password" value={password} className="rounded-r p-1.5 w-full focus:outline-none" type="password" placeholder="Password" onChange={handlePasswordChange} />
-                        </div>
-                        <div className="flex items-center">
-                            <div className='px-1 py-2 h-full bg-violet-500 rounded-l'></div>
-                            <input name="password2" value={password2} className="rounded-r p-1.5 w-full focus:outline-none" type="password" placeholder="Confirm Password" onChange={handleConfirmPasswordChange} />
-                        </div>
-                        <div className='flex items-center justify-between'>
-                            <hr className="w-full border-1 border-gray-600 dark:border-gray-400" />
-                            <p className="text-base font-medium leading-4 px-2.5 text-gray-600 dark:text-gray-400">OR</p>
-                            <hr className="w-full border-1 border-gray-600 dark:border-gray-400" />
-                        </div>
-                        <div className='flex space-x-2'>
-                            <a href={googleRedirectURL} className="w-fit p-2 border rounded-lg dark:border-gray-400 flex items-center w-full shadow-md">
-                                <svg width="19" height="20" viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M18.9892 10.1871C18.9892 9.36767 18.9246 8.76973 18.7847 8.14966H9.68848V11.848H15.0277C14.9201 12.767 14.3388 14.1512 13.047 15.0812L13.0289 15.205L15.905 17.4969L16.1042 17.5173C17.9342 15.7789 18.9892 13.221 18.9892 10.1871Z" fill="#4285F4" />
-                                    <path d="M9.68813 19.9314C12.3039 19.9314 14.4999 19.0455 16.1039 17.5174L13.0467 15.0813C12.2286 15.6682 11.1306 16.0779 9.68813 16.0779C7.12612 16.0779 4.95165 14.3395 4.17651 11.9366L4.06289 11.9465L1.07231 14.3273L1.0332 14.4391C2.62638 17.6946 5.89889 19.9314 9.68813 19.9314Z" fill="#34A853" />
-                                    <path d="M4.17667 11.9366C3.97215 11.3165 3.85378 10.6521 3.85378 9.96562C3.85378 9.27905 3.97215 8.6147 4.16591 7.99463L4.1605 7.86257L1.13246 5.44363L1.03339 5.49211C0.37677 6.84302 0 8.36005 0 9.96562C0 11.5712 0.37677 13.0881 1.03339 14.4391L4.17667 11.9366Z" fill="#FBBC05" />
-                                    <path d="M9.68807 3.85336C11.5073 3.85336 12.7344 4.66168 13.4342 5.33718L16.1684 2.59107C14.4892 0.985496 12.3039 0 9.68807 0C5.89885 0 2.62637 2.23672 1.0332 5.49214L4.16573 7.99466C4.95162 5.59183 7.12608 3.85336 9.68807 3.85336Z" fill="#EB4335" />
-                                </svg>
-                                <p className="text-base font-medium ml-2 text-gray-800 dark:text-gray-400">Register with Google</p>
-                            </a>
-                        </div>
-                        {error.signup ?
-                            <div className='flex p-2 border-2 border-red-500 rounded-lg space-x-2'>
-                                <IoCloseCircle className='h-5 w-5 text-red-500' />
-                                <p className='font-caviar font-bold text-sm text-red-500'>{error.message}</p>
-                            </div> :
-                            null
-                        }
-                        <div className='flex space-x-2 pt-5'>
-                            <button onClick={onSubmitClick} className='bg-violet-500 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 px-4 py-2 rounded-md text-lg font-caviar font-bold dark:font-normal'>Signup</button>
-                            <button onClick={onReset} className='text-white dark:text-violet-500 bg-gray-600 dark:bg-gray-200 hover:text-violet-500 dark:hover:text-violet-500 px-4 py-2 rounded-md text-lg font-caviar font-bold dark:font-normal'>Reset</button>
-                        </div>
-                        <p className='text-gray-700 dark:text-gray-500 text-sm pb-5'>By clicking Sign In, I confirm that I have read and agree to the Artyst <button type='button' className='text-sm font-bold text-violet-500'>Terms of Service</button> and <button type='button' className='text-sm font-bold text-violet-500'>Privacy Policy</button>.</p>
+            <div className="relative m-auto bg-slate-200 dark:bg-neutral-800 xs:w-11/12 sm:w-8/12 lg:w-6/12 rounded-xl z-50 overflow-y-auto">
+                <div className='flex flex-col my-10 mx-auto gap-4 xs:w-10/12 md:w-8/12'>
+                    <IoCloseSharp onClick={() => { onClose(); props.setAuthError() }} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-500' />
+                    <div className='flex flex-col'>
+                        <h1 className="font-nunito text-4xl font-bold text-neutral-800 dark:text-gray-300">{title}</h1>
+                        <p className="font-nunito text-base font-normal text-neutral-700 dark:text-gray-100/50">Have an account already? <span className='font-semibold text-indigo-600 tracking-wide cursor-pointer' onClick={() => { onClose(); openLogin() }}>Sign in</span></p>
                     </div>
+                    <div className="relative flex items-center">
+                        <input
+                            name="name"
+                            value={name}
+                            className="font-nunito bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 text-neutral-500 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-4 pr-9 w-full focus:outline-none"
+                            type="text"
+                            placeholder="Name"
+                            onChange={handleNameChange}
+                        />
+                    </div>
+                    <div className="relative flex items-center">
+                        <input
+                            name="username"
+                            value={username}
+                            className="font-nunito bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 text-neutral-500 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-4 pr-9 w-full focus:outline-none"
+                            type="text"
+                            placeholder="Username"
+                            onChange={handleUsernameChange}
+                        />
+                    </div>
+                    <div className="relative flex items-center">
+                        <input
+                            name="email"
+                            value={email}
+                            className="font-nunito bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 text-neutral-500 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-4 pr-9 w-full focus:outline-none"
+                            type="email"
+                            placeholder="Email"
+                            onChange={handleEmailChange}
+                        />
+                    </div>
+                    <div className="relative flex items-center">
+                        <input
+                            name="password"
+                            value={password}
+                            className="font-nunito bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 text-neutral-500 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-4 pr-9 w-full focus:outline-none"
+                            type="password"
+                            placeholder="Password"
+                            onChange={handlePasswordChange}
+                        />
+                    </div>
+                    <div className="relative flex items-center">
+                        <input
+                            name="password2"
+                            value={password2}
+                            className="font-nunito bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 text-neutral-500 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-4 pr-9 w-full focus:outline-none"
+                            type="password"
+                            placeholder="Confirm Password"
+                            onChange={handleConfirmPasswordChange}
+                        />
+                    </div>
+                    <div className='flex items-center justify-between'>
+                        <hr className="w-full border-1 border-gray-600 dark:border-gray-400" />
+                        <p className="font-nunito text-base font-bold leading-4 px-2.5 text-gray-600 dark:text-gray-400">OR</p>
+                        <hr className="w-full border-1 border-gray-600 dark:border-gray-400" />
+                    </div>
+                    <a href={googleRedirectURL} className="flex items-center justify-center w-full py-2 px-3 rounded-lg border-2 border-neutral-700 dark:border-slate-400">
+                        <GoogleIcon />
+                        <p className="font-nunito font-bold tracking-wider ml-4 text-gray-800 dark:text-gray-300">Sign in with Google</p>
+                    </a>
+                    {error.signup ?
+                        <div className='flex p-2 border-2 border-red-500 rounded-lg space-x-2'>
+                            <IoCloseCircle className='h-5 w-5 text-red-500' />
+                            <p className='font-nunito font-bold text-sm text-red-500'>{error.message}</p>
+                        </div> :
+                        null
+                    }
+                    <div className='flex space-x-2 pt-5'>
+                        <button onClick={onSubmitClick} className='w-fit font-nunito font-bold text-lg tracking-wide bg-indigo-600 hover:bg-indigo-600/75 text-gray-200 px-6 py-1 rounded-md'>Sign Up</button>
+                        <button onClick={onReset} className='w-fit font-nunito font-bold text-lg tracking-wide border-2 border-neutral-800 dark:border-gray-300 bg-transparent hover:bg-neutral-500/10 text-neutral-800 dark:text-gray-300 px-6 py-1 rounded-md'>Reset</button>
+                    </div>
+                    <p className='font-nunito font-semibold text-neutral-700 dark:text-gray-400 text-sm'>By clicking Sign Up, I confirm that I have read and agree to the artportal <button type='button' className='text-sm font-bold text-indigo-600'>Terms of Service</button> and <button type='button' className='text-sm font-bold text-indigo-600'>Privacy Policy</button>.</p>
                 </div>
             </div>
         </div>
@@ -267,7 +288,7 @@ export const AwardModal = (props) => {
                 <div className='grid'>
                     <div className='p-4 pt-2 flex flex-col space-y-3'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
-                        <h1 className='text-violet-500 dark:text-violet-800 text-4xl font-semibold tracking-widest font-antipasto'>{title}</h1>
+                        <h1 className='text-indigo-600 dark:text-violet-800 text-4xl font-semibold tracking-widest font-antipasto'>{title}</h1>
                         <AwardTabPanel awards={awardList} user={user} exploreID={exploreID} handleAwardExplore={handleAwardExplore} awardClose={onClose} />
                     </div>
                 </div>
@@ -290,15 +311,15 @@ export const AwardConfirmModal = (props) => {
                         <div className='flex-row'>
                             <div className='flex space-x-1 items-center'>
                                 <img loading='lazy' src={TokenIcon} className='h-6 w-6' />
-                                <span className='flex items-center font-bold text-2xl text-emerald-500 font-caviar'>{awardData.value}</span>
+                                <span className='flex items-center font-bold text-2xl text-emerald-500 font-nunito'>{awardData.value}</span>
                             </div>
-                            <p className='text-gray-900 font-bold dark:text-gray-200 font-caviar text-md'>Awarded by {user.username}.</p>
+                            <p className='text-gray-900 font-bold dark:text-gray-200 font-nunito text-md'>Awarded by {user.username}.</p>
                             <p className='text-gray-400 text-sm italic'>By purchasing the award, you understand the mentioned total will be deducted from your balance.</p>
                         </div>
                     </div>
                     <hr className='h-2 w-full px-2 mt-2' />
                     <div className='flex items-center place-content-between'>
-                        <p className='flex text-md text-gray-900 font-bold dark:text-gray-300 font-caviar'>Current Balance: <img loading='lazy' src={TokenIcon} className='h-6 w-6 ml-1 mr-1' />{user.tokens}</p>
+                        <p className='flex text-md text-gray-900 font-bold dark:text-gray-300 font-nunito'>Current Balance: <img loading='lazy' src={TokenIcon} className='h-6 w-6 ml-1 mr-1' />{user.tokens}</p>
                         <button onClick={() => { handleAwardExplore(awardData); onClose(); awardClose() }} className='p-1.5 bg-yellow-400 w-fit rounded-md'>Confirm</button>
                     </div>
                 </div>
@@ -321,37 +342,37 @@ export const TokenModal = (props) => {
                 <div className='grid'>
                     <div className='p-4 flex flex-col'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
-                        <h1 className='text-violet-500 dark:text-violet-800 text-4xl font-semibold tracking-widest font-antipasto'>{title}</h1>
+                        <h1 className='text-indigo-600 dark:text-violet-800 text-4xl font-semibold tracking-widest font-antipasto'>{title}</h1>
                         <div className='text-black dark:text-white text-md font-josefinlight'>Tokens are used to purchase awards, badges and profile avatars. You can gift your tokens to artists you admire as well!</div>
-                        <h1 className='text-3xl font-caviar m-2 text-rose-400 dark:text-rose-600'>*Feature to be added soon.</h1>
+                        <h1 className='text-3xl font-nunito m-2 text-rose-400 dark:text-rose-600'>*Feature to be added soon.</h1>
                         {/* <ul className='py-2 px-5 space-y-2 text-gray-700 dark:text-gray-400'>
                             <li className='flex justify-between place-items-center'>
-                                <div className='text-lg font-caviar'>250 tokens</div>
-                                <button onClick={() => setPurchaseDialog({ open: true, value: 250, price: 100 })} className='w-20 bg-violet-500/75 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 p-2 rounded-md text-sm font-caviar font-bold dark:font-normal'>&#8377;100</button>
+                                <div className='text-lg font-nunito'>250 tokens</div>
+                                <button onClick={() => setPurchaseDialog({ open: true, value: 250, price: 100 })} className='w-20 bg-indigo-600/75 text-gray-900 dark:text-gray-200 hover:bg-indigo-600 dark:hover:bg-indigo-600 p-2 rounded-md text-sm font-nunito font-bold dark:font-normal'>&#8377;100</button>
                             </li>
                             <li className='flex justify-between place-items-center'>
-                                <div className='text-lg font-caviar'>500 tokens</div>
-                                <button onClick={() => setPurchaseDialog({ open: true, value: 500, price: 190 })} className='w-20 bg-violet-500/75 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 p-2 rounded-md text-sm font-caviar font-bold dark:font-normal'>&#8377;190</button>
+                                <div className='text-lg font-nunito'>500 tokens</div>
+                                <button onClick={() => setPurchaseDialog({ open: true, value: 500, price: 190 })} className='w-20 bg-indigo-600/75 text-gray-900 dark:text-gray-200 hover:bg-indigo-600 dark:hover:bg-indigo-600 p-2 rounded-md text-sm font-nunito font-bold dark:font-normal'>&#8377;190</button>
                             </li>
                             <li className='flex justify-between place-items-center'>
-                                <div className='text-lg font-caviar'>1000 tokens</div>
-                                <button onClick={() => setPurchaseDialog({ open: true, value: 1000, price: 360 })} className='w-20 bg-violet-500/75 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 p-2 rounded-md text-sm font-caviar font-bold dark:font-normal'>&#8377;360</button>
+                                <div className='text-lg font-nunito'>1000 tokens</div>
+                                <button onClick={() => setPurchaseDialog({ open: true, value: 1000, price: 360 })} className='w-20 bg-indigo-600/75 text-gray-900 dark:text-gray-200 hover:bg-indigo-600 dark:hover:bg-indigo-600 p-2 rounded-md text-sm font-nunito font-bold dark:font-normal'>&#8377;360</button>
                             </li>
                             <li className='flex justify-between place-items-center'>
-                                <div className='text-lg font-caviar'>5000 tokens</div>
-                                <button onClick={() => setPurchaseDialog({ open: true, value: 5000, price: 1500 })} className='w-20 bg-violet-500/75 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 p-2 rounded-md text-sm font-caviar font-bold dark:font-normal'>&#8377;1500</button>
+                                <div className='text-lg font-nunito'>5000 tokens</div>
+                                <button onClick={() => setPurchaseDialog({ open: true, value: 5000, price: 1500 })} className='w-20 bg-indigo-600/75 text-gray-900 dark:text-gray-200 hover:bg-indigo-600 dark:hover:bg-indigo-600 p-2 rounded-md text-sm font-nunito font-bold dark:font-normal'>&#8377;1500</button>
                             </li>
                             <li className='flex justify-between place-items-center'>
-                                <div className='text-lg font-caviar'>10000 tokens</div>
-                                <button onClick={() => setPurchaseDialog({ open: true, value: 10000, price: 2600 })} className='w-20 bg-violet-500/75 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 p-2 rounded-md text-sm font-caviar font-bold dark:font-normal'>&#8377;2600</button>
+                                <div className='text-lg font-nunito'>10000 tokens</div>
+                                <button onClick={() => setPurchaseDialog({ open: true, value: 10000, price: 2600 })} className='w-20 bg-indigo-600/75 text-gray-900 dark:text-gray-200 hover:bg-indigo-600 dark:hover:bg-indigo-600 p-2 rounded-md text-sm font-nunito font-bold dark:font-normal'>&#8377;2600</button>
                             </li>
                             <li className='flex justify-between place-items-center'>
-                                <div className='text-lg font-caviar'>25000 tokens</div>
-                                <button onClick={() => setPurchaseDialog({ open: true, value: 25000, price: 5000 })} className='w-20 bg-violet-500/75 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 p-2 rounded-md text-sm font-caviar font-bold dark:font-normal'>&#8377;5000</button>
+                                <div className='text-lg font-nunito'>25000 tokens</div>
+                                <button onClick={() => setPurchaseDialog({ open: true, value: 25000, price: 5000 })} className='w-20 bg-indigo-600/75 text-gray-900 dark:text-gray-200 hover:bg-indigo-600 dark:hover:bg-indigo-600 p-2 rounded-md text-sm font-nunito font-bold dark:font-normal'>&#8377;5000</button>
                             </li>
                             <li className='flex justify-between place-items-center'>
-                                <div className='text-lg font-caviar'>50000 tokens</div>
-                                <button onClick={() => setPurchaseDialog({ open: true, value: 50000, price: 7400 })} className='w-20 bg-violet-500/75 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 p-2 rounded-md text-sm font-caviar font-bold dark:font-normal'>&#8377;7400</button>
+                                <div className='text-lg font-nunito'>50000 tokens</div>
+                                <button onClick={() => setPurchaseDialog({ open: true, value: 50000, price: 7400 })} className='w-20 bg-indigo-600/75 text-gray-900 dark:text-gray-200 hover:bg-indigo-600 dark:hover:bg-indigo-600 p-2 rounded-md text-sm font-nunito font-bold dark:font-normal'>&#8377;7400</button>
                             </li>
                         </ul>
                         <hr className='my-3 border-gray-700 dark:border-gray-200' />
@@ -360,7 +381,7 @@ export const TokenModal = (props) => {
                                 <h6 className='text-neutral-900 dark:text-gray-300 text-md'>Premium</h6>
                                 <p className='text-gray-500 text-sm'>Get 1000 tokens/month. No Ads & more!</p>
                             </div>
-                            <button className='whitespace-nowrap text-center bg-violet-500/75 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 py-1 px-4 rounded-md font-caviar font-bold dark:font-normal'>Go Premium</button>
+                            <button className='whitespace-nowrap text-center bg-indigo-600/75 text-gray-900 dark:text-gray-200 hover:bg-indigo-600 dark:hover:bg-indigo-600 py-1 px-4 rounded-md font-nunito font-bold dark:font-normal'>Go Premium</button>
                         </div> */}
                     </div>
                 </div>
@@ -386,14 +407,14 @@ export const PurchaseModal = (props) => {
                 <div className='grid'>
                     <div className='p-4 flex flex-col'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
-                        <h1 className='text-violet-500 dark:text-violet-800 text-3xl font-semibold tracking-wide font-josefinregular'>Add {new Intl.NumberFormat().format(value)} tokens</h1>
+                        <h1 className='text-indigo-600 dark:text-violet-800 text-3xl font-semibold tracking-wide font-josefinregular'>Add {new Intl.NumberFormat().format(value)} tokens</h1>
                         <div className='text-rose-500 text-md font-josefinregular'>Total: &#8377;{Number.parseFloat(price).toFixed(2)}</div>
                         <p className='mt-2 text-gray-700 dark:text-gray-300 text-sm'>Purchased tokens will be added to, <span>{props.user.username}</span></p>
-                        <p className='text-gray-500 text-xs'>By purchasing Coins and Awards, you agree to the <button type='button' className='text-xs font-bold text-violet-500'>Artyst User Agreement</button>.</p>
+                        <p className='text-gray-500 text-xs'>By purchasing Coins and Awards, you agree to the <button type='button' className='text-xs font-bold text-indigo-600'>artportal User Agreement</button>.</p>
                         <hr className='my-3 border-gray-500 dark:border-gray-300' />
                         <div className='flex flex-row justify-between'>
                             <h6 className='flex text-gray-700 dark:text-gray-300 text-md items-center'>Current Balance: <img loading='lazy' src={TokenLogo} className='w-5 h-5 mx-1' />{new Intl.NumberFormat().format(props.user.tokens)}</h6>
-                            <button className='whitespace-nowrap text-center bg-amber-400 text-gray-900 hover:bg-amber-500 dark:hover:bg-amber-500 py-1 px-4 rounded-md text-sm font-caviar font-bold'>Add</button>
+                            <button className='whitespace-nowrap text-center bg-amber-400 text-gray-900 hover:bg-amber-500 dark:hover:bg-amber-500 py-1 px-4 rounded-md text-sm font-nunito font-bold'>Add</button>
                         </div>
                     </div>
                 </div>
@@ -455,7 +476,7 @@ export const CartModal = (props) => {
             case 0: return <div>
                 <div className='sm:scrollbar px-2 flex flex-col bg-slate-200 dark:bg-neutral-900 max-h-48 overflow-y-auto w-full divide-y-2 divide-neutral-800 text-gray-800 dark:text-gray-300 font-semibold dark:font-medium'>
                     {cartList && cartList.map(cartItem => (
-                        <div className='flex sm:flex-row flex-col gap-5 py-2 font-caviar text-md'>
+                        <div className='flex sm:flex-row flex-col gap-5 py-2 font-nunito text-md'>
                             <div className='flex gap-4'>
                                 <img loading='lazy' src={fetchStoreImages(cartItem.file)} className="w-20 h-20 object-cover rounded shadow-lg" alt="Thumbnail" />
                                 <div className='flex flex-col'>
@@ -523,7 +544,7 @@ export const CartModal = (props) => {
                             <div className="text-lg font-bold text-center text-gray-900 dark:text-gray-400">Final</div>
                             <div className="font-bold text-center text-gray-900 dark:text-gray-200">&#8377;{Number.parseFloat(final).toFixed(2)}</div>
                         </div>
-                        <button onClick={() => setCurrentIndex(1)} className="flex float-right justify-center w-fit p-3 mt-6 sm:mb-0 mb-6 font-medium text-white uppercase bg-violet-400 rounded-xl shadow item-center hover:bg-violet-500 focus:shadow-outline focus:outline-none">Select the delivery location</button>
+                        <button onClick={() => setCurrentIndex(1)} className="flex float-right justify-center w-fit p-3 mt-6 sm:mb-0 mb-6 font-medium text-white uppercase bg-violet-400 rounded-xl shadow item-center hover:bg-indigo-600 focus:shadow-outline focus:outline-none">Select the delivery location</button>
                     </div>
                 </div>
             </div>
@@ -561,7 +582,7 @@ export const CartModal = (props) => {
                     </div>
                     <div className='flex ml-auto mt-auto space-x-2'>
                         <button onClick={() => setCurrentIndex(0)} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-rose-400 rounded-xl shadow item-center hover:bg-rose-500 focus:shadow-outline focus:outline-none">Back</button>
-                        <button disabled={checkAddressValues()} onClick={() => setCurrentIndex(2)} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-violet-400 rounded-xl shadow item-center hover:bg-violet-500 disabled:bg-neutral-300 disabled:text-gray-500 disabled:dark:bg-neutral-700 disabled:dark:text-gray-500 focus:shadow-outline focus:outline-none">Proceed to Payment</button>
+                        <button disabled={checkAddressValues()} onClick={() => setCurrentIndex(2)} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-violet-400 rounded-xl shadow item-center hover:bg-indigo-600 disabled:bg-neutral-300 disabled:text-gray-500 disabled:dark:bg-neutral-700 disabled:dark:text-gray-500 focus:shadow-outline focus:outline-none">Proceed to Payment</button>
                     </div>
                 </div>
             </div>
@@ -576,20 +597,20 @@ export const CartModal = (props) => {
                     <div>
                         <label className="font-bold uppercase text-md mb-2 ml-1 text-gray-700 dark:text-gray-300">Name on Card</label>
                         <div>
-                            <input value={cardHolder} onChange={(ev) => setCardHolder(ev.target.value)} className="w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors" placeholder="John Smith" type="text" />
+                            <input value={cardHolder} onChange={(ev) => setCardHolder(ev.target.value)} className="w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-600 transition-colors" placeholder="John Smith" type="text" />
                         </div>
                     </div>
                     <div>
                         <label className="font-bold uppercase text-md mb-2 ml-1 text-gray-700 dark:text-gray-300">Card Number</label>
                         <div>
-                            <input value={cardNumber} onChange={(ev) => setCardNumber(ev.target.value)} className="w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors" placeholder="0000 0000 0000 0000" type="text" />
+                            <input value={cardNumber} onChange={(ev) => setCardNumber(ev.target.value)} className="w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-600 transition-colors" placeholder="0000 0000 0000 0000" type="text" />
                         </div>
                     </div>
                     <div className='flex items-end'>
                         <div className='flex space-x-2 w-1/2'>
                             <div className='flex flex-col'>
                                 <label className="font-bold uppercase text-md mb-2 ml-1 text-gray-700 dark:text-gray-300">Expiration Date</label>
-                                <select value={expDate.date} onChange={(ev) => setExpDate({ ...expDate, date: ev.target.value })} className="form-select w-fit py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors cursor-pointer">
+                                <select value={expDate.date} onChange={(ev) => setExpDate({ ...expDate, date: ev.target.value })} className="form-select w-fit py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-600 transition-colors cursor-pointer">
                                     <option value="1">01 - January</option>
                                     <option value="2">02 - February</option>
                                     <option value="3">03 - March</option>
@@ -604,7 +625,7 @@ export const CartModal = (props) => {
                                     <option value="12">12 - December</option>
                                 </select>
                             </div>
-                            <select value={expDate.year} onChange={(ev) => setExpDate({ ...expDate, year: ev.target.value })} className="form-select w-fit py-2 mb-1 mt-auto border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors cursor-pointer">
+                            <select value={expDate.year} onChange={(ev) => setExpDate({ ...expDate, year: ev.target.value })} className="form-select w-fit py-2 mb-1 mt-auto border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-600 transition-colors cursor-pointer">
                                 <option value="2020">2020</option>
                                 <option value="2021">2021</option>
                                 <option value="2022">2022</option>
@@ -620,14 +641,14 @@ export const CartModal = (props) => {
                         <div className='w-1/2'>
                             <label className="font-bold uppercase text-md mb-2 ml-1 text-gray-700 dark:text-gray-300">Security code</label>
                             <div>
-                                <input value={cvv} onChange={(ev) => setCvv(ev.target.value)} className="w-32 px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors" placeholder="000" type="text" />
+                                <input value={cvv} onChange={(ev) => setCvv(ev.target.value)} className="w-32 px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-600 transition-colors" placeholder="000" type="text" />
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className='flex ml-auto mt-auto space-x-2'>
                     <button onClick={() => setCurrentIndex(1)} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-rose-400 rounded-xl shadow item-center hover:bg-rose-500 focus:shadow-outline focus:outline-none">Back</button>
-                    <button disabled={checkPaymentValues()} onClick={() => setCurrentIndex(3)} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-violet-400 rounded-xl shadow item-center hover:bg-violet-500 disabled:bg-neutral-300 disabled:text-gray-500 disabled:dark:bg-neutral-700 disabled:dark:text-gray-500 focus:shadow-outline focus:outline-none">Proceed to Confirmation</button>
+                    <button disabled={checkPaymentValues()} onClick={() => setCurrentIndex(3)} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-violet-400 rounded-xl shadow item-center hover:bg-indigo-600 disabled:bg-neutral-300 disabled:text-gray-500 disabled:dark:bg-neutral-700 disabled:dark:text-gray-500 focus:shadow-outline focus:outline-none">Proceed to Confirmation</button>
                 </div>
             </div>
 
@@ -672,7 +693,7 @@ export const CartModal = (props) => {
                 </div>
                 <div className='flex ml-auto mt-auto space-x-2'>
                     <button onClick={() => setCurrentIndex(2)} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-rose-400 rounded-xl shadow item-center hover:bg-rose-500 focus:shadow-outline focus:outline-none">Back</button>
-                    <button onClick={() => console.log('cart done')} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-violet-400 rounded-xl shadow item-center hover:bg-violet-500 disabled:bg-neutral-300 disabled:text-gray-500 disabled:dark:bg-neutral-700 disabled:dark:text-gray-500 focus:shadow-outline focus:outline-none">Checkout</button>
+                    <button onClick={() => console.log('cart done')} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-violet-400 rounded-xl shadow item-center hover:bg-indigo-600 disabled:bg-neutral-300 disabled:text-gray-500 disabled:dark:bg-neutral-700 disabled:dark:text-gray-500 focus:shadow-outline focus:outline-none">Checkout</button>
                 </div>
             </div >
         }
@@ -683,7 +704,7 @@ export const CartModal = (props) => {
             <div className="scrollbar relative m-auto bg-slate-100 dark:bg-neutral-800 lg:w-8/12 sm:w-11/12 xs:w-11/12 h-full max-h-[90%] rounded-xl z-50 overflow-y-auto">
                 <div className='p-4 h-full flex flex-col'>
                     <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
-                    <h1 className='text-violet-500 dark:text-violet-500 text-5xl font-semibold tracking-widest font-antipasto'>Cart</h1>
+                    <h1 className='text-indigo-600 dark:text-indigo-600 text-5xl font-semibold tracking-widest font-antipasto'>Cart</h1>
                     <Stepper activeIndex={currentIndex} />
                     {switchCartView()}
                 </div>
@@ -708,7 +729,7 @@ export const ShareModal = (props) => {
                 <div className='grid'>
                     <div className='p-4 flex flex-col'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
-                        <h1 className='text-violet-500 dark:text-violet-800 text-3xl font-semibold tracking-wide font-josefinregular'>{title}</h1>
+                        <h1 className='text-indigo-600 dark:text-violet-800 text-3xl font-semibold tracking-wide font-josefinregular'>{title}</h1>
                         <div className='flex flex-col space-y-3 py-2 px-4'>
                             <div>
                                 <h4 className='text-gray-500 dark:text-gray-300 text-lg font-josefinlight'>Share this with via...</h4>
@@ -740,7 +761,7 @@ export const ShareModal = (props) => {
                                 </div>
                             </div>
                             <hr />
-                            <button disabled={linkCopy} onClick={() => copyLink()} className='w-fit bg-violet-500 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 px-3 py-1 rounded-md text-lg font-caviar font-bold dark:font-normal'>{!linkCopy ? 'Copy the link url' : 'Link Copied!'}</button>
+                            <button disabled={linkCopy} onClick={() => copyLink()} className='w-fit bg-indigo-600 text-gray-900 dark:text-gray-200 hover:bg-indigo-600 dark:hover:bg-indigo-600 px-3 py-1 rounded-md text-lg font-nunito font-bold dark:font-normal'>{!linkCopy ? 'Copy the link url' : 'Link Copied!'}</button>
                         </div>
                     </div>
                 </div>
@@ -758,7 +779,7 @@ export const AvatarModal = (props) => {
                 <div className='grid'>
                     <div className='p-4 flex flex-col'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
-                        <h1 className='text-violet-500 dark:text-violet-800 text-3xl font-semibold tracking-wide font-josefinregular'>{title}</h1>
+                        <h1 className='text-indigo-600 dark:text-violet-800 text-3xl font-semibold tracking-wide font-josefinregular'>{title}</h1>
                         <div className='grid grid-rows-4 grid-flow-col gap-4'>
                             {avatarList.map(avatar => (
                                 <img loading='lazy' onClick={() => handleEditUserAvatar(avatar)} id={avatar._id} src={fetchUserImages(avatar.icon)} />
@@ -773,31 +794,34 @@ export const AvatarModal = (props) => {
 
 export const SearchModal = (props) => {
     let navigate = useNavigate();
-    const { open, searchVal, activeSearch, searchList, fetchSearchList, clearSearch, handleExploreSearch } = props;
+    const { open, betaMsg, searchVal, activeSearch, searchList, fetchSearchList, clearSearch, handleExploreSearch } = props;
 
     return (
-        <div className={`${open ? 'flex' : 'hidden'} scrollbar fixed mx-auto top-14 z-50 inset-0 h-fit  bg-slate-100 dark:bg-neutral-800 w-11/12 sm:w-8/12 md:w-9/12 rounded-xl`}>
+        <div className={`${open ? 'flex' : 'hidden'} scrollbar fixed mx-auto ${betaMsg === true ? 'top-20' : 'top-14'} z-50 inset-0 h-fit  bg-slate-100 dark:bg-neutral-800 w-11/12 sm:w-8/12 md:w-9/12 rounded-xl`}>
             <div className='flex flex-col w-full px-4 pb-4'>
                 <div className='sticky bottom-0 inset-x-0 flex flex-col md:flex-row items-center justify-between w-full p-2 bg-slate-300 dark:bg-neutral-800 font-antipasto space-x-2'>
                     <div className='flex flex-row p-2 bg-slate-300 dark:bg-neutral-800 font-antipasto space-x-2'>
-                        <button disabled={activeSearch === 'artwork'} onClick={() => { fetchSearchList('artwork', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'artwork' ? 'text-red-400' : 'text-gray-300 hover:text-red-400'}`}>
-                            <FiAtSign className='h-5 w-5' />
+                        <button disabled={activeSearch === 'artwork'} onClick={() => { fetchSearchList('artwork', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'artwork' ? 'text-indigo-600' : 'text-gray-300 hover:text-indigo-600'}`}>
+                            <FiAtSign className='h-4 w-4' />
+                            <span className='font-nunito font-semibold text-base'>Artworks</span>
                         </button>
                         <span className='flex text-gray-300'>&#8226;</span>
-                        <button disabled={activeSearch === 'tag'} onClick={() => { fetchSearchList('tag', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'tag' ? 'text-red-400' : 'text-gray-300 hover:text-red-400'}`}>
-                            <FaHashtag className='h-5 w-5' />
+                        <button disabled={activeSearch === 'tag'} onClick={() => { fetchSearchList('tag', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'tag' ? 'text-indigo-600' : 'text-gray-300 hover:text-indigo-600'}`}>
+                            <FaHashtag className='h-4 w-4' />
+                            <span className='font-nunito font-semibold text-base'>Tags</span>
                         </button>
                         <span className='flex text-gray-300'>&#8226;</span>
-                        <button disabled={activeSearch === 'artist'} onClick={() => { fetchSearchList('artist', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'artist' ? 'text-red-400' : 'text-gray-300 hover:text-red-400'}`}>
-                            <FaGreaterThan className='h-5 w-5' />
+                        <button disabled={activeSearch === 'artist'} onClick={() => { fetchSearchList('artist', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'artist' ? 'text-indigo-600' : 'text-gray-300 hover:text-indigo-600'}`}>
+                            <FaGreaterThan className='h-4 w-4' />
+                            <span className='font-nunito font-semibold text-base'>Artists</span>
                         </button>
                     </div>
                     <div className='flex flex-col md:flex-row p-2 bg-slate-300 dark:bg-neutral-800 font-antipasto space-x-2'>
-                        <button onClick={() => { handleExploreSearch() }} className='flex text-lg gap-2 items-center tracking-wide text-gray-300 hover:text-red-400'>
+                        <button onClick={() => { handleExploreSearch() }} className='flex font-nunito font-normal text-base gap-2 items-center tracking-wide text-gray-300 hover:text-indigo-600'>
                             {searchVal.length > 0 &&
                                 <>
                                     Search {activeSearch}s for '{searchVal}'
-                                    <BsArrowUpRightSquare className='h-5 w-5' />
+                                    <BsArrowUpRightSquare className='h-4 w-4' />
                                 </>
                             }
                         </button>
@@ -817,8 +841,8 @@ export const SearchModal = (props) => {
                                 <div className='flex flex-col space-y-2 items-center justify-center p-4'>
                                     <FiAtSign className='h-8 w-8 text-neutral-800 dark:text-gray-300' />
                                     <div className='flex flex-col items-center'>
-                                        <span className='text-gray-200 font-semibold leading-5'>No artworks found.</span>
-                                        <span className='text-gray-400 text-sm font-semibold'>"{searchVal}" did not match any artworks in our database. Please try again.</span>
+                                        <span className='text-gray-200 font-nunito font-semibold leading-5'>No artworks found.</span>
+                                        <span className='text-gray-400 font-nunito text-sm font-semibold'>"{searchVal}" did not match any artworks in our database. Please try again.</span>
                                     </div>
                                 </div>}
                         </div>
@@ -876,10 +900,10 @@ export const ConfirmModal = (props) => {
             <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 md:w-4/12 sm:w-8/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
                 <div className='grid'>
                     <div className='p-4 flex flex-col items-center'>
-                        <h1 className='text-violet-500 dark:text-violet-800 text-xl font-semibold tracking-wide font-josefinregular'>{title}</h1>
+                        <h1 className='text-indigo-600 dark:text-violet-800 text-xl font-semibold tracking-wide font-josefinregular'>{title}</h1>
                         <div className='flex space-x-4 mt-3'>
-                            <button onClick={onClose} className='text-white dark:text-violet-500 bg-gray-600 dark:bg-gray-200 hover:text-violet-500 dark:hover:text-violet-500 px-4 py-2 rounded-md font-caviar font-bold dark:font-normal'>Cancel</button>
-                            <button onClick={() => { onConfirm(); onClose() }} className='bg-violet-500 text-gray-900 dark:text-gray-200 hover:bg-violet-500 dark:hover:bg-violet-500 px-4 py-2 rounded-md font-caviar font-bold dark:font-normal'>Confirm</button>
+                            <button onClick={onClose} className='text-white dark:text-indigo-600 bg-gray-600 dark:bg-gray-200 hover:text-indigo-600 dark:hover:text-indigo-600 px-4 py-2 rounded-md font-nunito font-bold dark:font-normal'>Cancel</button>
+                            <button onClick={() => { onConfirm(); onClose() }} className='bg-indigo-600 text-gray-900 dark:text-gray-200 hover:bg-indigo-600 dark:hover:bg-indigo-600 px-4 py-2 rounded-md font-nunito font-bold dark:font-normal'>Confirm</button>
                         </div>
                     </div>
                 </div>
@@ -897,11 +921,11 @@ export const SignupSuccessModal = (props) => {
                 <div className='grid'>
                     <div className='p-4 items-center text-center flex flex-col'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
-                        <h1 className='text-violet-500 dark:text-violet-800 text-4xl font-semibold tracking-widest font-antipasto'>{title}</h1>
+                        <h1 className='text-indigo-600 dark:text-violet-800 text-4xl font-semibold tracking-widest font-antipasto'>{title}</h1>
                         <img src={Success} />
-                        <div className='text-black dark:text-white text-2xl font-bold font-caviar'>Thank you for joining the community! Have fun and enjoy your art journey here.</div>
-                        <h1 className='text-md font-caviar font-bold mt-2 text-rose-400 dark:text-rose-600'>5000 tokens have been added to your account to celebrate the occation. Enjoy!</h1>
-                        <h6 className='flex text-gray-700 dark:text-gray-300 text-md font-caviar font-bold items-center'>Token Balance: <img loading='lazy' src={TokenLogo} className='w-5 h-5 mx-1' />{new Intl.NumberFormat().format(props.user.tokens)}</h6>
+                        <div className='text-black dark:text-white text-2xl font-bold font-nunito'>Thank you for joining the community! Have fun and enjoy your art journey here.</div>
+                        <h1 className='text-md font-nunito font-bold mt-2 text-rose-400 dark:text-rose-600'>5000 tokens have been added to your account to celebrate the occation. Enjoy!</h1>
+                        <h6 className='flex text-gray-700 dark:text-gray-300 text-md font-nunito font-bold items-center'>Token Balance: <img loading='lazy' src={TokenLogo} className='w-5 h-5 mx-1' />{new Intl.NumberFormat().format(props.user.tokens)}</h6>
                     </div>
                 </div>
             </div>

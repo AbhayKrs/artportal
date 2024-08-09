@@ -271,13 +271,13 @@ const Profile = (props) => {
                                 </div>
                             </div>
                             <div className='flex space-x-3 py-3 items-center justify-start xs:flex-wrap xs:justify-center'>
-                                <div onClick={() => setActiveView('portfolio')} className={`text-lg font-semibold ${activeView === 'portfolio' ? 'text-violet-400 dark:text-violet-500' : 'text-gray-700 dark:text-gray-400'} font-caviar cursor-pointer`}>Portfolio</div>
+                                <div onClick={() => setActiveView('portfolio')} className={`text-lg font-semibold ${activeView === 'portfolio' ? 'text-violet-400 dark:text-indigo-600' : 'text-gray-700 dark:text-gray-400'} font-nunito cursor-pointer`}>Portfolio</div>
                                 <span className='text-gray-700 dark:text-gray-400'>&#9679;</span>
-                                <div onClick={() => setActiveView('about')} className={`text-lg font-semibold ${activeView === 'about' ? 'text-violet-400 dark:text-violet-500' : 'text-gray-700 dark:text-gray-400'} font-caviar cursor-pointer`}>About</div>
+                                <div onClick={() => setActiveView('about')} className={`text-lg font-semibold ${activeView === 'about' ? 'text-violet-400 dark:text-indigo-600' : 'text-gray-700 dark:text-gray-400'} font-nunito cursor-pointer`}>About</div>
                                 <span className='text-gray-700 dark:text-gray-400'>&#9679;</span>
-                                <div onClick={() => setActiveView('liked')} className={`text-lg font-semibold ${activeView === 'liked' ? 'text-violet-400 dark:text-violet-500' : 'text-gray-700 dark:text-gray-400'} font-caviar cursor-pointer`}>Liked</div>
+                                <div onClick={() => setActiveView('liked')} className={`text-lg font-semibold ${activeView === 'liked' ? 'text-violet-400 dark:text-indigo-600' : 'text-gray-700 dark:text-gray-400'} font-nunito cursor-pointer`}>Liked</div>
                                 <span className='text-gray-700 dark:text-gray-400'>&#9679;</span>
-                                {props.common.user.id === props.viewed_user.id && <div onClick={() => setActiveView('bookmarks')} className={`text-lg font-semibold ${activeView === 'bookmarks' ? 'text-violet-400 dark:text-violet-500' : 'text-gray-700 dark:text-gray-400'} font-caviar cursor-pointer`}>Bookmarks</div>}
+                                {props.common.user.id === props.viewed_user.id && <div onClick={() => setActiveView('bookmarks')} className={`text-lg font-semibold ${activeView === 'bookmarks' ? 'text-violet-400 dark:text-indigo-600' : 'text-gray-700 dark:text-gray-400'} font-nunito cursor-pointer`}>Bookmarks</div>}
                             </div>
                             {props.viewed_user && renderView()}
                         </div>

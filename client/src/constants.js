@@ -16,7 +16,7 @@ export const explorePeriodOptions = [
 ]
 
 export const awardTabPanelHeaders = [
-    'Artyst Specials',
+    'artportal Specials',
     'Community Made',
     'Premium'
 ]

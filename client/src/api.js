@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// const baseURL = 'https://artystweb.onrender.com/api/v1';
-// export const taggerURL = 'https://artystweb.onrender.com/api/v1.01/tagger/model.json';
+// const baseURL = 'https://artportalweb.onrender.com/api/v1';
+// export const taggerURL = 'https://artportalweb.onrender.com/api/v1.01/tagger/model.json';
 const baseURL = 'http://localhost:5000/api/v1.01';
 export const taggerURL = 'http://localhost:5000/api/v1.01/tagger/model.json';
 
@@ -19,7 +19,7 @@ export const googleRedirectURL = baseURL + `/auth/google/login`;
 //GET Request API's
 export const googleLoginAPI = () => get_api.get(`/auth/google/login`);
 export const artworkListAPI = () => get_api.get(`/artworks`);
-export const searchAPI = (type, value) => get_api.get(`/search?type=${type}&value=${value}`);
+export const searchAPI = (type, value) => get_api.get(`/artworks/search?type=${type}&value=${value}`);
 export const exploreItemAPI = (id, payload) => get_api.get(`/artworks/${id}`, payload);
 export const filterExploreListAPI = (filter, period) => get_api.get(`/artworks?filter=${filter}&period=${period}`);
 export const searchFilterExploreListAPI = (type, value, filter, period) => get_api.get(`/artworks/search?type=${type}&value=${value}&filter=${filter}&period=${period}`);

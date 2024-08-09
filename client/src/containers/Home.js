@@ -7,7 +7,7 @@ import { fetchExploreList, fetchTrendingList, fetchNewlyAddedList, fetchMonthHig
 import { setLoader } from '../store/actions/common.actions';
 import { HomeSingleCarousel } from '../components/Carousel';
 
-import AppQR from '../assets/images/artyst_appQR.png';
+import AppQR from '../assets/images/artportal_appQR.png';
 import HighlightList from '../components/HighlightList';
 
 const Home = (props) => {
@@ -42,8 +42,8 @@ const Home = (props) => {
                         <div className='w-full h-full py-5 md:py-0 backdrop-sepia-0 bg-white/50 dark:bg-black/50 rounded-lg'>
                             <div className='flex h-full relative text-black dark:text-white'>
                                 <div className='flex flex-col space-y-2 h-fit w-fit m-auto items-start'>
-                                    <h2 className='font-caviar text-lg leading-[1.125rem] md:text-xl lg:text-2xl font-bold uppercase tracking-wider'>Check out the<br /><span className='text-xl md:text-2xl lg:text-3xl font-black text-violet-400 dark:text-violet-500'>Trending Category</span><br />of the day</h2>
-                                    <button onClick={() => navigate(`/explore?filter=trending`)} className="bg-gradient-to-r font-caviar font-semibold from-violet-500 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Explore</button>
+                                    <h2 className='font-nunito text-lg leading-[1.125rem] md:text-xl lg:text-2xl font-bold uppercase tracking-wider'>Check out the<br /><span className='text-xl md:text-2xl lg:text-3xl font-black text-violet-400 dark:text-indigo-600'>Trending Category</span><br />of the day</h2>
+                                    <button onClick={() => navigate(`/explore?filter=trending`)} className="bg-gradient-to-r font-nunito font-semibold from-indigo-600 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Explore</button>
                                 </div>
                             </div>
                         </div>
@@ -55,7 +55,7 @@ const Home = (props) => {
                                             <img className='rounded-md' src={AppQR} />
                                         </span>
                                     </div>
-                                    <h2 className='font-caviar w-min text-md md:text-xl lg:text-2xl font-bold uppercase tracking-wider'>Download the app for<br /> <span className='text-2xl md:text-3xl lg:text-5xl font-black'>free!</span></h2>
+                                    <h2 className='font-nunito w-min text-md md:text-xl lg:text-2xl font-bold uppercase tracking-wider'>Download the app for<br /> <span className='text-2xl md:text-3xl lg:text-5xl font-black'>free!</span></h2>
                                 </div>
                             </div>
                         </div>

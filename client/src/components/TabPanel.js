@@ -82,7 +82,7 @@ export const AwardTabPanel = (props) => {
                 <div className='flex w-full overflow-hidden bg-gray-100 dark:bg-neutral-800'>
                     <ul id='tabSlider' className="flex ">
                         {awardTabPanelHeaders.map((awardType, index) => {
-                            return <li key={index} onClick={() => setActiveStatus(index)} className={index === activeStatus ? "text-sm text-gray-900 dark:font-medium bg-violet-500 mr-1 rounded-t-md" : "text-sm text-gray-600 rounded-t-md dark:text-gray-400 dark:bg-neutral-700 flex items-center mr-1 hover:text-indigo-700 cursor-pointer"}>
+                            return <li key={index} onClick={() => setActiveStatus(index)} className={index === activeStatus ? "text-sm text-gray-900 dark:font-medium bg-indigo-600 mr-1 rounded-t-md" : "text-sm text-gray-600 rounded-t-md dark:text-gray-400 dark:bg-neutral-700 flex items-center mr-1 hover:text-indigo-700 cursor-pointer"}>
                                 <div className="font-josefinregular flex items-center uppercase">
                                     <span className="p-2 pb-1">{awardType}</span>
                                 </div>
@@ -228,9 +228,9 @@ export const ExplorePanel = (props) => {
                 <div className='lg:flex hidden'>
                     <ul id='tabSlider' className="flex space-x-1 items-center whitespace-nowrap">
                         {exploreFilters.map((filter, index) => {
-                            return <li key={index} onClick={() => selectFilter(filter.value)} className={`flex items-center font-caviar text-sm font-bold tracking-wider ${filter.value === activeFilter ? 'text-violet-500' : 'text-gray-700 dark:text-gray-300'} h-fit`}>
+                            return <li key={index} onClick={() => selectFilter(filter.value)} className={`flex items-center font-nunito text-sm font-bold tracking-wider ${filter.value === activeFilter ? 'text-indigo-600' : 'text-gray-700 dark:text-gray-300'} h-fit`}>
                                 <span className="flex items-center py-[0.4rem] px-3 capitalize">
-                                    {filter.value === activeFilter && <div className='h-3.5 bg-violet-500 w-1 mr-1'></div>}
+                                    {filter.value === activeFilter && <div className='h-3.5 bg-indigo-600 w-1 mr-1'></div>}
                                     {filter.label}
                                 </span>
                             </li>
@@ -262,8 +262,8 @@ export const NotificationTabPanel = () => {
             {/* <div className='flex'>
                 <div className='flex w-full overflow-hidden bg-gray-100 dark:bg-neutral-800'>
                     <ul id='tabSlider' className="flex ">
-                        {['Artyst Specials', 'Community Made', 'Premium'].map((awardType, index) => {
-                            return <li key={index} onClick={() => setActiveStatus(index)} className={index === activeStatus ? "text-sm text-gray-900 dark:font-medium bg-violet-500 mr-1 rounded-t-md" : "text-sm text-gray-600 rounded-t-md dark:text-gray-400 dark:bg-neutral-700 flex items-center mr-1 hover:text-indigo-700 cursor-pointer"}>
+                        {['artportal Specials', 'Community Made', 'Premium'].map((awardType, index) => {
+                            return <li key={index} onClick={() => setActiveStatus(index)} className={index === activeStatus ? "text-sm text-gray-900 dark:font-medium bg-indigo-600 mr-1 rounded-t-md" : "text-sm text-gray-600 rounded-t-md dark:text-gray-400 dark:bg-neutral-700 flex items-center mr-1 hover:text-indigo-700 cursor-pointer"}>
                                 <div className="font-josefinregular flex items-center uppercase">
                                     <span className="p-2 pb-1">{awardType}</span>
                                 </div>

@@ -2,26 +2,22 @@
 	font-family: "Caviar";
 	src: url("./assets/fonts/Caviar.ttf");
 	font-weight: normal;
-	font-style: normal;
 }
 @font-face {
 	font-family: "Caviar";
 	src: url("./assets/fonts/CaviarBold.ttf");
 	font-weight: bold;
-	font-style: normal;
 }
 
 @font-face {
 	font-family: "Nunito";
 	src: url("./assets/fonts/Nunito.ttf");
 	font-weight: normal;
-	font-style: normal;
 }
 @font-face {
-	font-family: "NunitoBold";
+	font-family: "Nunito";
 	src: url("./assets/fonts/NunitoBold.ttf");
 	font-weight: bold;
-	font-style: normal;
 }
 
 .leaflet-container {

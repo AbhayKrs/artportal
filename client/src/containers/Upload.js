@@ -209,12 +209,12 @@ const ExploreUpload = (props) => {
     return (
         <div className="main-container bg-gray-200 dark:bg-darkBg py-8 px-20">
             <Helmet>
-                <title>Artyst | Upload</title>
+                <title>artportal | Upload</title>
             </Helmet>
             <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-8">
                 <div className='relative'>
-                    <span className='font-caviar text-4xl text-gray-700 dark:text-gray-300'>Upload</span>
-                    <div className='h-1 w-12 mt-1 bg-violet-500'></div>
+                    <span className='font-nunito text-4xl text-gray-700 dark:text-gray-300'>Upload</span>
+                    <div className='h-1 w-12 mt-1 bg-indigo-600'></div>
                 </div>
                 <div className='flex lg:flex-row flex-col p-5 lg:space-x-8 md:space-y-2'>
                     <div className='w-8/12 xs:mb-2 md:mb-0'>
@@ -222,7 +222,7 @@ const ExploreUpload = (props) => {
                         <div className="flex flex-col space-y-3">
                             <div className='flex flex-row space-x-4'>
                                 <div className="flex flex-col w-full justify-center items-center border-dashed space-y-2 rounded-lg border-2 border-gray-400 py-12" onDrop={(ev) => dropHandler(ev)} onDragOver={(ev) => dragOverHandler(ev)} >
-                                    <label htmlFor="file-upload" className='bg-violet-500 text-white font-caviar cursor-pointer text-lg font-semibold py-2 px-4 rounded'>
+                                    <label htmlFor="file-upload" className='bg-indigo-600 text-white font-nunito cursor-pointer text-lg font-semibold py-2 px-4 rounded'>
                                         Select image files
                                     </label>
                                     <input id="file-upload" className='hidden' type="file" multiple onChange={onImageChange} />
@@ -264,7 +264,7 @@ const ExploreUpload = (props) => {
                             <div className="w-full inline-flex flex-col justify-center relative text-gray-500">
                                 <div id='category_menu' className='flex flex-wrap space-x-1'>
                                     {exploreCategories.map((category, index) => (
-                                        <div key={index} className="flex justify-center items-center m-1 font-medium py-2 px-3 rounded-md text-indigo-100 bg-violet-500 border border-violet-700 ">
+                                        <div key={index} className="flex justify-center items-center m-1 font-medium py-2 px-3 rounded-md text-indigo-100 bg-indigo-600 border border-violet-700 ">
                                             <div className="text-sm font-normal leading-none max-w-full flex-initial">{category}</div>
                                         </div>
                                     ))}
@@ -291,7 +291,7 @@ const ExploreUpload = (props) => {
                                 {exploreTags.length === 0 ? '' :
                                     <div id='tagmenu' className='flex flex-wrap justify-center space-x-1 mt-2'>
                                         {exploreTags.map(tag => (
-                                            <div className="flex justify-center items-center m-1 font-medium py-1 px-2 rounded-md text-indigo-100 bg-violet-500 border border-violet-700 ">
+                                            <div className="flex justify-center items-center m-1 font-medium py-1 px-2 rounded-md text-indigo-100 bg-indigo-600 border border-violet-700 ">
                                                 <div className="text-xs font-normal leading-none max-w-full flex-initial">{tag}</div>
                                                 <div className="flex flex-auto flex-row-reverse">
                                                     <MdClose className='feather feather-x cursor-pointer hover:text-indigo-400 rounded-full w-4 h-4 ml-1' />
@@ -322,7 +322,7 @@ const ExploreUpload = (props) => {
                     </div>
                 </div>
                 <div className="flex justify-end pt-5">
-                    <button onClick={() => navigate(`/explore`)} className="font-caviar rounded-md px-3 py-1 bg-gray-300 focus:shadow-outline focus:outline-none">
+                    <button onClick={() => navigate(`/explore`)} className="font-nunito rounded-md px-3 py-1 bg-gray-300 focus:shadow-outline focus:outline-none">
                         Cancel
                     </button>
                     <button disabled={exploreFiles.length === 0 || exploreCategories.length === 0 || exploreTitle.length === 0 || exploreDesc.length === 0} onClick={handleUpload} className="ml-3 rounded-md px-3 py-1 bg-rose-500 hover:bg-rose-600 text-white focus:shadow-outline focus:outline-none disabled:text-neutral-400 disabled:bg-neutral-600 disabled:hover:bg-neutral-600">
@@ -467,7 +467,7 @@ const StoreUpload = (props) => {
     return (
         <div className="main-container bg-gray-200 dark:bg-darkBg p-5">
             <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-5">
-                <span className='font-caviar text-3xl text-gray-700 dark:text-gray-300'>List Product to Store</span>
+                <span className='font-nunito text-3xl text-gray-700 dark:text-gray-300'>List Product to Store</span>
                 <div className='flex lg:flex-row flex-col mt-3 lg:space-x-4 md:space-y-2'>
                     <div className='w-full'>
                         <span className='font-josefinlight font-semibold text-gray-700 dark:text-gray-300'>Files<span className='font-josefinlight text-rose-400 text-md'>*</span></span>
@@ -475,7 +475,7 @@ const StoreUpload = (props) => {
                             <div className="flex flex-col justify-center items-center border-dashed space-y-2 rounded-lg border-2 border-gray-400 py-8" onDrop={(ev) => dropHandler(ev)} onDragOver={(ev) => dragOverHandler(ev)} >
                                 <p className="font-semibold text-gray-700 dark:text-gray-300 flex flex-wrap justify-center">Drag files</p>
                                 <p className="font-semibold text-gray-700 dark:text-gray-300">OR</p>
-                                <label htmlFor="file-upload" className='bg-violet-500 text-white font-caviar font-semibold py-1 px-2 rounded'>
+                                <label htmlFor="file-upload" className='bg-indigo-600 text-white font-nunito font-semibold py-1 px-2 rounded'>
                                     Select files
                                 </label>
                                 <input id="file-upload" className='hidden' type="file" multiple onChange={onImageChange} />

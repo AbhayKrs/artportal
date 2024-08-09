@@ -197,7 +197,7 @@ const ExploreShow = (props) => {
                     <div className='flex flex-col space-y-1 p-2'>
                         <div className='flex flex-row space-x-2'>
                             <div className='flex px-2 flex-col w-full space-y-1'>
-                                <h1 className='font-caviar text-2xl tex-gray-900 dark:text-gray-200 font-bold'>{props.artwork.title}</h1>
+                                <h1 className='font-nunito text-2xl tex-gray-900 dark:text-gray-200 font-bold'>{props.artwork.title}</h1>
                                 <p className='font-josefinlight text-lg tex-gray-800 dark:text-gray-300'>{props.artwork.description}</p>
                             </div>
                         </div>
@@ -207,12 +207,12 @@ const ExploreShow = (props) => {
                                 <h3 className='font-josefinregular text-lg self-center'>{new Intl.NumberFormat().format(props.artwork.views.length)}</h3>
 
                             </div>
-                            <div className='flex items-center justify-end py-0.5 space-x-1 text-violet-500 dark:text-violet-500'>
+                            <div className='flex items-center justify-end py-0.5 space-x-1 text-indigo-600 dark:text-indigo-600'>
                                 <IoHeart className='h-6 w-6' />
                                 <h3 className='font-josefinregular text-lg self-center'>{new Intl.NumberFormat().format(props.artwork.likes.length)}</h3>
 
                             </div>
-                            <div className='flex items-center justify-end py-0.5 space-x-1 text-violet-500 dark:text-violet-500'>
+                            <div className='flex items-center justify-end py-0.5 space-x-1 text-indigo-600 dark:text-indigo-600'>
                                 <IoChatbox className='h-6 w-6' />
                                 <h3 className='font-josefinregular text-lg self-center'>{new Intl.NumberFormat().format(props.artwork.comments.length)}</h3>
 
@@ -230,7 +230,7 @@ const ExploreShow = (props) => {
                         </div>
                         <div className='flex flex-wrap'>
                             {props.artwork.tags.map((item, index) => (
-                                <div key={index} className="flex w-fit justify-center items-center m-0.5 font-medium py-1.5 px-2 rounded-full text-violet-500 dark:text-violet-500">
+                                <div key={index} className="flex w-fit justify-center items-center m-0.5 font-medium py-1.5 px-2 rounded-full text-indigo-600 dark:text-indigo-600">
                                     <div className="text-xs font-medium leading-none">#{item}</div>
                                 </div>
                             ))}
@@ -238,7 +238,7 @@ const ExploreShow = (props) => {
                         <div className='flex pl-1 justify-between'>
                             <div className='flex w-fit items-center space-x-3'>
                                 {props.artwork.artist.id === props.common.user.id ?
-                                    <div onClick={() => navigate(`/explore/${props.artwork._id}/edit`)} className='rounded-lg bg-violet-500 p-2 cursor-pointer ml-2'>
+                                    <div onClick={() => navigate(`/explore/${props.artwork._id}/edit`)} className='rounded-lg bg-indigo-600 p-2 cursor-pointer ml-2'>
                                         <MdEdit className="text-gray-200 h-6 w-6" />
                                     </div>
                                     : <div className="relative float-left flex">
@@ -266,12 +266,12 @@ const ExploreShow = (props) => {
                                             handleInvalidUser()
                                     }}
                                 />
-                                <IoShareSocialSharp onClick={() => setShareOpen(true)} className='h-7 w-7 cursor-pointer text-violet-500 dark:text-violet-500' />
+                                <IoShareSocialSharp onClick={() => setShareOpen(true)} className='h-7 w-7 cursor-pointer text-indigo-600 dark:text-indigo-600' />
                                 {props.user && props.user.bookmarked && !!props.user.bookmarked.find(item => item._id === props.artwork._id) ?
-                                    <MdBookmarkAdded className='h-7 w-7 text-violet-500 dark:text-violet-500' />
+                                    <MdBookmarkAdded className='h-7 w-7 text-indigo-600 dark:text-indigo-600' />
                                     :
                                     <MdBookmarkAdd
-                                        className='h-7 w-7 cursor-pointer text-violet-500 dark:text-violet-500'
+                                        className='h-7 w-7 cursor-pointer text-indigo-600 dark:text-indigo-600'
                                         onClick={() => {
                                             props.common.isAuthenticated ?
                                                 bookmarkIt()
@@ -350,7 +350,7 @@ const ExploreShow = (props) => {
                                 <div className='flex space-x-1'>
                                     {comment.likes.filter(item => item === props.user.id).length > 0 ?
                                         <button disabled>
-                                            <AiFillLike className='w-5 h-5 text-violet-500' />
+                                            <AiFillLike className='w-5 h-5 text-indigo-600' />
                                         </button>
                                         :
                                         <button
@@ -457,15 +457,15 @@ const StoreShow = (props) => {
                                         <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
                                     </svg>
                                 </div>
-                                <div className='flex text-md items-center text-josefinlight'>Seller Rating: <span className='flex ml-2 items-center text-indigo-500'>{Number.parseFloat(props.storeShow.seller.seller_rating).toFixed(1)}<ImStarFull className='ml-1 text-indigo-500' /></span></div>
+                                <div className='flex text-md items-center text-josefinlight'>Seller Rating: <span className='flex ml-2 items-center text-indigo-600'>{Number.parseFloat(props.storeShow.seller.seller_rating).toFixed(1)}<ImStarFull className='ml-1 text-indigo-600' /></span></div>
                             </div>
                             <span className="flex flex-col text-2xl text-neutral-700 dark:text-gray-300">
                                 ${Number.parseFloat(props.storeShow.price).toFixed(2)}
                                 <span className='text-xs text-rose-400'>including shipping & taxes</span>
                             </span>
                             <div className='flex space-x-3'>
-                                <button className="flex items-center font-caviar font-bold text-violet-500 bg-transparent border-2 border-violet-500 py-2 px-6 focus:outline-none hover:bg-violet-500 hover:text-gray-600 rounded-md">Add to Cart</button>
-                                <button className="flex items-center font-caviar font-bold text-gray-300 bg-violet-500 py-2 px-6 focus:outline-none hover:bg-violet-500 hover:text-gray-600 rounded-md">Checkout</button>
+                                <button className="flex items-center font-nunito font-bold text-indigo-600 bg-transparent border-2 border-indigo-600 py-2 px-6 focus:outline-none hover:bg-indigo-600 hover:text-gray-600 rounded-md">Add to Cart</button>
+                                <button className="flex items-center font-nunito font-bold text-gray-300 bg-indigo-600 py-2 px-6 focus:outline-none hover:bg-indigo-600 hover:text-gray-600 rounded-md">Checkout</button>
                             </div>
                             {/*<div className='pt-5 pr-3 space-y-2'>
                                 <hr className='rounded border-1 bg-neutral-700 dark:bg-neutral-300 border-neutral-700 dark:border-neutral-300 dark:border-neutral-200' />
@@ -481,7 +481,7 @@ const StoreShow = (props) => {
                                         <h1 className="title-font text-lg font-medium text-neutral-800 dark:text-neutral-300">title</h1>
                                         <div className="flex items-center flex-wrap justify-between">
                                             <div className='tracking-wide text-md font-medium text-gray-500 font-josefinregular'>$price</div>
-                                            <button className="bg-gradient-to-r font-caviar font-semibold from-violet-500 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-2 py-1 rounded-lg">Learn more</button>
+                                            <button className="bg-gradient-to-r font-nunito font-semibold from-indigo-600 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-2 py-1 rounded-lg">Learn more</button>
                                         </div>
                                     </div>
                                 </div>
@@ -492,7 +492,7 @@ const StoreShow = (props) => {
                             <img loading='lazy' className="w-full h-full object-cover object-center" src={fetchStoreImages(activeImg)} />
                             <div className='grid grid-cols-3 gap-2'>
                                 {props.storeShow.files.map((file, index) =>
-                                    <img key={index} onClick={() => setActiveImg(file)} loading='lazy' className={`w-full object-cover object-center rounded ${activeImg === file ? 'border-4 border-violet-500 dark:border-violet-400' : ''}`} src={fetchStoreImages(file)} />
+                                    <img key={index} onClick={() => setActiveImg(file)} loading='lazy' className={`w-full object-cover object-center rounded ${activeImg === file ? 'border-4 border-indigo-600 dark:border-violet-400' : ''}`} src={fetchStoreImages(file)} />
                                 )}
                             </div>
                         </div>

@@ -123,10 +123,10 @@ const openDialog = (value) => {
     let dialogTitle = '';
     if (value === 'openLoginDialog') {
         activeDialogName = 'LoginDialog';
-        dialogTitle = 'Sign in to Artyst';
+        dialogTitle = 'Sign in to artportal';
     } else if (value === 'openRegisterDialog') {
         activeDialogName = 'RegisterDialog';
-        dialogTitle = 'Sign Up';
+        dialogTitle = 'Sign up to artportal';
     } else if (value === 'openTokenDialog') {
         activeDialogName = 'TokenDialog';
         dialogTitle = 'Purchase Tokens';

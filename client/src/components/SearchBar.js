@@ -49,7 +49,7 @@ const SearchBar = (props) => {
     }
 
     return (
-        <div className='relative flex text-gray-300 dark:text-gray-600 w-8/12 items-center'>
+        <div className='relative flex xs:w-9/12 md:w-5/12 lg:w-6/12 text-gray-300 dark:text-gray-600 items-center'>
             <div
                 ref={searchModalRef}
                 onClick={() => {
@@ -60,10 +60,10 @@ const SearchBar = (props) => {
                 }}
                 className="flex w-full items-center bg-slate-300 dark:bg-neutral-800 rounded-xl p-0.5"
             >
-                <div className="flex relative items-center justify-center text-neutral-800 dark:text-gray-300 px-2">
-                    <MdSearch className='h-5 w-5' />
+                <div className="flex relative items-center justify-center px-2">
+                    <MdSearch className='h-5 w-5 text-gray-600 dark:text-gray-100/30' />
                 </div>
-                {props.activeSearch != '' && <div className="flex relative items-center justify-center rounded border-[1px] border-solid border-gray-200 text-neutral-800 dark:text-gray-300 h-7 w-7 mr-2">
+                {searchVal.length > 0 && <div className="flex relative items-center justify-center rounded border-2 border-gray-300 text-neutral-800 dark:text-gray-300 h-7 w-7 mr-2">
                     {props.activeSearch === 'artwork' && <FiAtSign className='h-4 w-4' />}
                     {props.activeSearch === 'tag' && <FaHashtag className='h-4 w-4' />}
                     {props.activeSearch === 'artist' && <FaGreaterThan className='h-4 w-4' />}
@@ -74,7 +74,7 @@ const SearchBar = (props) => {
                     value={searchVal}
                     placeholder="Search..."
                     autoComplete="off"
-                    className="w-full font-caviar font-semibold tracking-wide bg-transparent text-black dark:text-white placeholder-gray-600 dark:placeholder-gray-300 h-8 text-normal focus:outline-none"
+                    className="w-full font-nunito font-normal tracking-wide bg-transparent text-neutral-800 dark:text-gray-200 placeholder-gray-600 dark:placeholder-gray-100/30 h-8 text-base focus:outline-none"
                     onChange={(ev) => handleSearch(ev.target.value)}
                     onKeyPress={(ev) => {
                         if (ev.key === 'Enter') {
@@ -89,7 +89,8 @@ const SearchBar = (props) => {
                     </button>
                 }
                 <SearchModal
-                    open={props.activeSearch.length > 0}
+                    open={searchVal.length > 0}
+                    betaMsg={props.betaMsg}
                     searchVal={searchVal}
                     explore={props.explore}
                     searchList={props.searchList}

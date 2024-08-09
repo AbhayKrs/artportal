@@ -10,10 +10,10 @@ export const ExploreShowCarousel = (props) => {
       <div className="flex flex-col my-3 mx-4 md:mx-12 space-y-3 w-full justify-center">
         <div className='flex w-fit self-center items-center place-content-center'>
           <div className='flex fixed top-14 right-0 lg:right-[33.5%]  m-5 space-x-3 p-1 bg-neutral-100 dark:bg-neutral-800 rounded'>
-            {props.prevTrue ? <div onClick={props.prev} className='cursor-pointer flex justify-end py-0.5 space-x-2 text-gray-700 hover:text-violet-400 dark:text-gray-200 dark:hover:text-violet-500'>
+            {props.prevTrue ? <div onClick={props.prev} className='cursor-pointer flex justify-end py-0.5 space-x-2 text-gray-700 hover:text-violet-400 dark:text-gray-200 dark:hover:text-indigo-600'>
               <FaChevronLeft className='h-6 w-6' />
             </div> : ''}
-            {props.nextTrue ? <div onClick={props.next} className='cursor-pointer flex justify-end py-0.5 space-x-2 text-gray-700 hover:text-violet-400 dark:text-gray-200 dark:hover:text-violet-500'>
+            {props.nextTrue ? <div onClick={props.next} className='cursor-pointer flex justify-end py-0.5 space-x-2 text-gray-700 hover:text-violet-400 dark:text-gray-200 dark:hover:text-indigo-600'>
               <FaChevronRight className='h-6 w-6' />
             </div> : ''}
           </div>
@@ -165,8 +165,8 @@ export const StoreMultiCarousel = (props) => {
             <div key={index} className="carousel-item rounded text-center relative w-56 h-56 snap-start">
               <div className='h-full w-full aspect-square block bg-origin-padding bg-left-top bg-cover bg-no-repeat z-0'>
                 <img loading='lazy' src={item.image} alt={item.title} className="w-full aspect-square rounded" />
-                <div className="h-full w-full aspect-square block absolute top-0 left-0 transition-opacity duration-300 opacity-0 hover:opacity-75 bg-violet-500/75 z-10 rounded">
-                  <h3 className="absolute font-caviar font-semibold bottom-0 text-white py-6 px-3 mx-auto text-xl">
+                <div className="h-full w-full aspect-square block absolute top-0 left-0 transition-opacity duration-300 opacity-0 hover:opacity-75 bg-indigo-600/75 z-10 rounded">
+                  <h3 className="absolute font-nunito font-semibold bottom-0 text-white py-6 px-3 mx-auto text-xl">
                     {item.title}
                   </h3>
                 </div>

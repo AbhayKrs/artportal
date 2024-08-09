@@ -1,8 +1,8 @@
 {
-	"name": "artyst-v4",
+	"name": "artportal-v4",
 	"version": "1.0.0",
 	"type": "module",
-	"description": "Artyst Web - Art for the World!",
+	"description": "artportal Web - Art for the World!",
 	"main": "index.js",
 	"scripts": {
 		"start": "node server/index.js",

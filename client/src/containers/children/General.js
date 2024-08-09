@@ -93,7 +93,7 @@ export const General = (props) => {
                     <div className='flex py-2 px-4'>
                         <ul id='tabSlider' className="flex space-x-2 items-center">
                             {langList.map((lang, index) => {
-                                return <li key={index} onClick={() => setActiveLang(index)} className={index === activeLang ? "font-caviar text-sm font-bold tracking-wider text-gray-700 bg-violet-300 rounded-lg h-fit shadow" : "font-caviar text-sm font-bold tracking-wider text-gray-700 dark:text-gray-400 bg-slate-200 dark:bg-neutral-900 flex items-center shadow cursor-pointer rounded-lg h-fit"}>
+                                return <li key={index} onClick={() => setActiveLang(index)} className={index === activeLang ? "font-nunito text-sm font-bold tracking-wider text-gray-700 bg-violet-300 rounded-lg h-fit shadow" : "font-nunito text-sm font-bold tracking-wider text-gray-700 dark:text-gray-400 bg-slate-200 dark:bg-neutral-900 flex items-center shadow cursor-pointer rounded-lg h-fit"}>
                                     <div className="flex items-center">
                                         <span className="py-2 px-3 capitalize">{lang.label}</span>
                                     </div>
@@ -105,7 +105,7 @@ export const General = (props) => {
                 <div className=''>
                     <h2 className='text-2xl font-josefinlight font-semibold dark:text-gray-300'>Two Factor Authentication</h2>
                     <div className='font-josefinlight text-rose-400 font-semibold text-sm tracking-wider'>*Soon to come</div>
-                    {/* <button className="bg-gradient-to-r font-caviar font-semibold from-violet-500 to-purple-400 mx-4 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Setup</button> */}
+                    {/* <button className="bg-gradient-to-r font-nunito font-semibold from-indigo-600 to-purple-400 mx-4 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Setup</button> */}
                 </div>
             </div>
         </div >

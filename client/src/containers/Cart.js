@@ -65,7 +65,7 @@ const Cart = (props) => {
             case 0: return <div>
                 <div className='sm:scrollbar px-2 flex flex-col bg-slate-200 dark:bg-neutral-900 max-h-48 overflow-y-auto w-full divide-y-2 divide-neutral-800 text-gray-800 dark:text-gray-300 font-semibold dark:font-medium'>
                     {props.user.cart && props.user.cart.map(cartItem => (
-                        <div className='flex sm:flex-row flex-col gap-5 py-2 font-caviar text-md'>
+                        <div className='flex sm:flex-row flex-col gap-5 py-2 font-nunito text-md'>
                             <div className='flex gap-4'>
                                 <img loading='lazy' src={fetchStoreImages(cartItem.file)} className="w-20 h-20 object-cover rounded shadow-lg" alt="Thumbnail" />
                                 <div className='flex flex-col'>
@@ -133,7 +133,7 @@ const Cart = (props) => {
                             <div className="text-lg font-bold text-center text-gray-900 dark:text-gray-400">Final</div>
                             <div className="font-bold text-center text-gray-900 dark:text-gray-200">&#8377;{Number.parseFloat(final).toFixed(2)}</div>
                         </div>
-                        <button onClick={() => setCurrentIndex(1)} className="flex float-right justify-center w-fit p-3 mt-6 sm:mb-0 mb-6 font-medium text-white uppercase bg-violet-400 rounded-xl shadow item-center hover:bg-violet-500 focus:shadow-outline focus:outline-none">Select the delivery location</button>
+                        <button onClick={() => setCurrentIndex(1)} className="flex float-right justify-center w-fit p-3 mt-6 sm:mb-0 mb-6 font-medium text-white uppercase bg-violet-400 rounded-xl shadow item-center hover:bg-indigo-600 focus:shadow-outline focus:outline-none">Select the delivery location</button>
                     </div>
                 </div>
             </div>
@@ -171,7 +171,7 @@ const Cart = (props) => {
                     </div>
                     <div className='flex ml-auto mt-auto space-x-2'>
                         <button onClick={() => setCurrentIndex(0)} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-rose-400 rounded-xl shadow item-center hover:bg-rose-500 focus:shadow-outline focus:outline-none">Back</button>
-                        <button disabled={checkAddressValues()} onClick={() => setCurrentIndex(2)} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-violet-400 rounded-xl shadow item-center hover:bg-violet-500 disabled:bg-neutral-300 disabled:text-gray-500 disabled:dark:bg-neutral-700 disabled:dark:text-gray-500 focus:shadow-outline focus:outline-none">Proceed to Payment</button>
+                        <button disabled={checkAddressValues()} onClick={() => setCurrentIndex(2)} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-violet-400 rounded-xl shadow item-center hover:bg-indigo-600 disabled:bg-neutral-300 disabled:text-gray-500 disabled:dark:bg-neutral-700 disabled:dark:text-gray-500 focus:shadow-outline focus:outline-none">Proceed to Payment</button>
                     </div>
                 </div>
             </div>
@@ -186,20 +186,20 @@ const Cart = (props) => {
                     <div>
                         <label className="font-bold uppercase text-md mb-2 ml-1 text-gray-700 dark:text-gray-300">Name on Card</label>
                         <div>
-                            <input value={cardHolder} onChange={(ev) => setCardHolder(ev.target.value)} className="w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors" placeholder="John Smith" type="text" />
+                            <input value={cardHolder} onChange={(ev) => setCardHolder(ev.target.value)} className="w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-600 transition-colors" placeholder="John Smith" type="text" />
                         </div>
                     </div>
                     <div>
                         <label className="font-bold uppercase text-md mb-2 ml-1 text-gray-700 dark:text-gray-300">Card Number</label>
                         <div>
-                            <input value={cardNumber} onChange={(ev) => setCardNumber(ev.target.value)} className="w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors" placeholder="0000 0000 0000 0000" type="text" />
+                            <input value={cardNumber} onChange={(ev) => setCardNumber(ev.target.value)} className="w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-600 transition-colors" placeholder="0000 0000 0000 0000" type="text" />
                         </div>
                     </div>
                     <div className='flex items-end'>
                         <div className='flex space-x-2 w-1/2'>
                             <div className='flex flex-col'>
                                 <label className="font-bold uppercase text-md mb-2 ml-1 text-gray-700 dark:text-gray-300">Expiration Date</label>
-                                <select value={expDate.date} onChange={(ev) => setExpDate({ ...expDate, date: ev.target.value })} className="form-select w-fit py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors cursor-pointer">
+                                <select value={expDate.date} onChange={(ev) => setExpDate({ ...expDate, date: ev.target.value })} className="form-select w-fit py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-600 transition-colors cursor-pointer">
                                     <option value="1">01 - January</option>
                                     <option value="2">02 - February</option>
                                     <option value="3">03 - March</option>
@@ -214,7 +214,7 @@ const Cart = (props) => {
                                     <option value="12">12 - December</option>
                                 </select>
                             </div>
-                            <select value={expDate.year} onChange={(ev) => setExpDate({ ...expDate, year: ev.target.value })} className="form-select w-fit py-2 mb-1 mt-auto border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors cursor-pointer">
+                            <select value={expDate.year} onChange={(ev) => setExpDate({ ...expDate, year: ev.target.value })} className="form-select w-fit py-2 mb-1 mt-auto border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-600 transition-colors cursor-pointer">
                                 <option value="2020">2020</option>
                                 <option value="2021">2021</option>
                                 <option value="2022">2022</option>
@@ -230,14 +230,14 @@ const Cart = (props) => {
                         <div className='w-1/2'>
                             <label className="font-bold uppercase text-md mb-2 ml-1 text-gray-700 dark:text-gray-300">Security code</label>
                             <div>
-                                <input value={cvv} onChange={(ev) => setCvv(ev.target.value)} className="w-32 px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-500 transition-colors" placeholder="000" type="text" />
+                                <input value={cvv} onChange={(ev) => setCvv(ev.target.value)} className="w-32 px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-indigo-600 transition-colors" placeholder="000" type="text" />
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className='flex ml-auto mt-auto space-x-2'>
                     <button onClick={() => setCurrentIndex(1)} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-rose-400 rounded-xl shadow item-center hover:bg-rose-500 focus:shadow-outline focus:outline-none">Back</button>
-                    <button disabled={checkPaymentValues()} onClick={() => setCurrentIndex(3)} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-violet-400 rounded-xl shadow item-center hover:bg-violet-500 disabled:bg-neutral-300 disabled:text-gray-500 disabled:dark:bg-neutral-700 disabled:dark:text-gray-500 focus:shadow-outline focus:outline-none">Proceed to Confirmation</button>
+                    <button disabled={checkPaymentValues()} onClick={() => setCurrentIndex(3)} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-violet-400 rounded-xl shadow item-center hover:bg-indigo-600 disabled:bg-neutral-300 disabled:text-gray-500 disabled:dark:bg-neutral-700 disabled:dark:text-gray-500 focus:shadow-outline focus:outline-none">Proceed to Confirmation</button>
                 </div>
             </div>
 
@@ -282,7 +282,7 @@ const Cart = (props) => {
                 </div>
                 <div className='flex ml-auto mt-auto space-x-2'>
                     <button onClick={() => setCurrentIndex(2)} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-rose-400 rounded-xl shadow item-center hover:bg-rose-500 focus:shadow-outline focus:outline-none">Back</button>
-                    <button onClick={() => console.log('cart done')} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-violet-400 rounded-xl shadow item-center hover:bg-violet-500 disabled:bg-neutral-300 disabled:text-gray-500 disabled:dark:bg-neutral-700 disabled:dark:text-gray-500 focus:shadow-outline focus:outline-none">Checkout</button>
+                    <button onClick={() => console.log('cart done')} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-violet-400 rounded-xl shadow item-center hover:bg-indigo-600 disabled:bg-neutral-300 disabled:text-gray-500 disabled:dark:bg-neutral-700 disabled:dark:text-gray-500 focus:shadow-outline focus:outline-none">Checkout</button>
                 </div>
             </div >
         }
@@ -292,7 +292,7 @@ const Cart = (props) => {
         <div className=' bg-gray-200 dark:bg-darkBg flex w-full justify-center'>
             <div className="scrollbar w-full m-5 bg-slate-100 dark:bg-neutral-800 rounded-xl">
                 <div className='p-4 h-full flex flex-col'>
-                    <h1 className='text-violet-500 dark:text-violet-500 text-5xl font-semibold tracking-widest font-antipasto'>Cart</h1>
+                    <h1 className='text-indigo-600 dark:text-indigo-600 text-5xl font-semibold tracking-widest font-antipasto'>Cart</h1>
                     <Stepper activeIndex={currentIndex} />
                     {switchCartView()}
                 </div>

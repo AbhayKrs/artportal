@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 
+import LightMode from '../assets/images/LightMode.svg';
+import DarkMode from '../assets/images/DarkMode.svg';
+
 const ThemeToggle = (props) => {
     const { value, toggle } = props;
 
@@ -17,20 +20,9 @@ const ThemeToggle = (props) => {
     }
 
     return (
-        <div className='relative content-center'>
-            <button className='box-content block z-2 relative w-5 h-5 m-0 p-0 outline-none bg-none border-2 border-solid border-neutral-800 dark:border-gray-300 rounded-full transition-all cursor-pointer' onClick={toggleFn}>
-                <svg width="0" height="0" stroke="none">
-                    <defs>
-                        <clipPath id="myLightCurve" clipPathUnits="objectBoundingBox">
-                            <path d="m 0 1 V 0.5 Q 0.5 0.25 1 0.5 V 1 z" />
-                        </clipPath>
-                        <clipPath id="myDarkCurve" clipPathUnits="objectBoundingBox">
-                            <path d="m 0 1 V 0.5 Q 0.5 0.25 1 0.5 V 1 z" />
-                        </clipPath>
-                    </defs>
-                </svg>
-                <div style={{ clipPath: "url(#myDarkCurve)" }} className='absolute top-0 left-0 w-4 h-4 m-0.5 bg-neutral-800 dark:bg-gray-300 rounded-full transition-all' />
-            </button>
+        <div className='relative self-center hover:cursor-pointer w-5 h-5' onClick={toggleFn}>
+            <img className={`absolute inset-0 h-5 w-5 transition-all duration-500 ${value === "light" ? 'opacity-100' : 'opacity-0'}`} loading='lazy' src={LightMode} />
+            <img className={`absolute inset-0 h-5 w-5 transition-all duration-500 ${value === "dark" ? 'opacity-100' : 'opacity-0'}`} loading='lazy' src={DarkMode} />
         </div>
     )
 };

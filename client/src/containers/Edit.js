@@ -100,7 +100,7 @@ const ExploreEdit = (props) => {
         <div className="main-container bg-gray-200 dark:bg-darkBg p-8">
             <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-5">
                 <div className="flex justify-between pt-5">
-                    <span className='font-caviar text-3xl text-gray-700 dark:text-gray-300'>Edit</span>
+                    <span className='font-nunito text-3xl text-gray-700 dark:text-gray-300'>Edit</span>
                     <div>
                         <button onClick={() => navigate(`/explore/${id}`)} className="rounded-md px-3 py-1 bg-gray-100 hover:bg-gray-200 focus:shadow-outline focus:outline-none">
                             Cancel
@@ -158,7 +158,7 @@ const ExploreEdit = (props) => {
                                 {exploreTags.length === 0 ? '' :
                                     <div id='tagmenu' className='flex flex-wrap justify-center space-x-1 p-2'>
                                         {exploreTags.map(tag => (
-                                            <div className="flex justify-center items-center m-1 font-medium py-1 px-2 rounded-full text-indigo-100 bg-violet-500 border border-violet-700 ">
+                                            <div className="flex justify-center items-center m-1 font-medium py-1 px-2 rounded-full text-indigo-100 bg-indigo-600 border border-violet-700 ">
                                                 <div className="text-xs font-normal leading-none max-w-full flex-initial">{tag}</div>
                                                 <div className="flex flex-auto flex-row-reverse">
                                                     <MdClose className='feather feather-x cursor-pointer hover:text-indigo-400 rounded-full w-4 h-4 ml-1' />
@@ -309,7 +309,7 @@ const StoreUpload = (props) => {
     return (
         <div className="main-container bg-gray-200 dark:bg-darkBg p-5">
             <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-5">
-                <span className='font-caviar text-3xl text-gray-700 dark:text-gray-300'>List Product to Store</span>
+                <span className='font-nunito text-3xl text-gray-700 dark:text-gray-300'>List Product to Store</span>
                 <div className='flex lg:flex-row flex-col mt-3 lg:space-x-4 md:space-y-2'>
                     <div className='w-full'>
                         <span className='font-josefinlight font-semibold text-gray-700 dark:text-gray-300'>Files<span className='font-josefinlight text-rose-400 text-md'>*</span></span>
@@ -317,7 +317,7 @@ const StoreUpload = (props) => {
                             <div className="flex flex-col justify-center items-center border-dashed space-y-2 rounded-lg border-2 border-gray-400 py-8" onDrop={(ev) => dropHandler(ev)} onDragOver={(ev) => dragOverHandler(ev)} >
                                 <p className="font-semibold text-gray-700 dark:text-gray-300 flex flex-wrap justify-center">Drag files</p>
                                 <p className="font-semibold text-gray-700 dark:text-gray-300">OR</p>
-                                <label htmlFor="file-upload" className='bg-violet-500 text-white font-caviar font-semibold py-1 px-2 rounded'>
+                                <label htmlFor="file-upload" className='bg-indigo-600 text-white font-nunito font-semibold py-1 px-2 rounded'>
                                     Select files
                                 </label>
                                 <input id="file-upload" className='hidden' type="file" multiple onChange={onImageChange} />
