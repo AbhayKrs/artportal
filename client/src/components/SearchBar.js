@@ -54,7 +54,6 @@ const SearchBar = (props) => {
                 ref={searchModalRef}
                 onClick={() => {
                     if (props.activeSearch === '') {
-                        props.fetchSearchList('artwork', searchVal)
                         props.setSearchType('artwork');
                     }
                 }}

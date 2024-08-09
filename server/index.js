@@ -21,6 +21,7 @@ import artworks from './routes/artworks.js';
 import store from './routes/store.js';
 import admin from './routes/admin.js';
 import common from './routes/common.js';
+import search from './routes/search.js';
 
 dotenv.config();
 //Database Connection Established
@@ -52,6 +53,7 @@ app.use(`/api/${currentVersion}/auth`, auth);
 app.use(`/api/${currentVersion}/users`, users);
 app.use(`/api/${currentVersion}/store`, store);
 app.use(`/api/${currentVersion}/common`, common);
+app.use(`/api/${currentVersion}/search`, search);
 
 app.get(`/api/${currentVersion}/tagger/:filename`, (req, res) => {
     try {
@@ -72,16 +74,6 @@ app.get(`/api/${currentVersion}/tagger/:filename`, (req, res) => {
         return res.status(404).json({ msg: err.name });
     }
 });
-
-// app.use('/api/tagger/:filename', async (req, res) => {
-//     try {
-//         const __dirname = path.resolve();
-//         res.sendFile(__dirname + '/tagger/' + req.params.filename);
-//     } catch (err) {
-//         console.log(err);
-//         res.status(500).send('Unable to fetch explore');
-//     }
-// })
 
 /* ################# ADMIN ROUTES ################# */
 app.use(`/admin/${currentVersion}`, admin);

@@ -19,10 +19,10 @@ export const googleRedirectURL = baseURL + `/auth/google/login`;
 //GET Request API's
 export const googleLoginAPI = () => get_api.get(`/auth/google/login`);
 export const artworkListAPI = () => get_api.get(`/artworks`);
-export const searchAPI = (type, value) => get_api.get(`/artworks/search?type=${type}&value=${value}`);
+export const searchAPI = (type, value) => get_api.get(`/search?type=${type}&value=${value}`);
 export const exploreItemAPI = (id, payload) => get_api.get(`/artworks/${id}`, payload);
 export const filterExploreListAPI = (filter, period) => get_api.get(`/artworks?filter=${filter}&period=${period}`);
-export const searchFilterExploreListAPI = (type, value, filter, period) => get_api.get(`/artworks/search?type=${type}&value=${value}&filter=${filter}&period=${period}`);
+export const searchFilterExploreListAPI = (type, value, filter, period) => get_api.get(`/search?type=${type}&value=${value}&filter=${filter}&period=${period}`);
 export const sellerListAPI = () => get_api.get('/users?type=seller');
 export const storeListAPI = () => get_api.get(`/store`);
 export const storeItemAPI = storeID => get_api.get(`/store/${storeID}`);
