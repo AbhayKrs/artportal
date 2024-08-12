@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { IoCloseSharp, IoCloseCircle } from 'react-icons/io5';
 import { HiPlus, HiMinus, HiOutlineMail } from 'react-icons/hi';
-import AddressMap from '../components/AddressMap';
 import Stepper from '../components/Stepper';
 
 import { fetchStoreImages } from '../api';
@@ -139,7 +138,6 @@ const Cart = (props) => {
             </div>
 
             case 1: return <div className='flex sm:flex-row flex-col h-full gap-4'>
-                <AddressMap />
                 <div className="flex flex-col w-full">
                     <div className="space-y-4">
                         <div className="flex flex-col w-full space-y-2">

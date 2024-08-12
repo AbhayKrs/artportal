@@ -19,8 +19,3 @@
 	src: url("./assets/fonts/NunitoBold.ttf");
 	font-weight: bold;
 }
-
-.leaflet-container {
-	height: 100%;
-	width: 100%;
-}

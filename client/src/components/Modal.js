@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { googleRedirectURL } from '../api';
 
 import { AwardTabPanel } from './TabPanel';
-import AddressMap from './AddressMap';
 import Stepper from './Stepper';
 import { fetchArtworkImages, fetchUserImages } from '../api';
 
@@ -550,7 +549,6 @@ export const CartModal = (props) => {
             </div>
 
             case 1: return <div className='flex sm:flex-row flex-col h-full gap-4'>
-                <AddressMap />
                 <div className="flex flex-col w-full">
                     <div className="space-y-4">
                         <div className="flex flex-col w-full space-y-2">
