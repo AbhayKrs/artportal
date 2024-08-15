@@ -23,7 +23,6 @@ import common from './server/routes/common.js';
 import search from './server/routes/search.js';
 
 dotenv.config();
-//Database Connection Established
 connectDB();
 
 import { taggergfs } from './server/config/gridfsconfig.js';
@@ -38,9 +37,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 if (process.env.NODE_ENV === 'production') {
     const __dirname = path.resolve();
-    app.use(express.static(path.join(__dirname, '/client/build')));
+    app.use(express.static(path.join(__dirname, '/web/build')));
     app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+        res.sendFile(path.resolve(__dirname, 'web', 'build', 'index.html'))
     })
 } else {
     app.get(`/api/${process.env.API_VERSION}`, (req, res) => {
