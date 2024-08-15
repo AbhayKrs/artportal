@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 import { api_viewerID, api_tags, api_signIn, api_signUp, api_googleLogin, api_userDetails, api_updateUserData, api_deleteBookmark, api_search, api_userExploreList, api_userStoreList, api_deleteStoreItem, api_userCartList, api_avatarList, api_awardList, api_locationsList, api_editAvatar, api_deleteCartItem, api_updateUserCart, api_addUserCart } from '../../utils/api'
-import { r_deleteBookmark, r_headerDialogOpen, r_setAuthError, r_setAvatars, r_setAwards, r_setCartList, r_setLocations, r_setSearchList, r_setSnackMessage, r_setTags, r_setUserExploreList, r_setUserStoreList, r_setViewerID, r_signIn, r_signUp } from '../reducers/common.reducers';
+import { r_deleteBookmark, r_headerDialogClose, r_headerDialogOpen, r_setAuthError, r_setAvatars, r_setAwards, r_setCartList, r_setLocations, r_setSearchList, r_setSnackMessage, r_setTags, r_setUserExploreList, r_setUserStoreList, r_setViewerID, r_signIn, r_signUp } from '../reducers/common.reducers';
 
 import jwt_decode from 'jwt-decode';
 import setAuthToken from '../../utils/setAuthToken';
@@ -40,7 +40,7 @@ export const a_handleSignIn = createAsyncThunk("a_handleSignIn", async (payload,
         setAuthToken(token);
         const userData = jwt_decode(token);
         dispatch(r_signIn(userData));
-        dispatch(r_headerDialogOpen());
+        dispatch(r_headerDialogClose());
         return;
     }).catch(err => {
         if (err.response) {
@@ -63,7 +63,7 @@ export const a_handleSignUp = createAsyncThunk("a_handleSignUp", async (payload,
         setAuthToken(token);
         const userData = jwt_decode(token);
         dispatch(r_signUp(userData));
-        dispatch(r_headerDialogOpen());
+        dispatch(r_headerDialogClose());
         return;
     }).catch(err => {
         if (err.response) {

@@ -5,7 +5,6 @@ import { artworkgfs, artworkUpl } from '../config/gridfsconfig.js';
 
 //Middleware
 import { protect, admin } from '../middleware/authMw.js';
-import { checkObjectId } from '../middleware/checkObjectId.js';
 
 //Import Schemas
 import Artworks from '../models/artwork.js';

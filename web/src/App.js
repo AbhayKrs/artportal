@@ -6,6 +6,7 @@ import store from './store';
 
 import { r_verifyUser, r_setSnackMessage } from './store/reducers/common.reducers';
 import { a_fetchCartList, a_fetchUserExploreList, a_fetchUserStoreList, a_fetchViewerID } from './store/actions/common.actions';
+import setAuthToken from './utils/setAuthToken';
 
 import Header from './containers/Header';
 import Footer from './containers/Footer';
@@ -67,17 +68,19 @@ const Layout = (props) => {
     let token = null;
     if (localStorage.jwtToken) {
       token = localStorage.jwtToken;
+      setAuthToken(token);
+
       const userID = common.user.id;
-      const decoded = jwt_decode(token);
-      dispatch(r_verifyUser(decoded));
+      dispatch(r_verifyUser(token));
       dispatch(a_fetchUserExploreList(userID));
       dispatch(a_fetchUserStoreList(userID));
       dispatch(a_fetchCartList());
     } else if (sessionStorage.jwtToken) {
       token = sessionStorage.jwtToken;
+      setAuthToken(token);
+
       const userID = common.user.id;
-      const decoded = jwt_decode(token);
-      dispatch(r_verifyUser(decoded));
+      dispatch(r_verifyUser(token));
       dispatch(a_fetchUserExploreList(userID));
       dispatch(a_fetchUserStoreList(userID));
       dispatch(a_fetchCartList());

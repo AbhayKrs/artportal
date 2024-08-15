@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import passport from 'passport';
 import path from 'path';
 import { notFound, errorHandler } from './server/middleware/errorMw.js';
 

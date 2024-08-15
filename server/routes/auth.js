@@ -126,8 +126,7 @@ router.post("/signup", (req, res) => {
 
 // @route   GET api/v1.01/auth/google/login --- Authenticate user via Google --- PUBLIC
 router.get('/google/login', passport.authenticate('google', {
-    scope: ['email', 'profile'],
-    // prompt: 'select_account'
+    scope: ['profile', 'email']
 }));
 
 // @route   GET api/v1.01/auth/google/callback --- Google Authenticatation callback --- PUBLIC
@@ -135,7 +134,7 @@ router.get('/google/callback', passport.authenticate('google', {
     failureRedirect: '/login',
     session: false
 }), async (req, res) => {
-    const authenticatedUser = await User.findOne({ google_id: req.user.id });
+    const authenticatedUser = await User.findOne({ _id: req.user.id });
     const payload = {
         id: authenticatedUser._id,
         name: authenticatedUser.name,
