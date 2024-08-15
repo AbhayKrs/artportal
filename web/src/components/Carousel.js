@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { fetchArtworkImages } from '../utils/api';
+import { api_fetchArtworkImages } from '../utils/api';
 
 import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
@@ -17,12 +17,12 @@ export const ExploreShowCarousel = ({ prevTrue, nextTrue, data, currentImage, se
               <FaChevronRight className='h-6 w-6' />
             </div> : ''}
           </div>
-          <img loading='lazy' src={`${fetchArtworkImages(currentImage)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
+          <img loading='lazy' src={`${api_fetchArtworkImages(currentImage)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
         </div>
         {secondaryImages.length > 0 &&
           <div className='flex w-fit flex-col self-center items-center space-y-3 place-content-center'>
             {secondaryImages.map((image, index) => (
-              <img loading='lazy' key={index} src={`${fetchArtworkImages(image)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
+              <img loading='lazy' key={index} src={`${api_fetchArtworkImages(image)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
             ))}
           </div>
         }
@@ -89,7 +89,7 @@ export const HomeSingleCarousel = ({ itemCount, images }) => {
         {images.length > 0 && images[currentIndex]?.file && <div className="active float-left w-full h-full">
           <img
             loading='lazy'
-            src={fetchArtworkImages(images[currentIndex].file)}
+            src={api_fetchArtworkImages(images[currentIndex].file)}
             className={`block w-full h-full object-cover transition-opacity duration-700 ease-in  ${fade ? 'opacity-100' : 'opacity-0'}`}
             alt="Wild Landscape"
           />

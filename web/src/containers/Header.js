@@ -2,8 +2,9 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 
-import { switchTheme, handleSignIn, handleSignout, setSearchType, fetchSearchList, clearSearchList, handleHeaderDialogOpen, setAuthError, handleHeaderDialogClose, handleSignUp, handleGoogleAuth, handleAuthMsgClose } from '../store/reducers/common.reducers';
-import { fetchUserImages } from '../utils/api';
+import { a_handleSignIn, a_fetchSearchList, a_handleSignUp, a_handleGoogleAuth } from '../store/actions/common.actions';
+import { r_switchTheme, r_handleSignout, r_setSearchType, r_clearSearchList, r_headerDialogOpen, r_headerDialogClose, r_setAuthError, r_authMsgClose } from '../store/reducers/common.reducers';
+import { api_fetchUserImages } from '../utils/api';
 
 import { TokenModal, LoginModal, RegisterModal, SignupSuccessModal } from '../components/Modal';
 import SearchBar from '../components/SearchBar';
@@ -67,12 +68,12 @@ const Header = ({ betaMsg, setBetaMsg }) => {
     }, [mobileMenu])
 
     const handleThemeToggle = () => {
-        dispatch(switchTheme());
+        dispatch(r_switchTheme());
     }
 
     const handleSignout = () => {
         try {
-            dispatch(handleSignout({}));
+            dispatch(r_handleSignout({}));
         } catch (err) {
             console.log('---error handleSignOut', err);
         }
@@ -104,7 +105,7 @@ const Header = ({ betaMsg, setBetaMsg }) => {
                         <div className={`absolute ${activeRoute.includes('/store') ? 'block' : 'hidden group-hover:block'} h-1 w-2/6 bottom-[-2px] left-0 rounded text-2xl bg-indigo-600 dark:bg-indigo-600`}></div>
                     </Link>
                 </div>
-                <SearchBar betaMsg={betaMsg} tags={common.tags} explore={explore} activeSearch={common.activeSearch} searchList={common.searchList} setSearchType={(type) => dispatch(setSearchType(type))} fetchSearchList={(type, value) => dispatch(fetchSearchList(type, value))} clearSearchList={() => dispatch(clearSearchList())} />
+                <SearchBar betaMsg={betaMsg} tags={common.tags} explore={explore} activeSearch={common.activeSearch} searchList={common.searchList} setSearchType={(type) => dispatch(r_setSearchType(type))} fetchSearchList={(type, value) => dispatch(a_fetchSearchList(type, value))} clearSearchList={() => dispatch(r_clearSearchList())} />
                 <div className='hidden sm:flex flex-row space-x-4 justify-end'>
                     {common.isAuthenticated ?
                         <>
@@ -127,8 +128,8 @@ const Header = ({ betaMsg, setBetaMsg }) => {
                         </>
                         :
                         <>
-                            <button onClick={() => dispatch(handleHeaderDialogOpen('openLoginDialog'))} className='whitespace-nowrap self-center bg-neutral-800 dark:bg-gray-300 text-gray-200 dark:text-neutral-800 hover:bg-neutral-700 dark:hover:bg-gray-200 py-1 px-3 rounded-md text-base font-nunito font-bold tracking-wide'>Sign In</button>
-                            <button onClick={() => dispatch(handleHeaderDialogOpen('openRegisterDialog'))} className='whitespace-nowrap self-center border border-gray-800 dark:border-gray-300 text-neutral-800 dark:text-gray-200 hover:bg-slate-300 dark:hover:bg-neutral-500/20 py-1 px-3 ml-3 rounded-md text-base font-nunito font-bold tracking-wide'>Sign Up</button>
+                            <button onClick={() => dispatch(r_headerDialogOpen('openLoginDialog'))} className='whitespace-nowrap self-center bg-neutral-800 dark:bg-gray-300 text-gray-200 dark:text-neutral-800 hover:bg-neutral-700 dark:hover:bg-gray-200 py-1 px-3 rounded-md text-base font-nunito font-bold tracking-wide'>Sign In</button>
+                            <button onClick={() => dispatch(r_headerDialogOpen('openRegisterDialog'))} className='whitespace-nowrap self-center border border-gray-800 dark:border-gray-300 text-neutral-800 dark:text-gray-200 hover:bg-slate-300 dark:hover:bg-neutral-500/20 py-1 px-3 ml-3 rounded-md text-base font-nunito font-bold tracking-wide'>Sign Up</button>
                         </>
                     }
                     <Link to='/settings' className='relative self-center hover:cursor-pointer'>
@@ -138,13 +139,13 @@ const Header = ({ betaMsg, setBetaMsg }) => {
                     {common.isAuthenticated ?
                         <div ref={userMenuRef} className='relative group'>
                             <button onClick={() => setUserMenuActive(!userMenuActive)} className={`flex w-full m-auto p-1.5 justify-center items-center ${userMenuActive ? 'bg-slate-300 dark:bg-[#313135] rounded-md' : null}`} >
-                                {user.avatar.icon.length > 0 && <img loading='lazy' alt='user' src={fetchUserImages(user.avatar.icon)} className='w-6 h-6 mx-auto' />}
+                                {user.avatar.icon.length > 0 && <img loading='lazy' alt='user' src={api_fetchUserImages(user.avatar.icon)} className='w-6 h-6 mx-auto' />}
                             </button>
                             <div className={`container fixed ${betaMsg === true ? 'top-[4.75rem]' : 'top-[3.25rem]'} w-80 p-1 ${userMenuActive ? 'visible opacity-100' : 'invisible opacity-0'} bg-slate-300 dark:bg-[#313135] rounded-lg`} style={{ right: window.innerWidth >= 1024 ? '0.75rem' : '0.2rem' }}>
                                 <div className='flex flex-col scrollbar overflow-auto p-1 pr-2 h-full' style={{ maxHeight: 'calc(100vh - 5rem)' }}>
                                     <div className='flex flex-row items-center space-x-2 p-4'>
                                         <div className='flex relative w-14 h-14 justify-center items-center'>
-                                            <img loading='lazy' alt='user' src={fetchUserImages(user.avatar.icon)} className='mt-0.5' />
+                                            <img loading='lazy' alt='user' src={api_fetchUserImages(user.avatar.icon)} className='mt-0.5' />
                                         </div>
                                         <div className='flex flex-col'>
                                             <p className='text-gray-900 dark:text-gray-200 text-3xl font-nunito font-bold'>{user.name}</p>
@@ -236,7 +237,7 @@ const Header = ({ betaMsg, setBetaMsg }) => {
                             <div className='flex flex-row justify-between'>
                                 <div className='flex flex-row gap-2'>
                                     <div className='flex relative w-14 h-14 justify-center items-center'>
-                                        <img loading='lazy' alt='user' src={fetchUserImages(user.avatar.icon)} className='mt-0.5' />
+                                        <img loading='lazy' alt='user' src={api_fetchUserImages(user.avatar.icon)} className='mt-0.5' />
                                     </div>
                                     <div className='flex flex-col'>
                                         <p className='text-gray-900 dark:text-gray-200 text-3xl font-nunito font-bold'>{user.name}</p>
@@ -271,8 +272,8 @@ const Header = ({ betaMsg, setBetaMsg }) => {
                             </div>
                         </div> :
                         <div className='flex flex-row w-full space-x-3 mb-2'>
-                            <button onClick={() => dispatch(handleHeaderDialogOpen('openLoginDialog'))} className='w-full bg-gray-200 dark:bg-neutral-800 text-gray-900 dark:text-gray-200 px-3 py-1 rounded-md text-lg tracking-wide font-nunito font-bold dark:font-normal'>Sign In</button>
-                            <button onClick={() => dispatch(handleHeaderDialogOpen('openRegisterDialog'))} className='w-full border border-gray-200 dark:border-neutral-800 text-gray-900 dark:text-gray-200 px-3 py-1 rounded-md text-lg tracking-wide font-nunito font-bold dark:font-normal'>Sign Up</button>
+                            <button onClick={() => dispatch(r_headerDialogOpen('openLoginDialog'))} className='w-full bg-gray-200 dark:bg-neutral-800 text-gray-900 dark:text-gray-200 px-3 py-1 rounded-md text-lg tracking-wide font-nunito font-bold dark:font-normal'>Sign In</button>
+                            <button onClick={() => dispatch(r_headerDialogOpen('openRegisterDialog'))} className='w-full border border-gray-200 dark:border-neutral-800 text-gray-900 dark:text-gray-200 px-3 py-1 rounded-md text-lg tracking-wide font-nunito font-bold dark:font-normal'>Sign Up</button>
                         </div>
                     }
                     <div className='flex flex-row justify-between items-center rounded-md px-2'>
@@ -348,11 +349,11 @@ const Header = ({ betaMsg, setBetaMsg }) => {
                     title={common.dialogTitle}
                     banner={common.loginImage}
                     error={common.authError}
-                    setAuthError={(msg) => dispatch(setAuthError(msg))}
-                    onClose={() => dispatch(handleHeaderDialogClose())}
-                    onClick={() => dispatch(handleHeaderDialogClose())}
-                    openRegister={() => dispatch(handleHeaderDialogOpen('openRegisterDialog'))}
-                    handleSignIn={(stayLoggedIn, userData) => dispatch(handleSignIn({ stayLoggedIn, userData }))}
+                    setAuthError={(msg) => dispatch(r_setAuthError(msg))}
+                    onClose={() => dispatch(r_headerDialogClose())}
+                    onClick={() => dispatch(r_headerDialogClose())}
+                    openRegister={() => dispatch(r_headerDialogOpen('openRegisterDialog'))}
+                    handleSignIn={(stayLoggedIn, userData) => dispatch(a_handleSignIn({ stayLoggedIn, userData }))}
                 />
             }
             {
@@ -362,12 +363,12 @@ const Header = ({ betaMsg, setBetaMsg }) => {
                     title={common.dialogTitle}
                     banner={common.signupImage}
                     error={common.authError}
-                    setAuthError={(msg) => dispatch(setAuthError(msg))}
-                    onClose={() => dispatch(handleHeaderDialogClose())}
-                    onClick={() => dispatch(handleHeaderDialogClose())}
-                    openLogin={() => dispatch(handleHeaderDialogOpen('openLoginDialog'))}
-                    handleSignUp={(userData) => dispatch(handleSignUp(userData))}
-                    handleGoogleAuth={() => dispatch(handleGoogleAuth())}
+                    setAuthError={(msg) => dispatch(r_setAuthError(msg))}
+                    onClose={() => dispatch(r_headerDialogClose())}
+                    onClick={() => dispatch(r_headerDialogClose())}
+                    openLogin={() => dispatch(r_headerDialogOpen('openLoginDialog'))}
+                    handleSignUp={(userData) => dispatch(a_handleSignUp(userData))}
+                    handleGoogleAuth={() => dispatch(a_handleGoogleAuth())}
                 />
             }
             {
@@ -386,8 +387,8 @@ const Header = ({ betaMsg, setBetaMsg }) => {
                     open={common.signupSuccess}
                     user={user}
                     title={`Welcome to artportal, ${user.name}!`}
-                    onClose={() => dispatch(handleAuthMsgClose())}
-                    onClick={() => dispatch(handleAuthMsgClose())}
+                    onClose={() => dispatch(r_authMsgClose())}
+                    onClick={() => dispatch(r_authMsgClose())}
                 />
             }
         </nav >

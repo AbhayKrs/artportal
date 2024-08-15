@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { IoCloseSharp } from 'react-icons/io5';
 import TokenIcon from '../assets/images/money.png';
 
-import { fetchUserImages } from '../utils/api';
+import { api_fetchUserImages } from '../utils/api';
 
 export const AwardConfirmModal = ({ open, awardData, onClose, handleAwardExplore }) => {
     return (
@@ -11,7 +11,7 @@ export const AwardConfirmModal = ({ open, awardData, onClose, handleAwardExplore
                 <div className='p-4 flex flex-col'>
                     <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute right-0 top-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                     <div className='flex items-center space-x-2 my-2'>
-                        {awardData ? <img loading='lazy' className='h-12 w-12' src={fetchUserImages(awardData.icon)} /> : null}
+                        {awardData ? <img loading='lazy' className='h-12 w-12' src={api_fetchUserImages(awardData.icon)} /> : null}
                         <div className='tracking-widest flex-row'>
                             <p className='text-violet-800 font-josefinregular text-2xl font-semibold '>testing award confirm</p>
                             <span className='flex items-center font-bold text-lg text-emerald-500'><img loading='lazy' src={TokenIcon} className='h-5 w-5 mr-1' />500</span>

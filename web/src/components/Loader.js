@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { ReactComponent as Artportal_logo } from '../assets/icons/artportal_logo.svg';
 
-const Loader = ({ open, setLoader }) => {
+const Loader = ({ open, r_setLoader }) => {
     useEffect(() => {
         if (open) {
             document.querySelector("body").style.overflow = 'hidden';
             setTimeout(() => {
-                setLoader(false);
+                r_setLoader(false);
             }, 1500)
         } else {
             document.querySelector("body").style.overflow = 'auto';

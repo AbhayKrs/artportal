@@ -3,10 +3,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 
-import { fetchExploreItem, fetchExploreList, handleDislikeExplore, handleLikeExplore, viewExploreItem, handleAwardExplore, handleDeleteComment, handleEditComment, handleDislikeComment, handleLikeComment, handleBookmark, handleAddComment } from '../store/reducers/explore.reducers';
-import { setLoader, fetchAwards, refreshUserDetails, setSnackMessage } from '../store/reducers/common.reducers';
-import { fetchStoreItem, fetchStoreList } from '../store/reducers/store.reducers';
-import { fetchArtworkImages, fetchUserImages, fetchStoreImages } from '../utils/api';
+import { a_fetchExploreItem, a_fetchExploreList, a_handleDislikeExplore, a_handleLikeExplore, a_handleAwardExplore, a_handleDeleteComment, a_handleEditComment, a_handleDislikeComment, a_handleLikeComment, a_bookmarkExploreItem, a_handleAddComment } from '../store/actions/explore.actions';
+import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducers';
+import { a_fetchAwards, a_refreshUserDetails } from '../store/actions/common.actions';
+import { a_fetchStoreItem, a_fetchStoreList } from '../store/actions/store.actions';
+import { api_fetchArtworkImages, api_fetchUserImages, api_fetchStoreImages } from '../utils/api';
 
 import { ExploreShowCarousel } from '../components/Carousel';
 import { AwardModal, ShareModal } from '../components/Modal';
@@ -20,7 +21,6 @@ import { MdEdit, MdEditOff, MdBookmarkAdd, MdBookmarkAdded, MdOutlineAddShopping
 import { ImPlus, ImStarFull } from 'react-icons/im';
 import { TiInfoLarge } from 'react-icons/ti';
 import AwardIcon from '../assets/images/gift.png';
-
 
 const ExploreShow = (props) => {
     const dispatch = useDispatch();
@@ -45,10 +45,10 @@ const ExploreShow = (props) => {
 
     useEffect(async () => {
         window.scrollTo(0, 0);
-        dispatch(setLoader(true));
-        await dispatch(fetchExploreList());
-        await dispatch(fetchExploreItem(id));
-        // await dispatch(fetchAwards());
+        dispatch(r_setLoader(true));
+        await dispatch(a_fetchExploreList());
+        await dispatch(a_fetchExploreItem(id));
+        // await dispatch(a_fetchAwards());
         // await dispatch(viewExploreItem(id));
     }, [id])
 
@@ -77,50 +77,50 @@ const ExploreShow = (props) => {
 
     const submitComment = async (event) => {
         event.preventDefault();
-        await dispatch(handleAddComment({ exploreID: id, commentText: comment }));
-        setTimeout(() => dispatch(fetchExploreItem(id)), 2000)
+        await dispatch(a_handleAddComment({ exploreID: id, commentText: comment }));
+        setTimeout(() => dispatch(a_fetchExploreItem(id)), 2000)
         setComment('');
     }
 
     const handleToggleLike = async (likes) => {
         if (likes.includes(user.id)) {
-            await dispatch(handleDislikeExplore(id));
+            await dispatch(a_handleDislikeExplore(id));
         } else {
-            await dispatch(handleLikeExplore(id));
+            await dispatch(a_handleLikeExplore(id));
         }
-        dispatch(fetchExploreItem(id));
+        dispatch(a_fetchExploreItem(id));
     }
 
-    const handleAwardExplore = async (award) => {
-        await dispatch(handleAwardExplore({ exploreID: id, userID: user.id, award }));
+    const a_handleAwardExplore = async (award) => {
+        await dispatch(a_handleAwardExplore({ exploreID: id, userID: user.id, award }));
         setTimeout(() => {
-            dispatch(refreshUserDetails(user.id));
-            dispatch(fetchExploreItem(id));
+            dispatch(a_refreshUserDetails(user.id));
+            dispatch(a_fetchExploreItem(id));
         }, 2000);
     }
 
     const onDeleteComment = async (comment) => {
-        await dispatch(handleDeleteComment({ exploreID: id, commentID: comment._id }));
-        dispatch(fetchExploreItem(id));
+        await dispatch(a_handleDeleteComment({ exploreID: id, commentID: comment._id }));
+        dispatch(a_fetchExploreItem(id));
     }
 
     const onEditComment = async (comment) => {
-        await dispatch(handleEditComment({ exploreID: id, newComment: editComment, commentID: comment._id }));
+        await dispatch(a_handleEditComment({ exploreID: id, newComment: editComment, commentID: comment._id }));
         setEditForm(false);
         setTimeout(() => {
-            dispatch(fetchExploreItem(id));
+            dispatch(a_fetchExploreItem(id));
         }, 2000);
         return false;
     }
 
     const handleToggleCommentLike = async (status, comment) => {
         if (!status) {
-            await dispatch(handleDislikeComment({ exploreID: id, commentID: comment._id }));
+            await dispatch(a_handleDislikeComment({ exploreID: id, commentID: comment._id }));
         } else {
-            await dispatch(handleLikeComment({ exploreID: id, commentID: comment._id }));
+            await dispatch(a_handleLikeComment({ exploreID: id, commentID: comment._id }));
         }
         setTimeout(() => {
-            dispatch(fetchExploreItem(id));
+            dispatch(a_fetchExploreItem(id));
         }, 2000);
     }
 
@@ -157,7 +157,7 @@ const ExploreShow = (props) => {
             message: 'User not logged in. Please Sign In/Sign Up to perform the action.',
             type: 'warning'
         }
-        dispatch(setSnackMessage(msgData));
+        dispatch(r_setSnackMessage(msgData));
     }
 
     const bookmarkIt = () => {
@@ -168,16 +168,16 @@ const ExploreShow = (props) => {
             author: artwork.artist,
             description: artwork.description
         }
-        dispatch(handleBookmark({ userID: user.id, bookmarkData })).then(() => {
+        dispatch(a_bookmarkExploreItem({ userID: user.id, bookmarkData })).then(() => {
             const msgData = {
                 open: true,
                 message: 'Added to Bookmarks!',
                 type: 'success'
             }
-            dispatch(setSnackMessage(msgData));
+            dispatch(r_setSnackMessage(msgData));
             setTimeout(() => {
-                dispatch(refreshUserDetails(user.id));
-                dispatch(fetchExploreItem(id));
+                dispatch(a_refreshUserDetails(user.id));
+                dispatch(a_fetchExploreItem(id));
             }, 2000)
         }).catch(err => {
             const msgData = {
@@ -185,7 +185,7 @@ const ExploreShow = (props) => {
                 message: 'Add to Bookmark failed!',
                 type: 'warning'
             }
-            dispatch(setSnackMessage(msgData));
+            dispatch(r_setSnackMessage(msgData));
         })
     }
 
@@ -197,8 +197,8 @@ const ExploreShow = (props) => {
                 data={explore.artworks}
                 currentImage={artwork.files[0]}
                 secondaryImages={artwork.files.filter((image, index) => index !== 0)}
-                prev={() => { navigate(`/explore/${prev}`); dispatch(fetchExploreItem(prev)); }}
-                next={() => { navigate(`/explore/${next}`); dispatch(fetchExploreItem(next)); }}
+                prev={() => { navigate(`/explore/${prev}`); dispatch(a_fetchExploreItem(prev)); }}
+                next={() => { navigate(`/explore/${next}`); dispatch(a_fetchExploreItem(next)); }}
             />
             <div className='lg:col-span-4 md:mt-3 sm:mt-0 bg-fixed'>
                 <div className='flex flex-col rounded-md bg-neutral-50 dark:bg-neutral-800 mr-2 ml-2 lg:ml-0 py-3'>
@@ -294,7 +294,7 @@ const ExploreShow = (props) => {
                                     <p className='font-josefinlight text-xl'>Posted By</p>
                                     <div onClick={() => navigate(`/users/${artwork.artist.id}`)} className="flex cursor-pointer justify-end">
                                         <div className="w-6 h-6 overflow-hidden">
-                                            {artwork.artist ? <img loading='lazy' src={fetchUserImages(artwork.artist.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
+                                            {artwork.artist ? <img loading='lazy' src={api_fetchUserImages(artwork.artist.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
                                         </div>
                                         <p className="font-josefinlight pt-0.5 font-medium text-lg mx-0.5">
                                             {artwork.artist.username}
@@ -312,7 +312,7 @@ const ExploreShow = (props) => {
                         <div id='award' className='flex overflow-x-hidden bg-slate-200 dark:bg-neutral-700 mx-2 p-2 rounded-lg space-x-2'>
                             {artwork.awards.map((award, index) => (
                                 <div key={index} className="relative float-left mr-2 flex">
-                                    <img loading='lazy' draggable="false" className='max-w-fit h-12 w-12' src={fetchUserImages(award.icon)} />
+                                    <img loading='lazy' draggable="false" className='max-w-fit h-12 w-12' src={api_fetchUserImages(award.icon)} />
                                     <span className="absolute font-bold top-0 right-0 inline-block rounded-full bg-violet-800 shadow-lg shadow-neutral-800 text-gray-300 px-1.5 py-0.5 text-xs">{award.count}</span>
                                 </div>
                             ))}
@@ -345,7 +345,7 @@ const ExploreShow = (props) => {
                                 <div className='flex'>
                                     <div onClick={() => navigate(`/users/${comment.author.id}`)} className='flex cursor-pointer'>
                                         <div className="w-5 h-5 overflow-hidden">
-                                            <img loading='lazy' src={fetchUserImages(comment.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
+                                            <img loading='lazy' src={api_fetchUserImages(comment.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
                                         </div>
                                         <p className="font-josefinlight text-sm mx-0.5">
                                             {comment.author.username}
@@ -410,7 +410,7 @@ const ExploreShow = (props) => {
                         exploreID={id}
                         onClose={() => setAwardOpen(false)}
                         onClick={() => setAwardOpen(false)}
-                        handleAwardExplore={handleAwardExplore}
+                        a_handleAwardExplore={a_handleAwardExplore}
                     />
                 }
                 {shareOpen &&
@@ -436,10 +436,10 @@ const StoreShow = (props) => {
     const storeItem = useSelector(state => state.store.storeItem);
 
     useEffect(async () => {
-        dispatch(setLoader(true));
+        dispatch(r_setLoader(true));
         window.scrollTo(0, 0)
-        await dispatch(fetchStoreList());
-        await dispatch(fetchStoreItem(id));
+        await dispatch(a_fetchStoreList());
+        await dispatch(a_fetchStoreItem(id));
     }, [])
 
     useEffect(() => {
@@ -460,7 +460,7 @@ const StoreShow = (props) => {
                                 <TiInfoLarge onClick={() => navigate(`/users/${storeItem.seller.id}`)} className='absolute cursor-pointer h-4 w-4 top-0 right-0 m-2' />
                                 <div className="flex">
                                     <div className="w-6 h-6 overflow-hidden">
-                                        {storeItem.seller ? <img loading='lazy' src={fetchUserImages(storeItem.seller.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
+                                        {storeItem.seller ? <img loading='lazy' src={api_fetchUserImages(storeItem.seller.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
                                     </div>
                                     <p className="font-josefinlight pt-0.5 font-medium text-lg mx-0.5">
                                         {storeItem.seller.username}
@@ -487,7 +487,7 @@ const StoreShow = (props) => {
                             </div>
                              <div className='grid grid-cols-2 gap-2 mr-3'>
                                 {[0, 1, 2, 3].map(item => <div className="drop-shadow-lg rounded-xl bg-indigo-50 dark:bg-neutral-800 overflow-hidden h-fit">
-                                    <img loading='lazy' className="h-40 w-full object-cover object-center scale-110 transition-all duration-400 scale-100" src={fetchStoreImages(activeImg)} />
+                                    <img loading='lazy' className="h-40 w-full object-cover object-center scale-110 transition-all duration-400 scale-100" src={api_fetchStoreImages(activeImg)} />
                                     <div className="py-4 px-2">
                                         <h2 className="tracking-widest text-xs title-font font-medium text-gray-400">CATEGORY: <span className='capitalize text-gray-700'>category</span></h2>
                                         <h1 className="title-font text-lg font-medium text-neutral-800 dark:text-neutral-300">title</h1>
@@ -501,10 +501,10 @@ const StoreShow = (props) => {
                             </div> */}
                         </div>
                         <div className='order-1 lg:order-2 flex flex-col gap-2 lg:w-6/12 lg:h-full rounded'>
-                            <img loading='lazy' className="w-full h-full object-cover object-center" src={fetchStoreImages(activeImg)} />
+                            <img loading='lazy' className="w-full h-full object-cover object-center" src={api_fetchStoreImages(activeImg)} />
                             <div className='grid grid-cols-3 gap-2'>
                                 {storeItem.files.map((file, index) =>
-                                    <img key={index} onClick={() => setActiveImg(file)} loading='lazy' className={`w-full object-cover object-center rounded ${activeImg === file ? 'border-4 border-indigo-600 dark:border-indigo-600' : ''}`} src={fetchStoreImages(file)} />
+                                    <img key={index} onClick={() => setActiveImg(file)} loading='lazy' className={`w-full object-cover object-center rounded ${activeImg === file ? 'border-4 border-indigo-600 dark:border-indigo-600' : ''}`} src={api_fetchStoreImages(file)} />
                                 )}
                             </div>
                         </div>
@@ -556,7 +556,7 @@ const StoreShow = (props) => {
                                         <div className='flex items-center justify-between'>
                                             <div onClick={() => navigate(`/users/${review.author.id}`)} className='flex cursor-pointer'>
                                                 <div className="w-6 h-6 overflow-hidden">
-                                                    <img loading='lazy' src={fetchUserImages(review.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
+                                                    <img loading='lazy' src={api_fetchUserImages(review.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
                                                 </div>
                                                 <p className="font-josefinlight text-lg mx-0.5">
                                                     {review.author.username}

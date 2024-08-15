@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from "react-redux";
 
-import { fetchAvatars, handleEditUserAvatar, handleUpdateUser, loadProfileDetails, refreshUserDetails, setSnackMessage } from '../../store/reducers/common.reducers';
-import { fetchArtworkImages, fetchUserImages } from '../../utils/api';
+import { a_fetchAvatars, a_handleEditUserAvatar, a_handleUpdateUser, a_handleViewUser, a_refreshUserDetails } from '../../store/actions/common.actions';
+import { r_setSnackMessage } from '../../store/reducers/common.reducers';
+import { api_fetchArtworkImages, api_fetchUserImages } from '../../utils/api';
 
 import { AvatarModal, ConfirmModal } from '../../components/Modal';
 
@@ -30,8 +31,8 @@ export const Account = (props) => {
     useEffect(() => {
         if (!common.user.id) {
         } else {
-            dispatch(fetchAvatars());
-            dispatch(loadProfileDetails(common.user.id));
+            dispatch(a_fetchAvatars());
+            dispatch(a_handleViewUser(common.user.id));
             setUsername(user.username);
             setName(user.name);
             setEmail(user.email)
@@ -48,22 +49,22 @@ export const Account = (props) => {
                 message: 'User not logged in. Please Sign In/Sign Up to perform the action.',
                 type: 'error'
             }
-            dispatch(setSnackMessage(msgData));
+            dispatch(r_setSnackMessage(msgData));
         }
     }
 
     const updateUserData = () => {
         let userData;
         userData = { name: name, username: username, bio: bio };
-        dispatch(handleUpdateUser({ userID: user.id, userData }));
+        dispatch(a_handleUpdateUser({ userID: user.id, userData }));
         setEditStatus(false);
         setTimeout(() => {
-            dispatch(refreshUserDetails(user.id));
+            dispatch(a_refreshUserDetails(user.id));
         }, 2000);
     }
 
     const editAvatar = (avatar) => {
-        dispatch(handleEditUserAvatar({ userID: user.id, avatar }));
+        dispatch(a_handleEditUserAvatar({ userID: user.id, avatar }));
     }
 
     return (
@@ -83,7 +84,7 @@ export const Account = (props) => {
                     <div className='grid grid-cols-4'>
                         <div className='flex items-center'>
                             <div className='flex gap-2 relative'>
-                                {user.avatar ? <img loading='lazy' className='w-28' src={fetchUserImages(user.avatar.icon)} /> : null}
+                                {user.avatar ? <img loading='lazy' className='w-28' src={api_fetchUserImages(user.avatar.icon)} /> : null}
                                 {editStatus && <MdAddAPhoto onClick={() => openAvatarModal()} className='absolute bottom-0 right-0 h-6 w-6 cursor-pointer text-gray-800 dark:text-gray-200' />}
                             </div>
                         </div>
@@ -163,7 +164,7 @@ export const Account = (props) => {
                 open={avatarModal}
                 title='Pick your Avatar'
                 avatarList={common.avatarList}
-                handleEditUserAvatar={editAvatar}
+                a_handleEditUserAvatar={editAvatar}
                 onClose={() => setAvatarModal(false)}
             />}
             {confirmModal && <ConfirmModal

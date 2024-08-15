@@ -3,10 +3,10 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 
-import { fetchArtworkImages, fetchUserImages } from '../utils/api';
+import { api_fetchArtworkImages, api_fetchUserImages } from '../utils/api';
+import { r_setLoader } from '../store/reducers/common.reducers';
 
 import { MdSettings } from 'react-icons/md';
-import { setLoader } from '../store/reducers/common.reducers';
 
 export const Settings = (props) => {
     const dispatch = useDispatch();
@@ -19,7 +19,7 @@ export const Settings = (props) => {
     const [childPath, setChildPath] = useState('');
 
     useEffect(async () => {
-        dispatch(setLoader(true));
+        dispatch(r_setLoader(true));
         window.scrollTo(0, 0);
     }, [])
 
@@ -59,7 +59,7 @@ export const Settings = (props) => {
                 <div className='flex flex-col p-3 space-y-3 bg-slate-300 rounded-lg dark:bg-neutral-900 '>
                     {common.isAuthenticated && <>
                         <div className="flex space-x-2 w-full justify-center">
-                            {user.avatar ? <img loading='lazy' className='w-24' src={fetchUserImages(user.avatar.icon)} /> : null}
+                            {user.avatar ? <img loading='lazy' className='w-24' src={api_fetchUserImages(user.avatar.icon)} /> : null}
                             <div className='clear-left'>
                                 <h2 className='text-2xl font-josefinlight font-bold text-gray-700 dark:text-white'>{user.name}</h2>
                                 <h4 className='text-sm font-josefinlight font-semibold text-gray-500 dark:text-gray-400'>{`Member since ` + moment(user.joinDate).fromNow() + ` (` + moment(user.joinDate).format('LL') + `)`}</h4>

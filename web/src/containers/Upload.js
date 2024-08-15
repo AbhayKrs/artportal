@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Helmet } from 'react-helmet';
 
-import { handleExploreUpload } from '../store/reducers/explore.reducers';
-import { getTags, setLoader, setSnackMessage } from '../store/reducers/common.reducers';
-import { handleStoreUpload } from '../store/reducers/store.reducers';
+import { a_handleExploreUpload } from '../store/actions/explore.actions';
+import { a_getTags } from '../store/actions/common.actions';
+import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducers';
+import { a_handleStoreUpload } from '../store/actions/store.actions';
 
 import { MdClose } from 'react-icons/md';
 import { BsHash } from 'react-icons/bs';
@@ -31,9 +32,9 @@ const ExploreUpload = (props) => {
     const [primaryFile, setPrimaryFile] = useState('');
 
     useEffect(async () => {
-        dispatch(setLoader(true));
+        dispatch(r_setLoader(true));
         window.scrollTo(0, 0)
-        //await dispatch(getTags());
+        //await dispatch(a_getTags());
         // setExploreTitle(randomSentence({ min: 2, max: 8 }))
         // setExploreDesc(randomSentence({ min: 5, max: 14 }))
         // setExploreTags(common.tags.sort(() => 0.5 - Math.random()).slice(0, 10))
@@ -55,7 +56,7 @@ const ExploreUpload = (props) => {
                 message: 'Only a maximum of 3 files may be selected.',
                 type: 'warning'
             }
-            dispatch(setSnackMessage(msgData));
+            dispatch(r_setSnackMessage(msgData));
         }
         else {
             Object.keys(ev.target.files).map((key, index) => {
@@ -105,7 +106,7 @@ const ExploreUpload = (props) => {
                 message: 'Only a maximum of 3 files may be selected.',
                 type: 'warning'
             }
-            dispatch(setSnackMessage(msgData));
+            dispatch(r_setSnackMessage(msgData));
         } else {
             Object.keys(ev.target.files).map((key, index) => {
                 let convertedFile, convertedThumbFile;
@@ -159,7 +160,7 @@ const ExploreUpload = (props) => {
                     message: 'Maximum number of tags assigned!',
                     type: 'warning'
                 }
-                dispatch(setSnackMessage(msgData));
+                dispatch(r_setSnackMessage(msgData));
             } else {
                 setExploreTags(tags => [...tags, selectedTag])
             }
@@ -177,7 +178,7 @@ const ExploreUpload = (props) => {
                 message: 'Please fill all the required fields!',
                 type: 'error'
             }
-            dispatch(setSnackMessage(msgData))
+            dispatch(r_setSnackMessage(msgData))
             return;
         }
 
@@ -191,21 +192,21 @@ const ExploreUpload = (props) => {
         exploreUploadData.append('userID', userID);
         exploreTags.map(tag => exploreUploadData.append('tags[]', tag));
 
-        dispatch(handleExploreUpload(exploreUploadData)).then(() => {
+        dispatch(a_handleExploreUpload(exploreUploadData)).then(() => {
             navigate(`/explore`)
             const msgData = {
                 open: true,
                 message: 'Successfully Uploaded!',
                 type: 'success'
             }
-            dispatch(setSnackMessage(msgData));
+            dispatch(r_setSnackMessage(msgData));
         }).catch(err => {
             const msgData = {
                 open: true,
                 message: 'Upload Failed!',
                 type: 'warning'
             }
-            dispatch(setSnackMessage(msgData));
+            dispatch(r_setSnackMessage(msgData));
         });
     }
 
@@ -252,7 +253,7 @@ const ExploreUpload = (props) => {
                                                 })}
                                                 setReorderedFiles={setExploreFiles}
                                                 setCategories={(categories) => setExploreCategories(imageCategories => [...new Set([...imageCategories, ...categories])])}
-                                                setSnackMessage={(msgData) => dispatch(setSnackMessage(msgData))}
+                                                r_setSnackMessage={(msgData) => dispatch(r_setSnackMessage(msgData))}
                                             />
                                             <div className='font-josefinlight text-rose-400 font-semibold text-sm'>You may select a maximum of 3 files.</div>
                                         </div>
@@ -358,9 +359,9 @@ const StoreUpload = (props) => {
     ]
 
     useEffect(() => {
-        dispatch(setLoader(true));
+        dispatch(r_setLoader(true));
         window.scrollTo(0, 0)
-        dispatch(getTags());
+        dispatch(a_getTags());
     }, [])
 
     const onImageChange = (ev) => {
@@ -370,7 +371,7 @@ const StoreUpload = (props) => {
                 message: 'Only a maximum of 3 files may be selected.',
                 type: 'warning'
             }
-            dispatch(setSnackMessage(msgData));
+            dispatch(r_setSnackMessage(msgData));
         }
         else {
             const reader = new FileReader();
@@ -412,7 +413,7 @@ const StoreUpload = (props) => {
                 message: 'Only a maximum of 3 files may be selected.',
                 type: 'warning'
             }
-            dispatch(setSnackMessage(msgData));
+            dispatch(r_setSnackMessage(msgData));
         } else {
             Object.keys(ev.dataTransfer.files).map((key, index) => {
                 setStoreFiles(arr => [...arr, ev.dataTransfer.files[key]])
@@ -438,7 +439,7 @@ const StoreUpload = (props) => {
                 message: 'Please fill all the required fields!',
                 type: 'error'
             }
-            dispatch(setSnackMessage(msgData))
+            dispatch(r_setSnackMessage(msgData))
             return;
         }
 
@@ -452,21 +453,21 @@ const StoreUpload = (props) => {
         formData.append('category', storeCategory);
         formData.append('userID', userID);
 
-        dispatch(handleStoreUpload(formData)).then(() => {
+        dispatch(a_handleStoreUpload(formData)).then(() => {
             navigate(`/store`)
             const msgData = {
                 open: true,
                 message: 'Successfully listed product!',
                 type: 'success'
             }
-            dispatch(setSnackMessage(msgData));
+            dispatch(r_setSnackMessage(msgData));
         }).catch(err => {
             const msgData = {
                 open: true,
                 message: 'Upload Failed!',
                 type: 'warning'
             }
-            dispatch(setSnackMessage(msgData));
+            dispatch(r_setSnackMessage(msgData));
         });
     }
 

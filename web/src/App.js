@@ -4,7 +4,8 @@ import { Provider, useDispatch, useSelector } from "react-redux";
 import jwt_decode from 'jwt-decode';
 import store from './store';
 
-import { fetchCartlist, fetchUserExploreList, fetchUserStoreList, fetchViewerID, handleVerifyUser, setSnackMessage } from './store/reducers/common.reducers';
+import { r_verifyUser, r_setSnackMessage } from './store/reducers/common.reducers';
+import { a_fetchCartList, a_fetchUserExploreList, a_fetchUserStoreList, a_fetchViewerID } from './store/actions/common.actions';
 
 import Header from './containers/Header';
 import Footer from './containers/Footer';
@@ -61,25 +62,25 @@ const Layout = (props) => {
     }
     console.log(localStorage.getItem('theme'));
 
-    dispatch(fetchViewerID());
+    dispatch(a_fetchViewerID());
 
     let token = null;
     if (localStorage.jwtToken) {
       token = localStorage.jwtToken;
       const userID = common.user.id;
       const decoded = jwt_decode(token);
-      dispatch(handleVerifyUser(decoded));
-      dispatch(fetchUserExploreList(userID));
-      dispatch(fetchUserStoreList(userID));
-      dispatch(fetchCartlist());
+      dispatch(r_verifyUser(decoded));
+      dispatch(a_fetchUserExploreList(userID));
+      dispatch(a_fetchUserStoreList(userID));
+      dispatch(a_fetchCartList());
     } else if (sessionStorage.jwtToken) {
       token = sessionStorage.jwtToken;
       const userID = common.user.id;
       const decoded = jwt_decode(token);
-      dispatch(handleVerifyUser(decoded));
-      dispatch(fetchUserExploreList(userID));
-      dispatch(fetchUserStoreList(userID));
-      dispatch(fetchCartlist());
+      dispatch(r_verifyUser(decoded));
+      dispatch(a_fetchUserExploreList(userID));
+      dispatch(a_fetchUserStoreList(userID));
+      dispatch(a_fetchCartList());
     }
   }, []);
 
@@ -87,7 +88,7 @@ const Layout = (props) => {
     <main className={`App ${common.theme} relative`}>
       <Header betaMsg={betaMsg} setBetaMsg={setBetaMsg} />
       <div className={`h-screen flex flex-col bg-gray-200 dark:bg-darkBg ${betaMsg === true ? 'pt-[5.5rem]' : 'pt-[3.75rem]'}`}>
-        <Snackbar msgdata={common.snackmsg} setMessage={(msgData) => dispatch(setSnackMessage(msgData))} />
+        <Snackbar msgdata={common.snackmsg} setMessage={(msgData) => dispatch(r_setSnackMessage(msgData))} />
         <Outlet />
         <Footer />
       </div>

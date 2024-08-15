@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { IoCloseSharp } from 'react-icons/io5';
-import { MdError } from 'react-icons/md';
 
 import TaggerStartGif from '../assets/images/taggerstartgif.gif';
 import TaggerStopGif from '../assets/images/taggerdonegif.gif';
-
 
 const Snackbar = ({ msgdata, setMessage }) => {
     useEffect(() => {

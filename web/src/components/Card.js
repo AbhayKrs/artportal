@@ -1,7 +1,8 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
-import { fetchArtworkImages, fetchUserImages } from '../utils/api';
 import moment from 'moment';
+
+import { api_fetchArtworkImages, api_fetchUserImages } from '../utils/api';
 
 import { AiFillClockCircle, AiFillHeart } from 'react-icons/ai';
 import { BsChatFill, BsInfoCircleFill } from 'react-icons/bs';
@@ -11,13 +12,13 @@ export const ImageCard = ({ size, key, explore, artist }) => {
 
     return (
         <div className={`group flex relative cursor-pointer ${size === 'l' ? 'h-56 w-auto' : 'h-36 w-auto'}`} onClick={() => navigate(`/explore/${explore._id}`)}>
-            <img src={fetchArtworkImages(explore.files[0])} className='object-cover w-full h-full' />
+            <img src={api_fetchArtworkImages(explore.files[0])} className='object-cover w-full h-full' />
             <div className="hidden items-end h-full w-full group-hover:absolute group-hover:top-0 group-hover:flex group-hover:flex-row">
                 <div className="flex flex-col w-full pb-2 pt-14 px-2 bg-gradient-to-t from-black text-gray-200 group-hover:flex" >
                     <h3 className={`${size === 'l' ? 'text-base' : 'text-sm'} font-bold leading-5 capitalize`}>{explore.title}</h3>
                     <div className="inline-flex items-center">
                         <div className="w-5 h-5 overflow-hidden mr-1">
-                            {artist ? <img loading='lazy' src={fetchUserImages(artist.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
+                            {artist ? <img loading='lazy' src={api_fetchUserImages(artist.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
                         </div>
                         <span className="font-base text-xs my-1 mr-1">
                             {artist.username}
@@ -61,7 +62,7 @@ export const HorizontalCard = ({ explore, artist }) => {
         <div className='flex h-36 relative'>
             <div className='flex absolute left-0 h-full w-[50%] rounded-l-lg' style={{
                 clipPath: 'polygon(0% 0%, 100% 0%, 80% 100%, 2% 100%)',
-                backgroundImage: `url(${fetchArtworkImages(explore.files[0])})`,
+                backgroundImage: `url(${api_fetchArtworkImages(explore.files[0])})`,
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center',
                 backgroundSize: 'cover',
@@ -73,7 +74,7 @@ export const HorizontalCard = ({ explore, artist }) => {
                         <h3 className="lg:text-lg md:text-md sm:text-sm font-bold lg:leading-5 md:leading-5 sm:leading-5 capitalize">{explore.title}</h3>
                         <div className="inline-flex items-end">
                             <div className="w-5 h-5 overflow-hidden mr-1">
-                                {artist ? <img loading='lazy' src={fetchUserImages(artist.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
+                                {artist ? <img loading='lazy' src={api_fetchUserImages(artist.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
                             </div>
                             <span className="font-base text-xs mt-1 mr-1">
                                 {artist.username}
@@ -103,13 +104,13 @@ export const HorizontalCard = ({ explore, artist }) => {
                 </div>
             </div>
         </div>
-        // <div style={{ backgroundImage: `url(${fetchArtworkImages(explore.files[0])})` }} className="bg-gray-100 m-auto w-full h-64 bg-top bg-no-repeat bg-cover">
+        // <div style={{ backgroundImage: `url(${api_fetchArtworkImages(explore.files[0])})` }} className="bg-gray-100 m-auto w-full h-64 bg-top bg-no-repeat bg-cover">
         //     <div className="hidden items-end h-full w-full group-hover:flex group-hover:flex-row">
         //         <div className="flex flex-col w-full pb-2 pt-14 px-2 bg-gradient-to-t from-black text-gray-200 group-hover:flex" >
         //             <h3 className="text-base font-bold leading-5 capitalize">{explore.title}</h3>
         //             <div className="inline-flex items-center">
         //                 <div className="w-5 h-5 overflow-hidden mr-1">
-        //                     <img loading='lazy' src={artist && fetchUserImages(artist.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
+        //                     <img loading='lazy' src={artist && api_fetchUserImages(artist.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
         //                 </div>
         //                 <span className="font-base text-xs my-1 mr-1">
         //                     {artist.username}

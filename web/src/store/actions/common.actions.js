@@ -1,22 +1,24 @@
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-import { api_viewerID, api_tags, api_signIn, api_signUp, api_googleLogin, api_userDetails, api_updateUserData, api_deleteBookmark, api_search, api_userExploreList, api_userStoreList, api_deleteStoreItem, api_userCartList, api_avatarList, api_awardList, api_locationsList, api_editAvatar, api_deleteCartItem } from '../../utils/api'
+import { api_viewerID, api_tags, api_signIn, api_signUp, api_googleLogin, api_userDetails, api_updateUserData, api_deleteBookmark, api_search, api_userExploreList, api_userStoreList, api_deleteStoreItem, api_userCartList, api_avatarList, api_awardList, api_locationsList, api_editAvatar, api_deleteCartItem, api_updateUserCart, api_addUserCart } from '../../utils/api'
 import { r_deleteBookmark, r_headerDialogOpen, r_setAuthError, r_setAvatars, r_setAwards, r_setCartList, r_setLocations, r_setSearchList, r_setSnackMessage, r_setTags, r_setUserExploreList, r_setUserStoreList, r_setViewerID, r_signIn, r_signUp } from '../reducers/common.reducers';
 
 import jwt_decode from 'jwt-decode';
 import setAuthToken from '../../utils/setAuthToken';
 
-export const a_fetchViewerID = createAsyncThunk(payload, async ({ getState, dispatch, rejectWithValue }) => {
+export const a_fetchViewerID = createAsyncThunk("a_fetchViewerID", async (payload, { getState, dispatch, rejectWithValue }) => {
     api_viewerID().then(res => {
         const ipAdr = res.data.ip.replaceAll('.', '');
         dispatch(r_setViewerID(ipAdr));
+        return;
     }).catch(err => {
         console.log('---error a_fetchViewerID', err);
         return rejectWithValue(err.message)
     })
 });
 
-export const a_getTags = createAsyncThunk(payload, async ({ getState, dispatch, rejectWithValue }) => {
+export const a_getTags = createAsyncThunk("a_getTags", async (payload, { getState, dispatch, rejectWithValue }) => {
     api_tags().then(res => {
         dispatch(r_setTags(res.data));
         return;
@@ -26,7 +28,7 @@ export const a_getTags = createAsyncThunk(payload, async ({ getState, dispatch, 
     })
 });
 
-export const a_handleSignIn = createAsyncThunk(payload, async ({ getState, dispatch, rejectWithValue }) => {
+export const a_handleSignIn = createAsyncThunk("a_handleSignIn", async (payload, { getState, dispatch, rejectWithValue }) => {
     const { stayLoggedIn, userData } = payload;
 
     await api_signIn(userData).then(res => {
@@ -54,7 +56,7 @@ export const a_handleSignIn = createAsyncThunk(payload, async ({ getState, dispa
     })
 });
 
-export const a_handleSignUp = createAsyncThunk(payload, async ({ getState, dispatch, rejectWithValue }) => {
+export const a_handleSignUp = createAsyncThunk("a_handleSignUp", async (payload, { getState, dispatch, rejectWithValue }) => {
     await api_signUp(payload).then(res => {
         const { token } = res.data;
         sessionStorage.setItem('jwtToken', token);
@@ -77,7 +79,7 @@ export const a_handleSignUp = createAsyncThunk(payload, async ({ getState, dispa
     })
 });
 
-export const a_handleGoogleAuth = createAsyncThunk(payload, async ({ getState, dispatch, rejectWithValue }) => {
+export const a_handleGoogleAuth = createAsyncThunk("a_handleGoogleAuth", async (payload, { getState, dispatch, rejectWithValue }) => {
     await api_googleLogin().then(res => {
         const userData = res.data;
         dispatch(r_signIn(userData));
@@ -97,7 +99,7 @@ export const a_handleGoogleAuth = createAsyncThunk(payload, async ({ getState, d
     })
 });
 
-export const a_refreshUserDetails = createAsyncThunk(payload, async ({ getState, dispatch, rejectWithValue }) => {
+export const a_refreshUserDetails = createAsyncThunk("a_refreshUserDetails", async (payload, { getState, dispatch, rejectWithValue }) => {
     await api_userDetails(payload).then(res => {
         const { token } = res.data;
         if (sessionStorage.jwtToken) {
@@ -108,6 +110,7 @@ export const a_refreshUserDetails = createAsyncThunk(payload, async ({ getState,
         setAuthToken(token);
         const userData = jwt_decode(token);
         dispatch(r_signIn(userData));
+        return;
     }).catch(err => {
         if (err.response) {
             const msgData = {
@@ -122,11 +125,12 @@ export const a_refreshUserDetails = createAsyncThunk(payload, async ({ getState,
     })
 });
 
-export const a_handleViewUser = createAsyncThunk(payload, async ({ getState, dispatch, rejectWithValue }) => {
+export const a_handleViewUser = createAsyncThunk("a_handleViewUser", async (payload, { getState, dispatch, rejectWithValue }) => {
     await api_userDetails(payload).then(res => {
         const { token } = res.data;
         const loginData = jwt_decode(token);
         dispatch(r_setViewerID(loginData));
+        return;
     }).catch(err => {
         if (err.response) {
             const msgData = {
@@ -141,11 +145,12 @@ export const a_handleViewUser = createAsyncThunk(payload, async ({ getState, dis
     })
 });
 
-export const a_handleUpdateUser = createAsyncThunk(payload, async ({ getState, dispatch, rejectWithValue }) => {
+export const a_handleUpdateUser = createAsyncThunk("a_handleUpdateUser", async (payload, { getState, dispatch, rejectWithValue }) => {
     const { userID, userData } = payload;
 
     await api_updateUserData(userID, userData).then(res => {
-        console.log('updated user data', res.data)
+        console.log('updated user data', res.data);
+        return;
     }).catch(err => {
         if (err.response) {
             const msgData = {
@@ -160,11 +165,12 @@ export const a_handleUpdateUser = createAsyncThunk(payload, async ({ getState, d
     })
 });
 
-export const a_handleDeleteBookmark = createAsyncThunk(payload, async ({ getState, dispatch, rejectWithValue }) => {
+export const a_handleDeleteBookmark = createAsyncThunk("a_handleDeleteBookmark", async (payload, { getState, dispatch, rejectWithValue }) => {
     const { bookmarkID, userID } = payload
 
     await api_deleteBookmark(bookmarkID, userID).then(res => {
-        dispatch(r_deleteBookmark(res.data))
+        dispatch(r_deleteBookmark(res.data));
+        return;
     }).catch(err => {
         if (err.response) {
             const msgData = {
@@ -179,19 +185,20 @@ export const a_handleDeleteBookmark = createAsyncThunk(payload, async ({ getStat
     })
 });
 
-export const a_fetchSearchList = createAsyncThunk(payload, async ({ getState, dispatch, rejectWithValue }) => {
+export const a_fetchSearchList = createAsyncThunk("a_fetchSearchList", async (payload, { getState, dispatch, rejectWithValue }) => {
     const { type, value } = payload;
 
     await api_search(type, value).then(res => {
-        console.log('---fetch', res)
+        console.log('---fetch', res);
         dispatch(r_setSearchList({ type: type, list: res.data }));
+        return;
     }).catch(err => {
         console.log('---error a_fetchSearchList', err);
         return rejectWithValue(err.message);
     })
 });
 
-export const a_fetchUserExploreList = createAsyncThunk(payload, async ({ getState, dispatch, rejectWithValue }) => {
+export const a_fetchUserExploreList = createAsyncThunk("a_fetchUserExploreList", async (payload, { getState, dispatch, rejectWithValue }) => {
     const userID = getState().common.user.id;
     await api_userExploreList(userID).then(res => {
         dispatch(r_setUserExploreList(res.data));
@@ -202,7 +209,7 @@ export const a_fetchUserExploreList = createAsyncThunk(payload, async ({ getStat
     })
 });
 
-export const a_fetchUserStoreList = createAsyncThunk(payload, async ({ getState, dispatch, rejectWithValue }) => {
+export const a_fetchUserStoreList = createAsyncThunk("a_fetchUserStoreList", async (payload, { getState, dispatch, rejectWithValue }) => {
     const userID = getState().common.user.id;
     await api_userStoreList(userID).then(res => {
         dispatch(r_setUserStoreList(res.data));
@@ -213,10 +220,10 @@ export const a_fetchUserStoreList = createAsyncThunk(payload, async ({ getState,
     })
 });
 
-export const a_deleteUserStoreItem = createAsyncThunk(payload, async ({ getState, dispatch, rejectWithValue }) => {
+export const a_deleteUserStoreItem = createAsyncThunk("a_deleteUserStoreItem", async (payload, { getState, dispatch, rejectWithValue }) => {
     const userID = getState().common.user.id;
     await api_deleteStoreItem(payload, userID).then(async res => {
-        await dispatch(fetchUserStoreList());
+        await dispatch(a_fetchUserStoreList());
         return;
     }).catch(err => {
         console.log('Signup fail:: ', err);
@@ -224,7 +231,7 @@ export const a_deleteUserStoreItem = createAsyncThunk(payload, async ({ getState
     })
 });
 
-export const a_fetchCartList = createAsyncThunk(payload, async ({ getState, dispatch, rejectWithValue }) => {
+export const a_fetchCartList = createAsyncThunk("a_fetchCartList", async (payload, { getState, dispatch, rejectWithValue }) => {
     const userID = getState().common.user.id;
     await api_userCartList(userID).then(res => {
         dispatch(r_setCartList(res.data));
@@ -235,7 +242,7 @@ export const a_fetchCartList = createAsyncThunk(payload, async ({ getState, disp
     })
 });
 
-export const a_handleCartAdd = createAsyncThunk(payload, async ({ getState, dispatch, rejectWithValue }) => {
+export const a_handleCartAdd = createAsyncThunk("a_handleCartAdd", async (payload, { getState, dispatch, rejectWithValue }) => {
     try {
         let cartData;
         const userID = getState().common.user.id;
@@ -271,7 +278,7 @@ export const a_handleCartAdd = createAsyncThunk(payload, async ({ getState, disp
     }
 });
 
-export const a_handleRemoveFromCart = createAsyncThunk(payload, async ({ getState, dispatch, rejectWithValue }) => {
+export const a_handleRemoveFromCart = createAsyncThunk("a_handleRemoveFromCart", async (payload, { getState, dispatch, rejectWithValue }) => {
     let cartData;
     const userID = getState().common.user.id;
     const userCart = getState().common.user.cart;
@@ -293,45 +300,46 @@ export const a_handleRemoveFromCart = createAsyncThunk(payload, async ({ getStat
                 dispatch(a_fetchCartList());
             })
         }
+        return;
     } catch (err) {
         console.log('---error fetchCartList', err);
         return rejectWithValue(err.message);
     }
 });
 
-export const a_fetchAvatars = createAsyncThunk(payload, async ({ getState, dispatch, rejectWithValue }) => {
+export const a_fetchAvatars = createAsyncThunk("a_fetchAvatars", async (payload, { getState, dispatch, rejectWithValue }) => {
     await api_avatarList().then(res => {
         console.log('avatarList', res);
         dispatch(r_setAvatars(res.data));
         return;
     }).catch(err => {
-        console.log('---error fetchAvatars', err);
+        console.log('---error a_fetchAvatars', err);
         return rejectWithValue(err.message);
     });
 });
 
-export const a_fetchAwards = createAsyncThunk(payload, async ({ getState, dispatch, rejectWithValue }) => {
+export const a_fetchAwards = createAsyncThunk("a_fetchAwards", async (payload, { getState, dispatch, rejectWithValue }) => {
     await api_awardList().then(res => {
         console.log('awardList', res);
         dispatch(r_setAwards(res.data));
         return;
     }).catch(err => {
-        console.log('---error fetchAwards', err);
+        console.log('---error a_fetchAwards', err);
         return rejectWithValue(err.message);
     });
 });
 
-export const a_fetchLocations = createAsyncThunk(payload, async ({ getState, dispatch, rejectWithValue }) => {
+export const a_fetchLocations = createAsyncThunk("a_fetchLocations", async (payload, { getState, dispatch, rejectWithValue }) => {
     await api_locationsList().then(res => {
         dispatch(r_setLocations(res.data));
         return;
     }).catch(err => {
-        console.log('---error fetchLocations', err);
+        console.log('---error a_fetchLocations', err);
         return rejectWithValue(err.message);
     })
 });
 
-export const a_handleUploadAsset = createAsyncThunk(payload, async ({ getState, dispatch, rejectWithValue }) => {
+export const a_handleUploadAsset = createAsyncThunk("a_handleUploadAsset", async (payload, { getState, dispatch, rejectWithValue }) => {
     try {
         await axios({
             url: 'http://localhost:5000/api/users/assets/new',
@@ -339,22 +347,24 @@ export const a_handleUploadAsset = createAsyncThunk(payload, async ({ getState, 
             headers: { 'Content-Type': 'multipart/form-data' },
             data: payload
         }).then(async res => {
-            console.log('handleUploadAsset Successful!');
+            console.log('a_handleUploadAsset Successful!');
         }).catch(err => {
             if (err.response) {
                 console.log('Upload fail:: ', err.response.status);
             }
         })
+        return;
     } catch (err) {
         console.log(err);
         return rejectWithValue(err.message);
     }
 });
 
-export const a_handleEditUserAvatar = createAsyncThunk(payload, async ({ getState, dispatch, rejectWithValue }) => {
+export const a_handleEditUserAvatar = createAsyncThunk("a_handleEditUserAvatar", async (payload, { getState, dispatch, rejectWithValue }) => {
     const userID = getState().common.user.id;
     await api_editAvatar(userID, payload).then(res => {
-        console.log('handleEditUserAvatar Successful!');
+        console.log('a_handleEditUserAvatar Successful!');
+        return;
     }).catch(err => {
         console.log('Fail:: ', err);
         return rejectWithValue(err.message);

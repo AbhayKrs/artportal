@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import moment from 'moment';
 
-import { setLoader } from '../store/reducers/common.reducers';
-import { fetchExploreList, filterExploreList } from '../store/reducers/explore.reducers';
-import { fetchArtworkImages } from '../utils/api';
+import { r_setLoader } from '../store/reducers/common.reducers';
+import { a_fetchExploreList, a_filterExploreList } from '../store/actions/explore.actions';
+import { api_fetchArtworkImages } from '../utils/api';
 
 import Masonry from '../components/Masonry';
 import { ExplorePanel } from '../components/TabPanel';
@@ -20,13 +20,13 @@ const ExploreSearch = (props) => {
     const explore = useSelector(state => state.explore);
 
     useEffect(async () => {
-        dispatch(setLoader(true));
+        dispatch(r_setLoader(true));
         window.scrollTo(0, 0)
     }, []);
 
     return (
         <div className=' bg-gray-200 dark:bg-darkBg'>
-            <ExplorePanel search fetchExploreList={() => dispatch(fetchExploreList())} filterExploreList={(filter, period) => dispatch(filterExploreList({ filter, period }))} />
+            <ExplorePanel search a_fetchExploreList={() => dispatch(a_fetchExploreList())} a_filterExploreList={(filter, period) => dispatch(a_filterExploreList({ filter, period }))} />
             <div className='flex flex-row'>
                 <Masonry cols={5}>
                     {explore.artworks.map((explore, index) => (
@@ -34,7 +34,7 @@ const ExploreSearch = (props) => {
                             <img loading='lazy'
                                 id={index}
                                 className='object-cover w-full h-full'
-                                src={fetchArtworkImages(explore.files[0])}
+                                src={api_fetchArtworkImages(explore.files[0])}
                             />
                             <div className='hidden absolute bottom-0 p-2 pt-14 group-hover:flex group-hover:flex-row w-full bg-gradient-to-t from-black text-gray-200 group-hover:flex group-hover:justify-between'>
                                 <div className="flex flex-col place-self-end max-w-[65%]">

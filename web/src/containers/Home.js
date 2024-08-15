@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { setLoader } from '../store/reducers/common.reducers';
-import { fetchExploreList, fetchMonthHighlightsList, fetchNewlyAddedList, fetchTrendingList } from '../store/reducers/explore.reducers';
+import { r_setLoader } from '../store/reducers/common.reducers';
+import { a_fetchExploreList, a_fetchTrendingList, a_fetchNewlyAddedList, a_fetchMonthHighlightsList } from '../store/actions/explore.actions';
 
 import { HomeSingleCarousel } from '../components/Carousel';
 import HighlightList from '../components/HighlightList';
@@ -18,11 +18,11 @@ const Home = (props) => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        dispatch(setLoader(true));
-        dispatch(fetchExploreList());
-        dispatch(fetchTrendingList());
-        dispatch(fetchNewlyAddedList());
-        dispatch(fetchMonthHighlightsList());
+        dispatch(r_setLoader(true));
+        dispatch(a_fetchExploreList());
+        dispatch(a_fetchTrendingList());
+        dispatch(a_fetchNewlyAddedList());
+        dispatch(a_fetchMonthHighlightsList());
     }, [])
 
     return (

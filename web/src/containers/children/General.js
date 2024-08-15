@@ -28,7 +28,7 @@ export const General = (props) => {
     const [activeLang, setActiveLang] = useState(0);
 
     useEffect(() => {
-        props.fetchLocations();
+        props.a_fetchLocations();
     }, [])
 
     useEffect(() => {

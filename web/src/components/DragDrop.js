@@ -10,9 +10,9 @@ const reorder = (list, startIndex, endIndex) => {
     return result;
 };
 
-const Image = ({ image, index, setSnackMessage, setCategories }) => {
+const Image = ({ image, index, r_setSnackMessage, setCategories }) => {
     useEffect(async () => {
-        setSnackMessage({
+        r_setSnackMessage({
             open: true,
             message: 'Please give it a few seconds while the system auto-assigns the categories for your upload.',
             type: 'tagger_start'
@@ -43,7 +43,7 @@ const Image = ({ image, index, setSnackMessage, setCategories }) => {
             final.push(predicted_class[p_ind[i]]);
         }
         setCategories(final);
-        setSnackMessage({
+        r_setSnackMessage({
             open: true,
             message: 'Categories for your upload were successfully added!',
             type: 'tagger_stop'
@@ -68,13 +68,13 @@ const Image = ({ image, index, setSnackMessage, setCategories }) => {
     );
 }
 
-const ImageList = ({ images, setCategories, setSnackMessage }) => {
+const ImageList = ({ images, setCategories, r_setSnackMessage }) => {
     return images.map((image, index) => (
-        <Image image={image} index={index} key={image.id} setCategories={setCategories} setSnackMessage={setSnackMessage} />
+        <Image image={image} index={index} key={image.id} setCategories={setCategories} r_setSnackMessage={r_setSnackMessage} />
     ));
 }
 
-const DragDrop = ({ selectedImages, setReorderedFiles, setCategories, setSnackMessage }) => {
+const DragDrop = ({ selectedImages, setReorderedFiles, setCategories, r_setSnackMessage }) => {
     const [images, setImages] = useState([]);
 
     useEffect(() => {
@@ -101,7 +101,7 @@ const DragDrop = ({ selectedImages, setReorderedFiles, setCategories, setSnackMe
                         ref={provided.innerRef}
                         className='scrollbar flex p-2 overflow-auto space-x-2'
                         {...provided.droppableProps}>
-                        <ImageList images={images} setCategories={setCategories} setSnackMessage={setSnackMessage} />
+                        <ImageList images={images} setCategories={setCategories} r_setSnackMessage={r_setSnackMessage} />
                         {provided.placeholder}
                     </div>
                 )}

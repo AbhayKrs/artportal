@@ -248,12 +248,12 @@ router.delete('/:id/cart/:cart_id', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
         const cartItem = await Cart.findById(req.params.cart_id);
-        const deleteCartItem = user.cart.find(cartItem => cartItem._id === req.params.cart_id);
-        if (!deleteCartItem) {
+        const a_handleRemoveFromCart = user.cart.find(cartItem => cartItem._id === req.params.cart_id);
+        if (!a_handleRemoveFromCart) {
             return res.status(404).json({ msg: 'Cart item does not exist!' });
         }
-        user.cart = user.cart.filter(cartItem => cartItem._id !== deleteCartItem._id);
-        cartItem.deleteOne(deleteCartItem);
+        user.cart = user.cart.filter(cartItem => cartItem._id !== a_handleRemoveFromCart._id);
+        cartItem.deleteOne(a_handleRemoveFromCart);
         user.cart_count = user.cart.length;
         await user.save();
         return res.json(user.cart);

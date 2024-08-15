@@ -1,13 +1,12 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
+
+import { api_fetchUserImages } from '../utils/api';
+
 import { ImageCard } from './Card';
 import { AwardConfirmModal } from './Modal';
-import { MdUpload, MdClose } from 'react-icons/md';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import Dropdown from './Dropdown';
-import SearchBar from './SearchBar';
 
-import { fetchUserImages } from '../utils/api';
 import { awardTabPanelHeaders, exploreFilters, explorePeriodOptions } from '../utils/constants';
 
 export const HomeTabPanel = ({ tags, artworks, }) => {
@@ -96,7 +95,7 @@ export const AwardTabPanel = ({ awards, user, exploreID, awardClose, handleAward
                     return <Fragment key={index}>
                         {index === activeStatus && awards.map((award, index) => (
                             <button className='flex flex-col items-center' key={index} onClick={() => setConfirmData({ open: true, award })}>
-                                <img loading='lazy' style={{ width: '3em', height: '3em' }} src={fetchUserImages(award.icon)} />
+                                <img loading='lazy' style={{ width: '3em', height: '3em' }} src={api_fetchUserImages(award.icon)} />
                                 <p className="font-bold font-serif text-right text-neutral-700 dark:text-gray-300 text-sm">{award.value}</p>
                             </button>
                         ))}
@@ -277,7 +276,7 @@ export const NotificationTabPanel = ({ awards, user, exploreID, awardClose, hand
                     return <Fragment key={index}>
                         {index === activeStatus && awards.map((award, index) => (
                             <button className='flex flex-col items-center' key={index} onClick={() => setConfirmData({ open: true, award })}>
-                                <img loading='lazy' style={{ width: '3em', height: '3em' }} src={fetchUserImages(award.icon)} />
+                                <img loading='lazy' style={{ width: '3em', height: '3em' }} src={api_fetchUserImages(award.icon)} />
                                 <p className="font-bold font-serif text-right text-neutral-700 dark:text-gray-300 text-sm">{award.value}</p>
                             </button>
                         ))}

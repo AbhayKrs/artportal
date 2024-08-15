@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 
-import { setLoader, setSnackMessage } from '../store/reducers/common.reducers';
-import { fetchArtworkImages } from '../utils/api';
+import { api_fetchArtworkImages } from '../utils/api';
+import { a_fetchExploreList, a_filterExploreList } from '../store/actions/explore.actions';
+import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducers';
 
 import Masonry from '../components/Masonry';
 
@@ -12,7 +13,6 @@ import { BsHeart, BsChat } from 'react-icons/bs';
 import { BiTimeFive } from 'react-icons/bi';
 import { ExplorePanel } from '../components/TabPanel';
 import { Helmet } from 'react-helmet';
-import { fetchExploreList, filterExploreList } from '../store/reducers/explore.reducers';
 
 const Explore = (props) => {
     const dispatch = useDispatch();
@@ -22,7 +22,7 @@ const Explore = (props) => {
     const explore = useSelector(state => state.explore);
 
     useEffect(async () => {
-        dispatch(setLoader(true));
+        dispatch(r_setLoader(true));
         window.scrollTo(0, 0);
     }, []);
 
@@ -31,7 +31,7 @@ const Explore = (props) => {
             <Helmet>
                 <title>artportal | Explore</title>
             </Helmet>
-            <ExplorePanel authenticated={common.isAuthenticated} setSnackMessage={(msgData) => dispatch(setSnackMessage(msgData))} fetchExploreList={() => dispatch(fetchExploreList())} filterExploreList={(filter, period) => dispatch(filterExploreList({ filter, period }))} tags={common.tags} />
+            <ExplorePanel authenticated={common.isAuthenticated} r_setSnackMessage={(msgData) => dispatch(r_setSnackMessage(msgData))} a_fetchExploreList={() => dispatch(a_fetchExploreList())} a_filterExploreList={(filter, period) => dispatch(a_filterExploreList({ filter, period }))} tags={common.tags} />
             {explore.artworks.length > 0 ?
                 <div className='flex flex-row'>
                     <Masonry cols={5}>
@@ -40,7 +40,7 @@ const Explore = (props) => {
                                 <img loading='lazy'
                                     id={index}
                                     className='object-cover w-full h-full rounded'
-                                    src={fetchArtworkImages(explore.files[0])}
+                                    src={api_fetchArtworkImages(explore.files[0])}
                                 />
                                 <div className='opacity-0 flex transition-all delay-200 absolute bottom-0 p-2 pt-14 group-hover:opacity-100 w-full bg-gradient-to-t from-black text-gray-200 justify-between'>
                                     <div className="flex flex-col place-self-end max-w-[65%]">

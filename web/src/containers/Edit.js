@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { getTags, setLoader, setSnackMessage } from '../store/reducers/common.reducers';
-import { fetchExploreList, fetchExploreItem, handleExploreEdit } from '../store/reducers/explore.reducers';
+import { a_getTags } from '../store/actions/common.actions';
+import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducers';
+import { a_fetchExploreList, a_fetchExploreItem, a_handleExploreEdit } from '../store/actions/explore.actions';
 
-import { fetchArtworkImages } from '../utils/api';
+import { api_fetchArtworkImages } from '../utils/api';
 
 import { MdClose } from 'react-icons/md';
 import { BsHash } from 'react-icons/bs';
@@ -30,12 +31,12 @@ const ExploreEdit = (props) => {
     const [primaryFile, setPrimaryFile] = useState('');
 
     useEffect(async () => {
-        dispatch(setLoader(true));
+        dispatch(r_setLoader(true));
         window.scrollTo(0, 0)
-        dispatch(getTags());
+        dispatch(a_getTags());
 
-        await dispatch(fetchExploreList());
-        await dispatch(fetchExploreItem(id));
+        await dispatch(a_fetchExploreList());
+        await dispatch(a_fetchExploreItem(id));
         console.log('test')
     }, [id])
 
@@ -54,7 +55,7 @@ const ExploreEdit = (props) => {
                     message: 'Maximum number of tags assigned!',
                     type: 'warning'
                 }
-                dispatch(setSnackMessage(msgData));
+                dispatch(r_setSnackMessage(msgData));
             } else {
                 setExploreTags(tags => [...tags, selectedTag])
             }
@@ -72,7 +73,7 @@ const ExploreEdit = (props) => {
                 message: 'Please fill all mandatory fields!',
                 type: 'error'
             }
-            dispatch(setSnackMessage(msgData))
+            dispatch(r_setSnackMessage(msgData))
             return;
         }
 
@@ -82,21 +83,21 @@ const ExploreEdit = (props) => {
             tags: exploreTags
         }
 
-        dispatch(handleExploreEdit({ id, updatedData })).then(() => {
+        dispatch(a_handleExploreEdit({ id, updatedData })).then(() => {
             navigate(`/explore/${id}`)
             const msgData = {
                 open: true,
                 message: 'Successfully updated!',
                 type: 'success'
             }
-            dispatch(setSnackMessage(msgData));
+            dispatch(r_setSnackMessage(msgData));
         }).catch(err => {
             const msgData = {
                 open: true,
                 message: 'Edit Failed!',
                 type: 'warning'
             }
-            dispatch(setSnackMessage(msgData));
+            dispatch(r_setSnackMessage(msgData));
         });
     }
 
@@ -117,10 +118,10 @@ const ExploreEdit = (props) => {
                 <div className='flex lg:flex-row flex-col mt-3 lg:space-x-4 md:space-y-2'>
                     <div className='scrollbar w-full max-h-[37.5em] overflow-y-auto'>
                         <div className="flex flex-col space-y-3">
-                            <img loading='lazy' src={`${fetchArtworkImages(artwork.files[0])}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
+                            <img loading='lazy' src={`${api_fetchArtworkImages(artwork.files[0])}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
                             <div className='flex w-fit flex-col self-center items-center space-y-3 place-content-center'>
                                 {artwork.files.filter((image, index) => index !== 0).map((image, index) => (
-                                    <img loading='lazy' key={index} src={`${fetchArtworkImages(image)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
+                                    <img loading='lazy' key={index} src={`${api_fetchArtworkImages(image)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
                                 ))}
                             </div>
                         </div>

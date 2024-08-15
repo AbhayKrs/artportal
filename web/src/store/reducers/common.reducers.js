@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 import jwt_decode from 'jwt-decode';
-import axios from 'axios';
 import setAuthToken from '../../utils/setAuthToken';
 
 const initialState = {
@@ -168,12 +167,10 @@ const commonSlice = createSlice({
             state.searchList = [];
         },
         r_setAvatars: (state, action) => {
-            console.log('avatarList', res);
             const avatarList = [...action.payload];
             state.avatarList = avatarList;
         },
         r_setAwards: (state, action) => {
-            console.log('awardList', res);
             const awardList = [...action.payload];
             state.awardList = awardList;
         },

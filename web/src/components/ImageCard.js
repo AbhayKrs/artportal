@@ -1,19 +1,19 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
-import { fetchArtworkImages, fetchUserImages } from '../utils/api';
+import { api_fetchArtworkImages, api_fetchUserImages } from '../utils/api';
 import moment from 'moment';
 
 const ImageCard = ({ explore, author, }) => {
     let navigate = useNavigate();
 
     return (
-        <div style={{ backgroundImage: `url(${fetchArtworkImages(explore.files[0])})` }} className="group bg-gray-100 m-auto w-full h-64 bg-top bg-no-repeat bg-cover group-hover:block">
+        <div style={{ backgroundImage: `url(${api_fetchArtworkImages(explore.files[0])})` }} className="group bg-gray-100 m-auto w-full h-64 bg-top bg-no-repeat bg-cover group-hover:block">
             <div className="hidden items-end h-full w-full group-hover:flex group-hover:flex-row">
                 <div className="flex flex-col w-full pb-2 pt-14 px-2 bg-gradient-to-t from-black text-gray-200 group-hover:flex" >
                     <h3 className="text-base font-bold leading-5 capitalize">{explore.title}</h3>
                     <div className="inline-flex items-center">
                         <div className="w-5 h-5 overflow-hidden mr-1">
-                            {author ? <img loading='lazy' src={fetchUserImages(author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
+                            {author ? <img loading='lazy' src={api_fetchUserImages(author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
                         </div>
                         <span className="font-base text-xs my-1 mr-1">
                             {author.username}

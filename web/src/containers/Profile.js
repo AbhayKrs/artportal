@@ -3,9 +3,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 
-import { clearProfileDetails, handleDeleteBookmark, loadProfileDetails, refreshUserDetails, setLoader, setSnackMessage } from '../store/reducers/common.reducers';
-import { fetchExploreList } from '../store/reducers/explore.reducers';
-import { fetchArtworkImages, fetchUserImages } from '../utils/api';
+import { r_clearProfileDetails, r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducers';
+import { a_handleDeleteBookmark, a_handleViewUser, a_refreshUserDetails } from '../store/actions/common.actions';
+import { a_fetchExploreList } from '../store/actions/explore.actions';
+import { api_fetchArtworkImages, api_fetchUserImages } from '../utils/api';
 
 import Masonry from '../components/Masonry';
 
@@ -26,11 +27,11 @@ const Profile = (props) => {
     const viewed_user = useSelector(state => state.common.viewed_user);
 
     useEffect(async () => {
-        dispatch(setLoader(true));
+        dispatch(r_setLoader(true));
         window.scrollTo(0, 0);
-        await dispatch(loadProfileDetails(id));
-        await dispatch(fetchExploreList());
-        return () => dispatch(clearProfileDetails());
+        await dispatch(a_handleViewUser(id));
+        await dispatch(a_fetchExploreList());
+        return () => dispatch(r_clearProfileDetails());
     }, [id])
 
     const [activeView, setActiveView] = useState('portfolio');
@@ -41,11 +42,11 @@ const Profile = (props) => {
             message: 'Successfully deleted uploaded artwork.',
             type: 'success'
         }
-        dispatch(setSnackMessage(msgData));
+        dispatch(r_setSnackMessage(msgData));
         dispatch(deleteExploreItem(exploreID))
         setTimeout(() => {
-            dispatch(refreshUserDetails(viewed_user.id));
-            dispatch(loadProfileDetails(id));
+            dispatch(a_refreshUserDetails(viewed_user.id));
+            dispatch(a_handleViewUser(id));
         }, 2000)
     }
 
@@ -55,8 +56,8 @@ const Profile = (props) => {
             message: 'Bookmark deleted.',
             type: 'success'
         }
-        dispatch(setSnackMessage(msgData));
-        dispatch(handleDeleteBookmark({ bookmarkID, userID }))
+        dispatch(r_setSnackMessage(msgData));
+        dispatch(a_handleDeleteBookmark({ bookmarkID, userID }))
     }
 
     const onFollowClick = () => {
@@ -68,7 +69,7 @@ const Profile = (props) => {
                 message: 'User not logged in. Please Sign In/Sign Up to perform the action.',
                 type: 'error'
             }
-            dispatch(setSnackMessage(msgData));
+            dispatch(r_setSnackMessage(msgData));
         }
     }
 
@@ -81,7 +82,7 @@ const Profile = (props) => {
                 message: 'User not logged in. Please Sign In/Sign Up to perform the action.',
                 type: 'error'
             }
-            dispatch(setSnackMessage(msgData));
+            dispatch(r_setSnackMessage(msgData));
         }
     }
 
@@ -95,7 +96,7 @@ const Profile = (props) => {
                             <img loading='lazy'
                                 id={index}
                                 className='object-cover w-full h-full'
-                                src={fetchArtworkImages(explore.files[0])}
+                                src={api_fetchArtworkImages(explore.files[0])}
                             />
                             <div className='absolute z-30 hidden group-hover:flex top-0 right-0 m-2 space-x-1'>
                                 {common.user.id === viewed_user.id && <BsTrash onClick={() => deleteExploreItem(explore._id)} className=' h-6 w-6 cursor-pointer text-gray-200' />}
@@ -140,7 +141,7 @@ const Profile = (props) => {
                             <img loading='lazy'
                                 id={index}
                                 className='object-cover w-full h-full'
-                                src={fetchArtworkImages(explore.files[0])}
+                                src={api_fetchArtworkImages(explore.files[0])}
                             />
                             <div className='hidden absolute max-h-full bottom-0 p-2 pt-14 group-hover:flex group-hover:flex-row w-full bg-gradient-to-t from-black text-gray-200 group-hover:flex group-hover:justify-between'>
                                 <div className="flex flex-col place-self-end max-w-[65%]">
@@ -180,7 +181,7 @@ const Profile = (props) => {
                             <img loading='lazy'
                                 id={index}
                                 className='object-cover w-full h-full'
-                                src={fetchArtworkImages(explore.files[0])}
+                                src={api_fetchArtworkImages(explore.files[0])}
                             />
                             <IoCloseCircle onClick={() => deleteBookmark(explore._id, common.user.id)} className='hidden group-hover:flex absolute z-30 top-0 right-0 h-8 w-8 m-2 cursor-pointer text-gray-200' />
                             <div className='hidden absolute max-h-full bottom-0 p-2 pt-14 group-hover:flex group-hover:flex-row w-full bg-gradient-to-t from-black text-gray-200 group-hover:flex group-hover:justify-between'>
@@ -239,7 +240,7 @@ const Profile = (props) => {
                                 </div>
                                 <div className="w-full sm:w-3/12 px-4 flex justify-center">
                                     <div className="relative h-fit align-middle -m-[27rem] -ml-[27.5rem] sm:-m-32 sm:-ml-28 max-w-[15rem]">
-                                        {viewed_user.avatar ? <img loading='lazy' src={fetchUserImages(viewed_user.avatar.icon)} /> : null}
+                                        {viewed_user.avatar ? <img loading='lazy' src={api_fetchUserImages(viewed_user.avatar.icon)} /> : null}
                                     </div>
                                 </div>
                                 <div className="w-full sm:w-4/12 px-4 lg:text-right lg:self-center">

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { googleRedirectURL } from '../utils/api';
+
+import { api_fetchArtworkImages, api_fetchUserImages, api_fetchStoreImages, api_googleRedirectURL } from '../utils/api';
 
 import { AwardTabPanel } from './TabPanel';
 import Stepper from './Stepper';
-import { fetchArtworkImages, fetchUserImages } from '../utils/api';
 
 import TokenLogo from '../assets/images/money.png';
 import TokenIcon from '../assets/images/money.png';
@@ -72,7 +72,7 @@ export const LoginModal = ({ open, title, banner, error, onClose, openRegister, 
                         <h1 className="font-nunito text-4xl font-bold text-neutral-800 dark:text-gray-300">{title}</h1>
                         <p className="font-nunito text-base font-normal text-neutral-700 dark:text-gray-100/50">Don't have an account? <span className='font-semibold text-indigo-600 tracking-wide cursor-pointer' onClick={() => { onClose(); openRegister() }}>Sign up</span></p>
                     </div>
-                    <a href={googleRedirectURL} className="flex items-center justify-center w-full mt-6 py-2 px-3 rounded-lg border-2 border-neutral-700 dark:border-slate-400">
+                    <a href={api_googleRedirectURL} className="flex items-center justify-center w-full mt-6 py-2 px-3 rounded-lg border-2 border-neutral-700 dark:border-slate-400">
                         <GoogleIcon />
                         <p className="font-nunito font-bold tracking-wider ml-4 text-gray-800 dark:text-gray-300">Sign in with Google</p>
                     </a>
@@ -254,7 +254,7 @@ export const RegisterModal = ({ open, title, banner, error, onClose, openLogin, 
                         <p className="font-nunito text-base font-bold leading-4 px-2.5 text-gray-600 dark:text-gray-400">OR</p>
                         <hr className="w-full border-1 border-gray-600 dark:border-gray-400" />
                     </div>
-                    <a href={googleRedirectURL} className="flex items-center justify-center w-full py-2 px-3 rounded-lg border-2 border-neutral-700 dark:border-slate-400">
+                    <a href={api_googleRedirectURL} className="flex items-center justify-center w-full py-2 px-3 rounded-lg border-2 border-neutral-700 dark:border-slate-400">
                         <GoogleIcon />
                         <p className="font-nunito font-bold tracking-wider ml-4 text-gray-800 dark:text-gray-300">Sign in with Google</p>
                     </a>
@@ -300,7 +300,7 @@ export const AwardConfirmModal = ({ open, awardData, user, onClose, awardClose, 
                     <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute right-0 top-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                     <p className='text-violet-800 font-josefinregular text-2xl font-semibold '>Confirm Purchase?</p>
                     <div className='flex items-center space-x-3 my-2'>
-                        {awardData ? <img loading='lazy' className='h-16 w-16' src={fetchUserImages(awardData.icon)} /> : null}
+                        {awardData ? <img loading='lazy' className='h-16 w-16' src={api_fetchUserImages(awardData.icon)} /> : null}
                         <div className='flex-row'>
                             <div className='flex space-x-1 items-center'>
                                 <img loading='lazy' src={TokenIcon} className='h-6 w-6' />
@@ -413,7 +413,7 @@ export const PurchaseModal = ({ open, value, price, user, onClose }) => {
     )
 }
 
-export const CartModal = ({ open, onClose, cartList, cartTotal, fetchStoreImages, addToCart, handleCartRemove }) => {
+export const CartModal = ({ open, onClose, cartList, cartTotal, api_fetchStoreImages, addToCart, handleCartRemove }) => {
     const [couponCode, setCouponCode] = useState('');
     const [couponValue, setCouponValue] = useState(0);
     const [sellerInstruction, setSellerInstruction] = useState('');
@@ -467,7 +467,7 @@ export const CartModal = ({ open, onClose, cartList, cartTotal, fetchStoreImages
                     {cartList && cartList.map(cartItem => (
                         <div className='flex sm:flex-row flex-col gap-5 py-2 font-nunito text-md'>
                             <div className='flex gap-4'>
-                                <img loading='lazy' src={fetchStoreImages(cartItem.file)} className="w-20 h-20 object-cover rounded shadow-lg" alt="Thumbnail" />
+                                <img loading='lazy' src={api_fetchStoreImages(cartItem.file)} className="w-20 h-20 object-cover rounded shadow-lg" alt="Thumbnail" />
                                 <div className='flex flex-col'>
                                     <span>Title: {cartItem.title}</span>
                                     <span>Category: {cartItem.title}</span>
@@ -757,7 +757,7 @@ export const ShareModal = ({ open, value, title, onClose }) => {
     )
 }
 
-export const AvatarModal = ({ open, avatarList, title, onClose, handleEditUserAvatar }) => {
+export const AvatarModal = ({ open, avatarList, title, onClose, a_handleEditUserAvatar }) => {
     return (
         <div className={`${open ? 'block' : 'hidden'} flex  fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
             <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 sm:w-8/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
@@ -767,7 +767,7 @@ export const AvatarModal = ({ open, avatarList, title, onClose, handleEditUserAv
                         <h1 className='text-indigo-600 dark:text-violet-800 text-3xl font-semibold tracking-wide font-josefinregular'>{title}</h1>
                         <div className='grid grid-rows-4 grid-flow-col gap-4'>
                             {avatarList.map(avatar => (
-                                <img loading='lazy' onClick={() => handleEditUserAvatar(avatar)} id={avatar._id} src={fetchUserImages(avatar.icon)} />
+                                <img loading='lazy' onClick={() => a_handleEditUserAvatar(avatar)} id={avatar._id} src={api_fetchUserImages(avatar.icon)} />
                             ))}
                         </div>
                     </div>
@@ -818,7 +818,7 @@ export const SearchModal = ({ open, handleClose, betaMsg, searchVal, activeSearc
                             <div className='flex flex-col gap-2 pr-2'>
                                 {searchList.length > 0 ? searchList.map((item, index) => (
                                     <div key={index} className='flex items-center gap-4 rounded-lg text-neutral-700 dark:text-gray-200 bg-gray-100 dark:bg-neutral-900 py-2 px-5'>
-                                        <img src={fetchArtworkImages(item.files[0])} className='object-cover w-10 h-10 md:w-14 md:h-14 rounded' />
+                                        <img src={api_fetchArtworkImages(item.files[0])} className='object-cover w-10 h-10 md:w-14 md:h-14 rounded' />
                                         <span className='text-base md:text-xl font-semibold leading-5 capitalize'>{item.title}</span>
                                         <FaChevronRight onClick={() => { navigate(`/explore/${item._id}`); clearSearch() }} className="ml-auto h-6 w-6 cursor-pointer" />
                                     </div>
@@ -837,7 +837,7 @@ export const SearchModal = ({ open, handleClose, betaMsg, searchVal, activeSearc
                             <div className='flex flex-col pr-2'>
                                 {searchList.length > 0 ? searchList.map((item, index) => (
                                     <div key={index} onClick={() => { navigate(`/users/${item.id}`); clearSearch() }} className='flex items-center gap-5 cursor-pointer rounded-lg text-neutral-700 dark:text-gray-200 bg-gray-100 dark:bg-neutral-900 py-3 px-5'>
-                                        <img src={fetchUserImages(item.avatar.icon)} className='object-cover w-10 h-10' />
+                                        <img src={api_fetchUserImages(item.avatar.icon)} className='object-cover w-10 h-10' />
                                         <div className='flex flex-col'>
                                             <span className='text-lg font-semibold'>{item.name}</span>
                                             <span className='text-sm font-semibold'>@{item.username}</span>

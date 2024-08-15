@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useNavigate, } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 
-import { fetchSearchList } from '../store/reducers/common.reducers';
+import { a_fetchSearchList } from '../store/actions/common.actions';
 
 import { FaGreaterThan, FaHashtag } from 'react-icons/fa6';
 import { MdSearch, MdClose } from 'react-icons/md';
@@ -38,7 +38,7 @@ const SearchBar = ({ clearSearchList, activeSearch, setSearchType, betaMsg, expl
     const handleSearch = (val) => {
         setSearchVal(val);
         if (val.length > 0) {
-            dispatch(fetchSearchList({ type: activeSearch, value: val }))
+            dispatch(a_fetchSearchList({ type: activeSearch, value: val }))
             setSearchModal(true);
         } else {
             clearSearchList()
@@ -88,7 +88,7 @@ const SearchBar = ({ clearSearchList, activeSearch, setSearchType, betaMsg, expl
                     onChange={(ev) => handleSearch(ev.target.value)}
                     onKeyPress={(ev) => {
                         if (ev.key === 'Enter') {
-                            dispatch(fetchSearchList({ type: activeSearch, value: searchVal }))
+                            dispatch(a_fetchSearchList({ type: activeSearch, value: searchVal }))
                         }
                     }}
                 />
@@ -108,7 +108,7 @@ const SearchBar = ({ clearSearchList, activeSearch, setSearchType, betaMsg, expl
                 searchList={searchList}
                 setSearchVal={setSearchVal}
                 activeSearch={activeSearch}
-                fetchSearchList={(type, value) => dispatch(fetchSearchList({ type, value }))}
+                fetchSearchList={(type, value) => dispatch(a_fetchSearchList({ type, value }))}
                 clearSearch={clearSearch}
                 handleExploreSearch={handleExploreSearch}
             />
