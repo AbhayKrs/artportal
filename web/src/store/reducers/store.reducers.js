@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { sellerListAPI, storeListAPI, storeItemAPI, categorizedStoreListAPI, storeUploadAPI } from '../../utils/api';
 
 export const initialState = {
     id: null,
@@ -34,56 +33,32 @@ const storeSlice = createSlice({
     name: 'store',
     initialState,
     reducers: {
-        fetchSellerList: (state, action) => {
-            sellerListAPI().then(res => {
-                const sellerList = [...res.data];
-                state.sellerList = sellerList;
-            }).catch(err => {
-                console.log('---error fetchSellersList', err)
-            })
+        r_setSellerList: (state, action) => {
+            const sellerList = [...action.payload];
+            state.sellerList = sellerList;
         },
-        fetchStoreList: (state, action) => {
-            storeListAPI().then(res => {
-                const storeList = [...res.data];
-                state.storeList = storeList;
-            }).catch(err => {
-                console.log('---error fetchStoreList', err);
-            })
+        r_setStoreList: (state, action) => {
+            const storeList = [...action.payload];
+            state.storeList = storeList;
         },
-        fetchStoreItem: (state, action) => {
-            storeItemAPI(action.payload).then(res => {
-                state.storeItem = res.data
-            }).catch(err => {
-                console.log('---error fetchStoreItem', err);
-            })
+        r_setStoreItem: (state, action) => {
+            state.storeItem = action.payload;
         },
-        fetchCategorizedStoreList: (state, action) => {
-            categorizedStoreListAPI(action.payload).then(res => {
-                const storeList = [...res.data];
-                state.storeList = storeList;
-            }).catch(err => {
-                console.log('---error fetchCategorizedStoreList', err);
-            })
+        r_storeUpload: (state, action) => {
+            const { file, title, description } = action.payload;
+            state.file = file;
+            state.title = title;
+            state.description = description;
+            state.uploadStatus = 'success'
         },
-        handleStoreUpload: (state, action) => {
-            storeUploadAPI(action.payload).then(res => {
-                state.file = res.data.file;
-                state.title = res.data.title;
-                state.description = res.data.description;
-                state.uploadStatus = 'success'
-            }).catch(err => {
-                console.log('---error handleStoreUpload', err);
-            })
-        },
-        reset: () => initialState
+        handleStoreReset: () => initialState
     }
 });
 
 export const {
-    fetchSellerList,
-    fetchStoreList,
-    fetchStoreItem,
-    fetchCategorizedStoreList,
-    handleStoreUpload
+    r_setSellerList,
+    r_setStoreList,
+    r_setStoreItem,
+    r_storeUpload
 } = storeSlice.actions
 export default storeSlice.reducer

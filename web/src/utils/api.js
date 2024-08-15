@@ -1,74 +1,66 @@
 import axios from 'axios';
 
-// const baseURL = 'https://artportalweb.onrender.com/api/v1';
-// export const taggerURL = 'https://artportalweb.onrender.com/api/v1.01/tagger/model.json';
+// const api_baseURL = 'https://artportalweb.onrender.com/api/v1';
+// export const api_taggerURL = 'https://artportalweb.onrender.com/api/v1.01/tagger/model.json';
 const baseURL = 'http://localhost:5000/api/v1.01';
-export const taggerURL = 'http://localhost:5000/api/v1.01/tagger/model.json';
+export const taggerURL = baseURL + '/tagger/model.json';
+export const api_googleRedirectURL = baseURL + `/auth/google/login`;
 
-const get_api = axios.create({ baseURL });
-const post_api = axios.create({ baseURL, headers: { 'Content-Type': 'application/json' } });
-const form_api = axios.create({ baseURL, headers: { 'Content-Type': 'multipart/form-data' } });
+export const api_fetchArtworkImages = filename => baseURL + `/artworks/image/${filename}`;
+export const api_fetchStoreImages = filename => baseURL + `/store/image/${filename}`;
+export const api_fetchUserImages = filename => baseURL + `/common/files/${filename}`;
 
-export const fetchViewerID = () => axios.get('https://api.ipify.org?format=json');
+const artportal_get = axios.create({ baseURL });
+const artportal_post = axios.create({ baseURL, headers: { 'Content-Type': 'application/json' } });
+const artportal_form = axios.create({ baseURL, headers: { 'Content-Type': 'multipart/form-data' } });
 
-export const fetchArtworkImages = filename => baseURL + `/artworks/image/${filename}`;
-export const fetchStoreImages = filename => baseURL + `/store/image/${filename}`;
-export const fetchUserImages = filename => baseURL + `/common/files/${filename}`;
-export const googleRedirectURL = baseURL + `/auth/google/login`;
+export const api_viewerID = () => axios.get('https://api.ipify.org?format=json');
 
-//GET Request API's
-export const googleLoginAPI = () => get_api.get(`/auth/google/login`);
-export const artworkListAPI = () => get_api.get(`/artworks`);
-export const searchAPI = (type, value) => get_api.get(`/search?type=${type}&value=${value}`);
-export const exploreItemAPI = (id, payload) => get_api.get(`/artworks/${id}`, payload);
-export const filterExploreListAPI = (filter, period) => get_api.get(`/artworks?filter=${filter}&period=${period}`);
-export const searchFilterExploreListAPI = (type, value, filter, period) => get_api.get(`/search?type=${type}&value=${value}&filter=${filter}&period=${period}`);
-export const sellerListAPI = () => get_api.get('/users?type=seller');
-export const storeListAPI = () => get_api.get(`/store`);
-export const storeItemAPI = storeID => get_api.get(`/store/${storeID}`);
-export const categorizedStoreListAPI = (category) => get_api.get(`/store?category=${category}`);
-export const userExploreListAPI = userID => get_api.get(`/users/${userID}/artworks`);
-export const userStoreListAPI = userID => get_api.get(`/users/${userID}/store`);
-export const userCartListAPI = userID => get_api.get(`/users/${userID}/cart`);
-export const tagsAPI = () => get_api.get(`/common/tags`);
-export const userDetailsAPI = userID => get_api.get(`/users/${userID}`);
-export const avatarListAPI = () => get_api.get(`/common/avatars`);
-export const awardListAPI = () => get_api.get(`/common/stickers`);
-export const locationsListAPI = () => get_api.get(`/common/locations`);
+export const api_tags = () => artportal_get.get(`/common/tags`);
+export const api_signIn = userData => artportal_post.post(`/auth/login`, userData);
+export const api_signUp = userData => artportal_post.post(`/auth/signup`, userData);
+export const api_googleLogin = () => artportal_get.get(`/auth/google/login`);
+export const api_userDetails = userID => artportal_get.get(`/users/${userID}`);
+export const api_updateUserData = (userID, userData) => artportal_get.put(`/users/${userID}`, userData);
+export const api_deleteBookmark = (bookmarkID, userID) => artportal_get.delete(`/users/${userID}/bookmark/${bookmarkID}`);
+export const api_artworkList = () => artportal_get.get(`/artworks`);
+export const api_search = (type, value) => artportal_get.get(`/search?type=${type}&value=${value}`);
+export const api_exploreItem = (id, payload) => artportal_get.get(`/artworks/${id}`, payload);
+export const api_filterExploreList = (filter, period) => artportal_get.get(`/artworks?filter=${filter}&period=${period}`);
+export const api_searchFilterExploreList = (type, value, filter, period) => artportal_get.get(`/search?type=${type}&value=${value}&filter=${filter}&period=${period}`);
+export const api_sellerList = () => artportal_get.get('/users?type=seller');
+export const api_storeList = () => artportal_get.get(`/store`);
+export const api_storeItem = storeID => artportal_get.get(`/store/${storeID}`);
+export const api_categorizedStoreList = (category) => artportal_get.get(`/store?category=${category}`);
+export const api_userExploreList = userID => artportal_get.get(`/users/${userID}/artworks`);
+export const api_userStoreList = userID => artportal_get.get(`/users/${userID}/store`);
+export const api_userCartList = userID => artportal_get.get(`/users/${userID}/cart`);
+export const api_avatarList = () => artportal_get.get(`/common/avatars`);
+export const api_awardList = () => artportal_get.get(`/common/stickers`);
+export const api_locationsList = () => artportal_get.get(`/common/locations`);
+export const api_exploreUpload = exploreData => artportal_form.post(`/artworks/new`, exploreData);
+export const api_addExploreItemComment = (exploreID, commentText, userData) => artportal_post.post(`/artworks/${exploreID}/comments/new`, { content: commentText, user: userData })
+export const api_storeUpload = storeData => artportal_form.post(`/store/new`, storeData);
+export const api_bookmarkExploreItem = (userID, bookmarkData) => artportal_post.post(`/users/${userID}/bookmark`, bookmarkData);
+export const api_addUserCart = (userID, cartData) => artportal_get.post(`/users/${userID}/cart/add`, cartData);
+export const api_editAvatar = (userID, avatar) => artportal_get.post(`/users/${userID}/avatar`, avatar);
+export const api_exploreItemEdit = (exploreID, updatedData) => artportal_get.put(`/artworks/${exploreID}`, updatedData)
+export const api_exploreItemViewed = (exploreID, viewerID) => artportal_get.put(`/artworks/${exploreID}/viewed`, { viewer_id: viewerID });
+export const api_exploreEditComment = (exploreID, newComment, commentID, userData) => artportal_get.put(`/artworks/${exploreID}/comments/${commentID}`, { content: newComment, user: userData })
+export const api_likeExplore = (exploreID, userData) => artportal_get.put(`/artworks/${exploreID}/like`, userData);
+export const api_dislikeExplore = (exploreID, userData) => artportal_get.put(`/artworks/${exploreID}/dislike`, userData);
+export const api_exploreLikeComment = (exploreID, commentID, userData) => artportal_get.put(`/artworks/${exploreID}/comments/${commentID}/like`, { user: userData });
+export const api_exploreDislikeComment = (exploreID, commentID, userData) => artportal_get.put(`/artworks/${exploreID}/comments/${commentID}/dislike`, { user: userData });
+export const api_awardExplore = (exploreID, userID, awardData) => artportal_get.put(`/artworks/${exploreID}/award`, { userID: userID, ...awardData });
+export const api_updateUserCart = (userID, cartID, cartData) => artportal_get.put(`/users/${userID}/cart/${cartID}`, cartData);
+export const api_deleteExploreItem = (exploreID) => artportal_post.delete(`/artworks/${exploreID}`);
+export const api_exploreDeleteComment = (exploreID, commentID) => artportal_get.delete(`/artworks/${exploreID}/comments/${commentID}`);
+export const api_deleteStoreItem = (storeID, userID) => artportal_post.delete(`/store/${storeID}`, userID);
+export const api_deleteCartItem = (cartID, userID) => artportal_get.delete(`/users/${userID}/cart/${cartID}`);
 
-//POST Request API's
-export const loginAPI = userData => post_api.post(`/auth/login`, userData);
-export const signUpAPI = userData => post_api.post(`/auth/signup`, userData);
-export const exploreUploadAPI = exploreData => form_api.post(`/artworks/new`, exploreData);
-export const addArtworkCommentAPI = (exploreID, commentText, userData) => post_api.post(`/artworks/${exploreID}/comments/new`, { content: commentText, user: userData })
-export const storeUploadAPI = storeData => form_api.post(`/store/new`, storeData);
-export const bookmarkArtworkAPI = (userID, bookmarkData) => post_api.post(`/users/${userID}/bookmark`, bookmarkData);
-export const addUserCartAPI = (userID, cartData) => get_api.post(`/users/${userID}/cart/add`, cartData);
-export const editAvatarAPI = (userID, avatar) => get_api.post(`/users/${userID}/avatar`, avatar);
-
-//PUT Request API's
-export const exploreItemEditAPI = (exploreID, updatedData) => get_api.put(`/artworks/${exploreID}`, updatedData)
-export const exploreItemViewedAPI = (exploreID, viewerID) => get_api.put(`/artworks/${exploreID}/viewed`, { viewer_id: viewerID });
-export const exploreEditCommentAPI = (exploreID, newComment, commentID, userData) => get_api.put(`/artworks/${exploreID}/comments/${commentID}`, { content: newComment, user: userData })
-export const likeExploreAPI = (exploreID, userData) => get_api.put(`/artworks/${exploreID}/like`, userData);
-export const dislikeExploreAPI = (exploreID, userData) => get_api.put(`/artworks/${exploreID}/dislike`, userData);
-export const exploreLikeCommentAPI = (exploreID, commentID, userData) => get_api.put(`/artworks/${exploreID}/comments/${commentID}/like`, { user: userData });
-export const exploreDislikeCommentAPI = (exploreID, commentID, userData) => get_api.put(`/artworks/${exploreID}/comments/${commentID}/dislike`, { user: userData });
-export const awardExploreAPI = (exploreID, userID, awardData) => get_api.put(`/artworks/${exploreID}/award`, { userID: userID, ...awardData });
-export const updateUserDataAPI = (userID, userData) => get_api.put(`/users/${userID}`, userData);
-export const updateUserCartAPI = (userID, cartID, cartData) => get_api.put(`/users/${userID}/cart/${cartID}`, cartData);
-
-//DELETE Request API's
-export const deleteExploreItemAPI = (exploreID) => post_api.delete(`/artworks/${exploreID}`);
-export const exploreDeleteCommentAPI = (exploreID, commentID) => get_api.delete(`/artworks/${exploreID}/comments/${commentID}`);
-export const deleteStoreItemAPI = (storeID, userID) => post_api.delete(`/store/${storeID}`, userID);
-export const deleteBookmarkAPI = (bookmarkID, userID) => get_api.delete(`/users/${userID}/bookmark/${bookmarkID}`);
-export const deleteCartItemAPI = (cartID, userID) => get_api.delete(`/users/${userID}/cart/${cartID}`);
-
-
-// export const likeExplore = exploreID => apis.put(`/artworks/${exploreID}/like`, { user: getState().common.user })
-// export const dislikeExplore = exploreID => apis.put(`/artworks/${exploreID}/dislike`, { user: getState().common.user })
-// export const getAllMovies = () => api.get(`/movies`)
-// export const updateMovieById = (id, payload) => api.put(`/movie/${id}`, payload)
-// export const deleteMovieById = id => api.delete(`/movie/${id}`)
-// export const getMovieById = id => api.get(`/movie/${id}`)
+// export const api_likeExplore = exploreID => apis.put(`/artworks/${exploreID}/like`, { user: getState().common.user })
+// export const api_dislikeExplore = exploreID => apis.put(`/artworks/${exploreID}/dislike`, { user: getState().common.user })
+// export const api_getAllMovies = () => api.get(`/movies`)
+// export const api_updateMovieById = (id, payload) => api.put(`/movie/${id}`, payload)
+// export const api_deleteMovieById = id => api.delete(`/movie/${id}`)
+// export const api_getMovieById = id => api.get(`/movie/${id}`)
