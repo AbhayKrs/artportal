@@ -1,8 +1,8 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const paths = require('./paths');
+import { existsSync, realpathSync } from 'fs';
+import { delimiter, isAbsolute, resolve } from 'path';
+import { dotenv } from './paths';
 
 // Make sure that including paths.js after env.js will read .env variables.
 delete require.cache[require.resolve('./paths')];
@@ -16,13 +16,13 @@ if (!NODE_ENV) {
 
 // https://github.com/bkeepers/dotenv#what-other-env-files-can-i-use
 const dotenvFiles = [
-  `${paths.dotenv}.${NODE_ENV}.local`,
+  `${dotenv}.${NODE_ENV}.local`,
   // Don't include `.env.local` for `test` environment
   // since normally you expect tests to produce the same
   // results for everyone
-  NODE_ENV !== 'test' && `${paths.dotenv}.local`,
-  `${paths.dotenv}.${NODE_ENV}`,
-  paths.dotenv,
+  NODE_ENV !== 'test' && `${dotenv}.local`,
+  `${dotenv}.${NODE_ENV}`,
+  dotenv,
 ].filter(Boolean);
 
 // Load environment variables from .env* files. Suppress warnings using silent
@@ -31,7 +31,7 @@ const dotenvFiles = [
 // https://github.com/motdotla/dotenv
 // https://github.com/motdotla/dotenv-expand
 dotenvFiles.forEach(dotenvFile => {
-  if (fs.existsSync(dotenvFile)) {
+  if (existsSync(dotenvFile)) {
     require('dotenv-expand')(
       require('dotenv').config({
         path: dotenvFile,
@@ -49,12 +49,12 @@ dotenvFiles.forEach(dotenvFile => {
 // Otherwise, we risk importing Node.js core modules into an app instead of webpack shims.
 // https://github.com/facebook/create-react-app/issues/1023#issuecomment-265344421
 // We also resolve them to make sure all tools using them work consistently.
-const appDirectory = fs.realpathSync(process.cwd());
+const appDirectory = realpathSync(process.cwd());
 process.env.NODE_PATH = (process.env.NODE_PATH || '')
-  .split(path.delimiter)
-  .filter(folder => folder && !path.isAbsolute(folder))
-  .map(folder => path.resolve(appDirectory, folder))
-  .join(path.delimiter);
+  .split(delimiter)
+  .filter(folder => folder && !isAbsolute(folder))
+  .map(folder => resolve(appDirectory, folder))
+  .join(delimiter);
 
 // Grab NODE_ENV and REACT_APP_* environment variables and prepare them to be
 // injected into the application via DefinePlugin in webpack configuration.
@@ -101,4 +101,4 @@ function getClientEnvironment(publicUrl) {
   return { raw, stringified };
 }
 
-module.exports = getClientEnvironment;
+export default getClientEnvironment;

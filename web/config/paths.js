@@ -1,13 +1,13 @@
 'use strict';
 
-const path = require('path');
-const fs = require('fs');
-const getPublicUrlOrPath = require('react-dev-utils/getPublicUrlOrPath');
+import { resolve } from 'path';
+import { realpathSync, existsSync } from 'fs';
+import getPublicUrlOrPath from 'react-dev-utils/getPublicUrlOrPath';
 
 // Make sure any symlinks in the project folder are resolved:
 // https://github.com/facebook/create-react-app/issues/637
-const appDirectory = fs.realpathSync(process.cwd());
-const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
+const appDirectory = realpathSync(process.cwd());
+const resolveApp = relativePath => resolve(appDirectory, relativePath);
 
 // We use `PUBLIC_URL` environment variable or "homepage" field to infer
 // "public path" at which the app is served.
@@ -40,7 +40,7 @@ const moduleFileExtensions = [
 // Resolve file paths in the same order as webpack
 const resolveModule = (resolveFn, filePath) => {
   const extension = moduleFileExtensions.find(extension =>
-    fs.existsSync(resolveFn(`${filePath}.${extension}`))
+    existsSync(resolveFn(`${filePath}.${extension}`))
   );
 
   if (extension) {
@@ -51,7 +51,7 @@ const resolveModule = (resolveFn, filePath) => {
 };
 
 // config after eject: we're in ./config/
-module.exports = {
+export default {
   dotenv: resolveApp('.env'),
   appPath: resolveApp('.'),
   appBuild: resolveApp(buildPath),
@@ -74,4 +74,5 @@ module.exports = {
 
 
 
-module.exports.moduleFileExtensions = moduleFileExtensions;
+const _moduleFileExtensions = moduleFileExtensions;
+export { _moduleFileExtensions as moduleFileExtensions };
