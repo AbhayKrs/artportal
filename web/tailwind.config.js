@@ -5,10 +5,10 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx,html}"],
   theme: {
     screens: {
-      'xs': '360px',
-      'sm': '640px',
-      'md': '768px',
-      'lg': '1280px',
+      'xs': '425px',
+      'sm': '768px',
+      'md': '1024px',
+      'lg': '1440px',
       'xl': '1920px'
     },
     fontFamily: {
@@ -19,7 +19,6 @@ module.exports = {
       darkBg: '#1a1a1c',
       ...colors
     },
-
     extend: {},
   },
   plugins: []

@@ -1,10 +1,10 @@
 'use strict';
 
-import { existsSync, readFileSync } from 'fs';
-import { resolve } from 'path';
-import { publicEncrypt, privateDecrypt } from 'crypto';
-import { yellow, cyan } from 'react-dev-utils/chalk';
-import { appPath } from './paths';
+const fs = require('fs');
+const path = require('path');
+const crypto = require('crypto');
+const chalk = require('react-dev-utils/chalk');
+const paths = require('./paths');
 
 // Ensure the certificate and key provided are valid and if not
 // throw an easy to debug error
@@ -12,19 +12,20 @@ function validateKeyAndCerts({ cert, key, keyFile, crtFile }) {
   let encrypted;
   try {
     // publicEncrypt will throw an error with an invalid cert
-    encrypted = publicEncrypt(cert, Buffer.from('test'));
+    encrypted = crypto.publicEncrypt(cert, Buffer.from('test'));
   } catch (err) {
     throw new Error(
-      `The certificate "${yellow(crtFile)}" is invalid.\n${err.message}`
+      `The certificate "${chalk.yellow(crtFile)}" is invalid.\n${err.message}`
     );
   }
 
   try {
     // privateDecrypt will throw an error with an invalid key
-    privateDecrypt(key, encrypted);
+    crypto.privateDecrypt(key, encrypted);
   } catch (err) {
     throw new Error(
-      `The certificate key "${yellow(keyFile)}" is invalid.\n${err.message
+      `The certificate key "${chalk.yellow(keyFile)}" is invalid.\n${
+        err.message
       }`
     );
   }
@@ -32,14 +33,14 @@ function validateKeyAndCerts({ cert, key, keyFile, crtFile }) {
 
 // Read file and throw an error if it doesn't exist
 function readEnvFile(file, type) {
-  if (!existsSync(file)) {
+  if (!fs.existsSync(file)) {
     throw new Error(
-      `You specified ${cyan(
+      `You specified ${chalk.cyan(
         type
-      )} in your env, but the file "${yellow(file)}" can't be found.`
+      )} in your env, but the file "${chalk.yellow(file)}" can't be found.`
     );
   }
-  return readFileSync(file);
+  return fs.readFileSync(file);
 }
 
 // Get the https config
@@ -49,8 +50,8 @@ function getHttpsConfig() {
   const isHttps = HTTPS === 'true';
 
   if (isHttps && SSL_CRT_FILE && SSL_KEY_FILE) {
-    const crtFile = resolve(appPath, SSL_CRT_FILE);
-    const keyFile = resolve(appPath, SSL_KEY_FILE);
+    const crtFile = path.resolve(paths.appPath, SSL_CRT_FILE);
+    const keyFile = path.resolve(paths.appPath, SSL_KEY_FILE);
     const config = {
       cert: readEnvFile(crtFile, 'SSL_CRT_FILE'),
       key: readEnvFile(keyFile, 'SSL_KEY_FILE'),
@@ -62,4 +63,4 @@ function getHttpsConfig() {
   return isHttps;
 }
 
-export default getHttpsConfig;
+module.exports = getHttpsConfig;
