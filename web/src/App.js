@@ -88,7 +88,7 @@ const Layout = (props) => {
   }, []);
 
   return (
-    <main className={`App ${common.theme} relative`}>
+    <main className={`${common.theme} relative`}>
       <Header betaMsg={betaMsg} setBetaMsg={setBetaMsg} />
       <div className={`h-screen flex flex-col bg-gray-200 dark:bg-darkBg ${betaMsg === true ? 'pt-[5.5rem]' : 'pt-[3.75rem]'}`}>
         <Snackbar msgdata={common.snackmsg} setMessage={(msgData) => dispatch(r_setSnackMessage(msgData))} />
@@ -100,7 +100,6 @@ const Layout = (props) => {
 };
 
 const App = () => {
-
   const router = createBrowserRouter([
     {
       element: <Layout />,
