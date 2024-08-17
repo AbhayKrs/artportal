@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from "react-redux";
 
-import { a_fetchAvatars, a_handleEditUserAvatar, a_handleUpdateUser, a_handleViewUser, a_refreshUserDetails } from '../../store/actions/common.actions';
-import { r_setSnackMessage } from '../../store/reducers/common.reducers';
-import { api_fetchArtworkImages, api_fetchUserImages } from '../../utils/api';
+import { a_fetchAvatars, a_handleEditUserAvatar, a_handleUpdateUser, a_handleViewUser, a_refreshUserDetails } from '../store/actions/common.actions';
+import { r_setSnackMessage } from '../store/reducers/common.reducers';
+import { api_fetchArtworkImages, api_fetchUserImages } from '../utils/api';
 
-import { AvatarModal, ConfirmModal } from '../../components/Modal';
+import { AvatarModal, ConfirmModal } from '../components/Modal';
 
 import { AiOutlineLink } from 'react-icons/ai';
 import { FaEdit, FaRegUserCircle } from 'react-icons/fa';

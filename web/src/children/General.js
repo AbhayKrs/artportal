@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react';
 import { connect } from 'react-redux'
-import Dropdown from '../../components/Dropdown';
+import Dropdown from '../components/Dropdown';
 
 export const General = (props) => {
     const [countryList, setCountryList] = useState([{
