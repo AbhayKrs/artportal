@@ -37,14 +37,14 @@ import Snackbar from './components/Snackbar';
 // import Upload from './components/Explore/Upload';
 // import Privacy from './components/Help/Privacy';
 
-import General from './containers/children/General';
-import Account from './containers/children/Account';
-import Notification from './containers/children/Notification';
-import Community from './containers/children/Community';
-import Billing from './containers/children/Billing';
-import About from './containers/children/About';
-import TOS from './containers/children/TOS';
-import Privacy from './containers/children/Privacy';
+import General from './children/General';
+import Account from './children/Account';
+import Notification from './children/Notification';
+import Community from './children/Community';
+import Billing from './children/Billing';
+import About from './children/About';
+import TOS from './children/TOS';
+import Privacy from './children/Privacy';
 
 const Layout = (props) => {
   const dispatch = useDispatch();
