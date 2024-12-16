@@ -68,14 +68,14 @@ export const Settings = (props) => {
                         <hr />
                     </>
                     }
-                    <button className={`${childPath === 'general' ? `text-purple-500` : `text-black dark:text-gray-300`} font-nunito font-bold`} onClick={() => navigate('/settings/general')}>General</button>
-                    <button className={`${childPath === 'account' ? `text-purple-500` : `text-black dark:text-gray-300`} font-nunito font-bold`} onClick={() => navigate('/settings/account')}>Account</button>
-                    <button disabled className={`${childPath === 'notifications' ? `text-purple-500` : `text-gray-500 dark:text-gray-600`} font-nunito font-bold`} onClick={() => navigate('/settings/notifications')}>Notifications</button>
-                    <button disabled className={`${childPath === 'community' ? `text-purple-500` : `text-gray-500 dark:text-gray-600`} font-nunito font-bold`} onClick={() => navigate('/settings/community')}>Community</button>
-                    <button disabled className={`${childPath === 'billing' ? `text-purple-500` : `text-gray-500 dark:text-gray-600`} font-nunito font-bold`} onClick={() => navigate('/settings/billing')}>Billing</button>
-                    <button className={`${childPath === 'about' ? `text-purple-500` : `text-black dark:text-gray-300`} font-nunito font-bold`} onClick={() => navigate('/settings/about')}>About</button>
-                    <button className={`${childPath === 'tos' ? `text-purple-500` : `text-black dark:text-gray-300`} font-nunito font-bold`} onClick={() => navigate('/settings/tos')}>Terms of Service</button>
-                    <button className={`${childPath === 'privacy' ? `text-purple-500` : `text-black dark:text-gray-300`} font-nunito font-bold`} onClick={() => navigate('/settings/privacy')}>Privacy Policy</button>
+                    <button className={`${childPath === 'general' ? `text-purple-500` : `text-black dark:text-gray-300`} font-parkinsans font-bold`} onClick={() => navigate('/settings/general')}>General</button>
+                    <button className={`${childPath === 'account' ? `text-purple-500` : `text-black dark:text-gray-300`} font-parkinsans font-bold`} onClick={() => navigate('/settings/account')}>Account</button>
+                    <button disabled className={`${childPath === 'notifications' ? `text-purple-500` : `text-gray-500 dark:text-gray-600`} font-parkinsans font-bold`} onClick={() => navigate('/settings/notifications')}>Notifications</button>
+                    <button disabled className={`${childPath === 'community' ? `text-purple-500` : `text-gray-500 dark:text-gray-600`} font-parkinsans font-bold`} onClick={() => navigate('/settings/community')}>Community</button>
+                    <button disabled className={`${childPath === 'billing' ? `text-purple-500` : `text-gray-500 dark:text-gray-600`} font-parkinsans font-bold`} onClick={() => navigate('/settings/billing')}>Billing</button>
+                    <button className={`${childPath === 'about' ? `text-purple-500` : `text-black dark:text-gray-300`} font-parkinsans font-bold`} onClick={() => navigate('/settings/about')}>About</button>
+                    <button className={`${childPath === 'tos' ? `text-purple-500` : `text-black dark:text-gray-300`} font-parkinsans font-bold`} onClick={() => navigate('/settings/tos')}>Terms of Service</button>
+                    <button className={`${childPath === 'privacy' ? `text-purple-500` : `text-black dark:text-gray-300`} font-parkinsans font-bold`} onClick={() => navigate('/settings/privacy')}>Privacy Policy</button>
                 </div>
                 <Outlet />
             </div>

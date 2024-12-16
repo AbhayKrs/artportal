@@ -25,7 +25,7 @@ import search from './server/routes/search.js';
 dotenv.config();
 connectDB();
 
-import { taggergfs } from './server/config/gridfsconfig.js';
+import { taggerBucket } from './server/config/gridfs_config.js';
 
 const app = express();
 app.use(cors());
@@ -55,21 +55,17 @@ app.use(`/api/${process.env.API_VERSION}/store`, store);
 app.use(`/api/${process.env.API_VERSION}/common`, common);
 app.use(`/api/${process.env.API_VERSION}/search`, search);
 
-app.get(`/api/${process.env.API_VERSION}/tagger/:filename`, (req, res) => {
+app.get(`/api/${process.env.API_VERSION}/tagger/:filename`, async (req, res) => {
+    const { filename } = req.params;
+
     try {
-        // /image/:filename?
-        taggergfs.files.findOne({ filename: req.params.filename }, (err, file) => {
-            // Check if json or bin file
-            if (file.contentType === 'application/json' || file.contentType === 'application/octet-stream') {
-                // Read output to browser
-                const readstream = taggergfs.createReadStream({
-                    filename: req.params.filename,
-                });
-                readstream.pipe(res);
-            } else {
-                res.status(404).json({ err: 'Not a tagger file' });
-            }
-        });
+        const file = await taggerBucket.find({ filename }).toArray();
+
+        // Check if file
+        if (!file || file.length === 0) {
+            return res.status(404).json({ err: 'No file found' });
+        }
+        taggerBucket.openDownloadStreamByName(filename).pipe(res);
     } catch (err) {
         return res.status(404).json({ msg: err.name });
     }

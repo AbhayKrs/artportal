@@ -1,21 +1,25 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-import { api_viewerID, api_tags, api_signIn, api_signUp, api_googleLogin, api_userDetails, api_updateUserData, api_deleteBookmark, api_search, api_userExploreList, api_userStoreList, api_deleteStoreItem, api_userCartList, api_avatarList, api_awardList, api_locationsList, api_editAvatar, api_deleteCartItem, api_updateUserCart, api_addUserCart } from '../../utils/api'
-import { r_deleteBookmark, r_headerDialogClose, r_headerDialogOpen, r_setAuthError, r_setAvatars, r_setAwards, r_setCartList, r_setLocations, r_setSearchList, r_setSnackMessage, r_setTags, r_setUserExploreList, r_setUserStoreList, r_setViewerID, r_signIn, r_signUp } from '../reducers/common.reducers';
+import { api_tags, api_signIn, api_signUp, api_googleLogin, api_userDetails, api_updateUserData, api_deleteBookmark, api_search, api_userExploreList, api_userStoreList, api_deleteStoreItem, api_userCartList, api_avatarList, api_awardList, api_locationsList, api_editAvatar, api_deleteCartItem, api_updateUserCart, api_addUserCart } from '../../utils/api'
+import { r_deleteBookmark, r_headerDialogClose, r_headerDialogOpen, r_setAuthError, r_setAvatars, r_setAwards, r_setCartList, r_setLocations, r_setSearchList, r_setSnackMessage, r_setTags, r_setUserExploreList, r_setUserStoreList, r_setVisitorStatus, r_signIn, r_signUp } from '../reducers/common.reducers';
 
 import jwt_decode from 'jwt-decode';
 import setAuthToken from '../../utils/setAuthToken';
 
-export const a_fetchViewerID = createAsyncThunk("a_fetchViewerID", async (payload, { getState, dispatch, rejectWithValue }) => {
-    api_viewerID().then(res => {
-        const ipAdr = res.data.ip.replaceAll('.', '');
-        dispatch(r_setViewerID(ipAdr));
-        return;
-    }).catch(err => {
-        console.log('---error a_fetchViewerID', err);
-        return rejectWithValue(err.message)
-    })
+export const a_fetchVisitorStatus = createAsyncThunk("a_fetchVisitorStatus", async (payload, { getState, dispatch, rejectWithValue }) => {
+    const setCookie = (c_name, value, exdays) => { var exdate = new Date(); exdate.setDate(exdate.getDate() + exdays); var c_value = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString()); document.cookie = c_name + "=" + c_value; }
+    const getCookie = (c_name) => { var c_value = document.cookie; var c_start = c_value.indexOf(" " + c_name + "="); if (c_start == -1) { c_start = c_value.indexOf(c_name + "="); } if (c_start == -1) { c_value = null; } else { c_start = c_value.indexOf("=", c_start) + 1; var c_end = c_value.indexOf(";", c_start); if (c_end == -1) { c_end = c_value.length; } c_value = unescape(c_value.substring(c_start, c_end)); } return c_value; }
+
+    var c = getCookie("visited");
+    if (c === "yes") {
+        // alert("Welcome back YOU!");
+        dispatch(r_setVisitorStatus(false));
+    } else {
+        // alert("Welcome new visitor!");
+        dispatch(r_setVisitorStatus(true));
+    }
+    setCookie("visited", "yes", 365); // expire in 1 year; or use null to never expire
 });
 
 export const a_getTags = createAsyncThunk("a_getTags", async (payload, { getState, dispatch, rejectWithValue }) => {
@@ -129,7 +133,7 @@ export const a_handleViewUser = createAsyncThunk("a_handleViewUser", async (payl
     await api_userDetails(payload).then(res => {
         const { token } = res.data;
         const loginData = jwt_decode(token);
-        dispatch(r_setViewerID(loginData));
+        dispatch(r_setVisitorStatus(loginData));
         return;
     }).catch(err => {
         if (err.response) {

@@ -105,7 +105,7 @@ const ExploreEdit = (props) => {
         <div className="main-container bg-gray-200 dark:bg-darkBg p-8">
             <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-5">
                 <div className="flex justify-between pt-5">
-                    <span className='font-nunito text-3xl text-gray-700 dark:text-gray-300'>Edit</span>
+                    <span className='font-parkinsans text-3xl text-gray-700 dark:text-gray-300'>Edit</span>
                     <div>
                         <button onClick={() => navigate(`/explore/${id}`)} className="rounded-md px-3 py-1 bg-gray-100 hover:bg-gray-200 focus:shadow-outline focus:outline-none">
                             Cancel

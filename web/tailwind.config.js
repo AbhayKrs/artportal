@@ -12,8 +12,7 @@ module.exports = {
       'xl': '1920px'
     },
     fontFamily: {
-      'caviar': 'Caviar',
-      'nunito': 'Nunito'
+      'parkinsans': 'Parkinsans',
     },
     colors: {
       darkBg: '#1a1a1c',

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { r_setLoader } from '../store/reducers/common.reducers';
-import { a_fetchExploreList, a_fetchTrendingList, a_fetchNewlyAddedList, a_fetchMonthHighlightsList } from '../store/actions/explore.actions';
+import { a_fetchHomeData } from '../store/actions/explore.actions';
 
 import { HomeSingleCarousel } from '../components/Carousel';
 import HighlightList from '../components/HighlightList';
@@ -19,10 +19,7 @@ const Home = (props) => {
     useEffect(() => {
         window.scrollTo(0, 0);
         dispatch(r_setLoader(true));
-        dispatch(a_fetchExploreList());
-        dispatch(a_fetchTrendingList());
-        dispatch(a_fetchNewlyAddedList());
-        dispatch(a_fetchMonthHighlightsList());
+        dispatch(a_fetchHomeData());
     }, [])
 
     return (
@@ -46,11 +43,11 @@ const Home = (props) => {
                             <div className='flex h-full relative text-black dark:text-white'>
                                 <div className='flex flex-col h-fit w-fit m-auto items-start'>
                                     <h2 className='flex flex-col'>
-                                        <span className='font-nunito text-lg md:text-xl lg:text-2xl font-bold uppercase tracking-wider'>Check out the</span>
-                                        <span className='font-nunito text-xl md:text-2xl lg:text-3xl font-bold uppercase tracking-wider font-black text-indigo-600 dark:text-indigo-600'>Trending Category</span>
-                                        <span className='font-nunito text-lg md:text-xl lg:text-2xl font-bold uppercase tracking-wider'>of the day</span>
+                                        <span className='font-parkinsans text-lg md:text-xl lg:text-2xl font-bold uppercase tracking-wider'>Check out the</span>
+                                        <span className='font-parkinsans text-xl md:text-2xl lg:text-3xl font-bold uppercase tracking-wider font-black text-indigo-600 dark:text-indigo-600'>Trending Category</span>
+                                        <span className='font-parkinsans text-lg md:text-xl lg:text-2xl font-bold uppercase tracking-wider'>of the day</span>
                                     </h2>
-                                    <button onClick={() => navigate(`/explore?filter=trending`)} className="bg-gradient-to-r font-nunito font-semibold from-indigo-600 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Explore</button>
+                                    <button onClick={() => navigate(`/explore?filter=trending`)} className="bg-gradient-to-r font-parkinsans font-semibold from-indigo-600 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Explore</button>
                                 </div>
                             </div>
                         </div>
@@ -62,7 +59,7 @@ const Home = (props) => {
                                             <img className='rounded-md' src={AppQR} />
                                         </span>
                                     </div>
-                                    <h2 className='font-nunito w-min text-md md:text-xl lg:text-2xl font-bold uppercase tracking-wider'>Download the app for<br /> <span className='text-2xl md:text-3xl lg:text-5xl font-black'>free!</span></h2>
+                                    <h2 className='font-parkinsans w-min text-md md:text-xl lg:text-2xl font-bold uppercase tracking-wider'>Download the app for<br /> <span className='text-2xl md:text-3xl lg:text-5xl font-black'>free!</span></h2>
                                 </div>
                             </div>
                         </div>

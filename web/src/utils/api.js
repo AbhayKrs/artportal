@@ -14,8 +14,6 @@ const artportal_get = axios.create({ baseURL });
 const artportal_post = axios.create({ baseURL, headers: { 'Content-Type': 'application/json' } });
 const artportal_form = axios.create({ baseURL, headers: { 'Content-Type': 'multipart/form-data' } });
 
-export const api_viewerID = () => axios.get('https://api.ipify.org?format=json');
-
 export const api_tags = () => artportal_get.get(`/common/tags`);
 export const api_signIn = userData => artportal_post.post(`/auth/login`, userData);
 export const api_signUp = userData => artportal_post.post(`/auth/signup`, userData);

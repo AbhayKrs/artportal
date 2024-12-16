@@ -126,7 +126,7 @@ const Cart = (props) => {
             case 0: return <div>
                 <div className='sm:scrollbar px-2 flex flex-col bg-slate-200 dark:bg-neutral-900 max-h-48 overflow-y-auto w-full divide-y-2 divide-neutral-800 text-gray-800 dark:text-gray-300 font-semibold dark:font-medium'>
                     {user.cart && user.cart.map(cartItem => (
-                        <div className='flex sm:flex-row flex-col gap-5 py-2 font-nunito text-md'>
+                        <div className='flex sm:flex-row flex-col gap-5 py-2 font-parkinsans text-md'>
                             <div className='flex gap-4'>
                                 <img loading='lazy' src={api_fetchStoreImages(cartItem.file)} className="w-20 h-20 object-cover rounded shadow-lg" alt="Thumbnail" />
                                 <div className='flex flex-col'>

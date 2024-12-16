@@ -5,7 +5,7 @@ import jwt_decode from 'jwt-decode';
 import store from './store';
 
 import { r_verifyUser, r_setSnackMessage } from './store/reducers/common.reducers';
-import { a_fetchCartList, a_fetchUserExploreList, a_fetchUserStoreList, a_fetchViewerID } from './store/actions/common.actions';
+import { a_fetchCartList, a_fetchUserExploreList, a_fetchUserStoreList, a_fetchVisitorStatus } from './store/actions/common.actions';
 import setAuthToken from './utils/setAuthToken';
 
 import Header from './containers/Header';
@@ -53,6 +53,9 @@ const Layout = (props) => {
   const [betaMsg, setBetaMsg] = useState(true);
 
   useEffect(async () => {
+    dispatch(a_fetchVisitorStatus());
+
+    //Check condition for site theme
     if (localStorage.getItem('theme') === null) {
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
       if (systemTheme) {
@@ -63,8 +66,7 @@ const Layout = (props) => {
     }
     console.log(localStorage.getItem('theme'));
 
-    dispatch(a_fetchViewerID());
-
+    //Check condition for login status
     let token = null;
     if (localStorage.jwtToken) {
       token = localStorage.jwtToken;

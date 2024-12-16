@@ -205,7 +205,7 @@ const ExploreShow = (props) => {
                     <div className='flex flex-col space-y-1 p-2'>
                         <div className='flex flex-row space-x-2'>
                             <div className='flex px-2 flex-col w-full space-y-1'>
-                                <h1 className='font-nunito text-2xl tex-gray-900 dark:text-gray-200 font-bold'>{artwork.title}</h1>
+                                <h1 className='font-parkinsans text-2xl tex-gray-900 dark:text-gray-200 font-bold'>{artwork.title}</h1>
                                 <p className='font-josefinlight text-lg tex-gray-800 dark:text-gray-300'>{artwork.description}</p>
                             </div>
                         </div>
@@ -476,8 +476,8 @@ const StoreShow = (props) => {
                                 <span className='text-xs text-rose-400'>including shipping & taxes</span>
                             </span>
                             <div className='flex space-x-3'>
-                                <button className="flex items-center font-nunito font-bold text-indigo-600 bg-transparent border-2 border-indigo-600 py-2 px-6 focus:outline-none hover:bg-indigo-600 hover:text-gray-600 rounded-md">Add to Cart</button>
-                                <button className="flex items-center font-nunito font-bold text-gray-300 bg-indigo-600 py-2 px-6 focus:outline-none hover:bg-indigo-600 hover:text-gray-600 rounded-md">Checkout</button>
+                                <button className="flex items-center font-parkinsans font-bold text-indigo-600 bg-transparent border-2 border-indigo-600 py-2 px-6 focus:outline-none hover:bg-indigo-600 hover:text-gray-600 rounded-md">Add to Cart</button>
+                                <button className="flex items-center font-parkinsans font-bold text-gray-300 bg-indigo-600 py-2 px-6 focus:outline-none hover:bg-indigo-600 hover:text-gray-600 rounded-md">Checkout</button>
                             </div>
                             {/*<div className='pt-5 pr-3 space-y-2'>
                                 <hr className='rounded border-1 bg-neutral-700 dark:bg-neutral-300 border-neutral-700 dark:border-neutral-300 dark:border-neutral-200' />
@@ -493,7 +493,7 @@ const StoreShow = (props) => {
                                         <h1 className="title-font text-lg font-medium text-neutral-800 dark:text-neutral-300">title</h1>
                                         <div className="flex items-center flex-wrap justify-between">
                                             <div className='tracking-wide text-md font-medium text-gray-500 font-josefinregular'>$price</div>
-                                            <button className="bg-gradient-to-r font-nunito font-semibold from-indigo-600 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-2 py-1 rounded-lg">Learn more</button>
+                                            <button className="bg-gradient-to-r font-parkinsans font-semibold from-indigo-600 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-2 py-1 rounded-lg">Learn more</button>
                                         </div>
                                     </div>
                                 </div>

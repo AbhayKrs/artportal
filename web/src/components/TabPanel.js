@@ -227,7 +227,7 @@ export const ExplorePanel = ({ search, filterExploreList, searchExploreList }) =
                 <div className='lg:flex hidden'>
                     <ul id='tabSlider' className="flex space-x-1 items-center whitespace-nowrap">
                         {exploreFilters.map((filter, index) => {
-                            return <li key={index} onClick={() => selectFilter(filter.value)} className={`flex items-center font-nunito text-sm font-bold tracking-wider ${filter.value === activeFilter ? 'text-indigo-600' : 'text-gray-700 dark:text-gray-300'} h-fit`}>
+                            return <li key={index} onClick={() => selectFilter(filter.value)} className={`flex items-center font-parkinsans text-sm font-bold tracking-wider ${filter.value === activeFilter ? 'text-indigo-600' : 'text-gray-700 dark:text-gray-300'} h-fit`}>
                                 <span className="flex items-center py-[0.4rem] px-3 capitalize">
                                     {filter.value === activeFilter && <div className='h-3.5 bg-indigo-600 w-1 mr-1'></div>}
                                     {filter.label}

@@ -1,10 +1,6 @@
 import express from 'express';
 const router = express.Router();
-
-import { artworkgfs, artworkUpl } from '../config/gridfsconfig.js';
-
-//Middleware
-import { protect, admin } from '../middleware/authMw.js';
+import { artworkBucket, artworkUpl } from '../config/gridfs_config.js';
 
 //Import Schemas
 import Artworks from '../models/artwork.js';
@@ -14,28 +10,36 @@ import Gift from '../models/gift.js';
 const { Artwork, Comment } = Artworks;
 const { Sticker } = Common;
 
-
 // @route   Image Route --- Image from gridFS storage --- Public
-router.get('/image/:filename', (req, res) => {
+router.get('/image/:filename', async (req, res) => {
+    const { filename } = req.params;
+
     try {
-        // /image/:filename?
-        artworkgfs.files.findOne({ filename: req.params.filename }, (err, file) => {
-            // Check if file
-            if (!file || file.length === 0) {
-                return res.status(404).json({ err: 'No file exists' });
-            }
-            // Check if image
-            if (file.contentType === 'image/jpg' || file.contentType === 'image/jpeg' || file.contentType === 'image/png' || file.contentType === 'image/webp') {
-                // Read output to browser
-                const readstream = artworkgfs.createReadStream({
-                    filename: req.params.filename,
-                });
-                readstream.pipe(res);
-            } else {
-                res.status(404).json({ err: 'Not an image' });
-            }
-        });
+        const file = await artworkBucket.find({ filename }).toArray();
+        // Check if file
+        if (!file || file.length === 0) {
+            return res.status(404).json({ err: 'No file found' });
+        }
+        artworkBucket.openDownloadStreamByName(filename).pipe(res);
+
+        // artworkgfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+        //     // Check if file
+        //     if (!file || file.length === 0) {
+        //         return res.status(404).json({ err: 'No file exists' });
+        //     }
+        //     // Check if image
+        //     if (file.contentType === 'image/jpg' || file.contentType === 'image/jpeg' || file.contentType === 'image/png' || file.contentType === 'image/webp') {
+        //         // Read output to browser
+        //         const readstream = artworkgfs.createReadStream({
+        //             filename: req.params.filename,
+        //         });
+        //         readstream.pipe(res);
+        //     } else {
+        //         res.status(404).json({ err: 'Not an image' });
+        //     }
+        // });
     } catch (err) {
+        console.log("err", err);
         return res.status(404).json({ msg: err.name });
     }
 });

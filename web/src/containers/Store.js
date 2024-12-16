@@ -116,7 +116,7 @@ const Store = (props) => {
             </Helmet>
             <div className='pt-3 px-2'>
                 <div className='text-2xl font-antipasto font-bold tracking-wider text-indigo-600 dark:text-indigo-600'>Welcome to the artportal Store</div>
-                <div className='text-md font-nunito text-gray-800 dark:text-neutral-300'>Find the best of the artworld with artistic pieces, merch and products of everything art.</div>
+                <div className='text-md font-parkinsans text-gray-800 dark:text-neutral-300'>Find the best of the artworld with artistic pieces, merch and products of everything art.</div>
             </div>
             <div className='w-full flex p-3'>
                 {/* <button onClick={() => navigate('/store/all')} className="tracking-wider h-fit border-2 border-indigo-600 text-indigo-600 font-antipasto font-bold py-1.5 px-3 mr-2 rounded">Store - All</button> */}
@@ -141,7 +141,7 @@ const Store = (props) => {
                                 <div className='tracking-wide text-lg font-medium text-gray-500 font-josefinregular'>${item.price}</div>
                                 <div className='flex space-x-2'>
                                     <MdOutlineAddShoppingCart className='w-8 h-8 text-rose-500 hover:cursor-pointer' onClick={() => addToCart(item)} />
-                                    <button onClick={() => navigate(`/store/${item._id}`)} className="bg-gradient-to-r font-nunito font-semibold from-indigo-600 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Learn more</button>
+                                    <button onClick={() => navigate(`/store/${item._id}`)} className="bg-gradient-to-r font-parkinsans font-semibold from-indigo-600 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Learn more</button>
                                 </div>
                             </div>
                         </div>
@@ -163,7 +163,7 @@ const Store = (props) => {
                                     <div className='tracking-wide text-lg font-medium text-gray-500 font-josefinregular'>${item.price}</div>
                                     <div className='flex space-x-2'>
                                         <MdOutlineAddShoppingCart className='w-8 h-8 text-rose-500 hover:cursor-pointer' onClick={() => addToCart(item)} />
-                                        <button onClick={() => navigate(`/store/${item._id}`)} className="bg-gradient-to-r font-nunito font-semibold from-indigo-600 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Learn more</button>
+                                        <button onClick={() => navigate(`/store/${item._id}`)} className="bg-gradient-to-r font-parkinsans font-semibold from-indigo-600 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Learn more</button>
                                     </div>
                                 </div>
                             </div>
@@ -187,7 +187,7 @@ const Store = (props) => {
                                     <div className='tracking-wide text-md font-medium text-gray-500 font-josefinregular'>${item.price}</div>
                                     <div className='flex space-x-2'>
                                         <MdOutlineAddShoppingCart className='w-8 h-8 text-rose-500 hover:cursor-pointer' onClick={() => addToCart(item)} />
-                                        <button onClick={() => navigate(`/store/${item._id}`)} className="bg-gradient-to-r font-nunito font-semibold from-indigo-600 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Learn more</button>
+                                        <button onClick={() => navigate(`/store/${item._id}`)} className="bg-gradient-to-r font-parkinsans font-semibold from-indigo-600 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Learn more</button>
                                     </div>
                                 </div>
                             </div>
@@ -215,7 +215,7 @@ const Store = (props) => {
                                         <li className="flex flex-col text-sm"><span className="font-bold text-lg">YSR*</span>4.5</li>
                                     </ul>
                                     <div className="mb-3">
-                                        <button onClick={() => navigate(`/users/${seller._id}`)} className="bg-gradient-to-r font-nunito font-semibold from-yellow-300 to-amber-500 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg text-black">More Info</button>
+                                        <button onClick={() => navigate(`/users/${seller._id}`)} className="bg-gradient-to-r font-parkinsans font-semibold from-yellow-300 to-amber-500 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg text-black">More Info</button>
                                     </div>
                                     <div className='text-sm font-bold font-josefinlight text-rose-400'>* YSR - Year to Sales Rating</div>
                                 </div>

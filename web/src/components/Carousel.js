@@ -166,7 +166,7 @@ export const StoreMultiCarousel = ({ data }) => {
               <div className='h-full w-full aspect-square block bg-origin-padding bg-left-top bg-cover bg-no-repeat z-0'>
                 <img loading='lazy' src={item.image} alt={item.title} className="w-full aspect-square rounded" />
                 <div className="h-full w-full aspect-square block absolute top-0 left-0 transition-opacity duration-300 opacity-0 hover:opacity-75 bg-indigo-600/75 z-10 rounded">
-                  <h3 className="absolute font-nunito font-semibold bottom-0 text-white py-6 px-3 mx-auto text-xl">
+                  <h3 className="absolute font-parkinsans font-semibold bottom-0 text-white py-6 px-3 mx-auto text-xl">
                     {item.title}
                   </h3>
                 </div>

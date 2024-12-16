@@ -90,5 +90,5 @@ export default Explore;
 
 {/* <label className="flex items-center cursor-pointer">
                             <input type="radio" name='top' className="form-radio h-3.5 w-3.5 bg-slate-300 text-neutral-700 cursor-pointer mr-1" />
-                            <p className='font-nunito font-semibold text-sm'>New</p>
+                            <p className='font-parkinsans font-semibold text-sm'>New</p>
                         </label> */}

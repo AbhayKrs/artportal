@@ -27,7 +27,7 @@ const risingSort = (property) => {
 // if createdAt-1 is less than createdAt-2 then check if 
 
 export const a_exploreItemViewed = createAsyncThunk("a_exploreItemViewed", async (payload, { getState, dispatch, rejectWithValue }) => {
-    api_exploreItem(payload, getState().common.viewer_id);
+    api_exploreItem(payload, getState().common.new_visitor);
     return;
 });
 
@@ -53,32 +53,14 @@ export const a_fetchExploreList = createAsyncThunk("a_fetchExploreList", async (
     })
 });
 
-export const a_fetchTrendingList = createAsyncThunk("a_fetchTrendingList", async (payload, { getState, dispatch, rejectWithValue }) => {
+export const a_fetchHomeData = createAsyncThunk("a_fetchHomeData", async (payload, { getState, dispatch, rejectWithValue }) => {
     await api_artworkList().then(res => {
         dispatch(r_setTrendingList(res.data.sort(() => 0.4 - Math.random()).slice(0, 12)));
-        return;
-    }).catch(err => {
-        console.log('---error a_fetchTrendingList', err);
-        return rejectWithValue(err.message);
-    })
-});
-
-export const a_fetchNewlyAddedList = createAsyncThunk("a_fetchNewlyAddedList", async (payload, { getState, dispatch, rejectWithValue }) => {
-    await api_artworkList().then(res => {
         dispatch(r_setNewlyAddedList(res.data.sort(() => 0.4 - Math.random()).slice(0, 12)));
-        return;
-    }).catch(err => {
-        console.log('---error a_fetchNewlyAddedList', err);
-        return rejectWithValue(err.message);
-    })
-});
-
-export const a_fetchMonthHighlightsList = createAsyncThunk("a_fetchMonthHighlightsList", async (payload, { getState, dispatch, rejectWithValue }) => {
-    await api_artworkList().then(res => {
         dispatch(r_setMonthHighlightsList(res.data.sort(() => 0.4 - Math.random()).slice(0, 12)));
         return;
     }).catch(err => {
-        console.log('---error a_fetchMonthHighlightsList', err);
+        console.log('---error a_fetchTrendingList', err);
         return rejectWithValue(err.message);
     })
 });

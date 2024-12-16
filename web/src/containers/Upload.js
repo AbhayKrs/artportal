@@ -217,7 +217,7 @@ const ExploreUpload = (props) => {
             </Helmet>
             <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-8">
                 <div className='relative'>
-                    <span className='font-nunito text-4xl text-gray-700 dark:text-gray-300'>Upload</span>
+                    <span className='font-parkinsans text-4xl text-gray-700 dark:text-gray-300'>Upload</span>
                     <div className='h-1 w-12 mt-1 bg-indigo-600'></div>
                 </div>
                 <div className='flex lg:flex-row flex-col p-5 lg:space-x-8 md:space-y-2'>
@@ -226,7 +226,7 @@ const ExploreUpload = (props) => {
                         <div className="flex flex-col space-y-3">
                             <div className='flex flex-row space-x-4'>
                                 <div className="flex flex-col w-full justify-center items-center border-dashed space-y-2 rounded-lg border-2 border-gray-400 py-12" onDrop={(ev) => dropHandler(ev)} onDragOver={(ev) => dragOverHandler(ev)} >
-                                    <label htmlFor="file-upload" className='bg-indigo-600 text-white font-nunito cursor-pointer text-lg font-semibold py-2 px-4 rounded'>
+                                    <label htmlFor="file-upload" className='bg-indigo-600 text-white font-parkinsans cursor-pointer text-lg font-semibold py-2 px-4 rounded'>
                                         Select image files
                                     </label>
                                     <input id="file-upload" className='hidden' type="file" multiple onChange={onImageChange} />
@@ -326,7 +326,7 @@ const ExploreUpload = (props) => {
                     </div>
                 </div>
                 <div className="flex justify-end pt-5">
-                    <button onClick={() => navigate(`/explore`)} className="font-nunito rounded-md px-3 py-1 bg-gray-300 focus:shadow-outline focus:outline-none">
+                    <button onClick={() => navigate(`/explore`)} className="font-parkinsans rounded-md px-3 py-1 bg-gray-300 focus:shadow-outline focus:outline-none">
                         Cancel
                     </button>
                     <button disabled={exploreFiles.length === 0 || exploreCategories.length === 0 || exploreTitle.length === 0 || exploreDesc.length === 0} onClick={handleUpload} className="ml-3 rounded-md px-3 py-1 bg-rose-500 hover:bg-rose-600 text-white focus:shadow-outline focus:outline-none disabled:text-neutral-400 disabled:bg-neutral-600 disabled:hover:bg-neutral-600">
@@ -474,7 +474,7 @@ const StoreUpload = (props) => {
     return (
         <div className="main-container bg-gray-200 dark:bg-darkBg p-5">
             <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-5">
-                <span className='font-nunito text-3xl text-gray-700 dark:text-gray-300'>List Product to Store</span>
+                <span className='font-parkinsans text-3xl text-gray-700 dark:text-gray-300'>List Product to Store</span>
                 <div className='flex lg:flex-row flex-col mt-3 lg:space-x-4 md:space-y-2'>
                     <div className='w-full'>
                         <span className='font-josefinlight font-semibold text-gray-700 dark:text-gray-300'>Files<span className='font-josefinlight text-rose-400 text-md'>*</span></span>
@@ -482,7 +482,7 @@ const StoreUpload = (props) => {
                             <div className="flex flex-col justify-center items-center border-dashed space-y-2 rounded-lg border-2 border-gray-400 py-8" onDrop={(ev) => dropHandler(ev)} onDragOver={(ev) => dragOverHandler(ev)} >
                                 <p className="font-semibold text-gray-700 dark:text-gray-300 flex flex-wrap justify-center">Drag files</p>
                                 <p className="font-semibold text-gray-700 dark:text-gray-300">OR</p>
-                                <label htmlFor="file-upload" className='bg-indigo-600 text-white font-nunito font-semibold py-1 px-2 rounded'>
+                                <label htmlFor="file-upload" className='bg-indigo-600 text-white font-parkinsans font-semibold py-1 px-2 rounded'>
                                     Select files
                                 </label>
                                 <input id="file-upload" className='hidden' type="file" multiple onChange={onImageChange} />

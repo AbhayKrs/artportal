@@ -15,7 +15,7 @@ const initialState = {
         login: false,
         signup: false
     },
-    viewer_id: '',
+    new_visitor: '',
     openLoginDialog: false,
     loginImage: '',
     openRegisterDialog: false,
@@ -130,8 +130,8 @@ const commonSlice = createSlice({
             else
                 state.authError = state.authError;
         },
-        r_setViewerID: (state, action) => {
-            state.viewer_id = action.payload;
+        r_setVisitorStatus: (state, action) => {
+            state.new_visitor = action.payload;
         },
         r_verifyUser: (state, action) => {
             const decoded = jwt_decode(action.payload);
@@ -240,7 +240,7 @@ export const {
     r_setLoader,
     r_setSnackMessage,
     r_setAuthError,
-    r_setViewerID,
+    r_setVisitorStatus,
     r_verifyUser,
     r_headerDialogOpen,
     r_headerDialogClose,
