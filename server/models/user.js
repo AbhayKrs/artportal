@@ -3,12 +3,15 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema(
     {
+        avatar: {
+            icon: { type: String, default: '' },
+            category: { type: String, default: '' }
+        },
         name: { type: String, default: "", required: true },
         username: { type: String, default: "", required: true },
         email: { type: String, default: "", required: true },
         password: { type: String, required: true },
         bio: { type: String, default: "" },
-        avatar: { icon: { type: String, default: '' }, category: { type: String, default: '' } },
         tokens: { type: Number, default: 0 },
         google_id: { type: String },
         google_authenticated: { type: Boolean, default: false },

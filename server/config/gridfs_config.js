@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { GridFSBucket } from 'mongodb';
+import multer from 'multer';
 
 //Connect gfs to database
 const conn = mongoose.connection;

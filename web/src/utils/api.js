@@ -4,7 +4,7 @@ import axios from 'axios';
 // export const api_taggerURL = 'https://artportalweb.onrender.com/api/v1.01/tagger/model.json';
 const baseURL = 'http://localhost:5000/api/v1.01';
 export const taggerURL = baseURL + '/tagger/model.json';
-export const api_googleRedirectURL = baseURL + `/auth/google/login`;
+export const api_googleRedirectURL = baseURL + `/auth/googleAuth/login`;
 
 export const api_fetchArtworkImages = filename => baseURL + `/artworks/image/${filename}`;
 export const api_fetchStoreImages = filename => baseURL + `/store/image/${filename}`;
@@ -17,7 +17,7 @@ const artportal_form = axios.create({ baseURL, headers: { 'Content-Type': 'multi
 export const api_tags = () => artportal_get.get(`/common/tags`);
 export const api_signIn = userData => artportal_post.post(`/auth/login`, userData);
 export const api_signUp = userData => artportal_post.post(`/auth/signup`, userData);
-export const api_googleLogin = () => artportal_get.get(`/auth/google/login`);
+export const api_googleLogin = () => artportal_get.get(`/auth/googleAuth/login`);
 export const api_userDetails = userID => artportal_get.get(`/users/${userID}`);
 export const api_updateUserData = (userID, userData) => artportal_get.put(`/users/${userID}`, userData);
 export const api_deleteBookmark = (bookmarkID, userID) => artportal_get.delete(`/users/${userID}/bookmark/${bookmarkID}`);

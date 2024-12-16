@@ -124,13 +124,13 @@ router.post("/signup", (req, res) => {
     }
 });
 
-// @route   GET api/v1.01/auth/google/login --- Authenticate user via Google --- PUBLIC
-router.get('/google/login', passport.authenticate('google', {
+// @route   GET api/v1.01/auth/googleAuth/login --- Authenticate user via Google --- PUBLIC
+router.get('/googleAuth/login', passport.authenticate('google', {
     scope: ['profile', 'email']
 }));
 
 // @route   GET api/v1.01/auth/google/callback --- Google Authenticatation callback --- PUBLIC
-router.get('/google/callback', passport.authenticate('google', {
+router.get('/googleAuth/callback', passport.authenticate('google', {
     failureRedirect: '/login',
     session: false
 }), async (req, res) => {

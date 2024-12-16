@@ -9,18 +9,15 @@ passport.use(
     new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: "/api/v1.01/auth/google/callback",
+        callbackURL: "/api/v1.01/auth/googleAuth/callback",
         passReqToCallback: true,
         proxy: true
     },
-        async function (accessToken, refreshToken, profile, cb) {
-            console.log("user", profile);
+        async function (request, accessToken, refreshToken, profile, done) {
+            console.log("profile", profile);
 
-            try {
-                //Check user table for anyone with the Google ID
-                const user = await User.findOne({ email: profile.emails[0].value });
-                console.log("user", user);
-
+            //Check user table for anyone with the Google ID
+            await User.findOne({ email: profile.emails[0].value }).then((user, err) => {
                 if (!user) {
                     //User does not exist in DB, create a new user entry with google creds
                     const newUser = new User({
@@ -28,7 +25,7 @@ passport.use(
                         google_authenticated: true,
                         name: profile.displayName,
                         email: profile.emails[0].value,
-                        username: profile.emails[0].value.substring(0, profile.emails[0].value.indexOf("@")),
+                        username: profile.email.substring(0, profile.emails[0].value.indexOf("@")),
                         password: 'test12',
                         avatar: {
                             icon: '6cbaa37fa59b0caee31dc4b8cdd67d72.png',
@@ -40,7 +37,7 @@ passport.use(
                             if (err) throw err;
                             newUser.password = hash;
                             newUser.save().then(res => {
-                                return cb(null, profile);
+                                return done(null, profile);
                             });
                         })
                     })
@@ -50,13 +47,11 @@ passport.use(
                         user.google_id = profile.id;
                         user.google_authenticated = true;
                         user.save().then(res => {
-                            return cb(null, user)
+                            return done(null, user)
                         });
                     }
-                    return cb(null, user)
+                    return done(null, user)
                 }
-            } catch (err) {
-                console.log("err", err);
-                return cb(err, profile);
-            }
-        }))
+            })
+        })
+)

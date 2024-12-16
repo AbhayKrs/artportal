@@ -7,6 +7,7 @@ import Artworks from '../models/artwork.js';
 import User from '../models/user.js';
 import Common from '../models/common.js';
 import Gift from '../models/gift.js';
+import { protect } from '../middleware/authMw.js';
 const { Artwork, Comment } = Artworks;
 const { Sticker } = Common;
 
