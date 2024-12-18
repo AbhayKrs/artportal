@@ -14,8 +14,9 @@ import Home from './containers/Home';
 import Explore from './containers/Explore';
 import ExploreSearch from './containers/ExploreSearch';
 import Upload from './containers/Upload';
-import Show from './containers/Show';
+import ExploreShow from './containers/ExploreShow';
 import Store from './containers/Store';
+import StoreShow from './containers/StoreShow';
 import StoreAll from './containers/StoreAll';
 import Profile from './containers/Profile';
 import Google from './splash/Google';
@@ -52,9 +53,14 @@ const Layout = (props) => {
 
   const [betaMsg, setBetaMsg] = useState(true);
 
-  useEffect(async () => {
+  useEffect(() => {
     dispatch(a_fetchVisitorStatus());
 
+    load_theme();
+    load_auth();
+  }, []);
+
+  const load_theme = () => {
     //Check condition for site theme
     if (localStorage.getItem('theme') === null) {
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
@@ -65,12 +71,13 @@ const Layout = (props) => {
       }
     }
     console.log(localStorage.getItem('theme'));
+  }
 
+  const load_auth = () => {
     //Check condition for login status
     let token = null;
     if (localStorage.jwtToken) {
       token = localStorage.jwtToken;
-      setAuthToken(token);
 
       const userID = common.user.id;
       dispatch(r_verifyUser(token));
@@ -79,7 +86,6 @@ const Layout = (props) => {
       dispatch(a_fetchCartList());
     } else if (sessionStorage.jwtToken) {
       token = sessionStorage.jwtToken;
-      setAuthToken(token);
 
       const userID = common.user.id;
       dispatch(r_verifyUser(token));
@@ -87,16 +93,17 @@ const Layout = (props) => {
       dispatch(a_fetchUserStoreList(userID));
       dispatch(a_fetchCartList());
     }
-  }, []);
+  }
 
   return (
-    <main className={`${common.theme} relative`}>
+    <main className={`${common.theme} relative font-montserrat`}>
       <Header betaMsg={betaMsg} setBetaMsg={setBetaMsg} />
-      <div className={`h-screen flex flex-col bg-gray-200 dark:bg-darkBg ${betaMsg === true ? 'pt-[5.5rem]' : 'pt-[3.75rem]'}`}>
+      <div className={`min-h-show flex flex-col bg-gray-200 dark:bg-darkBg ${betaMsg === true ? 'pt-[5rem]' : 'pt-[3.25rem]'}`}>
         <Snackbar msgdata={common.snackmsg} setMessage={(msgData) => dispatch(r_setSnackMessage(msgData))} />
+        <Loader />
         <Outlet />
-        <Footer />
       </div>
+      <Footer />
     </main>
   )
 };
@@ -111,11 +118,11 @@ const App = () => {
         { path: '/google_failed', element: <Google header="Failed" /> },
         { path: '/explore', element: <Explore /> },
         { path: '/explore/search', element: <ExploreSearch /> },
-        { path: '/explore/:id', element: <Show.ExploreShow /> },
+        { path: '/explore/:id', element: <ExploreShow /> },
         { path: '/explore/new', element: <Upload.ExploreUpload /> },
         { path: '/explore/:id/edit', element: <Edit.ExploreEdit /> },
         { path: '/store', element: <Store /> },
-        { path: '/store/:id', element: <Show.StoreShow /> },
+        { path: '/store/:id', element: <StoreShow /> },
         { path: '/store/all', element: <StoreAll /> },
         { path: '/store/new', element: <Upload.StoreUpload /> },
         { path: '/store/cart', element: <Cart /> },

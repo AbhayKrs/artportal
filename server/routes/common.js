@@ -4,6 +4,7 @@ import { commongfs, commonUpl } from '../config/gridfsconfig.js';
 const router = express.Router();
 
 import Common from '../models/common.js';
+import { commonBucket } from '../config/gridfs_config.js';
 const { Tag, Sticker, Avatar, Location } = Common;
 
 // @route   GET api/v1.01/common/tags --- Fetch tags --- PUBLIC
@@ -79,28 +80,16 @@ router.get("/files", async (req, res) => {
 });
 
 // @route   GET api/v1.01/common/files/:filename --- Fetch file from common uploads db --- PUBLIC
-router.get('/files/:filename', (req, res) => {
+router.get('/files/:filename', async (req, res) => {
+    const { filename } = req.params;
+
     try {
-        commongfs.files.findOne({ filename: req.params.filename }, (err, file) => {
-            // Check if file
-            if (!file || file.length === 0) {
-                return res.status(404).json({ err: 'No file exists' });
-            }
-            // Check if image
-            if (
-                file.contentType === 'image/jpg' ||
-                file.contentType === 'image/jpeg' ||
-                file.contentType === 'image/png'
-            ) {
-                // Read output to browser
-                const readstream = commongfs.createReadStream({
-                    filename: req.params.filename,
-                });
-                readstream.pipe(res);
-            } else {
-                res.status(404).json({ err: 'Not an image' });
-            }
-        });
+        const file = await commonBucket.find({ filename }).toArray();
+        // Check if file
+        if (!file || file.length === 0) {
+            return res.status(404).json({ err: 'No file found' });
+        }
+        commonBucket.openDownloadStreamByName(filename).pipe(res);
     } catch (err) {
         console.error(err.message);
         return res.status(500).send('Unable to fetch image');

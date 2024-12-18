@@ -21,7 +21,7 @@ const Explore = (props) => {
     const common = useSelector(state => state.common);
     const explore = useSelector(state => state.explore);
 
-    useEffect(async () => {
+    useEffect(() => {
         dispatch(r_setLoader(true));
         window.scrollTo(0, 0);
     }, []);
@@ -44,7 +44,7 @@ const Explore = (props) => {
                                 />
                                 <div className='opacity-0 flex transition-all delay-200 absolute bottom-0 p-2 pt-14 group-hover:opacity-100 w-full bg-gradient-to-t from-black text-gray-200 justify-between'>
                                     <div className="flex flex-col place-self-end max-w-[65%]">
-                                        <h4 className="text-md text-base font-josefinregular font-bold leading-5 capitalize break-words">{explore.title}</h4>
+                                        <h4 className="text-md text-base font-montserrat font-bold leading-5 break-words">{explore.title.length > 20 ? explore.title.slice(0, 20) + "..." : explore.title}</h4>
                                         <div className='flex'>
                                             <span className="font-base text-xs my-1 mr-1">
                                                 {explore.artist.username}
@@ -77,7 +77,7 @@ const Explore = (props) => {
                 <div >
                     <div className='absolute inset-0 h-fit w-fit m-auto text-center text-gray-300'>
                         {/* <img loading='lazy' className='h-32 w-auto' src={emptyIcon} /> */}
-                        <h2 className='font-josefinregular text-2xl'>It's empty in here!</h2>
+                        <h2 className='font-montserrat text-2xl'>It's empty in here!</h2>
                     </div>
                 </div>
             }
@@ -90,5 +90,5 @@ export default Explore;
 
 {/* <label className="flex items-center cursor-pointer">
                             <input type="radio" name='top' className="form-radio h-3.5 w-3.5 bg-slate-300 text-neutral-700 cursor-pointer mr-1" />
-                            <p className='font-parkinsans font-semibold text-sm'>New</p>
+                            <p className='font-montserrat font-semibold text-sm'>New</p>
                         </label> */}

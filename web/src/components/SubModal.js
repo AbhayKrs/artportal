@@ -13,15 +13,15 @@ export const AwardConfirmModal = ({ open, awardData, onClose, handleAwardExplore
                     <div className='flex items-center space-x-2 my-2'>
                         {awardData ? <img loading='lazy' className='h-12 w-12' src={api_fetchUserImages(awardData.icon)} /> : null}
                         <div className='tracking-widest flex-row'>
-                            <p className='text-violet-800 font-josefinregular text-2xl font-semibold '>testing award confirm</p>
+                            <p className='text-violet-800 font-montserrat text-2xl font-semibold '>testing award confirm</p>
                             <span className='flex items-center font-bold text-lg text-emerald-500'><img loading='lazy' src={TokenIcon} className='h-5 w-5 mr-1' />500</span>
                         </div>
                     </div>
-                    <p className='text-gray-200 font-parkinsans text-md'>Purchased by akn787.</p>
+                    <p className='text-gray-200 font-montserrat text-md'>Purchased by akn787.</p>
                     <p className='text-gray-500 text-sm italic'>By purchasing the award, you understand the mentioned total will be deducted from your balance.</p>
                     <hr className='h-2 w-full px-2 mt-2' />
                     <div className='flex items-center place-content-between'>
-                        <p className='flex text-md text-gray-300 font-parkinsans'>Current Balance: <img loading='lazy' src={TokenIcon} className='h-6 w-6 ml-1 mr-0.5' />9999</p>
+                        <p className='flex text-md text-gray-300 font-montserrat'>Current Balance: <img loading='lazy' src={TokenIcon} className='h-6 w-6 ml-1 mr-0.5' />9999</p>
                         <button onClick={() => { handleAwardExplore(awardData); onClose() }} className='p-1.5 bg-yellow-400 w-fit rounded-md'>Confirm</button>
                     </div>
                 </div>

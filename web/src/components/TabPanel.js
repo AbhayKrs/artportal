@@ -65,7 +65,7 @@ export const HomeTabPanel = ({ tags, artworks, }) => {
                     })}
                 </div>
                 :
-                <div className='flex justify-center items-center font-josefinlight text-lg text-gray-800 dark:text-gray-300 bg-gray-300 dark:bg-neutral-800 h-full min-h-[20em]'>No artworks found...</div>
+                <div className='flex justify-center items-center font-montserrat text-lg text-gray-800 dark:text-gray-300 bg-gray-300 dark:bg-neutral-800 h-full min-h-[20em]'>No artworks found...</div>
             }
         </div >
     )
@@ -82,7 +82,7 @@ export const AwardTabPanel = ({ awards, user, exploreID, awardClose, handleAward
                     <ul id='tabSlider' className="flex ">
                         {awardTabPanelHeaders.map((awardType, index) => {
                             return <li key={index} onClick={() => setActiveStatus(index)} className={index === activeStatus ? "text-sm text-gray-900 dark:font-medium bg-indigo-600 mr-1 rounded-t-md" : "text-sm text-gray-600 rounded-t-md dark:text-gray-400 dark:bg-neutral-700 flex items-center mr-1 hover:text-indigo-700 cursor-pointer"}>
-                                <div className="font-josefinregular flex items-center uppercase">
+                                <div className="font-montserrat flex items-center uppercase">
                                     <span className="p-2 pb-1">{awardType}</span>
                                 </div>
                             </li>
@@ -117,7 +117,7 @@ export const AwardTabPanel = ({ awards, user, exploreID, awardClose, handleAward
     )
 }
 
-export const ExplorePanel = ({ search, filterExploreList, searchExploreList }) => {
+export const ExplorePanel = ({ search, a_filterExploreList, searchExploreList }) => {
     let navigate = useNavigate();
 
     const [triggerEffect, setTriggerEffect] = useState(false);
@@ -162,7 +162,7 @@ export const ExplorePanel = ({ search, filterExploreList, searchExploreList }) =
             console.log('case1', exploreSearch.length === 0 && activeFilter.length === 0 && activePeriod.length === 0)
             if (exploreSearch.length === 0 && activeFilter.length === 0 && activePeriod.length === 0) {
                 navigate('/explore?filter=trending');
-                filterExploreList('trending');
+                a_filterExploreList('trending');
             }
 
             //case 2 - Search / No Filter / No Period
@@ -190,14 +190,14 @@ export const ExplorePanel = ({ search, filterExploreList, searchExploreList }) =
             console.log('case5', exploreSearch.length === 0 && activeFilter.length > 0 && activePeriod.length === 0)
             if (exploreSearch.length === 0 && activeFilter.length > 0 && activePeriod.length === 0) {
                 navigate(`?filter=${activeFilter.replace(/\s+/g, '+')}`);
-                filterExploreList(activeFilter.replace(/\s+/g, '+'));
+                a_filterExploreList(activeFilter.replace(/\s+/g, '+'));
             }
 
             //case 6 - No Search / Filter / Period
             console.log('case6', exploreSearch.length === 0 && activeFilter.length > 0 && activePeriod.length > 0)
             if (exploreSearch.length === 0 && activeFilter.length > 0 && activePeriod.length > 0) {
                 navigate(`?filter=${activeFilter.replace(/\s+/g, '+')}&period=${activePeriod.replace(/\s+/g, '+')}`);
-                filterExploreList(activeFilter.replace(/\s+/g, '+'), activePeriod.replace(/\s+/g, '+'));
+                a_filterExploreList(activeFilter.replace(/\s+/g, '+'), activePeriod.replace(/\s+/g, '+'));
             }
 
         }
@@ -227,7 +227,7 @@ export const ExplorePanel = ({ search, filterExploreList, searchExploreList }) =
                 <div className='lg:flex hidden'>
                     <ul id='tabSlider' className="flex space-x-1 items-center whitespace-nowrap">
                         {exploreFilters.map((filter, index) => {
-                            return <li key={index} onClick={() => selectFilter(filter.value)} className={`flex items-center font-parkinsans text-sm font-bold tracking-wider ${filter.value === activeFilter ? 'text-indigo-600' : 'text-gray-700 dark:text-gray-300'} h-fit`}>
+                            return <li key={index} onClick={() => selectFilter(filter.value)} className={`flex items-center font-montserrat text-sm font-bold tracking-wider ${filter.value === activeFilter ? 'text-indigo-600' : 'text-gray-700 dark:text-gray-300'} h-fit`}>
                                 <span className="flex items-center py-[0.4rem] px-3 capitalize">
                                     {filter.value === activeFilter && <div className='h-3.5 bg-indigo-600 w-1 mr-1'></div>}
                                     {filter.label}
@@ -263,7 +263,7 @@ export const NotificationTabPanel = ({ awards, user, exploreID, awardClose, hand
                     <ul id='tabSlider' className="flex ">
                         {['artportal Specials', 'Community Made', 'Premium'].map((awardType, index) => {
                             return <li key={index} onClick={() => setActiveStatus(index)} className={index === activeStatus ? "text-sm text-gray-900 dark:font-medium bg-indigo-600 mr-1 rounded-t-md" : "text-sm text-gray-600 rounded-t-md dark:text-gray-400 dark:bg-neutral-700 flex items-center mr-1 hover:text-indigo-700 cursor-pointer"}>
-                                <div className="font-josefinregular flex items-center uppercase">
+                                <div className="font-montserrat flex items-center uppercase">
                                     <span className="p-2 pb-1">{awardType}</span>
                                 </div>
                             </li>

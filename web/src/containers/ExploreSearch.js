@@ -19,7 +19,7 @@ const ExploreSearch = (props) => {
 
     const explore = useSelector(state => state.explore);
 
-    useEffect(async () => {
+    useEffect(() => {
         dispatch(r_setLoader(true));
         window.scrollTo(0, 0)
     }, []);

@@ -1,32 +1,47 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { api_fetchArtworkImages } from '../utils/api';
+import { useDispatch } from "react-redux";
+
+import { r_headerDialogOpen } from '../store/reducers/common.reducers';
 
 import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
-export const ExploreShowCarousel = ({ prevTrue, nextTrue, data, currentImage, secondaryImages, prev, next }) => {
+export const ExploreShowCarousel = ({ isMatureContent, prevTrue, nextTrue, data, currentImage, secondaryImages, prev, next }) => {
+  const dispatch = useDispatch();
+
   return (
     <div className="flex relative lg:col-span-8 w-full justify-center bg-gray-300 dark:bg-[#101010]">
-      <div className="flex flex-col my-3 mx-4 md:mx-12 space-y-3 w-full justify-center">
-        <div className='flex w-fit self-center items-center place-content-center'>
-          <div className='flex fixed top-14 right-0 lg:right-[33.5%]  m-5 space-x-3 p-1 bg-neutral-100 dark:bg-neutral-800 rounded'>
-            {prevTrue ? <div onClick={prev} className='cursor-pointer flex justify-end py-0.5 space-x-2 text-gray-700 hover:text-indigo-600 dark:text-gray-200 dark:hover:text-indigo-600'>
-              <FaChevronLeft className='h-6 w-6' />
-            </div> : ''}
-            {nextTrue ? <div onClick={next} className='cursor-pointer flex justify-end py-0.5 space-x-2 text-gray-700 hover:text-indigo-600 dark:text-gray-200 dark:hover:text-indigo-600'>
-              <FaChevronRight className='h-6 w-6' />
-            </div> : ''}
+      {isMatureContent ?
+        <div className="flex flex-col my-3 mx-4 md:mx-12 space-y-3 w-full justify-center">
+          <div className='flex flex-col items-center text-center'>
+            <h1 className='text-xl lg:text-2xl font-montserrat font-semibold leading-5 lg:leading-6 text-neutral-800 dark:text-neutral-200'>18+ Content</h1>
+            <h2 className='text-base lg:text-lg font-montserrat font-semibold leading-5 lg:leading-6 text-neutral-700 dark:text-neutral-200'>The following artwork contains mature content.<br /> Please validate yourself by via login to view the artwork.</h2>
+            <button onClick={() => dispatch(r_headerDialogOpen('openLoginDialog'))} className='whitespace-nowrap self-center bg-neutral-800 dark:bg-gray-300 text-gray-200 dark:text-neutral-800 hover:bg-neutral-700 dark:hover:bg-gray-200 py-1 px-3 rounded-md text-base font-montserrat font-medium tracking-wide'>Sign In</button>
           </div>
-          <img loading='lazy' src={`${api_fetchArtworkImages(currentImage)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
         </div>
-        {secondaryImages.length > 0 &&
-          <div className='flex w-fit flex-col self-center items-center space-y-3 place-content-center'>
-            {secondaryImages.map((image, index) => (
-              <img loading='lazy' key={index} src={`${api_fetchArtworkImages(image)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
-            ))}
+        :
+        <div className="flex flex-col my-3 mx-4 md:mx-12 space-y-3 w-full justify-center">
+          <div className='flex w-fit self-center items-center place-content-center'>
+            <div className='flex fixed top-14 right-0 lg:right-[33.5%]  m-5 space-x-3 p-1 bg-neutral-100 dark:bg-neutral-800 rounded'>
+              {prevTrue ? <div onClick={prev} className='cursor-pointer flex justify-end py-0.5 space-x-2 text-gray-700 hover:text-indigo-600 dark:text-gray-200 dark:hover:text-indigo-600'>
+                <FaChevronLeft className='h-6 w-6' />
+              </div> : ''}
+              {nextTrue ? <div onClick={next} className='cursor-pointer flex justify-end py-0.5 space-x-2 text-gray-700 hover:text-indigo-600 dark:text-gray-200 dark:hover:text-indigo-600'>
+                <FaChevronRight className='h-6 w-6' />
+              </div> : ''}
+            </div>
+            <img loading='lazy' src={`${api_fetchArtworkImages(currentImage)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
           </div>
-        }
-      </div>
+          {secondaryImages.length > 0 &&
+            <div className='flex w-fit flex-col self-center items-center space-y-3 place-content-center'>
+              {secondaryImages.map((image, index) => (
+                <img loading='lazy' key={index} src={`${api_fetchArtworkImages(image)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
+              ))}
+            </div>
+          }
+        </div>
+      }
     </div>
   )
 }
@@ -42,8 +57,8 @@ export const HomeMultiCarousel = ({ data, goPrev, goNext }) => {
               <img loading='lazy' src={item.image} alt="black chair and white table" className="object-cover object-center w-full rounded-lg" />
               <div className="bg-gray-800 bg-gradient-to-t from-black rounded-lg bg-opacity-30 absolute w-full h-full p-2">
                 <div className="flex flex-col h-full justify-end">
-                  <h3 className="text-xl lg:text-2xl font-josefinlight font-semibold leading-5 lg:leading-6 text-white dark:text-neutral-200">{item.title}</h3>
-                  <span className='text-md font-josefinlight text-white dark:text-neutral-400 truncate'>{item.title2}</span>
+                  <h3 className="text-xl lg:text-2xl font-montserrat font-semibold leading-5 lg:leading-6 text-white dark:text-neutral-200">{item.title}</h3>
+                  <span className='text-md font-montserrat text-white dark:text-neutral-400 truncate'>{item.title2}</span>
                 </div>
               </div>
             </div>
@@ -95,8 +110,8 @@ export const HomeSingleCarousel = ({ itemCount, images }) => {
           />
           <div className='absolute h-full w-full bottom-0 bg-gradient-to-t from-black/70 to-black/10'>
             <div className='h-fit w-full pb-2 pl-2 absolute bottom-0'>
-              <h1 className='text-3xl font-black font-josefinlight text-gray-200 capitalize'>{images[currentIndex].title}</h1>
-              <h2 className='text-xl font-josefinregular text-gray-400'>{images[currentIndex].artist}</h2>
+              <h1 className='text-3xl font-black font-montserrat text-gray-200 capitalize'>{images[currentIndex].title}</h1>
+              <h2 className='text-xl font-montserrat text-gray-400'>{images[currentIndex].artist}</h2>
               <div className='flex flex-row absolute space-x-1 bottom-4 right-4'>
                 {images.map((img, index) => (
                   <label key={index} onClick={() => handleNextClick(index)} className="flex items-center cursor-pointer text-xl">
@@ -166,7 +181,7 @@ export const StoreMultiCarousel = ({ data }) => {
               <div className='h-full w-full aspect-square block bg-origin-padding bg-left-top bg-cover bg-no-repeat z-0'>
                 <img loading='lazy' src={item.image} alt={item.title} className="w-full aspect-square rounded" />
                 <div className="h-full w-full aspect-square block absolute top-0 left-0 transition-opacity duration-300 opacity-0 hover:opacity-75 bg-indigo-600/75 z-10 rounded">
-                  <h3 className="absolute font-parkinsans font-semibold bottom-0 text-white py-6 px-3 mx-auto text-xl">
+                  <h3 className="absolute font-montserrat font-semibold bottom-0 text-white py-6 px-3 mx-auto text-xl">
                     {item.title}
                   </h3>
                 </div>

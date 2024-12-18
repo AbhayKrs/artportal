@@ -47,7 +47,7 @@ router.post("/login", async (req, res) => {
                         (err, token) => {
                             res.json({
                                 success: true,
-                                token: "Bearer " + token
+                                token: token
                             });
                         }
                     );
@@ -109,7 +109,7 @@ router.post("/signup", (req, res) => {
                                     (err, token) => {
                                         res.json({
                                             success: true,
-                                            token: "Bearer " + token
+                                            token: token
                                         });
                                     }
                                 )
@@ -150,7 +150,7 @@ router.get('/googleAuth/callback', passport.authenticate('google', {
     };
     jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 31556926 },
         (err, token) => {
-            let googleToken = "Bearer " + token
+            let googleToken = token
             res.redirect('http://localhost:3000/google_success?auth=' + googleToken)
         }
     );
@@ -182,7 +182,7 @@ router.get('/facebook/callback', passport.authenticate('facebook', {
     };
     jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 31556926 },
         (err, token) => {
-            let googleToken = "Bearer " + token
+            let googleToken = token
             res.redirect('http://localhost:3000/google_success?auth=' + googleToken)
         }
     );

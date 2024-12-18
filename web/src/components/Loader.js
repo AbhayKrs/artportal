@@ -1,20 +1,27 @@
 import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { r_setLoader } from '../store/reducers/common.reducers';
+
 import { ReactComponent as Artportal_logo } from '../assets/icons/artportal_logo.svg';
 
-const Loader = ({ open, r_setLoader }) => {
+const Loader = () => {
+    const dispatch = useDispatch();
+    const common = useSelector(state => state.common);
+
     useEffect(() => {
-        if (open) {
+        if (common.loader) {
+            console.log("loader", common.loader);
             document.querySelector("body").style.overflow = 'hidden';
             setTimeout(() => {
-                r_setLoader(false);
-            }, 1500)
+                dispatch(r_setLoader(false));
+            }, 3000)
         } else {
             document.querySelector("body").style.overflow = 'auto';
         }
-    }, [open])
+    }, [common.loader])
 
     return (
-        <div className={`absolute ${open ? 'flex' : 'hidden'} inset-0 z-[100] h-screen w-screen content-center bg-gray-200 dark:bg-darkBg pointer-events-none`}>
+        <div className={`absolute ${common.loader ? 'flex' : 'hidden'} inset-0 z-[100] h-screen w-screen content-center bg-gray-200 dark:bg-darkBg pointer-events-none`}>
             <Artportal_logo fill="#4f46e5" className='animate-pulse m-auto h-24 w-24 hover:cursor-pointer' />
         </div>
     )

@@ -28,8 +28,8 @@ const Home = (props) => {
                 <div className='flex flex-col gap-4 md:flex-row md:h-96'>
                     <div className='w-full md:w-3/5 h-48 md:h-full rounded-lg'>
                         <HomeSingleCarousel
-                            itemCount="3"
-                            images={explore.artworks.slice(0, 3).map((item, index) => {
+                            itemCount={3}
+                            images={explore.trending_artworks.slice(0, 3).map((item, index) => {
                                 return {
                                     id: index,
                                     file: item.files[0],
@@ -43,11 +43,11 @@ const Home = (props) => {
                             <div className='flex h-full relative text-black dark:text-white'>
                                 <div className='flex flex-col h-fit w-fit m-auto items-start'>
                                     <h2 className='flex flex-col'>
-                                        <span className='font-parkinsans text-lg md:text-xl lg:text-2xl font-bold uppercase tracking-wider'>Check out the</span>
-                                        <span className='font-parkinsans text-xl md:text-2xl lg:text-3xl font-bold uppercase tracking-wider font-black text-indigo-600 dark:text-indigo-600'>Trending Category</span>
-                                        <span className='font-parkinsans text-lg md:text-xl lg:text-2xl font-bold uppercase tracking-wider'>of the day</span>
+                                        <span className='font-montserrat text-lg md:text-xl lg:text-2xl font-bold uppercase tracking-wider'>Check out the</span>
+                                        <span className='font-montserrat text-xl md:text-2xl lg:text-3xl font-bold uppercase tracking-wider font-black text-indigo-600 dark:text-indigo-600'>Trending Category</span>
+                                        <span className='font-montserrat text-lg md:text-xl lg:text-2xl font-bold uppercase tracking-wider'>of the day</span>
                                     </h2>
-                                    <button onClick={() => navigate(`/explore?filter=trending`)} className="bg-gradient-to-r font-parkinsans font-semibold from-indigo-600 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Explore</button>
+                                    <button onClick={() => navigate(`/explore?filter=trending`)} className="bg-gradient-to-r font-montserrat font-semibold from-indigo-600 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Explore</button>
                                 </div>
                             </div>
                         </div>
@@ -59,7 +59,7 @@ const Home = (props) => {
                                             <img className='rounded-md' src={AppQR} />
                                         </span>
                                     </div>
-                                    <h2 className='font-parkinsans w-min text-md md:text-xl lg:text-2xl font-bold uppercase tracking-wider'>Download the app for<br /> <span className='text-2xl md:text-3xl lg:text-5xl font-black'>free!</span></h2>
+                                    <h2 className='font-montserrat w-min text-md md:text-xl lg:text-2xl font-bold uppercase tracking-wider'>Download the app for<br /> <span className='text-2xl md:text-3xl lg:text-5xl font-black'>free!</span></h2>
                                 </div>
                             </div>
                         </div>
@@ -67,7 +67,7 @@ const Home = (props) => {
                 </div>
             </div>
             <div className='flex flex-col mt-4'>
-                <HighlightList type="trending" title="Trending" list={explore.artworks} />
+                <HighlightList type="trending" title="Trending" list={explore.trending_artworks} />
                 <HighlightList type="new" title="Newly Added" list={explore.new_artworks} />
                 <HighlightList type="popular" title="Highlights of the Month" list={explore.highlight_artworks} />
             </div>

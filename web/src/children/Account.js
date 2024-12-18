@@ -69,8 +69,8 @@ export const Account = (props) => {
 
     return (
         <div className='flex flex-col col-span-3 p-2'>
-            <h1 className='text-4xl font-antipasto tracking-wider font-bold text-purple-500'>Account Settings</h1>
-            <h3 className='text-lg font-josefinlight tracking-wide font-bold dark:text-gray-400'>Update your personal account details here.</h3>
+            <h1 className='text-4xl font-montserrat tracking-wider font-bold text-purple-500'>Account Settings</h1>
+            <h3 className='text-lg font-montserrat tracking-wide font-bold dark:text-gray-400'>Update your personal account details here.</h3>
             <div className='grid grid-cols-3 gap-4 p-3'>
                 <div className='relative col-span-2 flex flex-col rounded gap-4 py-4 px-6 bg-gray-300 dark:bg-neutral-800/75'>
                     {!editStatus ?
@@ -91,7 +91,7 @@ export const Account = (props) => {
                         <div className='col-span-3 flex flex-col'>
                             <div className=''>
                                 <div className='flex gap-2'>
-                                    <h2 className='text-lg font-josefinlight font-semibold dark:text-gray-300'>Full name</h2>
+                                    <h2 className='text-lg font-montserrat font-semibold dark:text-gray-300'>Full name</h2>
                                 </div>
                                 <div className='flex relative items-center gap-2'>
                                     <FaRegUserCircle className='absolute h-5 w-5 text-gray-400 ml-2' />
@@ -100,7 +100,7 @@ export const Account = (props) => {
                             </div>
                             <div className=''>
                                 <div className='flex gap-2'>
-                                    <h2 className='text-lg font-josefinlight font-semibold dark:text-gray-300'>Username</h2>
+                                    <h2 className='text-lg font-montserrat font-semibold dark:text-gray-300'>Username</h2>
                                 </div>
                                 <div className='flex relative items-center gap-2'>
                                     <AiOutlineLink className='absolute h-5 w-5 text-gray-400 ml-2' />
@@ -111,7 +111,7 @@ export const Account = (props) => {
                     </div>
                     <div className=''>
                         <div className='flex gap-2'>
-                            <h2 className='text-lg font-josefinlight font-semibold dark:text-gray-300'>Email address</h2>
+                            <h2 className='text-lg font-montserrat font-semibold dark:text-gray-300'>Email address</h2>
                         </div>
                         <div className='flex relative items-center gap-2'>
                             <MdAlternateEmail className='absolute h-5 w-5 text-gray-400 ml-2' />
@@ -120,7 +120,7 @@ export const Account = (props) => {
                     </div>
                     <div className=''>
                         <div className='flex gap-2'>
-                            <h2 className='text-lg font-josefinlight font-semibold dark:text-gray-300'>Profile bio</h2>
+                            <h2 className='text-lg font-montserrat font-semibold dark:text-gray-300'>Profile bio</h2>
                         </div>
                         <div className='flex items-center gap-2'>
                             <textarea rows='4' disabled={!editStatus} value={bio} placeholder="Enter a brief description about yourself and what your art signifies." onChange={(ev) => setBio(ev.target.value)} className="placeholder-gray-600 w-full dark:placeholder-gray-400 text-black dark:text-white bg-white disabled:bg-gray-200 dark:bg-neutral-700 dark:disabled:bg-neutral-900 p-3 pr-16 rounded-lg text-sm focus:outline-none" />
@@ -128,18 +128,18 @@ export const Account = (props) => {
                     </div>
                 </div>
                 <div className='rounded gap-4 py-4 px-6 bg-gray-300 dark:bg-neutral-800/75'>
-                    <h2 className='text-xl font-josefinlight font-semibold text-black dark:text-gray-300'>Linked Accounts</h2>
-                    <p className='font-josefinlight font-semibold text-gray-600 dark:text-gray-400'>Connect your social accounts to ease login process with just a few clicks.</p>
+                    <h2 className='text-xl font-montserrat font-semibold text-black dark:text-gray-300'>Linked Accounts</h2>
+                    <p className='font-montserrat font-semibold text-gray-600 dark:text-gray-400'>Connect your social accounts to ease login process with just a few clicks.</p>
                     <div className='flex flex-col gap-2 rounded-md p-3 bg-gray-200 dark:bg-neutral-900'>
                         <div className='flex gap-2 justify-between'>
                             <FcGoogle className='h-10 w-10' />
-                            <h5 className='font-josefinlight text-md text-black dark:text-gray-300 font-semibold'>Use Google to sign in to your account. Learn more</h5>
+                            <h5 className='font-montserrat text-md text-black dark:text-gray-300 font-semibold'>Use Google to sign in to your account. Learn more</h5>
                         </div>
                         {user.google_authenticated ?
-                            <button disabled className="bg-green-200 text-green-500 px-3 py-1 w-fit rounded-md text-md font-parkinsans font-bold">
+                            <button disabled className="bg-green-200 text-green-500 px-3 py-1 w-fit rounded-md text-md font-montserrat font-bold">
                                 Connected!
                             </button> :
-                            <button className="bg-green-500 text-gray-900 dark:text-gray-200 hover:bg-green-600 dark:hover:bg-green-600 px-3 py-1 rounded-md text-lg font-parkinsans font-bold dark:font-normal">
+                            <button className="bg-green-500 text-gray-900 dark:text-gray-200 hover:bg-green-600 dark:hover:bg-green-600 px-3 py-1 rounded-md text-lg font-montserrat font-bold dark:font-normal">
                                 Link Account to Google
                             </button>
                         }
@@ -148,15 +148,15 @@ export const Account = (props) => {
                         <div className='flex justify-between'>
                             <h1 className='flex text-xl font-md text-gray-200'><FcGoogle className='h-6 w-6' /> Google</h1>
                             {false ?
-                                <button disabled className="bg-green-200 text-green-500 px-3 py-1 rounded-md text-md font-parkinsans font-bold">
+                                <button disabled className="bg-green-200 text-green-500 px-3 py-1 rounded-md text-md font-montserrat font-bold">
                                     Connected!
                                 </button> :
-                                <button className="bg-indigo-600 text-gray-900 dark:text-gray-200 hover:bg-indigo-600 dark:hover:bg-indigo-600 px-3 py-1 rounded-md text-lg font-parkinsans font-bold dark:font-normal">
+                                <button className="bg-indigo-600 text-gray-900 dark:text-gray-200 hover:bg-indigo-600 dark:hover:bg-indigo-600 px-3 py-1 rounded-md text-lg font-montserrat font-bold dark:font-normal">
                                     Sign in
                                 </button>
                             }
                         </div>
-                        <h4 className='font-josefinlight text-gray-300 font-semibold'>Use Google to sign in to your account.</h4>
+                        <h4 className='font-montserrat text-gray-300 font-semibold'>Use Google to sign in to your account.</h4>
                     </div> */}
                 </div>
             </div>

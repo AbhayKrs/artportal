@@ -3,23 +3,20 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 
-import { a_fetchExploreItem, a_fetchExploreList, a_handleDislikeExplore, a_handleLikeExplore, a_handleAwardExplore, a_handleDeleteComment, a_handleEditComment, a_handleDislikeComment, a_handleLikeComment, a_bookmarkExploreItem, a_handleAddComment } from '../store/actions/explore.actions';
+import { a_fetchExploreItem, a_fetchExploreList, a_handleDislikeExplore, a_handleLikeExplore, a_handleDeleteComment, a_handleEditComment, a_handleDislikeComment, a_handleLikeComment, a_bookmarkExploreItem, a_handleAddComment } from '../store/actions/explore.actions';
 import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducers';
-import { a_fetchAwards, a_refreshUserDetails } from '../store/actions/common.actions';
-import { a_fetchStoreItem, a_fetchStoreList } from '../store/actions/store.actions';
-import { api_fetchArtworkImages, api_fetchUserImages, api_fetchStoreImages } from '../utils/api';
+import { a_refreshUserDetails } from '../store/actions/common.actions';
+import { api_fetchUserImages } from '../utils/api';
 
 import { ExploreShowCarousel } from '../components/Carousel';
 import { AwardModal, ShareModal } from '../components/Modal';
-import Ratings from '../components/Ratings';
 
 import { IoEye, IoHeart, IoSend, IoShareSocialSharp, IoChatbox } from 'react-icons/io5';
 import { BsTrash, BsHeartFill } from 'react-icons/bs';
 import { IoIosSend } from "react-icons/io";
-import { AiFillLike, AiFillDislike, AiOutlineDown, AiOutlineUp, AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai';
-import { MdEdit, MdEditOff, MdBookmarkAdd, MdBookmarkAdded, MdOutlineAddShoppingCart } from 'react-icons/md';
-import { ImPlus, ImStarFull } from 'react-icons/im';
-import { TiInfoLarge } from 'react-icons/ti';
+import { AiFillLike, AiFillDislike } from 'react-icons/ai';
+import { MdEdit, MdEditOff, MdBookmarkAdd, MdBookmarkAdded } from 'react-icons/md';
+import { ImPlus } from 'react-icons/im';
 import AwardIcon from '../assets/images/gift.png';
 
 const ExploreShow = (props) => {
@@ -43,13 +40,11 @@ const ExploreShow = (props) => {
     const { id } = useParams();
     let navigate = useNavigate();
 
-    useEffect(async () => {
+    useEffect(() => {
         window.scrollTo(0, 0);
         dispatch(r_setLoader(true));
-        await dispatch(a_fetchExploreList());
-        await dispatch(a_fetchExploreItem(id));
-        // await dispatch(a_fetchAwards());
-        // await dispatch(viewExploreItem(id));
+        dispatch(a_fetchExploreList());
+        dispatch(a_fetchExploreItem(id));
     }, [id])
 
     useEffect(() => {
@@ -77,7 +72,7 @@ const ExploreShow = (props) => {
 
     const submitComment = async (event) => {
         event.preventDefault();
-        await dispatch(a_handleAddComment({ exploreID: id, commentText: comment }));
+        dispatch(a_handleAddComment({ exploreID: id, commentText: comment }));
         setTimeout(() => dispatch(a_fetchExploreItem(id)), 2000)
         setComment('');
     }
@@ -190,8 +185,9 @@ const ExploreShow = (props) => {
     }
 
     return (
-        <div className=' min-h-screen sm:grid gap-2 bg-gray-200 dark:bg-darkBg sm:grid-cols-1 lg:grid-cols-12 xs:flex xs:flex-col'>
+        <div className='sm:grid gap-2 bg-gray-200 dark:bg-darkBg sm:grid-cols-1 lg:grid-cols-12 xs:flex xs:flex-col'>
             <ExploreShowCarousel
+                isMatureContent={artwork.categories.includes("mature_art")}
                 prevTrue={prev.length > 0}
                 nextTrue={next.length > 0}
                 data={explore.artworks}
@@ -200,29 +196,29 @@ const ExploreShow = (props) => {
                 prev={() => { navigate(`/explore/${prev}`); dispatch(a_fetchExploreItem(prev)); }}
                 next={() => { navigate(`/explore/${next}`); dispatch(a_fetchExploreItem(next)); }}
             />
-            <div className='lg:col-span-4 md:mt-3 sm:mt-0 bg-fixed'>
-                <div className='flex flex-col rounded-md bg-neutral-50 dark:bg-neutral-800 mr-2 ml-2 lg:ml-0 py-3'>
+            <div className='fixed right-0 lg:w-4/12 md:mt-3 sm:mt-0'>
+                <div className='flex flex-col break-anywhere rounded-md bg-neutral-50 dark:bg-neutral-800 mr-2 ml-2 lg:ml-1 py-3'>
                     <div className='flex flex-col space-y-1 p-2'>
                         <div className='flex flex-row space-x-2'>
                             <div className='flex px-2 flex-col w-full space-y-1'>
-                                <h1 className='font-parkinsans text-2xl tex-gray-900 dark:text-gray-200 font-bold'>{artwork.title}</h1>
-                                <p className='font-josefinlight text-lg tex-gray-800 dark:text-gray-300'>{artwork.description}</p>
+                                <h1 className='font-montserrat text-2xl tex-gray-900 dark:text-gray-200 font-bold'>{artwork.title}</h1>
+                                <p className='font-montserrat text-lg tex-gray-800 dark:text-gray-300'>{artwork.description}</p>
                             </div>
                         </div>
                         <div className='flex space-x-3 py-1 px-2 bg-neutral-100 dark:bg-neutral-800 rounded'>
                             <div className='flex items-center justify-end py-0.5 space-x-1 text-teal-500'>
                                 <IoEye className='h-6 w-6' />
-                                <h3 className='font-josefinregular text-lg self-center'>{new Intl.NumberFormat().format(artwork.views.length)}</h3>
+                                <h3 className='font-montserrat text-lg self-center'>{new Intl.NumberFormat().format(artwork.views.length)}</h3>
 
                             </div>
                             <div className='flex items-center justify-end py-0.5 space-x-1 text-indigo-600 dark:text-indigo-600'>
                                 <IoHeart className='h-6 w-6' />
-                                <h3 className='font-josefinregular text-lg self-center'>{new Intl.NumberFormat().format(artwork.likes.length)}</h3>
+                                <h3 className='font-montserrat text-lg self-center'>{new Intl.NumberFormat().format(artwork.likes.length)}</h3>
 
                             </div>
                             <div className='flex items-center justify-end py-0.5 space-x-1 text-indigo-600 dark:text-indigo-600'>
                                 <IoChatbox className='h-6 w-6' />
-                                <h3 className='font-josefinregular text-lg self-center'>{new Intl.NumberFormat().format(artwork.comments.length)}</h3>
+                                <h3 className='font-montserrat text-lg self-center'>{new Intl.NumberFormat().format(artwork.comments.length)}</h3>
 
                             </div>
                         </div>
@@ -237,6 +233,7 @@ const ExploreShow = (props) => {
                             </div>
                         </div>
                         <div className='flex flex-wrap'>
+                            {console.log("artwork", artwork)}
                             {artwork.tags.map((item, index) => (
                                 <div key={index} className="flex w-fit justify-center items-center m-0.5 font-medium py-1.5 px-2 rounded-full text-indigo-600 dark:text-indigo-600">
                                     <div className="text-xs font-medium leading-none">#{item}</div>
@@ -291,19 +288,19 @@ const ExploreShow = (props) => {
                             </div>
                             <div className='mr-3'>
                                 <div className='flex flex-col text-right justify-end py-1 text-neutral-900 dark:text-gray-400'>
-                                    <p className='font-josefinlight text-xl'>Posted By</p>
+                                    <p className='font-montserrat text-xl'>Posted By</p>
                                     <div onClick={() => navigate(`/users/${artwork.artist.id}`)} className="flex cursor-pointer justify-end">
                                         <div className="w-6 h-6 overflow-hidden">
                                             {artwork.artist ? <img loading='lazy' src={api_fetchUserImages(artwork.artist.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
                                         </div>
-                                        <p className="font-josefinlight pt-0.5 font-medium text-lg mx-0.5">
+                                        <p className="font-montserrat pt-0.5 font-medium text-lg mx-0.5">
                                             {artwork.artist.username}
                                         </p>
                                         <svg className="stroke-current stroke-1 text-blue-600 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                             <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
                                         </svg>
                                     </div>
-                                    <p className='font-josefinlight whitespace-nowrap text-sm'>{moment(artwork.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</p>
+                                    <p className='font-montserrat whitespace-nowrap text-sm'>{moment(artwork.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</p>
                                 </div>
                             </div>
                         </div>
@@ -326,7 +323,7 @@ const ExploreShow = (props) => {
                             :
                             <IoIosSend className='h-7 w-7 text-neutral-700 dark:text-gray-300 self-center ml-2' />
                         }
-                        <input type="text" name="comment" value={artwork.comments} onChange={(ev) => setComment(ev.target.value)} onKeyPress={(ev) => { if (ev.key === 'Enter') { submitComment(ev) } }} placeholder={`Hey ${user.username}, Let the artist know your thoughts...`} className="font-josefinlight w-full mx-2 my-3 font-bold text-md placeholder:text-neutral-700 dark:placeholder:text-gray-300 text-gray-600 dark:text-gray-300 outline-none bg-gray-300 dark:bg-neutral-700 border-b-2 border-b-gray-700 dark:border-b-gray-300" />
+                        <input type="text" name="comment" value={artwork.comments} onChange={(ev) => setComment(ev.target.value)} onKeyPress={(ev) => { if (ev.key === 'Enter') { submitComment(ev) } }} placeholder={`Hey ${user.username}, Let the artist know your thoughts...`} className="font-montserrat w-full mx-2 my-3 font-bold text-md placeholder:text-neutral-700 dark:placeholder:text-gray-300 text-gray-600 dark:text-gray-300 outline-none bg-gray-300 dark:bg-neutral-700 border-b-2 border-b-gray-700 dark:border-b-gray-300" />
                     </div>
                     :
                     ''}
@@ -336,22 +333,22 @@ const ExploreShow = (props) => {
                             <div className='flex flex-col basis-10/12'>
                                 {editForm && index === editIndex ?
                                     <div className='rounded flex bg-gray-300 dark:bg-neutral-700'>
-                                        <input type="text" name="comment" value={editComment} onChange={(ev) => setEditComment(ev.target.value)} onKeyPress={(ev) => { if (ev.key === 'Enter') { ev.preventDefault(); onEditComment(comment) } }} className="font-josefinlight w-fit mb-2 font-bold text-md placeholder:text-neutral-700 dark:placeholder:text-gray-300 text-gray-600 dark:text-gray-300 outline-none bg-gray-300 dark:bg-neutral-700 border-b-2 border-b-gray-700 dark:border-b-gray-300" />
+                                        <input type="text" name="comment" value={editComment} onChange={(ev) => setEditComment(ev.target.value)} onKeyPress={(ev) => { if (ev.key === 'Enter') { ev.preventDefault(); onEditComment(comment) } }} className="font-montserrat w-fit mb-2 font-bold text-md placeholder:text-neutral-700 dark:placeholder:text-gray-300 text-gray-600 dark:text-gray-300 outline-none bg-gray-300 dark:bg-neutral-700 border-b-2 border-b-gray-700 dark:border-b-gray-300" />
                                         <IoSend onClick={(ev) => onEditComment(comment)} className='h-5 w-5 ml-2 text-gray-600 dark:text-gray-300 cursor-pointer self-center' />
                                     </div>
                                     :
-                                    <p className='font-josefinlight text-lg font-bold'>{comment.content}</p>
+                                    <p className='font-montserrat text-lg font-bold'>{comment.content}</p>
                                 }
                                 <div className='flex'>
                                     <div onClick={() => navigate(`/users/${comment.author.id}`)} className='flex cursor-pointer'>
                                         <div className="w-5 h-5 overflow-hidden">
                                             <img loading='lazy' src={api_fetchUserImages(comment.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
                                         </div>
-                                        <p className="font-josefinlight text-sm mx-0.5">
+                                        <p className="font-montserrat text-sm mx-0.5">
                                             {comment.author.username}
                                         </p>
                                     </div>
-                                    <p className='font-josefinlight text-sm'>{'- ' + moment(comment.createdAt).fromNow()}</p>
+                                    <p className='font-montserrat text-sm'>{'- ' + moment(comment.createdAt).fromNow()}</p>
                                 </div>
                             </div>
                             <div className="flex basis-2/12 items-center justify-end relative">
@@ -426,160 +423,4 @@ const ExploreShow = (props) => {
     )
 }
 
-const StoreShow = (props) => {
-    const { id } = useParams();
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-
-    const [activeImg, setActiveImg] = useState('');
-
-    const storeItem = useSelector(state => state.store.storeItem);
-
-    useEffect(async () => {
-        dispatch(r_setLoader(true));
-        window.scrollTo(0, 0)
-        await dispatch(a_fetchStoreList());
-        await dispatch(a_fetchStoreItem(id));
-    }, [])
-
-    useEffect(() => {
-        setActiveImg(storeItem.files[0])
-    }, [storeItem])
-
-    return (
-        <div className=' bg-gray-200 dark:bg-darkBg max-100vh pt-5'>
-            <div className="text-black dark:text-white text-4xl title-font font-medium mx-5">{storeItem.title}</div>
-            <p className='font-josefinlight text-gray-600 dark:text-gray-400 whitespace-nowrap text-sm mx-5'>- Listed on {moment(storeItem.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</p>
-            <p className="text-gray-700 dark:text-gray-400 text-xl leading-relaxed mx-5">{storeItem.description}</p>
-            <section className="text-gray-400 body-font overflow-hidden">
-                <div className="p-4 mx-auto">
-                    <div className="mx-auto flex flex-col lg:flex-row gap-3">
-                        <div className="order-2 lg:order-1 lg:w-3/12 w-full mt-4 lg:mt-0 space-y-2">
-                            <h2 className="tracking-widest text-lg title-font font-medium text-gray-400 mb-2">CATEGORY: <span className='capitalize'>{storeItem.category}</span></h2>
-                            <div className='flex relative flex-col p-3 text-left justify-start text-neutral-900 dark:text-gray-400 bg-slate-300 dark:bg-neutral-900 rounded-md'>
-                                <TiInfoLarge onClick={() => navigate(`/users/${storeItem.seller.id}`)} className='absolute cursor-pointer h-4 w-4 top-0 right-0 m-2' />
-                                <div className="flex">
-                                    <div className="w-6 h-6 overflow-hidden">
-                                        {storeItem.seller ? <img loading='lazy' src={api_fetchUserImages(storeItem.seller.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
-                                    </div>
-                                    <p className="font-josefinlight pt-0.5 font-medium text-lg mx-0.5">
-                                        {storeItem.seller.username}
-                                    </p>
-                                    <svg className="stroke-current stroke-1 text-blue-600 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
-                                    </svg>
-                                </div>
-                                <div className='flex text-md items-center text-josefinlight'>Seller Rating: <span className='flex ml-2 items-center text-indigo-600'>{Number.parseFloat(storeItem.seller.seller_rating).toFixed(1)}<ImStarFull className='ml-1 text-indigo-600' /></span></div>
-                            </div>
-                            <span className="flex flex-col text-2xl text-neutral-700 dark:text-gray-300">
-                                ${Number.parseFloat(storeItem.price).toFixed(2)}
-                                <span className='text-xs text-rose-400'>including shipping & taxes</span>
-                            </span>
-                            <div className='flex space-x-3'>
-                                <button className="flex items-center font-parkinsans font-bold text-indigo-600 bg-transparent border-2 border-indigo-600 py-2 px-6 focus:outline-none hover:bg-indigo-600 hover:text-gray-600 rounded-md">Add to Cart</button>
-                                <button className="flex items-center font-parkinsans font-bold text-gray-300 bg-indigo-600 py-2 px-6 focus:outline-none hover:bg-indigo-600 hover:text-gray-600 rounded-md">Checkout</button>
-                            </div>
-                            {/*<div className='pt-5 pr-3 space-y-2'>
-                                <hr className='rounded border-1 bg-neutral-700 dark:bg-neutral-300 border-neutral-700 dark:border-neutral-300 dark:border-neutral-200' />
-                                <p className="text-black dark:text-gray-200 text-lg title-font font-medium mb-1">
-                                    More from {storeItem.seller.username}
-                                </p>
-                            </div>
-                             <div className='grid grid-cols-2 gap-2 mr-3'>
-                                {[0, 1, 2, 3].map(item => <div className="drop-shadow-lg rounded-xl bg-indigo-50 dark:bg-neutral-800 overflow-hidden h-fit">
-                                    <img loading='lazy' className="h-40 w-full object-cover object-center scale-110 transition-all duration-400 scale-100" src={api_fetchStoreImages(activeImg)} />
-                                    <div className="py-4 px-2">
-                                        <h2 className="tracking-widest text-xs title-font font-medium text-gray-400">CATEGORY: <span className='capitalize text-gray-700'>category</span></h2>
-                                        <h1 className="title-font text-lg font-medium text-neutral-800 dark:text-neutral-300">title</h1>
-                                        <div className="flex items-center flex-wrap justify-between">
-                                            <div className='tracking-wide text-md font-medium text-gray-500 font-josefinregular'>$price</div>
-                                            <button className="bg-gradient-to-r font-parkinsans font-semibold from-indigo-600 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-2 py-1 rounded-lg">Learn more</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                )}
-                            </div> */}
-                        </div>
-                        <div className='order-1 lg:order-2 flex flex-col gap-2 lg:w-6/12 lg:h-full rounded'>
-                            <img loading='lazy' className="w-full h-full object-cover object-center" src={api_fetchStoreImages(activeImg)} />
-                            <div className='grid grid-cols-3 gap-2'>
-                                {storeItem.files.map((file, index) =>
-                                    <img key={index} onClick={() => setActiveImg(file)} loading='lazy' className={`w-full object-cover object-center rounded ${activeImg === file ? 'border-4 border-indigo-600 dark:border-indigo-600' : ''}`} src={api_fetchStoreImages(file)} />
-                                )}
-                            </div>
-                        </div>
-                        <div className='order-3 lg:order-3 lg:w-3/12 w-full lg:h-auto object-cover object-center rounded'>
-                            <div className='flex flex-col justify-between'>
-                                <p className="text-black dark:text-white text-2xl title-font font-medium mb-1">Ratings & Reviews</p>
-                                <div className='flex space-x-2 items-center text-black dark:text-gray-300'>
-                                    <p className='text-md title-font'>Sort by:</p>
-                                    <div className='flex items-center space-x-1'>
-                                        <p>Ratings</p>
-                                        <div className='block'>
-                                            <AiOutlineUp className='w-2 h-2' />
-                                            <AiOutlineDown className='w-2 h-2' />
-                                            {/*
-                                                    <AiOutlineArrowUp className='w-3 h-3' />
-                                                    <AiOutlineArrowDown className='w-3 h-3' />   
-                                               */}
-                                        </div>
-                                    </div>
-                                    <div className='flex items-center space-x-1'>
-                                        <p>Date</p>
-                                        <div className='block'>
-                                            <AiOutlineUp className='w-2 h-2' />
-                                            <AiOutlineDown className='w-2 h-2' />
-                                            {/*
-                                                    <AiOutlineArrowUp className='w-3 h-3' />
-                                                    <AiOutlineArrowDown className='w-3 h-3' />   
-                                               */}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="bg-gray-300 dark:bg-neutral-900 p-4 mt-2 rounded-md">
-                                <p className="text-black dark:text-gray-200 text-xl title-font font-medium mb-1">Customer Ratings</p>
-                                <Ratings size='lg' withBg withValues rating={storeItem.rating} color='text-gray-200' />
-                                <div className='flex flex-col mt-2 px-2 space-y-2'>
-                                    <Ratings withReview reviews={24} rating={5} color='text-indigo-400' />
-                                    <Ratings withReview reviews={4} rating={4} color='text-indigo-400' />
-                                    <Ratings withReview reviews={14} rating={3} color='text-indigo-400' />
-                                    <Ratings withReview reviews={6} rating={2} color='text-indigo-400' />
-                                    <Ratings withReview reviews={1} rating={1} color='text-indigo-400' />
-                                </div>
-                                <hr className='m-3 rounded border-1 bg-neutral-700 dark:bg-neutral-300 border-neutral-700 dark:border-neutral-300 dark:border-neutral-200' />
-                                <p className="text-black dark:text-gray-200 text-lg title-font font-medium mb-1">
-                                    {storeItem.reviews.length} Reviews
-                                </p>
-                                {storeItem.reviews.map((review, index) => (
-                                    <div key={index} className='flex flex-col rounded-lg bg-gray-300 dark:bg-neutral-800 text-neutral-700 dark:text-gray-300 py-2 px-4 mb-2 space-y-1'>
-                                        <div className='flex items-center justify-between'>
-                                            <div onClick={() => navigate(`/users/${review.author.id}`)} className='flex cursor-pointer'>
-                                                <div className="w-6 h-6 overflow-hidden">
-                                                    <img loading='lazy' src={api_fetchUserImages(review.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
-                                                </div>
-                                                <p className="font-josefinlight text-lg mx-0.5">
-                                                    {review.author.username}
-                                                </p>
-                                            </div>
-                                            <div className='flex flex-col'>
-                                                <Ratings size='sm' withSingleValue rating={review.rating} color='text-indigo-400' />
-                                                <p className='font-josefinlight text-sm'>{'- ' + moment(review.createdAt).fromNow()}</p>
-                                            </div>
-                                        </div>
-                                        <p className='font-josefinlight text-md font-bold'>{review.content}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-    )
-}
-
-export default {
-    ExploreShow,
-    StoreShow
-}
+export default ExploreShow;

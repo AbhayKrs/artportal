@@ -7,7 +7,7 @@ import { api_fetchArtworkImages, api_fetchUserImages } from '../utils/api';
 import { AiFillClockCircle, AiFillHeart } from 'react-icons/ai';
 import { BsChatFill, BsInfoCircleFill } from 'react-icons/bs';
 
-export const ImageCard = ({ size, key, explore, artist }) => {
+export const ImageCard = ({ size, explore, artist }) => {
     let navigate = useNavigate();
 
     return (

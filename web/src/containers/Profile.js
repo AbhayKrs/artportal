@@ -26,11 +26,11 @@ const Profile = (props) => {
     const explore = useSelector(state => state.explore);
     const viewed_user = useSelector(state => state.common.viewed_user);
 
-    useEffect(async () => {
+    useEffect(() => {
         dispatch(r_setLoader(true));
         window.scrollTo(0, 0);
-        await dispatch(a_handleViewUser(id));
-        await dispatch(a_fetchExploreList());
+        dispatch(a_handleViewUser(id));
+        dispatch(a_fetchExploreList());
         return () => dispatch(r_clearProfileDetails());
     }, [id])
 
@@ -245,16 +245,16 @@ const Profile = (props) => {
                                 </div>
                                 <div className="w-full sm:w-4/12 px-4 lg:text-right lg:self-center">
                                     <div className="text-center pt-4 space-y-1.5">
-                                        <h3 className="text-4xl font-josefinregular font-semibold text-blueGray-800 dark:text-gray-300">
+                                        <h3 className="text-4xl font-montserrat font-semibold text-blueGray-800 dark:text-gray-300">
                                             {viewed_user.name}
                                         </h3>
-                                        <div className="text-md font-josefinregular text-blueGray-500 font-bold">
+                                        <div className="text-md font-montserrat text-blueGray-500 font-bold">
                                             #{viewed_user.username}
                                         </div>
-                                        <div className="text-blueGray-600 font-josefinregular text-blueGray-700 dark:text-gray-400 font-bold">
+                                        <div className="text-blueGray-600 font-montserrat text-blueGray-700 dark:text-gray-400 font-bold">
                                             {viewed_user.email}
                                         </div>
-                                        {viewed_user.bio && <p className="text-blueGray-600 font-josefinregular text-blueGray-700 dark:text-gray-400 font-bold italic">
+                                        {viewed_user.bio && <p className="text-blueGray-600 font-montserrat text-blueGray-700 dark:text-gray-400 font-bold italic">
                                             {'“' + viewed_user.bio + '”'}
                                         </p>}
                                         {common.user.id === viewed_user.id ?
@@ -278,13 +278,13 @@ const Profile = (props) => {
                                 </div>
                             </div>
                             <div className='flex space-x-3 py-3 items-center justify-start xs:flex-wrap xs:justify-center'>
-                                <div onClick={() => setActiveView('portfolio')} className={`text-lg font-semibold ${activeView === 'portfolio' ? 'text-indigo-600 dark:text-indigo-600' : 'text-gray-700 dark:text-gray-400'} font-parkinsans cursor-pointer`}>Portfolio</div>
+                                <div onClick={() => setActiveView('portfolio')} className={`text-lg font-semibold ${activeView === 'portfolio' ? 'text-indigo-600 dark:text-indigo-600' : 'text-gray-700 dark:text-gray-400'} font-montserrat cursor-pointer`}>Portfolio</div>
                                 <span className='text-gray-700 dark:text-gray-400'>&#9679;</span>
-                                <div onClick={() => setActiveView('about')} className={`text-lg font-semibold ${activeView === 'about' ? 'text-indigo-600 dark:text-indigo-600' : 'text-gray-700 dark:text-gray-400'} font-parkinsans cursor-pointer`}>About</div>
+                                <div onClick={() => setActiveView('about')} className={`text-lg font-semibold ${activeView === 'about' ? 'text-indigo-600 dark:text-indigo-600' : 'text-gray-700 dark:text-gray-400'} font-montserrat cursor-pointer`}>About</div>
                                 <span className='text-gray-700 dark:text-gray-400'>&#9679;</span>
-                                <div onClick={() => setActiveView('liked')} className={`text-lg font-semibold ${activeView === 'liked' ? 'text-indigo-600 dark:text-indigo-600' : 'text-gray-700 dark:text-gray-400'} font-parkinsans cursor-pointer`}>Liked</div>
+                                <div onClick={() => setActiveView('liked')} className={`text-lg font-semibold ${activeView === 'liked' ? 'text-indigo-600 dark:text-indigo-600' : 'text-gray-700 dark:text-gray-400'} font-montserrat cursor-pointer`}>Liked</div>
                                 <span className='text-gray-700 dark:text-gray-400'>&#9679;</span>
-                                {common.user.id === viewed_user.id && <div onClick={() => setActiveView('bookmarks')} className={`text-lg font-semibold ${activeView === 'bookmarks' ? 'text-indigo-600 dark:text-indigo-600' : 'text-gray-700 dark:text-gray-400'} font-parkinsans cursor-pointer`}>Bookmarks</div>}
+                                {common.user.id === viewed_user.id && <div onClick={() => setActiveView('bookmarks')} className={`text-lg font-semibold ${activeView === 'bookmarks' ? 'text-indigo-600 dark:text-indigo-600' : 'text-gray-700 dark:text-gray-400'} font-montserrat cursor-pointer`}>Bookmarks</div>}
                             </div>
                             {viewed_user && renderView()}
                         </div>

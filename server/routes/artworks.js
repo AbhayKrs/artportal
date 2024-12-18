@@ -22,23 +22,6 @@ router.get('/image/:filename', async (req, res) => {
             return res.status(404).json({ err: 'No file found' });
         }
         artworkBucket.openDownloadStreamByName(filename).pipe(res);
-
-        // artworkgfs.files.findOne({ filename: req.params.filename }, (err, file) => {
-        //     // Check if file
-        //     if (!file || file.length === 0) {
-        //         return res.status(404).json({ err: 'No file exists' });
-        //     }
-        //     // Check if image
-        //     if (file.contentType === 'image/jpg' || file.contentType === 'image/jpeg' || file.contentType === 'image/png' || file.contentType === 'image/webp') {
-        //         // Read output to browser
-        //         const readstream = artworkgfs.createReadStream({
-        //             filename: req.params.filename,
-        //         });
-        //         readstream.pipe(res);
-        //     } else {
-        //         res.status(404).json({ err: 'Not an image' });
-        //     }
-        // });
     } catch (err) {
         console.log("err", err);
         return res.status(404).json({ msg: err.name });
@@ -136,6 +119,8 @@ router.get('/:id', async (req, res) => {
 
 // @route   POST api/artworks/new --- Create an artwork entry --- Private
 router.post('/new', protect, artworkUpl.any(), async (req, res) => {
+    console.log("data", req.body, req.files);
+
     try {
         const user = await User.findById(req.body.userID);
         const newArtwork = new Artwork({
@@ -144,18 +129,22 @@ router.post('/new', protect, artworkUpl.any(), async (req, res) => {
             description: req.body.description,
             files: req.files.map(file => { return file.filename }),
             categories: req.body.categories,
-            tags: req.body.tags,
+            tags: req.body.tags.map(tag => { return JSON.parse(tag).value }),
             views: [],
             likes: [],
             comments: []
         });
-        Artwork.create(newArtwork, (err, data) => {
-            if (err) {
-                console.log(err);
-            } else {
-                res.send(data);
-            }
-        });
+
+        newArtwork.save()
+            .then(data => res.send(data))
+            .catch(err => console.log(err))
+        // Artwork.create(newArtwork, (err, data) => {
+        //     if (err) {
+        //         console.log(err);
+        //     } else {
+        //         res.send(data);
+        //     }
+        // });
     } catch (err) {
         return res.status(404).json({ msg: err.name });
     }

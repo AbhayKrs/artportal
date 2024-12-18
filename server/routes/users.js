@@ -33,7 +33,7 @@ router.get('/:id', async (req, res) => {
         jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 31556926 }, (err, token) => {
             res.json({
                 success: true,
-                token: "Bearer " + token
+                token: token
             });
         })
     } catch (err) {

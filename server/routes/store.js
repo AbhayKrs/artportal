@@ -10,6 +10,7 @@ import { checkObjectId } from '../middleware/checkObjectId.js';
 //Import Schemas
 import Store from '../models/store.js';
 import User from '../models/user.js';
+import { storeBucket } from '../config/gridfs_config.js';
 
 // @route       GET api/store
 // @desc        Get all store items
@@ -126,27 +127,20 @@ router.delete('/:id', async (req, res) => {
 // @route   Image Route
 // @desc    Image from gridFS storage
 // @access  Private
-router.get('/image/:filename', (req, res) => {
-    storegfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+router.get('/image/:filename', async (req, res) => {
+    const { filename } = req.params;
+
+    try {
+        const file = await storeBucket.find({ filename }).toArray();
         // Check if file
         if (!file || file.length === 0) {
-            return res.status(404).json({ err: 'No file exists' });
+            return res.status(404).json({ err: 'No file found' });
         }
-        // Check if image
-        if (
-            file.contentType === 'image/jpg' ||
-            file.contentType === 'image/jpeg' ||
-            file.contentType === 'image/png'
-        ) {
-            // Read output to browser
-            const readstream = storegfs.createReadStream({
-                filename: req.params.filename,
-            });
-            readstream.pipe(res);
-        } else {
-            res.status(404).json({ err: 'Not an image' });
-        }
-    });
+        storeBucket.openDownloadStreamByName(filename).pipe(res);
+    } catch (err) {
+        console.log("err", err);
+        return res.status(404).json({ msg: err.name });
+    }
 });
 
 export default router;

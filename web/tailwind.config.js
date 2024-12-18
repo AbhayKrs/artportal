@@ -12,13 +12,17 @@ module.exports = {
       'xl': '1920px'
     },
     fontFamily: {
-      'parkinsans': 'Parkinsans',
+      'montserrat': 'Montserrat',
     },
     colors: {
       darkBg: '#1a1a1c',
       ...colors
     },
-    extend: {},
+    extend: {
+      minHeight: {
+        'show': 'calc(100vh - 2.5rem)'
+      },
+    },
   },
   plugins: []
 }

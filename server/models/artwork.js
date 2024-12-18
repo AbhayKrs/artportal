@@ -19,7 +19,7 @@ const artworkSchema = new mongoose.Schema(
         description: { type: String, required: true },
         files: [{ type: String, required: true }],
         categories: [{ type: String, default: '' }],
-        tags: [{ type: String, default: '' }],
+        tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }],
         views: [{ type: String }],
         likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Users who liked the artwork
         comments: [commentSchema],

@@ -41,7 +41,7 @@ const exploreSlice = createSlice({
     initialState,
     reducers: {
         r_setExploreItem: (state, action) => {
-            state.artwork = action.payload;
+            state.artwork = { ...action.payload };
         },
         r_setExploreList: (state, action) => {
             const artworks = [...action.payload];
@@ -71,7 +71,7 @@ const exploreSlice = createSlice({
             }
         },
         r_exploreEdit: (state, action) => {
-            state.artwork = action.payload;
+            state.artwork = { ...action.payload };
         },
         r_dialogOpen: (state, action) => {
             const selectedData = action.payload;

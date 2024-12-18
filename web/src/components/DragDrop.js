@@ -11,12 +11,23 @@ const reorder = (list, startIndex, endIndex) => {
 };
 
 const Image = ({ image, index, r_setSnackMessage, setCategories }) => {
-    useEffect(async () => {
+    useEffect(() => {
         r_setSnackMessage({
             open: true,
             message: 'Please give it a few seconds while the system auto-assigns the categories for your upload.',
             type: 'tagger_start'
         });
+
+        model_load();
+
+        r_setSnackMessage({
+            open: true,
+            message: 'Categories for your upload were successfully added!',
+            type: 'tagger_stop'
+        });
+    }, [image.id])
+
+    const model_load = async () => {
         const model = await tf.loadLayersModel(taggerURL);
         const imgElem = document.getElementById('uploadImg' + index);
         const img = await tf.browser.fromPixels(imgElem);
@@ -43,12 +54,7 @@ const Image = ({ image, index, r_setSnackMessage, setCategories }) => {
             final.push(predicted_class[p_ind[i]]);
         }
         setCategories(final);
-        r_setSnackMessage({
-            open: true,
-            message: 'Categories for your upload were successfully added!',
-            type: 'tagger_stop'
-        });
-    }, [image.id])
+    }
 
     return (
         <Draggable draggableId={image.id} index={index}>
@@ -60,7 +66,7 @@ const Image = ({ image, index, r_setSnackMessage, setCategories }) => {
                     {...provided.dragHandleProps}
                 >
                     <img id={'uploadImg' + index} loading='lazy' src={URL.createObjectURL(image.content)} className='w-full h-full object-cover rounded' />
-                    {index === 0 ? <span className="absolute font-josefinlight text-white pt-0.5 px-2 rounded-tr-md bottom-0 left-0 bg-indigo-400">Primary</span> : ''}
+                    {index === 0 ? <span className="absolute font-montserrat text-white pt-0.5 px-2 rounded-tr-md bottom-0 left-0 bg-indigo-400">Primary</span> : ''}
                 </div>
             )
             }
