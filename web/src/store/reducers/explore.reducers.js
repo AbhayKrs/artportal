@@ -22,7 +22,9 @@ const initialState = {
             }
         },
         likes: [],
+        dislikes: [],
         comments: [],
+        comments_count: 0,
         tags: [],
         awards: [],
         views: []
@@ -41,7 +43,37 @@ const exploreSlice = createSlice({
     initialState,
     reducers: {
         r_setExploreItem: (state, action) => {
-            state.artwork = { ...action.payload };
+            let artwork_res = { ...action.payload };
+            const commentMap = new Map();
+            artwork_res.comments.forEach(com => {
+                com.replies = [];
+                commentMap.set(com._id, com);
+            });
+
+            const grouped = [];
+            artwork_res.comments.forEach(com => {
+                if (com.is_parent) {
+                    grouped.push(com);
+                } else {
+                    const parent = commentMap.get(com.parent_ref);
+                    if (parent) {
+                        parent.replies.push(com);
+                    }
+                }
+            });
+
+            const recursiveReplies = (comments) => {
+                comments.forEach((com) => {
+                    if (com.replies && com.replies.length > 0) {
+                        recursiveReplies(com.replies); // Call the function recursively on children
+                    }
+                });
+            };
+            artwork_res.comments_count = artwork_res.comments.length;
+            recursiveReplies(grouped);
+
+            artwork_res.comments = grouped;
+            state.artwork = artwork_res;
         },
         r_setExploreList: (state, action) => {
             const artworks = [...action.payload];

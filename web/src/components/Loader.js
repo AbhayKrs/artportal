@@ -14,7 +14,7 @@ const Loader = () => {
             document.querySelector("body").style.overflow = 'hidden';
             setTimeout(() => {
                 dispatch(r_setLoader(false));
-            }, 3000)
+            }, 1500)
         } else {
             document.querySelector("body").style.overflow = 'auto';
         }

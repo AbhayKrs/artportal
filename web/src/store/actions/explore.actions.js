@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { api_addExploreItemComment, api_artworkList, api_awardExplore, api_bookmarkExploreItem, api_deleteExploreItem, api_dislikeExplore, api_exploreDeleteComment, api_exploreDislikeComment, api_exploreEditComment, api_exploreItem, api_exploreItemEdit, api_exploreLikeComment, api_exploreUpload, api_filterExploreList, api_likeExplore } from '../../utils/api'
+import { api_commentOnArtwork, api_artworkList, api_awardExplore, api_bookmarkExploreItem, api_deleteArtwork, api_dislikeArtwork, api_exploreDeleteComment, api_dislikeComment, api_exploreEditComment, api_exploreItem, api_exploreItemEdit, api_likeComment, api_exploreUpload, api_filterExploreList, api_likeArtwork } from '../../utils/api'
 import { a_refreshUserDetails } from './common.actions';
 import { r_exploreEdit, r_exploreUpload, r_setExploreItem, r_setExploreList, r_setMonthHighlightsList, r_setNewlyAddedList, r_setTrendingList } from '../reducers/explore.reducers';
 
@@ -27,7 +27,7 @@ const risingSort = (property) => {
 // if createdAt-1 is less than createdAt-2 then check if 
 
 export const a_exploreItemViewed = createAsyncThunk("a_exploreItemViewed", async (payload, { getState, dispatch, rejectWithValue }) => {
-    api_exploreItem(payload, getState().common.new_visitor);
+    api_exploreItem(payload, getState().common.profile_data);
     return;
 });
 
@@ -87,8 +87,8 @@ export const a_handleExploreEdit = createAsyncThunk("a_handleExploreEdit", async
 });
 
 export const a_bookmarkExploreItem = createAsyncThunk("a_bookmarkExploreItem", async (payload, { getState, dispatch, rejectWithValue }) => {
-    const { userID, bookmarkData } = payload;
-    await api_bookmarkExploreItem(userID, bookmarkData).then(res => {
+    const { userID, artworkID } = payload;
+    await api_bookmarkExploreItem(userID, artworkID).then(res => {
         if (sessionStorage.jwtToken) {
             dispatch(a_refreshUserDetails(userID));
         } else if (localStorage.jwtToken) {
@@ -135,18 +135,20 @@ export const a_exploreVisited = createAsyncThunk("a_exploreVisited", async (payl
     return;
 });
 
-export const a_deleteExploreItem = createAsyncThunk("a_deleteExploreItem", async (payload, { getState, dispatch, rejectWithValue }) => {
-    await api_deleteExploreItem(payload).then(res => {
+export const a_deleteArtwork = createAsyncThunk("a_deleteArtwork", async (payload, { getState, dispatch, rejectWithValue }) => {
+    await api_deleteArtwork(payload).then(res => {
         console.log('deleted Explore');
         return;
     }).catch(err => {
-        console.log('---error a_deleteExploreItem', err);
+        console.log('---error a_deleteArtwork', err);
         return rejectWithValue(err.message);
     })
 });
 
 export const a_handleLikeExplore = createAsyncThunk("a_handleLikeExplore", async (payload, { getState, dispatch, rejectWithValue }) => {
-    await api_likeExplore(payload, getState().common.user).then(res => {
+    const { artworkID, userID } = payload;
+
+    await api_likeArtwork(artworkID, userID).then(res => {
         console.log('likeCount', res.status);
         return;
     }).catch(err => {
@@ -156,7 +158,9 @@ export const a_handleLikeExplore = createAsyncThunk("a_handleLikeExplore", async
 });
 
 export const a_handleDislikeExplore = createAsyncThunk("a_handleDislikeExplore", async (payload, { getState, dispatch, rejectWithValue }) => {
-    await api_dislikeExplore(payload, getState().common.user).then(res => {
+    const { artworkID, userID } = payload;
+
+    await api_dislikeArtwork(artworkID, userID).then(res => {
         console.log('likeCount', res.status);
         return;
     }).catch(err => {
@@ -177,8 +181,8 @@ export const a_handleAwardExplore = createAsyncThunk("a_handleAwardExplore", asy
 });
 
 export const a_handleAddComment = createAsyncThunk("a_handleAddComment", async (payload, { getState, dispatch, rejectWithValue }) => {
-    const { commentText, exploreID } = payload;
-    await api_addExploreItemComment(exploreID, commentText, getState().common.user).then(res => {
+    const { isParent, userID, artworkID, parentID, commentText } = payload;
+    await api_commentOnArtwork(isParent, userID, artworkID, parentID, commentText).then(res => {
         console.log('commentData', res.data);
         return;
     }).catch(err => {
@@ -210,8 +214,8 @@ export const a_handleDeleteComment = createAsyncThunk("a_handleDeleteComment", a
 });
 
 export const a_handleLikeComment = createAsyncThunk("a_handleLikeComment", async (payload, { getState, dispatch, rejectWithValue }) => {
-    const { exploreID, commentID } = payload;
-    await api_exploreLikeComment(exploreID, commentID, getState().common.user).then(res => {
+    const { artworkID, commentID, userID } = payload;
+    await api_likeComment(artworkID, commentID, userID).then(res => {
         console.log('likeCommentCount', res.data);
         return;
     }).catch(err => {
@@ -221,8 +225,8 @@ export const a_handleLikeComment = createAsyncThunk("a_handleLikeComment", async
 });
 
 export const a_handleDislikeComment = createAsyncThunk("a_handleDislikeComment", async (payload, { getState, dispatch, rejectWithValue }) => {
-    const { exploreID, commentID } = payload;
-    await api_exploreDislikeComment(exploreID, commentID, getState().common.user).then(res => {
+    const { artworkID, commentID, userID } = payload;
+    await api_dislikeComment(artworkID, commentID, userID).then(res => {
         console.log('dislikeCommentCount', res.data);
         return;
     }).catch(err => {

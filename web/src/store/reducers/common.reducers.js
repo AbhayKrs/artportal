@@ -15,7 +15,6 @@ const initialState = {
         login: false,
         signup: false
     },
-    new_visitor: '',
     openLoginDialog: false,
     loginImage: '',
     openRegisterDialog: false,
@@ -53,7 +52,7 @@ const initialState = {
         cart: [],
         cart_count: 0,
     },
-    viewed_user: {
+    profile_data: {
         id: '',
         name: '',
         username: '',
@@ -64,16 +63,17 @@ const initialState = {
         },
         bio: '',
         followers: [],
-        bookmarked: [],
+        bookmarks: [],
         followers_count: 0,
-        explore: [],
-        explore_count: 0,
+        artworks: [],
+        artworks_count: 0,
         comment_count: 0,
         store: [],
         store_count: 0,
         seller: false,
         seller_rating: 0
     },
+    new_visitor: '',
     token: null,
     isAuthenticated: false,
     cartOpen: false,
@@ -131,7 +131,7 @@ const commonSlice = createSlice({
                 state.authError = state.authError;
         },
         r_setVisitorStatus: (state, action) => {
-            state.new_visitor = action.payload;
+            state.profile_data = { ...initialState.profile_data, ...action.payload };
         },
         r_verifyUser: (state, action) => {
             const decoded = jwt_decode(action.payload);
@@ -180,7 +180,7 @@ const commonSlice = createSlice({
         },
         r_setUserExploreList: (state, action) => {
             const artworksItems = [...action.payload.artworks];
-            state.user = { ...state.user, artworks: artworksItems, artworks_count: action.payload.artworks_count }
+            state.profile_data = { ...state.user, artworks: artworksItems, artworks_count: action.payload.artworks_count }
         },
         r_setUserStoreList: (state, action) => {
             const storeList = [...action.payload.store];
@@ -207,6 +207,9 @@ const commonSlice = createSlice({
         r_removeFromCart: (state, action) => {
             state.user = { ...state.user, cart: state.user.cart.filter(item => item !== action.payload) }
         },
+        r_setProfileDetails: (state, action) => {
+            state.profile_data = { ...initialState.profile_data, ...action.payload };
+        },
         r_clearProfileDetails: (state, action) => {
             state.viewed_user = initialState.viewed_user;
         },
@@ -229,7 +232,7 @@ const commonSlice = createSlice({
             state.user = action.payload;
         },
         r_deleteBookmark: (state, action) => {
-            state.viewed_user = { ...state.viewed_user, bookmarked: [...action.payload] }
+            state.viewed_user = { ...state.viewed_user, bookmarks: [...action.payload] }
         },
     }
 })
@@ -258,6 +261,7 @@ export const {
     r_setCartList,
     r_pushToCart,
     r_removeFromCart,
+    r_setProfileDetails,
     r_clearProfileDetails,
     r_signIn,
     r_signUp,

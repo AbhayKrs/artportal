@@ -38,7 +38,7 @@ const ExploreSearch = (props) => {
                             />
                             <div className='hidden absolute bottom-0 p-2 pt-14 group-hover:flex group-hover:flex-row w-full bg-gradient-to-t from-black text-gray-200 group-hover:flex group-hover:justify-between'>
                                 <div className="flex flex-col place-self-end max-w-[65%]">
-                                    <h3 className="text-lg text-base font-bold leading-5 capitalize break-words">{explore.title + 'afsafokasfjhbasfbasbhfsbhf'}</h3>
+                                    <h3 className="text-lg text-base font-bold leading-5 capitalize break-words">{explore.title}</h3>
                                     <div className='flex'>
                                         <span className="font-base text-xs my-1 mr-1">
                                             {explore.author.username}

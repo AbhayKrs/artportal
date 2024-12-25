@@ -84,7 +84,7 @@ const SearchBar = ({ clearSearchList, activeSearch, setSearchType, betaMsg, expl
                     value={searchVal}
                     placeholder="Search..."
                     autoComplete="off"
-                    className="w-full font-montserrat font-normal tracking-wide bg-transparent text-neutral-800 dark:text-gray-200 placeholder-gray-600 dark:placeholder-gray-100/30 h-8 text-base focus:outline-none"
+                    className="w-full  font-normal tracking-wide bg-transparent text-neutral-800 dark:text-gray-200 placeholder-gray-600 dark:placeholder-gray-100/30 h-8 text-base focus:outline-none"
                     onChange={(ev) => handleSearch(ev.target.value)}
                     onKeyPress={(ev) => {
                         if (ev.key === 'Enter') {

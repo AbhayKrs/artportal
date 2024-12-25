@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 import { api_tags, api_signIn, api_signUp, api_googleLogin, api_userDetails, api_updateUserData, api_deleteBookmark, api_search, api_userExploreList, api_userStoreList, api_deleteStoreItem, api_userCartList, api_avatarList, api_awardList, api_locationsList, api_editAvatar, api_deleteCartItem, api_updateUserCart, api_addUserCart } from '../../utils/api'
-import { r_deleteBookmark, r_headerDialogClose, r_headerDialogOpen, r_setAuthError, r_setAvatars, r_setAwards, r_setCartList, r_setLocations, r_setSearchList, r_setSnackMessage, r_setTags, r_setUserExploreList, r_setUserStoreList, r_setVisitorStatus, r_signIn, r_signUp } from '../reducers/common.reducers';
+import { r_deleteBookmark, r_headerDialogClose, r_headerDialogOpen, r_setAuthError, r_setAvatars, r_setAwards, r_setCartList, r_setLocations, r_setProfileDetails, r_setSearchList, r_setSnackMessage, r_setTags, r_setUserExploreList, r_setUserStoreList, r_setVisitorStatus, r_signIn, r_signUp } from '../reducers/common.reducers';
 
 import jwt_decode from 'jwt-decode';
 import setAuthToken from '../../utils/setAuthToken';
@@ -113,6 +113,7 @@ export const a_refreshUserDetails = createAsyncThunk("a_refreshUserDetails", asy
         }
         setAuthToken(token);
         const userData = jwt_decode(token);
+        console.log("test", userData);
         dispatch(r_signIn(userData));
         return;
     }).catch(err => {
@@ -129,11 +130,11 @@ export const a_refreshUserDetails = createAsyncThunk("a_refreshUserDetails", asy
     })
 });
 
-export const a_handleViewUser = createAsyncThunk("a_handleViewUser", async (payload, { getState, dispatch, rejectWithValue }) => {
+export const a_handleFetchUserDetails = createAsyncThunk("a_handleFetchUserDetails", async (payload, { getState, dispatch, rejectWithValue }) => {
     await api_userDetails(payload).then(res => {
         const { token } = res.data;
         const loginData = jwt_decode(token);
-        dispatch(r_setVisitorStatus(loginData));
+        dispatch(r_setProfileDetails(loginData));
         return;
     }).catch(err => {
         if (err.response) {
@@ -203,8 +204,7 @@ export const a_fetchSearchList = createAsyncThunk("a_fetchSearchList", async (pa
 });
 
 export const a_fetchUserExploreList = createAsyncThunk("a_fetchUserExploreList", async (payload, { getState, dispatch, rejectWithValue }) => {
-    const userID = getState().common.user.id;
-    await api_userExploreList(userID).then(res => {
+    await api_userExploreList(payload).then(res => {
         dispatch(r_setUserExploreList(res.data));
         return;
     }).catch(err => {

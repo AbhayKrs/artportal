@@ -4,8 +4,10 @@ const commentSchema = new mongoose.Schema(
     {
         author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Reference to the user who posted the comment
         text: { type: String, required: true }, // Text content of the comment
+        is_parent: { type: Boolean, required: true }, // Identifier for if this is a parent/child comment
         parent_ref: { type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }, // Reference to the parent comment
         likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Users who liked the artwork
+        dislikes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Users who liked the artwork
     },
     {
         timestamps: true
@@ -22,7 +24,8 @@ const artworkSchema = new mongoose.Schema(
         tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }],
         views: [{ type: String }],
         likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Users who liked the artwork
-        comments: [commentSchema],
+        dislikes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // Users who liked the artwork
+        comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }]
     },
     {
         timestamps: true

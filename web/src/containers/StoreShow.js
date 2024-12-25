@@ -36,7 +36,7 @@ const StoreShow = (props) => {
     return (
         <div className=' bg-gray-200 dark:bg-darkBg max-100vh pt-5'>
             <div className="text-black dark:text-white text-4xl title-font font-medium mx-5">{storeItem.title}</div>
-            <p className='font-montserrat text-gray-600 dark:text-gray-400 whitespace-nowrap text-sm mx-5'>- Listed on {moment(storeItem.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</p>
+            <p className=' text-gray-600 dark:text-gray-400 whitespace-nowrap text-sm mx-5'>- Listed on {moment(storeItem.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</p>
             <p className="text-gray-700 dark:text-gray-400 text-xl leading-relaxed mx-5">{storeItem.description}</p>
             <section className="text-gray-400 body-font overflow-hidden">
                 <div className="p-4 mx-auto">
@@ -49,7 +49,7 @@ const StoreShow = (props) => {
                                     <div className="w-6 h-6 overflow-hidden">
                                         {storeItem.seller ? <img loading='lazy' src={api_fetchUserImages(storeItem.seller.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" /> : null}
                                     </div>
-                                    <p className="font-montserrat pt-0.5 font-medium text-lg mx-0.5">
+                                    <p className=" pt-0.5 font-medium text-lg mx-0.5">
                                         {storeItem.seller.username}
                                     </p>
                                     <svg className="stroke-current stroke-1 text-blue-600 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -63,8 +63,8 @@ const StoreShow = (props) => {
                                 <span className='text-xs text-rose-400'>including shipping & taxes</span>
                             </span>
                             <div className='flex space-x-3'>
-                                <button className="flex items-center font-montserrat font-bold text-indigo-600 bg-transparent border-2 border-indigo-600 py-2 px-6 focus:outline-none hover:bg-indigo-600 hover:text-gray-600 rounded-md">Add to Cart</button>
-                                <button className="flex items-center font-montserrat font-bold text-gray-300 bg-indigo-600 py-2 px-6 focus:outline-none hover:bg-indigo-600 hover:text-gray-600 rounded-md">Checkout</button>
+                                <button className="flex items-center  font-bold text-indigo-600 bg-transparent border-2 border-indigo-600 py-2 px-6 focus:outline-none hover:bg-indigo-600 hover:text-gray-600 rounded-md">Add to Cart</button>
+                                <button className="flex items-center  font-bold text-gray-300 bg-indigo-600 py-2 px-6 focus:outline-none hover:bg-indigo-600 hover:text-gray-600 rounded-md">Checkout</button>
                             </div>
                             {/*<div className='pt-5 pr-3 space-y-2'>
                                 <hr className='rounded border-1 bg-neutral-700 dark:bg-neutral-300 border-neutral-700 dark:border-neutral-300 dark:border-neutral-200' />
@@ -79,8 +79,8 @@ const StoreShow = (props) => {
                                         <h2 className="tracking-widest text-xs title-font font-medium text-gray-400">CATEGORY: <span className='capitalize text-gray-700'>category</span></h2>
                                         <h1 className="title-font text-lg font-medium text-neutral-800 dark:text-neutral-300">title</h1>
                                         <div className="flex items-center flex-wrap justify-between">
-                                            <div className='tracking-wide text-md font-medium text-gray-500 font-montserrat'>$price</div>
-                                            <button className="bg-gradient-to-r font-montserrat font-semibold from-indigo-600 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-2 py-1 rounded-lg">Learn more</button>
+                                            <div className='tracking-wide text-md font-medium text-gray-500 '>$price</div>
+                                            <button className="bg-gradient-to-r  font-semibold from-indigo-600 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-2 py-1 rounded-lg">Learn more</button>
                                         </div>
                                     </div>
                                 </div>
@@ -145,16 +145,16 @@ const StoreShow = (props) => {
                                                 <div className="w-6 h-6 overflow-hidden">
                                                     <img loading='lazy' src={api_fetchUserImages(review.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
                                                 </div>
-                                                <p className="font-montserrat text-lg mx-0.5">
+                                                <p className=" text-lg mx-0.5">
                                                     {review.author.username}
                                                 </p>
                                             </div>
                                             <div className='flex flex-col'>
                                                 <Ratings size='sm' withSingleValue rating={review.rating} color='text-indigo-400' />
-                                                <p className='font-montserrat text-sm'>{'- ' + moment(review.createdAt).fromNow()}</p>
+                                                <p className=' text-sm'>{'- ' + moment(review.createdAt).fromNow()}</p>
                                             </div>
                                         </div>
-                                        <p className='font-montserrat text-md font-bold'>{review.content}</p>
+                                        <p className=' text-md font-bold'>{review.content}</p>
                                     </div>
                                 ))}
                             </div>

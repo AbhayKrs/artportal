@@ -81,22 +81,26 @@ const Layout = (props) => {
 
       const userID = common.user.id;
       dispatch(r_verifyUser(token));
-      dispatch(a_fetchUserExploreList(userID));
-      dispatch(a_fetchUserStoreList(userID));
+      if (userID) {
+        dispatch(a_fetchUserExploreList(userID));
+        dispatch(a_fetchUserStoreList(userID));
+      }
       dispatch(a_fetchCartList());
     } else if (sessionStorage.jwtToken) {
       token = sessionStorage.jwtToken;
 
       const userID = common.user.id;
       dispatch(r_verifyUser(token));
-      dispatch(a_fetchUserExploreList(userID));
-      dispatch(a_fetchUserStoreList(userID));
+      if (userID) {
+        dispatch(a_fetchUserExploreList(userID));
+        dispatch(a_fetchUserStoreList(userID));
+      }
       dispatch(a_fetchCartList());
     }
   }
 
   return (
-    <main className={`${common.theme} relative font-montserrat`}>
+    <main className={`${common.theme} relative font-nunito`}>
       <Header betaMsg={betaMsg} setBetaMsg={setBetaMsg} />
       <div className={`min-h-show flex flex-col bg-gray-200 dark:bg-darkBg ${betaMsg === true ? 'pt-[5rem]' : 'pt-[3.25rem]'}`}>
         <Snackbar msgdata={common.snackmsg} setMessage={(msgData) => dispatch(r_setSnackMessage(msgData))} />

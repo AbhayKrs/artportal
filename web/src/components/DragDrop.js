@@ -10,21 +10,31 @@ const reorder = (list, startIndex, endIndex) => {
     return result;
 };
 
-const Image = ({ image, index, r_setSnackMessage, setCategories }) => {
+const Image = ({ image, index, r_setSnackMessage, setCategories, isFlagged, setIsFlagged }) => {
     useEffect(() => {
         r_setSnackMessage({
             open: true,
-            message: 'Please give it a few seconds while the system auto-assigns the categories for your upload.',
+            message: 'Please wait a moment as the system processes your upload and assigns a category.',
             type: 'tagger_start'
         });
 
-        model_load();
+        model_load()
+            .then(() => {
+                r_setSnackMessage({
+                    open: true,
+                    message: 'Categories for your upload were successfully added!',
+                    type: 'tagger_stop'
+                });
+            })
+            .catch(err => {
+                console.log(err);
 
-        r_setSnackMessage({
-            open: true,
-            message: 'Categories for your upload were successfully added!',
-            type: 'tagger_stop'
-        });
+                r_setSnackMessage({
+                    open: false,
+                    message: '',
+                    type: ''
+                });
+            });
     }, [image.id])
 
     const model_load = async () => {
@@ -53,6 +63,10 @@ const Image = ({ image, index, r_setSnackMessage, setCategories }) => {
         for (var i = 0; i < p_ind.length; i++) {
             final.push(predicted_class[p_ind[i]]);
         }
+        if (final.includes("mature_art")) {
+            setIsFlagged(true);
+            throw new Error("Flagged content");
+        }
         setCategories(final);
     }
 
@@ -66,7 +80,7 @@ const Image = ({ image, index, r_setSnackMessage, setCategories }) => {
                     {...provided.dragHandleProps}
                 >
                     <img id={'uploadImg' + index} loading='lazy' src={URL.createObjectURL(image.content)} className='w-full h-full object-cover rounded' />
-                    {index === 0 ? <span className="absolute font-montserrat text-white pt-0.5 px-2 rounded-tr-md bottom-0 left-0 bg-indigo-400">Primary</span> : ''}
+                    {index === 0 ? <span className="absolute  text-white pt-0.5 px-2 rounded-tr-md bottom-0 left-0 bg-indigo-400">Primary</span> : ''}
                 </div>
             )
             }
@@ -74,13 +88,13 @@ const Image = ({ image, index, r_setSnackMessage, setCategories }) => {
     );
 }
 
-const ImageList = ({ images, setCategories, r_setSnackMessage }) => {
+const ImageList = ({ images, setCategories, r_setSnackMessage, isFlagged, setIsFlagged }) => {
     return images.map((image, index) => (
-        <Image image={image} index={index} key={image.id} setCategories={setCategories} r_setSnackMessage={r_setSnackMessage} />
+        <Image image={image} index={index} key={image.id} setCategories={setCategories} r_setSnackMessage={r_setSnackMessage} isFlagged={isFlagged} setIsFlagged={setIsFlagged} />
     ));
 }
 
-const DragDrop = ({ selectedImages, setReorderedFiles, setCategories, r_setSnackMessage }) => {
+const DragDrop = ({ isFlagged, setIsFlagged, selectedImages, setReorderedFiles, setCategories, r_setSnackMessage }) => {
     const [images, setImages] = useState([]);
 
     useEffect(() => {
@@ -107,7 +121,7 @@ const DragDrop = ({ selectedImages, setReorderedFiles, setCategories, r_setSnack
                         ref={provided.innerRef}
                         className='scrollbar flex p-2 overflow-auto space-x-2'
                         {...provided.droppableProps}>
-                        <ImageList images={images} setCategories={setCategories} r_setSnackMessage={r_setSnackMessage} />
+                        <ImageList images={images} setCategories={setCategories} r_setSnackMessage={r_setSnackMessage} isFlagged={isFlagged} setIsFlagged={setIsFlagged} />
                         {provided.placeholder}
                     </div>
                 )}

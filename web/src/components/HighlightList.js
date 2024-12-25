@@ -33,7 +33,7 @@ const HighlightList = ({ title, list }) => {
     return (
         <div className='flex flex-col p-4 rounded-md w-full'>
             <div className='relative w-fit justify-between mb-2'>
-                <h2 className='font-montserrat font-bold text-3xl text-gray-300'>{title}</h2>
+                <h2 className=' font-bold text-3xl text-gray-300'>{title}</h2>
                 <div className='absolute h-1 w-8 bottom-0 left-0 text-2xl bg-gray-300'></div>
             </div>
 

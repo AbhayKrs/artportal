@@ -15,47 +15,51 @@ router.post("/login", async (req, res) => {
         const username = req.body.username;
         const password = req.body.password;
 
-        await User.find({}).then(users => {
-            userList.push(...users)
-        });
+        await User.find({})
+            .populate('bookmarks')
+            .then(users => {
+                userList.push(...users)
+            });
 
         const { errors, isValid } = validateLoginInput(userList, req.body);
         if (!isValid) { return res.status(400).json(errors) }
 
-        User.findOne({ username }).then(user => {
-            if (!user) {
-                return res.status(404).json('User not found!')
-            }
-            bcrypt.compare(password, user.password).then((isMatch) => {
-                if (isMatch) {
-                    const payload = {
-                        id: user._id,
-                        name: user.name,
-                        username: user.username,
-                        email: user.email,
-                        avatar: user.avatar,
-                        bio: user.bio,
-                        tokens: user.tokens,
-                        google_authenticated: user.google_authenticated,
-                        isPremium: user.isPremium,
-                        followers: user.followers,
-                        followering: user.following,
-                        bookmarks: user.bookmarks,
-                        created_on: user.createdAt
-                    };
-                    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 43200000 },
-                        (err, token) => {
-                            res.json({
-                                success: true,
-                                token: token
-                            });
-                        }
-                    );
-                } else {
-                    return res.status(400).json("Incorrect Password. Please try again!");
+        User.findOne({ username })
+            .populate('bookmarks')
+            .then(user => {
+                if (!user) {
+                    return res.status(404).json('User not found!')
                 }
+                bcrypt.compare(password, user.password).then((isMatch) => {
+                    if (isMatch) {
+                        const payload = {
+                            id: user._id,
+                            name: user.name,
+                            username: user.username,
+                            email: user.email,
+                            avatar: user.avatar,
+                            bio: user.bio,
+                            tokens: user.tokens,
+                            google_authenticated: user.google_authenticated,
+                            isPremium: user.isPremium,
+                            followers: user.followers,
+                            followering: user.following,
+                            bookmarks: user.bookmarks,
+                            created_on: user.createdAt
+                        };
+                        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 43200000 },
+                            (err, token) => {
+                                res.json({
+                                    success: true,
+                                    token: token
+                                });
+                            }
+                        );
+                    } else {
+                        return res.status(400).json("Incorrect Password. Please try again!");
+                    }
+                });
             });
-        });
     } catch (err) {
         return res.status(404).json({ msg: err.name });
     }
@@ -69,56 +73,58 @@ router.post("/signup", (req, res) => {
         if (!isValid) {
             return res.status(400).json(errors);
         }
-        User.findOne({ username: req.body.username }).then(user => {
-            if (user) {
-                return res.status(400).json('User already exists');
-            } else {
-                const newUser = new User({
-                    name: req.body.name,
-                    email: req.body.email,
-                    username: req.body.username,
-                    password: req.body.password,
-                    avatar: {
-                        icon: '6cbaa37fa59b0caee31dc4b8cdd67d72.png',
-                        category: 'None'
-                    },
-                    tokens: 5000
-                });
-                bcrypt.genSalt(10, (err, salt) => {
-                    bcrypt.hash(newUser.password, salt, (err, hash) => {
-                        if (err) throw err;
-                        newUser.password = hash;
-                        newUser.save()
-                            .then(user => {
-                                console.log('user', user);
-                                const payload = {
-                                    id: user._id,
-                                    name: user.name,
-                                    username: user.username,
-                                    email: user.email,
-                                    avatar: user.avatar,
-                                    bio: user.bio,
-                                    tokens: user.tokens,
-                                    isPremium: user.isPremium,
-                                    followers: user.followers,
-                                    followering: user.following,
-                                    bookmarks: user.bookmarks,
-                                    created_on: user.createdAt,
-                                };
-                                jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 43200000 },
-                                    (err, token) => {
-                                        res.json({
-                                            success: true,
-                                            token: token
-                                        });
-                                    }
-                                )
-                            })
-                            .catch(err => console.log(err));
+        User.findOne({ username: req.body.username })
+            .populate('bookmarks')
+            .then(user => {
+                if (user) {
+                    return res.status(400).json('User already exists');
+                } else {
+                    const newUser = new User({
+                        name: req.body.name,
+                        email: req.body.email,
+                        username: req.body.username,
+                        password: req.body.password,
+                        avatar: {
+                            icon: '6cbaa37fa59b0caee31dc4b8cdd67d72.png',
+                            category: 'None'
+                        },
+                        tokens: 5000
+                    });
+                    bcrypt.genSalt(10, (err, salt) => {
+                        bcrypt.hash(newUser.password, salt, (err, hash) => {
+                            if (err) throw err;
+                            newUser.password = hash;
+                            newUser.save()
+                                .then(user => {
+                                    console.log('user', user);
+                                    const payload = {
+                                        id: user._id,
+                                        name: user.name,
+                                        username: user.username,
+                                        email: user.email,
+                                        avatar: user.avatar,
+                                        bio: user.bio,
+                                        tokens: user.tokens,
+                                        isPremium: user.isPremium,
+                                        followers: user.followers,
+                                        followering: user.following,
+                                        bookmarks: user.bookmarks,
+                                        created_on: user.createdAt,
+                                    };
+                                    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 43200000 },
+                                        (err, token) => {
+                                            res.json({
+                                                success: true,
+                                                token: token
+                                            });
+                                        }
+                                    )
+                                })
+                                .catch(err => console.log(err));
+                        })
                     })
-                })
-            }
-        })
+                }
+            })
     } catch (err) {
         return res.status(404).json({ msg: err.name });
     }
@@ -134,7 +140,7 @@ router.get('/googleAuth/callback', passport.authenticate('google', {
     failureRedirect: '/login',
     session: false
 }), async (req, res) => {
-    const authenticatedUser = await User.findOne({ _id: req.user.id });
+    const authenticatedUser = await User.findOne({ _id: req.user.id }).populate('bookmarks');
     const payload = {
         id: authenticatedUser._id,
         name: authenticatedUser.name,
@@ -167,7 +173,7 @@ router.get('/facebook/callback', passport.authenticate('facebook', {
     failureRedirect: 'http://localhost:3000/google_failed',
     session: false
 }), async (req, res) => {
-    const authenticatedUser = await User.findOne({ id: req.user.id });
+    const authenticatedUser = await User.findOne({ id: req.user.id }).populate('bookmarks');
     const payload = {
         id: authenticatedUser.id,
         name: authenticatedUser.name,

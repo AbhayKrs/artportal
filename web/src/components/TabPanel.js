@@ -38,7 +38,7 @@ export const HomeTabPanel = ({ tags, artworks, }) => {
                 <div className='flex overflow-hidden bg-gray-300 dark:bg-neutral-800'>
                     <ul id='tabSlider' className="flex ">
                         {tags.map((tag, index) => {
-                            return <li key={index} onClick={() => setActiveStatus(index)} className={index === activeStatus ? "text-sm text-gray-600 bg-violet-300 mr-1" : "text-sm text-gray-600 dark:text-gray-400 flex items-center mr-1 hover:text-indigo-700 cursor-pointer"}>
+                            return <li key={index} onClick={() => setActiveStatus(index)} className={index === activeStatus ? "text-sm text-gray-600 bg-indigo-300 mr-1" : "text-sm text-gray-600 dark:text-gray-400 flex items-center mr-1 hover:text-indigo-700 cursor-pointer"}>
                                 <div className="flex items-center">
                                     <span className="p-2 font-normal">{tag}</span>
                                 </div>
@@ -65,7 +65,7 @@ export const HomeTabPanel = ({ tags, artworks, }) => {
                     })}
                 </div>
                 :
-                <div className='flex justify-center items-center font-montserrat text-lg text-gray-800 dark:text-gray-300 bg-gray-300 dark:bg-neutral-800 h-full min-h-[20em]'>No artworks found...</div>
+                <div className='flex justify-center items-center  text-lg text-gray-800 dark:text-gray-300 bg-gray-300 dark:bg-neutral-800 h-full min-h-[20em]'>No artworks found...</div>
             }
         </div >
     )
@@ -82,7 +82,7 @@ export const AwardTabPanel = ({ awards, user, exploreID, awardClose, handleAward
                     <ul id='tabSlider' className="flex ">
                         {awardTabPanelHeaders.map((awardType, index) => {
                             return <li key={index} onClick={() => setActiveStatus(index)} className={index === activeStatus ? "text-sm text-gray-900 dark:font-medium bg-indigo-600 mr-1 rounded-t-md" : "text-sm text-gray-600 rounded-t-md dark:text-gray-400 dark:bg-neutral-700 flex items-center mr-1 hover:text-indigo-700 cursor-pointer"}>
-                                <div className="font-montserrat flex items-center uppercase">
+                                <div className=" flex items-center uppercase">
                                     <span className="p-2 pb-1">{awardType}</span>
                                 </div>
                             </li>
@@ -95,7 +95,7 @@ export const AwardTabPanel = ({ awards, user, exploreID, awardClose, handleAward
                     return <Fragment key={index}>
                         {index === activeStatus && awards.map((award, index) => (
                             <button className='flex flex-col items-center' key={index} onClick={() => setConfirmData({ open: true, award })}>
-                                <img loading='lazy' style={{ width: '3em', height: '3em' }} src={api_fetchUserImages(award.icon)} />
+                                {award.icon.length > 0 && <img loading='lazy' style={{ width: '3em', height: '3em' }} src={api_fetchUserImages(award.icon)} />}
                                 <p className="font-bold font-serif text-right text-neutral-700 dark:text-gray-300 text-sm">{award.value}</p>
                             </button>
                         ))}
@@ -227,7 +227,7 @@ export const ExplorePanel = ({ search, a_filterExploreList, searchExploreList })
                 <div className='lg:flex hidden'>
                     <ul id='tabSlider' className="flex space-x-1 items-center whitespace-nowrap">
                         {exploreFilters.map((filter, index) => {
-                            return <li key={index} onClick={() => selectFilter(filter.value)} className={`flex items-center font-montserrat text-sm font-bold tracking-wider ${filter.value === activeFilter ? 'text-indigo-600' : 'text-gray-700 dark:text-gray-300'} h-fit`}>
+                            return <li key={index} onClick={() => selectFilter(filter.value)} className={`flex items-center cursor-pointer text-sm font-bold tracking-wider ${filter.value === activeFilter ? 'text-indigo-600' : 'text-gray-700 dark:text-gray-300'} h-fit`}>
                                 <span className="flex items-center py-[0.4rem] px-3 capitalize">
                                     {filter.value === activeFilter && <div className='h-3.5 bg-indigo-600 w-1 mr-1'></div>}
                                     {filter.label}
@@ -263,7 +263,7 @@ export const NotificationTabPanel = ({ awards, user, exploreID, awardClose, hand
                     <ul id='tabSlider' className="flex ">
                         {['artportal Specials', 'Community Made', 'Premium'].map((awardType, index) => {
                             return <li key={index} onClick={() => setActiveStatus(index)} className={index === activeStatus ? "text-sm text-gray-900 dark:font-medium bg-indigo-600 mr-1 rounded-t-md" : "text-sm text-gray-600 rounded-t-md dark:text-gray-400 dark:bg-neutral-700 flex items-center mr-1 hover:text-indigo-700 cursor-pointer"}>
-                                <div className="font-montserrat flex items-center uppercase">
+                                <div className=" flex items-center uppercase">
                                     <span className="p-2 pb-1">{awardType}</span>
                                 </div>
                             </li>

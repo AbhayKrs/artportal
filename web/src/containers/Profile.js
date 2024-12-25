@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 
 import { r_clearProfileDetails, r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducers';
-import { a_handleDeleteBookmark, a_handleViewUser, a_refreshUserDetails } from '../store/actions/common.actions';
-import { a_fetchExploreList } from '../store/actions/explore.actions';
+import { a_fetchUserExploreList, a_handleDeleteBookmark, a_handleFetchUserDetails, a_refreshUserDetails } from '../store/actions/common.actions';
+import { a_deleteArtwork, a_fetchExploreList } from '../store/actions/explore.actions';
 import { api_fetchArtworkImages, api_fetchUserImages } from '../utils/api';
 
 import Masonry from '../components/Masonry';
@@ -23,30 +23,31 @@ const Profile = (props) => {
     const navigate = useNavigate();
 
     const common = useSelector(state => state.common);
-    const explore = useSelector(state => state.explore);
-    const viewed_user = useSelector(state => state.common.viewed_user);
+    const profile_data = useSelector(state => state.common.profile_data);
 
     useEffect(() => {
         dispatch(r_setLoader(true));
         window.scrollTo(0, 0);
-        dispatch(a_handleViewUser(id));
-        dispatch(a_fetchExploreList());
+        if (id !== null) {
+            dispatch(a_handleFetchUserDetails(id));
+            dispatch(a_fetchUserExploreList(id));
+        }
         return () => dispatch(r_clearProfileDetails());
     }, [id])
 
     const [activeView, setActiveView] = useState('portfolio');
 
-    const deleteExploreItem = (exploreID) => {
+    const deleteArtwork = (exploreID) => {
         const msgData = {
             open: true,
             message: 'Successfully deleted uploaded artwork.',
             type: 'success'
         }
         dispatch(r_setSnackMessage(msgData));
-        dispatch(deleteExploreItem(exploreID))
+        dispatch(a_deleteArtwork(exploreID))
         setTimeout(() => {
-            dispatch(a_refreshUserDetails(viewed_user.id));
-            dispatch(a_handleViewUser(id));
+            dispatch(a_refreshUserDetails(profile_data.id));
+            dispatch(a_handleFetchUserDetails(id));
         }, 2000)
     }
 
@@ -90,24 +91,23 @@ const Profile = (props) => {
         switch (activeView) {
             case 'portfolio': return <div className='flex flex-row'>
                 <Masonry cols={4}>
-                    {viewed_user.explore.map((explore, index) => (
-                        // onClick={() => navigate(`/explore/${explore._id}`)}
+                    {profile_data.artworks.map((artwork, index) => (
                         <div key={index} className='relative group group-hover:block'>
                             <img loading='lazy'
                                 id={index}
                                 className='object-cover w-full h-full'
-                                src={api_fetchArtworkImages(explore.files[0])}
+                                src={api_fetchArtworkImages(artwork.files[0])}
                             />
                             <div className='absolute z-30 hidden group-hover:flex top-0 right-0 m-2 space-x-1'>
-                                {common.user.id === viewed_user.id && <BsTrash onClick={() => deleteExploreItem(explore._id)} className=' h-6 w-6 cursor-pointer text-gray-200' />}
-                                <GoInfo onClick={() => navigate(`/explore/${explore._id}`)} className='w-6 h-6 cursor-pointer text-gray-200' />
+                                {common.user.id === profile_data.id && <BsTrash onClick={() => deleteArtwork(artwork._id)} className=' h-6 w-6 cursor-pointer text-gray-200' />}
+                                <GoInfo onClick={() => navigate(`/artworks/${artwork._id}`)} className='w-6 h-6 cursor-pointer text-gray-200' />
                             </div>
                             <div className='hidden absolute max-h-full bottom-0 p-2 pt-14 group-hover:flex group-hover:flex-row w-full bg-gradient-to-t from-black text-gray-200 group-hover:flex group-hover:justify-between'>
                                 <div className="flex flex-col place-self-end max-w-[65%]">
-                                    <h3 className="text-md text-base font-bold leading-5 capitalize break-words">{explore.title + 'afsafokasfjhbasfbasbhfsbhf'}</h3>
+                                    <h3 className="text-md text-base font-bold leading-5 capitalize break-words">{artwork.title}</h3>
                                     <div className='flex'>
                                         <span className="font-base text-xs my-1 mr-1">
-                                            {explore.author.username}
+                                            {artwork.artist.username}
                                         </span>
                                         <svg className="stroke-current stroke-1 text-blue-600 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                             <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
@@ -117,15 +117,15 @@ const Profile = (props) => {
                                 <div className="flex flex-col self-end place-items-end space-y-1.5">
                                     <div className="inline-flex items-center">
                                         <BsHeart className='h-4 w-4' />
-                                        <span className="text-xs ml-1 antialiased">{explore.likes.length}</span>
+                                        <span className="text-xs ml-1 antialiased">{artwork.likes.length}</span>
                                     </div>
                                     <div className="inline-flex items-center">
                                         <BsChat className='h-4 w-4' />
-                                        <span className="text-xs ml-1 antialiased">{explore.comment_count}</span>
+                                        <span className="text-xs ml-1 antialiased">{artwork.comment_count}</span>
                                     </div>
                                     <div className="inline-flex items-center">
                                         <BiTimeFive className='h-4 w-4' />
-                                        <span className="text-xs ml-1 antialiased text-right whitespace-nowrap">{moment(explore.createdAt).fromNow()}</span>
+                                        <span className="text-xs ml-1 antialiased text-right whitespace-nowrap">{moment(artwork.createdAt).fromNow()}</span>
                                     </div>
                                 </div>
                             </div>
@@ -136,19 +136,19 @@ const Profile = (props) => {
             case 'about': return <div className='text-4xl text-gray-400'>HELLO</div>
             case 'liked': return <div className='flex flex-row'>
                 <Masonry cols={5}>
-                    {explore.artworks.filter(item => item.likes.indexOf(viewed_user.id) >= 0).map((explore, index) => (
-                        <div key={index} onClick={() => navigate(`/explore/${explore._id}`)} className='relative group group-hover:block'>
+                    {profile_data.artworks.filter(item => item.likes.indexOf(profile_data.id) >= 0).map((artwork, index) => (
+                        <div key={index} onClick={() => navigate(`/artworks/${artwork._id}`)} className='relative group group-hover:block'>
                             <img loading='lazy'
                                 id={index}
                                 className='object-cover w-full h-full'
-                                src={api_fetchArtworkImages(explore.files[0])}
+                                src={api_fetchArtworkImages(artwork.files[0])}
                             />
                             <div className='hidden absolute max-h-full bottom-0 p-2 pt-14 group-hover:flex group-hover:flex-row w-full bg-gradient-to-t from-black text-gray-200 group-hover:flex group-hover:justify-between'>
                                 <div className="flex flex-col place-self-end max-w-[65%]">
-                                    <h3 className="text-md text-base font-bold leading-5 capitalize break-words">{explore.title + 'afsafokasfjhbasfbasbhfsbhf'}</h3>
+                                    <h3 className="text-md text-base font-bold leading-5 capitalize break-words">{artwork.title}</h3>
                                     <div className='flex'>
                                         <span className="font-base text-xs my-1 mr-1">
-                                            {explore.author.username}
+                                            {artwork.artist.username}
                                         </span>
                                         <svg className="stroke-current stroke-1 text-blue-600 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                             <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
@@ -158,15 +158,15 @@ const Profile = (props) => {
                                 <div className="flex flex-col self-end place-items-end space-y-1.5">
                                     <div className="inline-flex items-center">
                                         <BsHeart className='h-4 w-4' />
-                                        <span className="text-xs ml-1 antialiased">{explore.likes.length}</span>
+                                        <span className="text-xs ml-1 antialiased">{artwork.likes.length}</span>
                                     </div>
                                     <div className="inline-flex items-center">
                                         <BsChat className='h-4 w-4' />
-                                        <span className="text-xs ml-1 antialiased">{explore.comment_count}</span>
+                                        <span className="text-xs ml-1 antialiased">{artwork.comment_count}</span>
                                     </div>
                                     <div className="inline-flex items-center">
                                         <BiTimeFive className='h-4 w-4' />
-                                        <span className="text-xs ml-1 antialiased">{moment(explore.createdAt).fromNow()}</span>
+                                        <span className="text-xs ml-1 antialiased">{moment(artwork.createdAt).fromNow()}</span>
                                     </div>
                                 </div>
                             </div>
@@ -176,20 +176,20 @@ const Profile = (props) => {
             </div>
             case 'bookmarks': return <div className='flex flex-row'>
                 <Masonry cols={5}>
-                    {viewed_user.bookmarked.map((explore, index) => (
+                    {profile_data.bookmarks.map((artwork, index) => (
                         <div key={index} className='relative group group-hover:block'>
                             <img loading='lazy'
                                 id={index}
                                 className='object-cover w-full h-full'
-                                src={api_fetchArtworkImages(explore.files[0])}
+                                src={api_fetchArtworkImages(artwork.files[0])}
                             />
-                            <IoCloseCircle onClick={() => deleteBookmark(explore._id, common.user.id)} className='hidden group-hover:flex absolute z-30 top-0 right-0 h-8 w-8 m-2 cursor-pointer text-gray-200' />
+                            <IoCloseCircle onClick={() => deleteBookmark(artwork._id, common.user.id)} className='hidden group-hover:flex absolute z-30 top-0 right-0 h-8 w-8 m-2 cursor-pointer text-gray-200' />
                             <div className='hidden absolute max-h-full bottom-0 p-2 pt-14 group-hover:flex group-hover:flex-row w-full bg-gradient-to-t from-black text-gray-200 group-hover:flex group-hover:justify-between'>
                                 <div className="flex flex-col place-self-end max-w-[65%]">
-                                    <h3 className="text-md text-base font-bold leading-5 capitalize break-words">{explore.title + 'afsafokasfjhbasfbasbhfsbhf'}</h3>
+                                    <h3 className="text-md text-base font-bold leading-5 capitalize break-words">{artwork.title}</h3>
                                     <div className='flex'>
                                         <span className="font-base text-xs my-1 mr-1">
-                                            {explore.author.username}
+                                            {artwork.artist.username}
                                         </span>
                                         <svg className="stroke-current stroke-1 text-blue-600 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                             <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
@@ -197,7 +197,7 @@ const Profile = (props) => {
                                     </div>
                                 </div>
                                 <div className="flex flex-col self-end place-items-end space-y-1.5">
-                                    <GoInfo onClick={() => navigate(`/explore/${explore._id}`)} className='w-6 h-6 cursor-pointer text-gray-200' />
+                                    <GoInfo onClick={() => navigate(`/artworks/${artwork._id}`)} className='w-6 h-6 cursor-pointer text-gray-200' />
                                 </div>
                             </div>
                         </div>
@@ -210,6 +210,7 @@ const Profile = (props) => {
 
     return (
         <div className=' bg-gray-200 dark:bg-darkBg'>
+            {console.log("profile_data", profile_data)}
             <div className="relative block h-96">
                 <div className="absolute top-0 w-full h-full bg-center bg-cover" style={{
                     backgroundImage: `url('https://cdna.artstation.com/p/assets/images/images/049/944/404/large/gabriel-gomez-fghghfghfghfghfghfghfg.jpg?1653675686')`
@@ -225,39 +226,39 @@ const Profile = (props) => {
                                 <div className="w-full sm:w-4/12 px-4">
                                     <div className="grid grid-cols-2 lg:grid-cols-4 justify-center sm:pt-4 pt-16">
                                         <div className="shrink mr-4 p-3 min-w-fit text-center">
-                                            <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-800 dark:text-gray-300">{viewed_user.followers_count}</span><span className="text-sm font-semibold text-blueGray-500">Following</span>
+                                            <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-800 dark:text-gray-300">{profile_data.followers_count}</span><span className="text-sm font-semibold text-blueGray-500">Following</span>
                                         </div>
                                         <div className="mr-4 p-3 min-w-fit text-center">
-                                            <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-800 dark:text-gray-300">{viewed_user.followers_count}</span><span className="text-sm font-semibold text-blueGray-500">Followers</span>
+                                            <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-800 dark:text-gray-300">{profile_data.followers_count}</span><span className="text-sm font-semibold text-blueGray-500">Followers</span>
                                         </div>
                                         <div className="mr-4 p-3 min-w-fit text-center">
-                                            <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-800 dark:text-gray-300">{viewed_user.explore_count}</span><span className="text-sm font-semibold text-blueGray-500">Explore Uploads</span>
+                                            <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-800 dark:text-gray-300">{profile_data.artworks_count}</span><span className="text-sm font-semibold text-blueGray-500">Explore Uploads</span>
                                         </div>
                                         <div className="mr-4 p-3 min-w-fit text-center">
-                                            <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-800 dark:text-gray-300">{viewed_user.comment_count}</span><span className="text-sm font-semibold text-blueGray-500">Comments</span>
+                                            <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-800 dark:text-gray-300">{profile_data.comment_count}</span><span className="text-sm font-semibold text-blueGray-500">Comments</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="w-full sm:w-3/12 px-4 flex justify-center">
                                     <div className="relative h-fit align-middle -m-[27rem] -ml-[27.5rem] sm:-m-32 sm:-ml-28 max-w-[15rem]">
-                                        {viewed_user.avatar ? <img loading='lazy' src={api_fetchUserImages(viewed_user.avatar.icon)} /> : null}
+                                        {profile_data.avatar.icon.length > 0 && <img loading='lazy' src={api_fetchUserImages(profile_data.avatar.icon)} />}
                                     </div>
                                 </div>
                                 <div className="w-full sm:w-4/12 px-4 lg:text-right lg:self-center">
                                     <div className="text-center pt-4 space-y-1.5">
-                                        <h3 className="text-4xl font-montserrat font-semibold text-blueGray-800 dark:text-gray-300">
-                                            {viewed_user.name}
+                                        <h3 className="text-4xl font-semibold text-blueGray-800 dark:text-gray-300">
+                                            {profile_data.name}
                                         </h3>
-                                        <div className="text-md font-montserrat text-blueGray-500 font-bold">
-                                            #{viewed_user.username}
+                                        <div className="text-md  text-blueGray-500 font-bold">
+                                            #{profile_data.username}
                                         </div>
-                                        <div className="text-blueGray-600 font-montserrat text-blueGray-700 dark:text-gray-400 font-bold">
-                                            {viewed_user.email}
+                                        <div className="text-blueGray-600  text-blueGray-700 dark:text-gray-400 font-bold">
+                                            {profile_data.email}
                                         </div>
-                                        {viewed_user.bio && <p className="text-blueGray-600 font-montserrat text-blueGray-700 dark:text-gray-400 font-bold italic">
-                                            {'“' + viewed_user.bio + '”'}
+                                        {profile_data.bio && <p className="text-blueGray-600  text-blueGray-700 dark:text-gray-400 font-bold italic">
+                                            {'“' + profile_data.bio + '”'}
                                         </p>}
-                                        {common.user.id === viewed_user.id ?
+                                        {common.user.id === profile_data.id ?
                                             <div>
                                                 <button onClick={() => navigate('/settings/account')} className="flex items-center space-x-2 bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150" type="button">
                                                     <FaUserEdit />
@@ -278,15 +279,15 @@ const Profile = (props) => {
                                 </div>
                             </div>
                             <div className='flex space-x-3 py-3 items-center justify-start xs:flex-wrap xs:justify-center'>
-                                <div onClick={() => setActiveView('portfolio')} className={`text-lg font-semibold ${activeView === 'portfolio' ? 'text-indigo-600 dark:text-indigo-600' : 'text-gray-700 dark:text-gray-400'} font-montserrat cursor-pointer`}>Portfolio</div>
+                                <div onClick={() => setActiveView('portfolio')} className={`text-lg font-semibold ${activeView === 'portfolio' ? 'text-indigo-600 dark:text-indigo-600' : 'text-gray-700 dark:text-gray-400'}  cursor-pointer`}>Portfolio</div>
                                 <span className='text-gray-700 dark:text-gray-400'>&#9679;</span>
-                                <div onClick={() => setActiveView('about')} className={`text-lg font-semibold ${activeView === 'about' ? 'text-indigo-600 dark:text-indigo-600' : 'text-gray-700 dark:text-gray-400'} font-montserrat cursor-pointer`}>About</div>
+                                <div onClick={() => setActiveView('about')} className={`text-lg font-semibold ${activeView === 'about' ? 'text-indigo-600 dark:text-indigo-600' : 'text-gray-700 dark:text-gray-400'}  cursor-pointer`}>About</div>
                                 <span className='text-gray-700 dark:text-gray-400'>&#9679;</span>
-                                <div onClick={() => setActiveView('liked')} className={`text-lg font-semibold ${activeView === 'liked' ? 'text-indigo-600 dark:text-indigo-600' : 'text-gray-700 dark:text-gray-400'} font-montserrat cursor-pointer`}>Liked</div>
+                                <div onClick={() => setActiveView('liked')} className={`text-lg font-semibold ${activeView === 'liked' ? 'text-indigo-600 dark:text-indigo-600' : 'text-gray-700 dark:text-gray-400'}  cursor-pointer`}>Liked</div>
                                 <span className='text-gray-700 dark:text-gray-400'>&#9679;</span>
-                                {common.user.id === viewed_user.id && <div onClick={() => setActiveView('bookmarks')} className={`text-lg font-semibold ${activeView === 'bookmarks' ? 'text-indigo-600 dark:text-indigo-600' : 'text-gray-700 dark:text-gray-400'} font-montserrat cursor-pointer`}>Bookmarks</div>}
+                                {common.user.id === profile_data.id && <div onClick={() => setActiveView('bookmarks')} className={`text-lg font-semibold ${activeView === 'bookmarks' ? 'text-indigo-600 dark:text-indigo-600' : 'text-gray-700 dark:text-gray-400'}  cursor-pointer`}>Bookmarks</div>}
                             </div>
-                            {viewed_user && renderView()}
+                            {profile_data && renderView()}
                         </div>
                     </div>
                 </div>

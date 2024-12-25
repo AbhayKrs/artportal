@@ -13,6 +13,7 @@ import { BsHash } from 'react-icons/bs';
 
 import DragDrop from '../components/DragDrop';
 import Dropdown from '../components/Dropdown';
+import { ConfirmModal, FlaggedModal } from '../components/Modal';
 
 
 const ExploreUpload = (props) => {
@@ -30,6 +31,8 @@ const ExploreUpload = (props) => {
     const [exploreTags, setExploreTags] = useState([]);
     const [tagSearch, setTagSearch] = useState('');
     const [primaryFile, setPrimaryFile] = useState('');
+
+    const [isFlagged, setIsFlagged] = useState(false);
 
     useEffect(() => {
         dispatch(r_setLoader(true));
@@ -217,20 +220,20 @@ const ExploreUpload = (props) => {
             </Helmet>
             <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-8">
                 <div className='relative'>
-                    <span className='font-montserrat text-4xl text-gray-700 dark:text-gray-300'>Upload</span>
+                    <span className=' text-4xl text-gray-700 dark:text-gray-300'>Upload</span>
                     <div className='h-1 w-12 mt-1 bg-indigo-600'></div>
                 </div>
                 <div className='flex lg:flex-row flex-col p-5 lg:space-x-8 md:space-y-2'>
                     <div className='w-8/12 xs:mb-2 md:mb-0'>
-                        <span className='font-montserrat text-lg tracking-wider font-semibold text-gray-700 dark:text-gray-300'>Files<span className='font-montserrat text-rose-400 text-md'>*</span></span>
+                        <span className=' text-lg tracking-wider font-semibold text-gray-700 dark:text-gray-300'>Files<span className=' text-rose-400 text-md'>*</span></span>
                         <div className="flex flex-col space-y-3">
                             <div className='flex flex-row space-x-4'>
                                 <div className="flex flex-col w-full justify-center items-center border-dashed space-y-2 rounded-lg border-2 border-gray-400 py-12" onDrop={(ev) => dropHandler(ev)} onDragOver={(ev) => dragOverHandler(ev)} >
-                                    <label htmlFor="file-upload" className='bg-indigo-600 text-white font-montserrat cursor-pointer text-lg font-semibold py-2 px-4 rounded'>
+                                    <label htmlFor="file-upload" className='bg-indigo-600 text-white  cursor-pointer text-lg font-semibold py-2 px-4 rounded'>
                                         Select image files
                                     </label>
                                     <input id="file-upload" className='hidden' type="file" multiple onChange={onImageChange} />
-                                    <p className="font-montserrat text-gray-700 dark:text-gray-300 flex-wrap justify-center">or drag and drop here</p>
+                                    <p className=" text-gray-700 dark:text-gray-300 flex-wrap justify-center">or drag and drop here</p>
                                 </div>
                             </div>
                             <div className="flex flex-col rounded-lg bg-slate-100 dark:bg-neutral-700 shadow items-center p-5 w-full">
@@ -240,11 +243,13 @@ const ExploreUpload = (props) => {
                                         <div className='w-full'>
                                             <img loading='lazy' className="my-2 mx-auto w-32" src="https://user-images.githubusercontent.com/507615/54591670-ac0a0180-4a65-11e9-846c-e55ffce0fe7b.png" alt="no data" />
                                             <span className="text-small dark:text-gray-500">No files selected</span>
-                                            <div className='font-montserrat text-rose-400 font-semibold text-sm'>You may select a maximum of 3 files only.</div>
+                                            <div className=' text-rose-400 font-semibold text-sm'>You may select a maximum of 3 files only.</div>
                                         </div>
                                         :
                                         <div className='w-full'>
                                             <DragDrop
+                                                isFlagged={isFlagged}
+                                                setIsFlagged={setIsFlagged}
                                                 selectedImages={exploreFiles.map((explore, index) => {
                                                     return {
                                                         id: index.toString(),
@@ -255,7 +260,7 @@ const ExploreUpload = (props) => {
                                                 setCategories={(categories) => setExploreCategories(imageCategories => [...new Set([...imageCategories, ...categories])])}
                                                 r_setSnackMessage={(msgData) => dispatch(r_setSnackMessage(msgData))}
                                             />
-                                            <div className='font-montserrat text-rose-400 font-semibold text-sm'>You may select a maximum of 3 files.</div>
+                                            <div className=' text-rose-400 font-semibold text-sm'>You may select a maximum of 3 files.</div>
                                         </div>
                                     }
                                 </div>
@@ -264,11 +269,11 @@ const ExploreUpload = (props) => {
                     </div>
                     <div className='w-4/12 space-y-4'>
                         {exploreCategories.length === 0 ? null : <div className='flex flex-col'>
-                            <span className='font-montserrat text-lg tracking-wide font-semibold text-gray-700 dark:text-gray-300'>Categories<span className='font-montserrat text-rose-400 text-md'>*</span></span>
+                            <span className=' text-lg tracking-wide font-semibold text-gray-700 dark:text-gray-300'>Categories<span className=' text-rose-400 text-md'>*</span></span>
                             <div className="w-full inline-flex flex-col justify-center relative text-gray-500">
                                 <div id='category_menu' className='flex flex-wrap space-x-1'>
                                     {exploreCategories.map((category, index) => (
-                                        <div key={index} className="flex justify-center items-center m-1 font-medium py-2 px-3 rounded-md text-indigo-100 bg-indigo-600 border border-violet-700 ">
+                                        <div key={index} className="flex justify-center items-center m-1 font-medium py-2 px-3 rounded-md text-indigo-100 bg-indigo-600 border border-indigo-700 ">
                                             <div className="text-sm font-normal leading-none max-w-full flex-initial">{category}</div>
                                         </div>
                                     ))}
@@ -276,16 +281,16 @@ const ExploreUpload = (props) => {
                             </div>
                         </div>}
                         <div className='flex flex-col'>
-                            <span className='font-montserrat text-lg tracking-wide font-semibold text-gray-700 dark:text-gray-300'>Title<span className='font-montserrat text-rose-400 text-md'>*</span></span>
+                            <span className=' text-lg tracking-wide font-semibold text-gray-700 dark:text-gray-300'>Title<span className=' text-rose-400 text-md'>*</span></span>
                             <input type="text" maxLength={250} value={exploreTitle} onChange={(ev) => setExploreTitle(ev.target.value)} className="py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 focus:outline-none rounded-md w-full" placeholder='Title' />
                         </div>
                         <div className='flex flex-col'>
-                            <span className='font-montserrat text-lg tracking-wide font-semibold text-gray-700 dark:text-gray-300'>Description<span className='font-montserrat text-rose-400 text-md'>*</span></span>
+                            <span className=' text-lg tracking-wide font-semibold text-gray-700 dark:text-gray-300'>Description<span className=' text-rose-400 text-md'>*</span></span>
                             <textarea rows='4' maxLength={1000} value={exploreDesc} onChange={(ev) => setExploreDesc(ev.target.value)} className="scrollbar py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 resize-none focus:outline-none rounded-md w-full" placeholder='Description' />
                         </div>
                         <div className='flex flex-col'>
-                            <span className='font-montserrat text-lg  leading-[1.125rem] tracking-wide font-semibold text-gray-700 dark:text-gray-300'>Add tags<span className='font-montserrat text-rose-400 text-md'>*</span></span>
-                            <div className='font-montserrat text-rose-400 font-semibold text-xs mb-1.5'>You may assign a maximum of 10 tags</div>
+                            <span className=' text-lg  leading-[1.125rem] tracking-wide font-semibold text-gray-700 dark:text-gray-300'>Add tags<span className=' text-rose-400 text-md'>*</span></span>
+                            <div className=' text-rose-400 font-semibold text-xs mb-1.5'>You may assign a maximum of 10 tags</div>
                             <div className="w-full inline-flex flex-col justify-center relative text-gray-500">
                                 <div className="relative">
                                     <input value={tagSearch} onChange={(ev) => setTagSearch(ev.target.value)} type="text" className="p-2 shadow  pl-8 w-full text-md rounded bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 focus:outline-none" placeholder="Search for tags..." />
@@ -295,7 +300,7 @@ const ExploreUpload = (props) => {
                                 {exploreTags.length === 0 ? '' :
                                     <div id='tagmenu' className='flex flex-wrap justify-center space-x-1 mt-2'>
                                         {exploreTags.map(tag => (
-                                            <div className="flex justify-center items-center m-1 font-medium py-1 px-2 rounded-md text-indigo-100 bg-indigo-600 border border-violet-700 ">
+                                            <div className="flex justify-center items-center m-1 font-medium py-1 px-2 rounded-md text-indigo-100 bg-indigo-600 border border-indigo-700 ">
                                                 <div className="text-xs font-normal leading-none max-w-full flex-initial">{tag.value}</div>
                                                 <div className="flex flex-auto flex-row-reverse">
                                                     <MdClose className='feather feather-x cursor-pointer hover:text-indigo-400 rounded-full w-4 h-4 ml-1' />
@@ -308,12 +313,12 @@ const ExploreUpload = (props) => {
                                     <div className="scrollbar bg-gray-200/25 dark:bg-neutral-700 max-h-60 h-full overflow-y-auto w-full mt-2 p-2 rounded">
                                         {common.tags.filter(tag => tag.value.toLowerCase().includes(tagSearch)).map(tag => {
                                             if (exploreTags.includes(tag)) {
-                                                return <div className="flex justify-between items-center pl-8 pr-2 py-2 m-1 bg-violet-100 text-gray-600 rounded">
+                                                return <div className="flex justify-between items-center pl-8 pr-2 py-2 m-1 bg-indigo-100 text-gray-600 rounded">
                                                     {tag.value}
                                                     <MdClose onClick={() => handleRemoveTag(tag)} className='h-5 w-5 cursor-pointer' />
                                                 </div>
                                             } else {
-                                                return <div onClick={() => handleSelectTag(tag)} className="pl-8 pr-2 py-2 text-gray-700 dark:text-gray-300 cursor-pointer hover:bg-violet-300 hover:bg-gray-100 dark:hover:bg-neutral-800/25 hover:rounded">
+                                                return <div onClick={() => handleSelectTag(tag)} className="pl-8 pr-2 py-2 text-gray-700 dark:text-gray-300 cursor-pointer hover:bg-indigo-300 hover:bg-gray-100 dark:hover:bg-neutral-800/25 hover:rounded">
                                                     {tag.value}
                                                 </div>
                                             }
@@ -326,7 +331,7 @@ const ExploreUpload = (props) => {
                     </div>
                 </div>
                 <div className="flex justify-end pt-5">
-                    <button onClick={() => navigate(`/explore`)} className="font-montserrat rounded-md px-3 py-1 bg-gray-300 focus:shadow-outline focus:outline-none">
+                    <button onClick={() => navigate(`/explore`)} className=" rounded-md px-3 py-1 bg-gray-300 focus:shadow-outline focus:outline-none">
                         Cancel
                     </button>
                     <button disabled={exploreFiles.length === 0 || exploreCategories.length === 0 || exploreTitle.length === 0 || exploreDesc.length === 0} onClick={handleUpload} className="ml-3 rounded-md px-3 py-1 bg-rose-500 hover:bg-rose-600 text-white focus:shadow-outline focus:outline-none disabled:text-neutral-400 disabled:bg-neutral-600 disabled:hover:bg-neutral-600">
@@ -334,6 +339,10 @@ const ExploreUpload = (props) => {
                     </button>
                 </div>
             </div>
+            {isFlagged && <FlaggedModal
+                open={isFlagged}
+                onClose={() => navigate(0)}
+            />}
         </div >
     )
 }
@@ -474,15 +483,15 @@ const StoreUpload = (props) => {
     return (
         <div className="main-container bg-gray-200 dark:bg-darkBg p-5">
             <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-5">
-                <span className='font-montserrat text-3xl text-gray-700 dark:text-gray-300'>List Product to Store</span>
+                <span className=' text-3xl text-gray-700 dark:text-gray-300'>List Product to Store</span>
                 <div className='flex lg:flex-row flex-col mt-3 lg:space-x-4 md:space-y-2'>
                     <div className='w-full'>
-                        <span className='font-montserrat font-semibold text-gray-700 dark:text-gray-300'>Files<span className='font-montserrat text-rose-400 text-md'>*</span></span>
+                        <span className=' font-semibold text-gray-700 dark:text-gray-300'>Files<span className=' text-rose-400 text-md'>*</span></span>
                         <div className="flex flex-col space-y-3">
                             <div className="flex flex-col justify-center items-center border-dashed space-y-2 rounded-lg border-2 border-gray-400 py-8" onDrop={(ev) => dropHandler(ev)} onDragOver={(ev) => dragOverHandler(ev)} >
                                 <p className="font-semibold text-gray-700 dark:text-gray-300 flex flex-wrap justify-center">Drag files</p>
                                 <p className="font-semibold text-gray-700 dark:text-gray-300">OR</p>
-                                <label htmlFor="file-upload" className='bg-indigo-600 text-white font-montserrat font-semibold py-1 px-2 rounded'>
+                                <label htmlFor="file-upload" className='bg-indigo-600 text-white  font-semibold py-1 px-2 rounded'>
                                     Select files
                                 </label>
                                 <input id="file-upload" className='hidden' type="file" multiple onChange={onImageChange} />
@@ -494,7 +503,7 @@ const StoreUpload = (props) => {
                                         <div>
                                             <img loading='lazy' className="mx-auto w-32" src="https://user-images.githubusercontent.com/507615/54591670-ac0a0180-4a65-11e9-846c-e55ffce0fe7b.png" alt="no data" />
                                             <span className="text-small dark:text-gray-500">No files selected</span>
-                                            <div className='font-montserrat text-rose-400 font-semibold text-sm'>You may select a maximum of 3 files.</div>
+                                            <div className=' text-rose-400 font-semibold text-sm'>You may select a maximum of 3 files.</div>
                                         </div>
                                         :
                                         <div className=''>
@@ -515,20 +524,20 @@ const StoreUpload = (props) => {
                     </div>
                     <div className='w-full space-y-2'>
                         <div className='flex flex-col'>
-                            <span className='font-montserrat font-semibold text-gray-700 dark:text-gray-300'>Title<span className='font-montserrat text-rose-400 text-md'>*</span></span>
+                            <span className=' font-semibold text-gray-700 dark:text-gray-300'>Title<span className=' text-rose-400 text-md'>*</span></span>
                             <input type="text" value={storeTitle} onChange={(ev) => setStoreTitle(ev.target.value)} className="py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 focus:outline-none rounded-md w-full" placeholder='Title' />
                         </div>
                         <div className='flex flex-col'>
-                            <span className='font-montserrat font-semibold text-gray-700 dark:text-gray-300'>Description<span className='font-montserrat text-rose-400 text-md'>*</span></span>
+                            <span className=' font-semibold text-gray-700 dark:text-gray-300'>Description<span className=' text-rose-400 text-md'>*</span></span>
                             <textarea rows='3' value={storeDesc} onChange={(ev) => setStoreDesc(ev.target.value)} className="scrollbar py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 resize-none focus:outline-none rounded-md w-full" placeholder='Description' />
                         </div>
                         <div className='flex flex-col'>
-                            <span className='font-montserrat font-semibold text-gray-700 dark:text-gray-300'>Price<span className='font-montserrat text-rose-400 text-md'>*</span></span>
+                            <span className=' font-semibold text-gray-700 dark:text-gray-300'>Price<span className=' text-rose-400 text-md'>*</span></span>
                             <span className="absolute ml-2 mt-8 text-gray-700 dark:text-gray-300">$</span>
                             <input type='number' value={storePrice} onChange={(ev) => setStorePrice(ev.target.value)} className="scrollbar w-fit py-2 pl-6 pr-3 shadow text-md bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 focus:outline-none rounded-md" />
                         </div>
                         <div className='flex flex-col'>
-                            <span className='font-montserrat font-semibold text-gray-700 dark:text-gray-300'>Category<span className='font-montserrat text-rose-400 text-md'>*</span></span>
+                            <span className=' font-semibold text-gray-700 dark:text-gray-300'>Category<span className=' text-rose-400 text-md'>*</span></span>
                             <Dropdown left name='category' selectedPeriod={activeCategoryLabel} options={categoryOptions} onSelect={handleCategoryChange} />
                         </div>
                     </div>

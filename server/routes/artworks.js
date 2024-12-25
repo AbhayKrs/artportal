@@ -98,38 +98,42 @@ router.get('/', async (req, res) => {
 // @route   Get api/artworks/:id --- Fetch Artwork by ID along with next and prev artwork reference --- Public
 router.get('/:id', async (req, res) => {
     try {
-        const artwork = await Artwork.findById(req.params.id).populate('artist', 'name username avatar');
-        // const viewer_id = req.body._id;
-
-        // console.log("viewer_id", viewer_id);
-
-        // if (!artwork) return res.status(400).send({ msg: 'Artwork not found' });
-
-        // if (viewer_id) {
-        //     artwork.views.indexOf(viewer_id) > -1 ? null : artwork.views.push(viewer_id);
-        //     artwork.save();
-        // }
+        const artwork = await Artwork.findById(req.params.id)
+            .populate('artist', 'name username avatar')
+            .populate('tags', 'value')
+            .populate({
+                path: 'comments',
+                populate: {
+                    path: 'author',
+                    select: 'name username avatar'
+                }
+            });
+        // .populate({
+        //     path: 'comments.author',
+        //     select: 'name username avatar' // Specify fields to include
+        // });
 
         res.json(artwork);
     } catch (err) {
-        console.error(err.message);
+        console.error(err);
         res.status(500).send('Unable to fetch artwork item');
     }
 });
 
 // @route   POST api/artworks/new --- Create an artwork entry --- Private
 router.post('/new', protect, artworkUpl.any(), async (req, res) => {
-    console.log("data", req.body, req.files);
-
     try {
         const user = await User.findById(req.body.userID);
+        const tags = await
+            console.log("Test", req.body);
+
         const newArtwork = new Artwork({
             artist: user._id,
             title: req.body.title,
             description: req.body.description,
             files: req.files.map(file => { return file.filename }),
             categories: req.body.categories,
-            tags: req.body.tags.map(tag => { return JSON.parse(tag).value }),
+            tags: req.body.tags.map(tag => { return JSON.parse(tag)._id }),
             views: [],
             likes: [],
             comments: []
@@ -206,26 +210,29 @@ router.put('/:id', protect, function (req, res) {
 // @route   Delete api/artworks/:id --- Delete an artwork --- Private
 router.delete('/:id', protect, async (req, res) => {
     try {
-        artworkgfs.remove({ _id: req.params.id, root: 'artworks' }, async (err, files) => {
-            if (err) {
-                return res.status(404).json({ err: err })
-            } else {
-                const users = await User.find({});
-                const artwork = await Artwork.findById(req.params.id);
-                if (!artwork) {
-                    return res.status(404).send('Artwork not found');
-                }
-                users.map(user => {
-                    if (user.bookmarks.some(item => item === req.params.id)) {
-                        user.bookmarks = [...user.bookmarks.filter(item => item != req.params.id)];
-                        console.log('test', user.bookmarks)
-                        user.save();
-                    }
-                })
-                await artwork.remove();
-                res.send('Artwork removed successfully');
+        const artwork = await Artwork.findById(req.params.id);
+        if (!artwork) {
+            return res.status(404).send("No such artwork entry found!");
+        }
+
+        artwork.files.map(async file => {
+            const toDelete = await artworkBucket.find({ filename: file });
+            const fileToDelete = await toDelete.next();
+            console.log("fileToDelete", fileToDelete);
+            if (!fileToDelete) return;
+            artworkBucket.delete(fileToDelete._id);
+        });
+
+        const users = await User.find({});
+        users.map(user => {
+            if (user.bookmarks.some(item => item === req.params.id)) {
+                user.bookmarks = [...user.bookmarks.filter(item => item != req.params.id)];
+                console.log('test', user.bookmarks)
+                user.save();
             }
         })
+        artwork.deleteOne({ _id: artwork._id });
+        res.send('Artwork removed successfully');
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Artwork removal failed');
@@ -237,19 +244,19 @@ router.delete('/:id', protect, async (req, res) => {
 router.put('/:id/like', protect, async (req, res) => {
     try {
         try {
-            Artwork.findByIdAndUpdate(req.params.id, {
-                $push: {
-                    likes: req.body.id
-                }
-            }, {
-                new: true
-            }).exec((err, like) => {
-                if (err) {
-                    res.status(500).send('Failed to like!');
-                } else {
-                    res.send(like);
-                }
-            });
+            Artwork.findByIdAndUpdate(
+                req.params.id, {
+                $addToSet: { likes: req.body.userID },
+                $pull: { dislikes: req.body.userID }
+            },
+                { new: true }
+            )
+                .then(() => {
+                    return res.json("Success");
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         } catch (err) {
             res.status(500).send('Failed to get likes count!');
         }
@@ -262,22 +269,19 @@ router.put('/:id/like', protect, async (req, res) => {
 router.put('/:id/dislike', protect, async (req, res) => {
     try {
         try {
-            if (!req.body.id) {
-                return res.status(401).json({ msg: 'User not authorized!' })
-            }
-            Artwork.findByIdAndUpdate(req.params.id, {
-                $pull: {
-                    likes: req.body.id
-                }
-            }, {
-                new: true
-            }).exec((err, dislike) => {
-                if (err) {
-                    res.status(500).send('Failed to like!');
-                } else {
-                    res.json(dislike);
-                }
-            });
+            Artwork.findByIdAndUpdate(
+                req.params.id, {
+                $addToSet: { dislikes: req.body.userID },
+                $pull: { likes: req.body.userID }
+            },
+                { new: true }
+            )
+                .then(() => {
+                    return res.json("Success");
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         } catch (err) {
             res.status(500).send('Failed to get likes count!');
         }
@@ -286,7 +290,7 @@ router.put('/:id/dislike', protect, async (req, res) => {
     }
 })
 
-// @route   PUT api/artworks/:id/award --- Like an artwork --- Private
+// @route   PUT api/artworks/:id/award --- Gift an artwork --- Private
 router.post('/:id/gift', protect, async (req, res) => {
     try {
         const artwork = await Artwork.findById(req.params.id);
@@ -332,18 +336,16 @@ router.post('/:id/comments/new', protect, async (req, res) => {
         const user = await User.findById(req.body.userID);
 
         const newComment = new Comment({
-            user_id: user._id,
+            author: user._id,
             text: req.body.text,
-            parent_ref: req.body.parent,
+            is_parent: req.body.isParent,
+            parent_ref: req.body.parentID,
             likes: []
         });
 
-        newComment()
-            .save()
+        newComment.save()
             .then(savedComment => {
-                console.log('Comment saved successfully:', savedComment);
-
-                artwork.comments.push(savedComment);
+                artwork.comments.push(savedComment._id);
                 artwork.save();
                 res.send(artwork.comments);
             })
@@ -351,6 +353,7 @@ router.post('/:id/comments/new', protect, async (req, res) => {
                 console.error('Error saving comment:', error);
             });
     } catch (err) {
+        console.log("err", err);
         res.status(500).send('Adding a comment failed');
     }
 });
@@ -418,24 +421,21 @@ router.delete('/:id/comments/:comment_id', protect, async (req, res) => {
 // @route   PUT api/artworks/:id/comments/:comment_id/like --- Like a comment --- Private
 router.put('/:id/comments/:comment_id/like', protect, async (req, res) => {
     try {
-        const artwork = await Artwork.findById(req.params.id);
-
-        Comment.findByIdAndUpdate(req.params.comment_id, {
-            $push: {
-                likes: req.body.id
-            }
-        }, {
-            new: true
-        }).exec((err, updatedComment) => {
-            if (err) {
-                console.log(err)
-            } else {
-                const index = artwork.comments.findIndex(comment => comment._id === updatedComment._id);
-                artwork.comments[index] = updatedComment;
-                artwork.save();
-            }
-        });
+        Comment.findByIdAndUpdate(
+            req.params.comment_id, {
+            $addToSet: { likes: req.body.userID },
+            $pull: { dislikes: req.body.userID }
+        },
+            { new: true }
+        )
+            .then(() => {
+                return res.json("Success");
+            })
+            .catch(err => {
+                console.log(err);
+            });
     } catch (err) {
+        console.log("err", err);
         res.status(500).send('Failed to like comment!');
     }
 })
@@ -443,23 +443,19 @@ router.put('/:id/comments/:comment_id/like', protect, async (req, res) => {
 // @route   PUT api/artworks/:id/comments/:comment_id/dislike --- Dislike a comment --- Private
 router.put('/:id/comments/:comment_id/dislike', protect, async (req, res) => {
     try {
-        const artwork = await Artwork.findById(req.params.id);
-
-        Comment.findByIdAndUpdate(req.params.id, {
-            $pull: {
-                likes: req.body.id
-            }
-        }, {
-            new: true
-        }).exec((err, updatedComment) => {
-            if (err) {
-                console.log(err)
-            } else {
-                const index = artwork.comments.findIndex(comment => comment._id === updatedComment._id);
-                artwork.comments[index] = updatedComment;
-                artwork.save();
-            }
-        });
+        Comment.findByIdAndUpdate(
+            req.params.comment_id, {
+            $addToSet: { dislikes: req.body.userID },
+            $pull: { likes: req.body.userID }
+        },
+            { new: true }
+        )
+            .then(() => {
+                return res.json("Success");
+            })
+            .catch(err => {
+                console.log(err);
+            });
     } catch (err) {
         res.status(500).send('Failed to dislike comment!');
     }

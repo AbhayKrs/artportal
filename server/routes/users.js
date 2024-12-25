@@ -16,7 +16,7 @@ import jwt from 'jsonwebtoken';
 // @route   GET api/v1.01/users/:id ---  Get user by ID --- PUBLIC
 router.get('/:id', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findById(req.params.id).populate('bookmarks');
         const payload = {
             id: user._id,
             name: user.name,
@@ -64,12 +64,12 @@ router.put('/:id', protect, async (req, res) => {
 // @route   GET api/v1.01/users/:id/artworks --- Get all cart items --- PUBLIC
 router.get('/:id/artworks', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findById(req.params.id).populate('bookmarks');
         if (!user) {
             return res.status(400).send({ msg: 'User not found' });
         }
 
-        const artworks = await Artwork.find({ "user_id": req.params.id });
+        const artworks = await Artwork.find({ "artist": req.params.id }).populate('artist', 'name username avatar');
         const artworksData = {
             artworks: artworks,
             artworks_count: artworks.length
@@ -86,20 +86,13 @@ router.get('/:id/artworks', async (req, res) => {
 // @access      Private
 router.post('/:id/bookmark', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findById(req.params.id).populate('bookmarks');
         if (!user) {
             return res.status(400).send({ msg: 'User not found' });
         }
-        const bookmarkData = {
-            _id: req.body.id,
-            files: req.body.files,
-            title: req.body.title,
-            author: req.body.author,
-            description: req.body.description
-        }
-        user.bookmarked.push(bookmarkData);
+        user.bookmarks.push(req.body.artworkID);
         user.save();
-        res.json(bookmarkData);
+        res.json("Success!");
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Bookmark failed!');
@@ -111,14 +104,14 @@ router.post('/:id/bookmark', async (req, res) => {
 // @access      Private
 router.delete('/:id/bookmark/:bookmark_id', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id);
-        const bookmark_toDelete = await user.bookmarked.find(bookmark => bookmark._id === req.params.bookmark_id);
+        const user = await User.findById(req.params.id).populate('bookmarks');
+        const bookmark_toDelete = await user.bookmarks.find(bookmark => bookmark._id === req.params.bookmark_id);
         if (!bookmark_toDelete) {
             return res.status(400).send({ msg: 'Bookmark does not exist!' });
         }
-        user.bookmarked = user.bookmarked.filter(bookmark => bookmark._id !== bookmark_toDelete._id);
+        user.bookmarks = user.bookmarks.filter(bookmark => bookmark._id !== bookmark_toDelete._id);
         await user.save();
-        res.json(user.bookmarked);
+        res.json(user.bookmarks);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Bookmark failed!');
@@ -130,7 +123,7 @@ router.delete('/:id/bookmark/:bookmark_id', async (req, res) => {
 // @access      Public
 router.get('/:id/store', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findById(req.params.id).populate('bookmarks');
         if (!user.store) {
             return res.status(400).send({ msg: 'Storelist not found' });
         }
@@ -153,7 +146,7 @@ router.get('/:id/store', async (req, res) => {
 // @access      Public
 router.get('/:id/cart', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findById(req.params.id).populate('bookmarks');
         if (!user.cart) {
             return res.status(400).send({ msg: 'Cartlist not found' });
         }
@@ -173,7 +166,7 @@ router.get('/:id/cart', async (req, res) => {
 // @access      Public
 router.post('/:id/cart/add', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findById(req.params.id).populate('bookmarks');
         if (!user) {
             return res.status(401).json({ msg: 'User not authorized!' })
         }
@@ -211,7 +204,7 @@ router.post('/:id/cart/add', async (req, res) => {
 // @access   Private
 router.put('/:id/cart/:cart_id', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findById(req.params.id).populate('bookmarks');
         const editCartItem = user.cart.find(cartItem => cartItem._id === req.params.cart_id);
         if (!editCartItem) {
             return res.status(401).json({ msg: 'Cart item does not exist!' })
@@ -246,7 +239,7 @@ router.put('/:id/cart/:cart_id', async (req, res) => {
 // @access   Private
 router.delete('/:id/cart/:cart_id', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findById(req.params.id).populate('bookmarks');
         const cartItem = await Cart.findById(req.params.cart_id);
         const a_handleRemoveFromCart = user.cart.find(cartItem => cartItem._id === req.params.cart_id);
         if (!a_handleRemoveFromCart) {
@@ -301,7 +294,7 @@ router.get("/logout", (req, res, next) => {
 // @access  Private
 router.post('/:id/avatar', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findById(req.params.id).populate('bookmarks');
         const artwork = await Artwork.find({ "author.id": req.params.id });
 
         artwork.map(item => {
