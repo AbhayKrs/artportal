@@ -35,18 +35,6 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-if (process.env.NODE_ENV === 'production') {
-    const __dirname = path.resolve();
-    app.use(express.static(path.join(__dirname, '/web/build')));
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'web', 'build', 'index.html'))
-    })
-} else {
-    app.get(`/api/${process.env.API_VERSION}`, (req, res) => {
-        res.send("API is running..");
-    });
-}
-
 // Define Routes
 app.use(`/api/${process.env.API_VERSION}/artworks`, artworks);
 app.use(`/api/${process.env.API_VERSION}/auth`, auth);
@@ -78,6 +66,18 @@ app.use(`/admin/${process.env.API_VERSION}`, admin);
 app.use('/app/download', (req, res) => {
     res.download('./server/public/app-release.apk');
 })
+
+if (process.env.NODE_ENV === 'production') {
+    const __dirname = path.resolve();
+    app.use(express.static(path.join(__dirname, '/web/build')));
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'web', 'build', 'index.html'))
+    })
+} else {
+    app.get(`/api/${process.env.API_VERSION}`, (req, res) => {
+        res.send("API is running..");
+    });
+}
 
 app.use(notFound);
 app.use(errorHandler);
