@@ -10,7 +10,7 @@ export const api_fetchArtworkImages = filename => api_baseURL + `/artworks/image
 export const api_fetchStoreImages = filename => api_baseURL + `/store/image/${filename}`;
 export const api_fetchUserImages = filename => api_baseURL + `/common/files/${filename}`;
 
-const apiClient = axios.create({ api_baseURL });
+const apiClient = axios.create({ baseURL: api_baseURL });
 apiClient.interceptors.request.use((config) => {
     // Retrieve the token from secure storage
     let token = null;
