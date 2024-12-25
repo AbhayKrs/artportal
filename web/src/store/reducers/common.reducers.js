@@ -5,6 +5,7 @@ import setAuthToken from '../../utils/setAuthToken';
 const initialState = {
     theme: localStorage.getItem("theme") ? localStorage.getItem("theme") : "dark",
     loader: false,
+    betaMsg: true,
     snackmsg: {
         open: false,
         message: '',
@@ -120,6 +121,9 @@ const commonSlice = createSlice({
         },
         r_setLoader: (state, action) => {
             state.loader = action.payload;
+        },
+        r_setBetaMessage: (state, action) => {
+            state.betaMsg = action.payload;
         },
         r_setSnackMessage: (state, action) => {
             state.snackmsg = action.payload;
@@ -241,6 +245,7 @@ export const {
     r_setTags,
     r_switchTheme,
     r_setLoader,
+    r_setBetaMessage,
     r_setSnackMessage,
     r_setAuthError,
     r_setVisitorStatus,

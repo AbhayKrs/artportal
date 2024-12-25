@@ -342,31 +342,28 @@ const ExploreShow = (props) => {
                 }
             </div>
             <div className='relative md:fixed md:right-4 flex flex-col gap-2 order-3 md:w-[23%] mx-4 md:mx-0' style={{ maxHeight: "calc(100vh - 7.25rem)" }}>
-                {common.isAuthenticated ?
-                    <div className='flex flex-col gap-1 rounded'>
-                        <div className='flex items-center justify-between py-0.5 text-indigo-600 dark:text-indigo-600'>
-                            <div className='flex flex-row gap-1 items-center'>
-                                {/* <IoChatbox className='h-5 w-5' /> */}
-                                <h2 className='text-lg self-center'>{new Intl.NumberFormat().format(artwork.comments_count)} Comments</h2>
-                            </div>
-                        </div>
-                        <div className='flex flex-row gap-2 items-center'>
-                            {user.avatar.icon.length > 0 && <div className="w-7 h-7 overflow-hidden">
-                                <img loading='lazy' src={api_fetchUserImages(user.avatar.icon)} alt="user_avatar" className="object-contain w-full h-full" />
-                            </div>}
-                            <input
-                                type="text"
-                                name="comment"
-                                value={comment}
-                                onChange={(ev) => setComment(ev.target.value)}
-                                onKeyDown={(ev) => { if (ev.code === 'Enter') { submitComment(ev) } }}
-                                placeholder="Add a comment..."
-                                className="w-full p-1 rounded text-md placeholder:font-semibold placeholder:text-neutral-700 dark:placeholder:text-neutral-500 text-gray-600 dark:text-neutral-300 outline-none border-2 border-gray-700 dark:border-neutral-600"
-                            />
+                <div className='flex flex-col gap-1 rounded'>
+                    <div className='flex items-center justify-between py-0.5 text-neutral-800 dark:text-gray-300'>
+                        <div className='flex flex-row gap-1 items-center'>
+                            {/* <IoChatbox className='h-5 w-5' /> */}
+                            <h2 className='text-lg self-center'>{new Intl.NumberFormat().format(artwork.comments_count)} Comments</h2>
                         </div>
                     </div>
-                    :
-                    ''}
+                    {common.isAuthenticated ? <div className='flex flex-row gap-2 items-center'>
+                        {user.avatar.icon.length > 0 && <div className="w-7 h-7 overflow-hidden">
+                            <img loading='lazy' src={api_fetchUserImages(user.avatar.icon)} alt="user_avatar" className="object-contain w-full h-full" />
+                        </div>}
+                        <input
+                            type="text"
+                            name="comment"
+                            value={comment}
+                            onChange={(ev) => setComment(ev.target.value)}
+                            onKeyDown={(ev) => { if (ev.code === 'Enter') { submitComment(ev) } }}
+                            placeholder="Add a comment..."
+                            className="w-full p-1 rounded text-md placeholder:font-semibold placeholder:text-neutral-700 dark:placeholder:text-neutral-500 text-gray-600 dark:text-neutral-300 outline-none border-2 border-gray-700 dark:border-neutral-600"
+                        />
+                    </div> : null}
+                </div>
                 <CommentList comments={artwork.comments} handleInvalidUser={handleInvalidUser} />
             </div>
         </div >

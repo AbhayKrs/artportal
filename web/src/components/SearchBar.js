@@ -25,9 +25,11 @@ const useSearchModalView = (ref, clearSearch) => {
     }, [ref]);
 }
 
-const SearchBar = ({ clearSearchList, activeSearch, setSearchType, betaMsg, explore, searchList }) => {
+const SearchBar = ({ clearSearchList, activeSearch, setSearchType, explore, searchList }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const common = useSelector(state => state.common);
 
     const [searchVal, setSearchVal] = useState('');
     const [searchModal, setSearchModal] = useState(false);
@@ -102,7 +104,7 @@ const SearchBar = ({ clearSearchList, activeSearch, setSearchType, betaMsg, expl
             <SearchModal
                 open={searchModal}
                 handleClose={() => setSearchModal(false)}
-                betaMsg={betaMsg}
+                betaMsg={common.betaMsg}
                 searchVal={searchVal}
                 explore={explore}
                 searchList={searchList}

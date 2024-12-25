@@ -91,7 +91,7 @@ const CommentList = ({ comments, handleInvalidUser }) => {
         <div className='flex flex-col gap-1 overflow-y-auto scrollbar'>
             {comments.map((comment, index) => (
                 <>
-                    <div key={index} className='flex items-center text-neutral-700 dark:text-gray-300 p-2 space-x-2'>
+                    <div key={index} className='flex items-center text-neutral-700 dark:text-gray-300 space-x-2'>
                         <div className='flex flex-col space-y-0.5 basis-10/12'>
                             {editForm && index === editIndex ?
                                 <div className='rounded flex bg-gray-300 dark:bg-neutral-700'>

@@ -8,6 +8,7 @@ import { AwardConfirmModal } from './Modal';
 import Dropdown from './Dropdown';
 
 import { awardTabPanelHeaders, exploreFilters, explorePeriodOptions } from '../utils/constants';
+import { useSelector } from 'react-redux';
 
 export const HomeTabPanel = ({ tags, artworks, }) => {
     const [activeStatus, setActiveStatus] = useState(0);
@@ -120,6 +121,8 @@ export const AwardTabPanel = ({ awards, user, exploreID, awardClose, handleAward
 export const ExplorePanel = ({ search, a_filterExploreList, searchExploreList }) => {
     let navigate = useNavigate();
 
+    const common = useSelector(state => state.common);
+
     const [triggerEffect, setTriggerEffect] = useState(false);
     const [exploreSearch, setExploreSearch] = useState('');
     const [activeFilter, setActiveFilter] = useState('');
@@ -130,7 +133,6 @@ export const ExplorePanel = ({ search, a_filterExploreList, searchExploreList })
         const params = new Proxy(new URLSearchParams(window.location.search), {
             get: (searchParams, prop) => searchParams.get(prop),
         });
-        console.log('init', params.filter);
 
         if (search && params.query) {
             setExploreSearch(params.query);
@@ -139,15 +141,13 @@ export const ExplorePanel = ({ search, a_filterExploreList, searchExploreList })
         if (params.filter || params.period) {
             params.filter ? setActiveFilter(params.filter) : setActiveFilter('');
 
-            console.log('test', params.filter, params.period);
-
             if (params.filter === 'trending' || params.filter === 'new' || params.filter === 'rising') {
                 setActivePeriod('');
             } else {
                 params.period ? setActivePeriod(params.period) : setActivePeriod('month')
             }
 
-            let label = params.period && explorePeriodOptions.find(item => item.value === params.period) ?
+            let label = params.period && explorePeriodOptions.some(item => item.value === params.period) ?
                 explorePeriodOptions.find(item => item.value === params.period).label
                 :
                 'Select a time period'
@@ -207,22 +207,26 @@ export const ExplorePanel = ({ search, a_filterExploreList, searchExploreList })
         if (activeFilter === item) {
             setActiveFilter('');
             setActivePeriod('');
+            setActivePeriodLabel('Select a time period');
         } else {
             if (item === 'trending' || item === 'new' || item === 'rising') {
                 setActivePeriod('');
+                setActivePeriodLabel('Select a time period');
             } else {
                 setActivePeriod('month');
+                setActivePeriodLabel('Past Month');
             }
             setActiveFilter(item)
         }
     }
 
-    const handlePeriodChange = (popular) => {
-        setActivePeriod(popular.value)
+    const handlePeriodChange = (item) => {
+        setActivePeriod(item.value);
+        setActivePeriodLabel(item.label);
     }
 
     return (
-        <div className='flex sm:flex-row gap-2 flex-col w-full items-center bg-slate-100/75 dark:bg-darkBg/75 p-2 sticky top-14 z-20'>
+        <div className={`flex sm:flex-row gap-2 flex-col w-full items-center bg-slate-100/75 dark:bg-darkBg/75 p-2 sticky ${common.betaMsg ? 'top-[5rem]' : 'top-[3.25rem]'} z-20`}>
             <div className='flex w-full items-center sm:justify-start justify-between'>
                 <div className='lg:flex hidden'>
                     <ul id='tabSlider' className="flex space-x-1 items-center whitespace-nowrap">
@@ -237,7 +241,7 @@ export const ExplorePanel = ({ search, a_filterExploreList, searchExploreList })
                     </ul>
                 </div>
                 <div className="lg:hidden flex items-center cursor-pointer space-x-2">
-                    <Dropdown left name='filters' selectedPeriod={activeFilter === '' ? 'Select a filter' : activeFilter.length >= 0 && exploreFilters.find(item => item.value === activeFilter) && exploreFilters.find(item => item.value === activeFilter).label} options={exploreFilters} onSelect={selectFilter} />
+                    <Dropdown left name='filters' selectedPeriod={activeFilter === '' ? 'Select a filter' : activePeriodLabel} options={exploreFilters} onSelect={selectFilter} />
                 </div>
                 {activePeriod.length > 0 && <span className='text-gray-600 dark:text-gray-400 mx-2'>&#9679;</span>}
                 {activePeriod.length > 0 ?

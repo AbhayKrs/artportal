@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 
 import { a_handleSignIn, a_fetchSearchList, a_handleSignUp, a_handleGoogleAuth } from '../store/actions/common.actions';
-import { r_switchTheme, r_handleSignout, r_setSearchType, r_clearSearchList, r_headerDialogOpen, r_headerDialogClose, r_setAuthError, r_authMsgClose } from '../store/reducers/common.reducers';
+import { r_switchTheme, r_handleSignout, r_setSearchType, r_clearSearchList, r_headerDialogOpen, r_headerDialogClose, r_setAuthError, r_authMsgClose, r_setBetaMessage } from '../store/reducers/common.reducers';
 import { api_fetchUserImages } from '../utils/api_routes';
 
 import { TokenModal, LoginModal, RegisterModal, SignupSuccessModal } from '../components/Modal';
@@ -39,7 +39,7 @@ const useUserMenuOut = (ref, active, setActive) => {
     }, [ref]);
 }
 
-const Header = ({ betaMsg, setBetaMsg }) => {
+const Header = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
@@ -86,10 +86,10 @@ const Header = ({ betaMsg, setBetaMsg }) => {
     }
 
     return (
-        <nav className='fixed h-20 top-0 z-50 bg-slate-200 w-full dark:bg-darkBg'>
-            {betaMsg && <div className='relative flex flex-row w-full py-1.5 justify-center bg-amber-500 '>
+        <nav className='fixed max-h-20 top-0 z-50 bg-slate-200 w-full dark:bg-darkBg'>
+            {common.betaMsg && <div className='relative flex flex-row w-full py-1.5 justify-center bg-amber-500 '>
                 <span className=' font-semibold text-sm tracking-wider uppercase'>This site is currently in Beta.</span>
-                <IoClose onClick={() => { setBetaMsg(!betaMsg) }} className='absolute m-auto inset-y-0 right-1 w-6 h-6 cursor-pointer text-neutral-800' />
+                <IoClose onClick={() => { dispatch(r_setBetaMessage(!common.betaMsg)) }} className='absolute m-auto inset-y-0 right-1 w-6 h-6 cursor-pointer text-neutral-800' />
             </div>}
             <div className='flex flex-row items-center py-2 px-3 justify-between'>
                 <div className='flex flex-row space-x-6'>
@@ -105,7 +105,7 @@ const Header = ({ betaMsg, setBetaMsg }) => {
                         <div className={`absolute ${activeRoute.includes('/store') ? 'block' : 'hidden group-hover:block'} h-1 w-2/6 bottom-[-4px] left-0 rounded text-2xl bg-indigo-600 dark:bg-indigo-600`}></div>
                     </Link>
                 </div>
-                <SearchBar betaMsg={betaMsg} tags={common.tags} explore={explore} activeSearch={common.activeSearch} searchList={common.searchList} setSearchType={(type) => dispatch(r_setSearchType(type))} fetchSearchList={(type, value) => dispatch(a_fetchSearchList(type, value))} clearSearchList={() => dispatch(r_clearSearchList())} />
+                <SearchBar tags={common.tags} explore={explore} activeSearch={common.activeSearch} searchList={common.searchList} setSearchType={(type) => dispatch(r_setSearchType(type))} fetchSearchList={(type, value) => dispatch(a_fetchSearchList(type, value))} clearSearchList={() => dispatch(r_clearSearchList())} />
                 <div className='hidden sm:flex flex-row space-x-4 justify-end'>
                     {common.isAuthenticated ?
                         <>
@@ -141,7 +141,7 @@ const Header = ({ betaMsg, setBetaMsg }) => {
                             <button onClick={() => setUserMenuActive(!userMenuActive)} className={`flex w-full m-auto p-1.5 justify-center items-center ${userMenuActive ? 'bg-slate-300 dark:bg-[#313135] rounded-md' : null}`} >
                                 {user.avatar.icon.length > 0 && <img loading='lazy' alt='user' src={api_fetchUserImages(user.avatar.icon)} className='w-6 h-6 mx-auto' />}
                             </button>
-                            <div className={`container fixed ${betaMsg === true ? 'top-[4.75rem]' : 'top-[3.25rem]'} w-80 p-1 ${userMenuActive ? 'visible opacity-100' : 'invisible opacity-0'} bg-slate-300 dark:bg-[#313135] rounded-lg`} style={{ right: window.innerWidth >= 1024 ? '0.75rem' : '0.2rem' }}>
+                            <div className={`container fixed ${common.betaMsg === true ? 'top-[4.75rem]' : 'top-[3.25rem]'} w-80 p-1 ${userMenuActive ? 'visible opacity-100' : 'invisible opacity-0'} bg-slate-300 dark:bg-[#313135] rounded-lg`} style={{ right: window.innerWidth >= 1024 ? '0.75rem' : '0.2rem' }}>
                                 <div className='flex flex-col scrollbar overflow-auto p-1 pr-2 h-full' style={{ maxHeight: 'calc(100vh - 5rem)' }}>
                                     <div className='flex flex-row items-center space-x-2 p-4'>
                                         {user.avatar.icon.length > 0 && <div className='flex relative w-14 h-14 justify-center items-center'>

@@ -51,8 +51,6 @@ const Layout = (props) => {
   const dispatch = useDispatch();
   const common = useSelector(state => state.common);
 
-  const [betaMsg, setBetaMsg] = useState(true);
-
   useEffect(() => {
     dispatch(a_fetchVisitorStatus());
 
@@ -101,8 +99,8 @@ const Layout = (props) => {
 
   return (
     <main className={`${common.theme} relative font-nunito`}>
-      <Header betaMsg={betaMsg} setBetaMsg={setBetaMsg} />
-      <div className={`min-h-show flex flex-col bg-gray-200 dark:bg-darkBg ${betaMsg === true ? 'pt-[5rem]' : 'pt-[3.25rem]'}`}>
+      <Header />
+      <div className={`min-h-show flex flex-col bg-gray-200 dark:bg-darkBg ${common.betaMsg === true ? 'pt-[5rem]' : 'pt-[3.25rem]'}`}>
         <Snackbar msgdata={common.snackmsg} setMessage={(msgData) => dispatch(r_setSnackMessage(msgData))} />
         <Loader />
         <Outlet />
