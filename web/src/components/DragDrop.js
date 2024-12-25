@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import * as tf from '@tensorflow/tfjs';
-import { taggerURL } from '../utils/api';
+import { api_taggerURL } from '../utils/api';
 
 const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
@@ -38,7 +38,7 @@ const Image = ({ image, index, r_setSnackMessage, setCategories, isFlagged, setI
     }, [image.id])
 
     const model_load = async () => {
-        const model = await tf.loadLayersModel(taggerURL);
+        const model = await tf.loadLayersModel(api_taggerURL);
         const imgElem = document.getElementById('uploadImg' + index);
         const img = await tf.browser.fromPixels(imgElem);
         const resizedImg = await tf.image.resizeBilinear(img, [255, 255]);
