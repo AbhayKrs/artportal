@@ -6,7 +6,7 @@ import { a_getTags } from '../store/actions/common.actions';
 import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducers';
 import { a_fetchExploreList, a_fetchExploreItem, a_handleExploreEdit } from '../store/actions/explore.actions';
 
-import { api_fetchArtworkImages } from '../utils/api';
+import { api_fetchArtworkImages } from '../utils/api_routes';
 
 import { MdClose } from 'react-icons/md';
 import { BsHash } from 'react-icons/bs';

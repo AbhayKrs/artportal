@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { api_fetchStoreImages } from '../utils/api';
+import { api_fetchStoreImages } from '../utils/api_routes';
 import { a_handleCartAdd, a_handleRemoveFromCart, a_fetchCartList } from '../store/actions/common.actions';
 import { r_setLoader } from '../store/reducers/common.reducers';
 import { a_fetchCategorizedStoreList, a_fetchStoreList } from '../store/actions/store.actions';

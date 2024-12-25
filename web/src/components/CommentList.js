@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 
 import { a_fetchExploreItem, a_handleDeleteComment, a_handleEditComment, a_handleDislikeComment, a_handleLikeComment, a_bookmarkExploreItem, a_handleAddComment } from '../store/actions/explore.actions';
-import { api_fetchUserImages } from '../utils/api';
+import { api_fetchUserImages } from '../utils/api_routes';
 
 import { IoSend } from 'react-icons/io5';
 import { AiFillLike, AiFillDislike } from 'react-icons/ai';

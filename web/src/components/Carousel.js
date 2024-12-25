@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { api_fetchArtworkImages } from '../utils/api';
+import { api_fetchArtworkImages } from '../utils/api_routes';
 import { useDispatch } from "react-redux";
 
 import { r_headerDialogOpen } from '../store/reducers/common.reducers';

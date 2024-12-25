@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 
-import { api_fetchUserImages } from '../utils/api';
+import { api_fetchUserImages } from '../utils/api_routes';
 
 import { ImageCard } from './Card';
 import { AwardConfirmModal } from './Modal';

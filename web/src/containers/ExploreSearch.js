@@ -5,7 +5,7 @@ import moment from 'moment';
 
 import { r_setLoader } from '../store/reducers/common.reducers';
 import { a_fetchExploreList, a_filterExploreList } from '../store/actions/explore.actions';
-import { api_fetchArtworkImages } from '../utils/api';
+import { api_fetchArtworkImages } from '../utils/api_routes';
 
 import Masonry from '../components/Masonry';
 import { ExplorePanel } from '../components/TabPanel';

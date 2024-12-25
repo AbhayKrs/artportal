@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { api_commentOnArtwork, api_artworkList, api_awardExplore, api_bookmarkExploreItem, api_deleteArtwork, api_dislikeArtwork, api_exploreDeleteComment, api_dislikeComment, api_exploreEditComment, api_exploreItem, api_exploreItemEdit, api_likeComment, api_exploreUpload, api_filterExploreList, api_likeArtwork } from '../../utils/api'
+import { api_commentOnArtwork, api_artworkList, api_awardExplore, api_bookmarkExploreItem, api_deleteArtwork, api_dislikeArtwork, api_exploreDeleteComment, api_dislikeComment, api_exploreEditComment, api_exploreItem, api_exploreItemEdit, api_likeComment, api_exploreUpload, api_filterExploreList, api_likeArtwork } from '../../utils/api_routes'
 import { a_refreshUserDetails } from './common.actions';
 import { r_exploreEdit, r_exploreUpload, r_setExploreItem, r_setExploreList, r_setMonthHighlightsList, r_setNewlyAddedList, r_setTrendingList } from '../reducers/explore.reducers';
 

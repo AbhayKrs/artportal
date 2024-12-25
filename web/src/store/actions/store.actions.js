@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { api_categorizedStoreList, api_sellerList, api_storeItem, api_storeList, api_storeUpload } from '../../utils/api';
+import { api_categorizedStoreList, api_sellerList, api_storeItem, api_storeList, api_storeUpload } from '../../utils/api_routes';
 import { r_setSellerList, r_setStoreItem, r_setStoreList, r_storeUpload } from '../reducers/store.reducers';
 
 export const a_fetchSellerList = createAsyncThunk("a_fetchSellerList", async (payload, { getState, dispatch, rejectWithValue }) => {

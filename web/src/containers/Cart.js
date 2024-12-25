@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 
 import { a_handleCartAdd, a_handleRemoveFromCart, a_fetchCartList } from '../store/actions/common.actions';
-import { api_fetchStoreImages } from '../utils/api';
+import { api_fetchStoreImages } from '../utils/api_routes';
 
 import { HiPlus, HiMinus, HiOutlineMail } from 'react-icons/hi';
 import Stepper from '../components/Stepper';

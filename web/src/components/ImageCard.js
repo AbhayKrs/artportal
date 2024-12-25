@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
-import { api_fetchArtworkImages, api_fetchUserImages } from '../utils/api';
+import { api_fetchArtworkImages, api_fetchUserImages } from '../utils/api_routes';
 import moment from 'moment';
 
 const ImageCard = ({ explore, author, }) => {

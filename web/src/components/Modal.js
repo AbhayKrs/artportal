@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
-import { api_fetchArtworkImages, api_fetchUserImages, api_fetchStoreImages, api_googleRedirectURL } from '../utils/api';
+import { api_fetchArtworkImages, api_fetchUserImages, api_fetchStoreImages, api_googleRedirectURL } from '../utils/api_routes';
 
 import { AwardTabPanel } from './TabPanel';
 import Stepper from './Stepper';

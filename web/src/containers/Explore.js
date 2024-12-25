@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 
-import { api_fetchArtworkImages } from '../utils/api';
+import { api_fetchArtworkImages } from '../utils/api_routes';
 import { a_fetchExploreList, a_filterExploreList } from '../store/actions/explore.actions';
 import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducers';
 

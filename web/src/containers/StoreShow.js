@@ -5,7 +5,7 @@ import moment from 'moment';
 
 import { r_setLoader } from '../store/reducers/common.reducers';
 import { a_fetchStoreItem, a_fetchStoreList } from '../store/actions/store.actions';
-import { api_fetchUserImages, api_fetchStoreImages } from '../utils/api';
+import { api_fetchUserImages, api_fetchStoreImages } from '../utils/api_routes';
 
 import Ratings from '../components/Ratings';
 

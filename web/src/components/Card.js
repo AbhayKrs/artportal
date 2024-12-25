@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from "react-router-dom";
 import moment from 'moment';
 
-import { api_fetchArtworkImages, api_fetchUserImages } from '../utils/api';
+import { api_fetchArtworkImages, api_fetchUserImages } from '../utils/api_routes';
 
 import { AiFillClockCircle, AiFillHeart } from 'react-icons/ai';
 import { BsChatFill, BsInfoCircleFill } from 'react-icons/bs';

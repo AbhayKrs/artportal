@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { a_handleSignIn, a_fetchSearchList, a_handleSignUp, a_handleGoogleAuth } from '../store/actions/common.actions';
 import { r_switchTheme, r_handleSignout, r_setSearchType, r_clearSearchList, r_headerDialogOpen, r_headerDialogClose, r_setAuthError, r_authMsgClose } from '../store/reducers/common.reducers';
-import { api_fetchUserImages } from '../utils/api';
+import { api_fetchUserImages } from '../utils/api_routes';
 
 import { TokenModal, LoginModal, RegisterModal, SignupSuccessModal } from '../components/Modal';
 import SearchBar from '../components/SearchBar';

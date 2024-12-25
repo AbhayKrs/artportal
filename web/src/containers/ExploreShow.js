@@ -6,7 +6,7 @@ import moment from 'moment';
 import { a_fetchExploreItem, a_fetchExploreList, a_handleDislikeExplore, a_handleLikeExplore, a_handleDeleteComment, a_handleEditComment, a_handleDislikeComment, a_handleLikeComment, a_bookmarkExploreItem, a_handleAddComment } from '../store/actions/explore.actions';
 import { r_setLoader, r_setSnackMessage, r_headerDialogOpen } from '../store/reducers/common.reducers';
 import { a_refreshUserDetails } from '../store/actions/common.actions';
-import { api_fetchUserImages, api_fetchArtworkImages } from '../utils/api';
+import { api_fetchUserImages, api_fetchArtworkImages } from '../utils/api_routes';
 
 import { AwardModal, ShareModal } from '../components/Modal';
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { IoCloseSharp } from 'react-icons/io5';
 import TokenIcon from '../assets/images/money.png';
 
-import { api_fetchUserImages } from '../utils/api';
+import { api_fetchUserImages } from '../utils/api_routes';
 
 export const AwardConfirmModal = ({ open, awardData, onClose, handleAwardExplore }) => {
     return (

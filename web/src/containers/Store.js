@@ -6,7 +6,7 @@ import { Helmet } from 'react-helmet';
 import { a_handleCartAdd, a_handleRemoveFromCart, a_fetchCartList } from '../store/actions/common.actions';
 import { r_setLoader } from '../store/reducers/common.reducers';
 import { a_fetchSellerList, a_fetchStoreList } from '../store/actions/store.actions';
-import { api_fetchUserImages, api_fetchStoreImages } from '../utils/api';
+import { api_fetchUserImages, api_fetchStoreImages } from '../utils/api_routes';
 
 import { StoreMultiCarousel } from '../components/Carousel';
 import { CartModal } from '../components/Modal';

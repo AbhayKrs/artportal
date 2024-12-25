@@ -6,7 +6,7 @@ import moment from 'moment';
 import { r_clearProfileDetails, r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducers';
 import { a_fetchUserExploreList, a_handleDeleteBookmark, a_handleFetchUserDetails, a_refreshUserDetails } from '../store/actions/common.actions';
 import { a_deleteArtwork, a_fetchExploreList } from '../store/actions/explore.actions';
-import { api_fetchArtworkImages, api_fetchUserImages } from '../utils/api';
+import { api_fetchArtworkImages, api_fetchUserImages } from '../utils/api_routes';
 
 import Masonry from '../components/Masonry';
 

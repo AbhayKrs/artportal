@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import * as tf from '@tensorflow/tfjs';
-import { api_taggerURL } from '../utils/api';
+import { api_taggerURL } from '../utils/api_routes';
 
 const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);

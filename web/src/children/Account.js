@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { a_fetchAvatars, a_handleEditUserAvatar, a_handleUpdateUser, a_handleFetchUserDetails, a_refreshUserDetails } from '../store/actions/common.actions';
 import { r_setSnackMessage } from '../store/reducers/common.reducers';
-import { api_fetchArtworkImages, api_fetchUserImages } from '../utils/api';
+import { api_fetchArtworkImages, api_fetchUserImages } from '../utils/api_routes';
 
 import { AvatarModal, ConfirmModal } from '../components/Modal';
 

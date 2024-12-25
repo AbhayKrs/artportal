@@ -3,7 +3,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 
-import { api_fetchArtworkImages, api_fetchUserImages } from '../utils/api';
+import { api_fetchArtworkImages, api_fetchUserImages } from '../utils/api_routes';
 import { r_setLoader } from '../store/reducers/common.reducers';
 
 import { MdSettings } from 'react-icons/md';
