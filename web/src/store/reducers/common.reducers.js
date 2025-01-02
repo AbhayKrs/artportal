@@ -52,6 +52,7 @@ const initialState = {
         store_count: 0,
         cart: [],
         cart_count: 0,
+        premium_validity: ''
     },
     profile_data: {
         id: '',
@@ -140,7 +141,7 @@ const commonSlice = createSlice({
         r_verifyUser: (state, action) => {
             const decoded = jwt_decode(action.payload);
             state.isAuthenticated = true;
-            state.user = { ...decoded };
+            state.user = { ...state.user, ...decoded };
         },
         r_headerDialogOpen: (state, action) => {
             const { activeDialogName, dialogTitle } = openDialog(action.payload);
@@ -232,7 +233,7 @@ const commonSlice = createSlice({
                 :
                 sessionStorage.removeItem('jwtToken')
             setAuthToken(false);
-            state.isAuthenticated = true;
+            state.isAuthenticated = false;
             state.user = action.payload;
         },
         r_deleteBookmark: (state, action) => {

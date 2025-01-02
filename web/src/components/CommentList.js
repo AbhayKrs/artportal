@@ -88,7 +88,7 @@ const CommentList = ({ comments, handleInvalidUser }) => {
     }
 
     return (
-        <div className='flex flex-col gap-1 overflow-y-auto scrollbar'>
+        <div className='flex flex-col gap-2 overflow-y-auto scrollbar'>
             {comments.map((comment, index) => (
                 <>
                     <div key={index} className='flex items-center text-neutral-700 dark:text-gray-300 space-x-2'>
@@ -101,8 +101,8 @@ const CommentList = ({ comments, handleInvalidUser }) => {
                                 :
                                 <p className='text-base'>{comment.text}</p>
                             }
-                            <div className='flex'>
-                                <div onClick={() => navigate(`/users/${comment.author.id}`)} className='flex gap-0.5 cursor-pointer'>
+                            <div className='flex flex-row items-center'>
+                                <div onClick={() => navigate(`/users/${comment.author.id}`)} className='flex gap-0.5 cursor-pointer items-center'>
                                     {comment.author.avatar.icon.length > 0 && <div className="w-4 h-4 overflow-hidden">
                                         <img loading='lazy' src={api_fetchUserImages(comment.author.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />
                                     </div>}
@@ -167,9 +167,9 @@ const CommentList = ({ comments, handleInvalidUser }) => {
                             </div>
                         </div>
                     </div>
-                    <div className='self-end w-[95%]'>
-                        {comment.replies && comment.replies.length > 0 && <CommentList comments={comment.replies} handleInvalidUser={handleInvalidUser} />}
-                    </div>
+                    {comment.replies && comment.replies.length > 0 && <div className='self-end w-[95%]'>
+                        <CommentList comments={comment.replies} handleInvalidUser={handleInvalidUser} />
+                    </div>}
                     {replies.length > 0 ?
                         replies[index] !== null && replies.find((reply) => reply.id === index) ?
                             <div className='flex flex-row gap-3 items-center'>

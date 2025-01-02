@@ -211,8 +211,8 @@ const ExploreShow = (props) => {
                                         />
                                         <ImPlus className="absolute bottom-0 right-0 text-[#D1853A] h-4 w-4" />
                                     </div>} */}
-                            <div className='flex flex-row gap-3 items-center'>
-                                <div className='flex flex-row space-x-2 items-center'>
+                            <div className='flex flex-col gap-3'>
+                                <div className='flex flex-row space-x-4 items-center'>
                                     <div className='flex flex-row items-center gap-0.5'>
                                         <IoEye className='h-6 w-6 text-neutral-600 dark:text-neutral-500' />
                                         <p className='font-semibold text-neutral-600 dark:text-neutral-500 text-base'>{new Intl.NumberFormat().format(artwork.views.length)}</p>
@@ -260,20 +260,22 @@ const ExploreShow = (props) => {
                                         </p>
                                     </div>
                                 </div>
-                                <IoShareSocialSharp onClick={() => setShareOpen(true)} className='h-6 w-6 cursor-pointer text-neutral-700 dark:text-gray-200' />
-                                {user && user.bookmarks && !!user.bookmarks.find(item => item._id === artwork._id) ?
-                                    <MdBookmarkAdded className='h-6 w-6 text-neutral-700 dark:text-gray-200' />
-                                    :
-                                    <MdBookmarkAdd
-                                        className='h-6 w-6 cursor-pointer text-neutral-700 dark:text-gray-200'
-                                        onClick={() => {
-                                            common.isAuthenticated ?
-                                                bookmarkIt()
-                                                :
-                                                handleInvalidUser()
-                                        }}
-                                    />
-                                }
+                                <div className='flex flex-row gap-3 items-center'>
+                                    <IoShareSocialSharp onClick={() => setShareOpen(true)} className='h-6 w-6 cursor-pointer text-neutral-700 dark:text-gray-200' />
+                                    {user && user.bookmarks && !!user.bookmarks.find(item => item._id === artwork._id) ?
+                                        <MdBookmarkAdded className='h-6 w-6 text-neutral-700 dark:text-gray-200' />
+                                        :
+                                        <MdBookmarkAdd
+                                            className='h-6 w-6 cursor-pointer text-neutral-700 dark:text-gray-200'
+                                            onClick={() => {
+                                                common.isAuthenticated ?
+                                                    bookmarkIt()
+                                                    :
+                                                    handleInvalidUser()
+                                            }}
+                                        />
+                                    }
+                                </div>
                             </div>
                             <div className='flex flex-row gap-3 rounded'>
                                 {prev.length > 0 ? <div onClick={handlePrev} className='cursor-pointer flex justify-end py-0.5 space-x-2 text-gray-700 hover:text-indigo-600 dark:text-gray-200 dark:hover:text-indigo-600'>

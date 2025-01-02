@@ -227,9 +227,9 @@ router.delete('/:id', protect, async (req, res) => {
         users.map(user => {
             if (user.bookmarks.some(item => item === req.params.id)) {
                 user.bookmarks = [...user.bookmarks.filter(item => item != req.params.id)];
-                console.log('test', user.bookmarks)
-                user.save();
             }
+
+            user.save();
         })
         artwork.deleteOne({ _id: artwork._id });
         res.send('Artwork removed successfully');

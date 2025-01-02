@@ -88,17 +88,15 @@ export const Account = (props) => {
                                 {editStatus && <MdAddAPhoto onClick={() => openAvatarModal()} className='absolute bottom-0 right-0 h-6 w-6 cursor-pointer text-gray-800 dark:text-gray-200' />}
                             </div>
                         </div>
-                        <div className='col-span-3 flex flex-col'>
-                            <div className=''>
-                                <div className='flex gap-2'>
-                                    <h2 className='text-lg  font-semibold dark:text-gray-300'>Full name</h2>
-                                </div>
+                        <div className='flex flex-col gap-2 col-span-3'>
+                            <div className='flex flex-col gap-1'>
+                                <h2 className='text-lg  font-semibold dark:text-gray-300'>Full name</h2>
                                 <div className='flex relative items-center gap-2'>
                                     <FaRegUserCircle className='absolute h-5 w-5 text-gray-400 ml-2' />
                                     <input disabled={!editStatus} type="text" name="search" value={name} onChange={(ev) => setName(ev.target.value)} className="placeholder-gray-600 w-full dark:placeholder-gray-300 text-black dark:text-white bg-white disabled:bg-gray-200 dark:bg-neutral-700 dark:disabled:bg-neutral-900 h-10 pl-9 pr-16 rounded-lg text-sm focus:outline-none" />
                                 </div>
                             </div>
-                            <div className=''>
+                            <div className='flex flex-col gap-1'>
                                 <div className='flex gap-2'>
                                     <h2 className='text-lg  font-semibold dark:text-gray-300'>Username</h2>
                                 </div>
@@ -109,7 +107,7 @@ export const Account = (props) => {
                             </div>
                         </div>
                     </div>
-                    <div className=''>
+                    <div className='flex flex-col gap-1'>
                         <div className='flex gap-2'>
                             <h2 className='text-lg  font-semibold dark:text-gray-300'>Email address</h2>
                         </div>
@@ -118,7 +116,7 @@ export const Account = (props) => {
                             <input disabled type="text" name="search" value={email} onChange={(ev) => setEmail(ev.target.value)} className="placeholder-gray-600 w-full dark:placeholder-gray-300 text-black dark:text-white bg-white disabled:bg-gray-200 dark:bg-neutral-700 dark:disabled:bg-neutral-900 h-10 pl-9 pr-16 rounded-lg text-sm focus:outline-none" />
                         </div>
                     </div>
-                    <div className=''>
+                    <div className='flex flex-col gap-1'>
                         <div className='flex gap-2'>
                             <h2 className='text-lg  font-semibold dark:text-gray-300'>Profile bio</h2>
                         </div>

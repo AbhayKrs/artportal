@@ -16,6 +16,7 @@ router.post("/login", async (req, res) => {
         const password = req.body.password;
 
         await User.find({})
+
             .populate('bookmarks')
             .then(users => {
                 userList.push(...users)
@@ -25,6 +26,7 @@ router.post("/login", async (req, res) => {
         if (!isValid) { return res.status(400).json(errors) }
 
         User.findOne({ username })
+
             .populate('bookmarks')
             .then(user => {
                 if (!user) {
@@ -45,7 +47,8 @@ router.post("/login", async (req, res) => {
                             followers: user.followers,
                             followering: user.following,
                             bookmarks: user.bookmarks,
-                            created_on: user.createdAt
+                            created_on: user.createdAt,
+                            premium_validity: user.premiumValidity
                         };
                         jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 43200000 },
                             (err, token) => {
@@ -74,6 +77,7 @@ router.post("/signup", (req, res) => {
             return res.status(400).json(errors);
         }
         User.findOne({ username: req.body.username })
+
             .populate('bookmarks')
             .then(user => {
                 if (user) {
@@ -110,6 +114,7 @@ router.post("/signup", (req, res) => {
                                         followering: user.following,
                                         bookmarks: user.bookmarks,
                                         created_on: user.createdAt,
+                                        premium_validity: user.premiumValidity
                                     };
                                     jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 43200000 },
                                         (err, token) => {
@@ -149,6 +154,7 @@ router.get('/googleAuth/callback', passport.authenticate('google', {
         bio: authenticatedUser.bio,
         avatar: authenticatedUser.avatar,
         created_on: authenticatedUser.createdAt,
+        premium_validity: authenticatedUser.premiumValidity,
         tokens: authenticatedUser.tokens,
         google_authenticated: authenticatedUser.google_authenticated,
         followers: authenticatedUser.followers,
@@ -182,6 +188,7 @@ router.get('/facebook/callback', passport.authenticate('facebook', {
         bio: authenticatedUser.bio,
         avatar: authenticatedUser.avatar,
         created_on: authenticatedUser.createdAt,
+        premium_validity: authenticatedUser.premiumValidity,
         tokens: authenticatedUser.tokens,
         followers: authenticatedUser.followers,
         bookmarks: authenticatedUser.bookmarks

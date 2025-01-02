@@ -23,12 +23,14 @@ const Profile = (props) => {
     const navigate = useNavigate();
 
     const common = useSelector(state => state.common);
+    const artworks = useSelector(state => state.explore.artworks);
     const profile_data = useSelector(state => state.common.profile_data);
 
     useEffect(() => {
         dispatch(r_setLoader(true));
         window.scrollTo(0, 0);
         if (id !== null) {
+            dispatch(a_fetchExploreList());
             dispatch(a_handleFetchUserDetails(id));
             dispatch(a_fetchUserExploreList(id));
         }
@@ -136,7 +138,7 @@ const Profile = (props) => {
             case 'about': return <div className='text-4xl text-gray-400'>HELLO</div>
             case 'liked': return <div className='flex flex-row'>
                 <Masonry cols={5}>
-                    {profile_data.artworks.filter(item => item.likes.indexOf(profile_data.id) >= 0).map((artwork, index) => (
+                    {artworks.filter(item => item.likes.indexOf(profile_data.id) >= 0).map((artwork, index) => (
                         <div key={index} onClick={() => navigate(`/artworks/${artwork._id}`)} className='relative group group-hover:block'>
                             <img loading='lazy'
                                 id={index}
@@ -225,16 +227,16 @@ const Profile = (props) => {
                             <div className="flex flex-wrap justify-center mb-7">
                                 <div className="w-full sm:w-4/12 px-4">
                                     <div className="grid grid-cols-2 lg:grid-cols-4 justify-center sm:pt-4 pt-16">
-                                        <div className="shrink mr-4 p-3 min-w-fit text-center">
+                                        <div className="shrink mr-4 p-3 min-w-fit text-center justify-items-center">
                                             <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-800 dark:text-gray-300">{profile_data.followers_count}</span><span className="text-sm font-semibold text-blueGray-500">Following</span>
                                         </div>
-                                        <div className="mr-4 p-3 min-w-fit text-center">
+                                        <div className="mr-4 p-3 min-w-fit text-center justify-items-center">
                                             <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-800 dark:text-gray-300">{profile_data.followers_count}</span><span className="text-sm font-semibold text-blueGray-500">Followers</span>
                                         </div>
-                                        <div className="mr-4 p-3 min-w-fit text-center">
+                                        <div className="mr-4 p-3 min-w-fit text-center justify-items-center">
                                             <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-800 dark:text-gray-300">{profile_data.artworks_count}</span><span className="text-sm font-semibold text-blueGray-500">Explore Uploads</span>
                                         </div>
-                                        <div className="mr-4 p-3 min-w-fit text-center">
+                                        <div className="mr-4 p-3 min-w-fit text-center justify-items-center">
                                             <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-800 dark:text-gray-300">{profile_data.comment_count}</span><span className="text-sm font-semibold text-blueGray-500">Comments</span>
                                         </div>
                                     </div>
@@ -245,17 +247,14 @@ const Profile = (props) => {
                                     </div>
                                 </div>
                                 <div className="w-full sm:w-4/12 px-4 lg:text-right lg:self-center">
-                                    <div className="text-center pt-4 space-y-1.5">
+                                    <div className="flex flex-col text-center pt-4 space-y-1.5">
                                         <h3 className="text-4xl font-semibold text-blueGray-800 dark:text-gray-300">
                                             {profile_data.name}
                                         </h3>
-                                        <div className="text-md  text-blueGray-500 font-bold">
+                                        <span className="text-md text-blueGray-500 font-bold">
                                             #{profile_data.username}
-                                        </div>
-                                        <div className="text-blueGray-600  text-blueGray-700 dark:text-gray-400 font-bold">
-                                            {profile_data.email}
-                                        </div>
-                                        {profile_data.bio && <p className="text-blueGray-600  text-blueGray-700 dark:text-gray-400 font-bold italic">
+                                        </span>
+                                        {profile_data.bio && <p className="text-blueGray-600 text-blueGray-700 dark:text-gray-400 font-bold italic">
                                             {'“' + profile_data.bio + '”'}
                                         </p>}
                                         {common.user.id === profile_data.id ?

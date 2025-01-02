@@ -87,8 +87,8 @@ const Header = () => {
 
     return (
         <nav className='fixed max-h-20 top-0 z-50 bg-slate-200 w-full dark:bg-darkBg'>
-            {common.betaMsg && <div className='relative flex flex-row w-full py-1.5 justify-center bg-amber-500 '>
-                <span className=' font-semibold text-sm tracking-wider uppercase'>This site is currently in Beta.</span>
+            {common.betaMsg && <div className='relative flex flex-row w-full py-2 justify-center bg-amber-500'>
+                <span className=' font-semibold text-xs tracking-wider uppercase'>This site is currently in Beta.</span>
                 <IoClose onClick={() => { dispatch(r_setBetaMessage(!common.betaMsg)) }} className='absolute m-auto inset-y-0 right-1 w-6 h-6 cursor-pointer text-neutral-800' />
             </div>}
             <div className='flex flex-row items-center py-2 px-3 justify-between'>
@@ -132,12 +132,10 @@ const Header = () => {
                             <button onClick={() => dispatch(r_headerDialogOpen('openRegisterDialog'))} className='whitespace-nowrap self-center border border-gray-800 dark:border-gray-300 text-neutral-800 dark:text-gray-200 hover:bg-slate-300 dark:hover:bg-neutral-500/20 py-1 px-3 ml-3 rounded-md text-base  font-medium tracking-wide'>Sign Up</button>
                         </>
                     }
-                    <Link to='/settings' className='relative self-center hover:cursor-pointer'>
-                        <RiSettings4Fill className='h-6 w-6 text-neutral-800 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-600' />
-                    </Link>
                     <ThemeToggle value={common.theme} toggle={handleThemeToggle} />
                     {common.isAuthenticated ?
                         <div ref={userMenuRef} className='relative group'>
+                            {console.log("Test", common, user)}
                             <button onClick={() => setUserMenuActive(!userMenuActive)} className={`flex w-full m-auto p-1.5 justify-center items-center ${userMenuActive ? 'bg-slate-300 dark:bg-[#313135] rounded-md' : null}`} >
                                 {user.avatar.icon.length > 0 && <img loading='lazy' alt='user' src={api_fetchUserImages(user.avatar.icon)} className='w-6 h-6 mx-auto' />}
                             </button>
@@ -196,6 +194,10 @@ const Header = () => {
                                             <span className='text-base  font-bold tracking-wide'>My History</span>
                                         </Link>
                                         <hr className='border-2 border-gray-400 dark:border-neutral-800 my-1.5 mx-2' />
+                                        <Link to='/settings' onClick={() => setUserMenuActive(false)} className='flex items-center text-gray-900 dark:text-gray-200 py-1.5 px-4 hover:bg-gray-200 dark:hover:bg-neutral-700 space-x-3 rounded-md'>
+                                            <TbSettings className='h-5 w-5' />
+                                            <span className='text-base  font-bold tracking-wide'>Settings</span>
+                                        </Link>
                                         <Link to='/studio' onClick={() => setUserMenuActive(false)} className='flex items-center text-gray-900 dark:text-gray-200 py-1.5 px-4 hover:bg-gray-200 dark:hover:bg-neutral-700 space-x-3 rounded-md'>
                                             <PiChalkboardSimpleBold className='h-5 w-5' />
                                             <span className='text-base  font-bold tracking-wide'>Studio</span>
