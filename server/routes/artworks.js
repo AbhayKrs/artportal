@@ -461,4 +461,38 @@ router.put('/:id/comments/:comment_id/dislike', protect, async (req, res) => {
     }
 })
 
+router.post("/check-plagiarism", artworkUpl.any(), (req, res) => {
+    let proms = [];
+    req.files.map(file => {
+        const prom = new Promise((resolve, reject) => {
+            if (!file) {
+                return res.status(400).json({ error: "No file uploaded" });
+            }
+            const imagePath = file.path;
+            const pythonProcess = spawn("python", ["plagrism_flagging_model.py", imagePath]);
+
+            let resultData = "";
+            pythonProcess.stdout.on("data", (data) => {
+                resultData += data.toString();
+            });
+
+            pythonProcess.stderr.on("data", (data) => {
+                console.error(`Error: ${data}`);
+            });
+
+            pythonProcess.on("close", (code) => {
+                fs.unlinkSync(imagePath); // Cleanup uploaded file
+                res.json(JSON.parse(resultData)); // Send result to frontend
+            });
+            resolve();
+        });
+        proms.push(prom);
+    });
+
+    Promise.all(proms).then(() => {
+        console.log("done");
+        res.send("done");
+    })
+})
+
 export default router;

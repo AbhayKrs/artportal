@@ -51,9 +51,10 @@ const Layout = (props) => {
   const dispatch = useDispatch();
   const common = useSelector(state => state.common);
 
+  const [hidePane, setHidePane] = useState(false);
+
   useEffect(() => {
     dispatch(a_fetchVisitorStatus());
-
     load_theme();
     load_auth();
   }, []);
@@ -99,8 +100,8 @@ const Layout = (props) => {
 
   return (
     <main className={`${common.theme} relative font-nunito`}>
-      <Header />
-      <div className={`min-h-show flex flex-col bg-gray-200 dark:bg-darkBg ${common.betaMsg === true ? 'pt-[5rem]' : 'pt-[3.25rem]'}`}>
+      <Header hidePane={hidePane} setHidePane={setHidePane} />
+      <div className={`min-h-show flex flex-col bg-gray-200 dark:bg-darkBg ${hidePane ? "pl-64" : "pl-20"}`}>
         <Snackbar msgdata={common.snackmsg} setMessage={(msgData) => dispatch(r_setSnackMessage(msgData))} />
         <Loader />
         <Outlet />
