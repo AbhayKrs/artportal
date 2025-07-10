@@ -9,13 +9,17 @@ import Stepper from './Stepper';
 import TokenLogo from '../assets/images/money.png';
 import TokenIcon from '../assets/images/money.png';
 import Success from '../assets/images/successgif.gif';
+
+import { MdSearch, MdClose } from 'react-icons/md';
 import { IoCloseSharp, IoCloseCircle } from 'react-icons/io5';
 import { HiPlus, HiMinus, HiOutlineMail } from 'react-icons/hi';
 import { FaUser, FaLock } from 'react-icons/fa';
 import { BsArrowUpRightSquare } from 'react-icons/bs';
 import { FaChevronRight, FaHashtag, FaGreaterThan } from 'react-icons/fa6';
 import { FiAtSign } from 'react-icons/fi';
+
 import { ReactComponent as GoogleIcon } from '../assets/icons/google-icon.svg';
+import { ReactComponent as SearchIcon } from '../assets/icons/search.svg';
 
 import {
     EmailIcon,
@@ -777,14 +781,53 @@ export const AvatarModal = ({ open, avatarList, title, onClose, a_handleEditUser
     )
 }
 
-export const SearchModal = ({ open, handleClose, betaMsg, searchVal, activeSearch, searchList, fetchSearchList, clearSearch, handleExploreSearch }) => {
+export const SearchModal = ({ open, handleClose, betaMsg, searchVal, setSearchVal, activeSearch, searchList, setSearchType, fetchSearchList, clearSearch, handleExploreSearch }) => {
     let navigate = useNavigate();
 
+    const handleSearch = (val) => {
+        setSearchVal(val);
+        if (val.length > 0) {
+            fetchSearchList(activeSearch, val);
+        } else {
+            clearSearch();
+        }
+    }
+
     return (
-        <div className={`${open ? 'flex' : 'hidden'}`}>
-            <div onClick={handleClose} className='fixed inset-0 w-screen h-screen'></div>
-            <div className={`scrollbar fixed mx-auto ${betaMsg === true ? 'top-20' : 'top-14'} z-50 inset-0 h-fit bg-slate-300 dark:bg-neutral-800 w-11/12 sm:w-8/12 md:w-9/12 rounded-xl`}>
-                <div className='flex flex-col w-full px-4 pb-4'>
+        <div className={`${open ? 'block' : 'hidden'} flex fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
+            <div className={`scrollbar fixed mx-auto ${betaMsg === true ? 'top-20' : 'top-14'} p-4 z-50 h-fit bg-slate-300 dark:bg-neutral-800 w-11/12 sm:w-8/12 md:w-9/12 rounded-xl`}>
+                <IoCloseSharp onClick={handleClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
+                <div className="flex w-6/12 items-center bg-slate-300 dark:bg-neutral-700/50 rounded-xl py-2 px-4 gap-2">
+                    <div className="flex relative items-center justify-center">
+                        <SearchIcon className="h-5 w-5" />
+                    </div>
+                    {searchVal.length > 0 && <div className="flex relative items-center justify-center rounded border-2 border-gray-300 text-neutral-800 dark:text-gray-300 h-7 w-7 mr-2">
+                        {activeSearch === 'artwork' && <FiAtSign className='h-4 w-4' />}
+                        {activeSearch === 'tag' && <FaHashtag className='h-4 w-4' />}
+                        {activeSearch === 'artist' && <FaGreaterThan className='h-4 w-4' />}
+                    </div>}
+                    <input
+                        type="text"
+                        name="search"
+                        value={searchVal}
+                        placeholder="Search..."
+                        autoComplete="off"
+                        className="w-full font-normal tracking-wide bg-transparent text-neutral-800 dark:text-gray-200 placeholder-gray-600 dark:placeholder-gray-100/30 text-xl focus:outline-none"
+                        onChange={(ev) => handleSearch(ev.target.value)}
+                        onKeyPress={(ev) => {
+                            if (ev.key === 'Enter') {
+                                fetchSearchList(activeSearch, searchVal)
+                            }
+                        }}
+                    />
+                    {searchVal.length === 0 ?
+                        '' :
+                        <button className="flex items-center justify-center text-neutral-800 dark:text-gray-300 h-full w-12" onClick={() => setSearchVal('')}>
+                            <MdClose className='h-5 w-5' />
+                        </button>
+                    }
+                </div>
+                <div className='flex flex-col w-full'>
                     <div className='sticky bottom-0 inset-x-0 flex flex-col md:flex-row items-center justify-between w-full p-2 bg-slate-300 dark:bg-neutral-800  space-x-2'>
                         <div className='flex flex-row p-2 bg-slate-300 dark:bg-neutral-800  space-x-2'>
                             <button disabled={activeSearch === 'artwork'} onClick={() => { fetchSearchList('artwork', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'artwork' ? 'text-indigo-600' : 'text-neutral-700 dark:text-gray-300 hover:text-indigo-600'}`}>
@@ -796,14 +839,14 @@ export const SearchModal = ({ open, handleClose, betaMsg, searchVal, activeSearc
                                 <FaHashtag className='h-4 w-4' />
                                 <span className=' font-semibold text-base'>Tags</span>
                             </button>
-                            <span className='flex text-neutral-700 text-gray-300'>&#8226;</span>
+                            <span className='flex text-neutral-700 dark:text-gray-300'>&#8226;</span>
                             <button disabled={activeSearch === 'artist'} onClick={() => { fetchSearchList('artist', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'artist' ? 'text-indigo-600' : 'text-neutral-700 dark:text-gray-300 hover:text-indigo-600'}`}>
                                 <FaGreaterThan className='h-4 w-4' />
                                 <span className=' font-semibold text-base'>Artists</span>
                             </button>
                         </div>
                         <div className='flex flex-col md:flex-row p-2 bg-slate-300 dark:bg-neutral-800  space-x-2'>
-                            <button onClick={() => { handleExploreSearch() }} className='flex  font-normal text-base gap-2 items-center tracking-wide text-neutral-700 dark:text-gray-300 hover:text-indigo-600'>
+                            <button onClick={() => { handleExploreSearch(); handleClose() }} className='flex  font-normal text-base gap-2 items-center tracking-wide text-neutral-700 dark:text-gray-300 hover:text-indigo-600'>
                                 {searchVal.length > 0 &&
                                     <>
                                         Search {activeSearch}s for '{searchVal}'
@@ -820,7 +863,7 @@ export const SearchModal = ({ open, handleClose, betaMsg, searchVal, activeSearc
                                     <div key={index} className='flex items-center gap-4 rounded-lg text-neutral-700 dark:text-gray-200 bg-gray-100 dark:bg-neutral-900 py-2 px-5'>
                                         <img src={api_fetchArtworkImages(item.files[0])} className='object-cover w-10 h-10 md:w-14 md:h-14 rounded' />
                                         <span className='text-base md:text-xl font-semibold leading-5 capitalize'>{item.title}</span>
-                                        <FaChevronRight onClick={() => { navigate(`/explore/${item._id}`); clearSearch() }} className="ml-auto h-6 w-6 cursor-pointer" />
+                                        <FaChevronRight onClick={() => { navigate(`/explore/${item._id}`); clearSearch(); handleClose() }} className="ml-auto h-6 w-6 cursor-pointer" />
                                     </div>
                                 ))
                                     :
@@ -898,7 +941,7 @@ export const ConfirmModal = ({ open, title, onClose, onConfirm }) => {
 
 export const FlaggedModal = ({ open, onClose }) => {
     return (
-        <div className={`${open ? 'block' : 'hidden'} flex  fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
+        <div className={`${open ? 'block' : 'hidden'} flex fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
             <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 md:w-4/12 sm:w-8/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
                 <div className='grid'>
                     <div className='p-4 flex flex-col items-center'>

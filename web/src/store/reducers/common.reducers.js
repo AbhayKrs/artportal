@@ -168,7 +168,6 @@ const commonSlice = createSlice({
             state.searchList = searchList;
         },
         r_clearSearchList: (state, action) => {
-            state.activeSearch = '';
             state.searchList = [];
         },
         r_setAvatars: (state, action) => {

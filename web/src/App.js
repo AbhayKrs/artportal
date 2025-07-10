@@ -101,7 +101,7 @@ const Layout = (props) => {
   return (
     <main className={`${common.theme} relative font-nunito`}>
       <Header hidePane={hidePane} setHidePane={setHidePane} />
-      <div className={`min-h-show flex flex-col bg-gray-200 dark:bg-darkBg ${hidePane ? "pl-64" : "pl-20"}`}>
+      <div className={`min-h-show flex flex-col bg-gray-200 dark:bg-darkBg ${hidePane ? "pl-20" : "pl-60"}`}>
         <Snackbar msgdata={common.snackmsg} setMessage={(msgData) => dispatch(r_setSnackMessage(msgData))} />
         <Loader />
         <Outlet />
