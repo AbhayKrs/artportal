@@ -14,7 +14,6 @@ import premium_logo from '../assets/icons/premium_logo.svg';
 import { ReactComponent as Artportal_logo } from '../assets/icons/artportal_logo.svg';
 import TokenLogo from '../assets/images/money.png';
 import { FaPlus } from 'react-icons/fa';
-import { IoClose, IoMenu } from "react-icons/io5";
 import { MdUpload, MdHelpOutline, MdShoppingCart, MdOutlineAttachMoney, MdOutlineReceiptLong, MdOutlineHistory } from "react-icons/md";
 import { HiOutlineLogout } from "react-icons/hi";
 import { BiLock } from 'react-icons/bi';
@@ -30,22 +29,10 @@ import { ReactComponent as CartIcon } from '../assets/icons/cart.svg';
 import { ReactComponent as NotificationIcon } from '../assets/icons/notifications.svg';
 import { ReactComponent as VerifiedIcon } from '../assets/icons/verified.svg';
 import { ReactComponent as TokenIcon } from '../assets/icons/token.svg';
+import { ReactComponent as SigninIcon } from '../assets/icons/signin.svg';
+import { ReactComponent as SignupIcon } from '../assets/icons/signup.svg';
+import { ReactComponent as LogoutIcon } from '../assets/icons/logout.svg';
 
-const useUserMenuOut = (ref, active, setActive) => {
-    useEffect(() => {
-        const handleOutsideClick = (event) => {
-            if (ref.current && !ref.current.contains(event.target)) {
-                // alert('You clicked outside');
-                setActive(false);
-            }
-        }
-
-        document.addEventListener("mousedown", handleOutsideClick);
-        return () => {
-            document.removeEventListener("mousedown", handleOutsideClick);
-        }
-    }, [ref]);
-}
 
 const Header = ({ hidePane, setHidePane }) => {
     const dispatch = useDispatch();
@@ -63,9 +50,6 @@ const Header = ({ hidePane, setHidePane }) => {
 
     const [searchVal, setSearchVal] = useState('');
     const [searchModal, setSearchModal] = useState(false);
-
-    const userMenuRef = useRef(null);
-    useUserMenuOut(userMenuRef, userMenuActive, setUserMenuActive);
 
     useEffect(() => {
         setActiveRoute(location.pathname);
@@ -127,127 +111,150 @@ const Header = ({ hidePane, setHidePane }) => {
 
                 </div>
                 <div className={`flex flex-col ${hidePane ? null : 'w-full'}  gap-1`}>
-                    <Link to='/explore' className={`${hidePane ? 'p-2' : 'flex gap-2 items-end py-3 px-4 text-xl font-medium tracking-wide'} group hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
+                    <Link to='/explore' className={`${hidePane ? 'p-2' : 'flex gap-2 items-end py-3 px-4 text-xl font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
                         <div className={`${activeRoute.includes('/explore') ? 'flex' : 'hidden'} h-5 w-1 bottom-[-4px] left-0 rounded text-2xl bg-blue-700 dark:bg-blue-700`}></div>
                         <LibraryIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />
                         {!hidePane && `Library`}
                     </Link>
-                    <Link onClick={() => { dispatch(r_setSearchType("artwork")); setSearchModal(true) }} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'py-3 px-4 text-xl font-medium tracking-wide'} group hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
+                    <Link onClick={() => { dispatch(r_setSearchType("artwork")); setSearchModal(true) }} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'py-3 px-4 text-xl font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
                         <div className={`${activeRoute.includes('/test') ? 'flex' : 'hidden'} h-5 w-1 bottom-[-4px] left-0 rounded text-2xl bg-blue-700 dark:bg-blue-700`}></div>
                         <SearchIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />
                         {!hidePane && `Search`}
                     </Link>
-                    <Link to='/store' className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'py-3 px-4 text-xl font-medium tracking-wide'} group hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
+                    <Link to='/store' className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'py-3 px-4 text-xl font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
                         <div className={`${activeRoute.includes('/store') ? 'flex' : 'hidden'} h-5 w-1 bottom-[-4px] left-0 rounded text-2xl bg-blue-700 dark:bg-blue-700`}></div>
                         <StoreIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />
                         {!hidePane && `Store`}
                     </Link>
                 </div>
                 {common.isAuthenticated ?
-                    <div className={`flex flex-col ${hidePane ? null : 'w-full'}  gap-1`}>
+                    <div className={`flex flex-col h-20 overflow-y-auto scrollbar-thin dark:scrollbar-thumb-blue-500 scrollbar-track-gray-200 ${hidePane ? null : 'w-full'} gap-1`}>
                         <hr className={`${hidePane ? 'w-full' : 'w-11/12'} border border-gray-300 dark:border-neutral-800 rounded-xl`} />
-                        <Link to='/explore/new' className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'py-3 px-4 text-xl font-medium tracking-wide'} group hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
+                        <Link to='/explore/new' className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'py-3 px-4 text-xl font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
                             <UploadIcon className='h-5 w-5 text-neutral-800 dark:text-gray-300' />
                             {!hidePane && `Upload`}
                         </Link>
-                        <Link to='/store/cart' className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'py-3 px-4 text-xl font-medium tracking-wide'} group hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
+                        <Link to='/store/cart' className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'py-3 px-4 text-xl font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
                             <CartIcon className='h-5 w-5 text-neutral-800 dark:text-gray-300' />
                             {user.cart && user.cart.length > 0 && <div className='absolute top-[-5px] left-4 px-1 bg-rose-500 font-bold text-gray-200 rounded-full text-xs'>{user.cart.length}</div>}
                             {!hidePane && `Cart (0)`}
                         </Link>
-                        <Link to='/notifications' className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'py-3 px-4 text-xl font-medium tracking-wide'} group hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
+                        <Link to='/notifications' className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'py-3 px-4 text-xl font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
                             <NotificationIcon className='h-5 w-5 text-neutral-800 dark:text-gray-300' />
                             {!hidePane && `Notifications`}
                         </Link>
+                        <hr className='w-full border border-gray-300 dark:border-neutral-800 rounded-xl px-2' />
+                        <div className='flex flex-col'>
+                            <Link to={`/users/${user.id}`} onClick={() => setUserMenuActive(false)} className='flex items-center text-neutral-800 dark:text-gray-200 py-1.5 px-4 hover:bg-gray-200 dark:hover:bg-neutral-700 space-x-3 rounded-xl'>
+                                <PiUserBold className='h-5 w-5' />
+                                <span className='text-base  font-bold tracking-wide'>My Profile</span>
+                            </Link>
+                            <Link to={`/users/${user.id}/pins`} onClick={() => setUserMenuActive(false)} className='flex items-center text-neutral-800 dark:text-gray-200 py-1.5 px-4 hover:bg-gray-200 dark:hover:bg-neutral-700 space-x-3 rounded-xl'>
+                                <PiPushPinBold className='h-5 w-5' />
+                                <span className='text-base  font-bold tracking-wide'>My Pins</span>
+                            </Link>
+                            <Link to={`/users/${user.id}/space`} onClick={() => setUserMenuActive(false)} className='flex items-center text-neutral-800 dark:text-gray-200 py-1.5 px-4 hover:bg-gray-200 dark:hover:bg-neutral-700 space-x-3 rounded-xl'>
+                                <PiUsersThreeBold className='h-5 w-5' />
+                                <span className='text-base  font-bold tracking-wide'>My Space</span>
+                            </Link>
+                            <Link to={`/users/${user.id}/history`} onClick={() => setUserMenuActive(false)} className='flex items-center text-neutral-800 dark:text-gray-200 py-1.5 px-4 hover:bg-gray-200 dark:hover:bg-neutral-700 space-x-3 rounded-xl'>
+                                <MdOutlineHistory className='h-5 w-5' />
+                                <span className='text-base  font-bold tracking-wide'>My History</span>
+                            </Link>
+                            <hr className='border-2 border-gray-400 dark:border-neutral-800 my-1.5 mx-2' />
+                            <Link to='/settings' onClick={() => setUserMenuActive(false)} className='flex items-center text-neutral-800 dark:text-gray-200 py-1.5 px-4 hover:bg-gray-200 dark:hover:bg-neutral-700 space-x-3 rounded-xl'>
+                                <TbSettings className='h-5 w-5' />
+                                <span className='text-base  font-bold tracking-wide'>Settings</span>
+                            </Link>
+                            <Link to='/studio' onClick={() => setUserMenuActive(false)} className='flex items-center text-neutral-800 dark:text-gray-200 py-1.5 px-4 hover:bg-gray-200 dark:hover:bg-neutral-700 space-x-3 rounded-xl'>
+                                <PiChalkboardSimpleBold className='h-5 w-5' />
+                                <span className='text-base  font-bold tracking-wide'>Studio</span>
+                            </Link>
+                            <Link to='/studio/earnings' onClick={() => setUserMenuActive(false)} className='flex items-center text-neutral-800 dark:text-gray-200 py-1.5 px-4 hover:bg-gray-200 dark:hover:bg-neutral-700 space-x-2'>
+                                <MdOutlineAttachMoney className='h-5 w-5' />
+                                <span className='text-base  font-bold tracking-wide'>Earnings</span>
+                            </Link>
+                            <Link to='/studio/payments' onClick={() => setUserMenuActive(false)} className='flex items-center text-neutral-800 dark:text-gray-200 py-1.5 px-4 hover:bg-gray-200 dark:hover:bg-neutral-700 space-x-3 rounded-xl'>
+                                <MdOutlineReceiptLong className='h-5 w-5' />
+                                <span className='text-base  font-bold tracking-wide'>Billing & Payments</span>
+                            </Link>
+                        </div>
                     </div>
                     :
-                    <div className='flex flex-col w-full gap-2 mt-auto px-2'>
-                        <button onClick={() => dispatch(r_headerDialogOpen('openLoginDialog'))} className='flex flex-row items-center justify-center bg-gray-300 dark:bg-neutral-700/50 dark:text-gray-300 gap-2 p-3 rounded-xl w-full text-xl font-medium tracking-wide'>
-                            Sign In
+                    <div className={`flex flex-col ${hidePane ? null : 'w-full px-2'} gap-2 mt-auto`}>
+                        <button onClick={() => dispatch(r_headerDialogOpen('openLoginDialog'))} className={`flex flex-row items-center justify-center bg-gray-300 dark:bg-neutral-700/50 dark:text-gray-300 gap-2 ${hidePane ? 'p-2' : 'py-3 px-4 text-xl font-medium tracking-wide'} rounded-xl`}>
+                            <SigninIcon className='h-5 w-5 text-neutral-800 dark:text-gray-300' />
+                            {!hidePane && `Sign In`}
                         </button>
-                        <button onClick={() => dispatch(r_headerDialogOpen('openRegisterDialog'))} className='flex flex-row items-center justify-center bg-gray-400 dark:bg-neutral-950 dark:text-gray-300 gap-2 p-3 rounded-xl w-full text-xl font-medium tracking-wide'>
-                            Sign Up
+                        <button onClick={() => dispatch(r_headerDialogOpen('openRegisterDialog'))} className={`flex flex-row items-center justify-center bg-gray-400 dark:bg-neutral-950 dark:text-gray-300 gap-2 ${hidePane ? 'p-2' : 'py-3 px-4 text-xl font-medium tracking-wide'} rounded-xl`}>
+                            <SignupIcon className='h-5 w-5 text-neutral-800 dark:text-gray-300' />
+                            {!hidePane && `Sign Up`}
                         </button>
                     </div>
                 }
-                {!hidePane && common.isAuthenticated &&
-                    <div ref={userMenuRef} className='flex flex-col px-2 w-full mt-auto'>
-                        <div className='flex flex-col gap-2'>
-                            <div className='flex flex-row items-center gap-2 pl-3'>
-                                {user.avatar.icon.length > 0 && <div className='flex relative w-10 h-10 justify-center items-center'>
-                                    <img loading='lazy' alt='user' src={api_fetchUserImages(user.avatar.icon)} className='mt-0.5' />
-                                </div>}
-                                <div className='flex flex-col'>
-                                    <p className='text-neutral-800 dark:text-gray-200 text-2xl font-medium tracking-wide'>{user.name}</p>
-                                    <div className='flex flex-row items-center gap-1'>
-                                        <p className='text-neutral-800 dark:text-gray-200 text-sm font-medium tracking-wide'>#{user.username}</p>
-                                        <VerifiedIcon className="stroke-current stroke-1 text-neutral-800 dark:text-gray-300 h-4 w-4" />
-                                        <Artportal_logo fill="#059669" className='h-3 w-auto hover:cursor-pointer' />
+                {common.isAuthenticated &&
+                    (hidePane ?
+                        <div className='flex flex-col items-center w-full mt-auto'>
+                            <div className='flex flex-col gap-2'>
+                                <div className='relative w-10 flex flex-col items-center gap-2'>
+                                    {user.avatar.icon.length > 0 && <div className='flex relative w-10 h-10 justify-center items-center'>
+                                        <img loading='lazy' alt='user' src={api_fetchUserImages(user.avatar.icon)} className='mt-0.5' />
+                                    </div>}
+                                    <div className='absolute justify-between left-[-5px] bottom-[-8px] flex flex-row bg-neutral-950/80 p-1 rounded-xl'>
+                                        <VerifiedIcon className="stroke-current stroke-1 text-neutral-800 dark:text-gray-300 h-3 w-3" />
+                                    </div>
+                                    <div className='absolute justify-between right-[-5px] bottom-[-8px] flex flex-row bg-neutral-950/80 p-1 rounded-xl'>
+                                        <Artportal_logo fill="#059669" className='h-2.5 w-auto hover:cursor-pointer' />
                                     </div>
                                 </div>
-                            </div>
-                            <button onClick={() => { navigate('/premium'); setUserMenuActive(false) }} className='flex flex-row items-center justify-center bg-neutral-800 dark:bg-neutral-900 gap-2 p-3 rounded-xl w-full'>
-                                <Artportal_logo fill="#059669" className='h-4 w-auto hover:cursor-pointer' />
-                                <p className='text-sm font-semibold tracking-wide text-neutral-200 dark:text-neutral-800'>Upgrade to artportal+</p>
-                            </button>
-                            <div className='flex flex-row justify-between items-center rounded-xl pl-3'>
-                                <div className='flex flex-col items-start'>
-                                    <div className='flex flex-row gap-1 items-start'>
-                                        <TokenIcon className="text-neutral-800 h-6 w-6" />
-                                        <p className='text-md tracking-wide text-neutral-800 dark:text-gray-300'>Tokens</p>
-                                    </div>
-                                    <p className='items-center text-base font-semibold tracking-wide text-neutral-800 dark:text-gray-300'>{user.tokens} tokens</p>
+                                <div className='flex flex-col gap-1 items-center'>
+                                    <TokenIcon className="text-neutral-800 dark:text-gray-300 h-6 w-6" />
+                                    <p className='text-sm tracking-wide text-neutral-800 dark:text-gray-300'>{user.tokens}</p>
                                 </div>
-                                <button className="p-1.5 hover:bg-gray-300 hover:dark:bg-neutral-700/50 rounded-xl" onClick={() => setTokenOpen(true)}>
-                                    <FaPlus className='h-7 w-7 text-neutral-800' />
+                                <button onClick={logout} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'py-3 px-4 text-xl font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
+                                    <LogoutIcon className='h-5 w-5 text-neutral-800 dark:text-gray-300' />
                                 </button>
                             </div>
                         </div>
-                        {/* <hr className='w-full border border-gray-300 dark:border-neutral-800 rounded-xl px-2' />
+                        :
+                        <div className='flex flex-col px-2 w-full mt-auto'>
+                            <div className='flex flex-col gap-3'>
+                                <button onClick={() => { navigate(`/users/${user.id}`) }} className='flex flex-row items-center gap-2'>
+                                    {user.avatar.icon.length > 0 && <div className='flex relative w-10 h-10 justify-center items-center'>
+                                        <img loading='lazy' alt='user' src={api_fetchUserImages(user.avatar.icon)} className='mt-0.5' />
+                                    </div>}
                                     <div className='flex flex-col'>
-                                        <Link to={`/users/${user.id}`} onClick={() => setUserMenuActive(false)} className='flex items-center text-neutral-800 dark:text-gray-200 py-1.5 px-4 hover:bg-gray-200 dark:hover:bg-neutral-700 space-x-3 rounded-xl'>
-                                            <PiUserBold className='h-5 w-5' />
-                                            <span className='text-base  font-bold tracking-wide'>My Profile</span>
-                                        </Link>
-                                        <Link to={`/users/${user.id}/pins`} onClick={() => setUserMenuActive(false)} className='flex items-center text-neutral-800 dark:text-gray-200 py-1.5 px-4 hover:bg-gray-200 dark:hover:bg-neutral-700 space-x-3 rounded-xl'>
-                                            <PiPushPinBold className='h-5 w-5' />
-                                            <span className='text-base  font-bold tracking-wide'>My Pins</span>
-                                        </Link>
-                                        <Link to={`/users/${user.id}/space`} onClick={() => setUserMenuActive(false)} className='flex items-center text-neutral-800 dark:text-gray-200 py-1.5 px-4 hover:bg-gray-200 dark:hover:bg-neutral-700 space-x-3 rounded-xl'>
-                                            <PiUsersThreeBold className='h-5 w-5' />
-                                            <span className='text-base  font-bold tracking-wide'>My Space</span>
-                                        </Link>
-                                        <Link to={`/users/${user.id}/history`} onClick={() => setUserMenuActive(false)} className='flex items-center text-neutral-800 dark:text-gray-200 py-1.5 px-4 hover:bg-gray-200 dark:hover:bg-neutral-700 space-x-3 rounded-xl'>
-                                            <MdOutlineHistory className='h-5 w-5' />
-                                            <span className='text-base  font-bold tracking-wide'>My History</span>
-                                        </Link>
-                                        <hr className='border-2 border-gray-400 dark:border-neutral-800 my-1.5 mx-2' />
-                                        <Link to='/settings' onClick={() => setUserMenuActive(false)} className='flex items-center text-neutral-800 dark:text-gray-200 py-1.5 px-4 hover:bg-gray-200 dark:hover:bg-neutral-700 space-x-3 rounded-xl'>
-                                            <TbSettings className='h-5 w-5' />
-                                            <span className='text-base  font-bold tracking-wide'>Settings</span>
-                                        </Link>
-                                        <Link to='/studio' onClick={() => setUserMenuActive(false)} className='flex items-center text-neutral-800 dark:text-gray-200 py-1.5 px-4 hover:bg-gray-200 dark:hover:bg-neutral-700 space-x-3 rounded-xl'>
-                                            <PiChalkboardSimpleBold className='h-5 w-5' />
-                                            <span className='text-base  font-bold tracking-wide'>Studio</span>
-                                        </Link>
-                                        <Link to='/studio/earnings' onClick={() => setUserMenuActive(false)} className='flex items-center text-neutral-800 dark:text-gray-200 py-1.5 px-4 hover:bg-gray-200 dark:hover:bg-neutral-700 space-x-2'>
-                                            <MdOutlineAttachMoney className='h-5 w-5' />
-                                            <span className='text-base  font-bold tracking-wide'>Earnings</span>
-                                        </Link>
-                                        <Link to='/studio/payments' onClick={() => setUserMenuActive(false)} className='flex items-center text-neutral-800 dark:text-gray-200 py-1.5 px-4 hover:bg-gray-200 dark:hover:bg-neutral-700 space-x-3 rounded-xl'>
-                                            <MdOutlineReceiptLong className='h-5 w-5' />
-                                            <span className='text-base  font-bold tracking-wide'>Billing & Payments</span>
-                                        </Link>
-                                        <button onClick={logout} className='flex items-center text-neutral-800 dark:text-blue-700 py-1.5 px-4 hover:bg-gray-200 dark:hover:bg-neutral-700 space-x-2 rounded-xl cursor-pointer'>
-                                            <HiOutlineLogout className='h-6 w-6' />
-                                            <span className='text-base  font-bold tracking-wide'>Logout</span>
-                                        </button>
-                                    </div> */}
-                        <button onClick={logout} className='flex gap-2 items-end p-3 group hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl text-xl font-medium tracking-wide'>
-                            <HiOutlineLogout className='h-6 w-6' />
-                            <span className='text-base  font-bold tracking-wide'>Logout</span>
-                        </button>
-                    </div>
+                                        <p className='text-neutral-800 dark:text-gray-200 text-2xl font-medium tracking-wide'>{user.name}</p>
+                                        <div className='flex flex-row items-center gap-1'>
+                                            <p className='text-neutral-800 dark:text-gray-200 text-sm font-medium tracking-wide'>#{user.username}</p>
+                                            <VerifiedIcon className="stroke-current stroke-1 text-neutral-800 dark:text-gray-300 h-4 w-4" />
+                                            <Artportal_logo fill="#059669" className='h-3 w-auto' />
+                                        </div>
+                                    </div>
+                                </button>
+                                <button onClick={() => { navigate('/premium'); setUserMenuActive(false) }} className='flex flex-row items-center justify-center bg-neutral-800 dark:bg-neutral-950 gap-2 p-3 rounded-xl w-full'>
+                                    <Artportal_logo fill="#059669" className='h-4 w-auto hover:cursor-pointer' />
+                                    <p className='text-sm font-semibold tracking-wide text-neutral-200 dark:text-gray-300'>Upgrade to artportal+</p>
+                                </button>
+                                <div className='flex flex-row justify-between items-center rounded-xl pl-3'>
+                                    <div className='flex flex-col items-start'>
+                                        <div className='flex flex-row gap-1 items-start'>
+                                            <TokenIcon className="text-neutral-800 dark:text-gray-300 h-6 w-6" />
+                                            <p className='text-md tracking-wide text-neutral-800 dark:text-gray-300'>Tokens</p>
+                                        </div>
+                                        <p className='items-center text-base font-semibold tracking-wide text-neutral-800 dark:text-gray-300'>{user.tokens} tokens</p>
+                                    </div>
+                                    <button className="p-1.5 hover:bg-gray-300 hover:dark:bg-neutral-700/50 rounded-xl" onClick={() => setTokenOpen(true)}>
+                                        <FaPlus className='h-7 w-7 text-neutral-800 dark:text-gray-300' />
+                                    </button>
+                                </div>
+                            </div>
+                            <button onClick={logout} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'py-3 px-4 text-xl font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
+                                <LogoutIcon className='h-5 w-5 text-neutral-800 dark:text-gray-300' />
+                                Logout
+                            </button>
+                        </div>
+                    )
                 }
             </div>
             {
@@ -295,11 +302,13 @@ const Header = ({ hidePane, setHidePane }) => {
                                     </div>
                                 </div> :
                                 <>
-                                    <button onClick={() => dispatch(r_headerDialogOpen('openLoginDialog'))} className='flex flex-row items-center justify-center bg-gray-300 dark:bg-neutral-700/50 dark:text-gray-300 gap-2 p-3 rounded-xl w-full text-xl font-medium tracking-wide'>
-                                        Sign In
+                                    <button onClick={() => dispatch(r_headerDialogOpen('openLoginDialog'))} className={`flex flex-row items-center justify-center bg-gray-300 dark:bg-neutral-700/50 dark:text-gray-300 gap-2 ${hidePane ? 'p-2' : 'py-3 px-4 text-xl font-medium tracking-wide'} rounded-xl`}>
+                                        <SigninIcon className='h-5 w-5 text-neutral-800 dark:text-gray-300' />
+                                        {!hidePane && `Sign In`}
                                     </button>
-                                    <button onClick={() => dispatch(r_headerDialogOpen('openRegisterDialog'))} className='flex flex-row items-center justify-center bg-gray-400 dark:bg-neutral-950 dark:text-gray-300 gap-2 p-3 rounded-xl w-full text-xl font-medium tracking-wide'>
-                                        Sign Up
+                                    <button onClick={() => dispatch(r_headerDialogOpen('openRegisterDialog'))} className={`flex flex-row items-center justify-center bg-gray-400 dark:bg-neutral-950 dark:text-gray-300 gap-2 ${hidePane ? 'p-2' : 'py-3 px-4 text-xl font-medium tracking-wide'} rounded-xl`}>
+                                        <SignupIcon className='h-5 w-5 text-neutral-800 dark:text-gray-300' />
+                                        {!hidePane && `Sign Up`}
                                     </button>
                                 </>
                         }
