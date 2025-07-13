@@ -9,6 +9,7 @@ import { a_fetchCartList, a_fetchUserExploreList, a_fetchUserStoreList, a_fetchV
 import setAuthToken from './utils/setAuthToken';
 
 import Header from './containers/Header';
+import MobileHeader from './containers/MobileHeader';
 import Footer from './containers/Footer';
 import Home from './containers/Home';
 import Explore from './containers/Explore';
@@ -46,10 +47,14 @@ import Billing from './children/Billing';
 import About from './children/About';
 import TOS from './children/TOS';
 import Privacy from './children/Privacy';
+import useWindowWidth from './hooks/useWindowWidth';
 
 const Layout = (props) => {
   const dispatch = useDispatch();
   const common = useSelector(state => state.common);
+
+  const width = useWindowWidth();
+  const isMobile = width < 640; // sm breakpoint
 
   const [hidePane, setHidePane] = useState(false);
 
@@ -100,8 +105,13 @@ const Layout = (props) => {
 
   return (
     <main className={`${common.theme} relative font-nunito`}>
-      <Header hidePane={hidePane} setHidePane={setHidePane} />
-      <div className={`min-h-show flex flex-col bg-gray-200 dark:bg-darkBg ${hidePane ? "pl-20" : "pl-60"}`}>
+      {isMobile ?
+        <MobileHeader className="block sm:hidden" hidePane={hidePane} setHidePane={setHidePane} />
+        :
+        <Header className="hidden sm:block" hidePane={hidePane} setHidePane={setHidePane} />
+      }
+
+      <div className={`min-h-show flex flex-col bg-gray-200 dark:bg-darkBg ${isMobile ? "pt-8" : hidePane ? "pl-20" : "pl-60"}`}>
         <Snackbar msgdata={common.snackmsg} setMessage={(msgData) => dispatch(r_setSnackMessage(msgData))} />
         <Loader />
         <Outlet />

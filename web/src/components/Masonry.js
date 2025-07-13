@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import useWindowWidth from '../hooks/useWindowWidth';
 // import ImageCard from './ImageCard';
 
 const Masonry = ({ cols, children }) => {
+    const width = useWindowWidth();
+
     const columnWrapper = {};
     const gap = 5;
     const result = [];
@@ -9,15 +12,15 @@ const Masonry = ({ cols, children }) => {
     const [columns, setColumns] = useState(cols);
 
     useEffect(() => {
-        if (window.innerWidth < 640) {
+        if (width < 640) {
             setColumns(1);
-        } else if (window.innerWidth <= 925) {
+        } else if (width <= 925) {
             setColumns(3);
         }
         const handleResize = () => {
-            if (window.innerWidth <= 925) {
+            if (width <= 925) {
                 setColumns(3);
-            } else if (window.innerWidth < 376) {
+            } else if (width < 376) {
                 setColumns(1);
             } else {
                 setColumns(5);

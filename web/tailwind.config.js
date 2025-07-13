@@ -43,23 +43,25 @@ module.exports = {
     function ({ addBase }) {
       addBase({
         '::-webkit-scrollbar': {
-          width: '0.7em',
+          width: '0.5em',
         },
         '::-webkit-scrollbar-track': {
           backgroundColor: '#94a3b8',
         },
         '::-webkit-scrollbar-thumb': {
           backgroundColor: '#f3f4f6',
+          borderRadius: 3
         },
         '@media (prefers-color-scheme: dark)': {
           '::-webkit-scrollbar': {
-            width: '0.7em',
+            width: '0.5em'
           },
           '::-webkit-scrollbar-track': {
             backgroundColor: '#1a1a1c',
           },
           '::-webkit-scrollbar-thumb': {
             backgroundColor: '#525252',
+            borderRadius: 3
           },
         }
       });

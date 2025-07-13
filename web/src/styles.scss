@@ -5,7 +5,7 @@
 @import "./fonts.scss";
 
 :root {
-	--scrollbarWidth: 0.7em;
+	--scrollbarWidth: 0.2em;
 	--scrollbarShadow: inset 0 0 6px rgba(0, 0, 0, 0);
 }
 
@@ -28,45 +28,4 @@ span {
 input,
 textarea {
 	background: transparent;
-}
-
-@layer utilities {
-	.light .scrollbar::-webkit-scrollbar {
-		width: var(--scrollbarWidth);
-	}
-
-	.light .scrollbar::-webkit-scrollbar-track {
-		box-shadow: var(--scrollbarShadow);
-		-webkit-box-shadow: var(--scrollbarShadow);
-		background-color: #94a3b8;
-		border-radius: 10px;
-	}
-
-	.light .scrollbar::-webkit-scrollbar-thumb {
-		border-radius: 10px;
-		background-color: #f3f4f6;
-	}
-
-	.light .scrollbar::-webkit-scrollbar-thumb:hover {
-		background: #e5e7eb;
-	}
-
-	.dark .scrollbar::-webkit-scrollbar {
-		width: var(--scrollbarWidth);
-	}
-
-	.dark .scrollbar::-webkit-scrollbar-track {
-		box-shadow: var(--scrollbarShadow);
-		background-color: #525252;
-		border-radius: 10px;
-	}
-
-	.dark .scrollbar::-webkit-scrollbar-thumb {
-		border-radius: 10px;
-		background-color: #262626;
-	}
-
-	.dark .scrollbar::-webkit-scrollbar-thumb:hover {
-		background: #525252;
-	}
 }
