@@ -41,7 +41,7 @@ import HeaderLink from '../components/HeaderLink';
 import Divider from '../components/Divider';
 import useWindowWidth from '../hooks/useWindowWidth';
 
-const Header = ({ hidePane, setHidePane, mobileMenu, setMobileMenu }) => {
+const Header = ({ hidePane, setHidePane }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
@@ -60,13 +60,6 @@ const Header = ({ hidePane, setHidePane, mobileMenu, setMobileMenu }) => {
         setActiveRoute(location.pathname);
     }, [location.pathname])
 
-    useEffect(() => {
-        mobileMenu ?
-            document.body.style.overflow = 'hidden'
-            :
-            document.body.style.removeProperty('overflow');
-    }, [mobileMenu])
-
     const handleThemeToggle = () => {
         dispatch(r_switchTheme());
     }
@@ -80,7 +73,6 @@ const Header = ({ hidePane, setHidePane, mobileMenu, setMobileMenu }) => {
     }
 
     const logout = () => {
-        setMobileMenu(false)
         handleSignout();
         navigate('/');
     }
@@ -102,42 +94,42 @@ const Header = ({ hidePane, setHidePane, mobileMenu, setMobileMenu }) => {
                 <span className='font-semibold text-xs tracking-wider uppercase'>The site is currently in Beta</span>
                 <CloseIcon onClick={() => { dispatch(r_setBetaMessage(!common.betaMsg)) }} className='absolute m-auto inset-y-0 right-1 h-3 w-auto cursor-pointer text-neutral-800' />
             </div>} */}
-            <div className={`flex flex-row md:flex-col gap-4 items-center h-16 md:h-screen ${hidePane ? 'max-w-16' : 'max-w-60'} w-full`}>
-                <div className={`flex flex-col gap-2 h-10/12 overflow-y-auto ${hidePane ? 'py-4 px-2' : 'p-2'}`}>
+            <div className={`flex flex-col gap-4 items-center md:h-screen ${hidePane ? 'w-16' : 'w-60'}`}>
+                <div className={`flex flex-col gap-2 h-10/12 h-full w-full overflow-y-auto ${hidePane ? 'py-4 px-2' : 'p-2'}`}>
                     <div className={`flex items-center ${hidePane ? 'flex-col gap-4' : 'justify-between pl-2 w-full'}`}>
                         <Link to='/' className='flex items-center'>
                             <Artportal_logo fill="#1d4ed8" className='h-7 w-auto hover:cursor-pointer' />
                         </Link>
-                        <div className={`flex ${hidePane ? 'flex-col' : 'flex-row'}`}>
+                        <div className={`flex ${hidePane ? 'flex-col' : 'flex-row'} items-center`}>
                             <ThemeToggle value={common.theme} toggle={handleThemeToggle} />
                             <button className="p-1.5 hover:bg-gray-300 hover:dark:bg-neutral-700/50 rounded-xl" onClick={() => setHidePane(!hidePane)}>
                                 <SidePane className="h-6 w-6 text-neutral-800 dark:text-gray-300" />
                             </button>
                         </div>
                     </div>
-                    <div className={`flex flex-col ${hidePane ? null : 'w-full'}`}>
+                    <div className={`flex flex-col ${hidePane ? ' items-center' : 'w-full'}`}>
                         <HeaderLink type="link" hidePane={hidePane} text="Library" path="/explore" icon={<LibraryIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
                         <HeaderLink type="button" hidePane={hidePane} text="Search" icon={<SearchIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} func={() => { dispatch(r_setSearchType("artwork")); setSearchModal(true) }} />
                         <HeaderLink type="link" hidePane={hidePane} text="Store" path="/store" icon={<StoreIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
                     </div>
                     <hr className={`w-full border border-gray-300 dark:border-neutral-800 rounded-xl`} />
                     {common.isAuthenticated ?
-                        <div className={`flex flex-col  ${hidePane ? null : 'w-full'} gap-4`}>
-                            <div className={`flex flex-col ${hidePane ? 'items-center' : null}`}>
+                        <div className={`flex flex-col  ${hidePane ? '' : 'w-full'} gap-4`}>
+                            <div className={`flex flex-col ${hidePane ? 'items-center' : ''}`}>
                                 <HeaderLink type="link" hidePane={hidePane} text="Upload" path="/explore/new" icon={<UploadIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 <HeaderLink type="link" hidePane={hidePane} text={`Cart (${user.cart.length})`} path="/store/cart" icon={<CartIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 <HeaderLink type="link" hidePane={hidePane} text="Notifications" path="/notifications" icon={<NotificationIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                             </div>
                             <Divider />
                             <div className='flex flex-col gap-4'>
-                                <div className={`flex flex-col ${hidePane ? 'items-center' : null}`}>
+                                <div className={`flex flex-col ${hidePane ? 'items-center' : ''}`}>
                                     <HeaderLink type="link" hidePane={hidePane} text="My Profile" path={`/users/${user.id}`} icon={<ProfileIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                     <HeaderLink type="link" hidePane={hidePane} text="My Pins" path={`/users/${user.id}/pins`} icon={<PinIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                     <HeaderLink type="link" hidePane={hidePane} text="My Space" path={`/users/${user.id}/space`} icon={<CommunityIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                     <HeaderLink type="link" hidePane={hidePane} text="My History" path={`/users/${user.id}/history`} icon={<HistoryIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 </div>
                                 <Divider />
-                                <div className={`flex flex-col ${hidePane ? 'items-center' : null}`}>
+                                <div className={`flex flex-col ${hidePane ? 'items-center' : ''}`}>
                                     <HeaderLink type="link" hidePane={hidePane} text="Settings" path="/settings" icon={<SettingsIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                     <HeaderLink type="link" hidePane={hidePane} text="Studio" path="/studio" icon={<StudioIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                     <HeaderLink type="link" hidePane={hidePane} text="Earnings" path="/studio/earnings" icon={<EarningsIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
@@ -146,7 +138,7 @@ const Header = ({ hidePane, setHidePane, mobileMenu, setMobileMenu }) => {
                             </div>
                         </div>
                         :
-                        <div className={`flex flex-col ${hidePane ? null : 'w-full px-2'} gap-2 mt-auto`}>
+                        <div className={`flex flex-col ${hidePane ? '' : 'w-full px-2'} gap-2 mt-auto`}>
                             <button onClick={() => dispatch(r_headerDialogOpen('openLoginDialog'))} className={`flex flex-row items-center justify-center bg-gray-300 dark:bg-neutral-700/50 dark:text-gray-300 gap-2 ${hidePane ? 'p-2' : 'p-3 text-xl font-medium tracking-wide'} rounded-xl`}>
                                 <SigninIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />
                                 {!hidePane && `Sign In`}

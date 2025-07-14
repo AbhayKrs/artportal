@@ -22,7 +22,7 @@ const Loader = () => {
 
     return (
         <div className={`absolute ${common.loader ? 'flex' : 'hidden'} inset-0 z-[100] h-screen w-screen content-center bg-gray-200 dark:bg-darkBg pointer-events-none`}>
-            <Artportal_logo fill="#4f46e5" className='animate-pulse m-auto h-24 w-24 hover:cursor-pointer' />
+            <Artportal_logo fill="#1d4ed8" className='animate-pulse m-auto h-24 w-24 hover:cursor-pointer' />
         </div>
     )
 }

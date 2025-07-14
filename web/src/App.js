@@ -110,7 +110,6 @@ const Layout = (props) => {
         :
         <Header className="hidden sm:block" hidePane={hidePane} setHidePane={setHidePane} />
       }
-
       <div className={`min-h-show flex flex-col bg-gray-200 dark:bg-darkBg ${isMobile ? "pt-8" : hidePane ? "pl-20" : "pl-60"}`}>
         <Snackbar msgdata={common.snackmsg} setMessage={(msgData) => dispatch(r_setSnackMessage(msgData))} />
         <Loader />
