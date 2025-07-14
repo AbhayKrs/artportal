@@ -20,12 +20,12 @@ module.exports = {
     },
     extend: {
       fontSize: {
-        xs: ['0.75rem', '0.75rem'],
-        sm: ['0.875rem', '0.875rem'],
-        lg: ['1rem', '1rem'],
-        xl: ['1.125rem', '1.125rem'],
-        "2xl": ['1.5rem', '1.5rem'],
-        "3xl": ['1.875rem', '1.875rem']
+        xs: ['0.75rem', '0.875rem'],
+        sm: ['0.875rem', '1rem'],
+        lg: ['1rem', '1.25rem'],
+        xl: ['1.125rem', '1.25rem'],
+        "2xl": ['1.5rem', '1.75rem'],
+        "3xl": ['1.875rem', '2rem']
       },
       minHeight: {
         'show': 'calc(100vh - 2.25rem)'

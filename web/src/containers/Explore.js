@@ -8,6 +8,7 @@ import { a_fetchExploreList, a_filterExploreList } from '../store/actions/explor
 import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducers';
 
 import Masonry from '../components/Masonry';
+import Divider from '../components/Divider';
 
 import { BsHeart, BsChat } from 'react-icons/bs';
 import { BiTimeFive } from 'react-icons/bi';
@@ -32,8 +33,9 @@ const Explore = (props) => {
                 <title>artportal | Explore</title>
             </Helmet>
             <ExplorePanel authenticated={common.isAuthenticated} r_setSnackMessage={(msgData) => dispatch(r_setSnackMessage(msgData))} a_fetchExploreList={() => dispatch(a_fetchExploreList())} a_filterExploreList={(filter, period) => dispatch(a_filterExploreList({ filter, period }))} tags={common.tags} />
+            <Divider />
             {artworks.length > 0 ?
-                <div className='flex flex-row'>
+                <div className='flex flex-row p-2'>
                     <Masonry cols={5}>
                         {artworks.map((artwork, index) => (
                             <div key={index} onClick={() => navigate(`/explore/${artwork._id}`)} className='relative group group-hover:block cursor-pointer'>

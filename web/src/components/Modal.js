@@ -799,7 +799,7 @@ export const SearchModal = ({ open, handleClose, betaMsg, searchVal, setSearchVa
                 <IoCloseSharp onClick={handleClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                 <div className="flex w-6/12 items-center bg-slate-300 dark:bg-neutral-700 rounded-xl py-2 px-4 gap-2">
                     <div className="flex relative items-center justify-center">
-                        <SearchIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />
+                        <SearchIcon className="h-5 w-5 text-neutral-800 dark:text-gray-400" />
                     </div>
                     {searchVal.length > 0 && <div className="flex relative items-center justify-center rounded border-2 border-gray-300 text-neutral-800 dark:text-gray-300 h-7 w-7 mr-2">
                         {activeSearch === 'artwork' && <FiAtSign className='h-4 w-4' />}
@@ -869,7 +869,7 @@ export const SearchModal = ({ open, handleClose, betaMsg, searchVal, setSearchVa
                                     :
                                     <div className='flex flex-col gap-2 items-center justify-center p-4'>
                                         <FiAtSign className='h-8 w-8 text-neutral-800 dark:text-gray-300' />
-                                        <div className='flex flex-col items-center'>
+                                        <div className='flex flex-col gap-1 items-center'>
                                             <span className='text-neutral-800 dark:text-gray-200  font-semibold leading-5'>No artworks found.</span>
                                             <span className='text-neutral-500 dark:text-gray-400  text-sm'>"{searchVal}" did not match any artworks in our database. Please try again.</span>
                                         </div>
@@ -877,7 +877,7 @@ export const SearchModal = ({ open, handleClose, betaMsg, searchVal, setSearchVa
                             </div>
                         }
                         {activeSearch === 'artist' &&
-                            <div className='flex flex-col pr-2'>
+                            <div className='flex flex-col gap-2 pr-2'>
                                 {searchList.length > 0 ? searchList.map((item, index) => (
                                     <div key={index} onClick={() => { navigate(`/users/${item.id}`); clearSearch() }} className='flex items-center gap-5 cursor-pointer rounded-lg text-neutral-700 dark:text-gray-200 bg-gray-100 dark:bg-neutral-900 py-3 px-5'>
                                         {item.avatar.icon.length > 0 && <img src={api_fetchUserImages(item.avatar.icon)} className='object-cover w-10 h-10' />}
@@ -898,7 +898,7 @@ export const SearchModal = ({ open, handleClose, betaMsg, searchVal, setSearchVa
                             </div>
                         }
                         {activeSearch === 'tag' &&
-                            <div className='flex flex-col pr-2'>
+                            <div className='flex flex-col gap-2 pr-2'>
                                 {searchList.length > 0 ? searchList.map((item, index) => (
                                     <div key={index} onClick={() => { navigate(`/explore`); clearSearch() }} className='flex cursor-pointer items-center gap-4 rounded-lg text-neutral-700 dark:text-gray-200 bg-gray-100 dark:bg-neutral-900 p-4'>
                                         <FaHashtag className='h-5 w-5' />

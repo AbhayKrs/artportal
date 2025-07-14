@@ -88,13 +88,19 @@ const Header = ({ hidePane, setHidePane }) => {
         dispatch(r_clearSearchList())
     }
 
+    const handleOpenSearch = () => {
+        dispatch(r_setSearchType("artwork"));
+        dispatch(a_fetchSearchList({ type: "artwork", value: searchVal }));
+        setSearchModal(true);
+    }
+
     return (
         <nav className={`fixed top-0 left-0 z-50 bg-slate-200 dark:bg-darkBg border-r-[3px] border-gray-400 dark:border-neutral-800`}>
             {/* {common.betaMsg && <div className='relative flex flex-col items-center w-full py-2 justify-center bg-amber-500'>
                 <span className='font-semibold text-xs tracking-wider uppercase'>The site is currently in Beta</span>
                 <CloseIcon onClick={() => { dispatch(r_setBetaMessage(!common.betaMsg)) }} className='absolute m-auto inset-y-0 right-1 h-3 w-auto cursor-pointer text-neutral-800' />
             </div>} */}
-            <div className={`flex flex-col gap-4 items-center md:h-screen ${hidePane ? 'w-16' : 'w-60'}`}>
+            <div className={`flex flex-col items-center md:h-screen ${hidePane ? 'w-16' : 'w-60'}`}>
                 <div className={`flex flex-col gap-2 h-10/12 h-full w-full overflow-y-auto ${hidePane ? 'py-4 px-2' : 'p-2'}`}>
                     <div className={`flex items-center ${hidePane ? 'flex-col gap-4' : 'justify-between pl-2 w-full'}`}>
                         <Link to='/' className='flex items-center'>
@@ -109,7 +115,7 @@ const Header = ({ hidePane, setHidePane }) => {
                     </div>
                     <div className={`flex flex-col ${hidePane ? ' items-center' : 'w-full'}`}>
                         <HeaderLink type="link" hidePane={hidePane} text="Library" path="/explore" icon={<LibraryIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
-                        <HeaderLink type="button" hidePane={hidePane} text="Search" icon={<SearchIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} func={() => { dispatch(r_setSearchType("artwork")); setSearchModal(true) }} />
+                        <HeaderLink type="button" hidePane={hidePane} text="Search" icon={<SearchIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} func={handleOpenSearch} />
                         <HeaderLink type="link" hidePane={hidePane} text="Store" path="/store" icon={<StoreIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
                     </div>
                     <hr className={`w-full border border-gray-300 dark:border-neutral-800 rounded-xl`} />
@@ -117,7 +123,7 @@ const Header = ({ hidePane, setHidePane }) => {
                         <div className={`flex flex-col  ${hidePane ? '' : 'w-full'} gap-4`}>
                             <div className={`flex flex-col ${hidePane ? 'items-center' : ''}`}>
                                 <HeaderLink type="link" hidePane={hidePane} text="Upload" path="/explore/new" icon={<UploadIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
-                                <HeaderLink type="link" hidePane={hidePane} text={`Cart (${user.cart.length})`} path="/store/cart" icon={<CartIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
+                                <HeaderLink type="link" hidePane={hidePane} text={`Cart (${user && user.cart && user.cart.length})`} path="/store/cart" icon={<CartIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 <HeaderLink type="link" hidePane={hidePane} text="Notifications" path="/notifications" icon={<NotificationIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                             </div>
                             <Divider />
@@ -153,7 +159,8 @@ const Header = ({ hidePane, setHidePane }) => {
                 {common.isAuthenticated &&
                     (hidePane ?
                         <div className='flex flex-col items-center w-full mt-auto'>
-                            <div className='flex flex-col gap-2'>
+                            <Divider />
+                            <div className='flex flex-col gap-2 mt-2'>
                                 <div className='relative w-10 flex flex-col items-center gap-2'>
                                     {user.avatar.icon.length > 0 && <div className='flex relative w-10 h-10 justify-center items-center'>
                                         <img loading='lazy' alt='user' src={api_fetchUserImages(user.avatar.icon)} className='mt-0.5' />
@@ -175,8 +182,9 @@ const Header = ({ hidePane, setHidePane }) => {
                             </div>
                         </div>
                         :
-                        <div className='flex flex-col px-2 w-full mt-auto'>
-                            <div className='flex flex-col gap-3'>
+                        <div className='flex flex-col w-full mt-auto'>
+                            <Divider />
+                            <div className='flex flex-col gap-3 px-2 mt-2'>
                                 <button onClick={() => { navigate(`/users/${user.id}`) }} className='flex flex-row items-center gap-2 px-1'>
                                     {user.avatar.icon.length > 0 && <div className='flex relative w-10 h-10 justify-center items-center'>
                                         <img loading='lazy' alt='user' src={api_fetchUserImages(user.avatar.icon)} className='mt-0.5' />
@@ -207,10 +215,12 @@ const Header = ({ hidePane, setHidePane }) => {
                                     </button>
                                 </div>
                             </div>
-                            <button onClick={logout} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'p-3 text-xl font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
-                                <LogoutIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />
-                                Logout
-                            </button>
+                            <div className='flex flex-col gap-3 px-2'>
+                                <button onClick={logout} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'p-3 text-xl font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
+                                    <LogoutIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />
+                                    Logout
+                                </button>
+                            </div>
                         </div>
                     )
                 }

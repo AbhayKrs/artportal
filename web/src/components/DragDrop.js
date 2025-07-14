@@ -74,13 +74,13 @@ const Image = ({ image, index, r_setSnackMessage, setCategories, isFlagged, setI
         <Draggable draggableId={image.id} index={index}>
             {provided => (
                 <div
-                    className={`relative h-60 w-1/3 rounded ${index === 0 ? 'border-dashed border-2 border-indigo-400' : ''}`}
+                    className={`relative h-60 w-1/3 rounded ${index === 0 ? 'border-dashed border-2 border-blue-700' : ''}`}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                 >
                     <img id={'uploadImg' + index} loading='lazy' src={URL.createObjectURL(image.content)} className='w-full h-full object-cover rounded' />
-                    {index === 0 ? <span className="absolute  text-white pt-0.5 px-2 rounded-tr-md bottom-0 left-0 bg-indigo-400">Primary</span> : ''}
+                    {index === 0 ? <span className="absolute  text-white pt-0.5 px-2 rounded-tr-md bottom-0 left-0 bg-blue-700">Primary</span> : ''}
                 </div>
             )
             }

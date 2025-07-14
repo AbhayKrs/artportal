@@ -11,13 +11,13 @@ const Footer = ({ hidePane }) => {
                     Copyright &#169; 2024 artportal Inc.
                 </span>
                 <div className="flex flex-row gap-3">
-                    <Link to='/about' className=' text-xs items-center text-gray-400 dark:text-gray-300'>
+                    <Link to='/settings/about' className=' text-xs items-center text-gray-400 dark:text-gray-300'>
                         about
                     </Link>
-                    <Link to='/tos' className=' text-xs items-center text-gray-400 dark:text-gray-300'>
+                    <Link to='/settings/tos' className=' text-xs items-center text-gray-400 dark:text-gray-300'>
                         terms of service
                     </Link>
-                    <Link to='/privacy' className=' text-xs items-center text-gray-400 dark:text-gray-300'>
+                    <Link to='/settings/privacy' className=' text-xs items-center text-gray-400 dark:text-gray-300'>
                         privacy policy
                     </Link>
                 </div>
