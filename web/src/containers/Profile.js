@@ -100,7 +100,7 @@ const Profile = (props) => {
                                 className='object-cover w-full h-full'
                                 src={api_fetchArtworkImages(artwork.files[0])}
                             />
-                            <div className='absolute z-30 hidden group-hover:flex top-0 right-0 m-2 space-x-1'>
+                            <div className='absolute z-30 hidden group-hover:flex top-0 right-0 m-2 gap-1'>
                                 {common.user.id === profile_data.id && <BsTrash onClick={() => deleteArtwork(artwork._id)} className=' h-6 w-6 cursor-pointer text-gray-200' />}
                                 <GoInfo onClick={() => navigate(`/artworks/${artwork._id}`)} className='w-6 h-6 cursor-pointer text-gray-200' />
                             </div>
@@ -116,7 +116,7 @@ const Profile = (props) => {
                                         </svg>
                                     </div>
                                 </div>
-                                <div className="flex flex-col self-end place-items-end space-y-1.5">
+                                <div className="flex flex-col self-end place-items-end gap-1.5">
                                     <div className="inline-flex items-center">
                                         <BsHeart className='h-4 w-4' />
                                         <span className="text-xs ml-1 antialiased">{artwork.likes.length}</span>
@@ -157,7 +157,7 @@ const Profile = (props) => {
                                         </svg>
                                     </div>
                                 </div>
-                                <div className="flex flex-col self-end place-items-end space-y-1.5">
+                                <div className="flex flex-col self-end place-items-end gap-1.5">
                                     <div className="inline-flex items-center">
                                         <BsHeart className='h-4 w-4' />
                                         <span className="text-xs ml-1 antialiased">{artwork.likes.length}</span>
@@ -198,7 +198,7 @@ const Profile = (props) => {
                                         </svg>
                                     </div>
                                 </div>
-                                <div className="flex flex-col self-end place-items-end space-y-1.5">
+                                <div className="flex flex-col self-end place-items-end gap-1.5">
                                     <GoInfo onClick={() => navigate(`/artworks/${artwork._id}`)} className='w-6 h-6 cursor-pointer text-gray-200' />
                                 </div>
                             </div>
@@ -247,7 +247,7 @@ const Profile = (props) => {
                                     </div>
                                 </div>
                                 <div className="w-full sm:w-4/12 px-4 lg:text-right lg:self-center">
-                                    <div className="flex flex-col text-center pt-4 space-y-1.5">
+                                    <div className="flex flex-col text-center pt-4 gap-1.5">
                                         <h3 className="text-4xl font-semibold text-blueGray-800 dark:text-gray-300">
                                             {profile_data.name}
                                         </h3>
@@ -259,7 +259,7 @@ const Profile = (props) => {
                                         </p>}
                                         {common.user.id === profile_data.id ?
                                             <div>
-                                                <button onClick={() => navigate('/settings/account')} className="flex items-center space-x-2 bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150" type="button">
+                                                <button onClick={() => navigate('/settings/account')} className="flex items-center gap-2 bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150" type="button">
                                                     <FaUserEdit />
                                                     <span>Manage user profile</span>
                                                 </button>
@@ -277,14 +277,14 @@ const Profile = (props) => {
                                     </div>
                                 </div>
                             </div>
-                            <div className='flex space-x-3 py-3 items-center justify-start xs:flex-wrap xs:justify-center'>
-                                <div onClick={() => setActiveView('portfolio')} className={`text-lg font-semibold ${activeView === 'portfolio' ? 'text-indigo-600 dark:text-indigo-600' : 'text-gray-700 dark:text-gray-400'}  cursor-pointer`}>Portfolio</div>
+                            <div className='flex gap-3 py-3 items-center justify-start xs:flex-wrap xs:justify-center'>
+                                <div onClick={() => setActiveView('portfolio')} className={`text-lg font-semibold ${activeView === 'portfolio' ? 'text-blue-700 dark:text-blue-700' : 'text-gray-700 dark:text-gray-400'}  cursor-pointer`}>Portfolio</div>
                                 <span className='text-gray-700 dark:text-gray-400'>&#9679;</span>
-                                <div onClick={() => setActiveView('about')} className={`text-lg font-semibold ${activeView === 'about' ? 'text-indigo-600 dark:text-indigo-600' : 'text-gray-700 dark:text-gray-400'}  cursor-pointer`}>About</div>
+                                <div onClick={() => setActiveView('about')} className={`text-lg font-semibold ${activeView === 'about' ? 'text-blue-700 dark:text-blue-700' : 'text-gray-700 dark:text-gray-400'}  cursor-pointer`}>About</div>
                                 <span className='text-gray-700 dark:text-gray-400'>&#9679;</span>
-                                <div onClick={() => setActiveView('liked')} className={`text-lg font-semibold ${activeView === 'liked' ? 'text-indigo-600 dark:text-indigo-600' : 'text-gray-700 dark:text-gray-400'}  cursor-pointer`}>Liked</div>
+                                <div onClick={() => setActiveView('liked')} className={`text-lg font-semibold ${activeView === 'liked' ? 'text-blue-700 dark:text-blue-700' : 'text-gray-700 dark:text-gray-400'}  cursor-pointer`}>Liked</div>
                                 <span className='text-gray-700 dark:text-gray-400'>&#9679;</span>
-                                {common.user.id === profile_data.id && <div onClick={() => setActiveView('bookmarks')} className={`text-lg font-semibold ${activeView === 'bookmarks' ? 'text-indigo-600 dark:text-indigo-600' : 'text-gray-700 dark:text-gray-400'}  cursor-pointer`}>Bookmarks</div>}
+                                {common.user.id === profile_data.id && <div onClick={() => setActiveView('bookmarks')} className={`text-lg font-semibold ${activeView === 'bookmarks' ? 'text-blue-700 dark:text-blue-700' : 'text-gray-700 dark:text-gray-400'}  cursor-pointer`}>Bookmarks</div>}
                             </div>
                             {profile_data && renderView()}
                         </div>

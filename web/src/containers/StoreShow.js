@@ -41,7 +41,7 @@ const StoreShow = (props) => {
             <section className="text-gray-400 body-font overflow-hidden">
                 <div className="p-4 mx-auto">
                     <div className="mx-auto flex flex-col lg:flex-row gap-3">
-                        <div className="order-2 lg:order-1 lg:w-3/12 w-full mt-4 lg:mt-0 space-y-2">
+                        <div className="order-2 lg:order-1 lg:w-3/12 w-full mt-4 lg:mt-0 gap-2">
                             <h2 className="tracking-widest text-lg title-font font-medium text-gray-400 mb-2">CATEGORY: <span className='capitalize'>{storeItem.category}</span></h2>
                             <div className='flex relative flex-col p-3 text-left justify-start text-neutral-900 dark:text-gray-400 bg-slate-300 dark:bg-neutral-900 rounded-md'>
                                 <TiInfoLarge onClick={() => navigate(`/users/${storeItem.seller.id}`)} className='absolute cursor-pointer h-4 w-4 top-0 right-0 m-2' />
@@ -56,17 +56,17 @@ const StoreShow = (props) => {
                                         <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
                                     </svg>
                                 </div>
-                                <div className='flex text-md items-center text-josefinlight'>Seller Rating: <span className='flex ml-2 items-center text-indigo-600'>{Number.parseFloat(storeItem.seller.seller_rating).toFixed(1)}<ImStarFull className='ml-1 text-indigo-600' /></span></div>
+                                <div className='flex text-md items-center text-josefinlight'>Seller Rating: <span className='flex ml-2 items-center text-blue-700'>{Number.parseFloat(storeItem.seller.seller_rating).toFixed(1)}<ImStarFull className='ml-1 text-blue-700' /></span></div>
                             </div>
                             <span className="flex flex-col text-2xl text-neutral-700 dark:text-gray-300">
                                 ${Number.parseFloat(storeItem.price).toFixed(2)}
                                 <span className='text-xs text-rose-400'>including shipping & taxes</span>
                             </span>
-                            <div className='flex space-x-3'>
-                                <button className="flex items-center  font-bold text-indigo-600 bg-transparent border-2 border-indigo-600 py-2 px-6 focus:outline-none hover:bg-indigo-600 hover:text-gray-600 rounded-md">Add to Cart</button>
-                                <button className="flex items-center  font-bold text-gray-300 bg-indigo-600 py-2 px-6 focus:outline-none hover:bg-indigo-600 hover:text-gray-600 rounded-md">Checkout</button>
+                            <div className='flex gap-3'>
+                                <button className="flex items-center  font-bold text-blue-700 bg-transparent border-2 border-blue-700 py-2 px-6 focus:outline-none hover:bg-blue-700 hover:text-gray-600 rounded-md">Add to Cart</button>
+                                <button className="flex items-center  font-bold text-gray-300 bg-blue-700 py-2 px-6 focus:outline-none hover:bg-blue-700 hover:text-gray-600 rounded-md">Checkout</button>
                             </div>
-                            {/*<div className='pt-5 pr-3 space-y-2'>
+                            {/*<div className='pt-5 pr-3 gap-2'>
                                 <hr className='rounded border-1 bg-neutral-700 dark:bg-neutral-300 border-neutral-700 dark:border-neutral-300 dark:border-neutral-200' />
                                 <p className="text-black dark:text-gray-200 text-lg title-font font-medium mb-1">
                                     More from {storeItem.seller.username}
@@ -80,7 +80,7 @@ const StoreShow = (props) => {
                                         <h1 className="title-font text-lg font-medium text-neutral-800 dark:text-neutral-300">title</h1>
                                         <div className="flex items-center flex-wrap justify-between">
                                             <div className='tracking-wide text-md font-medium text-gray-500 '>$price</div>
-                                            <button className="bg-gradient-to-r  font-semibold from-indigo-600 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-2 py-1 rounded-lg">Learn more</button>
+                                            <button className="bg-gradient-to-r  font-semibold from-blue-700 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-2 py-1 rounded-lg">Learn more</button>
                                         </div>
                                     </div>
                                 </div>
@@ -91,16 +91,16 @@ const StoreShow = (props) => {
                             <img loading='lazy' className="w-full h-full object-cover object-center" src={api_fetchStoreImages(activeImg)} />
                             <div className='grid grid-cols-3 gap-2'>
                                 {storeItem.files.map((file, index) =>
-                                    <img key={index} onClick={() => setActiveImg(file)} loading='lazy' className={`w-full object-cover object-center rounded ${activeImg === file ? 'border-4 border-indigo-600 dark:border-indigo-600' : ''}`} src={api_fetchStoreImages(file)} />
+                                    <img key={index} onClick={() => setActiveImg(file)} loading='lazy' className={`w-full object-cover object-center rounded ${activeImg === file ? 'border-4 border-blue-700 dark:border-blue-700' : ''}`} src={api_fetchStoreImages(file)} />
                                 )}
                             </div>
                         </div>
                         <div className='order-3 lg:order-3 lg:w-3/12 w-full lg:h-auto object-cover object-center rounded'>
                             <div className='flex flex-col justify-between'>
                                 <p className="text-black dark:text-white text-2xl title-font font-medium mb-1">Ratings & Reviews</p>
-                                <div className='flex space-x-2 items-center text-black dark:text-gray-300'>
+                                <div className='flex gap-2 items-center text-black dark:text-gray-300'>
                                     <p className='text-md title-font'>Sort by:</p>
-                                    <div className='flex items-center space-x-1'>
+                                    <div className='flex items-center gap-1'>
                                         <p>Ratings</p>
                                         <div className='block'>
                                             <AiOutlineUp className='w-2 h-2' />
@@ -111,7 +111,7 @@ const StoreShow = (props) => {
                                                */}
                                         </div>
                                     </div>
-                                    <div className='flex items-center space-x-1'>
+                                    <div className='flex items-center gap-1'>
                                         <p>Date</p>
                                         <div className='block'>
                                             <AiOutlineUp className='w-2 h-2' />
@@ -127,7 +127,7 @@ const StoreShow = (props) => {
                             <div className="bg-gray-300 dark:bg-neutral-900 p-4 mt-2 rounded-md">
                                 <p className="text-black dark:text-gray-200 text-xl title-font font-medium mb-1">Customer Ratings</p>
                                 <Ratings size='lg' withBg withValues rating={storeItem.rating} color='text-gray-200' />
-                                <div className='flex flex-col mt-2 px-2 space-y-2'>
+                                <div className='flex flex-col mt-2 px-2 gap-2'>
                                     <Ratings withReview reviews={24} rating={5} color='text-indigo-400' />
                                     <Ratings withReview reviews={4} rating={4} color='text-indigo-400' />
                                     <Ratings withReview reviews={14} rating={3} color='text-indigo-400' />
@@ -139,7 +139,7 @@ const StoreShow = (props) => {
                                     {storeItem.reviews.length} Reviews
                                 </p>
                                 {storeItem.reviews.map((review, index) => (
-                                    <div key={index} className='flex flex-col rounded-lg bg-gray-300 dark:bg-neutral-800 text-neutral-700 dark:text-gray-300 py-2 px-4 mb-2 space-y-1'>
+                                    <div key={index} className='flex flex-col rounded-lg bg-gray-300 dark:bg-neutral-800 text-neutral-700 dark:text-gray-300 py-2 px-4 mb-2 gap-1'>
                                         <div className='flex items-center justify-between'>
                                             <div onClick={() => navigate(`/users/${review.author.id}`)} className='flex cursor-pointer'>
                                                 <div className="w-6 h-6 overflow-hidden">

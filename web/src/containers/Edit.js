@@ -118,18 +118,18 @@ const ExploreEdit = (props) => {
                         </button>
                     </div>
                 </div>
-                <div className='flex lg:flex-row flex-col mt-3 lg:space-x-4 md:space-y-2'>
+                <div className='flex lg:flex-row flex-col mt-3 lg:gap-4 md:gap-2'>
                     <div className='scrollbar w-full max-h-[37.5em] overflow-y-auto'>
-                        <div className="flex flex-col space-y-3">
+                        <div className="flex flex-col gap-3">
                             <img loading='lazy' src={`${api_fetchArtworkImages(artwork.files[0])}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
-                            <div className='flex w-fit flex-col self-center items-center space-y-3 place-content-center'>
+                            <div className='flex w-fit flex-col self-center items-center gap-3 place-content-center'>
                                 {artwork.files.filter((image, index) => index !== 0).map((image, index) => (
                                     <img loading='lazy' key={index} src={`${api_fetchArtworkImages(image)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
                                 ))}
                             </div>
                         </div>
                     </div>
-                    <div className='w-full space-y-2'>
+                    <div className='w-full gap-2'>
                         <div className='flex flex-col'>
                             <span className=' font-semibold text-gray-700 dark:text-gray-300'>Title<span className=' text-rose-400 text-md'>*</span></span>
                             <input type="text" value={exploreTitle} onChange={(ev) => setExploreTitle(ev.target.value)} className="py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 focus:outline-none rounded-md w-full" placeholder='Title' />
@@ -164,9 +164,9 @@ const ExploreEdit = (props) => {
                                     </div>
                                 }
                                 {exploreTags.length === 0 ? '' :
-                                    <div id='tagmenu' className='flex flex-wrap justify-center space-x-1 p-2'>
+                                    <div id='tagmenu' className='flex flex-wrap justify-center gap-1 p-2'>
                                         {exploreTags.map(tag => (
-                                            <div className="flex justify-center items-center m-1 font-medium py-1 px-2 rounded-full text-indigo-100 bg-indigo-600 border border-indigo-700 ">
+                                            <div className="flex justify-center items-center m-1 font-medium py-1 px-2 rounded-full text-indigo-100 bg-blue-700 border border-indigo-700 ">
                                                 <div className="text-xs font-normal leading-none max-w-full flex-initial">{tag}</div>
                                                 <div className="flex flex-auto flex-row-reverse">
                                                     <MdClose className='feather feather-x cursor-pointer hover:text-indigo-400 rounded-full w-4 h-4 ml-1' />

@@ -115,7 +115,7 @@ const Layout = (props) => {
         <Loader />
         <Outlet />
       </div>
-      <Footer />
+      {!isMobile && <Footer hidePane={hidePane} />}
     </main>
   )
 };

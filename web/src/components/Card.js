@@ -11,7 +11,7 @@ export const ImageCard = ({ size, explore, artist }) => {
     let navigate = useNavigate();
 
     return (
-        <div className={`group flex relative cursor-pointer ${size === 'l' ? 'h-56 w-auto' : 'h-36 w-auto'}`} onClick={() => navigate(`/explore/${explore._id}`)}>
+        <div className={`group flex relative cursor-pointer ${size === 'l' ? 'h-44 w-auto' : 'h-36 w-auto'}`} onClick={() => navigate(`/explore/${explore._id}`)}>
             {explore.files[0].length > 0 && <img src={api_fetchArtworkImages(explore.files[0])} className='object-cover w-full h-full' />}
             <div className="hidden items-end h-full w-full group-hover:absolute group-hover:top-0 group-hover:flex group-hover:flex-row">
                 <div className="flex flex-col w-full pb-2 pt-14 px-2 bg-gradient-to-t from-black text-gray-200 group-hover:flex" >
@@ -23,7 +23,7 @@ export const ImageCard = ({ size, explore, artist }) => {
                         <span className="font-base text-xs my-1 mr-1">
                             {artist.username}
                         </span>
-                        <svg className="stroke-current stroke-1 text-indigo-600 dark:text-indigo-600 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <svg className="stroke-current stroke-1 text-blue-700 dark:text-blue-700 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
                         </svg>
                     </div>
@@ -71,7 +71,7 @@ export const HorizontalCard = ({ explore, artist }) => {
             }} />
             <div className='flex flex-col absolute right-0 h-full w-[60%] rounded-r-lg text-gray-700 dark:text-gray-300 backdrop-sepia-0 bg-slate-300/75 dark:bg-neutral-700/25' style={{ clipPath: 'polygon(17% 0%, 100% 0%, 100% 100%, 0% 100%)' }}>
                 <div className='flex flex-col max-w-[85%] h-full w-full p-4 absolute inset-y-0 right-0 m-auto justify-between'>
-                    <div className='space-y-2'>
+                    <div className='gap-2'>
                         <h3 className="lg:text-lg md:text-md sm:text-sm font-bold lg:leading-5 md:leading-5 sm:leading-5 capitalize">{explore.title.length > 20 ? explore.title.slice(0, 20) + "..." : explore.title}</h3>
                         <div className="inline-flex items-end">
                             <div className="w-5 h-5 overflow-hidden mr-1">
@@ -80,7 +80,7 @@ export const HorizontalCard = ({ explore, artist }) => {
                             <span className="font-base text-xs mt-1 mr-1">
                                 {artist.username}
                             </span>
-                            <svg className="stroke-current stroke-1 text-indigo-600 dark:text-indigo-600 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <svg className="stroke-current stroke-1 text-blue-700 dark:text-blue-700 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
                             </svg>
                         </div>
@@ -116,7 +116,7 @@ export const HorizontalCard = ({ explore, artist }) => {
         //                 <span className="font-base text-xs my-1 mr-1">
         //                     {artist.username}
         //                 </span>
-        //                 <svg className="stroke-current stroke-1 text-indigo-600 dark:text-indigo-600 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+        //                 <svg className="stroke-current stroke-1 text-blue-700 dark:text-blue-700 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
         //                     <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
         //                 </svg>
         //             </div>

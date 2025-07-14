@@ -12,7 +12,7 @@ export const HomeMultiCarousel = ({ data, goPrev, goNext }) => {
     <div className="w-full relative flex items-center justify-center">
       <GoChevronLeft onClick={goPrev} className='h-8 w-8 text-neutral-600' />
       <div className="w-full h-full overflow-x-hidden overflow-y-hidden">
-        <div id="slider" className="h-full flex space-x-2 items-center justify-start transition ease-out duration-700">
+        <div id="slider" className="h-full flex gap-2 items-center justify-start transition ease-out duration-700">
           {data.map((item, index) => {
             return <div key={index} className="flex h-56 w-56 flex-shrink-0 relative">
               <img loading='lazy' src={item.image} alt="black chair and white table" className="object-cover object-center w-full rounded-lg" />
@@ -73,7 +73,7 @@ export const HomeSingleCarousel = ({ itemCount, images }) => {
             <div className='h-fit w-full pb-2 pl-2 absolute bottom-0'>
               <h1 className='text-3xl font-black  text-gray-200 capitalize'>{images[currentIndex].title}</h1>
               <h2 className='text-xl  text-gray-400'>{images[currentIndex].artist}</h2>
-              <div className='flex flex-row absolute space-x-1 bottom-4 right-4'>
+              <div className='flex flex-row absolute gap-1 bottom-4 right-4'>
                 {images.map((img, index) => (
                   <label key={index} onClick={() => handleNextClick(index)} className="flex items-center cursor-pointer text-xl">
                     <input readOnly type="radio" name="radio" className="hidden peer" checked={currentIndex === index} />
@@ -141,7 +141,7 @@ export const StoreMultiCarousel = ({ data }) => {
             <div key={index} className="carousel-item rounded text-center relative w-56 h-56 snap-start">
               <div className='h-full w-full aspect-square block bg-origin-padding bg-left-top bg-cover bg-no-repeat z-0'>
                 <img loading='lazy' src={item.image} alt={item.title} className="w-full aspect-square rounded" />
-                <div className="h-full w-full aspect-square block absolute top-0 left-0 transition-opacity duration-300 opacity-0 hover:opacity-75 bg-indigo-600/75 z-10 rounded">
+                <div className="h-full w-full aspect-square block absolute top-0 left-0 transition-opacity duration-300 opacity-0 hover:opacity-75 bg-blue-700/75 z-10 rounded">
                   <h3 className="absolute  font-semibold bottom-0 text-white py-6 px-3 mx-auto text-xl">
                     {item.title}
                   </h3>

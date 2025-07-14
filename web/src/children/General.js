@@ -77,7 +77,7 @@ export const General = (props) => {
                 {/* <div className=''>
                     <h2 className='text-2xl  font-semibold text-gray-800 dark:text-gray-300'>Location</h2>
                     <h6 className='text-lg  text-gray-500 dark:text-gray-400'>To manage the language settings and send out the digest right on time!</h6>
-                    <div className='flex space-x-4 py-2 px-4'>
+                    <div className='flex gap-4 py-2 px-4'>
                         <span className='flex flex-col gap-1 text-md text-gray-700 dark:text-gray-300'>
                             Country
                             <Dropdown left name='country' selectedPeriod={countryLabel} options={countryList} onSelect={handleCountryChange} />
@@ -92,7 +92,7 @@ export const General = (props) => {
                     <h2 className='text-2xl  font-semibold dark:text-gray-300'>Language</h2>
                     <h6 className='text-lg  text-gray-500 dark:text-gray-400'>Pick your preferred language to view the website.</h6>
                     <div className='flex py-2 px-4'>
-                        <ul id='tabSlider' className="flex space-x-2 items-center">
+                        <ul id='tabSlider' className="flex gap-2 items-center">
                             {langList.map((lang, index) => {
                                 return <li key={index} onClick={() => setActiveLang(index)} className={index === activeLang ? " text-sm font-bold tracking-wider text-gray-700 bg-indigo-300 rounded-lg h-fit shadow" : " text-sm font-bold tracking-wider text-gray-700 dark:text-gray-400 bg-slate-200 dark:bg-neutral-900 flex items-center shadow cursor-pointer rounded-lg h-fit"}>
                                     <div className="flex items-center">
@@ -106,7 +106,7 @@ export const General = (props) => {
                 <div className=''>
                     <h2 className='text-2xl  font-semibold dark:text-gray-300'>Two Factor Authentication</h2>
                     <div className=' text-rose-400 font-semibold text-sm tracking-wider'>*Soon to come</div>
-                    {/* <button className="bg-gradient-to-r  font-semibold from-indigo-600 to-purple-400 mx-4 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Setup</button> */}
+                    {/* <button className="bg-gradient-to-r  font-semibold from-blue-700 to-purple-400 mx-4 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Setup</button> */}
                 </div>
             </div>
         </div >

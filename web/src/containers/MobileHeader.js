@@ -110,7 +110,7 @@ const MobileHeader = () => {
                     </button>
                 </div>
             </div >
-            {headerMenu && <div className='flex flex-col space-y-2 p-2 overflow-y-auto w-auto' style={{ height: 'calc(100vh - 1.75rem)' }}>
+            {headerMenu && <div className='flex flex-col gap-2 p-2 overflow-y-auto w-auto' style={{ height: 'calc(100vh - 1.75rem)' }}>
                 <div className='flex flex-col gap-2 h-10/12 overflow-y-auto'>
                     <div className='flex flex-col w-full'>
                         <HeaderLink type="link" hidePane={false} text="Library" path="/explore" icon={<LibraryIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />

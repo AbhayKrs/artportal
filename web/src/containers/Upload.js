@@ -214,22 +214,22 @@ const ExploreUpload = (props) => {
     }
 
     return (
-        <div className="main-container bg-gray-200 dark:bg-darkBg py-8 px-20">
+        <div className="main-container bg-gray-200 dark:bg-darkBg">
             <Helmet>
                 <title>artportal | Upload</title>
             </Helmet>
-            <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-8">
-                <div className='relative'>
-                    <span className=' text-4xl text-gray-700 dark:text-gray-300'>Upload</span>
-                    <div className='h-1 w-12 mt-1 bg-indigo-600'></div>
+            <div className="p-8">
+                <div className='relative w-fit justify-between mb-2'>
+                    <h2 className='font-medium text-3xl text-neutral-800 dark:text-gray-300'>Upload</h2>
+                    <div className='absolute h-1 w-6/12 bottom-[-3px] left-0 text-2xl bg-gray-300 rounded-md'></div>
                 </div>
-                <div className='flex lg:flex-row flex-col p-5 lg:space-x-8 md:space-y-2'>
+                <div className='flex lg:flex-row flex-col py-5 px-2 lg:gap-8 md:gap-2'>
                     <div className='w-8/12 xs:mb-2 md:mb-0'>
                         <span className=' text-lg tracking-wider font-semibold text-gray-700 dark:text-gray-300'>Files<span className=' text-rose-400 text-md'>*</span></span>
-                        <div className="flex flex-col space-y-3">
-                            <div className='flex flex-row space-x-4'>
-                                <div className="flex flex-col w-full justify-center items-center border-dashed space-y-2 rounded-lg border-2 border-gray-400 py-12" onDrop={(ev) => dropHandler(ev)} onDragOver={(ev) => dragOverHandler(ev)} >
-                                    <label htmlFor="file-upload" className='bg-indigo-600 text-white  cursor-pointer text-lg font-semibold py-2 px-4 rounded'>
+                        <div className="flex flex-col gap-3">
+                            <div className='flex flex-row gap-4'>
+                                <div className="flex flex-col w-full justify-center items-center border-dashed gap-2 rounded-lg border-2 border-gray-400 py-12" onDrop={(ev) => dropHandler(ev)} onDragOver={(ev) => dragOverHandler(ev)} >
+                                    <label htmlFor="file-upload" className='bg-blue-700 text-white  cursor-pointer text-lg font-semibold py-2 px-4 rounded'>
                                         Select image files
                                     </label>
                                     <input id="file-upload" className='hidden' type="file" multiple onChange={onImageChange} />
@@ -267,28 +267,28 @@ const ExploreUpload = (props) => {
                             </div>
                         </div>
                     </div>
-                    <div className='w-4/12 space-y-4'>
+                    <div className='flex flex-col gap-4 w-4/12'>
                         {exploreCategories.length === 0 ? null : <div className='flex flex-col'>
                             <span className=' text-lg tracking-wide font-semibold text-gray-700 dark:text-gray-300'>Categories<span className=' text-rose-400 text-md'>*</span></span>
                             <div className="w-full inline-flex flex-col justify-center relative text-gray-500">
-                                <div id='category_menu' className='flex flex-wrap space-x-1'>
+                                <div id='category_menu' className='flex flex-wrap gap-1'>
                                     {exploreCategories.map((category, index) => (
-                                        <div key={index} className="flex justify-center items-center m-1 font-medium py-2 px-3 rounded-md text-indigo-100 bg-indigo-600 border border-indigo-700 ">
+                                        <div key={index} className="flex justify-center items-center m-1 font-medium py-2 px-3 rounded-md text-indigo-100 bg-blue-700 border border-indigo-700 ">
                                             <div className="text-sm font-normal leading-none max-w-full flex-initial">{category}</div>
                                         </div>
                                     ))}
                                 </div>
                             </div>
                         </div>}
-                        <div className='flex flex-col'>
+                        <div className='flex flex-col gap-1'>
                             <span className=' text-lg tracking-wide font-semibold text-gray-700 dark:text-gray-300'>Title<span className=' text-rose-400 text-md'>*</span></span>
                             <input type="text" maxLength={250} value={exploreTitle} onChange={(ev) => setExploreTitle(ev.target.value)} className="py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 focus:outline-none rounded-md w-full" placeholder='Title' />
                         </div>
-                        <div className='flex flex-col'>
+                        <div className='flex flex-col gap-1'>
                             <span className=' text-lg tracking-wide font-semibold text-gray-700 dark:text-gray-300'>Description<span className=' text-rose-400 text-md'>*</span></span>
                             <textarea rows='4' maxLength={1000} value={exploreDesc} onChange={(ev) => setExploreDesc(ev.target.value)} className="scrollbar py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 resize-none focus:outline-none rounded-md w-full" placeholder='Description' />
                         </div>
-                        <div className='flex flex-col'>
+                        <div className='flex flex-col gap-1'>
                             <span className=' text-lg  leading-[1.125rem] tracking-wide font-semibold text-gray-700 dark:text-gray-300'>Add tags<span className=' text-rose-400 text-md'>*</span></span>
                             <div className=' text-rose-400 font-semibold text-xs mb-1.5'>You may assign a maximum of 10 tags</div>
                             <div className="w-full inline-flex flex-col justify-center relative text-gray-500">
@@ -298,9 +298,9 @@ const ExploreUpload = (props) => {
                                     {tagSearch.length === 0 ? '' : <MdClose onClick={() => setTagSearch('')} className="w-5 h-5 text-gray-700 dark:text-gray-300 absolute right-2 top-2.5" />}
                                 </div>
                                 {exploreTags.length === 0 ? '' :
-                                    <div id='tagmenu' className='flex flex-wrap justify-center space-x-1 mt-2'>
+                                    <div id='tagmenu' className='flex flex-wrap justify-center gap-1 mt-2'>
                                         {exploreTags.map(tag => (
-                                            <div className="flex justify-center items-center m-1 font-medium py-1 px-2 rounded-md text-indigo-100 bg-indigo-600 border border-indigo-700 ">
+                                            <div className="flex justify-center items-center m-1 font-medium py-1 px-2 rounded-md text-indigo-100 bg-blue-700 border border-indigo-700 ">
                                                 <div className="text-xs font-normal leading-none max-w-full flex-initial">{tag.value}</div>
                                                 <div className="flex flex-auto flex-row-reverse">
                                                     <MdClose className='feather feather-x cursor-pointer hover:text-indigo-400 rounded-full w-4 h-4 ml-1' />
@@ -484,14 +484,14 @@ const StoreUpload = (props) => {
         <div className="main-container bg-gray-200 dark:bg-darkBg p-5">
             <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-5">
                 <span className=' text-3xl text-gray-700 dark:text-gray-300'>List Product to Store</span>
-                <div className='flex lg:flex-row flex-col mt-3 lg:space-x-4 md:space-y-2'>
+                <div className='flex lg:flex-row flex-col mt-3 lg:gap-4 md:gap-2'>
                     <div className='w-full'>
                         <span className=' font-semibold text-gray-700 dark:text-gray-300'>Files<span className=' text-rose-400 text-md'>*</span></span>
-                        <div className="flex flex-col space-y-3">
-                            <div className="flex flex-col justify-center items-center border-dashed space-y-2 rounded-lg border-2 border-gray-400 py-8" onDrop={(ev) => dropHandler(ev)} onDragOver={(ev) => dragOverHandler(ev)} >
+                        <div className="flex flex-col gap-3">
+                            <div className="flex flex-col justify-center items-center border-dashed gap-2 rounded-lg border-2 border-gray-400 py-8" onDrop={(ev) => dropHandler(ev)} onDragOver={(ev) => dragOverHandler(ev)} >
                                 <p className="font-semibold text-gray-700 dark:text-gray-300 flex flex-wrap justify-center">Drag files</p>
                                 <p className="font-semibold text-gray-700 dark:text-gray-300">OR</p>
-                                <label htmlFor="file-upload" className='bg-indigo-600 text-white  font-semibold py-1 px-2 rounded'>
+                                <label htmlFor="file-upload" className='bg-blue-700 text-white  font-semibold py-1 px-2 rounded'>
                                     Select files
                                 </label>
                                 <input id="file-upload" className='hidden' type="file" multiple onChange={onImageChange} />
@@ -522,7 +522,7 @@ const StoreUpload = (props) => {
                             </div>
                         </div>
                     </div>
-                    <div className='w-full space-y-2'>
+                    <div className='w-full gap-2'>
                         <div className='flex flex-col'>
                             <span className=' font-semibold text-gray-700 dark:text-gray-300'>Title<span className=' text-rose-400 text-md'>*</span></span>
                             <input type="text" value={storeTitle} onChange={(ev) => setStoreTitle(ev.target.value)} className="py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 focus:outline-none rounded-md w-full" placeholder='Title' />

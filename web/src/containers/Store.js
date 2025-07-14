@@ -115,18 +115,18 @@ const Store = (props) => {
                 <title>artportal | Store</title>
             </Helmet>
             <div className='pt-3 px-2'>
-                <div className='text-2xl  font-bold tracking-wider text-indigo-600 dark:text-indigo-600'>Welcome to the artportal Store</div>
+                <div className='text-2xl  font-bold tracking-wider text-blue-700 dark:text-blue-700'>Welcome to the artportal Store</div>
                 <div className='text-md  text-gray-800 dark:text-neutral-300'>Find the best of the artworld with artistic pieces, merch and products of everything art.</div>
             </div>
             <div className='w-full flex p-3'>
-                {/* <button onClick={() => navigate('/store/all')} className="tracking-wider h-fit border-2 border-indigo-600 text-indigo-600  font-bold py-1.5 px-3 mr-2 rounded">Store - All</button> */}
-                {/* <button onClick={() => navigate('/store/sellers')} className="tracking-wider h-fit border-2 border-indigo-600 text-indigo-600  font-bold py-1.5 px-3 rounded">artportal Verified Sellers</button> */}
-                <div className='flex ml-auto space-x-3'>
-                    {common.user.cart && common.user.cart.length > 0 && <button onClick={() => handleCartOpen()} className='relative h-fit tracking-wider overflow-visible bg-indigo-600 font-bold p-2 rounded-lg'>
+                {/* <button onClick={() => navigate('/store/all')} className="tracking-wider h-fit border-2 border-blue-700 text-blue-700  font-bold py-1.5 px-3 mr-2 rounded">Store - All</button> */}
+                {/* <button onClick={() => navigate('/store/sellers')} className="tracking-wider h-fit border-2 border-blue-700 text-blue-700  font-bold py-1.5 px-3 rounded">artportal Verified Sellers</button> */}
+                <div className='flex ml-auto gap-3'>
+                    {common.user.cart && common.user.cart.length > 0 && <button onClick={() => handleCartOpen()} className='relative h-fit tracking-wider overflow-visible bg-blue-700 font-bold p-2 rounded-lg'>
                         <MdShoppingCart className='w-6 h-6 text-gray-200 hover:cursor-pointer' />
                         <div className='absolute -top-1 -right-1 px-1 bg-red-600 text-gray-200 rounded-full text-xs'>{common.user.cart.length}</div>
                     </button>}
-                    <button onClick={() => navigate('/store/new')} className='h-fit tracking-wider border-2 border-indigo-600 text-indigo-600  font-bold py-1.5 px-3 rounded-lg'>Create Listing</button>
+                    <button onClick={() => navigate('/store/new')} className='h-fit tracking-wider border-2 border-blue-700 text-blue-700  font-bold py-1.5 px-3 rounded-lg'>Create Listing</button>
                 </div>
             </div>
             <div className='grid gap-5 sm:grid-cols-4 grid-cols-1 p-5'>
@@ -139,9 +139,9 @@ const Store = (props) => {
                             <p className="text-sm leading-relaxed mb-3 text-gray-800 dark:text-gray-400">{item.description}</p>
                             <div className="flex items-center flex-wrap justify-between">
                                 <div className='tracking-wide text-lg font-medium text-gray-500 '>${item.price}</div>
-                                <div className='flex space-x-2'>
+                                <div className='flex gap-2'>
                                     <MdOutlineAddShoppingCart className='w-8 h-8 text-rose-500 hover:cursor-pointer' onClick={() => addToCart(item)} />
-                                    <button onClick={() => navigate(`/store/${item._id}`)} className="bg-gradient-to-r  font-semibold from-indigo-600 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Learn more</button>
+                                    <button onClick={() => navigate(`/store/${item._id}`)} className="bg-gradient-to-r  font-semibold from-blue-700 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Learn more</button>
                                 </div>
                             </div>
                         </div>
@@ -149,7 +149,7 @@ const Store = (props) => {
                 ))}
             </div>
             {/* Highlights of the Day section */}
-            {/* <div className='p-4 space-y-2'>
+            {/* <div className='p-4 gap-2'>
                 <div className='text-3xl  font-bold dark:text-neutral-400'>Highlights of the Day</div>
                 <div className='grid gap-5 sm:grid-cols-4 grid-cols-1 p-5'>
                     {store.storeList.map(item => (
@@ -161,9 +161,9 @@ const Store = (props) => {
                                 <p className="text-sm leading-relaxed mb-3 text-gray-800 dark:text-gray-400">{item.description}</p>
                                 <div className="flex items-center flex-wrap justify-between">
                                     <div className='tracking-wide text-lg font-medium text-gray-500 '>${item.price}</div>
-                                    <div className='flex space-x-2'>
+                                    <div className='flex gap-2'>
                                         <MdOutlineAddShoppingCart className='w-8 h-8 text-rose-500 hover:cursor-pointer' onClick={() => addToCart(item)} />
-                                        <button onClick={() => navigate(`/store/${item._id}`)} className="bg-gradient-to-r  font-semibold from-indigo-600 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Learn more</button>
+                                        <button onClick={() => navigate(`/store/${item._id}`)} className="bg-gradient-to-r  font-semibold from-blue-700 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Learn more</button>
                                     </div>
                                 </div>
                             </div>
@@ -173,7 +173,7 @@ const Store = (props) => {
             </div>
             <hr className='mx-4 rounded border-2 bg-neutral-700 dark:bg-neutral-300 border-neutral-700 dark:border-neutral-300 dark:border-neutral-200' /> */}
             {/* Featured */}
-            {/* <div className='p-4 space-y-2'>
+            {/* <div className='p-4 gap-2'>
                 <div className='text-3xl  font-bold dark:text-neutral-400'>Featured</div>
                 <div className='grid gap-5 sm:grid-cols-4 grid-cols-1 p-5'>
                     {store.storeList.map(item => (
@@ -185,9 +185,9 @@ const Store = (props) => {
                                 <p className="text-sm leading-relaxed mb-3 text-gray-800 dark:text-gray-400">{item.description}</p>
                                 <div className="flex items-center flex-wrap justify-between">
                                     <div className='tracking-wide text-md font-medium text-gray-500 '>${item.price}</div>
-                                    <div className='flex space-x-2'>
+                                    <div className='flex gap-2'>
                                         <MdOutlineAddShoppingCart className='w-8 h-8 text-rose-500 hover:cursor-pointer' onClick={() => addToCart(item)} />
-                                        <button onClick={() => navigate(`/store/${item._id}`)} className="bg-gradient-to-r  font-semibold from-indigo-600 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Learn more</button>
+                                        <button onClick={() => navigate(`/store/${item._id}`)} className="bg-gradient-to-r  font-semibold from-blue-700 to-purple-400 hover:scale-105 drop-shadow-md shadow-cla-blue px-4 py-1 rounded-lg">Learn more</button>
                                     </div>
                                 </div>
                             </div>
@@ -209,7 +209,7 @@ const Store = (props) => {
                                 <div className="text-center dark:text-gray-300">
                                     <h3 className="text-center text-2xl font-bold">{seller.name}</h3>
                                     <span className="text-sm">#{seller.username}</span>
-                                    <ul className="m-1.5 flex justify-center text-center  space-x-4">
+                                    <ul className="m-1.5 flex justify-center text-center  gap-4">
                                         <li className="flex flex-col text-sm"><span className="font-bold text-lg">Rating</span>{seller.seller_rating}</li>
                                         <li className="flex flex-col text-sm"><span className="font-bold text-lg">Followers</span>4.7</li>
                                         <li className="flex flex-col text-sm"><span className="font-bold text-lg">YSR*</span>4.5</li>

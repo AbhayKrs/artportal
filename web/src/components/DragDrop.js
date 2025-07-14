@@ -119,7 +119,7 @@ const DragDrop = ({ isFlagged, setIsFlagged, selectedImages, setReorderedFiles, 
                 {provided => (
                     <div
                         ref={provided.innerRef}
-                        className='scrollbar flex p-2 overflow-auto space-x-2'
+                        className='scrollbar flex p-2 overflow-auto gap-2'
                         {...provided.droppableProps}>
                         <ImageList images={images} setCategories={setCategories} r_setSnackMessage={r_setSnackMessage} isFlagged={isFlagged} setIsFlagged={setIsFlagged} />
                         {provided.placeholder}

@@ -76,7 +76,7 @@ export const Account = (props) => {
                     {!editStatus ?
                         <FaEdit onClick={() => setEditStatus(true)} className='absolute top-0 right-0 m-2 h-6 w-6 text-rose-500 dark:text-rose-400 cursor-pointer' />
                         :
-                        <div className='absolute top-0 right-0 flex m-2 space-x-1'>
+                        <div className='absolute top-0 right-0 flex m-2 gap-1'>
                             <MdEditOff onClick={() => setEditStatus(false)} className='h-6 w-6 text-rose-500 dark:text-rose-400 cursor-pointer' />
                             <MdDownloadDone onClick={() => setConfirmModal(true)} className='h-7 w-7 text-green-500 dark:text-green-400 cursor-pointer' />
                         </div>
@@ -149,7 +149,7 @@ export const Account = (props) => {
                                 <button disabled className="bg-green-200 text-green-500 px-3 py-1 rounded-md text-md  font-bold">
                                     Connected!
                                 </button> :
-                                <button className="bg-indigo-600 text-gray-900 dark:text-gray-200 hover:bg-indigo-600 dark:hover:bg-indigo-600 px-3 py-1 rounded-md text-lg  font-bold dark:font-normal">
+                                <button className="bg-blue-700 text-gray-900 dark:text-gray-200 hover:bg-blue-700 dark:hover:bg-blue-700 px-3 py-1 rounded-md text-lg  font-bold dark:font-normal">
                                     Sign in
                                 </button>
                             }

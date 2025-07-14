@@ -48,7 +48,7 @@ const ExploreSearch = (props) => {
                                         </svg>
                                     </div>
                                 </div>
-                                <div className="flex flex-col place-items-end space-y-1">
+                                <div className="flex flex-col place-items-end gap-1">
                                     <div className="inline-flex items-center">
                                         <BsHeart className='h-4 w-4' />
                                         <span className="text-xs ml-1 antialiased">{explore.likes.length}</span>

@@ -10,9 +10,11 @@ import 'react-multi-carousel/lib/styles.css';
 
 const HighlightList = ({ title, list }) => {
     let defaultTransform = 0;
+    let navigate = useNavigate();
 
     const responsive = {
         superLargeDesktop: {
+            // the naming can be any, depends on you.
             breakpoint: { max: 4000, min: 1920 },
             items: 8
         },
@@ -31,11 +33,11 @@ const HighlightList = ({ title, list }) => {
     };
 
     return (
-        <div className='flex flex-col gap-1 p-4 rounded-md w-full'>
-            {title.length === 0 ? null : <div className='relative w-fit justify-between mb-2'>
-                <h2 className='font-medium text-2xl text-neutral-800 dark:text-gray-300'>{title}</h2>
-                <div className='absolute h-1 w-8 bottom-[-2px] left-0 text-2xl bg-gray-300 rounded-md'></div>
-            </div>}
+        <div className='flex flex-col p-4 rounded-md w-full'>
+            <div className='relative w-fit justify-between mb-2'>
+                <h2 className=' font-bold text-3xl text-gray-300'>{title}</h2>
+                <div className='absolute h-1 w-8 bottom-0 left-0 text-2xl bg-gray-300'></div>
+            </div>
             <Carousel
                 responsive={responsive}
                 removeArrowOnDeviceType={['mobile']}

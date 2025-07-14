@@ -91,8 +91,8 @@ const CommentList = ({ comments, handleInvalidUser }) => {
         <div className='flex flex-col gap-2 overflow-y-auto scrollbar'>
             {comments.map((comment, index) => (
                 <>
-                    <div key={index} className='flex items-center text-neutral-700 dark:text-gray-300 space-x-2'>
-                        <div className='flex flex-col space-y-0.5 basis-10/12'>
+                    <div key={index} className='flex items-center text-neutral-700 dark:text-gray-300 gap-2'>
+                        <div className='flex flex-col gap-0.5 basis-10/12'>
                             {editForm && index === editIndex ?
                                 <div className='rounded flex bg-gray-300 dark:bg-neutral-700'>
                                     <input type="text" name="comment" value={editComment} onChange={(ev) => setEditComment(ev.target.value)} onKeyPress={(ev) => { if (ev.key === 'Enter') { ev.preventDefault(); onEditComment(comment) } }} className=" w-fit mb-2 font-bold text-md placeholder:text-neutral-700 dark:placeholder:text-gray-300 text-gray-600 dark:text-gray-300 outline-none bg-gray-300 dark:bg-neutral-700 border-b-2 border-b-gray-700 dark:border-b-gray-300" />
@@ -114,8 +114,8 @@ const CommentList = ({ comments, handleInvalidUser }) => {
                             </div>
                         </div>
                         <div className="flex basis-2/12 items-center justify-end relative">
-                            <div className='flex flex-row space-x-2 items-center'>
-                                <div className='flex flex-row space-x-1'>
+                            <div className='flex flex-row gap-2 items-center'>
+                                <div className='flex flex-row gap-1'>
                                     {comment.likes.filter(item => item === user.id).length > 0 ?
                                         <button disabled>
                                             <AiFillLike className='w-4 h-4 text-gray-200' />
@@ -136,7 +136,7 @@ const CommentList = ({ comments, handleInvalidUser }) => {
                                         {comment.likes.length}
                                     </div>
                                 </div>
-                                <div className='flex flex-row space-x-1'>
+                                <div className='flex flex-row gap-1'>
                                     {comment.dislikes.filter(item => item === user.id).length > 0 ?
                                         <button disabled>
                                             <AiFillDislike className='w-4 h-4 text-gray-200' />
@@ -160,7 +160,7 @@ const CommentList = ({ comments, handleInvalidUser }) => {
                                 <span className='text-gray-300 dark:text-neutral-500 text-xs'>&#9679;</span>
                                 <button
                                     onClick={() => startReply(index, comment._id)}
-                                    className='flex flex-row space-x-1 text-sm'
+                                    className='flex flex-row gap-1 text-sm'
                                 >
                                     Reply
                                 </button>

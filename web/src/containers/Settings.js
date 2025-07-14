@@ -43,8 +43,8 @@ export const Settings = (props) => {
     return (
         <div className='flex flex-col gap-2 p-4 bg-gray-200 dark:bg-darkBg'>
             <nav className="flex py-2 px-3 text-gray-700 bg-slate-300 rounded-lg dark:bg-neutral-900" aria-label="Breadcrumb">
-                <div className="inline-flex items-center space-x-1 md:space-x-3">
-                    <div className="inline-flex items-center space-x-2 font-medium ">
+                <div className="inline-flex items-center gap-1 md:gap-3">
+                    <div className="inline-flex items-center gap-2 font-medium ">
                         <p onClick={() => navigate('/settings/general')} className="inline-flex cursor-pointer items-center hover:text-gray-900 text-gray-600 dark:text-gray-400 dark:hover:text-gray-200">
                             <MdSettings className="mr-1 w-5 h-5" />
                             Settings
@@ -56,9 +56,9 @@ export const Settings = (props) => {
             </nav>
 
             <div className='grid grid-cols-4 gap-4'>
-                <div className='flex flex-col p-3 space-y-3 bg-slate-300 rounded-lg dark:bg-neutral-900 items-start'>
+                <div className='flex flex-col p-3 gap-3 bg-slate-300 rounded-lg dark:bg-neutral-900 items-start'>
                     {common.isAuthenticated && <>
-                        <div className="flex space-x-2 w-full justify-center">
+                        <div className="flex gap-2 w-full justify-center">
                             {user.avatar.icon.length > 0 && <img loading='lazy' className='w-24' src={api_fetchUserImages(user.avatar.icon)} />}
                             <div className='clear-left'>
                                 <h2 className='text-2xl font-bold text-gray-700 dark:text-white'>{user.name}</h2>

@@ -82,7 +82,7 @@ export const AwardTabPanel = ({ awards, user, exploreID, awardClose, handleAward
                 <div className='flex w-full overflow-hidden bg-gray-100 dark:bg-neutral-800'>
                     <ul id='tabSlider' className="flex ">
                         {awardTabPanelHeaders.map((awardType, index) => {
-                            return <li key={index} onClick={() => setActiveStatus(index)} className={index === activeStatus ? "text-sm text-gray-900 dark:font-medium bg-indigo-600 mr-1 rounded-t-md" : "text-sm text-gray-600 rounded-t-md dark:text-gray-400 dark:bg-neutral-700 flex items-center mr-1 hover:text-indigo-700 cursor-pointer"}>
+                            return <li key={index} onClick={() => setActiveStatus(index)} className={index === activeStatus ? "text-sm text-gray-900 dark:font-medium bg-blue-700 mr-1 rounded-t-md" : "text-sm text-gray-600 rounded-t-md dark:text-gray-400 dark:bg-neutral-700 flex items-center mr-1 hover:text-indigo-700 cursor-pointer"}>
                                 <div className=" flex items-center uppercase">
                                     <span className="p-2 pb-1">{awardType}</span>
                                 </div>
@@ -226,26 +226,24 @@ export const ExplorePanel = ({ search, a_filterExploreList, searchExploreList })
     }
 
     return (
-        <div className={`flex sm:flex-row gap-2 flex-col w-full items-center bg-slate-100/75 dark:bg-darkBg/75 p-2 sticky ${common.betaMsg ? 'top-[5rem]' : 'top-[3.25rem]'} z-20`}>
+        <div className={`flex sm:flex-row gap-2 flex-col w-full items-center bg-slate-100/75 dark:bg-darkBg/75 p-2 sticky z-20`}>
             <div className='flex w-full items-center sm:justify-start justify-between'>
                 <div className='lg:flex hidden'>
-                    <ul id='tabSlider' className="flex space-x-1 items-center whitespace-nowrap">
+                    <ul id='tabSlider' className="flex flex-row gap-4 items-center whitespace-nowrap p-2">
                         {exploreFilters.map((filter, index) => {
-                            return <li key={index} onClick={() => selectFilter(filter.value)} className={`flex items-center cursor-pointer text-sm font-bold tracking-wider ${filter.value === activeFilter ? 'text-indigo-600' : 'text-gray-700 dark:text-gray-300'} h-fit`}>
-                                <span className="flex items-center py-[0.4rem] px-3 capitalize">
-                                    {filter.value === activeFilter && <div className='h-3.5 bg-indigo-600 w-1 mr-1'></div>}
-                                    {filter.label}
-                                </span>
+                            return <li key={index} onClick={() => selectFilter(filter.value)} className={`flex gap-1 cursor-pointer text-lg font-medium tracking-wide text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
+                                <div className={`${filter.value === activeFilter ? 'flex' : 'hidden'} h-4 w-1 bottom-[-4px] left-0 rounded text-2xl bg-blue-700 dark:bg-blue-700`}></div>
+                                {filter.label}
                             </li>
                         })}
                     </ul>
                 </div>
-                <div className="lg:hidden flex items-center cursor-pointer space-x-2">
+                <div className="lg:hidden flex items-center cursor-pointer gap-2">
                     <Dropdown left name='filters' selectedPeriod={activeFilter === '' ? 'Select a filter' : activePeriodLabel} options={exploreFilters} onSelect={selectFilter} />
                 </div>
                 {activePeriod.length > 0 && <span className='text-gray-600 dark:text-gray-400 mx-2'>&#9679;</span>}
                 {activePeriod.length > 0 ?
-                    <div className="flex items-center cursor-pointer space-x-2">
+                    <div className="flex items-center cursor-pointer gap-2">
                         {window.innerWidth > 640 ?
                             <Dropdown left name='period' selectedPeriod={activePeriodLabel} options={explorePeriodOptions} onSelect={handlePeriodChange} />
                             :
@@ -266,7 +264,7 @@ export const NotificationTabPanel = ({ awards, user, exploreID, awardClose, hand
                 <div className='flex w-full overflow-hidden bg-gray-100 dark:bg-neutral-800'>
                     <ul id='tabSlider' className="flex ">
                         {['artportal Specials', 'Community Made', 'Premium'].map((awardType, index) => {
-                            return <li key={index} onClick={() => setActiveStatus(index)} className={index === activeStatus ? "text-sm text-gray-900 dark:font-medium bg-indigo-600 mr-1 rounded-t-md" : "text-sm text-gray-600 rounded-t-md dark:text-gray-400 dark:bg-neutral-700 flex items-center mr-1 hover:text-indigo-700 cursor-pointer"}>
+                            return <li key={index} onClick={() => setActiveStatus(index)} className={index === activeStatus ? "text-sm text-gray-900 dark:font-medium bg-blue-700 mr-1 rounded-t-md" : "text-sm text-gray-600 rounded-t-md dark:text-gray-400 dark:bg-neutral-700 flex items-center mr-1 hover:text-indigo-700 cursor-pointer"}>
                                 <div className=" flex items-center uppercase">
                                     <span className="p-2 pb-1">{awardType}</span>
                                 </div>

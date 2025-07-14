@@ -155,14 +155,14 @@ const ExploreShow = (props) => {
     return (
         <div className='md:relative flex flex-col md:flex-row gap-4 bg-gray-200 dark:bg-darkBg'>
             <div className='relative md:fixed md:left-4 flex flex-col h-fit md:w-[23%] mx-4 md:mx-0 order-2 md:order-1 rounded-md bg-neutral-50 dark:bg-neutral-800 py-3' style={{ maxHeight: "calc(100vh - 7.25rem)" }}>
-                <div className='flex flex-col space-y-2 py-2 px-4'>
+                <div className='flex flex-col gap-2 py-2 px-4'>
                     <div className='flex flex-col gap-1 w-full wrap-any'>
                         <h1 className='text-2xl tex-gray-900 dark:text-gray-200 font-bold'>{artwork.title}</h1>
                         <p className='text-lg tex-gray-800 dark:text-gray-300'>{artwork.description}</p>
                     </div>
-                    <div className='flex flex-row items-center w-full p-2 bg-neutral-200 dark:bg-neutral-900 rounded-xl space-x-2'>
+                    <div className='flex flex-row items-center w-full p-2 bg-neutral-200 dark:bg-neutral-900 rounded-xl gap-2'>
                         <div className="font-medium text-xs font-medium text-gray-600 dark:text-gray-300">Categories</div>
-                        <div className='flex flex-row space-x-1.5'>
+                        <div className='flex flex-row gap-1.5'>
                             {artwork.categories.map((item, index) => (
                                 <div key={index} className="flex w-fit justify-center items-center font-medium py-1.5 px-2 bg-teal-500 dark:bg-teal-600 rounded-full text-gray-600 dark:text-gray-300 shadow">
                                     <div className="text-xs font-medium leading-none">{item}</div>
@@ -194,7 +194,7 @@ const ExploreShow = (props) => {
                         </div>
                         <div className='flex justify-between items-center'>
                             {/* {artwork.artist.id === common.user.id ?
-                                    <div onClick={() => navigate(`/explore/${artwork._id}/edit`)} className='rounded-lg bg-indigo-600 p-2 cursor-pointer ml-2'>
+                                    <div onClick={() => navigate(`/explore/${artwork._id}/edit`)} className='rounded-lg bg-blue-700 p-2 cursor-pointer ml-2'>
                                         <MdEdit className="text-gray-200 h-6 w-6" />
                                     </div>
                                     : <div className="relative float-left flex">
@@ -212,7 +212,7 @@ const ExploreShow = (props) => {
                                         <ImPlus className="absolute bottom-0 right-0 text-[#D1853A] h-4 w-4" />
                                     </div>} */}
                             <div className='flex flex-col gap-3'>
-                                <div className='flex flex-row space-x-4 items-center'>
+                                <div className='flex flex-row gap-4 items-center'>
                                     <div className='flex flex-row items-center gap-0.5'>
                                         <IoEye className='h-6 w-6 text-neutral-600 dark:text-neutral-500' />
                                         <p className='font-semibold text-neutral-600 dark:text-neutral-500 text-base'>{new Intl.NumberFormat().format(artwork.views.length)}</p>
@@ -278,10 +278,10 @@ const ExploreShow = (props) => {
                                 </div>
                             </div>
                             <div className='flex flex-row gap-3 rounded'>
-                                {prev.length > 0 ? <div onClick={handlePrev} className='cursor-pointer flex justify-end py-0.5 space-x-2 text-gray-700 hover:text-indigo-600 dark:text-gray-200 dark:hover:text-indigo-600'>
+                                {prev.length > 0 ? <div onClick={handlePrev} className='cursor-pointer flex justify-end py-0.5 gap-2 text-gray-700 hover:text-blue-700 dark:text-gray-200 dark:hover:text-blue-700'>
                                     <FaChevronLeft className='h-6 w-6' />
                                 </div> : ''}
-                                {next.length > 0 ? <div onClick={handleNext} className='cursor-pointer flex justify-end py-0.5 space-x-2 text-gray-700 hover:text-indigo-600 dark:text-gray-200 dark:hover:text-indigo-600'>
+                                {next.length > 0 ? <div onClick={handleNext} className='cursor-pointer flex justify-end py-0.5 gap-2 text-gray-700 hover:text-blue-700 dark:text-gray-200 dark:hover:text-blue-700'>
                                     <FaChevronRight className='h-6 w-6' />
                                 </div> : ''}
                             </div>
@@ -289,7 +289,7 @@ const ExploreShow = (props) => {
                     </div>
                 </div>
                 {/* {artwork.awards.length > 0 ?
-                        <div id='award' className='flex overflow-x-hidden bg-slate-200 dark:bg-neutral-700 mx-2 p-2 rounded-lg space-x-2'>
+                        <div id='award' className='flex overflow-x-hidden bg-slate-200 dark:bg-neutral-700 mx-2 p-2 rounded-lg gap-2'>
                             {artwork.awards.map((award, index) => (
                                 <div key={index} className="relative float-left mr-2 flex">
                                     <img loading='lazy' draggable="false" className='max-w-fit h-12 w-12' src={api_fetchUserImages(award.icon)} />
@@ -321,7 +321,7 @@ const ExploreShow = (props) => {
             </div>
             <div className="flex mx-auto md:w-6/12 order-1 md:order-2 justify-center">
                 {artwork.categories.includes("mature_art") ?
-                    <div className="flex flex-col mx-4 md:mx-0 space-y-3 w-full">
+                    <div className="flex flex-col mx-4 md:mx-0 gap-3 w-full">
                         <div className='flex flex-col items-center text-center'>
                             <h1 className='text-xl lg:text-2xl  font-semibold leading-5 lg:leading-6 text-neutral-800 dark:text-neutral-200'>18+ Content</h1>
                             <h2 className='text-base lg:text-lg  font-semibold leading-5 lg:leading-6 text-neutral-700 dark:text-neutral-200'>The following artwork contains mature content.<br /> Please validate yourself by via login to view the artwork.</h2>
@@ -329,12 +329,12 @@ const ExploreShow = (props) => {
                         </div>
                     </div>
                     :
-                    <div className="flex flex-col mx-4 md:mx-0 space-y-3 w-full">
+                    <div className="flex flex-col mx-4 md:mx-0 gap-3 w-full">
                         <div className='flex w-fit self-center items-center place-content-center'>
                             {artwork.files[0]?.length > 0 && <img loading='lazy' src={`${api_fetchArtworkImages(artwork.files[0])}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />}
                         </div>
                         {artwork.files.filter((image, index) => index !== 0).length > 0 &&
-                            <div className='flex w-fit flex-col self-center items-center space-y-3 place-content-center'>
+                            <div className='flex w-fit flex-col self-center items-center gap-3 place-content-center'>
                                 {artwork.files.filter((image, index) => index !== 0).map((image, index) => (
                                     <img loading='lazy' key={index} src={`${api_fetchArtworkImages(image)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
                                 ))}

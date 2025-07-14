@@ -10,7 +10,7 @@ export const AwardConfirmModal = ({ open, awardData, onClose, handleAwardExplore
             <div className="relative w-7/12 m-auto bg-neutral-800 rounded-xl">
                 <div className='p-4 flex flex-col'>
                     <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute right-0 top-0 mt-2 mr-2 cursor-pointer text-gray-400' />
-                    <div className='flex items-center space-x-2 my-2'>
+                    <div className='flex items-center gap-2 my-2'>
                         {awardData.icon.length > 0 && <img loading='lazy' className='h-12 w-12' src={api_fetchUserImages(awardData.icon)} />}
                         <div className='tracking-widest flex-row'>
                             <p className='text-indigo-800  text-2xl font-semibold '>testing award confirm</p>
