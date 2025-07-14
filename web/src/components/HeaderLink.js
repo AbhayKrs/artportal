@@ -16,7 +16,7 @@ const HeaderLink = ({ type, path, hidePane, icon, text, activeRoute, func }) => 
                     <div className={`${activeRoute.includes(path) ? 'flex' : 'hidden'} h-5 w-1 bottom-[-4px] left-0 rounded text-2xl bg-blue-700 dark:bg-blue-700`}></div>
                     {icon}
                     {!hidePane && text}
-                </Link >
+                </Link>
             }
         </>
     )

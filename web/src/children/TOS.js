@@ -1,10 +1,10 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
 export const TOS = (props) => {
     return (
         <div className='flex flex-col gap-3 col-span-3 p-2 text-neutral-700 dark:text-gray-300'>
             <h1 className="text-2xl font-medium tracking-wide">artportal Terms of Service</h1>
+            <p className="text-lg tracking-wide">Last updated: July 14, 2025</p>
             <p className="text-lg tracking-wide">By using artportal.com ("Site"), you agree to these Terms of Use. Please also review our <a href="/privacy-policy">Privacy Policy</a>. Your agreement is with Epic Games, Inc. (U.S. residents) or Epic Games Commerce GmbH (non-U.S. residents).</p>
 
             <div className="flex flex-col gap-2 pl-3">

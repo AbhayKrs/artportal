@@ -68,10 +68,10 @@ export const Account = (props) => {
     }
 
     return (
-        <div className='flex flex-col col-span-3 p-2'>
-            <h1 className='text-4xl  tracking-wider font-bold text-purple-500'>Account Settings</h1>
-            <h3 className='text-lg  tracking-wide font-bold dark:text-gray-400'>Update your personal account details here.</h3>
-            <div className='grid grid-cols-3 gap-4 p-3'>
+        <div className='flex flex-col gap-3 col-span-3 p-2 text-neutral-700 dark:text-gray-300'>
+            <h1 className="text-2xl font-medium tracking-wide">Account Settings</h1>
+            <p className="text-lg tracking-wide">Update your personal account details here.</p>
+            <div className='grid grid-cols-3 gap-4'>
                 <div className='relative col-span-2 flex flex-col rounded gap-4 py-4 px-6 bg-gray-300 dark:bg-neutral-800/75'>
                     {!editStatus ?
                         <FaEdit onClick={() => setEditStatus(true)} className='absolute top-0 right-0 m-2 h-6 w-6 text-rose-500 dark:text-rose-400 cursor-pointer' />
@@ -90,7 +90,7 @@ export const Account = (props) => {
                         </div>
                         <div className='flex flex-col gap-2 col-span-3'>
                             <div className='flex flex-col gap-1'>
-                                <h2 className='text-lg  font-semibold dark:text-gray-300'>Full name</h2>
+                                <h2 className='text-lg font-medium text-neutral-700 dark:text-gray-300'>Full name</h2>
                                 <div className='flex relative items-center gap-2'>
                                     <FaRegUserCircle className='absolute h-5 w-5 text-gray-400 ml-2' />
                                     <input disabled={!editStatus} type="text" name="search" value={name} onChange={(ev) => setName(ev.target.value)} className="placeholder-gray-600 w-full dark:placeholder-gray-300 text-black dark:text-white bg-white disabled:bg-gray-200 dark:bg-neutral-700 dark:disabled:bg-neutral-900 h-10 pl-9 pr-16 rounded-lg text-sm focus:outline-none" />
@@ -98,7 +98,7 @@ export const Account = (props) => {
                             </div>
                             <div className='flex flex-col gap-1'>
                                 <div className='flex gap-2'>
-                                    <h2 className='text-lg  font-semibold dark:text-gray-300'>Username</h2>
+                                    <h2 className='text-lg font-medium text-neutral-700 dark:text-gray-300'>Username</h2>
                                 </div>
                                 <div className='flex relative items-center gap-2'>
                                     <AiOutlineLink className='absolute h-5 w-5 text-gray-400 ml-2' />
@@ -109,7 +109,7 @@ export const Account = (props) => {
                     </div>
                     <div className='flex flex-col gap-1'>
                         <div className='flex gap-2'>
-                            <h2 className='text-lg  font-semibold dark:text-gray-300'>Email address</h2>
+                            <h2 className='text-lg font-medium text-neutral-700 dark:text-gray-300'>Email address</h2>
                         </div>
                         <div className='flex relative items-center gap-2'>
                             <MdAlternateEmail className='absolute h-5 w-5 text-gray-400 ml-2' />
@@ -118,7 +118,7 @@ export const Account = (props) => {
                     </div>
                     <div className='flex flex-col gap-1'>
                         <div className='flex gap-2'>
-                            <h2 className='text-lg  font-semibold dark:text-gray-300'>Profile bio</h2>
+                            <h2 className='text-lg font-medium text-neutral-700 dark:text-gray-300'>Profile bio</h2>
                         </div>
                         <div className='flex items-center gap-2'>
                             <textarea rows='4' disabled={!editStatus} value={bio} placeholder="Enter a brief description about yourself and what your art signifies." onChange={(ev) => setBio(ev.target.value)} className="placeholder-gray-600 w-full dark:placeholder-gray-400 text-black dark:text-white bg-white disabled:bg-gray-200 dark:bg-neutral-700 dark:disabled:bg-neutral-900 p-3 pr-16 rounded-lg text-sm focus:outline-none" />
@@ -126,12 +126,12 @@ export const Account = (props) => {
                     </div>
                 </div>
                 <div className='rounded gap-4 py-4 px-6 bg-gray-300 dark:bg-neutral-800/75'>
-                    <h2 className='text-xl  font-semibold text-black dark:text-gray-300'>Linked Accounts</h2>
-                    <p className=' font-semibold text-gray-600 dark:text-gray-400'>Connect your social accounts to ease login process with just a few clicks.</p>
+                    <h2 className='text-xl  font-medium text-neutral-700 dark:text-gray-300'>Linked Accounts</h2>
+                    <p className=' font-medium text-gray-600 dark:text-gray-400'>Connect your social accounts to ease login process with just a few clicks.</p>
                     <div className='flex flex-col gap-2 rounded-md p-3 bg-gray-200 dark:bg-neutral-900'>
                         <div className='flex gap-2 justify-between'>
                             <FcGoogle className='h-10 w-10' />
-                            <h5 className=' text-md text-black dark:text-gray-300 font-semibold'>Use Google to sign in to your account. Learn more</h5>
+                            <h5 className=' text-md text-neutral-700 dark:text-gray-300 font-medium'>Use Google to sign in to your account. Learn more</h5>
                         </div>
                         {user.google_authenticated ?
                             <button disabled className="bg-green-200 text-green-500 px-3 py-1 w-fit rounded-md text-md  font-bold">
@@ -154,7 +154,7 @@ export const Account = (props) => {
                                 </button>
                             }
                         </div>
-                        <h4 className=' text-gray-300 font-semibold'>Use Google to sign in to your account.</h4>
+                        <h4 className=' text-gray-300 font-medium'>Use Google to sign in to your account.</h4>
                     </div> */}
                 </div>
             </div>
