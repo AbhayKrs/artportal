@@ -28,7 +28,8 @@ module.exports = {
         "3xl": ['1.875rem', '2rem']
       },
       minHeight: {
-        'show': 'calc(100vh - 2.25rem)'
+        'show': 'calc(100vh - 2.355rem)',
+        'innershow': 'calc(100vh - 3.25rem)'
       },
     },
   },

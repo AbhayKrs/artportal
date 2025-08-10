@@ -28,14 +28,14 @@ const Explore = (props) => {
     }, []);
 
     return (
-        <div className=' bg-gray-200 dark:bg-darkBg'>
+        <div className=' bg-gray-200 dark:bg-darkBg p-4'>
             <Helmet>
                 <title>artportal | Explore</title>
             </Helmet>
             <ExplorePanel authenticated={common.isAuthenticated} r_setSnackMessage={(msgData) => dispatch(r_setSnackMessage(msgData))} a_fetchExploreList={() => dispatch(a_fetchExploreList())} a_filterExploreList={(filter, period) => dispatch(a_filterExploreList({ filter, period }))} tags={common.tags} />
             <Divider />
             {artworks.length > 0 ?
-                <div className='flex flex-row p-2'>
+                <div className='flex flex-row'>
                     <Masonry cols={5}>
                         {artworks.map((artwork, index) => (
                             <div key={index} onClick={() => navigate(`/explore/${artwork._id}`)} className='relative group group-hover:block cursor-pointer'>

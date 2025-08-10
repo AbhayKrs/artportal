@@ -226,12 +226,12 @@ export const ExplorePanel = ({ search, a_filterExploreList, searchExploreList })
     }
 
     return (
-        <div className={`flex sm:flex-row gap-2 flex-col w-full items-center bg-slate-100/75 dark:bg-darkBg/75 p-2 sticky z-20`}>
+        <div className={`flex sm:flex-row gap-2 flex-col w-full items-center bg-slate-100/75 dark:bg-darkBg/75 sticky z-20`}>
             <div className='flex w-full items-center sm:justify-start justify-between'>
                 <div className='lg:flex hidden'>
-                    <ul id='tabSlider' className="flex flex-row gap-4 items-center whitespace-nowrap p-2">
+                    <ul id='tabSlider' className="flex flex-row gap-4 items-center whitespace-nowrap">
                         {exploreFilters.map((filter, index) => {
-                            return <li key={index} onClick={() => selectFilter(filter.value)} className={`flex gap-1 cursor-pointer text-lg font-medium tracking-wide text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
+                            return <li key={index} onClick={() => selectFilter(filter.value)} className={`flex gap-1 cursor-pointer text-xl font-medium tracking-wide text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
                                 <div className={`${filter.value === activeFilter ? 'flex' : 'hidden'} h-4 w-1 bottom-[-4px] left-0 rounded text-2xl bg-blue-700 dark:bg-blue-700`}></div>
                                 {filter.label}
                             </li>

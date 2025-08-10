@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import moment from 'moment';
 
 import { api_fetchArtworkImages } from '../utils/api_routes';
@@ -23,6 +23,8 @@ const Home = (props) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const hidePane = useOutletContext();
+
     const explore = useSelector(state => state.explore);
     const common = useSelector(state => state.common);
 
@@ -33,37 +35,38 @@ const Home = (props) => {
     }, [])
 
     return (
-        <div className='bg-gray-200 dark:bg-darkBg'>
-            <HighlightList type="trending" title="Trending" list={explore.trending_artworks} />
+        <div className='bg-gray-200 dark:bg-darkBg p-4'>
+            <HighlightList type="trending" title="Trending" list={explore.trending_artworks} visibleItems={{ desktop: 7, tablet: 4, mobile: 2 }} />
             <Divider />
-            <div className='flex gap-4 w-full px-4 py-4 backdrop-sepia-0 rounded-lg'>
-                <div className='flex flex-row overflow-x-auto gap-2 w-full p-4 backdrop-sepia-0 bg-white/30 dark:bg-black/30 rounded-lg'>
-                    <div className='flex flex-col gap-4 w-full'>
-                        <div className='relative'>
+            <div className='flex gap-4 w-full  backdrop-sepia-0 rounded-lg'>
+                <div className='flex flex-col gap-2 w-8/12 p-4 backdrop-sepia-0 bg-white/30 dark:bg-black/30 rounded-lg'>
+                    <div className='flex flex-row justify-between w-full'>
+                        <div className='flex flex-row gap-4 relative'>
                             <h2 className='font-medium text-2xl text-neutral-800 dark:text-gray-300'>Featured Artist</h2>
                             <div className='absolute h-1 w-8 bottom-[-2px] left-0 text-2xl bg-gray-300 rounded-md'></div>
                         </div>
-                        <div className='flex flex-col'>
+                        <div className='flex flex-row gap-2'>
                             <p className='text-neutral-800 dark:text-gray-200 text-2xl font-medium tracking-wide'>Akunta</p>
-                            <div className='flex flex-row items-center gap-1'>
+                            <a href="#" className='flex flex-row items-center gap-1'>
                                 <p className='text-neutral-800 dark:text-gray-200 text-sm font-medium tracking-wide'>#akn787</p>
-                            </div>
+                            </a>
                         </div>
                     </div>
-                    <HighlightList type="" title="" list={explore.trending_artworks.slice(0, 8)} />
+                    <HighlightList title="" list={explore.trending_artworks.slice(0, 8)} visibleItems={{ desktop: 4, tablet: 2, mobile: 2 }} />
                 </div>
-                <div className='flex h-full m-auto items-center gap-2 lg:gap-4 p-4 backdrop-sepia-0 bg-white/30 dark:bg-black/30 rounded-lg'>
-                    <div className='flex h-24 w-24 md:h-28 md:w-28 lg:h-32 lg:w-32'>
+                <div className='flex-1 w-4/12 content-center justify-items-center backdrop-sepia-0 bg-white/30 dark:bg-black/30 rounded-lg'>
+                    <div className='flex flex-row gap-2 lg:gap-4 p-4'> <div className='flex h-24 w-24 md:h-28 md:w-28 lg:h-32 lg:w-32'>
                         <span className='m-auto text-center'>
                             <img className='rounded-md' src={AppQR} />
                         </span>
                     </div>
-                    <h2 className=' w-min text-md md:text-xl lg:text-2xl font-bold uppercase tracking-wider text-neutral-800 dark:text-gray-200'>Download the app for<br /> <span className='text-2xl md:text-3xl lg:text-5xl font-black'>free!</span></h2>
+                        <h2 className=' w-min text-md md:text-xl lg:text-2xl font-bold uppercase tracking-wider text-neutral-800 dark:text-gray-200'>Download the app for<br /> <span className='text-2xl md:text-3xl lg:text-5xl font-black'>free!</span></h2>
+                    </div>
                 </div>
             </div>
             <Divider />
             {explore.trending_artworks.length > 0 ?
-                <div className='flex flex-row py-2 px-4'>
+                <div className='flex flex-row'>
                     <Masonry cols={5}>
                         {explore.trending_artworks.map((artwork, index) => (
                             <div key={index} onClick={() => navigate(`/explore/${artwork._id}`)} className='relative group group-hover:block cursor-pointer'>

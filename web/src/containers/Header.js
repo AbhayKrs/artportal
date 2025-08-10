@@ -118,16 +118,16 @@ const Header = ({ hidePane, setHidePane }) => {
                         <HeaderLink type="button" hidePane={hidePane} text="Search" icon={<SearchIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} func={handleOpenSearch} />
                         <HeaderLink type="link" hidePane={hidePane} text="Store" path="/store" icon={<StoreIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
                     </div>
-                    <hr className={`w-full border border-gray-300 dark:border-neutral-800 rounded-xl`} />
+                    <Divider />
                     {common.isAuthenticated ?
-                        <div className={`flex flex-col  ${hidePane ? '' : 'w-full'} gap-4`}>
+                        <div className={`flex flex-col  ${hidePane ? '' : 'w-full'}`}>
                             <div className={`flex flex-col ${hidePane ? 'items-center' : ''}`}>
                                 <HeaderLink type="link" hidePane={hidePane} text="Upload" path="/explore/new" icon={<UploadIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 <HeaderLink type="link" hidePane={hidePane} text={`Cart (${user && user.cart && user.cart.length})`} path="/store/cart" icon={<CartIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 <HeaderLink type="link" hidePane={hidePane} text="Notifications" path="/notifications" icon={<NotificationIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                             </div>
                             <Divider />
-                            <div className='flex flex-col gap-4'>
+                            <div className='flex flex-col'>
                                 <div className={`flex flex-col ${hidePane ? 'items-center' : ''}`}>
                                     <HeaderLink type="link" hidePane={hidePane} text="My Profile" path={`/users/${user.id}`} icon={<ProfileIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                     <HeaderLink type="link" hidePane={hidePane} text="My Pins" path={`/users/${user.id}/pins`} icon={<PinIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
@@ -159,7 +159,7 @@ const Header = ({ hidePane, setHidePane }) => {
                 {common.isAuthenticated &&
                     (hidePane ?
                         <div className='flex flex-col items-center w-full mt-auto'>
-                            <Divider />
+                            <Divider noPadding />
                             <div className='flex flex-col gap-2 mt-2'>
                                 <div className='relative w-10 flex flex-col items-center gap-2'>
                                     {user.avatar.icon.length > 0 && <div className='flex relative w-10 h-10 justify-center items-center'>
@@ -183,7 +183,7 @@ const Header = ({ hidePane, setHidePane }) => {
                         </div>
                         :
                         <div className='flex flex-col w-full mt-auto'>
-                            <Divider />
+                            <Divider noPadding />
                             <div className='flex flex-col gap-3 px-2 mt-2'>
                                 <button onClick={() => { navigate(`/users/${user.id}`) }} className='flex flex-row items-center gap-2 px-1'>
                                     {user.avatar.icon.length > 0 && <div className='flex relative w-10 h-10 justify-center items-center'>
