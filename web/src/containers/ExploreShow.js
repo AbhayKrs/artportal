@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useOutletContext } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 
@@ -11,9 +11,16 @@ import { api_fetchUserImages, api_fetchArtworkImages } from '../utils/api_routes
 import { AwardModal, ShareModal } from '../components/Modal';
 
 import { IoEye, IoHeart, IoSend, IoShareSocialSharp, IoChatbox } from 'react-icons/io5';
-import { AiFillLike, AiOutlineLike, AiFillDislike, AiOutlineDislike } from 'react-icons/ai';
 import { MdEdit, MdEditOff, MdBookmarkAdd, MdBookmarkAdded } from 'react-icons/md';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+
+import { ReactComponent as ViewsIcon } from '../assets/icons/views.svg';
+import { ReactComponent as VerifiedIcon } from '../assets/icons/verified.svg';
+import { ReactComponent as Artportal_logo } from '../assets/icons/artportal_logo.svg';
+import { ReactComponent as LikeIcon } from '../assets/icons/like.svg';
+import { ReactComponent as LikeFilledIcon } from '../assets/icons/likefilled.svg';
+import { ReactComponent as DislikeIcon } from '../assets/icons/dislike.svg';
+import { ReactComponent as DislikeFilledIcon } from '../assets/icons/dislikefilled.svg';
 
 import CommentList from '../components/CommentList';
 import Divider from '../components/Divider';
@@ -31,6 +38,8 @@ const ExploreShow = (props) => {
     const [comment, setComment] = useState('');
     const [shareOpen, setShareOpen] = useState(false);
     const [awardOpen, setAwardOpen] = useState(false);
+
+    const hidePane = useOutletContext();
 
     const { id } = useParams();
     let navigate = useNavigate();
@@ -159,7 +168,7 @@ const ExploreShow = (props) => {
 
     return (
         <div className='md:relative flex flex-col md:flex-row gap-4 bg-gray-200 dark:bg-darkBg'>
-            <div className="flex md:w-[68%] order-2 md:order-1 justify-center p-4 min-h-show">
+            <div className={`flex ${hidePane ? 'md:w-[70%]' : 'md:w-[69%]'} order-2 md:order-1 justify-center p-4 min-h-show`}>
                 {artwork.categories.includes("mature_art") ?
                     <div className="flex flex-col mx-4 md:mx-0 gap-3 w-full">
                         <div className='flex flex-col items-center text-center'>
@@ -183,7 +192,7 @@ const ExploreShow = (props) => {
                     </div>
                 }
             </div>
-            <div className='relative min-h-innershow md:fixed md:right-4 flex flex-col gap-2 md:w-3/12 order-1 md:order-2 rounded-md backdrop-sepia-0 bg-white/30 dark:bg-black/30 my-4 py-3'>
+            <div className={`relative min-h-innershow md:fixed md:right-4 flex flex-col gap-2 ${hidePane ? 'md:w-[28%]' : 'md:w-3/12'}  order-1 md:order-2 rounded-md backdrop-sepia-0 bg-white/30 dark:bg-black/30 my-4 py-3`}>
                 {/* <div className='relative md:fixed md:left-4 flex flex-col h-fit md:w-[23%] mx-4 md:mx-0 ' style={{ maxHeight: "calc(100vh - 7.25rem)" }}> */}
                 <div className='flex flex-col'>
                     <div className='flex flex-col gap-2 px-3'>
@@ -191,11 +200,11 @@ const ExploreShow = (props) => {
                             <h1 className='text-2xl tex-gray-900 dark:text-gray-200 font-bold'>{artwork.title}</h1>
                             <p className='text-lg tex-gray-800 dark:text-gray-300'>{artwork.description}</p>
                         </div>
-                        <div className='flex flex-row items-center w-full p-2 bg-neutral-200 dark:bg-neutral-900 rounded-xl gap-2'>
-                            <div className="font-medium text-xs text-gray-600 dark:text-gray-300">Categories</div>
+                        <div className='flex flex-row items-center w-full p-2 bg-neutral-300 dark:bg-neutral-800 rounded-xl gap-2'>
+                            <div className="font-medium text-xs text-neutral-800 dark:text-gray-300">Categories</div>
                             <div className='flex flex-row gap-1.5'>
                                 {artwork.categories.map((item, index) => (
-                                    <div key={index} className="flex w-fit justify-center items-center font-medium py-1.5 px-2 bg-teal-500 dark:bg-teal-600 rounded-full text-gray-600 dark:text-gray-300 shadow">
+                                    <div key={index} className="flex w-fit justify-center items-center font-medium py-1.5 px-2 bg-teal-500 dark:bg-teal-600 rounded-full text-neutral-800 dark:text-gray-300 shadow">
                                         <div className="text-xs font-medium leading-none">{item}</div>
                                     </div>
                                 ))}
@@ -214,12 +223,11 @@ const ExploreShow = (props) => {
                                     <div className="w-6 h-6 overflow-hidden">
                                         {artwork.artist.avatar.icon.length > 0 && <img loading='lazy' src={api_fetchUserImages(artwork.artist.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />}
                                     </div>
-                                    <p className="font-semibold text-base text-neutral-800 dark:text-gray-300">
-                                        {artwork.artist.username}
-                                    </p>
-                                    <svg className="stroke-current stroke-1 text-neutral-800 dark:text-gray-300 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
-                                    </svg>
+                                    <div className='flex flex-row items-center gap-1'>
+                                        <p className='text-neutral-800 dark:text-gray-200 text-sm font-medium tracking-wide'>{artwork.artist.username}</p>
+                                        <VerifiedIcon className="stroke-current stroke-1 text-neutral-800 dark:text-gray-300 h-4 w-4" />
+                                        <Artportal_logo fill="#059669" className='h-3 w-auto' />
+                                    </div>
                                 </div>
                                 <p className=' whitespace-nowrap text-sm'>{moment(artwork.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</p>
                             </div>
@@ -242,16 +250,16 @@ const ExploreShow = (props) => {
                                         />
                                         <ImPlus className="absolute bottom-0 right-0 text-[#D1853A] h-4 w-4" />
                                     </div>} */}
-                                <div className='flex flex-col gap-3'>
-                                    <div className='flex flex-row gap-4 items-center'>
-                                        <div className='flex flex-row items-center gap-0.5'>
-                                            <IoEye className='h-6 w-6 text-neutral-600 dark:text-neutral-500' />
-                                            <p className='font-semibold text-neutral-600 dark:text-neutral-500 text-base'>{new Intl.NumberFormat().format(artwork.views.length)}</p>
+                                <div className='flex flex-row gap-6'>
+                                    <div className='flex flex-row gap-3 items-center'>
+                                        <div className='flex flex-row items-center gap-1'>
+                                            <ViewsIcon className='w-5 h-5 text-neutral-600 dark:text-neutral-500' />
+                                            <p className='font-semibold text-neutral-600 dark:text-neutral-500 text-xl'>{new Intl.NumberFormat().format(artwork.views.length)}</p>
                                         </div>
-                                        <div className='flex flex-row items-center gap-0.5'>
+                                        <div className='flex flex-row items-center gap-1'>
                                             {artwork.likes.filter(item => item === user.id).length > 0 ?
                                                 <button disabled>
-                                                    <AiFillLike className='w-6 h-6 text-neutral-700 dark:text-gray-200' />
+                                                    <LikeFilledIcon className='w-4 h-4 text-neutral-700 dark:text-gray-200' />
                                                 </button>
                                                 :
                                                 <button
@@ -262,17 +270,17 @@ const ExploreShow = (props) => {
                                                             handleInvalidUser()
                                                     }}
                                                 >
-                                                    <AiOutlineLike className='w-6 h-6 text-neutral-600 dark:text-neutral-500' />
+                                                    <LikeIcon className='w-4 h-4 text-neutral-600 dark:text-neutral-500' />
                                                 </button>
                                             }
-                                            <p className="font-bold text-neutral-600 dark:text-gray-400 text-base">
+                                            <p className="font-semibold text-neutral-600 dark:text-gray-400 text-xl">
                                                 {artwork.likes.length}
                                             </p>
                                         </div>
-                                        <div className='flex flex-row items-center gap-0.5'>
+                                        <div className='flex flex-row items-center gap-1'>
                                             {artwork.dislikes.filter(item => item === user.id).length > 0 ?
                                                 <button disabled>
-                                                    <AiFillDislike className='w-6 h-6 text-neutral-700 dark:text-gray-200' />
+                                                    <DislikeFilledIcon className='w-4 h-4 text-neutral-700 dark:text-gray-200' />
                                                 </button>
                                                 :
                                                 <button
@@ -283,10 +291,10 @@ const ExploreShow = (props) => {
                                                             handleInvalidUser()
                                                     }}
                                                 >
-                                                    <AiOutlineDislike className='w-6 h-6 text-neutral-600 dark:text-neutral-500' />
+                                                    <DislikeIcon className='w-4 h-4 text-neutral-600 dark:text-neutral-500' />
                                                 </button>
                                             }
-                                            <p className="font-bold text-neutral-600 dark:text-gray-400 text-base">
+                                            <p className="font-semibold text-neutral-600 dark:text-gray-400 text-xl">
                                                 {artwork.dislikes.length}
                                             </p>
                                         </div>
@@ -318,27 +326,24 @@ const ExploreShow = (props) => {
                                 </div>
                             </div>
                         </div>
-                        <div className='flex items-center justify-between py-0.5 text-neutral-800 dark:text-gray-300'>
+                    </div>
+                    <Divider />
+                    <div className='flex flex-col gap-2'>
+                        <div className='flex items-center justify-between py-0.5 text-neutral-800 dark:text-gray-300 px-3'>
                             <div className='flex flex-row gap-1 items-center'>
                                 {/* <IoChatbox className='h-5 w-5' /> */}
                                 <h2 className='text-lg self-center'>{new Intl.NumberFormat().format(artwork.comments_count)} Comments</h2>
                             </div>
                         </div>
-                    </div>
-                    <Divider />
-                    <div className='flex flex-col gap-2'>
                         {common.isAuthenticated ? <div className='flex flex-row gap-2 items-center px-3'>
-                            {user.avatar.icon.length > 0 && <div className="w-7 h-7 overflow-hidden">
-                                <img loading='lazy' src={api_fetchUserImages(user.avatar.icon)} alt="user_avatar" className="object-contain w-full h-full" />
-                            </div>}
                             <input
                                 type="text"
                                 name="comment"
                                 value={comment}
                                 onChange={(ev) => setComment(ev.target.value)}
                                 onKeyDown={(ev) => { if (ev.code === 'Enter') { submitComment(ev) } }}
-                                placeholder="Add a comment..."
-                                className="w-full p-1 rounded text-md placeholder:font-semibold placeholder:text-neutral-700 dark:placeholder:text-neutral-500 text-gray-600 dark:text-neutral-300 outline-none border-2 border-gray-700 dark:border-neutral-600"
+                                placeholder="Add a comment"
+                                className="w-full p-2 rounded text-md placeholder:font-semibold placeholder:text-neutral-700 dark:placeholder:text-neutral-500 text-gray-600 dark:text-neutral-300 outline-none border-2 border-gray-700 dark:border-neutral-600"
                             />
                         </div> : null}
                         <div className="flex flex-col h-full max-h-[50vh] overflow-y-auto scrollbar px-3">
