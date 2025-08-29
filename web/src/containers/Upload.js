@@ -226,20 +226,20 @@ const ExploreUpload = (props) => {
                     <div className='absolute h-1 w-6/12 bottom-[-3px] left-0 text-2xl bg-gray-300 rounded-md'></div>
                 </div>
                 <div className='flex flex-col gap-1'>
-                    <p className='text-md text-neutral-700 dark:text-neutral-400'>Once you upload your image, our system runs two AI checks in the background to help keep the platform safe and organized:</p>
+                    <p className='font-semibold text-md text-neutral-700 dark:text-neutral-400'>Once you upload your image, our system runs two AI checks in the background to help keep the platform safe and organized:</p>
                     <div className='flex flex-row gap-2 items-center'>
                         <AiAgentIcon className="h-5 w-5 text-neutral-700 dark:text-neutral-400" />
-                        <p className='text-md text-neutral-700 dark:text-neutral-400'>
+                        <p className='text-md font-semibold text-neutral-700 dark:text-neutral-400'>
                             Auto-Categorization: The AI agent analyzes your artwork and automatically places it under the right category — no extra steps needed from you.
                         </p>
                     </div>
                     <div className='flex flex-row gap-2 items-center'>
                         <AiAgentIcon className="h-5 w-5 text-neutral-700 dark:text-neutral-400" />
-                        <p className='flex text-md text-neutral-700 dark:text-neutral-400'>
+                        <p className='font-semibold text-md text-neutral-700 dark:text-neutral-400'>
                             Your upload is automatically scanned against existing artworks on the platform to ensure its authenticity and not copied from another artist's work.
                         </p>
                     </div>
-                    <p className='text-sm italic text-neutral-700 dark:text-neutral-400'>Your artwork and personal data are never shared outside the platform. All uploads are securely processed and stored within our systems.</p>
+                    <p className='text-sm font-light italic text-neutral-700 dark:text-neutral-400'>* Your artwork and personal data are never shared outside the platform. All uploads are securely processed and stored within our systems.</p>
                 </div>
                 <div className='flex lg:flex-row flex-col py-5 px-2 lg:gap-8 md:gap-2'>
                     <div className='w-8/12 xs:mb-2 md:mb-0'>
@@ -285,7 +285,7 @@ const ExploreUpload = (props) => {
                             </div>
                         </div>
                     </div>
-                    <div className='flex flex-col gap-4 w-4/12'>
+                    <div className="flex flex-col gap-4 w-4/12 ">
                         {exploreCategories.length === 0 ? null : <div className='flex flex-col'>
                             <span className=' text-lg tracking-wide font-medium text-gray-700 dark:text-gray-300'>Categories<span className=' text-rose-400 text-md'>*</span></span>
                             <div className="w-full inline-flex flex-col justify-center relative text-gray-500">
@@ -298,7 +298,12 @@ const ExploreUpload = (props) => {
                                 </div>
                             </div>
                         </div>}
-                        <div className='flex flex-col gap-1'>
+                        <div className="relative p-6 bg-neutral-900 text-white rounded-xl 
+            before:content-[''] before:absolute before:-inset-[3px] 
+            before:rounded-inherit 
+            before:bg-[linear-gradient(130deg,#ff00ff,#00ffff,#ffff00,#ff00ff)] 
+            before:bg-[length:300%_300%] before:animate-glitter 
+            before:-z-10">
                             <span className=' text-lg tracking-wide font-medium text-gray-700 dark:text-gray-300'>Title<span className=' text-rose-400 text-md'>*</span></span>
                             <input type="text" maxLength={250} value={exploreTitle} onChange={(ev) => setExploreTitle(ev.target.value)} className="py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 focus:outline-none rounded-md w-full" placeholder='Title' />
                         </div>
@@ -318,10 +323,10 @@ const ExploreUpload = (props) => {
                                 {exploreTags.length === 0 ? '' :
                                     <div id='tagmenu' className='flex flex-wrap justify-center gap-1 mt-2'>
                                         {exploreTags.map(tag => (
-                                            <div className="flex justify-center items-center m-1 font-medium py-1 px-2 rounded-md text-indigo-100 bg-blue-700 border border-indigo-700 ">
-                                                <div className="text-xs font-normal leading-none max-w-full flex-initial">{tag.value}</div>
+                                            <div className="flex items-center font-medium py-1 px-2 rounded-full text-gray-700 dark:text-gray-300 border-2 border-gray-700 dark:border-gray-300">
+                                                <div className="text-xs tracking-wide font-semibold leading-none max-w-full flex-initial">{tag.value}</div>
                                                 <div className="flex flex-auto flex-row-reverse">
-                                                    <MdClose className='feather feather-x cursor-pointer hover:text-indigo-400 rounded-full w-4 h-4 ml-1' />
+                                                    <MdClose onClick={() => handleRemoveTag(tag)} className='h-5 w-5 cursor-pointer' />
                                                 </div>
                                             </div>
                                         ))}
@@ -333,7 +338,6 @@ const ExploreUpload = (props) => {
                                             if (exploreTags.includes(tag)) {
                                                 return <div className="flex justify-between items-center pl-8 pr-2 py-2 m-1 bg-indigo-100 text-gray-600 rounded">
                                                     {tag.value}
-                                                    <MdClose onClick={() => handleRemoveTag(tag)} className='h-5 w-5 cursor-pointer' />
                                                 </div>
                                             } else {
                                                 return <div onClick={() => handleSelectTag(tag)} className="pl-8 pr-2 py-2 text-gray-700 dark:text-gray-300 cursor-pointer hover:bg-indigo-300 hover:bg-gray-100 dark:hover:bg-neutral-800/25 hover:rounded">

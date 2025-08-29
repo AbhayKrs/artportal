@@ -39,6 +39,8 @@ import {
     WhatsappIcon,
     WhatsappShareButton,
 } from "react-share";
+import { ImageCard } from './Card';
+import Masonry from './Masonry';
 
 export const LoginModal = ({ open, title, banner, error, onClose, openRegister, handleSignIn, setAuthError }) => {
     const [username, setUsername] = useState('');
@@ -856,24 +858,68 @@ export const SearchModal = ({ open, handleClose, betaMsg, searchVal, setSearchVa
                             </button>
                         </div>
                     </div>
+                    {/* <Masonry cols={5}>
+                        {explore.trending_artworks.map((artwork, index) => (
+                            <div key={index} onClick={() => navigate(`/explore/${artwork._id}`)} className='relative group group-hover:block cursor-pointer'>
+                                <img loading='lazy'
+                                    id={index}
+                                    className='object-cover w-full h-full rounded'
+                                    src={api_fetchArtworkImages(artwork.files[0])}
+                                />
+                                <div className='opacity-0 flex transition-all delay-200 absolute bottom-0 p-2 pt-14 group-hover:opacity-100 w-full bg-gradient-to-t from-black text-gray-200 justify-between'>
+                                    <div className="flex flex-col place-self-end max-w-[65%]">
+                                        <h4 className="text-md text-base  font-bold leading-5 break-words">{artwork.title.length > 20 ? artwork.title.slice(0, 20) + "..." : artwork.title}</h4>
+                                        <div className='flex'>
+                                            <p className="font-base text-xs my-1 mr-1">
+                                                {artwork.artist.username}
+                                            </p>
+                                            <svg className="stroke-current stroke-1 text-indigo-600 dark:text-indigo-600 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col self-end place-items-end gap-1.5">
+                                        <div className="inline-flex gap-1 items-end">
+                                            <BsHeart className='h-4 w-4' />
+                                            <p className="text-xs antialiased">{artwork.likes.length}</p>
+                                        </div>
+                                        <div className="inline-flex gap-1 items-end">
+                                            <BsChat className='h-4 w-4' />
+                                            <p className="text-xs antialiased">{artwork.comments.length}</p>
+                                        </div>
+                                        <div className="inline-flex gap-1 items-end">
+                                            <BiTimeFive className='h-4 w-4' />
+                                            <p className="text-xs antialiased">{moment(artwork.createdAt).fromNow()}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </Masonry> */}
                     <div className='scrollbar max-h-full md:max-h-[30rem] overflow-y-auto'>
                         {activeSearch === 'artwork' &&
                             <div className='flex flex-col gap-2 pr-2'>
-                                {searchList.length > 0 ? searchList.map((item, index) => (
-                                    <div key={index} className='flex items-center gap-4 rounded-lg text-neutral-700 dark:text-gray-200 bg-gray-100 dark:bg-neutral-900 py-2 px-5'>
-                                        <img src={api_fetchArtworkImages(item.files[0])} className='object-cover w-10 h-10 md:w-14 md:h-14 rounded' />
-                                        <span className='text-base md:text-xl font-semibold leading-5 capitalize'>{item.title}</span>
-                                        <FaChevronRight onClick={() => { navigate(`/explore/${item._id}`); clearSearch(); handleClose() }} className="ml-auto h-6 w-6 cursor-pointer" />
-                                    </div>
-                                ))
-                                    :
-                                    <div className='flex flex-col gap-2 items-center justify-center p-4'>
-                                        <FiAtSign className='h-8 w-8 text-neutral-800 dark:text-gray-300' />
-                                        <div className='flex flex-col gap-1 items-center'>
-                                            <span className='text-neutral-800 dark:text-gray-200  font-semibold leading-5'>No artworks found.</span>
-                                            <span className='text-neutral-500 dark:text-gray-400  text-sm'>"{searchVal}" did not match any artworks in our database. Please try again.</span>
-                                        </div>
-                                    </div>}
+                                <Masonry cols={6}>
+                                    {searchList.length > 0 ?
+                                        searchList.map((item, index) => (
+                                            <ImageCard size="m" key={index} explore={item} artist={item.artist} />
+                                        ))
+                                        // searchList.map((item, index) => (
+                                        //     <div key={index} className='flex items-center gap-4 rounded-lg text-neutral-700 dark:text-gray-200 bg-gray-100 dark:bg-neutral-900 py-2 px-5'>
+                                        //         <img src={api_fetchArtworkImages(item.files[0])} className='object-cover w-10 h-10 md:w-14 md:h-14 rounded' />
+                                        //         <span className='text-base md:text-xl font-semibold leading-5 capitalize'>{item.title}</span>
+                                        //         <FaChevronRight onClick={() => { navigate(`/explore/${item._id}`); clearSearch(); handleClose() }} className="ml-auto h-6 w-6 cursor-pointer" />
+                                        //     </div>
+                                        // ))
+                                        :
+                                        <div className='flex flex-col gap-2 items-center justify-center p-4'>
+                                            <FiAtSign className='h-8 w-8 text-neutral-800 dark:text-gray-300' />
+                                            <div className='flex flex-col gap-1 items-center'>
+                                                <span className='text-neutral-800 dark:text-gray-200  font-semibold leading-5'>No artworks found.</span>
+                                                <span className='text-neutral-500 dark:text-gray-400  text-sm'>"{searchVal}" did not match any artworks in our database. Please try again.</span>
+                                            </div>
+                                        </div>}
+                                </Masonry>
                             </div>
                         }
                         {activeSearch === 'artist' &&

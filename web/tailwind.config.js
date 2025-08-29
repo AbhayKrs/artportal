@@ -28,8 +28,22 @@ module.exports = {
         "3xl": ['1.875rem', '2rem']
       },
       minHeight: {
-        'show': 'calc(100vh - 2.355rem)',
+        'show': 'calc(100vh - 1.55rem)',
         'innershow': 'calc(100vh - 3.25rem)'
+      },
+      maxHeight: {
+        'show': 'calc(100vh - 1.55rem)',
+        'innershow': 'calc(100vh - 3.25rem)'
+      },
+      keyframes: {
+        glitter: {
+          '0%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+          '100%': { backgroundPosition: '0% 50%' },
+        },
+      },
+      animation: {
+        glitter: 'glitter 3s linear infinite',
       },
     },
   },
@@ -47,7 +61,7 @@ module.exports = {
           width: '0.5em',
         },
         '::-webkit-scrollbar-track': {
-          backgroundColor: '#737373'
+          // backgroundColor: '#737373'
         },
         '::-webkit-scrollbar-thumb': {
           backgroundColor: '#404040',

@@ -123,7 +123,7 @@ const Header = ({ hidePane, setHidePane }) => {
                         <div className={`flex flex-col  ${hidePane ? '' : 'w-full'}`}>
                             <div className={`flex flex-col ${hidePane ? 'items-center' : ''}`}>
                                 <HeaderLink type="link" hidePane={hidePane} text="Upload" path="/explore/new" icon={<UploadIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
-                                <HeaderLink type="link" hidePane={hidePane} text={`Cart (${user && user.cart && user.cart.length})`} path="/store/cart" icon={<CartIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
+                                <HeaderLink type="link" hidePane={hidePane} text={`Cart (${user && user.cart ? user.cart.length : 0})`} path="/store/cart" icon={<CartIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 <HeaderLink type="link" hidePane={hidePane} text="Notifications" path="/notifications" icon={<NotificationIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                             </div>
                             <Divider />
