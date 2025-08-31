@@ -1,125 +1,18 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
-
-import { api_userImages } from '../utils/api_routes';
-
-import { ImageCard } from './Card';
-import { AwardConfirmModal } from './Modal';
 import Dropdown from './Dropdown';
 
-import { awardTabPanelHeaders, filters, periodOptions } from '../utils/constants';
+import { filters, periodOptions } from '../utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { a_fetchArtworks } from '../store/actions/library.actions';
+import { a_fetchArtworks, a_searchArtworks } from '../store/actions/library.actions';
 
-export const HomeTabPanel = ({ tags, artworks, }) => {
-    const [activeStatus, setActiveStatus] = useState(0);
-    let defaultTransform = 0;
+import { MdClose } from 'react-icons/md';
+import { FiAtSign } from 'react-icons/fi';
+import { FaChevronRight, FaHashtag, FaGreaterThan } from 'react-icons/fa6';
+import { ReactComponent as SearchIcon } from '../assets/icons/search.svg';
+import { r_clearSearchList } from '../store/reducers/common.reducers';
 
-    const goNext = () => {
-        defaultTransform = defaultTransform - 600;
-        var tabSlider = document.getElementById("tabSlider");
-        if (Math.abs(defaultTransform) >= tabSlider.scrollWidth / 1.05)
-            defaultTransform = 0;
-        tabSlider.style.transform = "translateX(" + defaultTransform + "px)";
-    }
-    const goPrev = () => {
-        var tabSlider = document.getElementById("tabSlider");
-        if (Math.abs(defaultTransform) === 0) defaultTransform = 0;
-        else defaultTransform = defaultTransform + 600;
-        tabSlider.style.transform = "translateX(" + defaultTransform + "px)";
-    }
-
-    return (
-        <div className="p-2 h-fit bg-gray-200 dark:bg-darkBg">
-            <div className='flex'>
-                <button onClick={() => goPrev()} aria-label="slide backward" className="px-1.5 z-30 left-0 cursor-pointer bg-gray-400/50 dark:bg-neutral-700 rounded-tl-md">
-                    <svg className="dark:text-gray-200 h-3 w-3" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M7 1L1 7L7 13" stroke="currentColor" />
-                    </svg>
-                </button>
-                <div className='flex overflow-hidden bg-gray-300 dark:bg-neutral-800'>
-                    <ul id='tabSlider' className="flex ">
-                        {tags.map((tag, index) => {
-                            return <li key={index} onClick={() => setActiveStatus(index)} className={index === activeStatus ? "text-sm text-gray-600 bg-indigo-300 mr-1" : "text-sm text-gray-600 dark:text-gray-400 flex items-center mr-1 hover:text-indigo-700 cursor-pointer"}>
-                                <div className="flex items-center">
-                                    <span className="p-2 font-normal">{tag}</span>
-                                </div>
-                            </li>
-                        })}
-                    </ul>
-                </div>
-                <button onClick={() => goNext()} aria-label="slide forward" className="px-1.5 z-30 right-0 cursor-pointer bg-gray-400/50 dark:bg-neutral-700 rounded-tr-md">
-                    <svg className="dark:text-gray-200 h-3 w-3" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 1L7 7L1 13" stroke="currentColor" />
-                    </svg>
-                </button>
-            </div>
-            {artworks.length > 0 ?
-                <div className="grid bg-gray-300 dark:bg-neutral-800 overflow-hidden rounded-b-md lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-3 xs:grid-cols-1">
-                    {tags.map((tag, index) => {
-                        return <Fragment key={index}>
-                            {
-                                index === activeStatus && artworks.filter(item => item.tags.includes(tag) === true).map((artwork, index) => (
-                                    <ImageCard size='l' key={index} artwork={artwork} artist={artwork.artist} />
-                                ))
-                            }
-                        </Fragment>
-                    })}
-                </div>
-                :
-                <div className='flex justify-center items-center  text-lg text-gray-800 dark:text-gray-300 bg-gray-300 dark:bg-neutral-800 h-full min-h-[20em]'>No artworks found...</div>
-            }
-        </div >
-    )
-}
-
-export const AwardTabPanel = ({ awards, user, artworkID, awardClose, handleAwardArtwork }) => {
-    const [activeStatus, setActiveStatus] = useState(0);
-    const [confirmData, setConfirmData] = useState({ open: false, award: {} });
-
-    return (
-        <div className="p-2 h-fit bg-slate-100 dark:bg-neutral-800">
-            <div className='flex'>
-                <div className='flex w-full overflow-hidden bg-gray-100 dark:bg-neutral-800'>
-                    <ul id='tabSlider' className="flex ">
-                        {awardTabPanelHeaders.map((awardType, index) => {
-                            return <li key={index} onClick={() => setActiveStatus(index)} className={index === activeStatus ? "text-sm text-gray-900 dark:font-medium bg-blue-700 mr-1 rounded-t-md" : "text-sm text-gray-600 rounded-t-md dark:text-gray-400 dark:bg-neutral-700 flex items-center mr-1 hover:text-indigo-700 cursor-pointer"}>
-                                <div className=" flex items-center uppercase">
-                                    <span className="p-2 pb-1">{awardType}</span>
-                                </div>
-                            </li>
-                        })}
-                    </ul>
-                </div>
-            </div>
-            <div className="scrollbar w-fit grid max-h-96 gap-6 bg-gray-300 dark:bg-neutral-900 p-5 overflow-x-hidden rounded-b-md lg:grid-cols-6 xs:grid-cols-4" >
-                {awards.map((award, index) => {
-                    return <Fragment key={index}>
-                        {index === activeStatus && awards.map((award, index) => (
-                            <button className='flex flex-col items-center' key={index} onClick={() => setConfirmData({ open: true, award })}>
-                                {award.icon.length > 0 && <img loading='lazy' style={{ width: '3em', height: '3em' }} src={api_userImages(award.icon)} />}
-                                <p className="font-bold font-serif text-right text-neutral-700 dark:text-gray-300 text-sm">{award.value}</p>
-                            </button>
-                        ))}
-                    </Fragment>
-                })}
-            </div>
-            {confirmData.open &&
-                <AwardConfirmModal
-                    open={confirmData.open}
-                    awardData={confirmData.award}
-                    user={user}
-                    artworkID={artworkID}
-                    onClose={() => setConfirmData({ open: false, award: {} })}
-                    awardClose={awardClose}
-                    handleAwardArtwork={handleAwardArtwork}
-                />
-            }
-        </div >
-    )
-}
-
-export const ExplorePanel = ({ search }) => {
+const TabPanel = ({ search }) => {
     let navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -159,43 +52,40 @@ export const ExplorePanel = ({ search }) => {
     }, []);
 
     useEffect(() => {
+        const activePath = search ? "search" : "library";
+        console.log("activePath", activePath);
+
         if (triggerEffect) {
             //case 1 - No search / No Filter / No Period
-            console.log('case1', searchVal.length === 0 && activeFilter.length === 0 && activePeriod.length === 0)
             if (searchVal.length === 0 && activeFilter.length === 0 && activePeriod.length === 0) {
-                navigate('/library?filter=trending');
-                dispatch(a_fetchArtworks({ filter: "trending" }))
+                navigate(`/${activePath}?filter=trending`);
+                dispatch(a_fetchArtworks({ filter: "trending" }));
             }
 
             //case 2 - Search / No Filter / No Period
-            console.log('case2', searchVal.length > 0 && activeFilter.length === 0 && activePeriod.length === 0)
             if (searchVal.length > 0 && activeFilter.length === 0 && activePeriod.length === 0) {
-                navigate(`/library/search?query=${searchVal}`);
+                navigate(`/${activePath}?query=${searchVal}`);
             }
 
             //case 3 - Search / Filter / No Period
-            console.log('case3', searchVal.length > 0 && activeFilter.length > 0 && activePeriod.length === 0)
             if (searchVal.length > 0 && activeFilter.length > 0 && activePeriod.length === 0) {
-                navigate(`/library/search?query=${searchVal}&filter=${activeFilter.replace(/\s+/g, '+')}`);
+                navigate(`/${activePath}?query=${searchVal}&filter=${activeFilter.replace(/\s+/g, '+')}`);
             }
 
             //case 4 - Search / Filter / Period
-            console.log('case4', searchVal.length > 0 && activeFilter.length > 0 && activePeriod.length > 0)
             if (searchVal.length > 0 && activeFilter.length > 0 && activePeriod.length > 0) {
-                navigate(`/library/search?query=${searchVal}&filter=${activeFilter.replace(/\s+/g, '+')}&period=${activePeriod.replace(/\s+/g, '+')}`);
+                navigate(`/${activePath}?query=${searchVal}&filter=${activeFilter.replace(/\s+/g, '+')}&period=${activePeriod.replace(/\s+/g, '+')}`);
             }
 
             //case 5 - No Search / Filter / No Period
-            console.log('case5', searchVal.length === 0 && activeFilter.length > 0 && activePeriod.length === 0)
             if (searchVal.length === 0 && activeFilter.length > 0 && activePeriod.length === 0) {
-                navigate(`?filter=${activeFilter.replace(/\s+/g, '+')}`);
+                navigate(`/${activePath}?filter=${activeFilter.replace(/\s+/g, '+')}`);
                 dispatch(a_fetchArtworks({ filter: activeFilter.replace(/\s+/g, '+') }))
             }
 
             //case 6 - No Search / Filter / Period
-            console.log('case6', searchVal.length === 0 && activeFilter.length > 0 && activePeriod.length > 0)
             if (searchVal.length === 0 && activeFilter.length > 0 && activePeriod.length > 0) {
-                navigate(`?filter=${activeFilter.replace(/\s+/g, '+')}&period=${activePeriod.replace(/\s+/g, '+')}`);
+                navigate(`/${activePath}?filter=${activeFilter.replace(/\s+/g, '+')}&period=${activePeriod.replace(/\s+/g, '+')}`);
                 dispatch(a_fetchArtworks({ filter: activeFilter.replace(/\s+/g, '+'), period: activePeriod.replace(/\s+/g, '+') }))
             }
 
@@ -224,83 +114,116 @@ export const ExplorePanel = ({ search }) => {
         setActivePeriodLabel(item.label);
     }
 
+    const clearSearch = () => {
+        dispatch(r_clearSearchList())
+        setSearchVal('');
+    }
+
+    const handleSearch = (val) => {
+        setSearchVal(val);
+        if (val.length > 0) {
+            dispatch(a_searchArtworks({ value: val, filter: "", period: "" }));
+        } else {
+            clearSearch();
+        }
+    }
+
     return (
-        <div className={`flex sm:flex-row gap-2 flex-col w-full items-center bg-slate-100/75 dark:bg-darkBg/75 sticky z-20`}>
-            <div className='flex w-full items-center sm:justify-start justify-between'>
-                <div className='lg:flex hidden'>
-                    <ul id='tabSlider' className="flex flex-row gap-4 items-center whitespace-nowrap">
-                        {filters.map((filter, index) => {
-                            return (
-                                <li
-                                    key={index}
-                                    onClick={() => selectFilter(filter.value)}
-                                    className={`flex gap-1 cursor-pointer text-lg font-medium tracking-wide text-neutral-800 dark:text-gray-300 rounded-xl items-center`}
-                                >
-                                    <div className={`${filter.value === activeFilter ? 'flex' : 'hidden'} h-4 w-1 bottom-[-4px] left-0 rounded text-2xl bg-blue-700 dark:bg-blue-700`}></div>
-                                    {filter.label}
-                                </li>
-                            )
-                        })}
-                    </ul>
-                </div>
-                <div className="lg:hidden flex items-center cursor-pointer gap-2">
-                    <Dropdown left name='filters' selectedPeriod={activeFilter === '' ? 'Select a filter' : activePeriodLabel} options={filters} onSelect={selectFilter} />
-                </div>
-                {activePeriod.length > 0 && <span className='text-gray-600 dark:text-gray-400 mx-2'>&#9679;</span>}
-                {activePeriod.length > 0 ?
-                    <div className="flex items-center cursor-pointer gap-2">
-                        {window.innerWidth > 640 ?
-                            <Dropdown left name='period' selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
-                            :
-                            <Dropdown right name='period' selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
+        <div className={`flex flex-col gap-2 w-full bg-slate-100/75 dark:bg-darkBg/75`}>
+            {search && (
+                <div className='flex flex-col gap-2 w-full'>
+                    <div className="flex w-6/12 items-center bg-slate-300 dark:bg-neutral-800 rounded-xl py-2 px-4 gap-2">
+                        <div className="flex relative items-center justify-center">
+                            <SearchIcon className="h-4 w-4 text-neutral-800 dark:text-gray-300" />
+                        </div>
+                        {searchVal.length > 0 && <div className="flex relative items-center justify-center rounded dark:text-gray-300 h-7 w-7 mr-2">
+                            {common.activeSearch === 'artwork' && <FiAtSign className='h-4 w-4' />}
+                            {common.activeSearch === 'tag' && <FaHashtag className='h-4 w-4' />}
+                            {common.activeSearch === 'artist' && <FaGreaterThan className='h-4 w-4' />}
+                        </div>}
+                        <input
+                            type="text"
+                            name="search"
+                            value={searchVal}
+                            placeholder="Search..."
+                            autoComplete="off"
+                            className="w-full bg-transparent text-neutral-800 dark:text-gray-200 placeholder-gray-600 dark:placeholder-gray-300 text-xl focus:outline-none"
+                            onChange={(ev) => handleSearch(ev.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    switch (common.activeSearch) {
+                                        case 'artwork': {
+                                            dispatch(a_searchArtworks({ value: searchVal, filter: "", period: "" }))
+                                        }
+                                    }
+                                }
+                            }}
+                        />
+                        {searchVal.length === 0 ?
+                            '' :
+                            <button className="flex items-center justify-center text-neutral-800 dark:text-gray-300 h-full w-12" onClick={() => setSearchVal('')}>
+                                <MdClose className='h-5 w-5' />
+                            </button>
                         }
                     </div>
-                    :
-                    null}
+                </div>
+            )}
+            <div className='flex flex-row w-full justify-between'>
+                {search && (
+                    <div className='flex flex-row gap-2'>
+                        <button disabled={common.activeSearch === 'artwork'} onClick={() => { dispatch(a_searchArtworks({ value: searchVal, filter: "", period: "" })) }} className={`flex gap-1 items-center tracking-wide ${common.activeSearch === 'artwork' ? 'text-blue-700' : 'text-neutral-700 dark:text-gray-300 hover:text-blue-700'}`}>
+                            <FiAtSign className='h-4 w-4' />
+                            <span className=' font-semibold text-base'>Artworks</span>
+                        </button>
+                        <span className='flex text-neutral-700 dark:text-gray-300'>&#8226;</span>
+                        <button disabled={searchVal.length === 0} onClick={() => { dispatch(a_searchArtworks({ value: searchVal })) }} className={`flex gap-1 items-center tracking-wide ${common.activeSearch === 'tag' ? 'text-blue-700' : 'text-neutral-700 dark:text-gray-300 hover:text-blue-700'} disabled:text-gray-300 dark:disabled:text-neutral-500`}>
+                            <FaHashtag className='h-4 w-4' />
+                            <span className=' font-semibold text-base'>Tags</span>
+                        </button>
+                        <span className='flex text-neutral-700 dark:text-gray-300'>&#8226;</span>
+                        <button disabled={searchVal.length === 0} onClick={() => { dispatch(a_searchArtworks({ value: searchVal })) }} className={`flex gap-1 items-center tracking-wide ${common.activeSearch === 'artist' ? 'text-blue-700' : 'text-neutral-700 dark:text-gray-300 hover:text-blue-700'} disabled:text-gray-300 dark:disabled:text-neutral-500`}>
+                            <FaGreaterThan className='h-4 w-4' />
+                            <span className=' font-semibold text-base'>Artists</span>
+                        </button>
+                    </div>
+                )}
+                {(!search || (search && common.activeSearch === "artwork")) && (
+                    <div className='flex items-center'>
+                        <div className='lg:flex hidden'>
+                            <ul id='tabSlider' className="flex flex-row gap-4 items-center whitespace-nowrap">
+                                {filters.map((filter, index) => {
+                                    return (
+                                        <li
+                                            key={index}
+                                            onClick={() => selectFilter(filter.value)}
+                                            className={`flex gap-1 cursor-pointer text-lg font-medium tracking-wide text-neutral-800 dark:text-gray-300 rounded-xl items-center`}
+                                        >
+                                            <div className={`${filter.value === activeFilter ? 'flex' : 'hidden'} h-4 w-1 bottom-[-4px] left-0 rounded text-2xl bg-blue-700 dark:bg-blue-700`}></div>
+                                            {filter.label}
+                                        </li>
+                                    )
+                                })}
+                            </ul>
+                        </div>
+                        <div className="lg:hidden flex items-center cursor-pointer gap-2">
+                            <Dropdown left name='filters' selectedPeriod={activeFilter === '' ? 'Select a filter' : activePeriodLabel} options={filters} onSelect={selectFilter} />
+                        </div>
+                        {activePeriod.length > 0 && <span className='text-gray-600 dark:text-gray-400 mx-2'>&#9679;</span>}
+                        {activePeriod.length > 0 ?
+                            <div className="flex items-center cursor-pointer gap-2">
+                                {window.innerWidth > 640 ?
+                                    <Dropdown left name='period' selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
+                                    :
+                                    <Dropdown right name='period' selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
+                                }
+                            </div>
+                            :
+                            null}
+                    </div>
+                )}
             </div>
         </div>
     )
 }
 
-export const NotificationTabPanel = ({ awards, user, artworkID, awardClose, handleAwardArtwork }) => {
-    return (
-        <div className="p-2 h-fit bg-slate-100 dark:bg-neutral-800">
-            {/* <div className='flex'>
-                <div className='flex w-full overflow-hidden bg-gray-100 dark:bg-neutral-800'>
-                    <ul id='tabSlider' className="flex ">
-                        {['artportal Specials', 'Community Made', 'Premium'].map((awardType, index) => {
-                            return <li key={index} onClick={() => setActiveStatus(index)} className={index === activeStatus ? "text-sm text-gray-900 dark:font-medium bg-blue-700 mr-1 rounded-t-md" : "text-sm text-gray-600 rounded-t-md dark:text-gray-400 dark:bg-neutral-700 flex items-center mr-1 hover:text-indigo-700 cursor-pointer"}>
-                                <div className=" flex items-center uppercase">
-                                    <span className="p-2 pb-1">{awardType}</span>
-                                </div>
-                            </li>
-                        })}
-                    </ul>
-                </div>
-            </div>
-            <div className="scrollbar w-fit grid max-h-96 gap-6 bg-gray-300 dark:bg-neutral-900 p-5 overflow-x-hidden rounded-b-md lg:grid-cols-6 xs:grid-cols-4" >
-                {awards.map((award, index) => {
-                    return <Fragment key={index}>
-                        {index === activeStatus && awards.map((award, index) => (
-                            <button className='flex flex-col items-center' key={index} onClick={() => setConfirmData({ open: true, award })}>
-                                <img loading='lazy' style={{ width: '3em', height: '3em' }} src={api_userImages(award.icon)} />
-                                <p className="font-bold font-serif text-right text-neutral-700 dark:text-gray-300 text-sm">{award.value}</p>
-                            </button>
-                        ))}
-                    </Fragment>
-                })}
-            </div>
-            {confirmData.open &&
-                <AwardConfirmModal
-                    open={confirmData.open}
-                    awardData={confirmData.award}
-                    user={user}
-                    artworkID={artworkID}
-                    onClose={() => setConfirmData({ open: false, award: {} })}
-                    awardClose={awardClose}
-                    handleAwardArtwork={handleAwardArtwork}
-                />
-            } */}
-        </div >
-    )
-}
+export default TabPanel;

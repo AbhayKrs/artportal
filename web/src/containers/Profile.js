@@ -102,7 +102,7 @@ const Profile = (props) => {
                             />
                             <div className='absolute z-30 hidden group-hover:flex top-0 right-0 m-2 gap-1'>
                                 {common.user.id === profile_data.id && <BsTrash onClick={() => deleteArtwork(artwork._id)} className=' h-6 w-6 cursor-pointer text-gray-200' />}
-                                <GoInfo onClick={() => navigate(`/artworks/${artwork._id}`)} className='w-6 h-6 cursor-pointer text-gray-200' />
+                                <GoInfo onClick={() => navigate(`/library/${artwork._id}`)} className='w-6 h-6 cursor-pointer text-gray-200' />
                             </div>
                             <div className='hidden absolute max-h-full bottom-0 p-2 pt-14 group-hover:flex group-hover:flex-row w-full bg-gradient-to-t from-black text-gray-200 group-hover:flex group-hover:justify-between'>
                                 <div className="flex flex-col place-self-end max-w-[65%]">
@@ -139,7 +139,7 @@ const Profile = (props) => {
             case 'liked': return <div className='flex flex-row'>
                 <Masonry cols={5}>
                     {artworks.filter(item => item.likes.indexOf(profile_data.id) >= 0).map((artwork, index) => (
-                        <div key={index} onClick={() => navigate(`/artworks/${artwork._id}`)} className='relative group group-hover:block'>
+                        <div key={index} onClick={() => navigate(`/library/${artwork._id}`)} className='relative group group-hover:block'>
                             <img loading='lazy'
                                 id={index}
                                 className='object-cover w-full h-full'
@@ -199,7 +199,7 @@ const Profile = (props) => {
                                     </div>
                                 </div>
                                 <div className="flex flex-col self-end place-items-end gap-1.5">
-                                    <GoInfo onClick={() => navigate(`/artworks/${artwork._id}`)} className='w-6 h-6 cursor-pointer text-gray-200' />
+                                    <GoInfo onClick={() => navigate(`/library/${artwork._id}`)} className='w-6 h-6 cursor-pointer text-gray-200' />
                                 </div>
                             </div>
                         </div>

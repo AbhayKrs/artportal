@@ -13,7 +13,7 @@ import MobileHeader from './containers/MobileHeader';
 import Footer from './containers/Footer';
 import Home from './containers/Home';
 import Library from './containers/Library';
-import LibrarySearch from './containers/LibrarySearch';
+import Search from './containers/Search';
 import Upload from './containers/Upload';
 import Show from './containers/Show';
 import Store from './containers/Store';
@@ -126,7 +126,7 @@ const App = () => {
         { path: '/google_success', element: <Google header="Success" />, },
         { path: '/google_failed', element: <Google header="Failed" /> },
         { path: '/library', element: <Library /> },
-        { path: '/library/search', element: <LibrarySearch /> },
+        { path: '/search', element: <Search /> },
         { path: '/library/:id', element: <Show.Library /> },
         { path: '/library/new', element: <Upload.Library /> },
         { path: '/library/:id/edit', element: <Edit.Library /> },

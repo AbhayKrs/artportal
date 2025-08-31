@@ -103,6 +103,17 @@ export const a_fetchArtworks = createAsyncThunk("a_fetchArtworks", async (payloa
     })
 });
 
+export const a_searchArtworks = createAsyncThunk("a_searchArtworks", async (payload, { getState, dispatch, rejectWithValue }) => {
+    const { value, filter, period } = payload;
+    await api_artworks("search", value, filter, period).then(res => {
+        dispatch(r_setArtworks(res.data));
+        return;
+    }).catch(err => {
+        console.log('---error a_searchArtworks', err);
+        return rejectWithValue(err.message);
+    })
+});
+
 export const a_artworkVisited = createAsyncThunk("a_artworkVisited", async (payload, { getState, dispatch, rejectWithValue }) => {
     console.log('page visited');
     return;

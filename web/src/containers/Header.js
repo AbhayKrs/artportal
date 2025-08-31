@@ -2,13 +2,12 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 
-import { a_handleSignIn, a_fetchSearchList, a_handleSignUp, a_handleGoogleAuth } from '../store/actions/common.actions';
-import { r_switchTheme, r_handleSignout, r_setSearchType, r_clearSearchList, r_headerDialogOpen, r_headerDialogClose, r_setAuthError, r_authMsgClose, r_setBetaMessage } from '../store/reducers/common.reducers';
+import { a_handleSignIn, a_handleSignUp, a_handleGoogleAuth } from '../store/actions/common.actions';
+import { r_switchTheme, r_handleSignout, r_headerDialogOpen, r_headerDialogClose, r_setAuthError, r_authMsgClose, r_setBetaMessage } from '../store/reducers/common.reducers';
 import { api_userImages } from '../utils/api_routes';
 
 import { TokenModal, LoginModal, RegisterModal, SignupSuccessModal } from '../components/Modal';
 import ThemeToggle from '../components/ThemeToggle';
-import { SearchModal } from '../components/Modal';
 
 import { ReactComponent as Artportal_logo } from '../assets/icons/artportal_logo.svg';
 import { ReactComponent as SidePane } from '../assets/icons/sidepane.svg';
@@ -53,9 +52,6 @@ const Header = ({ hidePane, setHidePane }) => {
     const [tokenOpen, setTokenOpen] = useState(false);
     const [activeRoute, setActiveRoute] = useState('');
 
-    const [searchVal, setSearchVal] = useState('');
-    const [searchModal, setSearchModal] = useState(false);
-
     useEffect(() => {
         setActiveRoute(location.pathname);
     }, [location.pathname])
@@ -75,23 +71,6 @@ const Header = ({ hidePane, setHidePane }) => {
     const logout = () => {
         handleSignout();
         navigate('/');
-    }
-
-    const clearSearch = () => {
-        dispatch(r_clearSearchList())
-        setSearchVal('');
-    }
-
-
-    const handleArtworkSearch = () => {
-        navigate(`/library/search?query=${searchVal}`);
-        dispatch(r_clearSearchList())
-    }
-
-    const handleOpenSearch = () => {
-        dispatch(r_setSearchType("artwork"));
-        dispatch(a_fetchSearchList({ type: "artwork", value: searchVal }));
-        setSearchModal(true);
     }
 
     return (
@@ -115,7 +94,7 @@ const Header = ({ hidePane, setHidePane }) => {
                     </div>
                     <div className={`flex flex-col ${hidePane ? ' items-center' : 'w-full'}`}>
                         <HeaderLink type="link" hidePane={hidePane} text="Library" path="/library" icon={<LibraryIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
-                        <HeaderLink type="button" hidePane={hidePane} text="Search" icon={<SearchIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} func={handleOpenSearch} />
+                        <HeaderLink type="link" hidePane={hidePane} text="Search" path="/search" icon={<SearchIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
                         <HeaderLink type="link" hidePane={hidePane} text="Store" path="/store" icon={<StoreIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
                     </div>
                     <Divider />
@@ -268,21 +247,6 @@ const Header = ({ hidePane, setHidePane }) => {
                     title={`Welcome to artportal, ${user.name}!`}
                     onClose={() => dispatch(r_authMsgClose())}
                     onClick={() => dispatch(r_authMsgClose())}
-                />
-            }
-            {searchModal &&
-                <SearchModal
-                    open={searchModal}
-                    handleClose={() => setSearchModal(false)}
-                    betaMsg={common.betaMsg}
-                    searchVal={searchVal}
-                    searchList={common.searchList}
-                    setSearchVal={setSearchVal}
-                    activeSearch={common.activeSearch}
-                    setSearchType={(type) => dispatch(r_setSearchType(type))}
-                    fetchSearchList={(type, value) => dispatch(a_fetchSearchList({ type, value }))}
-                    clearSearch={clearSearch}
-                    handleArtworkSearch={handleArtworkSearch}
                 />
             }
         </nav>

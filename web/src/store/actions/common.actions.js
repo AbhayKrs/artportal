@@ -190,19 +190,6 @@ export const a_handleDeleteBookmark = createAsyncThunk("a_handleDeleteBookmark",
     })
 });
 
-export const a_fetchSearchList = createAsyncThunk("a_fetchSearchList", async (payload, { getState, dispatch, rejectWithValue }) => {
-    const { type, value } = payload;
-
-    await api_artworks("search", value).then(res => {
-        console.log('---fetch', res);
-        dispatch(r_setSearchList({ type: type, list: res.data }));
-        return;
-    }).catch(err => {
-        console.log('---error a_fetchSearchList', err);
-        return rejectWithValue(err.message);
-    })
-});
-
 export const a_fetchUserArtworks = createAsyncThunk("a_fetchUserArtworks", async (payload, { getState, dispatch, rejectWithValue }) => {
     await api_userArtworks(payload).then(res => {
         dispatch(r_setUserArtworks(res.data));

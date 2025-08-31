@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 import { api_artworkImages, api_userImages, api_storeImages, api_googleRedirectURL } from '../utils/api_routes';
 
-import { AwardTabPanel } from './TabPanel';
 import Stepper from './Stepper';
 
 import TokenLogo from '../assets/images/money.png';
@@ -92,7 +91,7 @@ export const LoginModal = ({ open, title, banner, error, onClose, openRegister, 
                         <input
                             name="username"
                             value={username}
-                            className=" bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 text-neutral-500 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-4 pr-9 w-full focus:outline-none"
+                            className=" bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-4 pr-9 w-full focus:outline-none"
                             type="text"
                             placeholder="Username"
                             onChange={handleUsernameChange}
@@ -108,7 +107,7 @@ export const LoginModal = ({ open, title, banner, error, onClose, openRegister, 
                         <input
                             name="password"
                             value={password}
-                            className=" bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 text-neutral-500 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-4 pr-9 w-full focus:outline-none"
+                            className=" bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-4 pr-9 w-full focus:outline-none"
                             type="password"
                             placeholder="Password"
                             onChange={handlePasswordChange}
@@ -290,7 +289,7 @@ export const AwardModal = ({ open, onClose, title, awardList, user, artworkID, h
                     <div className='p-4 pt-2 flex flex-col gap-3'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                         <h1 className='text-blue-700 dark:text-indigo-800 text-4xl font-semibold tracking-widest '>{title}</h1>
-                        <AwardTabPanel awards={awardList} user={user} artworkID={artworkID} handleAwardArtwork={handleAwardArtwork} awardClose={onClose} />
+                        {/* <AwardTabPanel awards={awardList} user={user} artworkID={artworkID} handleAwardArtwork={handleAwardArtwork} awardClose={onClose} /> */}
                     </div>
                 </div>
             </div>

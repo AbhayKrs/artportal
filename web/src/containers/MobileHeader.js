@@ -241,21 +241,6 @@ const MobileHeader = () => {
                     onClick={() => dispatch(r_authMsgClose())}
                 />
             }
-            {searchModal &&
-                <SearchModal
-                    open={searchModal}
-                    handleClose={() => setSearchModal(false)}
-                    betaMsg={common.betaMsg}
-                    searchVal={searchVal}
-                    searchList={common.searchList}
-                    setSearchVal={setSearchVal}
-                    activeSearch={common.activeSearch}
-                    setSearchType={(type) => dispatch(r_setSearchType(type))}
-                    fetchSearchList={(type, value) => dispatch(a_fetchSearchList({ type, value }))}
-                    clearSearch={clearSearch}
-                    handleArtworkSearch={handleArtworkSearch}
-                />
-            }
         </nav >
     );
 };

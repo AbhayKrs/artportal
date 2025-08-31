@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 
@@ -11,7 +11,7 @@ import Divider from '../components/Divider';
 
 import { BsHeart, BsChat } from 'react-icons/bs';
 import { BiTimeFive } from 'react-icons/bi';
-import { ExplorePanel } from '../components/TabPanel';
+import TabPanel from '../components/TabPanel';
 import { Helmet } from 'react-helmet';
 
 const Library = (props) => {
@@ -27,11 +27,11 @@ const Library = (props) => {
     }, []);
 
     return (
-        <div className=' bg-gray-200 dark:bg-darkBg p-4'>
+        <div className='bg-gray-200 dark:bg-darkBg p-4'>
             <Helmet>
                 <title>artportal | Library</title>
             </Helmet>
-            <ExplorePanel authenticated={common.isAuthenticated} tags={common.tags} />
+            <TabPanel />
             <Divider />
             {artworks.length > 0 ?
                 <div className='flex flex-row'>
