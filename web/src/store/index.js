@@ -1,13 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import commonReducers from './reducers/common.reducers';
-import exploreReducers from './reducers/explore.reducers';
+import libraryReducers from './reducers/library.reducers';
 import storeReducers from './reducers/store.reducers';
 
 const store = configureStore({
     reducer: {
         common: commonReducers,
-        explore: exploreReducers,
+        library: libraryReducers,
         store: storeReducers
     }
 })

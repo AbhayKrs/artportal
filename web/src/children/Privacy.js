@@ -3,7 +3,7 @@ import React from 'react'
 export const Privacy = (props) => {
     return (
         <div className='flex flex-col gap-3 col-span-3 p-2 text-neutral-700 dark:text-gray-300'>
-            <h1 className="text-2xl font-medium tracking-wide">artportal Privacy Policy</h1>
+            <h1 className="text-3xl font-medium tracking-wide">artportal Privacy Policy</h1>
             <p className="text-lg tracking-wide">Last updated: July 14, 2025</p>
             <p className="text-lg tracking-wide">We are committed to protecting your personal information. This Privacy Policy applies to www.artstation.com. Contact us at <a href="mailto:privacy@artstation.com" class="text-blue-600 hover:underline">privacy@artstation.com</a> with questions.</p>
 

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { a_handleSignIn, a_fetchSearchList, a_handleSignUp, a_handleGoogleAuth } from '../store/actions/common.actions';
 import { r_switchTheme, r_handleSignout, r_setSearchType, r_clearSearchList, r_headerDialogOpen, r_headerDialogClose, r_setAuthError, r_authMsgClose, r_setBetaMessage } from '../store/reducers/common.reducers';
-import { api_fetchUserImages } from '../utils/api_routes';
+import { api_userImages } from '../utils/api_routes';
 
 import { TokenModal, LoginModal, RegisterModal, SignupSuccessModal } from '../components/Modal';
 import ThemeToggle from '../components/ThemeToggle';
@@ -47,7 +47,7 @@ const Header = ({ hidePane, setHidePane }) => {
     const location = useLocation();
 
     const common = useSelector(state => state.common);
-    const explore = useSelector(state => state.explore);
+    const library = useSelector(state => state.library);
     const user = useSelector(state => state.common.user);
 
     const [tokenOpen, setTokenOpen] = useState(false);
@@ -83,8 +83,8 @@ const Header = ({ hidePane, setHidePane }) => {
     }
 
 
-    const handleExploreSearch = () => {
-        navigate(`/explore/search?query=${searchVal}`);
+    const handleArtworkSearch = () => {
+        navigate(`/library/search?query=${searchVal}`);
         dispatch(r_clearSearchList())
     }
 
@@ -114,7 +114,7 @@ const Header = ({ hidePane, setHidePane }) => {
                         </div>
                     </div>
                     <div className={`flex flex-col ${hidePane ? ' items-center' : 'w-full'}`}>
-                        <HeaderLink type="link" hidePane={hidePane} text="Library" path="/explore" icon={<LibraryIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
+                        <HeaderLink type="link" hidePane={hidePane} text="Library" path="/library" icon={<LibraryIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
                         <HeaderLink type="button" hidePane={hidePane} text="Search" icon={<SearchIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} func={handleOpenSearch} />
                         <HeaderLink type="link" hidePane={hidePane} text="Store" path="/store" icon={<StoreIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
                     </div>
@@ -122,7 +122,7 @@ const Header = ({ hidePane, setHidePane }) => {
                     {common.isAuthenticated ?
                         <div className={`flex flex-col  ${hidePane ? '' : 'w-full'}`}>
                             <div className={`flex flex-col ${hidePane ? 'items-center' : ''}`}>
-                                <HeaderLink type="link" hidePane={hidePane} text="Upload" path="/explore/new" icon={<UploadIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
+                                <HeaderLink type="link" hidePane={hidePane} text="Upload" path="/library/new" icon={<UploadIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 <HeaderLink type="link" hidePane={hidePane} text={`Cart (${user && user.cart ? user.cart.length : 0})`} path="/store/cart" icon={<CartIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 <HeaderLink type="link" hidePane={hidePane} text="Notifications" path="/notifications" icon={<NotificationIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                             </div>
@@ -163,7 +163,7 @@ const Header = ({ hidePane, setHidePane }) => {
                             <div className='flex flex-col gap-2 mt-2'>
                                 <div className='relative w-10 flex flex-col items-center gap-2'>
                                     {user.avatar.icon.length > 0 && <div className='flex relative w-10 h-10 justify-center items-center'>
-                                        <img loading='lazy' alt='user' src={api_fetchUserImages(user.avatar.icon)} className='mt-0.5' />
+                                        <img loading='lazy' alt='user' src={api_userImages(user.avatar.icon)} className='mt-0.5' />
                                     </div>}
                                     <div className='absolute justify-between left-[-5px] bottom-[-8px] flex flex-row bg-neutral-950/80 p-1 rounded-xl'>
                                         <VerifiedIcon className="stroke-current stroke-1 text-neutral-800 dark:text-gray-300 h-3 w-3" />
@@ -187,7 +187,7 @@ const Header = ({ hidePane, setHidePane }) => {
                             <div className='flex flex-col gap-3 px-2 mt-2'>
                                 <button onClick={() => { navigate(`/users/${user.id}`) }} className='flex flex-row items-center gap-2 px-1'>
                                     {user.avatar.icon.length > 0 && <div className='flex relative w-10 h-10 justify-center items-center'>
-                                        <img loading='lazy' alt='user' src={api_fetchUserImages(user.avatar.icon)} className='mt-0.5' />
+                                        <img loading='lazy' alt='user' src={api_userImages(user.avatar.icon)} className='mt-0.5' />
                                     </div>}
                                     <div className='flex flex-col'>
                                         <p className='text-neutral-800 dark:text-gray-200 text-2xl font-medium tracking-wide'>{user.name}</p>
@@ -276,14 +276,13 @@ const Header = ({ hidePane, setHidePane }) => {
                     handleClose={() => setSearchModal(false)}
                     betaMsg={common.betaMsg}
                     searchVal={searchVal}
-                    explore={explore}
                     searchList={common.searchList}
                     setSearchVal={setSearchVal}
                     activeSearch={common.activeSearch}
                     setSearchType={(type) => dispatch(r_setSearchType(type))}
                     fetchSearchList={(type, value) => dispatch(a_fetchSearchList({ type, value }))}
                     clearSearch={clearSearch}
-                    handleExploreSearch={handleExploreSearch}
+                    handleArtworkSearch={handleArtworkSearch}
                 />
             }
         </nav>

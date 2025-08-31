@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 
 import { r_clearProfileDetails, r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducers';
-import { a_fetchUserExploreList, a_handleDeleteBookmark, a_handleFetchUserDetails, a_refreshUserDetails } from '../store/actions/common.actions';
-import { a_deleteArtwork, a_fetchExploreList } from '../store/actions/explore.actions';
-import { api_fetchArtworkImages, api_fetchUserImages } from '../utils/api_routes';
+import { a_fetchUserArtworks, a_handleDeleteBookmark, a_handleFetchUserDetails, a_refreshUserDetails } from '../store/actions/common.actions';
+import { a_deleteArtwork, a_fetchArtworks } from '../store/actions/library.actions';
+import { api_artworkImages, api_userImages } from '../utils/api_routes';
 
 import Masonry from '../components/Masonry';
 
@@ -23,30 +23,30 @@ const Profile = (props) => {
     const navigate = useNavigate();
 
     const common = useSelector(state => state.common);
-    const artworks = useSelector(state => state.explore.artworks);
+    const artworks = useSelector(state => state.library.artworks);
     const profile_data = useSelector(state => state.common.profile_data);
 
     useEffect(() => {
         dispatch(r_setLoader(true));
         window.scrollTo(0, 0);
         if (id !== null) {
-            dispatch(a_fetchExploreList());
+            dispatch(a_fetchArtworks());
             dispatch(a_handleFetchUserDetails(id));
-            dispatch(a_fetchUserExploreList(id));
+            dispatch(a_fetchUserArtworks(id));
         }
         return () => dispatch(r_clearProfileDetails());
     }, [id])
 
     const [activeView, setActiveView] = useState('portfolio');
 
-    const deleteArtwork = (exploreID) => {
+    const deleteArtwork = (artworkID) => {
         const msgData = {
             open: true,
             message: 'Successfully deleted uploaded artwork.',
             type: 'success'
         }
         dispatch(r_setSnackMessage(msgData));
-        dispatch(a_deleteArtwork(exploreID))
+        dispatch(a_deleteArtwork(artworkID))
         setTimeout(() => {
             dispatch(a_refreshUserDetails(profile_data.id));
             dispatch(a_handleFetchUserDetails(id));
@@ -98,7 +98,7 @@ const Profile = (props) => {
                             <img loading='lazy'
                                 id={index}
                                 className='object-cover w-full h-full'
-                                src={api_fetchArtworkImages(artwork.files[0])}
+                                src={api_artworkImages(artwork.files[0])}
                             />
                             <div className='absolute z-30 hidden group-hover:flex top-0 right-0 m-2 gap-1'>
                                 {common.user.id === profile_data.id && <BsTrash onClick={() => deleteArtwork(artwork._id)} className=' h-6 w-6 cursor-pointer text-gray-200' />}
@@ -143,7 +143,7 @@ const Profile = (props) => {
                             <img loading='lazy'
                                 id={index}
                                 className='object-cover w-full h-full'
-                                src={api_fetchArtworkImages(artwork.files[0])}
+                                src={api_artworkImages(artwork.files[0])}
                             />
                             <div className='hidden absolute max-h-full bottom-0 p-2 pt-14 group-hover:flex group-hover:flex-row w-full bg-gradient-to-t from-black text-gray-200 group-hover:flex group-hover:justify-between'>
                                 <div className="flex flex-col place-self-end max-w-[65%]">
@@ -183,7 +183,7 @@ const Profile = (props) => {
                             <img loading='lazy'
                                 id={index}
                                 className='object-cover w-full h-full'
-                                src={api_fetchArtworkImages(artwork.files[0])}
+                                src={api_artworkImages(artwork.files[0])}
                             />
                             <IoCloseCircle onClick={() => deleteBookmark(artwork._id, common.user.id)} className='hidden group-hover:flex absolute z-30 top-0 right-0 h-8 w-8 m-2 cursor-pointer text-gray-200' />
                             <div className='hidden absolute max-h-full bottom-0 p-2 pt-14 group-hover:flex group-hover:flex-row w-full bg-gradient-to-t from-black text-gray-200 group-hover:flex group-hover:justify-between'>
@@ -234,7 +234,7 @@ const Profile = (props) => {
                                             <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-800 dark:text-gray-300">{profile_data.followers_count}</span><span className="text-sm font-semibold text-blueGray-500">Followers</span>
                                         </div>
                                         <div className="mr-4 p-3 min-w-fit text-center justify-items-center">
-                                            <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-800 dark:text-gray-300">{profile_data.artworks_count}</span><span className="text-sm font-semibold text-blueGray-500">Explore Uploads</span>
+                                            <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-800 dark:text-gray-300">{profile_data.artworks_count}</span><span className="text-sm font-semibold text-blueGray-500">Artwork Uploads</span>
                                         </div>
                                         <div className="mr-4 p-3 min-w-fit text-center justify-items-center">
                                             <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-800 dark:text-gray-300">{profile_data.comment_count}</span><span className="text-sm font-semibold text-blueGray-500">Comments</span>
@@ -243,7 +243,7 @@ const Profile = (props) => {
                                 </div>
                                 <div className="w-full sm:w-3/12 px-4 flex justify-center">
                                     <div className="relative h-fit align-middle -m-[27rem] -ml-[27.5rem] sm:-m-32 sm:-ml-28 max-w-[15rem]">
-                                        {profile_data.avatar.icon.length > 0 && <img loading='lazy' src={api_fetchUserImages(profile_data.avatar.icon)} />}
+                                        {profile_data.avatar.icon.length > 0 && <img loading='lazy' src={api_userImages(profile_data.avatar.icon)} />}
                                     </div>
                                 </div>
                                 <div className="w-full sm:w-4/12 px-4 lg:text-right lg:self-center">

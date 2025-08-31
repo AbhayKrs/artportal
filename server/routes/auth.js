@@ -135,13 +135,13 @@ router.post("/signup", (req, res) => {
     }
 });
 
-// @route   GET api/v1.01/auth/googleAuth/login --- Authenticate user via Google --- PUBLIC
-router.get('/googleAuth/login', passport.authenticate('google', {
+// @route   GET api/v1.01/auth/google/login --- Authenticate user via Google --- PUBLIC
+router.get('/google/login', passport.authenticate('google', {
     scope: ['profile', 'email']
 }));
 
 // @route   GET api/v1.01/auth/google/callback --- Google Authenticatation callback --- PUBLIC
-router.get('/googleAuth/callback', passport.authenticate('google', {
+router.get('/google/callback', passport.authenticate('google', {
     failureRedirect: '/login',
     session: false
 }), async (req, res) => {
@@ -200,5 +200,36 @@ router.get('/facebook/callback', passport.authenticate('facebook', {
         }
     );
 })
+
+// @route   POST api/v1.01/auth/logout --- Logout the user --- PUBLIC
+router.post("/logout", (req, res, next) => {
+    try {
+        const { signedCookies = {} } = req;
+        const { refreshToken } = signedCookies;
+        User.findById(req.user._id).then(
+            (user) => {
+                const tokenIndex = user.refreshToken.findIndex(
+                    (item) => item.refreshToken === refreshToken
+                );
+                if (tokenIndex !== -1) {
+                    user.refreshToken.id(user.refreshToken[tokenIndex]._id).remove();
+                }
+
+                user.save((err, user) => {
+                    if (err) {
+                        res.statusCode = 500;
+                        res.send(err);
+                    } else {
+                        res.clearCookie("refreshToken", COOKIE_OPTIONS);
+                        res.send({ success: true });
+                    }
+                });
+            },
+            (err) => next(err)
+        );
+    } catch (err) {
+        return res.status(404).json({ msg: err.name });
+    }
+});
 
 export default router;

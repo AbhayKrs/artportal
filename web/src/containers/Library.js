@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 
-import { api_fetchArtworkImages } from '../utils/api_routes';
-import { a_fetchExploreList, a_filterExploreList } from '../store/actions/explore.actions';
+import { api_artworkImages } from '../utils/api_routes';
 import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducers';
 
 import Masonry from '../components/Masonry';
@@ -15,12 +14,12 @@ import { BiTimeFive } from 'react-icons/bi';
 import { ExplorePanel } from '../components/TabPanel';
 import { Helmet } from 'react-helmet';
 
-const Explore = (props) => {
+const Library = (props) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const common = useSelector(state => state.common);
-    const artworks = useSelector(state => state.explore.artworks);
+    const artworks = useSelector(state => state.library.artworks);
 
     useEffect(() => {
         dispatch(r_setLoader(true));
@@ -30,19 +29,19 @@ const Explore = (props) => {
     return (
         <div className=' bg-gray-200 dark:bg-darkBg p-4'>
             <Helmet>
-                <title>artportal | Explore</title>
+                <title>artportal | Library</title>
             </Helmet>
-            <ExplorePanel authenticated={common.isAuthenticated} r_setSnackMessage={(msgData) => dispatch(r_setSnackMessage(msgData))} a_fetchExploreList={() => dispatch(a_fetchExploreList())} a_filterExploreList={(filter, period) => dispatch(a_filterExploreList({ filter, period }))} tags={common.tags} />
+            <ExplorePanel authenticated={common.isAuthenticated} tags={common.tags} />
             <Divider />
             {artworks.length > 0 ?
                 <div className='flex flex-row'>
                     <Masonry cols={5}>
                         {artworks.map((artwork, index) => (
-                            <div key={index} onClick={() => navigate(`/explore/${artwork._id}`)} className='relative group group-hover:block cursor-pointer'>
+                            <div key={index} onClick={() => navigate(`/library/${artwork._id}`)} className='relative group group-hover:block cursor-pointer'>
                                 <img loading='lazy'
                                     id={index}
                                     className='object-cover w-full h-full rounded'
-                                    src={api_fetchArtworkImages(artwork.files[0])}
+                                    src={api_artworkImages(artwork.files[0])}
                                 />
                                 <div className='opacity-0 flex transition-all delay-200 absolute bottom-0 p-2 pt-14 group-hover:opacity-100 w-full bg-gradient-to-t from-black text-gray-200 justify-between'>
                                     <div className="flex flex-col place-self-end max-w-[65%]">
@@ -87,7 +86,7 @@ const Explore = (props) => {
     )
 }
 
-export default Explore;
+export default Library;
 
 
 {/* <label className="flex items-center cursor-pointer">

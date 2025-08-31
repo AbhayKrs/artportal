@@ -5,19 +5,18 @@ import jwt_decode from 'jwt-decode';
 import store from './store';
 
 import { r_verifyUser, r_setSnackMessage } from './store/reducers/common.reducers';
-import { a_fetchCartList, a_fetchUserExploreList, a_fetchUserStoreList, a_fetchVisitorStatus } from './store/actions/common.actions';
+import { a_fetchUserCart, a_fetchUserArtworks, a_fetchUserStoreList, a_fetchVisitorStatus } from './store/actions/common.actions';
 import setAuthToken from './utils/setAuthToken';
 
 import Header from './containers/Header';
 import MobileHeader from './containers/MobileHeader';
 import Footer from './containers/Footer';
 import Home from './containers/Home';
-import Explore from './containers/Explore';
-import ExploreSearch from './containers/ExploreSearch';
+import Library from './containers/Library';
+import LibrarySearch from './containers/LibrarySearch';
 import Upload from './containers/Upload';
-import ExploreShow from './containers/ExploreShow';
+import Show from './containers/Show';
 import Store from './containers/Store';
-import StoreShow from './containers/StoreShow';
 import StoreAll from './containers/StoreAll';
 import Profile from './containers/Profile';
 import Google from './splash/Google';
@@ -26,17 +25,15 @@ import Edit from './containers/Edit';
 import Cart from './containers/Cart';
 import Notifications from './containers/Notifications';
 
-// import ExploreUpload from './components/ExploreUpload';
 import Loader from './components/Loader';
 import Snackbar from './components/Snackbar';
-// import ExploreShow from './components/Explore/ExploreShow';
 // import About from './components/Help/About';
 // import Dashboard from './components/Dashboard/Dashboard';
 // import Profile from './components/Account/Profile';
 // import Notification from './components/Notification/Notification';
 // import StoreShow from './components/Store/StoreShow';
 // import StoreUpload from './components/Store/StoreUpload';
-// import Upload from './components/Explore/Upload';
+// import Upload from './components/Library/Upload';
 // import Privacy from './components/Help/Privacy';
 
 import General from './children/General';
@@ -86,20 +83,20 @@ const Layout = (props) => {
       const userID = common.user.id;
       dispatch(r_verifyUser(token));
       if (userID) {
-        dispatch(a_fetchUserExploreList(userID));
+        dispatch(a_fetchUserArtworks(userID));
         dispatch(a_fetchUserStoreList(userID));
       }
-      dispatch(a_fetchCartList());
+      dispatch(a_fetchUserCart());
     } else if (sessionStorage.jwtToken) {
       token = sessionStorage.jwtToken;
 
       const userID = common.user.id;
       dispatch(r_verifyUser(token));
       if (userID) {
-        dispatch(a_fetchUserExploreList(userID));
+        dispatch(a_fetchUserArtworks(userID));
         dispatch(a_fetchUserStoreList(userID));
       }
-      dispatch(a_fetchCartList());
+      dispatch(a_fetchUserCart());
     }
   }
 
@@ -128,15 +125,15 @@ const App = () => {
         { path: '/', element: <Home /> },
         { path: '/google_success', element: <Google header="Success" />, },
         { path: '/google_failed', element: <Google header="Failed" /> },
-        { path: '/explore', element: <Explore /> },
-        { path: '/explore/search', element: <ExploreSearch /> },
-        { path: '/explore/:id', element: <ExploreShow /> },
-        { path: '/explore/new', element: <Upload.ExploreUpload /> },
-        { path: '/explore/:id/edit', element: <Edit.ExploreEdit /> },
+        { path: '/library', element: <Library /> },
+        { path: '/library/search', element: <LibrarySearch /> },
+        { path: '/library/:id', element: <Show.Library /> },
+        { path: '/library/new', element: <Upload.Library /> },
+        { path: '/library/:id/edit', element: <Edit.Library /> },
         { path: '/store', element: <Store /> },
-        { path: '/store/:id', element: <StoreShow /> },
+        { path: '/store/:id', element: <Show.Store /> },
         { path: '/store/all', element: <StoreAll /> },
-        { path: '/store/new', element: <Upload.StoreUpload /> },
+        { path: '/store/new', element: <Upload.Store /> },
         { path: '/store/cart', element: <Cart /> },
         { path: '/users/:id', element: <Profile /> },
         { path: '/notifications', element: <Notifications /> },

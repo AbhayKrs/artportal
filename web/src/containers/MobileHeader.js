@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { a_handleSignIn, a_fetchSearchList, a_handleSignUp, a_handleGoogleAuth } from '../store/actions/common.actions';
 import { r_switchTheme, r_handleSignout, r_setSearchType, r_clearSearchList, r_headerDialogOpen, r_headerDialogClose, r_setAuthError, r_authMsgClose, r_setBetaMessage } from '../store/reducers/common.reducers';
-import { api_fetchUserImages } from '../utils/api_routes';
+import { api_userImages } from '../utils/api_routes';
 
 import { TokenModal, LoginModal, RegisterModal, SignupSuccessModal } from '../components/Modal';
 import ThemeToggle from '../components/ThemeToggle';
@@ -47,7 +47,7 @@ const MobileHeader = () => {
     const location = useLocation();
 
     const common = useSelector(state => state.common);
-    const explore = useSelector(state => state.explore);
+    const library = useSelector(state => state.library);
     const user = useSelector(state => state.common.user);
 
     const [headerMenu, setHeaderMenu] = useState(false);
@@ -92,8 +92,8 @@ const MobileHeader = () => {
     }
 
 
-    const handleExploreSearch = () => {
-        navigate(`/explore/search?query=${searchVal}`);
+    const handleArtworkSearch = () => {
+        navigate(`/library/search?query=${searchVal}`);
         dispatch(r_clearSearchList())
     }
 
@@ -113,7 +113,7 @@ const MobileHeader = () => {
             {headerMenu && <div className='flex flex-col gap-2 p-2 overflow-y-auto w-auto' style={{ height: 'calc(100vh - 1.75rem)' }}>
                 <div className='flex flex-col gap-2 h-10/12 overflow-y-auto'>
                     <div className='flex flex-col w-full'>
-                        <HeaderLink type="link" hidePane={false} text="Library" path="/explore" icon={<LibraryIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
+                        <HeaderLink type="link" hidePane={false} text="Library" path="/library" icon={<LibraryIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
                         <HeaderLink type="button" hidePane={false} text="Search" icon={<SearchIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} func={() => { dispatch(r_setSearchType("artwork")); setSearchModal(true) }} />
                         <HeaderLink type="link" hidePane={false} text="Store" path="/store" icon={<StoreIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
                     </div>
@@ -121,7 +121,7 @@ const MobileHeader = () => {
                     {common.isAuthenticated ?
                         <div className='flex flex-col w-full gap-4'>
                             <div className='flex flex-col'>
-                                <HeaderLink type="link" hidePane={false} text="Upload" path="/explore/new" icon={<UploadIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
+                                <HeaderLink type="link" hidePane={false} text="Upload" path="/library/new" icon={<UploadIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 <HeaderLink type="link" hidePane={false} text={`Cart (${user.cart.length})`} path="/store/cart" icon={<CartIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 <HeaderLink type="link" hidePane={false} text="Notifications" path="/notifications" icon={<NotificationIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                             </div>
@@ -160,7 +160,7 @@ const MobileHeader = () => {
                         <div className='flex flex-col gap-3'>
                             <button onClick={() => { navigate(`/users/${user.id}`) }} className='flex flex-row items-center gap-2 px-1'>
                                 {user.avatar.icon.length > 0 && <div className='flex relative w-10 h-10 justify-center items-center'>
-                                    <img loading='lazy' alt='user' src={api_fetchUserImages(user.avatar.icon)} className='mt-0.5' />
+                                    <img loading='lazy' alt='user' src={api_userImages(user.avatar.icon)} className='mt-0.5' />
                                 </div>}
                                 <div className='flex flex-col'>
                                     <p className='text-neutral-800 dark:text-gray-200 text-2xl font-medium tracking-wide'>{user.name}</p>
@@ -247,14 +247,13 @@ const MobileHeader = () => {
                     handleClose={() => setSearchModal(false)}
                     betaMsg={common.betaMsg}
                     searchVal={searchVal}
-                    explore={explore}
                     searchList={common.searchList}
                     setSearchVal={setSearchVal}
                     activeSearch={common.activeSearch}
                     setSearchType={(type) => dispatch(r_setSearchType(type))}
                     fetchSearchList={(type, value) => dispatch(a_fetchSearchList({ type, value }))}
                     clearSearch={clearSearch}
-                    handleExploreSearch={handleExploreSearch}
+                    handleArtworkSearch={handleArtworkSearch}
                 />
             }
         </nav >

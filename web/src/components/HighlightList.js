@@ -61,7 +61,7 @@ const HighlightList = ({ title, list, visibleItems = { desktop: 7, tablet: 4, mo
                 }
             >
                 {list.map((item, index) => (
-                    <ImageCard size="m" key={index} explore={item} artist={item.artist} />
+                    <ImageCard size="m" key={index} artwork={item} artist={item.artist} />
                 ))}
             </Carousel>
         </div >

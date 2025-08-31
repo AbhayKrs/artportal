@@ -66,8 +66,8 @@ router.get('/store', adminKey, async (req, res) => {
     }
 });
 
-// @route   GET admin/v1.01/model_categories --- Fetch categorisation model files --- ADMIN
-router.get('/model_categories', adminKey, (req, res) => {
+// @route   GET admin/v1.01/model_categories --- Fetch tagger categorisation model files --- ADMIN
+router.get('/files/taggercategorisation', adminKey, (req, res) => {
     try {
         taggergfs.files.find().toArray((err, files) => {
             if (!files || files.length === 0) {
@@ -86,8 +86,8 @@ router.get('/model_categories', adminKey, (req, res) => {
     }
 });
 
-// @route   GET admin/v1.01/model_categories/:filename --- Fetch categorisation model image --- ADMIN
-router.get('/model_categories/:filename', adminKey, (req, res) => {
+// @route   GET admin/v1.01/model_categories/:filename --- Fetch tagger categorisation model image --- ADMIN
+router.get('/files/taggercategorisation/:filename', adminKey, (req, res) => {
     try {
         taggergfs.files.findOne({ filename: req.params.filename }, (err, file) => {
             // Check if file
@@ -110,8 +110,8 @@ router.get('/model_categories/:filename', adminKey, (req, res) => {
     }
 });
 
-// @route   GET admin/v1.01/model_categories/new --- Add categorisation model image --- ADMIN
-router.post('/model_categories/new', adminKey, taggerUpl.any(), async (req, res) => {
+// @route   GET admin/v1.01/model_categories/new --- Add tagger categorisation model image --- ADMIN
+router.post('/files/taggercategorisation/new', adminKey, taggerUpl.any(), async (req, res) => {
     try {
         console.log('categorisation model image uploaded successfully...');
         res.send('success');

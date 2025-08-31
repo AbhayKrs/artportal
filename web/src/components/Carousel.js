@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { api_fetchArtworkImages } from '../utils/api_routes';
+import { api_artworkImages } from '../utils/api_routes';
 import { useDispatch } from "react-redux";
 
 import { r_headerDialogOpen } from '../store/reducers/common.reducers';
@@ -65,7 +65,7 @@ export const HomeSingleCarousel = ({ itemCount, images }) => {
         {images.length > 0 && images[currentIndex]?.file && <div className="active float-left w-full h-full">
           <img
             loading='lazy'
-            src={api_fetchArtworkImages(images[currentIndex].file)}
+            src={api_artworkImages(images[currentIndex].file)}
             className={`block w-full h-full object-cover transition-opacity duration-700 ease-in  ${fade ? 'opacity-100' : 'opacity-0'}`}
             alt="Wild Landscape"
           />

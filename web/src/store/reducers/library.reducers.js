@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    openExploreDialog: false,
+    openArtworkDialog: false,
     artworks: [],
     trending_artworks: [],
     new_artworks: [],
@@ -38,11 +38,11 @@ const initialState = {
     activeDialog: false
 }
 
-const exploreSlice = createSlice({
-    name: 'explore',
+const librarySlice = createSlice({
+    name: 'library',
     initialState,
     reducers: {
-        r_setExploreItem: (state, action) => {
+        r_setArtworkItem: (state, action) => {
             let artwork_res = { ...action.payload };
             const commentMap = new Map();
             artwork_res.comments.forEach(com => {
@@ -75,7 +75,7 @@ const exploreSlice = createSlice({
             artwork_res.comments = grouped;
             state.artwork = artwork_res;
         },
-        r_setExploreList: (state, action) => {
+        r_setArtworks: (state, action) => {
             const artworks = [...action.payload];
             state.artworks = artworks;
         },
@@ -93,7 +93,7 @@ const exploreSlice = createSlice({
             const list = [...action.payload.sort(() => 0.4 - Math.random()).slice(0, 12)];
             state.highlight_artworks = list;
         },
-        r_exploreUpload: (state, action) => {
+        r_artworkUpload: (state, action) => {
             const { file, title, description } = action.payload;
             state.uploadData = {
                 file: file,
@@ -102,13 +102,13 @@ const exploreSlice = createSlice({
                 uploadStatus: 'success'
             }
         },
-        r_exploreEdit: (state, action) => {
+        r_artworkEdit: (state, action) => {
             state.artwork = { ...action.payload };
         },
         r_dialogOpen: (state, action) => {
             const selectedData = action.payload;
             state.activeDialog = true;
-            state.selectedExplore = selectedData
+            state.selectedArtwork = selectedData
         },
         r_dialogClose: (state, action) => {
             state.activeDialog = false
@@ -117,14 +117,14 @@ const exploreSlice = createSlice({
 });
 
 export const {
-    r_setExploreItem,
-    r_setExploreList,
+    r_setArtworkItem,
+    r_setArtworks,
     r_setTrendingList,
     r_setNewlyAddedList,
     r_setMonthHighlightsList,
-    r_exploreUpload,
-    r_exploreEdit,
+    r_artworkUpload,
+    r_artworkEdit,
     r_dialogOpen,
     r_dialogClose
-} = exploreSlice.actions
-export default exploreSlice.reducer
+} = librarySlice.actions
+export default librarySlice.reducer

@@ -53,7 +53,7 @@ const HighlightList = ({ title, list }) => {
                     </button>
                 }>
                 {list.map((item, index) => {
-                    return <ImageCard size="l" key={index} explore={item} artist={item.artist} />
+                    return <ImageCard size="l" key={index} artwork={item} artist={item.artist} />
                 })}
             </Carousel>
 

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { api_fetchStoreImages } from '../utils/api_routes';
-import { a_handleCartAdd, a_handleRemoveFromCart, a_fetchCartList } from '../store/actions/common.actions';
+import { api_storeImages } from '../utils/api_routes';
+import { a_handleCartAdd, a_handleRemoveFromCart, a_fetchUserCart } from '../store/actions/common.actions';
 import { r_setLoader } from '../store/reducers/common.reducers';
 import { a_fetchCategorizedStoreList, a_fetchStoreList } from '../store/actions/store.actions';
 
@@ -70,7 +70,7 @@ const StoreAll = (props) => {
                 }
                 const cartID = userCart.filter(item => item.title === data.title)[0]._id;
                 // dispatch(updateCartlist({ userID, cartID, cartData })).then(res => {
-                //     dispatch(a_fetchCartList());
+                //     dispatch(a_fetchUserCart());
                 // });
             } else {
                 cartData = {
@@ -82,7 +82,7 @@ const StoreAll = (props) => {
                     subtotal: data.price * 1
                 }
                 dispatch(a_handleCartAdd({ userID, cartData })).then(res => {
-                    dispatch(a_fetchCartList());
+                    dispatch(a_fetchUserCart());
                 });
             }
         } catch (err) {
@@ -98,7 +98,7 @@ const StoreAll = (props) => {
         try {
             if (userCart.filter(item => item.title === data.title)[0].quantity === 1) {
                 dispatch(a_handleRemoveFromCart({ cartID, userID })).then(res => {
-                    dispatch(a_fetchCartList());
+                    dispatch(a_fetchUserCart());
                 });
             } else {
                 let quantity = userCart.filter(item => item.title === data.title)[0].quantity - 1;
@@ -109,7 +109,7 @@ const StoreAll = (props) => {
                 }
                 const cartID = userCart.filter(item => item.title === data.title)[0]._id;
                 dispatch(a_handleRemoveFromCart({ cartID, userID })).then(res => {
-                    dispatch(a_fetchCartList());
+                    dispatch(a_fetchUserCart());
                 });
             }
         } catch (err) {
@@ -154,7 +154,7 @@ const StoreAll = (props) => {
                     <div className='grid gap-4 sm:grid-cols-3 grid-cols-1'>
                         {store.storeList.map(item => (
                             <div className="drop-shadow-lg rounded-xl bg-indigo-50 dark:bg-neutral-800 overflow-hidden">
-                                <img loading='lazy' className="sm:h-full max-h-60 w-full object-cover object-center scale-110 transition-all duration-400 scale-100" src={api_fetchStoreImages(item.files[0])} />
+                                <img loading='lazy' className="sm:h-full max-h-60 w-full object-cover object-center scale-110 transition-all duration-400 scale-100" src={api_storeImages(item.files[0])} />
                                 <div className="py-6 px-4">
                                     <h2 className="tracking-widest text-xs title-font font-medium text-gray-400 mb-2">CATEGORY: <span className='capitalize text-gray-700'>{item.category}</span></h2>
                                     <h1 className="title-font text-lg font-medium text-neutral-800 dark:text-neutral-300">{item.title}</h1>
@@ -172,7 +172,7 @@ const StoreAll = (props) => {
                     </div>
                 </div>
             </div>
-            {cartOpen && <CartModal open={cartOpen} onClose={handleCartClose} cartList={common.user.cart} cartTotal={findCartTotal()} api_fetchStoreImages={api_fetchStoreImages} addToCart={addToCart} handleCartRemove={removeFromCart} />}
+            {cartOpen && <CartModal open={cartOpen} onClose={handleCartClose} cartList={common.user.cart} cartTotal={findCartTotal()} api_storeImages={api_storeImages} addToCart={addToCart} handleCartRemove={removeFromCart} />}
         </div>
     )
 }

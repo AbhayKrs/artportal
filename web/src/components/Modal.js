@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
-import { api_fetchArtworkImages, api_fetchUserImages, api_fetchStoreImages, api_googleRedirectURL } from '../utils/api_routes';
+import { api_artworkImages, api_userImages, api_storeImages, api_googleRedirectURL } from '../utils/api_routes';
 
 import { AwardTabPanel } from './TabPanel';
 import Stepper from './Stepper';
@@ -282,7 +282,7 @@ export const RegisterModal = ({ open, title, banner, error, onClose, openLogin, 
     )
 }
 
-export const AwardModal = ({ open, onClose, title, awardList, user, exploreID, handleAwardExplore }) => {
+export const AwardModal = ({ open, onClose, title, awardList, user, artworkID, handleAwardArtwork }) => {
     return (
         <div className={`${open ? 'block' : 'hidden'} flex fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
             <div className="relative m-auto xs:m-5 bg-slate-100 dark:bg-neutral-800 max-w-11/12 rounded-xl z-50 overflow-y-auto">
@@ -290,7 +290,7 @@ export const AwardModal = ({ open, onClose, title, awardList, user, exploreID, h
                     <div className='p-4 pt-2 flex flex-col gap-3'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                         <h1 className='text-blue-700 dark:text-indigo-800 text-4xl font-semibold tracking-widest '>{title}</h1>
-                        <AwardTabPanel awards={awardList} user={user} exploreID={exploreID} handleAwardExplore={handleAwardExplore} awardClose={onClose} />
+                        <AwardTabPanel awards={awardList} user={user} artworkID={artworkID} handleAwardArtwork={handleAwardArtwork} awardClose={onClose} />
                     </div>
                 </div>
             </div>
@@ -298,7 +298,7 @@ export const AwardModal = ({ open, onClose, title, awardList, user, exploreID, h
     )
 }
 
-export const AwardConfirmModal = ({ open, awardData, user, onClose, awardClose, exploreID, handleAwardExplore }) => {
+export const AwardConfirmModal = ({ open, awardData, user, onClose, awardClose, artworkID, handleAwardArtwork }) => {
     return (
         <div className={`${open ? 'block' : 'hidden'} flex  fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
             <div className="relative m-auto bg-slate-100 dark:bg-neutral-800 lg:w-4/12 md:w-6/12 sm:w-8/12 xs:w-11/12 rounded-xl z-50 overflow-y-auto">
@@ -306,7 +306,7 @@ export const AwardConfirmModal = ({ open, awardData, user, onClose, awardClose, 
                     <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute right-0 top-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                     <p className='text-indigo-800  text-2xl font-semibold '>Confirm Purchase?</p>
                     <div className='flex items-center gap-3 my-2'>
-                        {awardData.icon.length > 0 && <img loading='lazy' className='h-16 w-16' src={api_fetchUserImages(awardData.icon)} />}
+                        {awardData.icon.length > 0 && <img loading='lazy' className='h-16 w-16' src={api_userImages(awardData.icon)} />}
                         <div className='flex-row'>
                             <div className='flex gap-1 items-center'>
                                 <img loading='lazy' src={TokenIcon} className='h-6 w-6' />
@@ -319,7 +319,7 @@ export const AwardConfirmModal = ({ open, awardData, user, onClose, awardClose, 
                     <hr className='h-2 w-full px-2 mt-2' />
                     <div className='flex items-center place-content-between'>
                         <p className='flex text-md text-gray-900 font-bold dark:text-gray-300 '>Current Balance: <img loading='lazy' src={TokenIcon} className='h-6 w-6 ml-1 mr-1' />{user.tokens}</p>
-                        <button onClick={() => { handleAwardExplore(awardData); onClose(); awardClose() }} className='p-1.5 bg-yellow-400 w-fit rounded-md'>Confirm</button>
+                        <button onClick={() => { handleAwardArtwork(awardData); onClose(); awardClose() }} className='p-1.5 bg-yellow-400 w-fit rounded-md'>Confirm</button>
                     </div>
                 </div>
             </div>
@@ -419,7 +419,7 @@ export const PurchaseModal = ({ open, value, price, user, onClose }) => {
     )
 }
 
-export const CartModal = ({ open, onClose, cartList, cartTotal, api_fetchStoreImages, addToCart, handleCartRemove }) => {
+export const CartModal = ({ open, onClose, cartList, cartTotal, api_storeImages, addToCart, handleCartRemove }) => {
     const [couponCode, setCouponCode] = useState('');
     const [couponValue, setCouponValue] = useState(0);
     const [sellerInstruction, setSellerInstruction] = useState('');
@@ -473,7 +473,7 @@ export const CartModal = ({ open, onClose, cartList, cartTotal, api_fetchStoreIm
                     {cartList && cartList.map(cartItem => (
                         <div className='flex sm:flex-row flex-col gap-5 py-2  text-md'>
                             <div className='flex gap-4'>
-                                <img loading='lazy' src={api_fetchStoreImages(cartItem.file)} className="w-20 h-20 object-cover rounded shadow-lg" alt="Thumbnail" />
+                                <img loading='lazy' src={api_storeImages(cartItem.file)} className="w-20 h-20 object-cover rounded shadow-lg" alt="Thumbnail" />
                                 <div className='flex flex-col'>
                                     <span>Title: {cartItem.title}</span>
                                     <span>Category: {cartItem.title}</span>
@@ -773,7 +773,7 @@ export const AvatarModal = ({ open, avatarList, title, onClose, a_handleEditUser
                         <h1 className='text-blue-700 dark:text-indigo-800 text-3xl font-semibold tracking-wide '>{title}</h1>
                         <div className='grid grid-rows-4 grid-flow-col gap-4'>
                             {avatarList.map(avatar => (
-                                <img loading='lazy' onClick={() => a_handleEditUserAvatar(avatar)} id={avatar._id} src={api_fetchUserImages(avatar.icon)} />
+                                <img loading='lazy' onClick={() => a_handleEditUserAvatar(avatar)} id={avatar._id} src={api_userImages(avatar.icon)} />
                             ))}
                         </div>
                     </div>
@@ -783,7 +783,7 @@ export const AvatarModal = ({ open, avatarList, title, onClose, a_handleEditUser
     )
 }
 
-export const SearchModal = ({ open, handleClose, betaMsg, searchVal, setSearchVal, activeSearch, searchList, setSearchType, fetchSearchList, clearSearch, handleExploreSearch }) => {
+export const SearchModal = ({ open, handleClose, betaMsg, searchVal, setSearchVal, activeSearch, searchList, setSearchType, fetchSearchList, clearSearch, handleArtworkSearch }) => {
     let navigate = useNavigate();
 
     const handleSearch = (val) => {
@@ -848,7 +848,7 @@ export const SearchModal = ({ open, handleClose, betaMsg, searchVal, setSearchVa
                             </button>
                         </div>
                         <div className='flex flex-col md:flex-row p-2 bg-slate-300 dark:bg-neutral-800  gap-2'>
-                            <button onClick={() => { handleExploreSearch(); handleClose() }} className='flex  font-normal text-base gap-2 items-center tracking-wide text-neutral-700 dark:text-gray-300 hover:text-blue-700'>
+                            <button onClick={() => { handleArtworkSearch(); handleClose() }} className='flex  font-normal text-base gap-2 items-center tracking-wide text-neutral-700 dark:text-gray-300 hover:text-blue-700'>
                                 {searchVal.length > 0 &&
                                     <>
                                         Search {activeSearch}s for '{searchVal}'
@@ -859,12 +859,12 @@ export const SearchModal = ({ open, handleClose, betaMsg, searchVal, setSearchVa
                         </div>
                     </div>
                     {/* <Masonry cols={5}>
-                        {explore.trending_artworks.map((artwork, index) => (
-                            <div key={index} onClick={() => navigate(`/explore/${artwork._id}`)} className='relative group group-hover:block cursor-pointer'>
+                        {library.trending_artworks.map((artwork, index) => (
+                            <div key={index} onClick={() => navigate(`/library/${artwork._id}`)} className='relative group group-hover:block cursor-pointer'>
                                 <img loading='lazy'
                                     id={index}
                                     className='object-cover w-full h-full rounded'
-                                    src={api_fetchArtworkImages(artwork.files[0])}
+                                    src={api_artworkImages(artwork.files[0])}
                                 />
                                 <div className='opacity-0 flex transition-all delay-200 absolute bottom-0 p-2 pt-14 group-hover:opacity-100 w-full bg-gradient-to-t from-black text-gray-200 justify-between'>
                                     <div className="flex flex-col place-self-end max-w-[65%]">
@@ -902,13 +902,13 @@ export const SearchModal = ({ open, handleClose, betaMsg, searchVal, setSearchVa
                                 <Masonry cols={6}>
                                     {searchList.length > 0 ?
                                         searchList.map((item, index) => (
-                                            <ImageCard size="m" key={index} explore={item} artist={item.artist} />
+                                            <ImageCard size="m" key={index} artwork={item} artist={item.artist} />
                                         ))
                                         // searchList.map((item, index) => (
                                         //     <div key={index} className='flex items-center gap-4 rounded-lg text-neutral-700 dark:text-gray-200 bg-gray-100 dark:bg-neutral-900 py-2 px-5'>
-                                        //         <img src={api_fetchArtworkImages(item.files[0])} className='object-cover w-10 h-10 md:w-14 md:h-14 rounded' />
+                                        //         <img src={api_artworkImages(item.files[0])} className='object-cover w-10 h-10 md:w-14 md:h-14 rounded' />
                                         //         <span className='text-base md:text-xl font-semibold leading-5 capitalize'>{item.title}</span>
-                                        //         <FaChevronRight onClick={() => { navigate(`/explore/${item._id}`); clearSearch(); handleClose() }} className="ml-auto h-6 w-6 cursor-pointer" />
+                                        //         <FaChevronRight onClick={() => { navigate(`/library/${item._id}`); clearSearch(); handleClose() }} className="ml-auto h-6 w-6 cursor-pointer" />
                                         //     </div>
                                         // ))
                                         :
@@ -926,7 +926,7 @@ export const SearchModal = ({ open, handleClose, betaMsg, searchVal, setSearchVa
                             <div className='flex flex-col gap-2 pr-2'>
                                 {searchList.length > 0 ? searchList.map((item, index) => (
                                     <div key={index} onClick={() => { navigate(`/users/${item.id}`); clearSearch() }} className='flex items-center gap-5 cursor-pointer rounded-lg text-neutral-700 dark:text-gray-200 bg-gray-100 dark:bg-neutral-900 py-3 px-5'>
-                                        {item.avatar.icon.length > 0 && <img src={api_fetchUserImages(item.avatar.icon)} className='object-cover w-10 h-10' />}
+                                        {item.avatar.icon.length > 0 && <img src={api_userImages(item.avatar.icon)} className='object-cover w-10 h-10' />}
                                         <div className='flex flex-col'>
                                             <span className='text-lg font-semibold'>{item.name}</span>
                                             <span className='text-sm font-semibold'>@{item.username}</span>
@@ -946,7 +946,7 @@ export const SearchModal = ({ open, handleClose, betaMsg, searchVal, setSearchVa
                         {activeSearch === 'tag' &&
                             <div className='flex flex-col gap-2 pr-2'>
                                 {searchList.length > 0 ? searchList.map((item, index) => (
-                                    <div key={index} onClick={() => { navigate(`/explore`); clearSearch() }} className='flex cursor-pointer items-center gap-4 rounded-lg text-neutral-700 dark:text-gray-200 bg-gray-100 dark:bg-neutral-900 p-4'>
+                                    <div key={index} onClick={() => { navigate(`/library`); clearSearch() }} className='flex cursor-pointer items-center gap-4 rounded-lg text-neutral-700 dark:text-gray-200 bg-gray-100 dark:bg-neutral-900 p-4'>
                                         <FaHashtag className='h-5 w-5' />
                                         <span className=' font-semibold leading-5'>{item}</span>
                                     </div>

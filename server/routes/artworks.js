@@ -11,7 +11,7 @@ import { protect } from '../middleware/authMw.js';
 const { Artwork, Comment } = Artworks;
 const { Sticker } = Common;
 
-// @route   Image Route --- Image from gridFS storage --- Public
+// @route   GET api/v1.01/image/:filename --- Image from gridFS storage --- Public
 router.get('/image/:filename', async (req, res) => {
     const { filename } = req.params;
 
@@ -28,16 +28,27 @@ router.get('/image/:filename', async (req, res) => {
     }
 });
 
-// @route   GET api/artworks --- Fetch all artworks --- Public
+// @route   GET api/v1.01/artworks --- Fetch all artworks --- Public
 router.get('/', async (req, res) => {
     try {
         let response = [];
+        let searchResponse = [];
+
+        const type = req.query.filter;
+        const value = req.query.filter;
         const filter = req.query.filter;
         const period = req.query.period;
+        const artworkList = await Artwork.find({}).populate('artist', 'name username avatar');
+
+        if (type === "search") {
+            searchResponse = artworkList.filter(item => item.title.toLowerCase().indexOf(value.toLowerCase()) != -1);
+            response = searchResponse;
+        }
+        console.log("response default", !filter, !period)
+
         if (!filter && !period) {
-            response = await Artwork.find({}).populate('artist', 'name username avatar');
+            response = artworkList;
         } else {
-            const artworkList = await Artwork.find({}).populate('artist', 'name username avatar');
             const getPeriod = (label) => {
                 let value = 0;
                 switch (label) {
@@ -95,7 +106,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-// @route   Get api/artworks/:id --- Fetch Artwork by ID along with next and prev artwork reference --- Public
+// @route   Get api/v1.01/artworks/:id --- Fetch Artwork by ID along with next and prev artwork reference --- Public
 router.get('/:id', async (req, res) => {
     try {
         const artwork = await Artwork.findById(req.params.id)
@@ -120,7 +131,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// @route   POST api/artworks/new --- Create an artwork entry --- Private
+// @route   POST api/v1.01/artworks/new --- Create an artwork entry --- Private
 router.post('/new', protect, artworkUpl.any(), async (req, res) => {
     try {
         const user = await User.findById(req.body.userID);
@@ -154,7 +165,7 @@ router.post('/new', protect, artworkUpl.any(), async (req, res) => {
     }
 });
 
-// @route   POST api/artworks/new --- Create multiple new artwork entries --- Private
+// @route   POST api/v1.01/artworks/new --- Create multiple new artwork entries --- Private
 router.post('/multiupload', protect, artworkUpl.any(), async (req, res) => {
     try {
         const user = await User.findById(req.query.userID);
@@ -187,7 +198,7 @@ router.post('/multiupload', protect, artworkUpl.any(), async (req, res) => {
     }
 });
 
-// @route   PUT Edit api/artworks/:id --- Edit artwork details --- Private
+// @route   PUT Edit api/v1.01/artworks/:id --- Edit artwork details --- Private
 router.put('/:id', protect, function (req, res) {
     try {
         const updatedArtwork = {
@@ -207,7 +218,7 @@ router.put('/:id', protect, function (req, res) {
     }
 });
 
-// @route   Delete api/artworks/:id --- Delete an artwork --- Private
+// @route   Delete api/v1.01/artworks/:id --- Delete an artwork --- Private
 router.delete('/:id', protect, async (req, res) => {
     try {
         const artwork = await Artwork.findById(req.params.id);
@@ -240,7 +251,7 @@ router.delete('/:id', protect, async (req, res) => {
 }
 );
 
-// @route   PUT api/artworks/:id/like --- Like an artwork --- Private
+// @route   PUT api/v1.01/artworks/:id/like --- Like an artwork --- Private
 router.put('/:id/like', protect, async (req, res) => {
     try {
         try {
@@ -265,7 +276,7 @@ router.put('/:id/like', protect, async (req, res) => {
     }
 })
 
-// @route   PUT api/artworks/:id/dislike --- Dislike an artwork --- Private
+// @route   PUT api/v1.01/artworks/:id/dislike --- Dislike an artwork --- Private
 router.put('/:id/dislike', protect, async (req, res) => {
     try {
         try {
@@ -290,7 +301,7 @@ router.put('/:id/dislike', protect, async (req, res) => {
     }
 })
 
-// @route   PUT api/artworks/:id/award --- Gift an artwork --- Private
+// @route   PUT api/v1.01/artworks/:id/gift --- Gift an artwork --- Private
 router.post('/:id/gift', protect, async (req, res) => {
     try {
         const artwork = await Artwork.findById(req.params.id);
@@ -319,7 +330,7 @@ router.post('/:id/gift', protect, async (req, res) => {
     }
 });
 
-// @route   GET api/artworks/:id/comments --- Fetch artwork comments --- Public
+// @route   GET api/v1.01/artworks/:id/comments --- Fetch artwork comments --- Public
 router.get('/:id/comments', async (req, res) => {
     try {
         const artwork = await Artwork.findById(req.params.id);
@@ -329,7 +340,7 @@ router.get('/:id/comments', async (req, res) => {
     }
 });
 
-// @route   POST api/artworks/:id/comments/new --- Add a new comment --- Private
+// @route   POST api/v1.01/artworks/:id/comments/new --- Add a new comment --- Private
 router.post('/:id/comments/new', protect, async (req, res) => {
     try {
         const artwork = await Artwork.findById(req.params.id);
@@ -358,7 +369,7 @@ router.post('/:id/comments/new', protect, async (req, res) => {
     }
 });
 
-// @route   PUT api/artworks/:id/comments/:comment_id --- Edit a comment --- Private
+// @route   PUT api/v1.01/artworks/:id/comments/:comment_id --- Edit a comment --- Private
 router.put('/:id/comments/:comment_id', protect, async (req, res) => {
     try {
         const artwork = await Artwork.findById(req.params.id);
@@ -389,7 +400,7 @@ router.put('/:id/comments/:comment_id', protect, async (req, res) => {
     }
 })
 
-// @route   DELETE api/artworks/:id/comments/:comment_id --- Delete a comment --- Private
+// @route   DELETE api/v1.01/artworks/:id/comments/:comment_id --- Delete a comment --- Private
 router.delete('/:id/comments/:comment_id', protect, async (req, res) => {
     try {
         const artwork = await Artwork.findById(req.params.id);
@@ -418,7 +429,7 @@ router.delete('/:id/comments/:comment_id', protect, async (req, res) => {
     }
 });
 
-// @route   PUT api/artworks/:id/comments/:comment_id/like --- Like a comment --- Private
+// @route   PUT api/v1.01/artworks/:id/comments/:comment_id/like --- Like a comment --- Private
 router.put('/:id/comments/:comment_id/like', protect, async (req, res) => {
     try {
         Comment.findByIdAndUpdate(
@@ -440,7 +451,7 @@ router.put('/:id/comments/:comment_id/like', protect, async (req, res) => {
     }
 })
 
-// @route   PUT api/artworks/:id/comments/:comment_id/dislike --- Dislike a comment --- Private
+// @route   PUT api/v1.01/artworks/:id/comments/:comment_id/dislike --- Dislike a comment --- Private
 router.put('/:id/comments/:comment_id/dislike', protect, async (req, res) => {
     try {
         Comment.findByIdAndUpdate(
@@ -461,6 +472,7 @@ router.put('/:id/comments/:comment_id/dislike', protect, async (req, res) => {
     }
 })
 
+// @route   POST api/v1.01/artworks/check-plagiarism --- Check for plagiarism in artwork --- Private
 router.post("/check-plagiarism", artworkUpl.any(), (req, res) => {
     let proms = [];
     req.files.map(file => {

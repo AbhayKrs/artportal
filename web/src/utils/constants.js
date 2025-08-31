@@ -1,4 +1,4 @@
-export const exploreFilters = [
+export const filters = [
     { id: 0, label: 'Trending', value: 'trending' },
     { id: 1, label: 'Popular', value: 'popular' },
     { id: 2, label: 'New', value: 'new' },
@@ -6,7 +6,7 @@ export const exploreFilters = [
     { id: 4, label: 'Most Discussed', value: 'most discussed' }
 ];
 
-export const explorePeriodOptions = [
+export const periodOptions = [
     { id: 1, label: 'Past hour', value: 'hour' },
     { id: 2, label: 'Past 24 hours', value: 'day' },
     { id: 3, label: 'Past week', value: 'week' },

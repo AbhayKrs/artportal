@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Helmet } from 'react-helmet';
 
-import { a_handleExploreUpload } from '../store/actions/explore.actions';
+import { a_handleArtworkUpload } from '../store/actions/library.actions';
 import { a_getTags } from '../store/actions/common.actions';
 import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducers';
 import { a_handleStoreUpload } from '../store/actions/store.actions';
@@ -23,14 +23,13 @@ const ExploreUpload = (props) => {
     let navigate = useNavigate();
 
     const common = useSelector(state => state.common);
-    const explore = useSelector(state => state.explore);
 
-    const [exploreCategories, setExploreCategories] = useState([]);
-    const [exploreFiles, setExploreFiles] = useState([]);
-    const [exploreThumbnail, setExploreThumbnail] = useState([]);
-    const [exploreTitle, setExploreTitle] = useState('');
-    const [exploreDesc, setExploreDesc] = useState('');
-    const [exploreTags, setExploreTags] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [files, setFiles] = useState([]);
+    const [thumbnail, setThumbnail] = useState([]);
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [tags, setTags] = useState([]);
     const [tagSearch, setTagSearch] = useState('');
     const [primaryFile, setPrimaryFile] = useState('');
 
@@ -40,9 +39,9 @@ const ExploreUpload = (props) => {
         dispatch(r_setLoader(true));
         window.scrollTo(0, 0)
         dispatch(a_getTags());
-        // setExploreTitle(randomSentence({ min: 2, max: 8 }))
-        // setExploreDesc(randomSentence({ min: 5, max: 14 }))
-        // setExploreTags(common.tags.sort(() => 0.5 - Math.random()).slice(0, 10))
+        // setTitle(randomSentence({ min: 2, max: 8 }))
+        // setDescription(randomSentence({ min: 5, max: 14 }))
+        // setTags(common.tags.sort(() => 0.5 - Math.random()).slice(0, 10))
     }, [])
 
     const dataURLtoFile = (dataurl, filename) => {
@@ -55,7 +54,7 @@ const ExploreUpload = (props) => {
     }
 
     const onImageChange = (ev) => {
-        if (ev.target.files.length > 3 || exploreFiles.length > 2) {
+        if (ev.target.files.length > 3 || files.length > 2) {
             const msgData = {
                 open: true,
                 message: 'Only a maximum of 3 files may be selected.',
@@ -90,13 +89,13 @@ const ExploreUpload = (props) => {
                     let newImage = new Image();
                     newImage.src = convertedImg;
                     convertedFile = dataURLtoFile(newImage.src, `${ev.target.files[key].name.split('.')[0]}.webp`)
-                    setExploreFiles(arr => [...arr, convertedFile]);
+                    setFiles(arr => [...arr, convertedFile]);
 
                     let newThumb = new Image();
                     newThumb.src = convertedThumb;
                     convertedThumbFile = dataURLtoFile(newThumb.src, `${ev.target.files[key].name.split('.')[0]}.webp`)
                     console.log('test', convertedThumbFile)
-                    setExploreThumbnail(convertedThumbFile);
+                    setThumbnail(convertedThumbFile);
                 }
             })
             setPrimaryFile(ev.target.files[0]);
@@ -105,7 +104,7 @@ const ExploreUpload = (props) => {
 
     const dropHandler = (ev) => {
         ev.nativeEvent.preventDefault();
-        if (ev.dataTransfer.files.length > 3 || exploreFiles.length > 2) {
+        if (ev.dataTransfer.files.length > 3 || files.length > 2) {
             const msgData = {
                 open: true,
                 message: 'Only a maximum of 3 files may be selected.',
@@ -139,12 +138,12 @@ const ExploreUpload = (props) => {
                     let newImage = new Image();
                     newImage.src = convertedImg;
                     convertedFile = dataURLtoFile(newImage.src, `${ev.target.files[key].name.split('.')[0]}.webp`)
-                    setExploreFiles(arr => [...arr, convertedFile]);
+                    setFiles(arr => [...arr, convertedFile]);
 
                     let newThumb = new Image();
                     newThumb.src = convertedThumb;
                     convertedThumbFile = dataURLtoFile(newThumb.src, `${ev.target.files[key].name.split('.')[0]}.webp`)
-                    setExploreThumbnail(convertedThumbFile);
+                    setThumbnail(convertedThumbFile);
                 }
             })
             setPrimaryFile(ev.target.files[0]);
@@ -157,8 +156,8 @@ const ExploreUpload = (props) => {
     }
 
     const handleSelectTag = (selectedTag) => {
-        if (exploreTags.filter(item => item._id === selectedTag._id).length === 0) {
-            if (exploreTags.length === 10) {
+        if (tags.filter(item => item._id === selectedTag._id).length === 0) {
+            if (tags.length === 10) {
                 setTagSearch('');
                 const msgData = {
                     open: true,
@@ -167,17 +166,17 @@ const ExploreUpload = (props) => {
                 }
                 dispatch(r_setSnackMessage(msgData));
             } else {
-                setExploreTags(tags => [...tags, selectedTag])
+                setTags(tags => [...tags, selectedTag])
             }
         }
     }
 
     const handleRemoveTag = (selectedTag) => {
-        setExploreTags(exploreTags.filter(tag => tag._id !== selectedTag._id))
+        setTags(tags.filter(tag => tag._id !== selectedTag._id))
     }
 
     const handleUpload = () => {
-        if (exploreFiles.length === 0 || exploreTitle.length === 0 || exploreDesc.length === 0) {
+        if (files.length === 0 || title.length === 0 || description.length === 0) {
             const msgData = {
                 open: true,
                 message: 'Please fill all the required fields!',
@@ -188,17 +187,17 @@ const ExploreUpload = (props) => {
         }
 
         const userID = common.user.id;
-        const exploreUploadData = new FormData();
-        exploreFiles.map(file => exploreUploadData.append('files[]', file));
-        // exploreUploadData.append('thumbnail', exploreThumbnail);
-        exploreCategories.map(category => exploreUploadData.append('categories[]', category));
-        exploreUploadData.append('title', exploreTitle);
-        exploreUploadData.append('description', exploreDesc);
-        exploreUploadData.append('userID', userID);
-        exploreTags.map(tag => exploreUploadData.append('tags[]', JSON.stringify(tag)));
+        const uploadData = new FormData();
+        files.map(file => uploadData.append('files[]', file));
+        // uploadData.append('thumbnail', thumbnail);
+        categories.map(category => uploadData.append('categories[]', category));
+        uploadData.append('title', title);
+        uploadData.append('description', description);
+        uploadData.append('userID', userID);
+        tags.map(tag => uploadData.append('tags[]', JSON.stringify(tag)));
 
-        dispatch(a_handleExploreUpload(exploreUploadData)).then(() => {
-            navigate(`/explore`)
+        dispatch(a_handleArtworkUpload(uploadData)).then(() => {
+            navigate(`/library`)
             const msgData = {
                 open: true,
                 message: 'Successfully Uploaded!',
@@ -257,7 +256,7 @@ const ExploreUpload = (props) => {
                             <div className="flex flex-col rounded-lg bg-slate-100 dark:bg-neutral-800 shadow items-center p-5 w-full">
                                 <h1 className="font-bold tracking-wide text-lg text-gray-800 dark:text-gray-400">Selected Files</h1>
                                 <div className="h-full w-full text-center flex flex-col justify-center items-center">
-                                    {exploreFiles.length === 0 ?
+                                    {files.length === 0 ?
                                         <div className='w-full'>
                                             <img loading='lazy' className="my-2 mx-auto w-32" src="https://user-images.githubusercontent.com/507615/54591670-ac0a0180-4a65-11e9-846c-e55ffce0fe7b.png" alt="no data" />
                                             <span className="text-sm tracking-wide dark:text-gray-500">No files selected</span>
@@ -268,14 +267,14 @@ const ExploreUpload = (props) => {
                                             <DragDrop
                                                 isFlagged={isFlagged}
                                                 setIsFlagged={setIsFlagged}
-                                                selectedImages={exploreFiles.map((explore, index) => {
+                                                selectedImages={files.map((file, index) => {
                                                     return {
                                                         id: index.toString(),
-                                                        content: explore
+                                                        content: file
                                                     }
                                                 })}
-                                                setReorderedFiles={setExploreFiles}
-                                                setCategories={(categories) => setExploreCategories(imageCategories => [...new Set([...imageCategories, ...categories])])}
+                                                setReorderedFiles={setFiles}
+                                                setCategories={(categories) => setCategories(imageCategories => [...new Set([...imageCategories, ...categories])])}
                                                 r_setSnackMessage={(msgData) => dispatch(r_setSnackMessage(msgData))}
                                             />
                                             <div className=' text-rose-400 font-medium text-sm'>You may select a maximum of 3 files.</div>
@@ -286,11 +285,11 @@ const ExploreUpload = (props) => {
                         </div>
                     </div>
                     <div className="flex flex-col gap-4 w-4/12 ">
-                        {exploreCategories.length === 0 ? null : <div className='flex flex-col'>
+                        {categories.length === 0 ? null : <div className='flex flex-col'>
                             <span className=' text-lg tracking-wide font-medium text-gray-700 dark:text-gray-300'>Categories<span className=' text-rose-400 text-md'>*</span></span>
                             <div className="w-full inline-flex flex-col justify-center relative text-gray-500">
                                 <div id='category_menu' className='flex flex-wrap gap-1'>
-                                    {exploreCategories.map((category, index) => (
+                                    {categories.map((category, index) => (
                                         <div key={index} className="flex justify-center items-center m-1 font-medium py-2 px-3 rounded-md text-indigo-100 bg-blue-700 border border-blue-700 ">
                                             <div className="text-sm font-normal leading-none max-w-full flex-initial">{category}</div>
                                         </div>
@@ -305,11 +304,11 @@ const ExploreUpload = (props) => {
             before:bg-[length:300%_300%] before:animate-glitter 
             before:-z-10">
                             <span className=' text-lg tracking-wide font-medium text-gray-700 dark:text-gray-300'>Title<span className=' text-rose-400 text-md'>*</span></span>
-                            <input type="text" maxLength={250} value={exploreTitle} onChange={(ev) => setExploreTitle(ev.target.value)} className="py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 focus:outline-none rounded-md w-full" placeholder='Title' />
+                            <input type="text" maxLength={250} value={title} onChange={(ev) => setTitle(ev.target.value)} className="py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 focus:outline-none rounded-md w-full" placeholder='Title' />
                         </div>
                         <div className='flex flex-col gap-1'>
                             <span className=' text-lg tracking-wide font-medium text-gray-700 dark:text-gray-300'>Description<span className=' text-rose-400 text-md'>*</span></span>
-                            <textarea rows='4' maxLength={1000} value={exploreDesc} onChange={(ev) => setExploreDesc(ev.target.value)} className="scrollbar py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 resize-none focus:outline-none rounded-md w-full" placeholder='Description' />
+                            <textarea rows='4' maxLength={1000} value={description} onChange={(ev) => setDescription(ev.target.value)} className="scrollbar py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 resize-none focus:outline-none rounded-md w-full" placeholder='Description' />
                         </div>
                         <div className='flex flex-col gap-1'>
                             <span className=' text-lg  leading-[1.125rem] tracking-wide font-medium text-gray-700 dark:text-gray-300'>Add tags<span className=' text-rose-400 text-md'>*</span></span>
@@ -320,9 +319,9 @@ const ExploreUpload = (props) => {
                                     <BsHash className="w-5 h-5 text-gray-400 dark:text-gray-300 absolute left-2 top-2.5" />
                                     {tagSearch.length === 0 ? '' : <MdClose onClick={() => setTagSearch('')} className="w-5 h-5 text-gray-700 dark:text-gray-300 absolute right-2 top-2.5" />}
                                 </div>
-                                {exploreTags.length === 0 ? '' :
+                                {tags.length === 0 ? '' :
                                     <div id='tagmenu' className='flex flex-wrap justify-center gap-1 mt-2'>
-                                        {exploreTags.map(tag => (
+                                        {tags.map(tag => (
                                             <div className="flex items-center font-medium py-1 px-2 rounded-full text-gray-700 dark:text-gray-300 border-2 border-gray-700 dark:border-gray-300">
                                                 <div className="text-xs tracking-wide font-semibold leading-none max-w-full flex-initial">{tag.value}</div>
                                                 <div className="flex flex-auto flex-row-reverse">
@@ -335,7 +334,7 @@ const ExploreUpload = (props) => {
                                 {tagSearch.length === 0 ? '' :
                                     <div className="scrollbar bg-gray-200/25 dark:bg-neutral-800 max-h-60 h-full overflow-y-auto w-full mt-2 p-2 rounded">
                                         {common.tags.filter(tag => tag.value.toLowerCase().includes(tagSearch)).map(tag => {
-                                            if (exploreTags.includes(tag)) {
+                                            if (tags.includes(tag)) {
                                                 return <div className="flex justify-between items-center pl-8 pr-2 py-2 m-1 bg-indigo-100 text-gray-600 rounded">
                                                     {tag.value}
                                                 </div>
@@ -353,10 +352,10 @@ const ExploreUpload = (props) => {
                     </div>
                 </div>
                 <div className="flex justify-end pt-5">
-                    <button onClick={() => navigate(`/explore`)} className=" rounded-md px-3 py-1 bg-neutral-400 focus:shadow-outline focus:outline-none">
+                    <button onClick={() => navigate(`/library`)} className=" rounded-md px-3 py-1 bg-neutral-400 focus:shadow-outline focus:outline-none">
                         Cancel
                     </button>
-                    <button disabled={exploreFiles.length === 0 || exploreCategories.length === 0 || exploreTitle.length === 0 || exploreDesc.length === 0} onClick={handleUpload} className="ml-3 rounded-md px-3 py-1 bg-blue-700 hover:bg-blue-600 text-white focus:shadow-outline focus:outline-none disabled:text-neutral-400 disabled:bg-neutral-600 disabled:hover:bg-neutral-600">
+                    <button disabled={files.length === 0 || categories.length === 0 || title.length === 0 || description.length === 0} onClick={handleUpload} className="ml-3 rounded-md px-3 py-1 bg-blue-700 hover:bg-blue-600 text-white focus:shadow-outline focus:outline-none disabled:text-neutral-400 disabled:bg-neutral-600 disabled:hover:bg-neutral-600">
                         Submit
                     </button>
                 </div>

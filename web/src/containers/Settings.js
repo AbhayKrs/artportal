@@ -3,7 +3,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 
-import { api_fetchArtworkImages, api_fetchUserImages } from '../utils/api_routes';
+import { api_artworkImages, api_userImages } from '../utils/api_routes';
 import { r_setLoader } from '../store/reducers/common.reducers';
 
 import Divider from '../components/Divider';
@@ -61,7 +61,7 @@ export const Settings = (props) => {
                 <div className='flex flex-col p-3 gap-3 bg-slate-300 rounded-lg dark:bg-neutral-900 items-start'>
                     {common.isAuthenticated && <>
                         <div className="flex gap-2 w-full justify-center">
-                            {user.avatar.icon.length > 0 && <img loading='lazy' className='w-24' src={api_fetchUserImages(user.avatar.icon)} />}
+                            {user.avatar.icon.length > 0 && <img loading='lazy' className='w-24' src={api_userImages(user.avatar.icon)} />}
                             <div className='clear-left'>
                                 <h2 className='text-2xl font-bold text-gray-700 dark:text-white'>{user.name}</h2>
                                 <h4 className='text-sm font-semibold text-gray-500 dark:text-neutral-400'>{`Member since ` + ` (` + moment(user.created_on).format('LL') + `)`}</h4>

@@ -182,7 +182,7 @@ const commonSlice = createSlice({
             const locationList = [...action.payload];
             state.locationList = locationList;
         },
-        r_setUserExploreList: (state, action) => {
+        r_setUserArtworks: (state, action) => {
             const artworksItems = [...action.payload.artworks];
             state.profile_data = { ...state.user, artworks: artworksItems, artworks_count: action.payload.artworks_count }
         },
@@ -259,7 +259,7 @@ export const {
     r_setAvatars,
     r_setAwards,
     r_setLocations,
-    r_setUserExploreList,
+    r_setUserArtworks,
     r_setUserStoreList,
     r_handleCartOpen,
     r_handleCartClose,

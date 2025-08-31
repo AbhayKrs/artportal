@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { a_fetchAvatars, a_handleEditUserAvatar, a_handleUpdateUser, a_handleFetchUserDetails, a_refreshUserDetails } from '../store/actions/common.actions';
 import { r_setSnackMessage } from '../store/reducers/common.reducers';
-import { api_fetchArtworkImages, api_fetchUserImages } from '../utils/api_routes';
+import { api_artworkImages, api_userImages } from '../utils/api_routes';
 
 import { AvatarModal, ConfirmModal } from '../components/Modal';
 
@@ -12,6 +12,7 @@ import { FaEdit, FaRegUserCircle } from 'react-icons/fa';
 import { MdAlternateEmail, MdEditOff, MdDownloadDone } from 'react-icons/md';
 import { FcGoogle } from 'react-icons/fc';
 import { MdAddAPhoto, MdClose } from 'react-icons/md';
+import Divider from '../components/Divider';
 
 export const Account = (props) => {
     const dispatch = useDispatch();
@@ -69,8 +70,10 @@ export const Account = (props) => {
 
     return (
         <div className='flex flex-col gap-3 col-span-3 p-2 text-neutral-700 dark:text-gray-300'>
-            <h1 className="text-2xl font-medium tracking-wide">Account Settings</h1>
-            <p className="text-lg tracking-wide">Update your personal account details here.</p>
+            <div className='flex flex-col gap-1'>
+                <h1 className="text-3xl font-medium tracking-wide">Account Settings</h1>
+                <p className="text-lg tracking-wide">Update your personal account details here.</p>
+            </div>
             <div className='grid grid-cols-3 gap-4'>
                 <div className='relative col-span-2 flex flex-col rounded gap-4 py-4 px-6 bg-gray-300 dark:bg-neutral-800/75'>
                     {!editStatus ?
@@ -84,7 +87,7 @@ export const Account = (props) => {
                     <div className='grid grid-cols-4'>
                         <div className='flex items-center'>
                             <div className='flex gap-2 relative'>
-                                {user.avatar.icon.length > 0 && <img loading='lazy' className='w-28' src={api_fetchUserImages(user.avatar.icon)} />}
+                                {user.avatar.icon.length > 0 && <img loading='lazy' className='w-28' src={api_userImages(user.avatar.icon)} />}
                                 {editStatus && <MdAddAPhoto onClick={() => openAvatarModal()} className='absolute bottom-0 right-0 h-6 w-6 cursor-pointer text-gray-800 dark:text-gray-200' />}
                             </div>
                         </div>
@@ -123,6 +126,12 @@ export const Account = (props) => {
                         <div className='flex items-center gap-2'>
                             <textarea rows='4' disabled={!editStatus} value={bio} placeholder="Enter a brief description about yourself and what your art signifies." onChange={(ev) => setBio(ev.target.value)} className="placeholder-gray-600 w-full dark:placeholder-gray-400 text-black dark:text-white bg-white disabled:bg-gray-200 dark:bg-neutral-700 dark:disabled:bg-neutral-900 p-3 pr-16 rounded-lg text-sm focus:outline-none" />
                         </div>
+                    </div>
+                    <Divider />
+                    <div className='flex flex-col'>
+                        Upon deletion of your account, all associated data—including artworks, comments, store listings, and membership—will be scheduled for permanent removal. Your account and its data will remain recoverable for a period of 30 days, after which restoration will no longer be possible and all data will be irreversibly deleted.                        <button className="bg-red-500 text-gray-900 dark:text-gray-200 hover:bg-red-600 dark:hover:bg-red-600 px-3 py-1 rounded-md text-lg  font-bold dark:font-normal">
+                            Delete Account
+                        </button>
                     </div>
                 </div>
                 <div className='rounded gap-4 py-4 px-6 bg-gray-300 dark:bg-neutral-800/75'>

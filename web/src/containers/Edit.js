@@ -4,9 +4,9 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { a_getTags } from '../store/actions/common.actions';
 import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducers';
-import { a_fetchExploreList, a_fetchExploreItem, a_handleExploreEdit } from '../store/actions/explore.actions';
+import { a_fetchArtworks, a_fetchArtwork, a_editArtwork } from '../store/actions/library.actions';
 
-import { api_fetchArtworkImages } from '../utils/api_routes';
+import { api_artworkImages } from '../utils/api_routes';
 
 import { MdClose } from 'react-icons/md';
 import { BsHash } from 'react-icons/bs';
@@ -19,14 +19,14 @@ const ExploreEdit = (props) => {
     const navigate = useNavigate();
 
     const common = useSelector(state => state.common);
-    const artwork = useSelector(state => state.explore.exploreData);
+    const artwork = useSelector(state => state.library.artwork);
 
     const { id } = useParams();
 
-    const [exploreFiles, setExploreFiles] = useState([]);
-    const [exploreTitle, setExploreTitle] = useState('');
-    const [exploreDesc, setExploreDesc] = useState('');
-    const [exploreTags, setExploreTags] = useState([]);
+    const [files, setFiles] = useState([]);
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [tags, setTags] = useState([]);
     const [tagSearch, setTagSearch] = useState('');
     const [primaryFile, setPrimaryFile] = useState('');
 
@@ -39,19 +39,19 @@ const ExploreEdit = (props) => {
     }, [id])
 
     const load_data = async () => {
-        await dispatch(a_fetchExploreList());
-        await dispatch(a_fetchExploreItem(id));
+        await dispatch(a_fetchArtworks());
+        await dispatch(a_fetchArtwork(id));
     }
 
     useEffect(() => {
-        setExploreTitle(artwork.title)
-        setExploreDesc(artwork.description)
-        setExploreTags(artwork.tags)
+        setTitle(artwork.title)
+        setDescription(artwork.description)
+        setTags(artwork.tags)
     }, [artwork])
 
     const handleSelectTag = (selectedTag) => {
-        if (exploreTags.filter(item => item === selectedTag).length === 0) {
-            if (exploreTags.length === 10) {
+        if (tags.filter(item => item === selectedTag).length === 0) {
+            if (tags.length === 10) {
                 setTagSearch('');
                 const msgData = {
                     open: true,
@@ -60,17 +60,17 @@ const ExploreEdit = (props) => {
                 }
                 dispatch(r_setSnackMessage(msgData));
             } else {
-                setExploreTags(tags => [...tags, selectedTag])
+                setTags(tags => [...tags, selectedTag])
             }
         }
     }
 
     const handleRemoveTag = (selectedTag) => {
-        setExploreTags(exploreTags.filter(tag => tag !== selectedTag))
+        setTags(tags.filter(tag => tag !== selectedTag))
     }
 
     const handleEditSubmit = () => {
-        if (exploreTitle.length === 0 || exploreDesc.length === 0 || exploreTags.length === 0) {
+        if (title.length === 0 || description.length === 0 || tags.length === 0) {
             const msgData = {
                 open: true,
                 message: 'Please fill all mandatory fields!',
@@ -80,14 +80,9 @@ const ExploreEdit = (props) => {
             return;
         }
 
-        const updatedData = {
-            title: exploreTitle,
-            description: exploreDesc,
-            tags: exploreTags
-        }
-
-        dispatch(a_handleExploreEdit({ id, updatedData })).then(() => {
-            navigate(`/explore/${id}`)
+        const updatedData = { title, description, tags };
+        dispatch(a_editArtwork({ id, updatedData })).then(() => {
+            navigate(`/library/${id}`)
             const msgData = {
                 open: true,
                 message: 'Successfully updated!',
@@ -110,7 +105,7 @@ const ExploreEdit = (props) => {
                 <div className="flex justify-between pt-5">
                     <span className=' text-3xl text-gray-700 dark:text-gray-300'>Edit</span>
                     <div>
-                        <button onClick={() => navigate(`/explore/${id}`)} className="rounded-md px-3 py-1 bg-gray-100 hover:bg-gray-200 focus:shadow-outline focus:outline-none">
+                        <button onClick={() => navigate(`/library/${id}`)} className="rounded-md px-3 py-1 bg-gray-100 hover:bg-gray-200 focus:shadow-outline focus:outline-none">
                             Cancel
                         </button>
                         <button onClick={handleEditSubmit} className="ml-3 rounded-md px-3 py-1 bg-rose-500 hover:bg-rose-600 text-white focus:shadow-outline focus:outline-none">
@@ -121,10 +116,10 @@ const ExploreEdit = (props) => {
                 <div className='flex lg:flex-row flex-col mt-3 lg:gap-4 md:gap-2'>
                     <div className='scrollbar w-full max-h-[37.5em] overflow-y-auto'>
                         <div className="flex flex-col gap-3">
-                            <img loading='lazy' src={`${api_fetchArtworkImages(artwork.files[0])}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
+                            <img loading='lazy' src={`${api_artworkImages(artwork.files[0])}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
                             <div className='flex w-fit flex-col self-center items-center gap-3 place-content-center'>
                                 {artwork.files.filter((image, index) => index !== 0).map((image, index) => (
-                                    <img loading='lazy' key={index} src={`${api_fetchArtworkImages(image)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
+                                    <img loading='lazy' key={index} src={`${api_artworkImages(image)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
                                 ))}
                             </div>
                         </div>
@@ -132,11 +127,11 @@ const ExploreEdit = (props) => {
                     <div className='w-full gap-2'>
                         <div className='flex flex-col'>
                             <span className=' font-semibold text-gray-700 dark:text-gray-300'>Title<span className=' text-rose-400 text-md'>*</span></span>
-                            <input type="text" value={exploreTitle} onChange={(ev) => setExploreTitle(ev.target.value)} className="py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 focus:outline-none rounded-md w-full" placeholder='Title' />
+                            <input type="text" value={title} onChange={(ev) => setTitle(ev.target.value)} className="py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 focus:outline-none rounded-md w-full" placeholder='Title' />
                         </div>
                         <div className='flex flex-col'>
                             <span className=' font-semibold text-gray-700 dark:text-gray-300'>Description<span className=' text-rose-400 text-md'>*</span></span>
-                            <textarea rows='4' value={exploreDesc} onChange={(ev) => setExploreDesc(ev.target.value)} className="scrollbar py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 resize-none focus:outline-none rounded-md w-full" placeholder='Title' />
+                            <textarea rows='4' value={description} onChange={(ev) => setDescription(ev.target.value)} className="scrollbar py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 resize-none focus:outline-none rounded-md w-full" placeholder='Title' />
                         </div>
                         <div className='flex flex-col'>
                             <span className=' font-semibold text-gray-700 dark:text-gray-300'>Add tags:</span>
@@ -150,7 +145,7 @@ const ExploreEdit = (props) => {
                                 {tagSearch.length === 0 ? '' :
                                     <div className="scrollbar grid grid-cols-2 bg-gray-200/25 dark:bg-neutral-700 max-h-60 h-full overflow-y-auto w-full mt-2 rounded">
                                         {common.tags.filter(tag => tag.includes(tagSearch)).map(tag => {
-                                            if (exploreTags.includes(tag)) {
+                                            if (tags.includes(tag)) {
                                                 return <div className="flex justify-between items-center pl-8 pr-2 py-2 m-1 bg-indigo-100 text-gray-600 rounded">
                                                     {tag}
                                                     <MdClose onClick={() => handleRemoveTag(tag)} className='h-5 w-5 cursor-pointer' />
@@ -163,9 +158,9 @@ const ExploreEdit = (props) => {
                                         })}
                                     </div>
                                 }
-                                {exploreTags.length === 0 ? '' :
+                                {tags.length === 0 ? '' :
                                     <div id='tagmenu' className='flex flex-wrap justify-center gap-1 p-2'>
-                                        {exploreTags.map(tag => (
+                                        {tags.map(tag => (
                                             <div className="flex justify-center items-center m-1 font-medium py-1 px-2 rounded-full text-indigo-100 bg-blue-700 border border-indigo-700 ">
                                                 <div className="text-xs font-normal leading-none max-w-full flex-initial">{tag}</div>
                                                 <div className="flex flex-auto flex-row-reverse">

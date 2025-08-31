@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-import { api_tags, api_signIn, api_signUp, api_googleLogin, api_userDetails, api_updateUserData, api_deleteBookmark, api_search, api_userExploreList, api_userStoreList, api_deleteStoreItem, api_userCartList, api_avatarList, api_awardList, api_locationsList, api_editAvatar, api_deleteCartItem, api_updateUserCart, api_addUserCart } from '../../utils/api_routes'
-import { r_deleteBookmark, r_headerDialogClose, r_headerDialogOpen, r_setAuthError, r_setAvatars, r_setAwards, r_setCartList, r_setLocations, r_setProfileDetails, r_setSearchList, r_setSnackMessage, r_setTags, r_setUserExploreList, r_setUserStoreList, r_setVisitorStatus, r_signIn, r_signUp } from '../reducers/common.reducers';
+import { api_tags, api_signIn, api_signUp, api_googleLogin, api_userData, api_updateUserData, api_deleteBookmark, api_userArtworks, api_userStoreListings, api_deleteStoreListing, api_userCart, api_avatars, api_awards, api_locations, api_editAvatar, api_deleteFromCart, api_updateCart, api_addToCart, api_artworks } from '../../utils/api_routes'
+import { r_deleteBookmark, r_headerDialogClose, r_headerDialogOpen, r_setAuthError, r_setAvatars, r_setAwards, r_setCartList, r_setLocations, r_setProfileDetails, r_setSearchList, r_setSnackMessage, r_setTags, r_setUserArtworks, r_setUserStoreList, r_setVisitorStatus, r_signIn, r_signUp } from '../reducers/common.reducers';
 
 import jwt_decode from 'jwt-decode';
 import setAuthToken from '../../utils/setAuthToken';
@@ -104,7 +104,7 @@ export const a_handleGoogleAuth = createAsyncThunk("a_handleGoogleAuth", async (
 });
 
 export const a_refreshUserDetails = createAsyncThunk("a_refreshUserDetails", async (payload, { getState, dispatch, rejectWithValue }) => {
-    await api_userDetails(payload).then(res => {
+    await api_userData(payload).then(res => {
         const { token } = res.data;
         if (sessionStorage.jwtToken) {
             sessionStorage.setItem('jwtToken', token)
@@ -131,7 +131,7 @@ export const a_refreshUserDetails = createAsyncThunk("a_refreshUserDetails", asy
 });
 
 export const a_handleFetchUserDetails = createAsyncThunk("a_handleFetchUserDetails", async (payload, { getState, dispatch, rejectWithValue }) => {
-    await api_userDetails(payload).then(res => {
+    await api_userData(payload).then(res => {
         const { token } = res.data;
         const loginData = jwt_decode(token);
         dispatch(r_setProfileDetails(loginData));
@@ -193,7 +193,7 @@ export const a_handleDeleteBookmark = createAsyncThunk("a_handleDeleteBookmark",
 export const a_fetchSearchList = createAsyncThunk("a_fetchSearchList", async (payload, { getState, dispatch, rejectWithValue }) => {
     const { type, value } = payload;
 
-    await api_search(type, value).then(res => {
+    await api_artworks("search", value).then(res => {
         console.log('---fetch', res);
         dispatch(r_setSearchList({ type: type, list: res.data }));
         return;
@@ -203,19 +203,19 @@ export const a_fetchSearchList = createAsyncThunk("a_fetchSearchList", async (pa
     })
 });
 
-export const a_fetchUserExploreList = createAsyncThunk("a_fetchUserExploreList", async (payload, { getState, dispatch, rejectWithValue }) => {
-    await api_userExploreList(payload).then(res => {
-        dispatch(r_setUserExploreList(res.data));
+export const a_fetchUserArtworks = createAsyncThunk("a_fetchUserArtworks", async (payload, { getState, dispatch, rejectWithValue }) => {
+    await api_userArtworks(payload).then(res => {
+        dispatch(r_setUserArtworks(res.data));
         return;
     }).catch(err => {
-        console.log('---error fetchUserExploreList', err);
+        console.log('---error fetchUserArtworks', err);
         return rejectWithValue(err.message);
     })
 });
 
 export const a_fetchUserStoreList = createAsyncThunk("a_fetchUserStoreList", async (payload, { getState, dispatch, rejectWithValue }) => {
     const userID = getState().common.user.id;
-    await api_userStoreList(userID).then(res => {
+    await api_userStoreListings(userID).then(res => {
         dispatch(r_setUserStoreList(res.data));
         return;
     }).catch(err => {
@@ -226,7 +226,7 @@ export const a_fetchUserStoreList = createAsyncThunk("a_fetchUserStoreList", asy
 
 export const a_deleteUserStoreItem = createAsyncThunk("a_deleteUserStoreItem", async (payload, { getState, dispatch, rejectWithValue }) => {
     const userID = getState().common.user.id;
-    await api_deleteStoreItem(payload, userID).then(async res => {
+    await api_deleteStoreListing(payload, userID).then(async res => {
         await dispatch(a_fetchUserStoreList());
         return;
     }).catch(err => {
@@ -235,9 +235,9 @@ export const a_deleteUserStoreItem = createAsyncThunk("a_deleteUserStoreItem", a
     })
 });
 
-export const a_fetchCartList = createAsyncThunk("a_fetchCartList", async (payload, { getState, dispatch, rejectWithValue }) => {
+export const a_fetchUserCart = createAsyncThunk("a_fetchUserCart", async (payload, { getState, dispatch, rejectWithValue }) => {
     const userID = getState().common.user.id;
-    await api_userCartList(userID).then(res => {
+    await api_userCart(userID).then(res => {
         dispatch(r_setCartList(res.data));
         return;
     }).catch(err => {
@@ -259,8 +259,8 @@ export const a_handleCartAdd = createAsyncThunk("a_handleCartAdd", async (payloa
                 subtotal
             }
             const cartID = userCart.filter(item => item.title === payload.title)[0]._id;
-            await api_updateUserCart(userID, cartID, cartData).then(res => {
-                dispatch(a_fetchCartList());
+            await api_updateCart(userID, cartID, cartData).then(res => {
+                dispatch(a_fetchUserCart());
             })
         } else {
             cartData = {
@@ -271,8 +271,8 @@ export const a_handleCartAdd = createAsyncThunk("a_handleCartAdd", async (payloa
                 quantity: 1,
                 subtotal: payload.price * 1
             }
-            await api_addUserCart(userID, cartData).then(res => {
-                dispatch(a_fetchCartList());
+            await api_addToCart(userID, cartData).then(res => {
+                dispatch(a_fetchUserCart());
             })
         }
         return;
@@ -289,8 +289,8 @@ export const a_handleRemoveFromCart = createAsyncThunk("a_handleRemoveFromCart",
     const cartID = userCart.filter(item => item.title === payload.title)[0]._id;
     try {
         if (userCart.filter(item => item.title === payload.title)[0].quantity === 1) {
-            await api_deleteCartItem(cartID, userID).then(res => {
-                dispatch(a_fetchCartList());
+            await api_deleteFromCart(cartID, userID).then(res => {
+                dispatch(a_fetchUserCart());
             })
         } else {
             let quantity = userCart.filter(item => item.title === payload.title)[0].quantity - 1;
@@ -300,8 +300,8 @@ export const a_handleRemoveFromCart = createAsyncThunk("a_handleRemoveFromCart",
                 subtotal
             }
             const cartID = userCart.filter(item => item.title === payload.title)[0]._id;
-            await api_deleteCartItem(cartID, userID).then(res => {
-                dispatch(a_fetchCartList());
+            await api_deleteFromCart(cartID, userID).then(res => {
+                dispatch(a_fetchUserCart());
             })
         }
         return;
@@ -312,7 +312,7 @@ export const a_handleRemoveFromCart = createAsyncThunk("a_handleRemoveFromCart",
 });
 
 export const a_fetchAvatars = createAsyncThunk("a_fetchAvatars", async (payload, { getState, dispatch, rejectWithValue }) => {
-    await api_avatarList().then(res => {
+    await api_avatars().then(res => {
         console.log('avatarList', res);
         dispatch(r_setAvatars(res.data));
         return;
@@ -323,7 +323,7 @@ export const a_fetchAvatars = createAsyncThunk("a_fetchAvatars", async (payload,
 });
 
 export const a_fetchAwards = createAsyncThunk("a_fetchAwards", async (payload, { getState, dispatch, rejectWithValue }) => {
-    await api_awardList().then(res => {
+    await api_awards().then(res => {
         console.log('awardList', res);
         dispatch(r_setAwards(res.data));
         return;
@@ -334,7 +334,7 @@ export const a_fetchAwards = createAsyncThunk("a_fetchAwards", async (payload, {
 });
 
 export const a_fetchLocations = createAsyncThunk("a_fetchLocations", async (payload, { getState, dispatch, rejectWithValue }) => {
-    await api_locationsList().then(res => {
+    await api_locations().then(res => {
         dispatch(r_setLocations(res.data));
         return;
     }).catch(err => {

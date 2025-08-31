@@ -3,15 +3,15 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 import {
-    a_fetchExploreItem,
+    a_fetchArtwork,
     a_handleDeleteComment,
     a_handleEditComment,
     a_handleDislikeComment,
     a_handleLikeComment,
-    a_bookmarkExploreItem,
+    a_bookmarkLibraryItem,
     a_handleAddComment
-} from '../store/actions/explore.actions';
-import { api_fetchUserImages } from '../utils/api_routes';
+} from '../store/actions/library.actions';
+import { api_userImages } from '../utils/api_routes';
 import { IoSend } from 'react-icons/io5';
 import { AiFillLike, AiFillDislike } from 'react-icons/ai';
 
@@ -47,15 +47,15 @@ const CommentList = ({ comments, handleInvalidUser }) => {
     const [replies, setReplies] = useState([]);
 
     const onDeleteComment = async (comment) => {
-        await dispatch(a_handleDeleteComment({ exploreID: id, commentID: comment._id }));
-        dispatch(a_fetchExploreItem(id));
+        await dispatch(a_handleDeleteComment({ libraryItemID: id, commentID: comment._id }));
+        dispatch(a_fetchArtwork(id));
     };
 
     const onEditComment = async (comment) => {
-        dispatch(a_handleEditComment({ exploreID: id, newComment: editComment, commentID: comment._id }));
+        dispatch(a_handleEditComment({ libraryItemID: id, newComment: editComment, commentID: comment._id }));
         setEditForm(false);
         setTimeout(() => {
-            dispatch(a_fetchExploreItem(id));
+            dispatch(a_fetchArtwork(id));
         }, 2000);
     };
 
@@ -66,7 +66,7 @@ const CommentList = ({ comments, handleInvalidUser }) => {
             dispatch(a_handleLikeComment({ artworkID: id, commentID: comment._id, userID: user.id }));
         }
         setTimeout(() => {
-            dispatch(a_fetchExploreItem(id));
+            dispatch(a_fetchArtwork(id));
         }, 2000);
     };
 
@@ -94,7 +94,7 @@ const CommentList = ({ comments, handleInvalidUser }) => {
         }));
 
         setTimeout(() => {
-            dispatch(a_fetchExploreItem(id));
+            dispatch(a_fetchArtwork(id));
             clearReply(replyId);
         }, 2000);
     };
@@ -118,7 +118,7 @@ const CommentList = ({ comments, handleInvalidUser }) => {
                                     <div className="w-4 h-4 overflow-hidden">
                                         <img
                                             loading="lazy"
-                                            src={api_fetchUserImages(comment.author.avatar.icon)}
+                                            src={api_userImages(comment.author.avatar.icon)}
                                             alt="user_avatar"
                                             className="object-cover w-full h-full"
                                         />
@@ -210,7 +210,7 @@ const CommentList = ({ comments, handleInvalidUser }) => {
                                 <div className="w-7 h-7 overflow-hidden">
                                     <img
                                         loading="lazy"
-                                        src={api_fetchUserImages(user.avatar.icon)}
+                                        src={api_userImages(user.avatar.icon)}
                                         alt="user_avatar"
                                         className="object-contain w-full h-full"
                                     />

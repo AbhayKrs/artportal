@@ -81,9 +81,7 @@ router.get('/:id/artworks', async (req, res) => {
     }
 });
 
-// @route       POST api/users/:id/bookmark
-// @desc        Bookmark an explore
-// @access      Private
+// @route   POST api/v1.01/users/:id/bookmark --- Add artwork to bookmarks --- PUBLIC
 router.post('/:id/bookmark', async (req, res) => {
     try {
         const user = await User.findById(req.params.id).populate('bookmarks');
@@ -99,9 +97,7 @@ router.post('/:id/bookmark', async (req, res) => {
     }
 })
 
-// @route       POST api/users/:id/bookmark/:bookmark_id
-// @desc        Bookmark an explore
-// @access      Private
+// @route   DELETE api/v1.01/users/:id/bookmark --- Delete artwork from bookmarks --- PUBLIC
 router.delete('/:id/bookmark/:bookmark_id', async (req, res) => {
     try {
         const user = await User.findById(req.params.id).populate('bookmarks');
@@ -118,9 +114,7 @@ router.delete('/:id/bookmark/:bookmark_id', async (req, res) => {
     }
 })
 
-// @route       GET api/users/:id/cart
-// @desc        Get all cart items
-// @access      Public
+// @route   GET api/v1.01/users/:id/store --- Fetch store listings of user --- PUBLIC
 router.get('/:id/store', async (req, res) => {
     try {
         const user = await User.findById(req.params.id).populate('bookmarks');
@@ -141,12 +135,11 @@ router.get('/:id/store', async (req, res) => {
 // ******************** CART CALLS *****************************
 // *************************************************************
 
-// @route       GET api/users/:id/cart
-// @desc        Get all cart items
-// @access      Public
+// @route   GET api/v1.01/users/:id/cart --- Fetch cart of user --- PUBLIC
 router.get('/:id/cart', async (req, res) => {
     try {
         const user = await User.findById(req.params.id).populate('bookmarks');
+        console.log("user", user)
         if (!user.cart) {
             return res.status(400).send({ msg: 'Cartlist not found' });
         }
@@ -161,9 +154,7 @@ router.get('/:id/cart', async (req, res) => {
     }
 });
 
-// @route       POST api/users/:id/cart/add
-// @desc        Add to cart
-// @access      Public
+// @route   POST api/v1.01/users/:id/cart/add --- Add the listing to cart --- PUBLIC
 router.post('/:id/cart/add', async (req, res) => {
     try {
         const user = await User.findById(req.params.id).populate('bookmarks');
@@ -199,9 +190,7 @@ router.post('/:id/cart/add', async (req, res) => {
     }
 });
 
-// @route    PUT api/users/:id/cart/:cart_id
-// @desc     Edit a cart item
-// @access   Private
+// @route   PUT api/v1.01/users/:id/cart/:cart_id --- Update the listing in cart --- PUBLIC
 router.put('/:id/cart/:cart_id', async (req, res) => {
     try {
         const user = await User.findById(req.params.id).populate('bookmarks');
@@ -210,7 +199,7 @@ router.put('/:id/cart/:cart_id', async (req, res) => {
             return res.status(401).json({ msg: 'Cart item does not exist!' })
         }
         // // Check user
-        // if (explore.author.id !== editComment.author.id) {
+        // if (library.author.id !== editComment.author.id) {
         //     return res.status(401).json({ msg: 'User not authorized!' });
         // }
         const newData = { quantity: req.body.quantity, subtotal: req.body.subtotal }
@@ -234,9 +223,7 @@ router.put('/:id/cart/:cart_id', async (req, res) => {
     }
 })
 
-// @route    DELETE api/users/:id/cart/:cart_id
-// @desc     Delete a cart item
-// @access   Private
+// @route   DELETE api/v1.01/users/:id/cart/:cart_id --- Delete the listing in cart --- PUBLIC
 router.delete('/:id/cart/:cart_id', async (req, res) => {
     try {
         const user = await User.findById(req.params.id).populate('bookmarks');
@@ -256,43 +243,8 @@ router.delete('/:id/cart/:cart_id', async (req, res) => {
     }
 });
 
-// @desc    Logout user
-// @route   GET /api/v1.01/users/logout
-// @access  Public
-router.get("/logout", (req, res, next) => {
-    try {
-        const { signedCookies = {} } = req;
-        const { refreshToken } = signedCookies;
-        User.findById(req.user._id).then(
-            (user) => {
-                const tokenIndex = user.refreshToken.findIndex(
-                    (item) => item.refreshToken === refreshToken
-                );
-                if (tokenIndex !== -1) {
-                    user.refreshToken.id(user.refreshToken[tokenIndex]._id).remove();
-                }
-
-                user.save((err, user) => {
-                    if (err) {
-                        res.statusCode = 500;
-                        res.send(err);
-                    } else {
-                        res.clearCookie("refreshToken", COOKIE_OPTIONS);
-                        res.send({ success: true });
-                    }
-                });
-            },
-            (err) => next(err)
-        );
-    } catch (err) {
-        return res.status(404).json({ msg: err.name });
-    }
-});
-
-// @route   Edit User Avatar
-// @desc    POST /api/v1.01/users/:id/avatar
-// @access  Private
-router.post('/:id/avatar', async (req, res) => {
+// @route   PUT api/v1.01/users/:id/cart/:cart_id --- Update user avatar --- PUBLIC
+router.put('/:id/avatar', async (req, res) => {
     try {
         const user = await User.findById(req.params.id).populate('bookmarks');
         const artwork = await Artwork.find({ "author.id": req.params.id });

@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { api_commentOnArtwork, api_artworkList, api_awardExplore, api_bookmarkExploreItem, api_deleteArtwork, api_dislikeArtwork, api_exploreDeleteComment, api_dislikeComment, api_exploreEditComment, api_exploreItem, api_exploreItemEdit, api_likeComment, api_exploreUpload, api_filterExploreList, api_likeArtwork } from '../../utils/api_routes'
+import { api_commentOnArtwork, api_artworks, api_giftToArtwork, api_bookmarkArtwork, api_deleteArtwork, api_dislikeArtwork, api_deleteArtworkComment, api_dislikeComment, api_editArtworkComment, api_artworkItem, api_editArtwork, api_likeComment, api_artworkUpload, api_likeArtwork } from '../../utils/api_routes'
 import { a_refreshUserDetails } from './common.actions';
-import { r_exploreEdit, r_exploreUpload, r_setExploreItem, r_setExploreList, r_setMonthHighlightsList, r_setNewlyAddedList, r_setTrendingList } from '../reducers/explore.reducers';
+import { r_artworkEdit, r_artworkUpload, r_setArtworkItem, r_setArtworks, r_setMonthHighlightsList, r_setNewlyAddedList, r_setTrendingList } from '../reducers/library.reducers';
 
 const dynamicSort = (property) => {
     return (a, b) => {
@@ -17,7 +17,7 @@ const risingSort = (property) => {
     }
 }
 // function trendingCheck() {
-//     var createdAt = new Date(getState().explore.artworks[0].createdAt)
+//     var createdAt = new Date(getState().artwork.artworks[0].createdAt)
 //     console.log('Trending', createdAt.getTime(), Date.now(), Date.now() - createdAt.getTime())
 //     // return function (a, b) {
 
@@ -26,35 +26,25 @@ const risingSort = (property) => {
 // }
 // if createdAt-1 is less than createdAt-2 then check if 
 
-export const a_exploreItemViewed = createAsyncThunk("a_exploreItemViewed", async (payload, { getState, dispatch, rejectWithValue }) => {
-    api_exploreItem(payload, getState().common.profile_data);
+export const a_artworkItemViewed = createAsyncThunk("a_artworkItemViewed", async (payload, { getState, dispatch, rejectWithValue }) => {
+    api_artworkItem(payload, getState().common.profile_data);
     return;
 });
 
-export const a_fetchExploreItem = createAsyncThunk("a_fetchExploreItem", async (payload, { getState, dispatch, rejectWithValue }) => {
+export const a_fetchArtwork = createAsyncThunk("a_fetchArtwork", async (payload, { getState, dispatch, rejectWithValue }) => {
     const userID = getState().common.user.id;
-    await api_exploreItem(payload, { _id: userID }).then(res => {
-        dispatch(r_setExploreItem(res.data));
+    await api_artworkItem(payload, { _id: userID }).then(res => {
+        dispatch(r_setArtworkItem(res.data));
         return;
     }).catch(err => {
-        console.log('---error a_fetchExploreItem', err);
-        return rejectWithValue(err.message);
-    })
-});
-
-export const a_fetchExploreList = createAsyncThunk("a_fetchExploreList", async (payload, { getState, dispatch, rejectWithValue }) => {
-    await api_artworkList().then(res => {
-        console.log('---success fetchExploreList', res.data);
-        dispatch(r_setExploreList(res.data));
-        return;
-    }).catch(err => {
-        console.log('---error a_fetchExploreList', err);
+        console.log('---error a_fetchArtwork', err);
         return rejectWithValue(err.message);
     })
 });
 
 export const a_fetchHomeData = createAsyncThunk("a_fetchHomeData", async (payload, { getState, dispatch, rejectWithValue }) => {
-    await api_artworkList().then(res => {
+    const { filter, period } = payload;
+    await api_artworks("list", "", filter, period).then(res => {
         dispatch(r_setTrendingList(res.data.sort(() => 0.4 - Math.random()).slice(0, 12)));
         dispatch(r_setNewlyAddedList(res.data.sort(() => 0.4 - Math.random()).slice(0, 12)));
         dispatch(r_setMonthHighlightsList(res.data.sort(() => 0.4 - Math.random()).slice(0, 12)));
@@ -65,79 +55,62 @@ export const a_fetchHomeData = createAsyncThunk("a_fetchHomeData", async (payloa
     })
 });
 
-export const a_handleExploreUpload = createAsyncThunk("a_handleExploreUpload", async (payload, { getState, dispatch, rejectWithValue }) => {
-    await api_exploreUpload(payload).then(res => {
-        dispatch(r_exploreUpload(res.data));
+export const a_handleArtworkUpload = createAsyncThunk("a_handleArtworkUpload", async (payload, { getState, dispatch, rejectWithValue }) => {
+    await api_artworkUpload(payload).then(res => {
+        dispatch(r_artworkUpload(res.data));
         return;
     }).catch(err => {
-        console.log('---error a_handleExploreUpload', err);
+        console.log('---error a_handleArtworkUpload', err);
         return rejectWithValue(err.message);
     })
 });
 
-export const a_handleExploreEdit = createAsyncThunk("a_handleExploreEdit", async (payload, { getState, dispatch, rejectWithValue }) => {
-    const { exploreID, updatedData } = payload;
-    await api_exploreItemEdit(exploreID, updatedData).then(res => {
-        dispatch(r_exploreEdit(res.data));
+export const a_editArtwork = createAsyncThunk("a_editArtwork", async (payload, { getState, dispatch, rejectWithValue }) => {
+    const { artworkID, updatedData } = payload;
+    await api_editArtwork(artworkID, updatedData).then(res => {
+        dispatch(r_artworkEdit(res.data));
         return;
     }).catch(err => {
-        console.log('---error a_handleExploreEdit', err);
+        console.log('---error a_editArtwork', err);
         return rejectWithValue(err.message);
     })
 });
 
-export const a_bookmarkExploreItem = createAsyncThunk("a_bookmarkExploreItem", async (payload, { getState, dispatch, rejectWithValue }) => {
+export const a_bookmarkArtwork = createAsyncThunk("a_bookmarkArtwork", async (payload, { getState, dispatch, rejectWithValue }) => {
     const { userID, artworkID } = payload;
-    await api_bookmarkExploreItem(userID, artworkID).then(res => {
+    await api_bookmarkArtwork(userID, artworkID).then(res => {
         if (sessionStorage.jwtToken) {
             dispatch(a_refreshUserDetails(userID));
         } else if (localStorage.jwtToken) {
             dispatch(a_refreshUserDetails(userID));
         }
-        console.log('success a_bookmarkExploreItem', res.data);
+        console.log('success a_bookmarkArtwork', res.data);
         return;
     }).catch(err => {
-        console.log('---error a_bookmarkExploreItem', err);
+        console.log('---error a_bookmarkArtwork', err);
         return rejectWithValue(err.message);
     })
 });
 
-// export const a_searchExploreList = createAsyncThunk(query, filter, period) , async ({ getState, dispatch, rejectWithValue }) => {
-//     if (!filter && !period) {
-//         await searchExploreListAPI(query).then(res => {
-//             console.log('test search', res.data);
-//             dispatch({ type: FETCH_EXPLORELIST, payload: res.data });
-//         }).catch(err => {
-//             console.log('---error searchExploreList', err);
-//         })
-//     } else {
-//         await searchFilterExploreListAPI(query, filter, period).then(res => {
-//             dispatch({ type: FETCH_EXPLORELIST, payload: res.data });
-//         }).catch(err => {
-//             console.log('---error searchExploreList', err);
-//         })
-//     }
-// }
-
-export const a_filterExploreList = createAsyncThunk("a_filterExploreList", async (payload, { getState, dispatch, rejectWithValue }) => {
+export const a_fetchArtworks = createAsyncThunk("a_fetchArtworks", async (payload, { getState, dispatch, rejectWithValue }) => {
     const { filter, period } = payload;
-    await api_filterExploreList(filter, period).then(res => {
-        dispatch(r_setExploreList(res.data));
+    await api_artworks("list", "", filter, period).then(res => {
+        dispatch(r_setArtworks(res.data));
         return;
     }).catch(err => {
-        console.log('---error a_filterExploreList', err);
+        console.log('---error a_fetchArtworks', err);
         return rejectWithValue(err.message);
     })
 });
 
-export const a_exploreVisited = createAsyncThunk("a_exploreVisited", async (payload, { getState, dispatch, rejectWithValue }) => {
+export const a_artworkVisited = createAsyncThunk("a_artworkVisited", async (payload, { getState, dispatch, rejectWithValue }) => {
     console.log('page visited');
     return;
 });
 
 export const a_deleteArtwork = createAsyncThunk("a_deleteArtwork", async (payload, { getState, dispatch, rejectWithValue }) => {
     await api_deleteArtwork(payload).then(res => {
-        console.log('deleted Explore');
+        console.log('deleted Artwork');
         return;
     }).catch(err => {
         console.log('---error a_deleteArtwork', err);
@@ -145,37 +118,37 @@ export const a_deleteArtwork = createAsyncThunk("a_deleteArtwork", async (payloa
     })
 });
 
-export const a_handleLikeExplore = createAsyncThunk("a_handleLikeExplore", async (payload, { getState, dispatch, rejectWithValue }) => {
+export const a_handleLikeArtwork = createAsyncThunk("a_handleLikeArtwork", async (payload, { getState, dispatch, rejectWithValue }) => {
     const { artworkID, userID } = payload;
 
     await api_likeArtwork(artworkID, userID).then(res => {
         console.log('likeCount', res.status);
         return;
     }).catch(err => {
-        console.log('---error a_handleLikeExplore', err);
+        console.log('---error a_handleLikeArtwork', err);
         return rejectWithValue(err.message);
     })
 });
 
-export const a_handleDislikeExplore = createAsyncThunk("a_handleDislikeExplore", async (payload, { getState, dispatch, rejectWithValue }) => {
+export const a_handleDislikeArtwork = createAsyncThunk("a_handleDislikeArtwork", async (payload, { getState, dispatch, rejectWithValue }) => {
     const { artworkID, userID } = payload;
 
     await api_dislikeArtwork(artworkID, userID).then(res => {
         console.log('likeCount', res.status);
         return;
     }).catch(err => {
-        console.log('---error a_handleDislikeExplore', err);
+        console.log('---error a_handleDislikeArtwork', err);
         return rejectWithValue(err.message);
     })
 });
 
-export const a_handleAwardExplore = createAsyncThunk("a_handleAwardExplore", async (payload, { getState, dispatch, rejectWithValue }) => {
-    const { exploreID, userID, award } = payload;
-    await api_awardExplore(exploreID, userID, award).then(res => {
+export const a_handleAwardArtwork = createAsyncThunk("a_handleAwardArtwork", async (payload, { getState, dispatch, rejectWithValue }) => {
+    const { artworkID, userID, award } = payload;
+    await api_giftToArtwork(artworkID, userID, award).then(res => {
         console.log('award', res.status);
         return;
     }).catch(err => {
-        console.log('---error a_handleAwardExplore', err);
+        console.log('---error a_handleAwardArtwork', err);
         return rejectWithValue(err.message);
     })
 });
@@ -192,8 +165,8 @@ export const a_handleAddComment = createAsyncThunk("a_handleAddComment", async (
 });
 
 export const a_handleEditComment = createAsyncThunk("a_handleEditComment", async (payload, { getState, dispatch, rejectWithValue }) => {
-    const { newComment, exploreID, commentID } = payload;
-    await api_exploreEditComment(exploreID, newComment, commentID, getState().common.user).then(res => {
+    const { newComment, artworkID, commentID } = payload;
+    await api_editArtworkComment(artworkID, newComment, commentID, getState().common.user).then(res => {
         console.log('editStatus', res.data);
         return;
     }).catch(err => {
@@ -203,8 +176,8 @@ export const a_handleEditComment = createAsyncThunk("a_handleEditComment", async
 });
 
 export const a_handleDeleteComment = createAsyncThunk("a_handleDeleteComment", async (payload, { getState, dispatch, rejectWithValue }) => {
-    const { exploreID, commentID } = payload;
-    await api_exploreDeleteComment(exploreID, commentID).then(res => {
+    const { artworkID, commentID } = payload;
+    await api_deleteArtworkComment(artworkID, commentID).then(res => {
         console.log('deleteStatus', res.data);
         return;
     }).catch(err => {
@@ -238,18 +211,18 @@ export const a_handleDislikeComment = createAsyncThunk("a_handleDislikeComment",
 export const a_handleTabChange = createAsyncThunk("a_handleTabChange", async (payload, { getState, dispatch, rejectWithValue }) => {
     switch (payload) {
         case 'Latest': {
-            let artworks = getState().explore.artworks;
-            dispatch(r_setExploreList(artworks.sort(dynamicSort('createdAt'))));
+            let artworks = getState().artwork.artworks;
+            dispatch(r_setArtworks(artworks.sort(dynamicSort('createdAt'))));
             break;
         }
         case 'Trending': {
-            let artworks = getState().explore.artworks;
-            dispatch(r_setExploreList(artworks.sort(dynamicSort('title'))));
+            let artworks = getState().artwork.artworks;
+            dispatch(r_setArtworks(artworks.sort(dynamicSort('title'))));
             break;
         }
         case 'Rising': {
-            let artworks = getState().explore.artworks;
-            dispatch(r_setExploreList(artworks.sort(dynamicSort('title'))));
+            let artworks = getState().artwork.artworks;
+            dispatch(r_setArtworks(artworks.sort(dynamicSort('title'))));
             break;
         }
         default: break;

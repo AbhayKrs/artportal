@@ -3,7 +3,7 @@ import React from 'react'
 export const TOS = (props) => {
     return (
         <div className='flex flex-col gap-3 col-span-3 p-2 text-neutral-700 dark:text-gray-300'>
-            <h1 className="text-2xl font-medium tracking-wide">artportal Terms of Service</h1>
+            <h1 className="text-3xl font-medium tracking-wide">artportal Terms of Service</h1>
             <p className="text-lg tracking-wide">Last updated: July 14, 2025</p>
             <p className="text-lg tracking-wide">By using artportal.com ("Site"), you agree to these Terms of Use. Please also review our <a href="/privacy-policy">Privacy Policy</a>. Your agreement is with Epic Games, Inc. (U.S. residents) or Epic Games Commerce GmbH (non-U.S. residents).</p>
 
@@ -50,7 +50,7 @@ export const TOS = (props) => {
 
                 <div className="flex flex-col gap-1">
                     <h2 className="text-lg font-medium tracking-wide">9. Content Rules</h2>
-                    <p className="text-lg tracking-wide pl-5">Comply with laws, Epic’s policies, and privacy regulations. Your Content remains yours; Epic owns Site content and tools. Grant Epic a worldwide, royalty-free license to use Your Content for Services and Safety/Discovery Tools. Tag AI-generated Digital Products with “CreatedWithAI.” Do not use “NoAI” tagged content for AI purposes.</p>
+                    <p className="text-lg tracking-wide pl-5">Comply with laws, Epic's policies, and privacy regulations. Your Content remains yours; Epic owns Site content and tools. Grant Epic a worldwide, royalty-free license to use Your Content for Services and Safety/Discovery Tools. Tag AI-generated Digital Products with “CreatedWithAI.” Do not use “NoAI” tagged content for AI purposes.</p>
                 </div>
 
                 <div className="flex flex-col gap-1">

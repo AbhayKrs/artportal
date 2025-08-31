@@ -12,9 +12,7 @@ import Store from '../models/store.js';
 import User from '../models/user.js';
 import { storeBucket } from '../config/gridfs_config.js';
 
-// @route       GET api/store
-// @desc        Get all store items
-// @access      Public
+// @route   GET api/v1.01/store --- Fetch all store listings --- PUBLIC
 router.get('/', async (req, res) => {
     try {
         let store = [];
@@ -31,9 +29,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-// @route       POST api/store/new
-// @desc        Publish on store
-// @access      Private
+// @route   POST api/v1.01/store/new --- Post new store listing --- PUBLIC
 router.post('/new', storeUpl.any(), async (req, res) => {
     const user = await User.findById(req.body.userID);
     const newStoreItem = new Store({
@@ -62,9 +58,7 @@ router.post('/new', storeUpl.any(), async (req, res) => {
 }
 );
 
-// @route       Get api/store/:id
-// @desc        Fetch store item by ID
-// @access      Public
+// @route   GET api/v1.01/store/:id --- Fetch store listing by id --- PUBLIC
 router.get('/:id', async (req, res) => {
     try {
         const storeItem = await Store.findById(req.params.id);
@@ -78,15 +72,8 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// @route       Edit api/store/:id
-// @desc        Edit a store item
-// @access      Private/Admin
+// @route   PUT api/v1.01/store/:id --- Edit store listing by id --- PUBLIC
 router.put('/:id', function (req, res) {
-    const newStoreItemDetails = {
-        title: req.body.title,
-        description: req.body.description,
-        price: req.body.price
-    };
     Store.findByIdAndUpdate(
         req.params.id,
         { $set: newData },
@@ -100,9 +87,7 @@ router.put('/:id', function (req, res) {
     );
 });
 
-// @route       Delete api/store/:id
-// @desc        Delete a store item
-// @access      Private/Admin
+// @route   DELETE api/v1.01/store/:id --- Delete store listing by id --- PUBLIC
 router.delete('/:id', async (req, res) => {
     try {
         const storeItem = await Store.findById(req.params.id);
@@ -124,9 +109,7 @@ router.delete('/:id', async (req, res) => {
 }
 );
 
-// @route   Image Route
-// @desc    Image from gridFS storage
-// @access  Private
+// @route   GET api/v1.01/store/image/:filename --- Fetch image of store listing --- PUBLIC
 router.get('/image/:filename', async (req, res) => {
     const { filename } = req.params;
 

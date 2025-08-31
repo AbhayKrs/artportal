@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 
-import { a_handleCartAdd, a_handleRemoveFromCart, a_fetchCartList } from '../store/actions/common.actions';
-import { api_fetchStoreImages } from '../utils/api_routes';
+import { a_handleCartAdd, a_handleRemoveFromCart, a_fetchUserCart } from '../store/actions/common.actions';
+import { api_storeImages } from '../utils/api_routes';
 
 import { HiPlus, HiMinus, HiOutlineMail } from 'react-icons/hi';
 import Stepper from '../components/Stepper';
@@ -74,7 +74,7 @@ const Cart = (props) => {
                 }
                 const cartID = userCart.filter(item => item.title === data.title)[0]._id;
                 dispatch(a_handleCartAdd({ userID, cartID, cartData })).then(res => {
-                    dispatch(a_fetchCartList());
+                    dispatch(a_fetchUserCart());
                 });
             } else {
                 cartData = {
@@ -86,7 +86,7 @@ const Cart = (props) => {
                     subtotal: data.price * 1
                 }
                 dispatch(a_handleCartAdd({ userID, cartData })).then(res => {
-                    dispatch(a_fetchCartList());
+                    dispatch(a_fetchUserCart());
                 });
             }
         } catch (err) {
@@ -102,7 +102,7 @@ const Cart = (props) => {
         try {
             if (userCart.filter(item => item.title === data.title)[0].quantity === 1) {
                 dispatch(a_handleRemoveFromCart({ cartID, userID })).then(res => {
-                    dispatch(a_fetchCartList());
+                    dispatch(a_fetchUserCart());
                 });
             } else {
                 let quantity = userCart.filter(item => item.title === data.title)[0].quantity - 1;
@@ -113,7 +113,7 @@ const Cart = (props) => {
                 }
                 const cartID = userCart.filter(item => item.title === data.title)[0]._id;
                 dispatch(a_handleRemoveFromCart({ cartID, userID })).then(res => {
-                    dispatch(a_fetchCartList());
+                    dispatch(a_fetchUserCart());
                 });
             }
         } catch (err) {
@@ -128,7 +128,7 @@ const Cart = (props) => {
                     {user.cart && user.cart.map(cartItem => (
                         <div className='flex sm:flex-row flex-col gap-5 py-2  text-md'>
                             <div className='flex gap-4'>
-                                <img loading='lazy' src={api_fetchStoreImages(cartItem.file)} className="w-20 h-20 object-cover rounded shadow-lg" alt="Thumbnail" />
+                                <img loading='lazy' src={api_storeImages(cartItem.file)} className="w-20 h-20 object-cover rounded shadow-lg" alt="Thumbnail" />
                                 <div className='flex flex-col'>
                                     <span>Title: {cartItem.title}</span>
                                     <span>Category: {cartItem.title}</span>

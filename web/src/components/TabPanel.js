@@ -1,14 +1,15 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 
-import { api_fetchUserImages } from '../utils/api_routes';
+import { api_userImages } from '../utils/api_routes';
 
 import { ImageCard } from './Card';
 import { AwardConfirmModal } from './Modal';
 import Dropdown from './Dropdown';
 
-import { awardTabPanelHeaders, exploreFilters, explorePeriodOptions } from '../utils/constants';
-import { useSelector } from 'react-redux';
+import { awardTabPanelHeaders, filters, periodOptions } from '../utils/constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { a_fetchArtworks } from '../store/actions/library.actions';
 
 export const HomeTabPanel = ({ tags, artworks, }) => {
     const [activeStatus, setActiveStatus] = useState(0);
@@ -58,8 +59,8 @@ export const HomeTabPanel = ({ tags, artworks, }) => {
                     {tags.map((tag, index) => {
                         return <Fragment key={index}>
                             {
-                                index === activeStatus && artworks.filter(item => item.tags.includes(tag) === true).map((explore, index) => (
-                                    <ImageCard size='l' key={index} explore={explore} artist={explore.artist} />
+                                index === activeStatus && artworks.filter(item => item.tags.includes(tag) === true).map((artwork, index) => (
+                                    <ImageCard size='l' key={index} artwork={artwork} artist={artwork.artist} />
                                 ))
                             }
                         </Fragment>
@@ -72,7 +73,7 @@ export const HomeTabPanel = ({ tags, artworks, }) => {
     )
 }
 
-export const AwardTabPanel = ({ awards, user, exploreID, awardClose, handleAwardExplore }) => {
+export const AwardTabPanel = ({ awards, user, artworkID, awardClose, handleAwardArtwork }) => {
     const [activeStatus, setActiveStatus] = useState(0);
     const [confirmData, setConfirmData] = useState({ open: false, award: {} });
 
@@ -96,7 +97,7 @@ export const AwardTabPanel = ({ awards, user, exploreID, awardClose, handleAward
                     return <Fragment key={index}>
                         {index === activeStatus && awards.map((award, index) => (
                             <button className='flex flex-col items-center' key={index} onClick={() => setConfirmData({ open: true, award })}>
-                                {award.icon.length > 0 && <img loading='lazy' style={{ width: '3em', height: '3em' }} src={api_fetchUserImages(award.icon)} />}
+                                {award.icon.length > 0 && <img loading='lazy' style={{ width: '3em', height: '3em' }} src={api_userImages(award.icon)} />}
                                 <p className="font-bold font-serif text-right text-neutral-700 dark:text-gray-300 text-sm">{award.value}</p>
                             </button>
                         ))}
@@ -108,23 +109,24 @@ export const AwardTabPanel = ({ awards, user, exploreID, awardClose, handleAward
                     open={confirmData.open}
                     awardData={confirmData.award}
                     user={user}
-                    exploreID={exploreID}
+                    artworkID={artworkID}
                     onClose={() => setConfirmData({ open: false, award: {} })}
                     awardClose={awardClose}
-                    handleAwardExplore={handleAwardExplore}
+                    handleAwardArtwork={handleAwardArtwork}
                 />
             }
         </div >
     )
 }
 
-export const ExplorePanel = ({ search, a_filterExploreList, searchExploreList }) => {
+export const ExplorePanel = ({ search }) => {
     let navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const common = useSelector(state => state.common);
 
     const [triggerEffect, setTriggerEffect] = useState(false);
-    const [exploreSearch, setExploreSearch] = useState('');
+    const [searchVal, setSearchVal] = useState('');
     const [activeFilter, setActiveFilter] = useState('');
     const [activePeriod, setActivePeriod] = useState('');
     const [activePeriodLabel, setActivePeriodLabel] = useState('Select a time period');
@@ -135,7 +137,7 @@ export const ExplorePanel = ({ search, a_filterExploreList, searchExploreList })
         });
 
         if (search && params.query) {
-            setExploreSearch(params.query);
+            setSearchVal(params.query);
         }
 
         if (params.filter || params.period) {
@@ -147,8 +149,8 @@ export const ExplorePanel = ({ search, a_filterExploreList, searchExploreList })
                 params.period ? setActivePeriod(params.period) : setActivePeriod('month')
             }
 
-            let label = params.period && explorePeriodOptions.some(item => item.value === params.period) ?
-                explorePeriodOptions.find(item => item.value === params.period).label
+            let label = params.period && periodOptions.some(item => item.value === params.period) ?
+                periodOptions.find(item => item.value === params.period).label
                 :
                 'Select a time period'
             setActivePeriodLabel(label);
@@ -159,49 +161,46 @@ export const ExplorePanel = ({ search, a_filterExploreList, searchExploreList })
     useEffect(() => {
         if (triggerEffect) {
             //case 1 - No search / No Filter / No Period
-            console.log('case1', exploreSearch.length === 0 && activeFilter.length === 0 && activePeriod.length === 0)
-            if (exploreSearch.length === 0 && activeFilter.length === 0 && activePeriod.length === 0) {
-                navigate('/explore?filter=trending');
-                a_filterExploreList('trending');
+            console.log('case1', searchVal.length === 0 && activeFilter.length === 0 && activePeriod.length === 0)
+            if (searchVal.length === 0 && activeFilter.length === 0 && activePeriod.length === 0) {
+                navigate('/library?filter=trending');
+                dispatch(a_fetchArtworks({ filter: "trending" }))
             }
 
             //case 2 - Search / No Filter / No Period
-            console.log('case2', exploreSearch.length > 0 && activeFilter.length === 0 && activePeriod.length === 0)
-            if (exploreSearch.length > 0 && activeFilter.length === 0 && activePeriod.length === 0) {
-                navigate(`/explore/search?query=${exploreSearch}`);
-                // searchExploreList(exploreSearch);
+            console.log('case2', searchVal.length > 0 && activeFilter.length === 0 && activePeriod.length === 0)
+            if (searchVal.length > 0 && activeFilter.length === 0 && activePeriod.length === 0) {
+                navigate(`/library/search?query=${searchVal}`);
             }
 
             //case 3 - Search / Filter / No Period
-            console.log('case3', exploreSearch.length > 0 && activeFilter.length > 0 && activePeriod.length === 0)
-            if (exploreSearch.length > 0 && activeFilter.length > 0 && activePeriod.length === 0) {
-                navigate(`/explore/search?query=${exploreSearch}&filter=${activeFilter.replace(/\s+/g, '+')}`);
-                // searchExploreList(exploreSearch, activeFilter.replace(/\s+/g, '+'));
+            console.log('case3', searchVal.length > 0 && activeFilter.length > 0 && activePeriod.length === 0)
+            if (searchVal.length > 0 && activeFilter.length > 0 && activePeriod.length === 0) {
+                navigate(`/library/search?query=${searchVal}&filter=${activeFilter.replace(/\s+/g, '+')}`);
             }
 
             //case 4 - Search / Filter / Period
-            console.log('case4', exploreSearch.length > 0 && activeFilter.length > 0 && activePeriod.length > 0)
-            if (exploreSearch.length > 0 && activeFilter.length > 0 && activePeriod.length > 0) {
-                navigate(`/explore/search?query=${exploreSearch}&filter=${activeFilter.replace(/\s+/g, '+')}&period=${activePeriod.replace(/\s+/g, '+')}`);
-                // searchExploreList(exploreSearch, activeFilter.replace(/\s+/g, '+'), activePeriod.replace(/\s+/g, '+'));
+            console.log('case4', searchVal.length > 0 && activeFilter.length > 0 && activePeriod.length > 0)
+            if (searchVal.length > 0 && activeFilter.length > 0 && activePeriod.length > 0) {
+                navigate(`/library/search?query=${searchVal}&filter=${activeFilter.replace(/\s+/g, '+')}&period=${activePeriod.replace(/\s+/g, '+')}`);
             }
 
             //case 5 - No Search / Filter / No Period
-            console.log('case5', exploreSearch.length === 0 && activeFilter.length > 0 && activePeriod.length === 0)
-            if (exploreSearch.length === 0 && activeFilter.length > 0 && activePeriod.length === 0) {
+            console.log('case5', searchVal.length === 0 && activeFilter.length > 0 && activePeriod.length === 0)
+            if (searchVal.length === 0 && activeFilter.length > 0 && activePeriod.length === 0) {
                 navigate(`?filter=${activeFilter.replace(/\s+/g, '+')}`);
-                a_filterExploreList(activeFilter.replace(/\s+/g, '+'));
+                dispatch(a_fetchArtworks({ filter: activeFilter.replace(/\s+/g, '+') }))
             }
 
             //case 6 - No Search / Filter / Period
-            console.log('case6', exploreSearch.length === 0 && activeFilter.length > 0 && activePeriod.length > 0)
-            if (exploreSearch.length === 0 && activeFilter.length > 0 && activePeriod.length > 0) {
+            console.log('case6', searchVal.length === 0 && activeFilter.length > 0 && activePeriod.length > 0)
+            if (searchVal.length === 0 && activeFilter.length > 0 && activePeriod.length > 0) {
                 navigate(`?filter=${activeFilter.replace(/\s+/g, '+')}&period=${activePeriod.replace(/\s+/g, '+')}`);
-                a_filterExploreList(activeFilter.replace(/\s+/g, '+'), activePeriod.replace(/\s+/g, '+'));
+                dispatch(a_fetchArtworks({ filter: activeFilter.replace(/\s+/g, '+'), period: activePeriod.replace(/\s+/g, '+') }))
             }
 
         }
-    }, [triggerEffect, exploreSearch, activeFilter, activePeriod])
+    }, [triggerEffect, searchVal, activeFilter, activePeriod])
 
     const selectFilter = (item) => {
         if (activeFilter === item) {
@@ -230,24 +229,30 @@ export const ExplorePanel = ({ search, a_filterExploreList, searchExploreList })
             <div className='flex w-full items-center sm:justify-start justify-between'>
                 <div className='lg:flex hidden'>
                     <ul id='tabSlider' className="flex flex-row gap-4 items-center whitespace-nowrap">
-                        {exploreFilters.map((filter, index) => {
-                            return <li key={index} onClick={() => selectFilter(filter.value)} className={`flex gap-1 cursor-pointer text-xl font-medium tracking-wide text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
-                                <div className={`${filter.value === activeFilter ? 'flex' : 'hidden'} h-4 w-1 bottom-[-4px] left-0 rounded text-2xl bg-blue-700 dark:bg-blue-700`}></div>
-                                {filter.label}
-                            </li>
+                        {filters.map((filter, index) => {
+                            return (
+                                <li
+                                    key={index}
+                                    onClick={() => selectFilter(filter.value)}
+                                    className={`flex gap-1 cursor-pointer text-lg font-medium tracking-wide text-neutral-800 dark:text-gray-300 rounded-xl items-center`}
+                                >
+                                    <div className={`${filter.value === activeFilter ? 'flex' : 'hidden'} h-4 w-1 bottom-[-4px] left-0 rounded text-2xl bg-blue-700 dark:bg-blue-700`}></div>
+                                    {filter.label}
+                                </li>
+                            )
                         })}
                     </ul>
                 </div>
                 <div className="lg:hidden flex items-center cursor-pointer gap-2">
-                    <Dropdown left name='filters' selectedPeriod={activeFilter === '' ? 'Select a filter' : activePeriodLabel} options={exploreFilters} onSelect={selectFilter} />
+                    <Dropdown left name='filters' selectedPeriod={activeFilter === '' ? 'Select a filter' : activePeriodLabel} options={filters} onSelect={selectFilter} />
                 </div>
                 {activePeriod.length > 0 && <span className='text-gray-600 dark:text-gray-400 mx-2'>&#9679;</span>}
                 {activePeriod.length > 0 ?
                     <div className="flex items-center cursor-pointer gap-2">
                         {window.innerWidth > 640 ?
-                            <Dropdown left name='period' selectedPeriod={activePeriodLabel} options={explorePeriodOptions} onSelect={handlePeriodChange} />
+                            <Dropdown left name='period' selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
                             :
-                            <Dropdown right name='period' selectedPeriod={activePeriodLabel} options={explorePeriodOptions} onSelect={handlePeriodChange} />
+                            <Dropdown right name='period' selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
                         }
                     </div>
                     :
@@ -257,7 +262,7 @@ export const ExplorePanel = ({ search, a_filterExploreList, searchExploreList })
     )
 }
 
-export const NotificationTabPanel = ({ awards, user, exploreID, awardClose, handleAwardExplore }) => {
+export const NotificationTabPanel = ({ awards, user, artworkID, awardClose, handleAwardArtwork }) => {
     return (
         <div className="p-2 h-fit bg-slate-100 dark:bg-neutral-800">
             {/* <div className='flex'>
@@ -278,7 +283,7 @@ export const NotificationTabPanel = ({ awards, user, exploreID, awardClose, hand
                     return <Fragment key={index}>
                         {index === activeStatus && awards.map((award, index) => (
                             <button className='flex flex-col items-center' key={index} onClick={() => setConfirmData({ open: true, award })}>
-                                <img loading='lazy' style={{ width: '3em', height: '3em' }} src={api_fetchUserImages(award.icon)} />
+                                <img loading='lazy' style={{ width: '3em', height: '3em' }} src={api_userImages(award.icon)} />
                                 <p className="font-bold font-serif text-right text-neutral-700 dark:text-gray-300 text-sm">{award.value}</p>
                             </button>
                         ))}
@@ -290,10 +295,10 @@ export const NotificationTabPanel = ({ awards, user, exploreID, awardClose, hand
                     open={confirmData.open}
                     awardData={confirmData.award}
                     user={user}
-                    exploreID={exploreID}
+                    artworkID={artworkID}
                     onClose={() => setConfirmData({ open: false, award: {} })}
                     awardClose={awardClose}
-                    handleAwardExplore={handleAwardExplore}
+                    handleAwardArtwork={handleAwardArtwork}
                 />
             } */}
         </div >
