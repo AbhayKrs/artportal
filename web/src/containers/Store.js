@@ -3,15 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Helmet } from 'react-helmet';
 
-import { a_handleCartAdd, a_handleRemoveFromCart, a_fetchUserCart } from '../store/actions/common.actions';
 import { r_setLoader } from '../store/reducers/common.reducers';
-import { a_fetchSellerList, a_fetchStoreList } from '../store/actions/store.actions';
+import { a_fetchStoreList } from '../store/actions/store.actions';
 import { api_userImages, api_storeImages } from '../utils/api_routes';
 
 import { StoreMultiCarousel } from '../components/Carousel';
 import { CartModal } from '../components/Modal';
 
 import { MdShoppingCart, MdOutlineAddShoppingCart } from 'react-icons/md';
+import { a_fetchUserCart, a_handleCartAdd, a_handleRemoveFromCart } from '../store/actions/user.actions';
 
 const Store = (props) => {
     const dispatch = useDispatch();
@@ -19,7 +19,7 @@ const Store = (props) => {
 
     const common = useSelector(state => state.common);
     const store = useSelector(state => state.store);
-    const user = useSelector(state => state.common.user);
+    const user = useSelector(state => state.user);
 
     let cartTotal = 0;
     const [cartOpen, setCartOpen] = useState(false);
@@ -28,7 +28,7 @@ const Store = (props) => {
         dispatch(r_setLoader(true));
         window.scrollTo(0, 0)
         dispatch(a_fetchStoreList());
-        dispatch(a_fetchSellerList());
+        // dispatch(a_fetchSellerList());
     }, [])
 
     const addToCart = (data) => {
@@ -100,7 +100,7 @@ const Store = (props) => {
     }
 
     const findCartTotal = () => {
-        let cart = common.user.cart
+        let cart = user.cart
         if (cart && cart.length > 0) {
             cart.map(item => {
                 cartTotal = item.subtotal + cartTotal
@@ -122,9 +122,9 @@ const Store = (props) => {
                 {/* <button onClick={() => navigate('/store/all')} className="tracking-wider h-fit border-2 border-blue-700 text-blue-700  font-bold py-1.5 px-3 mr-2 rounded">Store - All</button> */}
                 {/* <button onClick={() => navigate('/store/sellers')} className="tracking-wider h-fit border-2 border-blue-700 text-blue-700  font-bold py-1.5 px-3 rounded">artportal Verified Sellers</button> */}
                 <div className='flex ml-auto gap-3'>
-                    {common.user.cart && common.user.cart.length > 0 && <button onClick={() => handleCartOpen()} className='relative h-fit tracking-wider overflow-visible bg-blue-700 font-bold p-2 rounded-lg'>
+                    {user.cart && user.cart.length > 0 && <button onClick={() => handleCartOpen()} className='relative h-fit tracking-wider overflow-visible bg-blue-700 font-bold p-2 rounded-lg'>
                         <MdShoppingCart className='w-6 h-6 text-gray-200 hover:cursor-pointer' />
-                        <div className='absolute -top-1 -right-1 px-1 bg-red-600 text-gray-200 rounded-full text-xs'>{common.user.cart.length}</div>
+                        <div className='absolute -top-1 -right-1 px-1 bg-red-600 text-gray-200 rounded-full text-xs'>{user.cart.length}</div>
                     </button>}
                     <button onClick={() => navigate('/store/new')} className='h-fit tracking-wider border-2 border-blue-700 text-blue-700  font-bold py-1.5 px-3 rounded-lg'>Create Listing</button>
                 </div>
@@ -225,7 +225,7 @@ const Store = (props) => {
                 </div>
             </div> */}
             {/* Merch */}
-            {cartOpen && <CartModal open={cartOpen} onClose={handleCartClose} cartList={common.user.cart} cartTotal={findCartTotal()} api_storeImages={api_storeImages} addToCart={addToCart} handleCartRemove={removeFromCart} />}
+            {cartOpen && <CartModal open={cartOpen} onClose={handleCartClose} cartList={user.cart} cartTotal={findCartTotal()} api_storeImages={api_storeImages} addToCart={addToCart} handleCartRemove={removeFromCart} />}
         </div >
     )
 }

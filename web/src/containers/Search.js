@@ -13,7 +13,6 @@ import { MdSearch, MdClose } from 'react-icons/md';
 import { BsHeart, BsChat } from 'react-icons/bs';
 import { BiTimeFive } from 'react-icons/bi';
 
-import { a_searchArtworks } from '../store/actions/library.actions';
 import Divider from '../components/Divider';
 import { Helmet } from 'react-helmet';
 
@@ -24,13 +23,21 @@ const Search = (props) => {
     const library = useSelector(state => state.library);
     const common = useSelector(state => state.common);
 
-    const [searchVal, setSearchVal] = useState("");
+    let searchList = [];
 
     useEffect(() => {
         dispatch(r_setSearchType("artwork"));
         dispatch(r_setLoader(true));
         window.scrollTo(0, 0)
     }, []);
+
+    useEffect(() => {
+        if (common.activeSearch === "artwork") {
+            searchList = library.artworks;
+        } else if (common.activeSearch === 'tag') {
+            searchList = common.tags;
+        } else { }
+    }, [common.activeSearch])
 
     return (
         <div className='relative bg-gray-200 dark:bg-darkBg p-4'>

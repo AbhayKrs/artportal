@@ -16,7 +16,7 @@ export const Settings = (props) => {
     const location = useLocation();
 
     const common = useSelector(state => state.common);
-    const user = useSelector(state => state.common.user);
+    const user = useSelector(state => state.user);
 
     const [childPath, setChildPath] = useState('');
 
@@ -59,7 +59,7 @@ export const Settings = (props) => {
 
             <div className='grid grid-cols-4 gap-4'>
                 <div className='flex flex-col p-3 gap-3 bg-slate-300 rounded-lg dark:bg-neutral-900 items-start'>
-                    {common.isAuthenticated && <>
+                    {user.is_authenticated && <>
                         <div className="flex gap-2 w-full justify-center">
                             {user.avatar.icon.length > 0 && <img loading='lazy' className='w-24' src={api_userImages(user.avatar.icon)} />}
                             <div className='clear-left'>
@@ -76,7 +76,7 @@ export const Settings = (props) => {
                             <div className={`${childPath === "general" ? 'flex' : 'hidden'} h-5 w-1 bottom-[-4px] left-0 rounded text-2xl bg-blue-700 dark:bg-blue-700`}></div>
                             General
                         </button>
-                        {common.isAuthenticated && <>
+                        {user.is_authenticated && <>
                             <button onClick={() => navigate('/settings/account')} className={`flex w-full p-2 gap-2 items-end text-xl font-medium tracking-wide hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
                                 <div className={`${childPath === "account" ? 'flex' : 'hidden'} h-5 w-1 bottom-[-4px] left-0 rounded text-2xl bg-blue-700 dark:bg-blue-700`}></div>
                                 Account

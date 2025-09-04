@@ -13,6 +13,37 @@ const { Artwork, Comment } = Artworks;
 
 import jwt from 'jsonwebtoken';
 
+// @route   GET api/v1.01/users --- Fetch all artworks --- Public
+router.get('/', async (req, res) => {
+    try {
+        let response = [];
+        let searchResponse = [];
+
+        const type = req.query.type; // list, search, verified
+        const value = req.query.filter; // searchVal 
+        const userList = await User.find({});
+
+        switch (type) {
+            case 'list': {
+                response = userList;
+                break;
+            }
+            case 'search': {
+                searchResponse = userList.filter(item => item.name.toLowerCase().indexOf(value.toLowerCase()) != -1 || item.username.toLowerCase().indexOf(value.toLowerCase()) != -1);
+                response = searchResponse;
+
+            }
+            case 'verified': {
+                response = userList.filter(item => item.name.toLowerCase().indexOf(value.toLowerCase()) != -1 || item.username.toLowerCase().indexOf(value.toLowerCase()) != -1);
+            }
+            default: { response = userList }
+        }
+        res.json(response);
+    } catch (err) {
+        res.status(500).send('Unable to fetch artworks data');
+    }
+});
+
 // @route   GET api/v1.01/users/:id ---  Get user by ID --- PUBLIC
 router.get('/:id', async (req, res) => {
     try {
@@ -22,13 +53,17 @@ router.get('/:id', async (req, res) => {
             name: user.name,
             username: user.username,
             email: user.email,
-            bio: user.bio,
             avatar: user.avatar,
-            created_on: user.createdAt,
+            bio: user.bio,
             tokens: user.tokens,
-            bookmarks: user.bookmarks,
+            google_authenticated: user.google_authenticated,
+            is_verified: user.is_verified,
+            is_premium: user.is_premium,
             followers: user.followers,
-            likes: user.likes,
+            followering: user.following,
+            bookmarks: user.bookmarks,
+            created_on: user.createdAt,
+            premium_validity: user.premium_validity
         };
         jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 31556926 }, (err, token) => {
             res.json({

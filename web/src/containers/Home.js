@@ -49,19 +49,16 @@ const Home = (props) => {
                             </a>
                         </div>
                     </div>
-                    <HighlightList title="" list={library.trending_artworks.slice(0, 8)} visibleItems={{ desktop: 5, tablet: 2, mobile: 2 }} />
+                    {/* <HighlightList title="" list={library.trending_artworks.slice(0, 8)} visibleItems={{ desktop: 5, tablet: 2, mobile: 2 }} /> */}
                 </div>
                 <div className='flex-1 w-2/12 content-center justify-items-center backdrop-sepia-0 bg-white/30 dark:bg-black/30 rounded-lg'>
                     <div className='flex flex-col gap-2 lg:gap-4 p-4'>
-                        <div className='flex bg-neutral-900 h-24 w-24 md:h-28 md:w-28 lg:h-36 lg:w-36'>
-                            <span className='m-auto text-center'>
-                                {showQR ?
-                                    <img className='rounded-md' src={AppQR} />
-                                    :
-                                    <button onClick={() => setShowQR(true)}>
-                                        <ViewsIcon className='w-6 h-6 text-neutral-600 dark:text-neutral-400' />
-                                    </button>
-                                }
+                        <div className='flex h-24 w-24 md:h-28 md:w-28 lg:h-36 lg:w-36'>
+                            <span className='relative m-auto text-center rounded-md'>
+                                {!showQR && <button className='flex absolute rounded-md z-10 inset-0 m-auto items-center justify-center backdrop-blur-sm' onClick={() => setShowQR(true)}>
+                                    <ViewsIcon className='w-8 h-8 text-neutral-600 dark:text-black/75' />
+                                </button>}
+                                <img className='rounded-md shadow-md' src={AppQR} />
                             </span>
                         </div>
                         <h2 className='w-min text-md md:text-xl lg:text-xl font-bold uppercase text-center tracking-wider text-neutral-800 dark:text-gray-200'>Download the app for<br /> <span className='text-2xl md:text-3xl lg:text-5xl font-black'>free!</span></h2>
@@ -74,7 +71,7 @@ const Home = (props) => {
                             <div className='absolute h-1 w-8 bottom-[-2px] left-0 text-2xl bg-gray-300 rounded-md'></div>
                         </div>
                         <ul className='list-disc pl-5'>
-                            {["abstract", "nature", "concept", "abstract", "nature", "concept"].map(ctg => (
+                            {["abstract", "architecture", "character", "concept", "environment", "mature", "traditional"].map(ctg => (
                                 <li className='w-min text-md text-neutral-800 dark:text-gray-200'>{ctg}</li>
                             ))}
                         </ul>
@@ -83,10 +80,10 @@ const Home = (props) => {
             </div>
             <Divider />
             {
-                library.trending_artworks.length > 0 ?
+                library.artworks.length > 0 ?
                     <div className='flex flex-row'>
                         <Masonry cols={5}>
-                            {library.trending_artworks.map((artwork, index) => (
+                            {library.artworks.map((artwork, index) => (
                                 <div key={index} onClick={() => navigate(`/library/${artwork._id}`)} className='relative group group-hover:block cursor-pointer'>
                                     <img loading='lazy'
                                         id={index}

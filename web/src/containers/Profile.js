@@ -3,8 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 
-import { r_clearProfileDetails, r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducers';
-import { a_fetchUserArtworks, a_handleDeleteBookmark, a_handleFetchUserDetails, a_refreshUserDetails } from '../store/actions/common.actions';
 import { a_deleteArtwork, a_fetchArtworks } from '../store/actions/library.actions';
 import { api_artworkImages, api_userImages } from '../utils/api_routes';
 
@@ -15,6 +13,9 @@ import { FaUserEdit } from 'react-icons/fa';
 import { BiTimeFive } from 'react-icons/bi';
 import { GoInfo } from 'react-icons/go';
 import { IoCloseCircle } from 'react-icons/io5';
+import { a_fetchUserArtworks, a_handleDeleteBookmark, a_handleFetchUserDetails, a_refreshUserDetails } from '../store/actions/user.actions';
+import { r_clearProfileDetails } from '../store/reducers/user.reducers';
+import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducers';
 
 
 const Profile = (props) => {
@@ -101,7 +102,7 @@ const Profile = (props) => {
                                 src={api_artworkImages(artwork.files[0])}
                             />
                             <div className='absolute z-30 hidden group-hover:flex top-0 right-0 m-2 gap-1'>
-                                {common.user.id === profile_data.id && <BsTrash onClick={() => deleteArtwork(artwork._id)} className=' h-6 w-6 cursor-pointer text-gray-200' />}
+                                {user.id === profile_data.id && <BsTrash onClick={() => deleteArtwork(artwork._id)} className=' h-6 w-6 cursor-pointer text-gray-200' />}
                                 <GoInfo onClick={() => navigate(`/library/${artwork._id}`)} className='w-6 h-6 cursor-pointer text-gray-200' />
                             </div>
                             <div className='hidden absolute max-h-full bottom-0 p-2 pt-14 group-hover:flex group-hover:flex-row w-full bg-gradient-to-t from-black text-gray-200 group-hover:flex group-hover:justify-between'>
@@ -185,7 +186,7 @@ const Profile = (props) => {
                                 className='object-cover w-full h-full'
                                 src={api_artworkImages(artwork.files[0])}
                             />
-                            <IoCloseCircle onClick={() => deleteBookmark(artwork._id, common.user.id)} className='hidden group-hover:flex absolute z-30 top-0 right-0 h-8 w-8 m-2 cursor-pointer text-gray-200' />
+                            <IoCloseCircle onClick={() => deleteBookmark(artwork._id, user.id)} className='hidden group-hover:flex absolute z-30 top-0 right-0 h-8 w-8 m-2 cursor-pointer text-gray-200' />
                             <div className='hidden absolute max-h-full bottom-0 p-2 pt-14 group-hover:flex group-hover:flex-row w-full bg-gradient-to-t from-black text-gray-200 group-hover:flex group-hover:justify-between'>
                                 <div className="flex flex-col place-self-end max-w-[65%]">
                                     <h3 className="text-md text-base font-bold leading-5 capitalize break-words">{artwork.title}</h3>
@@ -257,7 +258,7 @@ const Profile = (props) => {
                                         {profile_data.bio && <p className="text-blueGray-600 text-blueGray-700 dark:text-gray-400 font-bold italic">
                                             {'“' + profile_data.bio + '”'}
                                         </p>}
-                                        {common.user.id === profile_data.id ?
+                                        {user.id === profile_data.id ?
                                             <div>
                                                 <button onClick={() => navigate('/settings/account')} className="flex items-center gap-2 bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150" type="button">
                                                     <FaUserEdit />
@@ -284,7 +285,7 @@ const Profile = (props) => {
                                 <span className='text-gray-700 dark:text-gray-400'>&#9679;</span>
                                 <div onClick={() => setActiveView('liked')} className={`text-lg font-semibold ${activeView === 'liked' ? 'text-blue-700 dark:text-blue-700' : 'text-gray-700 dark:text-gray-400'}  cursor-pointer`}>Liked</div>
                                 <span className='text-gray-700 dark:text-gray-400'>&#9679;</span>
-                                {common.user.id === profile_data.id && <div onClick={() => setActiveView('bookmarks')} className={`text-lg font-semibold ${activeView === 'bookmarks' ? 'text-blue-700 dark:text-blue-700' : 'text-gray-700 dark:text-gray-400'}  cursor-pointer`}>Bookmarks</div>}
+                                {user.id === profile_data.id && <div onClick={() => setActiveView('bookmarks')} className={`text-lg font-semibold ${activeView === 'bookmarks' ? 'text-blue-700 dark:text-blue-700' : 'text-gray-700 dark:text-gray-400'}  cursor-pointer`}>Bookmarks</div>}
                             </div>
                             {profile_data && renderView()}
                         </div>

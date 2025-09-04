@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 
-import { a_handleCartAdd, a_handleRemoveFromCart, a_fetchUserCart } from '../store/actions/common.actions';
 import { api_storeImages } from '../utils/api_routes';
 
 import { HiPlus, HiMinus, HiOutlineMail } from 'react-icons/hi';
 import Stepper from '../components/Stepper';
+import { a_fetchUserCart, a_handleCartAdd, a_handleRemoveFromCart } from '../store/actions/user.actions';
 
 const Cart = (props) => {
     const dispatch = useDispatch();
-    const user = useSelector(state => state.common.user);
+    const user = useSelector(state => state.user);
 
     const [couponCode, setCouponCode] = useState('');
     const [couponValue, setCouponValue] = useState(0);

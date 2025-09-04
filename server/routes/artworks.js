@@ -11,6 +11,30 @@ import { protect } from '../middleware/authMw.js';
 const { Artwork, Comment } = Artworks;
 const { Sticker } = Common;
 
+const getHotScore = (artwork) => {
+    const likes = artwork.likes.length;
+    const comments = artwork.comments.length;
+    const views = artwork.views.length;
+    const dislikes = artwork.dislikes.length;
+
+    // Net votes (weighted)
+    const votes = likes * 3 + comments * 4 + views * 0.2 - dislikes * 2;
+
+    // Order (log scale)
+    const order = Math.log10(Math.max(Math.abs(votes), 1));
+
+    // Sign
+    const sign = votes > 0 ? 1 : votes < 0 ? -1 : 0;
+
+    // Age in seconds
+    const createdAt = new Date(artwork.createdAt).getTime() / 1000;
+    const epoch = 1134028003; // Reddit’s epoch (Dec 8, 2005)
+    const ageInSeconds = createdAt - epoch;
+
+    // Hot score
+    return order + sign * (ageInSeconds / 45000);
+}
+
 // @route   GET api/v1.01/image/:filename --- Image from gridFS storage --- Public
 router.get('/image/:filename', async (req, res) => {
     const { filename } = req.params;
@@ -34,8 +58,8 @@ router.get('/', async (req, res) => {
         let response = [];
         let searchResponse = [];
 
-        const type = req.query.filter;
-        const value = req.query.filter;
+        const type = req.query.type;
+        const value = req.query.value;
         const filter = req.query.filter;
         const period = req.query.period;
         const artworkList = await Artwork.find({}).populate('artist', 'name username avatar');
@@ -44,9 +68,8 @@ router.get('/', async (req, res) => {
             searchResponse = artworkList.filter(item => item.title.toLowerCase().indexOf(value.toLowerCase()) != -1);
             response = searchResponse;
         }
-        console.log("response default", !filter, !period)
 
-        if (!filter && !period) {
+        if ((filter.length === 0 || filter === "undefined") && (period.length === 0 || period === "undefined")) {
             response = artworkList;
         } else {
             const getPeriod = (label) => {
@@ -64,7 +87,8 @@ router.get('/', async (req, res) => {
 
             switch (filter) {
                 case 'trending': {
-                    response = artworkList;
+                    console.log("trending");
+                    response = artworkList.sort((a, b) => getHotScore(b) - getHotScore(a));
                     break;
                 }
                 case 'popular': {

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from "react-redux";
 
-import { a_fetchAvatars, a_handleEditUserAvatar, a_handleUpdateUser, a_handleFetchUserDetails, a_refreshUserDetails } from '../store/actions/common.actions';
-import { r_setSnackMessage } from '../store/reducers/common.reducers';
 import { api_artworkImages, api_userImages } from '../utils/api_routes';
 
 import { AvatarModal, ConfirmModal } from '../components/Modal';
@@ -13,12 +11,15 @@ import { MdAlternateEmail, MdEditOff, MdDownloadDone } from 'react-icons/md';
 import { FcGoogle } from 'react-icons/fc';
 import { MdAddAPhoto, MdClose } from 'react-icons/md';
 import Divider from '../components/Divider';
+import { a_fetchAvatars } from '../store/actions/common.actions';
+import { a_handleEditUserAvatar, a_handleFetchUserDetails, a_handleUpdateUser, a_refreshUserDetails } from '../store/actions/user.actions';
+import { r_setSnackMessage } from '../store/reducers/common.reducers';
 
 export const Account = (props) => {
     const dispatch = useDispatch();
 
     const common = useSelector(state => state.common);
-    const user = useSelector(state => state.common.user);
+    const user = useSelector(state => state.user);
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -30,19 +31,19 @@ export const Account = (props) => {
     const [editStatus, setEditStatus] = useState(false);
 
     useEffect(() => {
-        if (!common.user.id) {
+        if (!user.id) {
         } else {
             dispatch(a_fetchAvatars());
-            dispatch(a_handleFetchUserDetails(common.user.id));
+            dispatch(a_handleFetchUserDetails(user.id));
             setUsername(user.username);
             setName(user.name);
             setEmail(user.email)
             setBio(user.bio)
         }
-    }, [common.user])
+    }, [user])
 
     const openAvatarModal = () => {
-        if (common.isAuthenticated)
+        if (user.is_authenticated)
             setAvatarModal(true)
         else {
             const msgData = {

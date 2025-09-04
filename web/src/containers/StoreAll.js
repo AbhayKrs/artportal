@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { api_storeImages } from '../utils/api_routes';
-import { a_handleCartAdd, a_handleRemoveFromCart, a_fetchUserCart } from '../store/actions/common.actions';
 import { r_setLoader } from '../store/reducers/common.reducers';
 import { a_fetchCategorizedStoreList, a_fetchStoreList } from '../store/actions/store.actions';
 
@@ -11,6 +10,7 @@ import Dropdown from '../components/Dropdown';
 import { CartModal } from '../components/Modal';
 
 import { MdShoppingCart, MdOutlineAddShoppingCart } from 'react-icons/md';
+import { a_fetchUserCart, a_handleCartAdd, a_handleRemoveFromCart } from '../store/actions/user.actions';
 
 const StoreAll = (props) => {
     const dispatch = useDispatch();
@@ -18,7 +18,7 @@ const StoreAll = (props) => {
 
     const common = useSelector(state => state.common);
     const store = useSelector(state => state.store);
-    const user = useSelector(state => state.common.user);
+    const user = useSelector(state => state.user);
 
     let cartTotal = 0;
     const [cartOpen, setCartOpen] = useState(false);
@@ -125,7 +125,7 @@ const StoreAll = (props) => {
     }
 
     const findCartTotal = () => {
-        let cart = common.user.cart
+        let cart = user.cart
         if (cart && cart.length > 0) {
             cart.map(item => {
                 cartTotal = item.subtotal + cartTotal
@@ -140,9 +140,9 @@ const StoreAll = (props) => {
                 <div className='flex sm:flex-row flex-col mb-3 justify-between'>
                     <div className='text-3xl  font-bold tracking-wider text-blue-700 dark:text-blue-700'>artportal Store</div>
                     <div className='flex items-center gap-2'>
-                        {common.user.cart && common.user.cart.length > 0 && <button onClick={() => handleCartOpen()} className='relative h-fit tracking-wider overflow-visible bg-blue-700 font-bold p-2 rounded-lg'>
+                        {user.cart && user.cart.length > 0 && <button onClick={() => handleCartOpen()} className='relative h-fit tracking-wider overflow-visible bg-blue-700 font-bold p-2 rounded-lg'>
                             <MdShoppingCart className='w-6 h-6 text-gray-200 hover:cursor-pointer' />
-                            <div className={`${!cartOpen && 'animate-pulse'} absolute -top-1 -right-1 px-1 bg-red-600 text-gray-200 rounded-full text-xs`}>{common.user.cart.length}</div>
+                            <div className={`${!cartOpen && 'animate-pulse'} absolute -top-1 -right-1 px-1 bg-red-600 text-gray-200 rounded-full text-xs`}>{user.cart.length}</div>
                         </button>}
                         <button onClick={() => navigate('/store/new')} className='ml-auto h-fit tracking-wider border-2 border-blue-700 text-blue-700  font-bold py-1.5 px-3 rounded-lg'>Create Listing</button>
                         <Dropdown right name='category' selectedPeriod={activeCategoryLabel} options={categoryOptions} onSelect={handleCategoryChange} />
@@ -154,7 +154,7 @@ const StoreAll = (props) => {
                     <div className='grid gap-4 sm:grid-cols-3 grid-cols-1'>
                         {store.storeList.map(item => (
                             <div className="drop-shadow-lg rounded-xl bg-indigo-50 dark:bg-neutral-800 overflow-hidden">
-                                <img loading='lazy' className="sm:h-full max-h-60 w-full object-cover object-center scale-110 transition-all duration-400 scale-100" src={api_storeImages(item.files[0])} />
+                                <img loading='lazy' className="sm:h-full max-h-60 w-full object-cover object-center transition-all duration-400 scale-100" src={api_storeImages(item.files[0])} />
                                 <div className="py-6 px-4">
                                     <h2 className="tracking-widest text-xs title-font font-medium text-gray-400 mb-2">CATEGORY: <span className='capitalize text-gray-700'>{item.category}</span></h2>
                                     <h1 className="title-font text-lg font-medium text-neutral-800 dark:text-neutral-300">{item.title}</h1>
@@ -172,7 +172,7 @@ const StoreAll = (props) => {
                     </div>
                 </div>
             </div>
-            {cartOpen && <CartModal open={cartOpen} onClose={handleCartClose} cartList={common.user.cart} cartTotal={findCartTotal()} api_storeImages={api_storeImages} addToCart={addToCart} handleCartRemove={removeFromCart} />}
+            {cartOpen && <CartModal open={cartOpen} onClose={handleCartClose} cartList={user.cart} cartTotal={findCartTotal()} api_storeImages={api_storeImages} addToCart={addToCart} handleCartRemove={removeFromCart} />}
         </div>
     )
 }

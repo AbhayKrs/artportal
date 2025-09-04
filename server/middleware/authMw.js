@@ -21,7 +21,7 @@ const protect = async (req, res, next) => {
 };
 
 const admin = (req, res, next) => {
-    if (req.user && req.user.isAdmin) {
+    if (req.user && req.user.is_admin) {
         next();
     } else {
         res.status(401);

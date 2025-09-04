@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { api_commentOnArtwork, api_artworks, api_giftToArtwork, api_bookmarkArtwork, api_deleteArtwork, api_dislikeArtwork, api_deleteArtworkComment, api_dislikeComment, api_editArtworkComment, api_artworkItem, api_editArtwork, api_likeComment, api_artworkUpload, api_likeArtwork } from '../../utils/api_routes'
-import { a_refreshUserDetails } from './common.actions';
+import { a_refreshUserDetails } from './user.actions';
 import { r_artworkEdit, r_artworkUpload, r_setArtworkItem, r_setArtworks, r_setMonthHighlightsList, r_setNewlyAddedList, r_setTrendingList } from '../reducers/library.reducers';
 
 const dynamicSort = (property) => {
@@ -32,7 +32,7 @@ export const a_artworkItemViewed = createAsyncThunk("a_artworkItemViewed", async
 });
 
 export const a_fetchArtwork = createAsyncThunk("a_fetchArtwork", async (payload, { getState, dispatch, rejectWithValue }) => {
-    const userID = getState().common.user.id;
+    const userID = getState().user.id;
     await api_artworkItem(payload, { _id: userID }).then(res => {
         dispatch(r_setArtworkItem(res.data));
         return;
@@ -44,15 +44,16 @@ export const a_fetchArtwork = createAsyncThunk("a_fetchArtwork", async (payload,
 
 export const a_fetchHomeData = createAsyncThunk("a_fetchHomeData", async (payload, { getState, dispatch, rejectWithValue }) => {
     const { filter, period } = payload;
-    await api_artworks("list", "", filter, period).then(res => {
-        dispatch(r_setTrendingList(res.data.sort(() => 0.4 - Math.random()).slice(0, 12)));
-        dispatch(r_setNewlyAddedList(res.data.sort(() => 0.4 - Math.random()).slice(0, 12)));
-        dispatch(r_setMonthHighlightsList(res.data.sort(() => 0.4 - Math.random()).slice(0, 12)));
-        return;
-    }).catch(err => {
-        console.log('---error a_fetchTrendingList', err);
-        return rejectWithValue(err.message);
-    })
+    await api_artworks("list").then(res => dispatch(r_setArtworks(res.data)));
+    await api_artworks("list", "", "trending").then(res => dispatch(r_setTrendingList(res.data)));
+    // await api_artworks("list", "", filter, period).then(res => {
+    //     dispatch(r_setNewlyAddedList(res.data.sort(() => 0.4 - Math.random()).slice(0, 12)));
+    //     dispatch(r_setMonthHighlightsList(res.data.sort(() => 0.4 - Math.random()).slice(0, 12)));
+    //     return;
+    // }).catch(err => {
+    //     console.log('---error a_fetchTrendingList', err);
+    //     return rejectWithValue(err.message);
+    // })
 });
 
 export const a_handleArtworkUpload = createAsyncThunk("a_handleArtworkUpload", async (payload, { getState, dispatch, rejectWithValue }) => {
@@ -177,7 +178,7 @@ export const a_handleAddComment = createAsyncThunk("a_handleAddComment", async (
 
 export const a_handleEditComment = createAsyncThunk("a_handleEditComment", async (payload, { getState, dispatch, rejectWithValue }) => {
     const { newComment, artworkID, commentID } = payload;
-    await api_editArtworkComment(artworkID, newComment, commentID, getState().common.user).then(res => {
+    await api_editArtworkComment(artworkID, newComment, commentID, getState().user).then(res => {
         console.log('editStatus', res.data);
         return;
     }).catch(err => {

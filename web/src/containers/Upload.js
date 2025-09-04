@@ -23,6 +23,7 @@ const ExploreUpload = (props) => {
     let navigate = useNavigate();
 
     const common = useSelector(state => state.common);
+    const user = useSelector(state => state.user);
 
     const [categories, setCategories] = useState([]);
     const [files, setFiles] = useState([]);
@@ -186,7 +187,7 @@ const ExploreUpload = (props) => {
             return;
         }
 
-        const userID = common.user.id;
+        const userID = user.id;
         const uploadData = new FormData();
         files.map(file => uploadData.append('files[]', file));
         // uploadData.append('thumbnail', thumbnail);
@@ -373,6 +374,7 @@ const StoreUpload = (props) => {
     const navigate = useNavigate();
 
     const common = useSelector(state => state.common);
+    const user = useSelector(state => state.user);
 
     const [storeFiles, setStoreFiles] = useState([]);
     const [storeTitle, setStoreTitle] = useState('');
@@ -473,7 +475,7 @@ const StoreUpload = (props) => {
             return;
         }
 
-        const userID = common.user.id;
+        const userID = user.id;
         const formData = new FormData();
 
         storeFiles.map(file => formData.append('files[]', file));

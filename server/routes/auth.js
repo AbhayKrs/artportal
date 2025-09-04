@@ -43,12 +43,13 @@ router.post("/login", async (req, res) => {
                             bio: user.bio,
                             tokens: user.tokens,
                             google_authenticated: user.google_authenticated,
-                            isPremium: user.isPremium,
+                            is_verified: user.is_verified,
+                            is_premium: user.is_premium,
                             followers: user.followers,
                             followering: user.following,
                             bookmarks: user.bookmarks,
                             created_on: user.createdAt,
-                            premium_validity: user.premiumValidity
+                            premium_validity: user.premium_validity
                         };
                         jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 43200000 },
                             (err, token) => {
@@ -109,12 +110,14 @@ router.post("/signup", (req, res) => {
                                         avatar: user.avatar,
                                         bio: user.bio,
                                         tokens: user.tokens,
-                                        isPremium: user.isPremium,
+                                        google_authenticated: user.google_authenticated,
+                                        is_verified: user.is_verified,
+                                        is_premium: user.is_premium,
                                         followers: user.followers,
                                         followering: user.following,
                                         bookmarks: user.bookmarks,
                                         created_on: user.createdAt,
-                                        premium_validity: user.premiumValidity
+                                        premium_validity: user.premium_validity
                                     };
                                     jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 43200000 },
                                         (err, token) => {
@@ -154,7 +157,7 @@ router.get('/google/callback', passport.authenticate('google', {
         bio: authenticatedUser.bio,
         avatar: authenticatedUser.avatar,
         created_on: authenticatedUser.createdAt,
-        premium_validity: authenticatedUser.premiumValidity,
+        premium_validity: authenticatedUser.premium_validity,
         tokens: authenticatedUser.tokens,
         google_authenticated: authenticatedUser.google_authenticated,
         followers: authenticatedUser.followers,
@@ -188,7 +191,7 @@ router.get('/facebook/callback', passport.authenticate('facebook', {
         bio: authenticatedUser.bio,
         avatar: authenticatedUser.avatar,
         created_on: authenticatedUser.createdAt,
-        premium_validity: authenticatedUser.premiumValidity,
+        premium_validity: authenticatedUser.premium_validity,
         tokens: authenticatedUser.tokens,
         followers: authenticatedUser.followers,
         bookmarks: authenticatedUser.bookmarks

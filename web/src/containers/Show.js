@@ -6,7 +6,6 @@ import moment from 'moment';
 import { a_fetchArtwork, a_fetchArtworks, a_handleDislikeArtwork, a_handleLikeArtwork, a_handleDeleteComment, a_handleEditComment, a_handleDislikeComment, a_handleLikeComment, a_bookmarkArtwork, a_handleAddComment } from '../store/actions/library.actions';
 import { a_fetchStoreItem, a_fetchStoreList } from '../store/actions/store.actions';
 import { r_setLoader, r_setSnackMessage, r_headerDialogOpen } from '../store/reducers/common.reducers';
-import { a_refreshUserDetails } from '../store/actions/common.actions';
 import { api_userImages, api_artworkImages, api_storeImages } from '../utils/api_routes';
 
 import { AwardModal, ShareModal } from '../components/Modal';
@@ -29,12 +28,13 @@ import { ReactComponent as DislikeFilledIcon } from '../assets/icons/dislikefill
 
 import CommentList from '../components/CommentList';
 import Divider from '../components/Divider';
+import { a_refreshUserDetails } from '../store/actions/user.actions';
 
 const Library = (props) => {
     const dispatch = useDispatch();
 
     const common = useSelector(state => state.common);
-    const user = useSelector(state => state.common.user);
+    const user = useSelector(state => state.user);
     const library = useSelector(state => state.library);
     const artwork = useSelector(state => state.library.artwork);
 
@@ -237,7 +237,7 @@ const Library = (props) => {
                                 <p className=' whitespace-nowrap text-sm'>{moment(artwork.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</p>
                             </div>
                             <div className='flex justify-between items-center'>
-                                {/* {artwork.artist.id === common.user.id ?
+                                {/* {artwork.artist.id === user.id ?
                                     <div onClick={() => navigate(`/library/${artwork._id}/edit`)} className='rounded-lg bg-blue-700 p-2 cursor-pointer ml-2'>
                                         <MdEdit className="text-gray-200 h-6 w-6" />
                                     </div>
@@ -247,7 +247,7 @@ const Library = (props) => {
                                             src={AwardIcon}
                                             className='h-12 w-12 cursor-pointer'
                                             onClick={() => {
-                                                common.isAuthenticated ?
+                                                user.is_authenticated ?
                                                     setAwardOpen(true)
                                                     :
                                                     handleInvalidUser()
@@ -269,7 +269,7 @@ const Library = (props) => {
                                                 :
                                                 <button
                                                     onClick={() => {
-                                                        common.isAuthenticated ?
+                                                        user.is_authenticated ?
                                                             handleToggleLike(true)
                                                             :
                                                             handleInvalidUser()
@@ -290,7 +290,7 @@ const Library = (props) => {
                                                 :
                                                 <button
                                                     onClick={() => {
-                                                        common.isAuthenticated ?
+                                                        user.is_authenticated ?
                                                             handleToggleLike(false)
                                                             :
                                                             handleInvalidUser()
@@ -312,7 +312,7 @@ const Library = (props) => {
                                             <MdBookmarkAdd
                                                 className='h-6 w-6 cursor-pointer text-neutral-700 dark:text-gray-200'
                                                 onClick={() => {
-                                                    common.isAuthenticated ?
+                                                    user.is_authenticated ?
                                                         bookmarkIt()
                                                         :
                                                         handleInvalidUser()
@@ -340,7 +340,7 @@ const Library = (props) => {
                                 <h2 className='text-lg self-center'>{new Intl.NumberFormat().format(artwork.comments_count)} Comments</h2>
                             </div>
                         </div>
-                        {common.isAuthenticated ? <div className='flex flex-row gap-2 items-center px-3'>
+                        {user.is_authenticated ? <div className='flex flex-row gap-2 items-center px-3'>
                             <input
                                 type="text"
                                 name="comment"

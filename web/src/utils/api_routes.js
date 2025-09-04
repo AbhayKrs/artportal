@@ -33,12 +33,12 @@ export const api_tags = () => apiClient.get(`/common/tags`);
 export const api_signIn = userData => apiClient.post(`/auth/login`, userData, { headers: { 'Content-Type': 'application/json' } });
 export const api_signUp = userData => apiClient.post(`/auth/signup`, userData, { headers: { 'Content-Type': 'application/json' } });
 export const api_googleLogin = () => apiClient.get(`/auth/google/login`);
+export const api_users = (type, value) => apiClient.get(`/users?type=${type}&value=${value}`);
 export const api_userData = userID => apiClient.get(`/users/${userID}`);
 export const api_updateUserData = (userID, userData) => apiClient.put(`/users/${userID}`, userData);
 export const api_deleteBookmark = (bookmarkID, userID) => apiClient.delete(`/users/${userID}/bookmark/${bookmarkID}`);
 export const api_artworks = (type, value, filter, period) => apiClient.get(`/artworks?type=${type}&value=${value}&filter=${filter}&period=${period}`);
 export const api_artworkItem = (id, payload) => apiClient.get(`/artworks/${id}`, payload);
-export const api_sellerList = () => apiClient.get('/users?type=seller');
 export const api_storeListings = () => apiClient.get(`/store`);
 export const api_storeItem = storeID => apiClient.get(`/store/${storeID}`);
 export const api_categorizedStoreListings = (category) => apiClient.get(`/store?category=${category}`);
@@ -68,8 +68,8 @@ export const api_deleteArtworkComment = (artworkID, commentID) => apiClient.dele
 export const api_deleteStoreListing = (storeID, userID) => apiClient.delete(`/store/${storeID}`, userID, { headers: { 'Content-Type': 'application/json' } });
 export const api_deleteFromCart = (cartID, userID) => apiClient.delete(`/users/${userID}/cart/${cartID}`);
 
-// export const api_likeArtwork = artworkID => apis.put(`/artworks/${artworkID}/like`, { user: getState().common.user })
-// export const api_dislikeArtwork = artworkID => apis.put(`/artworks/${artworkID}/dislike`, { user: getState().common.user })
+// export const api_likeArtwork = artworkID => apis.put(`/artworks/${artworkID}/like`, { user: getState().user })
+// export const api_dislikeArtwork = artworkID => apis.put(`/artworks/${artworkID}/dislike`, { user: getState().user })
 // export const api_getAllMovies = () => api.get(`/movies`)
 // export const api_updateMovieById = (id, payload) => api.put(`/movie/${id}`, payload)
 // export const api_deleteMovieById = id => api.delete(`/movie/${id}`)

@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import Dropdown from './Dropdown';
 
-import { filters, periodOptions } from '../utils/constants';
+import { filterOptions, periodOptions } from '../utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { a_fetchArtworks, a_searchArtworks } from '../store/actions/library.actions';
 
@@ -10,7 +10,8 @@ import { MdClose } from 'react-icons/md';
 import { FiAtSign } from 'react-icons/fi';
 import { FaChevronRight, FaHashtag, FaGreaterThan } from 'react-icons/fa6';
 import { ReactComponent as SearchIcon } from '../assets/icons/search.svg';
-import { r_clearSearchList } from '../store/reducers/common.reducers';
+import { r_clearSearchList, r_setSearchType } from '../store/reducers/common.reducers';
+import { a_getTags } from '../store/actions/common.actions';
 
 const TabPanel = ({ search }) => {
     let navigate = useNavigate();
@@ -21,6 +22,7 @@ const TabPanel = ({ search }) => {
     const [triggerEffect, setTriggerEffect] = useState(false);
     const [searchVal, setSearchVal] = useState('');
     const [activeFilter, setActiveFilter] = useState('');
+    const [activeFilterLabel, setActiveFilterLabel] = useState('Select a time period');
     const [activePeriod, setActivePeriod] = useState('');
     const [activePeriodLabel, setActivePeriodLabel] = useState('Select a time period');
 
@@ -35,18 +37,22 @@ const TabPanel = ({ search }) => {
 
         if (params.filter || params.period) {
             params.filter ? setActiveFilter(params.filter) : setActiveFilter('');
-
+            let filterlabel = params.filter && filterOptions.some(item => item.value === params.filter) ?
+                filterOptions.find(item => item.value === params.filter).label
+                :
+                'Select a filter'
+            setActiveFilterLabel(filterlabel);
             if (params.filter === 'trending' || params.filter === 'new' || params.filter === 'rising') {
                 setActivePeriod('');
             } else {
                 params.period ? setActivePeriod(params.period) : setActivePeriod('month')
             }
 
-            let label = params.period && periodOptions.some(item => item.value === params.period) ?
+            let periodlabel = params.period && periodOptions.some(item => item.value === params.period) ?
                 periodOptions.find(item => item.value === params.period).label
                 :
                 'Select a time period'
-            setActivePeriodLabel(label);
+            setActivePeriodLabel(periodlabel);
         }
         setTriggerEffect(true);
     }, []);
@@ -95,6 +101,7 @@ const TabPanel = ({ search }) => {
     const selectFilter = (item) => {
         if (activeFilter === item) {
             setActiveFilter('');
+            setActiveFilterLabel('Select a filter');
             setActivePeriod('');
             setActivePeriodLabel('Select a time period');
         } else {
@@ -171,17 +178,17 @@ const TabPanel = ({ search }) => {
             <div className='flex flex-row w-full justify-between'>
                 {search && (
                     <div className='flex flex-row gap-2'>
-                        <button disabled={common.activeSearch === 'artwork'} onClick={() => { dispatch(a_searchArtworks({ value: searchVal, filter: "", period: "" })) }} className={`flex gap-1 items-center tracking-wide ${common.activeSearch === 'artwork' ? 'text-blue-700' : 'text-neutral-700 dark:text-gray-300 hover:text-blue-700'}`}>
+                        <button disabled={common.activeSearch === 'artwork'} onClick={() => { dispatch(r_setSearchType('artwork')); dispatch(a_searchArtworks({ value: searchVal, filter: "", period: "" })) }} className={`flex gap-1 items-center tracking-wide ${common.activeSearch === 'artwork' ? 'text-blue-700' : 'text-neutral-700 dark:text-gray-300 hover:text-blue-700'}`}>
                             <FiAtSign className='h-4 w-4' />
                             <span className=' font-semibold text-base'>Artworks</span>
                         </button>
                         <span className='flex text-neutral-700 dark:text-gray-300'>&#8226;</span>
-                        <button disabled={searchVal.length === 0} onClick={() => { dispatch(a_searchArtworks({ value: searchVal })) }} className={`flex gap-1 items-center tracking-wide ${common.activeSearch === 'tag' ? 'text-blue-700' : 'text-neutral-700 dark:text-gray-300 hover:text-blue-700'} disabled:text-gray-300 dark:disabled:text-neutral-500`}>
+                        <button disabled={searchVal.length === 0} onClick={() => { dispatch(a_getTags()); dispatch(a_searchArtworks({ value: searchVal })) }} className={`flex gap-1 items-center tracking-wide ${common.activeSearch === 'tag' ? 'text-blue-700' : 'text-neutral-700 dark:text-gray-300 hover:text-blue-700'} disabled:text-gray-300 dark:disabled:text-neutral-500`}>
                             <FaHashtag className='h-4 w-4' />
                             <span className=' font-semibold text-base'>Tags</span>
                         </button>
                         <span className='flex text-neutral-700 dark:text-gray-300'>&#8226;</span>
-                        <button disabled={searchVal.length === 0} onClick={() => { dispatch(a_searchArtworks({ value: searchVal })) }} className={`flex gap-1 items-center tracking-wide ${common.activeSearch === 'artist' ? 'text-blue-700' : 'text-neutral-700 dark:text-gray-300 hover:text-blue-700'} disabled:text-gray-300 dark:disabled:text-neutral-500`}>
+                        <button disabled={searchVal.length === 0} onClick={() => { dispatch(r_setSearchType('artist')); dispatch(a_searchArtworks({ value: searchVal })) }} className={`flex gap-1 items-center tracking-wide ${common.activeSearch === 'artist' ? 'text-blue-700' : 'text-neutral-700 dark:text-gray-300 hover:text-blue-700'} disabled:text-gray-300 dark:disabled:text-neutral-500`}>
                             <FaGreaterThan className='h-4 w-4' />
                             <span className=' font-semibold text-base'>Artists</span>
                         </button>
@@ -189,36 +196,34 @@ const TabPanel = ({ search }) => {
                 )}
                 {(!search || (search && common.activeSearch === "artwork")) && (
                     <div className='flex items-center'>
-                        <div className='lg:flex hidden'>
-                            <ul id='tabSlider' className="flex flex-row gap-4 items-center whitespace-nowrap">
-                                {filters.map((filter, index) => {
-                                    return (
-                                        <li
-                                            key={index}
-                                            onClick={() => selectFilter(filter.value)}
-                                            className={`flex gap-1 cursor-pointer text-lg font-medium tracking-wide text-neutral-800 dark:text-gray-300 rounded-xl items-center`}
-                                        >
-                                            <div className={`${filter.value === activeFilter ? 'flex' : 'hidden'} h-4 w-1 bottom-[-4px] left-0 rounded text-2xl bg-blue-700 dark:bg-blue-700`}></div>
-                                            {filter.label}
-                                        </li>
-                                    )
-                                })}
-                            </ul>
-                        </div>
-                        <div className="lg:hidden flex items-center cursor-pointer gap-2">
-                            <Dropdown left name='filters' selectedPeriod={activeFilter === '' ? 'Select a filter' : activePeriodLabel} options={filters} onSelect={selectFilter} />
-                        </div>
-                        {activePeriod.length > 0 && <span className='text-gray-600 dark:text-gray-400 mx-2'>&#9679;</span>}
-                        {activePeriod.length > 0 ?
-                            <div className="flex items-center cursor-pointer gap-2">
+                        <Dropdown
+                            left
+                            name='filters'
+                            selected={activeFilterLabel}
+                            options={filterOptions}
+                            onSelect={selectFilter}
+                        />
+                        {activePeriod.length > 0 &&
+                            <>
                                 {window.innerWidth > 640 ?
-                                    <Dropdown left name='period' selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
+                                    <Dropdown
+                                        left
+                                        name='period'
+                                        selected={activePeriodLabel}
+                                        options={periodOptions}
+                                        onSelect={handlePeriodChange}
+                                    />
                                     :
-                                    <Dropdown right name='period' selectedPeriod={activePeriodLabel} options={periodOptions} onSelect={handlePeriodChange} />
+                                    <Dropdown
+                                        right
+                                        name='period'
+                                        selected={activePeriodLabel}
+                                        options={periodOptions}
+                                        onSelect={handlePeriodChange}
+                                    />
                                 }
-                            </div>
-                            :
-                            null}
+                            </>
+                        }
                     </div>
                 )}
             </div>

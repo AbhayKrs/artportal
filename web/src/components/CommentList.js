@@ -39,7 +39,7 @@ const CommentList = ({ comments, handleInvalidUser }) => {
     const { id } = useParams();
     const navigate = useNavigate();
     const common = useSelector(state => state.common);
-    const user = useSelector(state => state.common.user);
+    const user = useSelector(state => state.user);
 
     const [editForm, setEditForm] = useState(false);
     const [editIndex, setEditIndex] = useState('');
@@ -161,7 +161,7 @@ const CommentList = ({ comments, handleInvalidUser }) => {
                                 ) : (
                                     <button
                                         onClick={() =>
-                                            common.isAuthenticated
+                                            user.is_authenticated
                                                 ? handleToggleCommentLike(true, comment)
                                                 : handleInvalidUser()
                                         }
@@ -178,7 +178,7 @@ const CommentList = ({ comments, handleInvalidUser }) => {
                                 ) : (
                                     <button
                                         onClick={() =>
-                                            common.isAuthenticated
+                                            user.is_authenticated
                                                 ? handleToggleCommentLike(false, comment)
                                                 : handleInvalidUser()
                                         }

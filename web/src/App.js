@@ -4,8 +4,6 @@ import { Provider, useDispatch, useSelector } from "react-redux";
 import jwt_decode from 'jwt-decode';
 import store from './store';
 
-import { r_verifyUser, r_setSnackMessage } from './store/reducers/common.reducers';
-import { a_fetchUserCart, a_fetchUserArtworks, a_fetchUserStoreList, a_fetchVisitorStatus } from './store/actions/common.actions';
 import setAuthToken from './utils/setAuthToken';
 
 import Header from './containers/Header';
@@ -45,10 +43,14 @@ import About from './children/About';
 import TOS from './children/TOS';
 import Privacy from './children/Privacy';
 import useWindowWidth from './hooks/useWindowWidth';
+import { a_fetchUserArtworks, a_fetchUserCart, a_fetchUserStoreList, a_fetchVisitorStatus } from './store/actions/user.actions';
+import { r_verifyUser } from './store/reducers/user.reducers';
+import { r_setLoader, r_setSnackMessage } from './store/reducers/common.reducers';
 
 const Layout = (props) => {
   const dispatch = useDispatch();
   const common = useSelector(state => state.common);
+  const user = useSelector(state => state.user);
 
   const width = useWindowWidth();
   const isMobile = width < 640; // sm breakpoint
@@ -60,6 +62,17 @@ const Layout = (props) => {
     load_theme();
     load_auth();
   }, []);
+
+  useEffect(() => {
+    if (common.loader) {
+      document.querySelector("body").style.overflow = 'hidden';
+      setTimeout(() => {
+        dispatch(r_setLoader(false));
+      }, 1500)
+    } else {
+      document.querySelector("body").style.overflow = 'auto';
+    }
+  }, [common.loader])
 
   const load_theme = () => {
     //Check condition for site theme
@@ -80,7 +93,7 @@ const Layout = (props) => {
     if (localStorage.jwtToken) {
       token = localStorage.jwtToken;
 
-      const userID = common.user.id;
+      const userID = user.id;
       dispatch(r_verifyUser(token));
       if (userID) {
         dispatch(a_fetchUserArtworks(userID));
@@ -90,7 +103,7 @@ const Layout = (props) => {
     } else if (sessionStorage.jwtToken) {
       token = sessionStorage.jwtToken;
 
-      const userID = common.user.id;
+      const userID = user.id;
       dispatch(r_verifyUser(token));
       if (userID) {
         dispatch(a_fetchUserArtworks(userID));
@@ -109,7 +122,7 @@ const Layout = (props) => {
       }
       <div className={`max-h-show min-h-show overflow-auto flex flex-col bg-gray-200 dark:bg-darkBg ${isMobile ? "pt-8" : hidePane ? "pl-16" : "pl-60"}`}>
         <Snackbar msgdata={common.snackmsg} setMessage={(msgData) => dispatch(r_setSnackMessage(msgData))} />
-        <Loader />
+        {/* <Loader /> */}
         <Outlet context={hidePane} />
       </div>
       {!isMobile && <Footer hidePane={hidePane} />}

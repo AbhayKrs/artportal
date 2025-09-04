@@ -80,7 +80,7 @@ const librarySlice = createSlice({
             state.artworks = artworks;
         },
         r_setTrendingList: (state, action) => {
-            const list = [...action.payload.sort(() => 0.4 - Math.random()).slice(0, 12)];
+            const list = [...action.payload];
             state.trending_artworks = list;
 
         },

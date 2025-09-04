@@ -2,13 +2,10 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 
-import { a_handleSignIn, a_fetchSearchList, a_handleSignUp, a_handleGoogleAuth } from '../store/actions/common.actions';
-import { r_switchTheme, r_handleSignout, r_setSearchType, r_clearSearchList, r_headerDialogOpen, r_headerDialogClose, r_setAuthError, r_authMsgClose, r_setBetaMessage } from '../store/reducers/common.reducers';
 import { api_userImages } from '../utils/api_routes';
 
 import { TokenModal, LoginModal, RegisterModal, SignupSuccessModal } from '../components/Modal';
 import ThemeToggle from '../components/ThemeToggle';
-import { SearchModal } from '../components/Modal';
 
 import { ReactComponent as Artportal_logo } from '../assets/icons/artportal_logo.svg';
 import { ReactComponent as SidePane } from '../assets/icons/sidepane.svg';
@@ -40,6 +37,9 @@ import { ReactComponent as AddIcon } from '../assets/icons/add.svg';
 import { ReactComponent as MenuIcon } from '../assets/icons/menu.svg';
 import HeaderLink from '../components/HeaderLink';
 import Divider from '../components/Divider';
+import { r_authMsgClose, r_handleSignout, r_setAuthError } from '../store/reducers/user.reducers';
+import { r_clearSearchList, r_headerDialogClose, r_headerDialogOpen, r_setSearchType, r_switchTheme } from '../store/reducers/common.reducers';
+import { a_handleGoogleAuth, a_handleSignIn, a_handleSignUp } from '../store/actions/user.actions';
 
 const MobileHeader = () => {
     const dispatch = useDispatch();
@@ -48,7 +48,7 @@ const MobileHeader = () => {
 
     const common = useSelector(state => state.common);
     const library = useSelector(state => state.library);
-    const user = useSelector(state => state.common.user);
+    const user = useSelector(state => state.user);
 
     const [headerMenu, setHeaderMenu] = useState(false);
     const [tokenOpen, setTokenOpen] = useState(false);
@@ -118,7 +118,7 @@ const MobileHeader = () => {
                         <HeaderLink type="link" hidePane={false} text="Store" path="/store" icon={<StoreIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
                     </div>
                     <hr className='w-full border border-gray-300 dark:border-neutral-800 rounded-xl' />
-                    {common.isAuthenticated ?
+                    {user.is_authenticated ?
                         <div className='flex flex-col w-full gap-4'>
                             <div className='flex flex-col'>
                                 <HeaderLink type="link" hidePane={false} text="Upload" path="/library/new" icon={<UploadIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
@@ -155,7 +155,7 @@ const MobileHeader = () => {
                         </div >
                     }
                 </div >
-                {common.isAuthenticated &&
+                {user.is_authenticated &&
                     <div className='flex flex-col px-2 w-full mt-auto'>
                         <div className='flex flex-col gap-3'>
                             <button onClick={() => { navigate(`/users/${user.id}`) }} className='flex flex-row items-center gap-2 px-1'>

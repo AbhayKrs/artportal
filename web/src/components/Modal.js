@@ -77,10 +77,24 @@ export const LoginModal = ({ open, title, banner, error, onClose, openRegister, 
                         <h1 className=" text-4xl font-bold text-neutral-800 dark:text-gray-300">{title}</h1>
                         <p className=" text-base font-normal text-neutral-700 dark:text-gray-100/50">Don't have an account? <span className='font-semibold text-blue-700 tracking-wide cursor-pointer' onClick={() => { onClose(); openRegister() }}>Sign up</span></p>
                     </div>
-                    <a href={api_googleRedirectURL} className="flex items-center justify-center w-full mt-6 py-2 px-3 rounded-lg border-2 border-neutral-700 dark:border-slate-400">
-                        <GoogleIcon />
-                        <p className=" font-bold tracking-wider ml-4 text-gray-800 dark:text-gray-300">Sign in with Google</p>
-                    </a>
+                    <div
+                        data-client_id="820054731966-q06eo9cipacgl0406ofeq1r4n2ji5asl.apps.googleusercontent.com"
+                        data-login_uri={api_googleRedirectURL}
+                        data-auto_prompt="false"
+                    //  href={api_googleRedirectURL}
+                    // className="flex items-center justify-center w-full mt-6 py-2 px-3 rounded-lg border-2 border-neutral-700 dark:border-slate-400"
+                    >
+                        {/* <GoogleIcon />
+                        <p className=" font-bold tracking-wider ml-4 text-gray-800 dark:text-gray-300">Sign in with Google</p> */}
+                    </div>
+                    <div class="g_id_signin"
+                        data-type="standard"
+                        data-size="large"
+                        data-theme="outline"
+                        data-text="sign_in_with"
+                        data-shape="rectangular"
+                        data-logo_alignment="left">
+                    </div>
                     <div className='flex items-center justify-between'>
                         <hr className="w-full border-1 border-gray-600 dark:border-gray-400" />
                         <p className=" text-base font-bold leading-4 px-2.5 text-gray-600 dark:text-gray-400">OR</p>

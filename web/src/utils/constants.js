@@ -1,4 +1,4 @@
-export const filters = [
+export const filterOptions = [
     { id: 0, label: 'Trending', value: 'trending' },
     { id: 1, label: 'Popular', value: 'popular' },
     { id: 2, label: 'New', value: 'new' },
