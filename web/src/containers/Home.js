@@ -49,7 +49,7 @@ const Home = (props) => {
                             </a>
                         </div>
                     </div>
-                    {/* <HighlightList title="" list={library.trending_artworks.slice(0, 8)} visibleItems={{ desktop: 5, tablet: 2, mobile: 2 }} /> */}
+                    <HighlightList title="" list={library.featured_artworks} visibleItems={{ desktop: 5, tablet: 2, mobile: 2 }} />
                 </div>
                 <div className='flex-1 w-2/12 content-center justify-items-center backdrop-sepia-0 bg-white/30 dark:bg-black/30 rounded-lg'>
                     <div className='flex flex-col gap-2 lg:gap-4 p-4'>

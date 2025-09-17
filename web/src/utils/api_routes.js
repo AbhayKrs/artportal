@@ -32,7 +32,7 @@ apiClient.interceptors.request.use((config) => {
 export const api_tags = () => apiClient.get(`/common/tags`);
 export const api_signIn = userData => apiClient.post(`/auth/login`, userData, { headers: { 'Content-Type': 'application/json' } });
 export const api_signUp = userData => apiClient.post(`/auth/signup`, userData, { headers: { 'Content-Type': 'application/json' } });
-export const api_googleLogin = () => apiClient.get(`/auth/google/login`);
+export const api_googleLogin = (payload) => apiClient.post(`/auth/google/login`, { token: payload });
 export const api_users = (type, value) => apiClient.get(`/users?type=${type}&value=${value}`);
 export const api_userData = userID => apiClient.get(`/users/${userID}`);
 export const api_updateUserData = (userID, userData) => apiClient.put(`/users/${userID}`, userData);

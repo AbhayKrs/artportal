@@ -4,6 +4,7 @@ const initialState = {
     openArtworkDialog: false,
     artworks: [],
     trending_artworks: [],
+    featured_artworks: [],
     new_artworks: [],
     highlight_artworks: [],
     artwork: {
@@ -82,7 +83,10 @@ const librarySlice = createSlice({
         r_setTrendingList: (state, action) => {
             const list = [...action.payload];
             state.trending_artworks = list;
-
+        },
+        r_setFeaturedList: (state, action) => {
+            const list = [...action.payload];
+            state.featured_artworks = list;
         },
         r_setNewlyAddedList: (state, action) => {
             const list = [...action.payload.sort(() => 0.4 - Math.random()).slice(0, 12)];
@@ -120,6 +124,7 @@ export const {
     r_setArtworkItem,
     r_setArtworks,
     r_setTrendingList,
+    r_setFeaturedList,
     r_setNewlyAddedList,
     r_setMonthHighlightsList,
     r_artworkUpload,

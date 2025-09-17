@@ -69,6 +69,11 @@ router.get('/', async (req, res) => {
             response = searchResponse;
         }
 
+        if (type == "artist") {
+            response = artworkList.filter(item => item.artist.username === value);
+            return res.json(response);
+        }
+
         if ((filter.length === 0 || filter === "undefined") && (period.length === 0 || period === "undefined")) {
             response = artworkList;
         } else {

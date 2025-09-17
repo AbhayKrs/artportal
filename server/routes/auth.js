@@ -1,7 +1,7 @@
 import express from 'express';
-import passport from 'passport';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import passport from 'passport';
 
 const router = express.Router();
 
@@ -142,6 +142,15 @@ router.post("/signup", (req, res) => {
 router.get('/google/login', passport.authenticate('google', {
     scope: ['profile', 'email']
 }));
+
+// @route   POST api/v1.01/auth/google/login --- Authenticate user via Google --- PUBLIC
+router.post('/google/login', (req, res) => {
+    console.log("req.body", jwt_de)
+    res.json({
+        success: true,
+        user: req.user
+    })
+});
 
 // @route   GET api/v1.01/auth/google/callback --- Google Authenticatation callback --- PUBLIC
 router.get('/google/callback', passport.authenticate('google', {

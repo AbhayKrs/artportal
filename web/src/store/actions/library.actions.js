@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { api_commentOnArtwork, api_artworks, api_giftToArtwork, api_bookmarkArtwork, api_deleteArtwork, api_dislikeArtwork, api_deleteArtworkComment, api_dislikeComment, api_editArtworkComment, api_artworkItem, api_editArtwork, api_likeComment, api_artworkUpload, api_likeArtwork } from '../../utils/api_routes'
 import { a_refreshUserDetails } from './user.actions';
-import { r_artworkEdit, r_artworkUpload, r_setArtworkItem, r_setArtworks, r_setMonthHighlightsList, r_setNewlyAddedList, r_setTrendingList } from '../reducers/library.reducers';
+import { r_artworkEdit, r_artworkUpload, r_setArtworkItem, r_setArtworks, r_setFeaturedList, r_setMonthHighlightsList, r_setNewlyAddedList, r_setTrendingList } from '../reducers/library.reducers';
 
 const dynamicSort = (property) => {
     return (a, b) => {
@@ -43,9 +43,10 @@ export const a_fetchArtwork = createAsyncThunk("a_fetchArtwork", async (payload,
 });
 
 export const a_fetchHomeData = createAsyncThunk("a_fetchHomeData", async (payload, { getState, dispatch, rejectWithValue }) => {
-    const { filter, period } = payload;
+    const { value, filter, period } = payload;
     await api_artworks("list").then(res => dispatch(r_setArtworks(res.data)));
     await api_artworks("list", "", "trending").then(res => dispatch(r_setTrendingList(res.data)));
+    await api_artworks("artist", "jayabhay9").then(res => dispatch(r_setFeaturedList(res.data)));
     // await api_artworks("list", "", filter, period).then(res => {
     //     dispatch(r_setNewlyAddedList(res.data.sort(() => 0.4 - Math.random()).slice(0, 12)));
     //     dispatch(r_setMonthHighlightsList(res.data.sort(() => 0.4 - Math.random()).slice(0, 12)));

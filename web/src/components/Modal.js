@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
-import { api_artworkImages, api_userImages, api_storeImages, api_googleRedirectURL } from '../utils/api_routes';
-
+import { api_artworkImages, api_userImages, api_storeImages, api_googleRedirectURL, api_googleLogin } from '../utils/api_routes';
 import Stepper from './Stepper';
 
 import TokenLogo from '../assets/images/money.png';
@@ -68,6 +67,23 @@ export const LoginModal = ({ open, title, banner, error, onClose, openRegister, 
         setUsername('');
         setPassword('');
     }
+
+    const handleGoogleLogin = () => {
+        window.open(
+            api_googleRedirectURL, // your login route
+            "googleLogin",
+            "width=500,height=600"
+        );
+
+        window.addEventListener("message", (event) => {
+            if (event.origin !== "http://localhost:5000") return; // security
+            if (event.data.type === "google-auth-success") {
+                console.log("User:", event.data.user);
+                // you can store JWT in localStorage/session here
+            }
+        });
+    }
+
     return (
         <div className={`${open ? 'block' : 'hidden'} flex fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
             <div className="relative m-auto bg-slate-200 dark:bg-neutral-800 xs:w-11/12 sm:w-8/12 lg:w-6/12 rounded-xl z-50 overflow-y-auto">
@@ -77,51 +93,18 @@ export const LoginModal = ({ open, title, banner, error, onClose, openRegister, 
                         <h1 className=" text-4xl font-bold text-neutral-800 dark:text-gray-300">{title}</h1>
                         <p className=" text-base font-normal text-neutral-700 dark:text-gray-100/50">Don't have an account? <span className='font-semibold text-blue-700 tracking-wide cursor-pointer' onClick={() => { onClose(); openRegister() }}>Sign up</span></p>
                     </div>
-                    <div
-                        data-client_id="820054731966-q06eo9cipacgl0406ofeq1r4n2ji5asl.apps.googleusercontent.com"
-                        data-login_uri={api_googleRedirectURL}
-                        data-auto_prompt="false"
-                    //  href={api_googleRedirectURL}
-                    // className="flex items-center justify-center w-full mt-6 py-2 px-3 rounded-lg border-2 border-neutral-700 dark:border-slate-400"
-                    >
-                        {/* <GoogleIcon />
-                        <p className=" font-bold tracking-wider ml-4 text-gray-800 dark:text-gray-300">Sign in with Google</p> */}
-                    </div>
-                    <div class="g_id_signin"
-                        data-type="standard"
-                        data-size="large"
-                        data-theme="outline"
-                        data-text="sign_in_with"
-                        data-shape="rectangular"
-                        data-logo_alignment="left">
-                    </div>
-                    <div className='flex items-center justify-between'>
-                        <hr className="w-full border-1 border-gray-600 dark:border-gray-400" />
-                        <p className=" text-base font-bold leading-4 px-2.5 text-gray-600 dark:text-gray-400">OR</p>
-                        <hr className="w-full border-1 border-gray-600 dark:border-gray-400" />
-                    </div>
+                    <a
+                        onClick={handleGoogleLogin}
+                        className="flex items-center justify-center w-full mt-6 py-2 px-3 rounded-lg border-2 border-neutral-700 dark:border-slate-400">
+                        <GoogleIcon />
+                        <p className=" font-bold tracking-wider ml-4 text-gray-800 dark:text-gray-300">Sign in with Google</p>
+                    </a>
                     <div className="relative flex items-center">
-                        <FaUser className="absolute right-2 h-5 w-5 text-blue-700 dark:text-blue-700" />
-                        <input
-                            name="username"
-                            value={username}
-                            className=" bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-4 pr-9 w-full focus:outline-none"
-                            type="text"
-                            placeholder="Username"
-                            onChange={handleUsernameChange}
-                            onKeyPress={(event) => {
-                                if (event.key === 'Enter') {
-                                    onSubmitClick()
-                                }
-                            }}
-                        />
-                    </div>
-                    <div className="relative flex items-center">
-                        <FaLock className="absolute right-2 h-5 w-5 text-blue-700 dark:text-blue-700" />
+                        <FaLock className="absolute left-2.5 h-5 w-5 text-slate-300 dark:text-neutral-800" />
                         <input
                             name="password"
                             value={password}
-                            className=" bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-4 pr-9 w-full focus:outline-none"
+                            className=" bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-9 w-full focus:outline-none"
                             type="password"
                             placeholder="Password"
                             onChange={handlePasswordChange}
@@ -135,7 +118,7 @@ export const LoginModal = ({ open, title, banner, error, onClose, openRegister, 
                     <label className="flex items-center cursor-pointer gap-2">
                         <input type="checkbox" checked={stayLoggedIn} onChange={handleStayLoggedin}
                             style={{
-                                '-webkit-appearance': 'none',
+                                WebkitAppearance: 'none',
                             }}
                             className="h-4 w-4 appearance-none align-middle rounded-md outline-none bg-slate-300 dark:bg-neutral-700 checked:bg-blue-700 dark:checked:bg-blue-700 cursor-pointer"
                         />
@@ -252,7 +235,7 @@ export const RegisterModal = ({ open, title, banner, error, onClose, openLogin, 
                         <input
                             name="password"
                             value={password}
-                            className=" bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 text-neutral-500 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-4 pr-9 w-full focus:outline-none"
+                            className=" bg-slate-50 dark:bg-neutral-700 dark:text-gray-200 text-neutral-500 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-4 pr-9 w-full focus:outline-none"
                             type="password"
                             placeholder="Password"
                             onChange={handlePasswordChange}
@@ -262,7 +245,7 @@ export const RegisterModal = ({ open, title, banner, error, onClose, openLogin, 
                         <input
                             name="password2"
                             value={password2}
-                            className=" bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 text-neutral-500 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-4 pr-9 w-full focus:outline-none"
+                            className=" bg-slate-50 dark:bg-neutral-700 dark:text-gray-200 text-neutral-500 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-4 pr-9 w-full focus:outline-none"
                             type="password"
                             placeholder="Confirm Password"
                             onChange={handleConfirmPasswordChange}
