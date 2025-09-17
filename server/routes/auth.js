@@ -172,9 +172,10 @@ router.get('/google/callback', passport.authenticate('google', {
         followers: authenticatedUser.followers,
         bookmarks: authenticatedUser.bookmarks
     };
+
     jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 31556926 },
         (err, token) => {
-            let googleToken = token
+            let googleToken = token;
             res.redirect('http://localhost:3000/google_success?auth=' + googleToken)
         }
     );
@@ -188,7 +189,7 @@ router.get('/facebook/login', passport.authenticate('facebook', {
 
 // @route   GET api/v1.01/auth/facebook/callback --- Facebook Authenticatation callback --- PUBLIC
 router.get('/facebook/callback', passport.authenticate('facebook', {
-    failureRedirect: 'http://localhost:3000/google_failed',
+    failureRedirect: '/google_failed',
     session: false
 }), async (req, res) => {
     const authenticatedUser = await User.findOne({ id: req.user.id }).populate('bookmarks');
@@ -208,7 +209,7 @@ router.get('/facebook/callback', passport.authenticate('facebook', {
     jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 31556926 },
         (err, token) => {
             let googleToken = token
-            res.redirect('http://localhost:3000/google_success?auth=' + googleToken)
+            res.redirect('/google_success?auth=' + googleToken)
         }
     );
 })

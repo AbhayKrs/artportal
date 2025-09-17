@@ -41,6 +41,8 @@ import { ImageCard } from './Card';
 import Masonry from './Masonry';
 
 export const LoginModal = ({ open, title, banner, error, onClose, openRegister, handleSignIn, setAuthError }) => {
+    let navigate = useNavigate();
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [stayLoggedIn, setLoggedIn] = useState(false);
@@ -61,27 +63,11 @@ export const LoginModal = ({ open, title, banner, error, onClose, openRegister, 
     const onSubmitClick = () => {
         const signinInput = {
             username: username,
-            password: password,
+            password: password
         }
         handleSignIn(stayLoggedIn, signinInput);
         setUsername('');
         setPassword('');
-    }
-
-    const handleGoogleLogin = () => {
-        window.open(
-            api_googleRedirectURL, // your login route
-            "googleLogin",
-            "width=500,height=600"
-        );
-
-        window.addEventListener("message", (event) => {
-            if (event.origin !== "http://localhost:5000") return; // security
-            if (event.data.type === "google-auth-success") {
-                console.log("User:", event.data.user);
-                // you can store JWT in localStorage/session here
-            }
-        });
     }
 
     return (
@@ -94,7 +80,7 @@ export const LoginModal = ({ open, title, banner, error, onClose, openRegister, 
                         <p className=" text-base font-normal text-neutral-700 dark:text-gray-100/50">Don't have an account? <span className='font-semibold text-blue-700 tracking-wide cursor-pointer' onClick={() => { onClose(); openRegister() }}>Sign up</span></p>
                     </div>
                     <a
-                        onClick={handleGoogleLogin}
+                        href={api_googleRedirectURL}
                         className="flex items-center justify-center w-full mt-6 py-2 px-3 rounded-lg border-2 border-neutral-700 dark:border-slate-400 cursor-pointer">
                         <GoogleIcon />
                         <p className="font-bold tracking-wider ml-4 text-gray-800 dark:text-gray-300">Sign in with Google</p>
