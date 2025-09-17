@@ -23,7 +23,7 @@ const Profile = (props) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const common = useSelector(state => state.common);
+    const user = useSelector(state => state.user);
     const artworks = useSelector(state => state.library.artworks);
     const profile_data = useSelector(state => state.common.profile_data);
 
@@ -65,7 +65,7 @@ const Profile = (props) => {
     }
 
     const onFollowClick = () => {
-        if (common.authenticated)
+        if (user.is_authenticated)
             console.log('follow clicked')
         else {
             const msgData = {
@@ -78,7 +78,7 @@ const Profile = (props) => {
     }
 
     const onMessageClick = () => {
-        if (common.authenticated)
+        if (user.is_authenticated)
             console.log('message clicked')
         else {
             const msgData = {
@@ -146,7 +146,7 @@ const Profile = (props) => {
                                 className='object-cover w-full h-full'
                                 src={api_artworkImages(artwork.files[0])}
                             />
-                            <div className='hidden absolute max-h-full bottom-0 p-2 pt-14 group-hover:flex group-hover:flex-row w-full bg-gradient-to-t from-black text-gray-200 group-hover:flex group-hover:justify-between'>
+                            <div className='hidden absolute max-h-full bottom-0 p-2 pt-14 group-hover:flex w-full bg-gradient-to-t from-black text-gray-200 group-hover:justify-between'>
                                 <div className="flex flex-col place-self-end max-w-[65%]">
                                     <h3 className="text-md text-base font-bold leading-5 capitalize break-words">{artwork.title}</h3>
                                     <div className='flex'>
