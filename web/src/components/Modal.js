@@ -95,10 +95,26 @@ export const LoginModal = ({ open, title, banner, error, onClose, openRegister, 
                     </div>
                     <a
                         onClick={handleGoogleLogin}
-                        className="flex items-center justify-center w-full mt-6 py-2 px-3 rounded-lg border-2 border-neutral-700 dark:border-slate-400">
+                        className="flex items-center justify-center w-full mt-6 py-2 px-3 rounded-lg border-2 border-neutral-700 dark:border-slate-400 cursor-pointer">
                         <GoogleIcon />
-                        <p className=" font-bold tracking-wider ml-4 text-gray-800 dark:text-gray-300">Sign in with Google</p>
+                        <p className="font-bold tracking-wider ml-4 text-gray-800 dark:text-gray-300">Sign in with Google</p>
                     </a>
+                    <div className="relative flex items-center">
+                        <FaUser className="absolute left-2.5 h-5 w-5 text-slate-300 dark:text-neutral-800" />
+                        <input
+                            name="username"
+                            value={username}
+                            className=" bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-9 w-full focus:outline-none"
+                            type="text"
+                            placeholder="Username"
+                            onChange={handleUsernameChange}
+                            onKeyPress={(event) => {
+                                if (event.key === 'Enter') {
+                                    onSubmitClick()
+                                }
+                            }}
+                        />
+                    </div>
                     <div className="relative flex items-center">
                         <FaLock className="absolute left-2.5 h-5 w-5 text-slate-300 dark:text-neutral-800" />
                         <input
