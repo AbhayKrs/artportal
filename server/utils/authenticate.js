@@ -1,4 +1,33 @@
 import Validator from 'validator';
+import jwt from 'jsonwebtoken';
+
+const generateAccessToken = (payload) => {
+    return jwt.sign(
+        payload,
+        process.env.JWT_SECRET,
+        { expiresIn: "15m" } // short-lived
+    );
+};
+
+const generateRefreshToken = (payload) => {
+    return jwt.sign(
+        payload,
+        process.env.REFRESH_TOKEN_SECRET,
+        { expiresIn: "7d" } // long-lived
+    );
+};
+
+const verifyRefreshToken = (token) => {
+    return jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+};
+
+const validateOAuthUser = (user) => {
+    let errors = '';
+    if (user.google_authenticated && !user.password) {
+        errors = "This account was created via Google. Please login using OAuth or set a new password.";
+    }
+    return { errors, isValid: Validator.isEmpty(errors) };
+}
 
 const validateLoginInput = (users, data) => {
     let errors = '';
@@ -32,4 +61,4 @@ const validateRegisterInput = (userData) => {
 }
 
 
-export { validateLoginInput, validateRegisterInput }
+export { generateAccessToken, generateRefreshToken, verifyRefreshToken, validateOAuthUser, validateLoginInput, validateRegisterInput }

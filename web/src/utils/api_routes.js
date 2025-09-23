@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+let accessToken = null;
+console.log("NODE_ENV", process.env)
 // const api_baseURL = 'https://artportal.onrender.com/api/v1.01';
 const api_baseURL = 'http://localhost:5000/api/v1.01';
 
@@ -10,24 +12,51 @@ export const api_artworkImages = filename => api_baseURL + `/artworks/image/${fi
 export const api_storeImages = filename => api_baseURL + `/store/image/${filename}`;
 export const api_userImages = filename => api_baseURL + `/common/files/${filename}`;
 
-const apiClient = axios.create({ baseURL: api_baseURL });
-apiClient.interceptors.request.use((config) => {
-    // Retrieve the token from secure storage
-    let token = null;
-    if (localStorage.jwtToken)
-        token = localStorage.getItem('jwtToken'); // Replace with your token retrieval logic
-    else
-        token = sessionStorage.getItem('jwtToken'); // Replace with your token retrieval logic
-
-    if (token) {
-        // Add Authorization header if token exists
-        config.headers['Authorization'] = `Bearer ${token}`;
-    }
-    return config;
-}, (error) => {
-    // Handle request error
-    return Promise.reject(error);
+const apiClient = axios.create({
+    baseURL: api_baseURL,
+    withCredentials: true
 });
+// Attach token before each request
+apiClient.interceptors.request.use(
+    (config) => {
+        if (accessToken) {
+            config.headers.Authorization = `Bearer ${accessToken}`;
+        }
+        return config;
+    }, (error) => Promise.reject(error)
+);
+// Auto-refresh on 401
+apiClient.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+        const originalRequest = error.config;
+
+        // If access token expired
+        if (error.response?.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
+
+            try {
+                // Ask server for a new access token
+                const res = await axios.post(
+                    api_baseURL + "/auth/refresh",
+                    {},
+                    { withCredentials: true }
+                );
+
+                accessToken = res.data.token; // save new access token
+
+                // Retry the original request with new token
+                originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
+                return apiClient(originalRequest);
+            } catch (refreshError) {
+                console.error("Session expired. Please log in again.");
+                window.location.href = "/login";
+            }
+        }
+
+        return Promise.reject(error);
+    }
+);
 
 export const api_tags = () => apiClient.get(`/common/tags`);
 export const api_signIn = userData => apiClient.post(`/auth/login`, userData, { headers: { 'Content-Type': 'application/json' } });

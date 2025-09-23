@@ -1,247 +1,237 @@
 import express from 'express';
-import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import passport from 'passport';
+import passport from "../strategies/index.js";
+import User from '../models/user.js';
+import { generateAccessToken, generateRefreshToken, validateLoginInput, validateOAuthUser, validateRegisterInput, verifyRefreshToken } from '../utils/authenticate.js';
 
 const router = express.Router();
-
-import User from '../models/user.js';
-import { validateLoginInput, validateRegisterInput } from '../utils/authenticate.js';
 
 // @route   GET api/v1.01/auth/login --- Login user and fetch authentication token --- PUBLIC
 router.post("/login", async (req, res) => {
     try {
-        let userList = [];
-        const username = req.body.username;
-        const password = req.body.password;
+        const { username, password } = req.body;
+        const users = await User.find({});
+        const user = await User.findOne({ username }).populate("bookmarks");
+        if (!user) return res.status(404).json('User not found!');
 
-        await User.find({})
+        const { errors: loginErrors, isValid: isLoginValid } = validateLoginInput(users, req.body);
+        if (!isLoginValid) { return res.status(400).json(loginErrors) }
 
-            .populate('bookmarks')
-            .then(users => {
-                userList.push(...users)
-            });
+        const { errors: oauthErrors, isValid: isOAuthValid } = validateOAuthUser(user);
+        if (!isOAuthValid) { return res.status(400).json(oauthErrors) }
 
-        const { errors, isValid } = validateLoginInput(userList, req.body);
-        if (!isValid) { return res.status(400).json(errors) }
+        const isMatch = await bcrypt.compare(password, user.password || "");
+        if (!isMatch) return res.status(400).json({ error: "Incorrect Password. Please try again!" });
 
-        User.findOne({ username })
+        const payload = {
+            id: user._id,
+            name: user.name,
+            username: user.username,
+            email: user.email,
+            avatar: user.avatar,
+            bio: user.bio,
+            tokens: user.tokens,
+            google_authenticated: user.google_authenticated,
+            is_verified: user.is_verified,
+            is_premium: user.is_premium,
+            followers: user.followers,
+            followering: user.following,
+            bookmarks: user.bookmarks,
+            created_on: user.createdAt,
+            premium_validity: user.premium_validity
+        };
+        const accessToken = generateAccessToken(payload);
+        const refreshToken = generateRefreshToken(payload);
 
-            .populate('bookmarks')
-            .then(user => {
-                if (!user) {
-                    return res.status(404).json('User not found!')
-                }
-                bcrypt.compare(password, user.password).then((isMatch) => {
-                    if (isMatch) {
-                        const payload = {
-                            id: user._id,
-                            name: user.name,
-                            username: user.username,
-                            email: user.email,
-                            avatar: user.avatar,
-                            bio: user.bio,
-                            tokens: user.tokens,
-                            google_authenticated: user.google_authenticated,
-                            is_verified: user.is_verified,
-                            is_premium: user.is_premium,
-                            followers: user.followers,
-                            followering: user.following,
-                            bookmarks: user.bookmarks,
-                            created_on: user.createdAt,
-                            premium_validity: user.premium_validity
-                        };
-                        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 43200000 },
-                            (err, token) => {
-                                res.json({
-                                    success: true,
-                                    token: token
-                                });
-                            }
-                        );
-                    } else {
-                        return res.status(400).json("Incorrect Password. Please try again!");
-                    }
-                });
-            });
+        user.refreshToken = refreshToken;
+        await user.save();
+
+        res.cookie("jwt", refreshToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax",
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+        res.json({
+            success: true,
+            token: accessToken
+        });
     } catch (err) {
         return res.status(404).json({ msg: err.name });
     }
 });
 
 // @route   GET api/v1.01/auth/signup --- Signup user and fetch authentication token --- PUBLIC
-router.post("/signup", (req, res) => {
+router.post("/signup", async (req, res) => {
     try {
+        const { username, email, password, name } = req.body;
+
         // Verify that first name is not empty
         const { errors, isValid } = validateRegisterInput(req.body);
         if (!isValid) {
             return res.status(400).json(errors);
         }
-        User.findOne({ username: req.body.username })
 
-            .populate('bookmarks')
-            .then(user => {
-                if (user) {
-                    return res.status(400).json('User already exists');
-                } else {
-                    const newUser = new User({
-                        name: req.body.name,
-                        email: req.body.email,
-                        username: req.body.username,
-                        password: req.body.password,
-                        avatar: {
-                            icon: '6cbaa37fa59b0caee31dc4b8cdd67d72.png',
-                            category: 'None'
-                        },
-                        tokens: 5000
-                    });
-                    bcrypt.genSalt(10, (err, salt) => {
-                        bcrypt.hash(newUser.password, salt, (err, hash) => {
-                            if (err) throw err;
-                            newUser.password = hash;
-                            newUser.save()
-                                .then(user => {
-                                    console.log('user', user);
-                                    const payload = {
-                                        id: user._id,
-                                        name: user.name,
-                                        username: user.username,
-                                        email: user.email,
-                                        avatar: user.avatar,
-                                        bio: user.bio,
-                                        tokens: user.tokens,
-                                        google_authenticated: user.google_authenticated,
-                                        is_verified: user.is_verified,
-                                        is_premium: user.is_premium,
-                                        followers: user.followers,
-                                        followering: user.following,
-                                        bookmarks: user.bookmarks,
-                                        created_on: user.createdAt,
-                                        premium_validity: user.premium_validity
-                                    };
-                                    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 43200000 },
-                                        (err, token) => {
-                                            res.json({
-                                                success: true,
-                                                token: token
-                                            });
-                                        }
-                                    )
-                                })
-                                .catch(err => console.log(err));
-                        })
-                    })
-                }
+        const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+        if (existingUser) {
+            return res.status(400).json({ error: "Username or email already exists" });
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const newUser = await User.create({
+            name,
+            email,
+            username,
+            password: hashedPassword,
+            avatar: {
+                icon: '6cbaa37fa59b0caee31dc4b8cdd67d72.png',
+                category: 'None'
+            },
+            tokens: 5000
+        });
+
+        newUser.save()
+            .then(async user => {
+                const jwtPayload = {
+                    id: user._id,
+                    name: user.name,
+                    username: user.username,
+                    email: user.email,
+                    avatar: user.avatar,
+                    bio: user.bio,
+                    tokens: user.tokens,
+                    google_authenticated: user.google_authenticated,
+                    is_verified: user.is_verified,
+                    is_premium: user.is_premium,
+                    followers: user.followers,
+                    followering: user.following,
+                    bookmarks: user.bookmarks,
+                    created_on: user.createdAt,
+                    premium_validity: user.premium_validity
+                };
+
+                const accessToken = generateAccessToken(jwtPayload);
+                const refreshToken = generateRefreshToken(jwtPayload);
+
+                user.refreshToken = refreshToken;
+                await user.save();
+
+                res.cookie("jwt", refreshToken, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: "strict",
+                    maxAge: 7 * 24 * 60 * 60 * 1000
+                });
+                res.json({
+                    success: true,
+                    token: accessToken
+                });
             })
+            .catch(err => {
+                res.status(500).json({ error: err.message });
+            });
     } catch (err) {
         return res.status(404).json({ msg: err.name });
     }
 });
 
-// @route   GET api/v1.01/auth/google/login --- Authenticate user via Google --- PUBLIC
-router.get('/google/login', passport.authenticate('google', {
+// @route   GET api/v1.01/auth/refresh  --- Checks refresh token is valid and still stored in DB --- PUBLIC
+router.post("/refresh ", async (req, res) => {
+    try {
+        const refreshToken = req.cookies.jwt;
+        if (!refreshToken) return res.sendStatus(401);
+
+        // Verify token
+        const decoded = verifyRefreshToken(refreshToken);
+
+        // Find user and match token in DB
+        const user = await User.findById(decoded.id);
+        if (!user || user.refreshToken !== refreshToken) {
+            return res.sendStatus(403);
+        }
+
+        // Rotate refresh token
+        const newRefreshToken = generateRefreshToken(user);
+        user.refreshToken = newRefreshToken;
+        await user.save();
+
+        // Send new refresh token as cookie
+        res.cookie("jwt", newRefreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
+
+        // Issue new access token
+        const accessToken = generateAccessToken(user);
+        res.json({ success: true, token: accessToken });
+    } catch (err) {
+        return res.status(403).json({ msg: err.name });
+    }
+});
+
+// @route   GET api/v1.01/auth/google --- Authenticate user via Google --- PUBLIC
+router.get('/google', passport.authenticate('google', {
     scope: ['profile', 'email']
 }));
 
-// @route   POST api/v1.01/auth/google/login --- Authenticate user via Google --- PUBLIC
-router.post('/google/login', (req, res) => {
-    console.log("req.body", jwt_de)
-    res.json({
-        success: true,
-        user: req.user
-    })
-});
-
 // @route   GET api/v1.01/auth/google/callback --- Google Authenticatation callback --- PUBLIC
 router.get('/google/callback', passport.authenticate('google', {
-    failureRedirect: '/login',
-    session: false
+    session: false,
+    failureRedirect: '/login'
 }), async (req, res) => {
-    const authenticatedUser = await User.findOne({ _id: req.user.id }).populate('bookmarks');
+    const user = await User.findOne({ _id: req.user.id }).populate('bookmarks');
     const payload = {
-        id: authenticatedUser._id,
-        name: authenticatedUser.name,
-        username: authenticatedUser.username,
-        email: authenticatedUser.email,
-        bio: authenticatedUser.bio,
-        avatar: authenticatedUser.avatar,
-        created_on: authenticatedUser.createdAt,
-        premium_validity: authenticatedUser.premium_validity,
-        tokens: authenticatedUser.tokens,
-        google_authenticated: authenticatedUser.google_authenticated,
-        followers: authenticatedUser.followers,
-        bookmarks: authenticatedUser.bookmarks
+        id: user._id,
+        name: user.name,
+        username: user.username,
+        email: user.email,
+        bio: user.bio,
+        avatar: user.avatar,
+        created_on: user.createdAt,
+        premium_validity: user.premium_validity,
+        tokens: user.tokens,
+        google_authenticated: user.google_authenticated,
+        followers: user.followers,
+        bookmarks: user.bookmarks
     };
 
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 31556926 },
-        (err, token) => {
-            let googleToken = token;
-            res.redirect('http://localhost:3000/google_success?auth=' + googleToken)
-        }
-    );
-})
+    const accessToken = generateAccessToken(payload);
+    const refreshToken = generateRefreshToken(payload);
 
-// @route   GET api/v1.01/auth/facebook/login --- Authenticate user via Facebook --- PUBLIC
-router.get('/facebook/login', passport.authenticate('facebook', {
-    scope: ['email', 'profile'],
-    prompt: 'select_account'
-}));
+    user.refreshToken = refreshToken;
+    await user.save();
 
-// @route   GET api/v1.01/auth/facebook/callback --- Facebook Authenticatation callback --- PUBLIC
-router.get('/facebook/callback', passport.authenticate('facebook', {
-    failureRedirect: '/google_failed',
-    session: false
-}), async (req, res) => {
-    const authenticatedUser = await User.findOne({ id: req.user.id }).populate('bookmarks');
-    const payload = {
-        id: authenticatedUser.id,
-        name: authenticatedUser.name,
-        username: authenticatedUser.username,
-        email: authenticatedUser.email,
-        bio: authenticatedUser.bio,
-        avatar: authenticatedUser.avatar,
-        created_on: authenticatedUser.createdAt,
-        premium_validity: authenticatedUser.premium_validity,
-        tokens: authenticatedUser.tokens,
-        followers: authenticatedUser.followers,
-        bookmarks: authenticatedUser.bookmarks
-    };
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 31556926 },
-        (err, token) => {
-            let googleToken = token
-            res.redirect('/google_success?auth=' + googleToken)
-        }
-    );
+    res.cookie("jwt", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    // Redirect to frontend with access token
+    res.redirect(`${process.env.FRONTEND_URL}/google_success?auth=${accessToken}`);
 })
 
 // @route   POST api/v1.01/auth/logout --- Logout the user --- PUBLIC
-router.post("/logout", (req, res, next) => {
+router.post("/logout", async (req, res) => {
     try {
-        const { signedCookies = {} } = req;
-        const { refreshToken } = signedCookies;
-        User.findById(req.user._id).then(
-            (user) => {
-                const tokenIndex = user.refreshToken.findIndex(
-                    (item) => item.refreshToken === refreshToken
-                );
-                if (tokenIndex !== -1) {
-                    user.refreshToken.id(user.refreshToken[tokenIndex]._id).remove();
-                }
+        const refreshToken = req.cookies.jwt;
+        if (refreshToken) {
+            const user = await User.findOne({ refreshToken });
+            if (user) {
+                user.refreshToken = null;
+                await user.save();
+            }
+        }
 
-                user.save((err, user) => {
-                    if (err) {
-                        res.statusCode = 500;
-                        res.send(err);
-                    } else {
-                        res.clearCookie("refreshToken", COOKIE_OPTIONS);
-                        res.send({ success: true });
-                    }
-                });
-            },
-            (err) => next(err)
-        );
+        res.clearCookie("jwt", { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "strict" });
+        res.json({ success: true, message: "Logged out successfully" });
     } catch (err) {
-        return res.status(404).json({ msg: err.name });
+        res.status(500).json({ error: err.message });
     }
 });
 

@@ -94,7 +94,7 @@ const Header = ({ hidePane, setHidePane }) => {
                         </div>
                     </div>
                     <div className={`flex flex-col ${hidePane ? ' items-center' : 'w-full'}`}>
-                        <HeaderLink type="link" hidePane={hidePane} text="Library" path="/library" icon={<LibraryIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
+                        <HeaderLink type="link" hidePane={hidePane} text="Library" path="/library?filter=trending" icon={<LibraryIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
                         <HeaderLink type="link" hidePane={hidePane} text="Search" path="/search" icon={<SearchIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
                         <HeaderLink type="link" hidePane={hidePane} text="Store" path="/store" icon={<StoreIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
                     </div>
