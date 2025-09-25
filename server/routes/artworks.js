@@ -164,8 +164,6 @@ router.get('/:id', async (req, res) => {
 router.post('/new', protect, artworkUpl.any(), async (req, res) => {
     try {
         const user = await User.findById(req.body.userID);
-        const tags = await
-            console.log("Test", req.body);
 
         const newArtwork = new Artwork({
             artist: user._id,

@@ -10,7 +10,7 @@ const UserSchema = new Schema(
         name: { type: String, default: "", required: true },
         username: { type: String, default: "", required: true },
         email: { type: String, default: "", required: true },
-        password: { type: String, required: true },
+        password: { type: String },
         bio: { type: String, default: "" },
         tokens: { type: Number, default: 0 },
         google_id: { type: String },

@@ -6,7 +6,7 @@ const adminKey = (req, res, next) => {
     const expectedSecretKey = process.env.ADMIN_VERSION_SECRET; // Replace with your actual expected secret key
 
     if (!secretKey) {
-        return res.status(401).json({ message: 'Access denied. Secret key missing.' });
+        return res.status(401).json({ message: 'Not authorized. This is an admin only request.' });
     }
 
     if (secretKey !== expectedSecretKey) {

@@ -6,7 +6,7 @@ import { generateAccessToken, generateRefreshToken, validateLoginInput, validate
 
 const router = express.Router();
 
-// @route   GET api/v1.01/auth/login --- Login user and fetch authentication token --- PUBLIC
+// @route   POST api/v1.01/auth/login --- Login user and fetch authentication token --- PUBLIC
 router.post("/login", async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -189,14 +189,17 @@ router.get('/google/callback', passport.authenticate('google', {
         name: user.name,
         username: user.username,
         email: user.email,
-        bio: user.bio,
         avatar: user.avatar,
-        created_on: user.createdAt,
-        premium_validity: user.premium_validity,
+        bio: user.bio,
         tokens: user.tokens,
         google_authenticated: user.google_authenticated,
+        is_verified: user.is_verified,
+        is_premium: user.is_premium,
         followers: user.followers,
-        bookmarks: user.bookmarks
+        followering: user.following,
+        bookmarks: user.bookmarks,
+        created_on: user.createdAt,
+        premium_validity: user.premium_validity
     };
 
     const accessToken = generateAccessToken(payload);
@@ -213,7 +216,7 @@ router.get('/google/callback', passport.authenticate('google', {
     });
 
     // Redirect to frontend with access token
-    res.redirect(`${process.env.FRONTEND_URL}/google_success?auth=${accessToken}`);
+    res.redirect(`${process.env.FRONTEND_ORIGIN}/google_success?auth=${accessToken}`);
 })
 
 // @route   POST api/v1.01/auth/logout --- Logout the user --- PUBLIC

@@ -12,7 +12,7 @@ export default (passport) => {
                     passReqToCallback: true,
                     proxy: true
                 },
-                async function (accessToken, refreshToken, profile, done) {
+                async function (request, accessToken, refreshToken, profile, done) {
                     try {
                         let user = await User.findOne({ googleId: profile.id });
                         if (!user) {
@@ -21,7 +21,7 @@ export default (passport) => {
                                 google_id: profile.id,
                                 name: profile.displayName,
                                 email: profile.emails[0].value,
-                                username: profile.email.substring(0, profile.emails[0].value.indexOf("@")),
+                                username: profile.emails[0].value.substring(0, profile.emails[0].value.indexOf("@")),
                                 avatar: {
                                     icon: '6cbaa37fa59b0caee31dc4b8cdd67d72.png',
                                     category: 'None'
@@ -32,7 +32,7 @@ export default (passport) => {
                         }
                         return done(null, user)
                     } catch (err) {
-                        console.log("Err", err)
+                        console.log("Google err: ", err)
                         return done(err, false);
                     }
                 })

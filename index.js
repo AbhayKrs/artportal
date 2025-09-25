@@ -41,7 +41,9 @@ app.use(cors({
 // const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
 // app.set('redis', redis);
 
-app.use(helmet());
+app.use(helmet({
+    crossOriginResourcePolicy: false
+}));
 app.use(express.json({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(bodyParser.json());
