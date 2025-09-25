@@ -32,11 +32,13 @@ export default (passport) => {
                         }
                         return done(null, user)
                     } catch (err) {
+                        console.log("Err", err)
                         return done(err, false);
                     }
                 })
         )
     } catch (err) {
+        console.log("err", err);
         return err;
     }
 }

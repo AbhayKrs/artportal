@@ -1,6 +1,4 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
+import 'dotenv/config';
 import express from 'express';
 const app = express();
 
@@ -13,7 +11,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 
-import passport from "./server/strategies/index.js";
+import passport from './server/strategies/index.js';
 app.use(passport.initialize());
 
 import { notFound, errorHandler } from './server/middleware/errorMw.js';

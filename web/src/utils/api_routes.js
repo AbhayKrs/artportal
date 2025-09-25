@@ -1,12 +1,11 @@
 import axios from 'axios';
 
 let accessToken = null;
-console.log("NODE_ENV", process.env)
-// const api_baseURL = 'https://artportal.onrender.com/api/v1.01';
-const api_baseURL = 'http://localhost:5000/api/v1.01';
+const api_baseURL = 'https://artportal.onrender.com/api/v1.01';
+// const api_baseURL = 'http://localhost:5000/api/v1.01';
 
 export const api_taggerURL = api_baseURL + '/tagger/model.json';
-export const api_googleRedirectURL = api_baseURL + `/auth/google/login`;
+export const api_googleRedirectURL = api_baseURL + `/auth/google`;
 
 export const api_artworkImages = filename => api_baseURL + `/artworks/image/${filename}`;
 export const api_storeImages = filename => api_baseURL + `/store/image/${filename}`;
@@ -61,7 +60,7 @@ apiClient.interceptors.response.use(
 export const api_tags = () => apiClient.get(`/common/tags`);
 export const api_signIn = userData => apiClient.post(`/auth/login`, userData, { headers: { 'Content-Type': 'application/json' } });
 export const api_signUp = userData => apiClient.post(`/auth/signup`, userData, { headers: { 'Content-Type': 'application/json' } });
-export const api_googleLogin = (payload) => apiClient.post(`/auth/google/login`, { token: payload });
+export const api_googleLogin = (payload) => apiClient.post(`/auth/google`, { token: payload });
 export const api_users = (type, value) => apiClient.get(`/users?type=${type}&value=${value}`);
 export const api_userData = userID => apiClient.get(`/users/${userID}`);
 export const api_updateUserData = (userID, userData) => apiClient.put(`/users/${userID}`, userData);
