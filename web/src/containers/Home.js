@@ -71,8 +71,8 @@ const Home = (props) => {
                             <div className='absolute h-1 w-8 bottom-[-2px] left-0 text-2xl bg-gray-300 rounded-md'></div>
                         </div>
                         <ul className='list-disc pl-5'>
-                            {["abstract", "architecture", "character", "concept", "environment", "mature", "traditional"].map(ctg => (
-                                <li className='w-min text-md text-neutral-800 dark:text-gray-200'>{ctg}</li>
+                            {["abstract", "architecture", "character", "concept", "environment", "mature", "traditional"].map((ctg, index) => (
+                                <li key={index} className='w-min text-md text-neutral-800 dark:text-gray-200'>{ctg}</li>
                             ))}
                         </ul>
                     </div>

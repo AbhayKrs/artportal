@@ -3,15 +3,15 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema(
     {
-        avatar: {
-            icon: { type: String, default: '' },
-            category: { type: String, default: '' }
-        },
         name: { type: String, default: "", required: true },
         username: { type: String, default: "", required: true },
         email: { type: String, default: "", required: true },
         password: { type: String },
         bio: { type: String, default: "" },
+        avatar: {
+            icon: { type: String, default: '' },
+            category: { type: String, default: '' }
+        },
         tokens: { type: Number, default: 0 },
         google_id: { type: String },
         google_authenticated: { type: Boolean, default: false },
@@ -29,7 +29,8 @@ const UserSchema = new Schema(
             _id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
             followedOn: { type: Date }
         }],
-        bookmarks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Artwork" }]
+        bookmarks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Artwork" }],
+        refresh_token: { type: String }
     },
     {
         timestamps: true,

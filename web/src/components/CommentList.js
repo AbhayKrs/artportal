@@ -161,7 +161,7 @@ const CommentList = ({ comments, handleInvalidUser }) => {
                                 ) : (
                                     <button
                                         onClick={() =>
-                                            user.is_authenticated
+                                            user.is_verified
                                                 ? handleToggleCommentLike(true, comment)
                                                 : handleInvalidUser()
                                         }
@@ -178,7 +178,7 @@ const CommentList = ({ comments, handleInvalidUser }) => {
                                 ) : (
                                     <button
                                         onClick={() =>
-                                            user.is_authenticated
+                                            user.is_verified
                                                 ? handleToggleCommentLike(false, comment)
                                                 : handleInvalidUser()
                                         }

@@ -72,25 +72,26 @@ export const LoginModal = ({ open, title, banner, error, onClose, openRegister, 
 
     return (
         <div className={`${open ? 'block' : 'hidden'} flex fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
-            <div className="relative m-auto bg-slate-200 dark:bg-neutral-800 xs:w-11/12 sm:w-8/12 lg:w-6/12 rounded-xl z-50 overflow-y-auto">
-                <div className='flex flex-col my-10 mx-auto gap-4 xs:w-10/12 md:w-8/12'>
+            <div className="relative m-auto max-h-modal bg-slate-200 dark:bg-neutral-800 xs:w-11/12 sm:w-6/12 lg:w-6/12 rounded-xl z-50 overflow-y-auto">
+                <div className='flex flex-col my-14 mx-auto gap-4 xs:w-10/12 md:w-8/12'>
                     <IoCloseSharp onClick={() => { onClose(); setAuthError() }} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-500' />
                     <div className='flex flex-col'>
-                        <h1 className=" text-4xl font-bold text-neutral-800 dark:text-gray-300">{title}</h1>
-                        <p className=" text-base font-normal text-neutral-700 dark:text-gray-100/50">Don't have an account? <span className='font-semibold text-blue-700 tracking-wide cursor-pointer' onClick={() => { onClose(); openRegister() }}>Sign up</span></p>
+                        <h1 className="text-4xl font-bold tracking-wide text-neutral-800 dark:text-gray-300">{title}</h1>
+                        <p className="tracking-wide text-base font-normal text-neutral-700 dark:text-gray-100/50">Don't have an account? <span className='font-semibold text-blue-700 dark:text-blue-700 tracking-wide cursor-pointer' onClick={() => { onClose(); openRegister() }}>Sign up</span></p>
                     </div>
                     <a
                         href={api_googleRedirectURL}
-                        className="flex items-center justify-center w-full mt-6 py-2 px-3 rounded-lg border-2 border-neutral-700 dark:border-slate-400 cursor-pointer">
+                        className="flex items-center justify-center w-full mt-6 py-2 px-3 rounded-full border border-gray-300 dark:border-slate-400 cursor-pointer">
                         <GoogleIcon />
-                        <p className="font-bold tracking-wider ml-4 text-gray-800 dark:text-gray-300">Sign in with Google</p>
+                        <p className="w-full text-base text-center font-medium text-gray-800 dark:text-gray-300">Continue with Google</p>
                     </a>
+                    <p className='text-sm w-full text-center text-neutral-700 dark:text-neutral-400'>or</p>
                     <div className="relative flex items-center">
-                        <FaUser className="absolute left-2.5 h-5 w-5 text-slate-300 dark:text-neutral-800" />
+                        <FaUser className="absolute left-3.5 h-4 w-4 text-gray-300 dark:text-neutral-800" />
                         <input
                             name="username"
                             value={username}
-                            className=" bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-9 w-full focus:outline-none"
+                            className=" bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 dark:placeholder:text-neutral-400 rounded-full text-base py-3 pl-10 w-full focus:outline-none"
                             type="text"
                             placeholder="Username"
                             onChange={handleUsernameChange}
@@ -102,11 +103,11 @@ export const LoginModal = ({ open, title, banner, error, onClose, openRegister, 
                         />
                     </div>
                     <div className="relative flex items-center">
-                        <FaLock className="absolute left-2.5 h-5 w-5 text-slate-300 dark:text-neutral-800" />
+                        <FaLock className="absolute left-3.5 h-4 w-4 text-gray-300 dark:text-neutral-800" />
                         <input
                             name="password"
                             value={password}
-                            className=" bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-9 w-full focus:outline-none"
+                            className=" bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 dark:placeholder:text-neutral-400 rounded-full text-base py-3 pl-10 w-full focus:outline-none"
                             type="password"
                             placeholder="Password"
                             onChange={handlePasswordChange}
@@ -133,8 +134,8 @@ export const LoginModal = ({ open, title, banner, error, onClose, openRegister, 
                         </div> :
                         null
                     }
-                    <button onClick={onSubmitClick} className='w-fit  font-bold text-lg tracking-wide bg-blue-700 hover:bg-blue-700/75 text-gray-200 px-6 py-1 rounded-md'>Sign In</button>
-                    <p className=' font-semibold text-neutral-700 dark:text-gray-400 text-sm'>By clicking Sign In, I confirm that I have read and agree to the artportal <button type='button' className='text-sm font-bold text-blue-700'>Terms of Service</button> and <button type='button' className='text-sm font-bold text-blue-700'>Privacy Policy</button>.</p>
+                    <button onClick={onSubmitClick} className="flex w-fit py-2.5 px-6 text-base font-medium tracking-wide bg-blue-700 hover:bg-blue-600 text-neutral-800 dark:text-gray-300 rounded-xl items-center">Sign In</button>
+                    <p className='tracking-wide font-semibold text-neutral-700 dark:text-gray-400 text-sm'>By clicking Sign In, I confirm that I have read and agree to the artportal <button type='button' className='text-sm font-bold text-blue-700'>Terms of Service</button> and <button type='button' className='text-sm font-bold text-blue-700'>Privacy Policy</button>.</p>
                 </div>
             </div>
         </div >
@@ -196,18 +197,25 @@ export const RegisterModal = ({ open, title, banner, error, onClose, openLogin, 
 
     return (
         <div className={`${open ? 'block' : 'hidden'} flex fixed w-full inset-0 z-50 overflow-hidden justify-center items-center animated fadeIn faster`} style={{ background: 'rgba(0, 0, 0, .7)' }}>
-            <div className="relative m-auto bg-slate-200 dark:bg-neutral-800 xs:w-11/12 sm:w-8/12 lg:w-6/12 rounded-xl z-50 overflow-y-auto">
-                <div className='flex flex-col my-10 mx-auto gap-4 xs:w-10/12 md:w-8/12'>
+            <div className="relative m-auto max-h-modal bg-slate-200 dark:bg-neutral-800 xs:w-11/12 sm:w-6/12 lg:w-6/12 rounded-xl z-50 overflow-y-auto">
+                <div className='flex flex-col my-14 mx-auto gap-4 xs:w-10/12 md:w-8/12'>
                     <IoCloseSharp onClick={() => { onClose(); setAuthError() }} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-500' />
                     <div className='flex flex-col'>
-                        <h1 className=" text-4xl font-bold text-neutral-800 dark:text-gray-300">{title}</h1>
-                        <p className=" text-base font-normal text-neutral-700 dark:text-gray-100/50">Have an account already? <span className='font-semibold text-blue-700 tracking-wide cursor-pointer' onClick={() => { onClose(); openLogin() }}>Sign in</span></p>
+                        <h1 className="text-4xl font-bold tracking-wide text-neutral-800 dark:text-gray-300">{title}</h1>
+                        <p className="tracking-wide text-base font-normal text-neutral-700 dark:text-gray-100/50">Have an account already? <span className='font-semibold text-blue-700 dark:text-blue-700 tracking-wide cursor-pointer' onClick={() => { onClose(); openLogin() }}>Sign in</span></p>
                     </div>
+                    <a
+                        href={api_googleRedirectURL}
+                        className="flex items-center justify-center w-full mt-6 py-2 px-3 rounded-full border border-gray-300 dark:border-slate-400 cursor-pointer">
+                        <GoogleIcon />
+                        <p className="w-full text-center font-medium text-gray-800 dark:text-gray-300">Continue with Google</p>
+                    </a>
+                    <p className='text-sm w-full text-center text-neutral-700 dark:text-neutral-400'>or</p>
                     <div className="relative flex items-center">
                         <input
                             name="name"
                             value={name}
-                            className=" bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 text-neutral-500 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-4 pr-9 w-full focus:outline-none"
+                            className=" bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 dark:placeholder:text-neutral-400 rounded-full text-base py-2.5 pl-4 w-full focus:outline-none"
                             type="text"
                             placeholder="Name"
                             onChange={handleNameChange}
@@ -217,7 +225,7 @@ export const RegisterModal = ({ open, title, banner, error, onClose, openLogin, 
                         <input
                             name="username"
                             value={username}
-                            className=" bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 text-neutral-500 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-4 pr-9 w-full focus:outline-none"
+                            className=" bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 dark:placeholder:text-neutral-400 rounded-full text-base py-2.5 pl-4 w-full focus:outline-none"
                             type="text"
                             placeholder="Username"
                             onChange={handleUsernameChange}
@@ -227,7 +235,7 @@ export const RegisterModal = ({ open, title, banner, error, onClose, openLogin, 
                         <input
                             name="email"
                             value={email}
-                            className=" bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 text-neutral-500 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-4 pr-9 w-full focus:outline-none"
+                            className=" bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 dark:placeholder:text-neutral-400 rounded-full text-base py-2.5 pl-4 w-full focus:outline-none"
                             type="email"
                             placeholder="Email"
                             onChange={handleEmailChange}
@@ -237,7 +245,7 @@ export const RegisterModal = ({ open, title, banner, error, onClose, openLogin, 
                         <input
                             name="password"
                             value={password}
-                            className=" bg-slate-50 dark:bg-neutral-700 dark:text-gray-200 text-neutral-500 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-4 pr-9 w-full focus:outline-none"
+                            className=" bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 dark:placeholder:text-neutral-400 rounded-full text-base py-2.5 pl-4 w-full focus:outline-none"
                             type="password"
                             placeholder="Password"
                             onChange={handlePasswordChange}
@@ -247,21 +255,12 @@ export const RegisterModal = ({ open, title, banner, error, onClose, openLogin, 
                         <input
                             name="password2"
                             value={password2}
-                            className=" bg-slate-50 dark:bg-neutral-700 dark:text-gray-200 text-neutral-500 dark:placeholder:text-neutral-400 rounded-lg py-2 pl-4 pr-9 w-full focus:outline-none"
+                            className=" bg-slate-50 dark:bg-neutral-700 text-gray-800 dark:text-gray-200 dark:placeholder:text-neutral-400 rounded-full text-base py-2.5 pl-4 w-full focus:outline-none"
                             type="password"
                             placeholder="Confirm Password"
                             onChange={handleConfirmPasswordChange}
                         />
                     </div>
-                    <div className='flex items-center justify-between'>
-                        <hr className="w-full border-1 border-gray-600 dark:border-gray-400" />
-                        <p className=" text-base font-bold leading-4 px-2.5 text-gray-600 dark:text-gray-400">OR</p>
-                        <hr className="w-full border-1 border-gray-600 dark:border-gray-400" />
-                    </div>
-                    <a href={api_googleRedirectURL} className="flex items-center justify-center w-full py-2 px-3 rounded-lg border-2 border-neutral-700 dark:border-slate-400">
-                        <GoogleIcon />
-                        <p className=" font-bold tracking-wider ml-4 text-gray-800 dark:text-gray-300">Sign in with Google</p>
-                    </a>
                     {error.signup ?
                         <div className='flex p-2 border-2 border-red-500 rounded-lg gap-2'>
                             <IoCloseCircle className='h-5 w-5 text-red-500' />
@@ -269,11 +268,11 @@ export const RegisterModal = ({ open, title, banner, error, onClose, openLogin, 
                         </div> :
                         null
                     }
-                    <div className='flex gap-2 pt-5'>
-                        <button onClick={onSubmitClick} className='w-fit  font-bold text-lg tracking-wide bg-blue-700 hover:bg-blue-700/75 text-gray-200 px-6 py-1 rounded-md'>Sign Up</button>
-                        <button onClick={onReset} className='w-fit  font-bold text-lg tracking-wide border-2 border-neutral-800 dark:border-gray-300 bg-transparent hover:bg-neutral-500/10 text-neutral-800 dark:text-gray-300 px-6 py-1 rounded-md'>Reset</button>
+                    <div className='flex gap-2'>
+                        <button onClick={onSubmitClick} className="flex w-fit py-2.5 px-6 text-base font-medium tracking-wide bg-blue-700 hover:bg-blue-600 text-neutral-800 dark:text-gray-300 rounded-xl items-center">Sign Up</button>
+                        <button onClick={onReset} className="flex w-fit py-2.5 px-6 text-base font-medium tracking-wide bg-neutral-700 hover:bg-neutral-600 text-neutral-800 dark:text-gray-300 rounded-xl items-center">Reset</button>
                     </div>
-                    <p className=' font-semibold text-neutral-700 dark:text-gray-400 text-sm'>By clicking Sign Up, I confirm that I have read and agree to the artportal <button type='button' className='text-sm font-bold text-blue-700'>Terms of Service</button> and <button type='button' className='text-sm font-bold text-blue-700'>Privacy Policy</button>.</p>
+                    <p className='tracking-wide font-semibold text-neutral-700 dark:text-gray-400 text-sm'>By clicking Sign Up, I confirm that I have read and agree to the artportal <button type='button' className='text-sm font-bold text-blue-700'>Terms of Service</button> and <button type='button' className='text-sm font-bold text-blue-700'>Privacy Policy</button>.</p>
                 </div>
             </div>
         </div>

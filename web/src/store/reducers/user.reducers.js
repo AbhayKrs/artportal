@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 import jwt_decode from 'jwt-decode';
-import setAuthToken from '../../utils/setAuthToken';
 
 const initialState = {
+    accessToken: '',
     id: '',
     name: '',
     username: '',
@@ -14,8 +14,10 @@ const initialState = {
     bio: '',
     created_on: '',
     tokens: 0,
+    is_verified: false,
     google_authenticated: false,
     followers: [],
+    following: [],
     bookmarks: [],
     followers_count: 0,
     artworks: [],
@@ -30,6 +32,7 @@ const initialState = {
     cart_open: false,
     cart_count: 0,
     cart_cost: 0,
+    is_premium: false,
     premium_validity: '',
     authSuccess: {
         message: '',
@@ -41,9 +44,7 @@ const initialState = {
         login: false,
         signup: false
     },
-    new_visitor: '',
-    tokens: null,
-    is_authenticated: false,
+    new_visitor: ''
 }
 
 const userSlice = createSlice({
@@ -61,7 +62,6 @@ const userSlice = createSlice({
         },
         r_verifyUser: (state, action) => {
             const decoded = jwt_decode(action.payload);
-            state.is_authenticated = true;
             Object.assign(state, decoded);
         },
         r_authMsgClose: (state, action) => {
@@ -99,42 +99,48 @@ const userSlice = createSlice({
             state.cart = state.cart.filter(item => item !== action.payload)
         },
         r_setProfileDetails: (state, action) => {
-            state = { ...state, ...action.payload };
+            Object.keys(action.payload).map(key => {
+                state[key] = action.payload[key]
+            })
         },
         r_clearProfileDetails: (state, action) => {
             state = { ...initialState };
         },
         r_signIn: (state, action) => {
-            state.is_authenticated = true;
-            state = { ...state, ...action.payload };
+            const { accessToken, user } = action.payload;
             state.authSuccess = {
                 message: 'Login successful',
                 login: true,
                 signup: false
             }
+            state.accessToken = accessToken;
+            Object.keys(user).map(key => {
+                state[key] = user[key]
+            })
         },
         r_signUp: (state, action) => {
-            state.is_authenticated = true;
-            state = { ...state, ...action.payload };
             state.authSuccess = {
                 message: 'Signup successful',
                 login: false,
                 signup: true
             }
+            Object.keys(action.payload).map(key => {
+                state[key] = action.payload[key]
+            })
         },
-        r_handleSignout: (state, action) => {
-            localStorage.hasOwnProperty('jwtToken') ?
-                localStorage.removeItem('jwtToken')
-                :
-                sessionStorage.removeItem('jwtToken')
-            setAuthToken(false);
-            state.is_authenticated = false;
-            state = { ...state, ...action.payload };
+        r_clearAuth: (state, action) => {
+            state.accessToken = null;
+            state = initialState;
+        },
+        r_handleLogout: (state, action) => {
             state.authSuccess = {
                 message: 'Logout successful',
                 login: false,
                 signup: false
-            }
+            };
+            Object.keys(action.payload).map(key => {
+                state[key] = action.payload[key]
+            })
         },
         r_deleteBookmark: (state, action) => {
             state.viewed_user = { ...state.viewed_user, bookmarks: [...action.payload] }
@@ -158,7 +164,8 @@ export const {
     r_clearProfileDetails,
     r_signIn,
     r_signUp,
-    r_handleSignout,
+    r_clearAuth,
+    r_handleLogout,
     r_deleteBookmark
 } = userSlice.actions
 export default userSlice.reducer

@@ -5,7 +5,7 @@ const generateAccessToken = (payload) => {
     return jwt.sign(
         payload,
         process.env.JWT_SECRET,
-        { expiresIn: "15m" } // short-lived
+        { expiresIn: "10s" } // short-lived
     );
 };
 
@@ -13,12 +13,12 @@ const generateRefreshToken = (payload) => {
     return jwt.sign(
         payload,
         process.env.REFRESH_TOKEN_SECRET,
-        { expiresIn: "7d" } // long-lived
+        { expiresIn: "30s" } // long-lived
     );
 };
 
 const verifyRefreshToken = (token) => {
-    return jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    return jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
 };
 
 const validateOAuthUser = (user) => {

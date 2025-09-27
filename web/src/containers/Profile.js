@@ -65,7 +65,7 @@ const Profile = (props) => {
     }
 
     const onFollowClick = () => {
-        if (user.is_authenticated)
+        if (user.is_verified)
             console.log('follow clicked')
         else {
             const msgData = {
@@ -78,7 +78,7 @@ const Profile = (props) => {
     }
 
     const onMessageClick = () => {
-        if (user.is_authenticated)
+        if (user.is_verified)
             console.log('message clicked')
         else {
             const msgData = {

@@ -247,7 +247,7 @@ const Library = (props) => {
                                             src={AwardIcon}
                                             className='h-12 w-12 cursor-pointer'
                                             onClick={() => {
-                                                user.is_authenticated ?
+                                                user.is_verified ?
                                                     setAwardOpen(true)
                                                     :
                                                     handleInvalidUser()
@@ -269,7 +269,7 @@ const Library = (props) => {
                                                 :
                                                 <button
                                                     onClick={() => {
-                                                        user.is_authenticated ?
+                                                        user.is_verified ?
                                                             handleToggleLike(true)
                                                             :
                                                             handleInvalidUser()
@@ -290,7 +290,7 @@ const Library = (props) => {
                                                 :
                                                 <button
                                                     onClick={() => {
-                                                        user.is_authenticated ?
+                                                        user.is_verified ?
                                                             handleToggleLike(false)
                                                             :
                                                             handleInvalidUser()
@@ -312,7 +312,7 @@ const Library = (props) => {
                                             <MdBookmarkAdd
                                                 className='h-6 w-6 cursor-pointer text-neutral-700 dark:text-gray-200'
                                                 onClick={() => {
-                                                    user.is_authenticated ?
+                                                    user.is_verified ?
                                                         bookmarkIt()
                                                         :
                                                         handleInvalidUser()
@@ -340,7 +340,7 @@ const Library = (props) => {
                                 <h2 className='text-lg self-center'>{new Intl.NumberFormat().format(artwork.comments_count)} Comments</h2>
                             </div>
                         </div>
-                        {user.is_authenticated ? <div className='flex flex-row gap-2 items-center px-3'>
+                        {user.is_verified ? <div className='flex flex-row gap-2 items-center px-3'>
                             <input
                                 type="text"
                                 name="comment"

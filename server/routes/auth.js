@@ -10,18 +10,19 @@ const router = express.Router();
 router.post("/login", async (req, res) => {
     try {
         const { username, password } = req.body;
+
         const users = await User.find({});
         const user = await User.findOne({ username }).populate("bookmarks");
-        if (!user) return res.status(404).json('User not found!');
+        if (!user) return res.status(401).json('User not found!');
 
         const { errors: loginErrors, isValid: isLoginValid } = validateLoginInput(users, req.body);
-        if (!isLoginValid) { return res.status(400).json(loginErrors) }
+        if (!isLoginValid) { return res.status(401).json(loginErrors) }
 
         const { errors: oauthErrors, isValid: isOAuthValid } = validateOAuthUser(user);
-        if (!isOAuthValid) { return res.status(400).json(oauthErrors) }
+        if (!isOAuthValid) { return res.status(401).json(oauthErrors) }
 
         const isMatch = await bcrypt.compare(password, user.password || "");
-        if (!isMatch) return res.status(400).json({ error: "Incorrect Password. Please try again!" });
+        if (!isMatch) return res.status(401).json({ error: "Incorrect Password. Please try again!" });
 
         const payload = {
             id: user._id,
@@ -35,7 +36,7 @@ router.post("/login", async (req, res) => {
             is_verified: user.is_verified,
             is_premium: user.is_premium,
             followers: user.followers,
-            followering: user.following,
+            following: user.following,
             bookmarks: user.bookmarks,
             created_on: user.createdAt,
             premium_validity: user.premium_validity
@@ -43,13 +44,13 @@ router.post("/login", async (req, res) => {
         const accessToken = generateAccessToken(payload);
         const refreshToken = generateRefreshToken(payload);
 
-        user.refreshToken = refreshToken;
+        user.refresh_token = refreshToken;
         await user.save();
 
-        res.cookie("jwt", refreshToken, {
+        res.cookie("token", refreshToken, {
             httpOnly: true,
-            secure: false,
-            sameSite: "lax",
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
         res.json({
@@ -106,7 +107,7 @@ router.post("/signup", async (req, res) => {
                     is_verified: user.is_verified,
                     is_premium: user.is_premium,
                     followers: user.followers,
-                    followering: user.following,
+                    following: user.following,
                     bookmarks: user.bookmarks,
                     created_on: user.createdAt,
                     premium_validity: user.premium_validity
@@ -115,10 +116,10 @@ router.post("/signup", async (req, res) => {
                 const accessToken = generateAccessToken(jwtPayload);
                 const refreshToken = generateRefreshToken(jwtPayload);
 
-                user.refreshToken = refreshToken;
+                user.refresh_token = refreshToken;
                 await user.save();
 
-                res.cookie("jwt", refreshToken, {
+                res.cookie("token", refreshToken, {
                     httpOnly: true,
                     secure: process.env.NODE_ENV === "production",
                     sameSite: "strict",
@@ -138,37 +139,59 @@ router.post("/signup", async (req, res) => {
 });
 
 // @route   GET api/v1.01/auth/refresh  --- Checks refresh token is valid and still stored in DB --- PUBLIC
-router.post("/refresh ", async (req, res) => {
+router.post("/refresh", async (req, res) => {
     try {
-        const refreshToken = req.cookies.jwt;
-        if (!refreshToken) return res.sendStatus(401);
+        const refreshToken = req.cookies.token;
+        if (!refreshToken) return res.status(401).json({ message: 'No refresh token' });
 
         // Verify token
-        const decoded = verifyRefreshToken(refreshToken);
+        const decoded = await verifyRefreshToken(refreshToken);
 
         // Find user and match token in DB
-        const user = await User.findById(decoded.id);
-        if (!user || user.refreshToken !== refreshToken) {
-            return res.sendStatus(403);
-        }
+        const user = await User.findOne({ _id: decoded.id }).populate('bookmarks');
+        console.log("test", refreshToken);
+        console.log("test", user.refresh_token);
 
+        if (!user || !user.refresh_token || user.refresh_token !== refreshToken) {
+            return res.status(403).json({ msg: "Invalid token" });
+        }
+        const payload = {
+            id: user._id,
+            name: user.name,
+            username: user.username,
+            email: user.email,
+            avatar: user.avatar,
+            bio: user.bio,
+            tokens: user.tokens,
+            google_authenticated: user.google_authenticated,
+            is_verified: user.is_verified,
+            is_premium: user.is_premium,
+            followers: user.followers,
+            following: user.following,
+            bookmarks: user.bookmarks,
+            created_on: user.createdAt,
+            premium_validity: user.premium_validity
+        };
         // Rotate refresh token
-        const newRefreshToken = generateRefreshToken(user);
-        user.refreshToken = newRefreshToken;
+        const accessToken = generateAccessToken(payload);
+        const newRefreshToken = generateRefreshToken(payload);
+
+        user.refresh_token = newRefreshToken;
         await user.save();
 
         // Send new refresh token as cookie
-        res.cookie("jwt", newRefreshToken, {
+        res.cookie("token", newRefreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
+            maxAge: 7 * 24 * 60 * 60 * 1000
         });
-
-        // Issue new access token
-        const accessToken = generateAccessToken(user);
-        res.json({ success: true, token: accessToken });
+        res.json({
+            success: true,
+            token: accessToken
+        });
     } catch (err) {
+        console.log("err: ", err);
         return res.status(403).json({ msg: err.name });
     }
 });
@@ -196,7 +219,7 @@ router.get('/google/callback', passport.authenticate('google', {
         is_verified: user.is_verified,
         is_premium: user.is_premium,
         followers: user.followers,
-        followering: user.following,
+        following: user.following,
         bookmarks: user.bookmarks,
         created_on: user.createdAt,
         premium_validity: user.premium_validity
@@ -205,33 +228,33 @@ router.get('/google/callback', passport.authenticate('google', {
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
 
-    user.refreshToken = refreshToken;
+    user.refresh_token = refreshToken;
     await user.save();
 
-    res.cookie("jwt", refreshToken, {
+    res.cookie("token", refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
         maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-
     // Redirect to frontend with access token
-    res.redirect(`${process.env.FRONTEND_ORIGIN}/google_success?auth=${accessToken}`);
+    res.redirect(`${process.env.FRONTEND_ORIGIN}`);
 })
 
 // @route   POST api/v1.01/auth/logout --- Logout the user --- PUBLIC
 router.post("/logout", async (req, res) => {
     try {
-        const refreshToken = req.cookies.jwt;
+        const refreshToken = req.cookies.token;
         if (refreshToken) {
             const user = await User.findOne({ refreshToken });
             if (user) {
-                user.refreshToken = null;
+                user.refresh_token = '';
                 await user.save();
             }
         }
 
-        res.clearCookie("jwt", { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "strict" });
+        res.clearCookie("token");
+        res.clearCookie("hasSession");
         res.json({ success: true, message: "Logged out successfully" });
     } catch (err) {
         res.status(500).json({ error: err.message });

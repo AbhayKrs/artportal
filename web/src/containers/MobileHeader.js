@@ -37,7 +37,7 @@ import { ReactComponent as AddIcon } from '../assets/icons/add.svg';
 import { ReactComponent as MenuIcon } from '../assets/icons/menu.svg';
 import HeaderLink from '../components/HeaderLink';
 import Divider from '../components/Divider';
-import { r_authMsgClose, r_handleSignout, r_setAuthError } from '../store/reducers/user.reducers';
+import { r_authMsgClose, r_handleLogout, r_setAuthError } from '../store/reducers/user.reducers';
 import { r_clearSearchList, r_headerDialogClose, r_headerDialogOpen, r_setSearchType, r_switchTheme } from '../store/reducers/common.reducers';
 import { a_handleGoogleAuth, a_handleSignIn, a_handleSignUp } from '../store/actions/user.actions';
 
@@ -74,7 +74,7 @@ const MobileHeader = () => {
 
     const handleSignout = () => {
         try {
-            dispatch(r_handleSignout({}));
+            dispatch(r_handleLogout({}));
         } catch (err) {
             console.log('---error handleSignOut', err);
         }
@@ -118,7 +118,7 @@ const MobileHeader = () => {
                         <HeaderLink type="link" hidePane={false} text="Store" path="/store" icon={<StoreIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
                     </div>
                     <hr className='w-full border border-gray-300 dark:border-neutral-800 rounded-xl' />
-                    {user.is_authenticated ?
+                    {user.is_verified ?
                         <div className='flex flex-col w-full gap-4'>
                             <div className='flex flex-col'>
                                 <HeaderLink type="link" hidePane={false} text="Upload" path="/library/new" icon={<UploadIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
@@ -155,7 +155,7 @@ const MobileHeader = () => {
                         </div >
                     }
                 </div >
-                {user.is_authenticated &&
+                {user.is_verified &&
                     <div className='flex flex-col px-2 w-full mt-auto'>
                         <div className='flex flex-col gap-3'>
                             <button onClick={() => { navigate(`/users/${user.id}`) }} className='flex flex-row items-center gap-2 px-1'>

@@ -12,7 +12,7 @@ module.exports = {
       'xl': '1920px'
     },
     fontFamily: {
-      'nunito': 'Nunito',
+      'nunito': 'Nunito'
     },
     colors: {
       darkBg: '#1a1a1c',
@@ -22,10 +22,11 @@ module.exports = {
       fontSize: {
         xs: ['0.75rem', '0.875rem'],
         sm: ['0.875rem', '1rem'],
-        lg: ['1rem', '1.25rem'],
-        xl: ['1.125rem', '1.25rem'],
-        "2xl": ['1.5rem', '1.75rem'],
-        "3xl": ['1.875rem', '2rem']
+        base: ['1rem', '1.25rem'],
+        lg: ['1.125rem', '1.25rem'],
+        xl: ['1.5rem', '1.75rem'],
+        "2xl": ['1.875rem', '2rem'],
+        "3xl": ['2rem', '2.25rem'],
       },
       minHeight: {
         'show': 'calc(100vh - 1.55rem)',
@@ -33,7 +34,8 @@ module.exports = {
       },
       maxHeight: {
         'show': 'calc(100vh - 1.55rem)',
-        'innershow': 'calc(100vh - 3.25rem)'
+        'innershow': 'calc(100vh - 3.25rem)',
+        'modal': 'calc(100vh - 1.25rem)'
       },
       keyframes: {
         glitter: {

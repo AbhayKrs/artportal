@@ -43,7 +43,7 @@ export const Account = (props) => {
     }, [user])
 
     const openAvatarModal = () => {
-        if (user.is_authenticated)
+        if (user.is_verified)
             setAvatarModal(true)
         else {
             const msgData = {

@@ -1,7 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
-import { api_signIn, api_signUp, api_googleLogin, api_userData, api_updateUserData, api_deleteBookmark, api_userArtworks, api_userStoreListings, api_deleteStoreListing, api_userCart, api_editAvatar, api_deleteFromCart, api_updateCart, api_addToCart } from '../../utils/api_routes'
+import { api_signIn, api_signUp, api_googleLogin, api_userData, api_updateUserData, api_deleteBookmark, api_userArtworks, api_userStoreListings, api_deleteStoreListing, api_userCart, api_editAvatar, api_deleteFromCart, api_updateCart, api_addToCart, api_verifyAuth } from '../../utils/api_routes'
 import {
     r_setAuthError,
     r_setVisitorStatus,
@@ -11,7 +12,8 @@ import {
     r_setProfileDetails,
     r_signIn,
     r_signUp,
-    r_deleteBookmark
+    r_deleteBookmark,
+    r_clearAuth
 } from '../reducers/user.reducers';
 import {
     r_setSnackMessage,
@@ -20,7 +22,6 @@ import {
 } from '../reducers/common.reducers';
 
 import jwt_decode from 'jwt-decode';
-import setAuthToken from '../../utils/setAuthToken';
 
 export const a_fetchVisitorStatus = createAsyncThunk("a_fetchVisitorStatus", async (payload, { getState, dispatch, rejectWithValue }) => {
     const setCookie = (c_name, value, exdays) => { var exdate = new Date(); exdate.setDate(exdate.getDate() + exdays); var c_value = escape(value) + ((exdays === null) ? "" : "; expires=" + exdate.toUTCString()); document.cookie = c_name + "=" + c_value; }
@@ -37,18 +38,38 @@ export const a_fetchVisitorStatus = createAsyncThunk("a_fetchVisitorStatus", asy
     setCookie("visited", "yes", 365); // expire in 1 year; or use null to never expire
 });
 
+export const a_verifyAuth = createAsyncThunk("a_verifyAuth", async (payload, { getState, dispatch, rejectWithValue }) => {
+    await api_verifyAuth().then(res => {
+        const { token } = res.data;
+        const userData = jwt_decode(token);
+        dispatch(r_signIn({ accessToken: token, user: userData }));
+        dispatch(r_headerDialogClose());
+        return;
+    }).catch(err => {
+        if (err.response) {
+            const error = {
+                message: err.response.data,
+                login: true,
+                signup: false
+            }
+            // dispatch(r_setAuthError(error));
+        }
+        Cookies.remove('hasSession');
+        localStorage.removeItem('hasSession');
+        dispatch(r_clearAuth());
+        return rejectWithValue(err.message)
+    })
+});
+
 export const a_handleSignIn = createAsyncThunk("a_handleSignIn", async (payload, { getState, dispatch, rejectWithValue }) => {
     const { stayLoggedIn, userData } = payload;
 
     await api_signIn(userData).then(res => {
         const { token } = res.data;
-        stayLoggedIn ?
-            localStorage.setItem('jwtToken', token)
-            :
-            sessionStorage.setItem('jwtToken', token)
-        setAuthToken(token);
         const userData = jwt_decode(token);
-        dispatch(r_signIn(userData));
+        Cookies.set('hasSession', 'true', { expires: 7 }); // readable cookie
+        localStorage.setItem('hasSession', 'true');
+        dispatch(r_signIn({ accessToken: token, user: userData }));
         dispatch(r_headerDialogClose());
         return;
     }).catch(err => {
@@ -68,9 +89,9 @@ export const a_handleSignIn = createAsyncThunk("a_handleSignIn", async (payload,
 export const a_handleSignUp = createAsyncThunk("a_handleSignUp", async (payload, { getState, dispatch, rejectWithValue }) => {
     await api_signUp(payload).then(res => {
         const { token } = res.data;
-        sessionStorage.setItem('jwtToken', token);
-        setAuthToken(token);
         const userData = jwt_decode(token);
+        Cookies.set('hasSession', 'true', { expires: 7 }); // readable cookie
+        localStorage.setItem('hasSession', 'true');
         dispatch(r_signUp(userData));
         dispatch(r_headerDialogClose());
         return;
@@ -91,6 +112,8 @@ export const a_handleSignUp = createAsyncThunk("a_handleSignUp", async (payload,
 export const a_handleGoogleAuth = createAsyncThunk("a_handleGoogleAuth", async (payload, { getState, dispatch, rejectWithValue }) => {
     await api_googleLogin().then(res => {
         const userData = res.data;
+        Cookies.set('hasSession', 'true', { expires: 7 }); // readable cookie
+        localStorage.setItem('hasSession', 'true');
         dispatch(r_signIn(userData));
         dispatch(r_headerDialogOpen());
         return;
@@ -111,14 +134,9 @@ export const a_handleGoogleAuth = createAsyncThunk("a_handleGoogleAuth", async (
 export const a_refreshUserDetails = createAsyncThunk("a_refreshUserDetails", async (payload, { getState, dispatch, rejectWithValue }) => {
     await api_userData(payload).then(res => {
         const { token } = res.data;
-        if (sessionStorage.jwtToken) {
-            sessionStorage.setItem('jwtToken', token)
-        } else if (localStorage.jwtToken) {
-            localStorage.setItem('jwtToken', token)
-        }
-        setAuthToken(token);
         const userData = jwt_decode(token);
-        console.log("test", userData);
+        Cookies.set('hasSession', 'true', { expires: 7 }); // readable cookie
+        localStorage.setItem('hasSession', 'true');
         dispatch(r_signIn(userData));
         return;
     }).catch(err => {

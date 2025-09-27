@@ -1,8 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
+import Cookies from 'js-cookie';
 
-import { api_userImages } from '../utils/api_routes';
+import { api_logout, api_userImages } from '../utils/api_routes';
 
 import { TokenModal, LoginModal, RegisterModal, SignupSuccessModal } from '../components/Modal';
 import ThemeToggle from '../components/ThemeToggle';
@@ -36,9 +37,8 @@ import { ReactComponent as CloseIcon } from '../assets/icons/close.svg';
 import { ReactComponent as AddIcon } from '../assets/icons/add.svg';
 import HeaderLink from '../components/HeaderLink';
 import Divider from '../components/Divider';
-import useWindowWidth from '../hooks/useWindowWidth';
 import { r_headerDialogClose, r_headerDialogOpen, r_switchTheme } from '../store/reducers/common.reducers';
-import { r_authMsgClose, r_handleSignout, r_setAuthError } from '../store/reducers/user.reducers';
+import { r_authMsgClose, r_clearAuth, r_handleLogout, r_setAuthError } from '../store/reducers/user.reducers';
 import { a_handleGoogleAuth, a_handleSignIn, a_handleSignUp } from '../store/actions/user.actions';
 
 const Header = ({ hidePane, setHidePane }) => {
@@ -47,7 +47,6 @@ const Header = ({ hidePane, setHidePane }) => {
     const location = useLocation();
 
     const common = useSelector(state => state.common);
-    const library = useSelector(state => state.library);
     const user = useSelector(state => state.user);
 
     const [tokenOpen, setTokenOpen] = useState(false);
@@ -61,16 +60,11 @@ const Header = ({ hidePane, setHidePane }) => {
         dispatch(r_switchTheme());
     }
 
-    const handleSignout = () => {
-        try {
-            dispatch(r_handleSignout({}));
-        } catch (err) {
-            console.log('---error handleSignOut', err);
-        }
-    }
-
     const logout = () => {
-        handleSignout();
+        Cookies.remove('hasSession');
+        localStorage.removeItem('hasSession');
+        api_logout();
+        dispatch(r_clearAuth({}));
         navigate('/');
     }
 
@@ -80,8 +74,8 @@ const Header = ({ hidePane, setHidePane }) => {
                 <span className='font-semibold text-xs tracking-wider uppercase'>The site is currently in Beta</span>
                 <CloseIcon onClick={() => { dispatch(r_setBetaMessage(!common.betaMsg)) }} className='absolute m-auto inset-y-0 right-1 h-3 w-auto cursor-pointer text-neutral-800' />
             </div>} */}
-            <div className={`flex flex-col items-center md:h-screen ${hidePane ? 'w-16' : 'w-60'}`}>
-                <div className={`flex flex-col gap-2 h-10/12 h-full w-full overflow-y-auto ${hidePane ? 'py-4 px-2' : 'p-2'}`}>
+            <div className={`flex flex-col items-center h-screen ${hidePane ? 'w-16' : 'w-60'}`}>
+                <div className={`flex flex-col gap-2 h-full w-full overflow-y-auto ${hidePane ? 'py-4 px-2' : 'p-2'}`}>
                     <div className={`flex items-center ${hidePane ? 'flex-col gap-4' : 'justify-between pl-2 w-full'}`}>
                         <Link to='/' className='flex items-center'>
                             <Artportal_logo fill="#1d4ed8" className='h-7 w-auto hover:cursor-pointer' />
@@ -98,7 +92,7 @@ const Header = ({ hidePane, setHidePane }) => {
                         <HeaderLink type="link" hidePane={hidePane} text="Search" path="/search" icon={<SearchIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
                         <HeaderLink type="link" hidePane={hidePane} text="Store" path="/store" icon={<StoreIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
                     </div>
-                    {user.is_authenticated ?
+                    {user.is_verified ?
                         <div className={`flex flex-col  ${hidePane ? '' : 'w-full'}`}>
                             <Divider />
                             <div className={`flex flex-col ${hidePane ? 'items-center' : ''}`}>
@@ -126,18 +120,18 @@ const Header = ({ hidePane, setHidePane }) => {
                         :
                         <div className={`flex flex-col ${hidePane ? '' : 'w-full'} mt-auto`}>
                             <Divider />
-                            <button onClick={() => dispatch(r_headerDialogOpen('openLoginDialog'))} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'p-3 text-xl font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
+                            <button onClick={() => dispatch(r_headerDialogOpen('openLoginDialog'))} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'p-3 text-lg font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
                                 <SigninIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />
                                 {!hidePane && `Sign In`}
                             </button>
-                            <button onClick={() => dispatch(r_headerDialogOpen('openRegisterDialog'))} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'p-3 text-xl font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
+                            <button onClick={() => dispatch(r_headerDialogOpen('openRegisterDialog'))} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'p-3 text-lg font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
                                 <SignupIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />
                                 {!hidePane && `Sign Up`}
                             </button>
                         </div>
                     }
                 </div>
-                {user.is_authenticated &&
+                {user.is_verified &&
                     (hidePane ?
                         <div className='flex flex-col items-center w-full mt-auto'>
                             <Divider noPadding />
@@ -222,7 +216,7 @@ const Header = ({ hidePane, setHidePane }) => {
                     open={common.openRegisterDialog}
                     title={common.dialogTitle}
                     banner={common.signupImage}
-                    error={common.authError}
+                    error={user.authError}
                     setAuthError={(msg) => dispatch(r_setAuthError(msg))}
                     onClose={() => dispatch(r_headerDialogClose())}
                     onClick={() => dispatch(r_headerDialogClose())}

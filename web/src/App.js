@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { createBrowserRouter, Outlet, Navigate, RouterProvider } from "react-router-dom";
 import { Provider, useDispatch, useSelector } from "react-redux";
-import jwt_decode from 'jwt-decode';
+import Cookies from 'js-cookie';
 import store from './store';
-
-import setAuthToken from './utils/setAuthToken';
 
 import Header from './containers/Header';
 import MobileHeader from './containers/MobileHeader';
@@ -43,7 +41,7 @@ import About from './children/About';
 import TOS from './children/TOS';
 import Privacy from './children/Privacy';
 import useWindowWidth from './hooks/useWindowWidth';
-import { a_fetchUserArtworks, a_fetchUserCart, a_fetchUserStoreList, a_fetchVisitorStatus } from './store/actions/user.actions';
+import { a_fetchUserArtworks, a_fetchUserCart, a_fetchUserStoreList, a_fetchVisitorStatus, a_verifyAuth } from './store/actions/user.actions';
 import { r_verifyUser } from './store/reducers/user.reducers';
 import { r_setLoader, r_setSnackMessage } from './store/reducers/common.reducers';
 
@@ -84,33 +82,14 @@ const Layout = (props) => {
         localStorage.setItem('theme', "light");
       }
     }
-    console.log(localStorage.getItem('theme'));
   }
 
   const load_auth = () => {
-    //Check condition for login status
-    let token = null;
-    if (localStorage.jwtToken) {
-      token = localStorage.jwtToken;
+    //Check condition for site theme
+    const hasSession = !!Cookies.get('hasSession') || !!localStorage.getItem('hasSession');
+    if (!hasSession) return; // user anonymous, skip refresh
 
-      const userID = user.id;
-      dispatch(r_verifyUser(token));
-      if (userID) {
-        dispatch(a_fetchUserArtworks(userID));
-        dispatch(a_fetchUserStoreList(userID));
-      }
-      dispatch(a_fetchUserCart());
-    } else if (sessionStorage.jwtToken) {
-      token = sessionStorage.jwtToken;
-
-      const userID = user.id;
-      dispatch(r_verifyUser(token));
-      if (userID) {
-        dispatch(a_fetchUserArtworks(userID));
-        dispatch(a_fetchUserStoreList(userID));
-      }
-      dispatch(a_fetchUserCart());
-    }
+    dispatch(a_verifyAuth());
   }
 
   return (
@@ -140,13 +119,13 @@ const App = () => {
         { path: '/google_failed', element: <Google header="Failed" /> },
         { path: '/library', element: <Library /> },
         { path: '/search', element: <Search /> },
-        { path: '/library/:id', element: <Show.Library /> },
-        { path: '/library/new', element: <Upload.Library /> },
-        { path: '/library/:id/edit', element: <Edit.Library /> },
+        // { path: '/library/:id', element: <Show.Library /> },
+        // { path: '/library/new', element: <Upload.Library /> },
+        // { path: '/library/:id/edit', element: <Edit.Library /> },
         { path: '/store', element: <Store /> },
-        { path: '/store/:id', element: <Show.Store /> },
-        { path: '/store/all', element: <StoreAll /> },
-        { path: '/store/new', element: <Upload.Store /> },
+        // { path: '/store/:id', element: <Show.Store /> },
+        // { path: '/store/all', element: <StoreAll /> },
+        // { path: '/store/new', element: <Upload.Store /> },
         { path: '/store/cart', element: <Cart /> },
         { path: '/users/:id', element: <Profile /> },
         { path: '/notifications', element: <Notifications /> },

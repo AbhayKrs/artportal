@@ -1,8 +1,12 @@
 import axios from 'axios';
+import store from "../store/index";
+import { r_clearAuth, r_signIn } from '../store/reducers/user.reducers';
+import jwt_decode from 'jwt-decode';
+import Cookies from 'js-cookie';
 
 let accessToken = null;
-const api_baseURL = 'https://artportal.onrender.com/api/v1.01';
-// const api_baseURL = 'http://localhost:5000/api/v1.01';
+// const api_baseURL = 'https://artportal.onrender.com/api/v1.01';
+const api_baseURL = 'http://localhost:5000/api/v1.01';
 
 export const api_taggerURL = api_baseURL + '/tagger/model.json';
 export const api_googleRedirectURL = api_baseURL + `/auth/google`;
@@ -15,45 +19,83 @@ const apiClient = axios.create({
     baseURL: api_baseURL,
     withCredentials: true
 });
+
 // Attach token before each request
-apiClient.interceptors.request.use(
-    (config) => {
-        if (accessToken) {
-            config.headers.Authorization = `Bearer ${accessToken}`;
-        }
-        return config;
-    }, (error) => Promise.reject(error)
-);
+apiClient.interceptors.request.use((config) => {
+    const token = store.getState().user.accessToken;
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+    return config;
+});
+
+// refresh logic with queue to avoid duplicate refresh calls
+let isRefreshing = false;
+let failedQueue = [];
+
+const processQueue = (error, token = null) => {
+    failedQueue.forEach(p => (error ? p.reject(error) : p.resolve(token)));
+    failedQueue = [];
+};
+
 // Auto-refresh on 401
 apiClient.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
+        if (!originalRequest) return Promise.reject(error);
 
         // If access token expired
-        if (error.response?.status === 401 && !originalRequest._retry) {
-            originalRequest._retry = true;
+        if (error.response?.status !== 401) return Promise.reject(error);
 
-            try {
-                // Ask server for a new access token
-                const res = await axios.post(
-                    api_baseURL + "/auth/refresh",
-                    {},
-                    { withCredentials: true }
-                );
+        // If we don't have a session flag, don't attempt refresh (user might be anonymous)
+        const hasSession = !!Cookies.get('hasSession') || !!localStorage.getItem('hasSession');
 
-                accessToken = res.data.token; // save new access token
-
-                // Retry the original request with new token
-                originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
-                return apiClient(originalRequest);
-            } catch (refreshError) {
-                console.error("Session expired. Please log in again.");
-                window.location.href = "/login";
-            }
+        if (!hasSession) {
+            // optionally clear auth state if any
+            store.dispatch(r_clearAuth());
+            return Promise.reject(error);
         }
 
-        return Promise.reject(error);
+        if (originalRequest._retry) {
+            // already retried, give up
+            store.dispatch(r_clearAuth());
+            return Promise.reject(error);
+        }
+
+        if (isRefreshing) {
+            // queue the request
+            return new Promise(function (resolve, reject) {
+                failedQueue.push({ resolve, reject });
+            })
+                .then((token) => {
+                    originalRequest.headers.Authorization = 'Bearer ' + token;
+                    return axios(originalRequest);
+                })
+                .catch((e) => Promise.reject(e));
+        }
+
+        originalRequest._retry = true;
+        isRefreshing = true;
+
+        try {
+            // Ask server for a new access token
+            const res = await axios.post(api_baseURL + "/auth/refresh", {}, { withCredentials: true });
+            const { token } = res.data.token; // save new access token
+            const userData = jwt_decode(token);
+            store.dispatch(r_signIn({ accessToken: token, user: userData }));
+            processQueue(null, accessToken);
+
+            // Retry the original request with new token
+            originalRequest.headers["Authorization"] = `Bearer ${token}`;
+            return apiClient(originalRequest);
+        } catch (refreshError) {
+            processQueue(refreshError, null);
+            Cookies.remove('hasSession');
+            localStorage.removeItem('hasSession');
+            store.dispatch(r_clearAuth());
+            return Promise.reject(refreshError);
+        } finally {
+            isRefreshing = false;
+        }
     }
 );
 
@@ -61,6 +103,8 @@ export const api_tags = () => apiClient.get(`/common/tags`);
 export const api_signIn = userData => apiClient.post(`/auth/login`, userData, { headers: { 'Content-Type': 'application/json' } });
 export const api_signUp = userData => apiClient.post(`/auth/signup`, userData, { headers: { 'Content-Type': 'application/json' } });
 export const api_googleLogin = (payload) => apiClient.post(`/auth/google`, { token: payload });
+export const api_verifyAuth = () => apiClient.post(`/auth/refresh`);
+export const api_logout = () => apiClient.post(`/auth/logout`);
 export const api_users = (type, value) => apiClient.get(`/users?type=${type}&value=${value}`);
 export const api_userData = userID => apiClient.get(`/users/${userID}`);
 export const api_updateUserData = (userID, userData) => apiClient.put(`/users/${userID}`, userData);

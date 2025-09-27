@@ -1,6 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import jwt_decode from 'jwt-decode';
-import setAuthToken from '../../utils/setAuthToken';
 
 const initialState = {
     theme: localStorage.getItem("theme") ? localStorage.getItem("theme") : "dark",
