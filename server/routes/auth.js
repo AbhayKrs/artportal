@@ -149,8 +149,6 @@ router.post("/refresh", async (req, res) => {
 
         // Find user and match token in DB
         const user = await User.findOne({ _id: decoded.id }).populate('bookmarks');
-        console.log("test", refreshToken);
-        console.log("test", user.refresh_token);
 
         if (!user || !user.refresh_token || user.refresh_token !== refreshToken) {
             return res.status(403).json({ msg: "Invalid token" });
@@ -192,6 +190,8 @@ router.post("/refresh", async (req, res) => {
         });
     } catch (err) {
         console.log("err: ", err);
+        res.clearCookie("token");
+        res.clearCookie("hasSession");
         return res.status(403).json({ msg: err.name });
     }
 });

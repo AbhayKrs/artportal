@@ -151,7 +151,7 @@ const Header = ({ hidePane, setHidePane }) => {
                                     <TokenIcon className="text-neutral-800 dark:text-gray-300 h-6 w-6" />
                                     <p className='text-sm tracking-wide text-neutral-800 dark:text-gray-300'>{user.tokens}</p>
                                 </div>
-                                <button onClick={logout} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'p-3 text-xl font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
+                                <button onClick={logout} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'p-3 font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
                                     <LogoutIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />
                                 </button>
                             </div>
@@ -189,7 +189,7 @@ const Header = ({ hidePane, setHidePane }) => {
                                         <AddIcon className='h-7 w-7 text-neutral-800 dark:text-gray-300' />
                                     </button>
                                 </div>
-                                <button onClick={logout} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'p-3 text-xl font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
+                                <button onClick={logout} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'p-3 text-lg font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
                                     <LogoutIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />
                                     Logout
                                 </button>

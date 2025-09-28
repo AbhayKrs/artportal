@@ -17,8 +17,7 @@ import { ConfirmModal, FlaggedModal } from '../components/Modal';
 
 import { ReactComponent as AiAgentIcon } from '../assets/icons/ai_agent.svg';
 
-
-const ExploreUpload = (props) => {
+const Library = (props) => {
     const dispatch = useDispatch();
     let navigate = useNavigate();
 
@@ -298,12 +297,8 @@ const ExploreUpload = (props) => {
                                 </div>
                             </div>
                         </div>}
-                        <div className="relative p-6 bg-neutral-900 text-white rounded-xl 
-            before:content-[''] before:absolute before:-inset-[3px] 
-            before:rounded-inherit 
-            before:bg-[linear-gradient(130deg,#ff00ff,#00ffff,#ffff00,#ff00ff)] 
-            before:bg-[length:300%_300%] before:animate-glitter 
-            before:-z-10">
+                        <div
+                            className="relative p-6 bg-neutral-900 text-white rounded-xl before:content-[''] before:absolute before:-inset-[3px] before:rounded-inherit before:bg-[linear-gradient(130deg,#ff00ff,#00ffff,#ffff00,#ff00ff)] before:bg-[length:300%_300%] before:animate-glitter before:-z-10">
                             <span className=' text-lg tracking-wide font-medium text-gray-700 dark:text-gray-300'>Title<span className=' text-rose-400 text-md'>*</span></span>
                             <input type="text" maxLength={250} value={title} onChange={(ev) => setTitle(ev.target.value)} className="py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 focus:outline-none rounded-md w-full" placeholder='Title' />
                         </div>
@@ -369,7 +364,7 @@ const ExploreUpload = (props) => {
     )
 }
 
-const StoreUpload = (props) => {
+const Store = (props) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -579,6 +574,6 @@ const StoreUpload = (props) => {
 }
 
 export default {
-    ExploreUpload,
-    StoreUpload
+    Library,
+    Store
 }

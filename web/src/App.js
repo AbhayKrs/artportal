@@ -85,10 +85,9 @@ const Layout = (props) => {
   }
 
   const load_auth = () => {
-    //Check condition for site theme
+    // Check condition for site theme
     const hasSession = !!Cookies.get('hasSession') || !!localStorage.getItem('hasSession');
     if (!hasSession) return; // user anonymous, skip refresh
-
     dispatch(a_verifyAuth());
   }
 
@@ -119,13 +118,13 @@ const App = () => {
         { path: '/google_failed', element: <Google header="Failed" /> },
         { path: '/library', element: <Library /> },
         { path: '/search', element: <Search /> },
-        // { path: '/library/:id', element: <Show.Library /> },
-        // { path: '/library/new', element: <Upload.Library /> },
-        // { path: '/library/:id/edit', element: <Edit.Library /> },
+        { path: '/library/:id', element: <Show.Library /> },
+        { path: '/library/new', element: <Upload.Library /> },
+        { path: '/library/:id/edit', element: <Edit.Library /> },
         { path: '/store', element: <Store /> },
-        // { path: '/store/:id', element: <Show.Store /> },
-        // { path: '/store/all', element: <StoreAll /> },
-        // { path: '/store/new', element: <Upload.Store /> },
+        { path: '/store/:id', element: <Show.Store /> },
+        { path: '/store/all', element: <StoreAll /> },
+        { path: '/store/new', element: <Upload.Store /> },
         { path: '/store/cart', element: <Cart /> },
         { path: '/users/:id', element: <Profile /> },
         { path: '/notifications', element: <Notifications /> },

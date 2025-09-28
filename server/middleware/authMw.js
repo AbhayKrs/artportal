@@ -10,7 +10,7 @@ const protect = async (req, res, next) => {
             req.user = await User.findById(decoded.id).select('-password');
         } catch (error) {
             console.error(error);
-            return res.status(401).json({ message: 'Unauthorized. User authentication is invalid.' });
+            return res.status(401).json({ message: 'Unauthorized: Invalid or missing token' });
         }
     }
     if (!token) {

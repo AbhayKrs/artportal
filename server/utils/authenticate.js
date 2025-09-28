@@ -13,7 +13,7 @@ const generateRefreshToken = (payload) => {
     return jwt.sign(
         payload,
         process.env.REFRESH_TOKEN_SECRET,
-        { expiresIn: "30s" } // long-lived
+        { expiresIn: "9h" } // long-lived
     );
 };
 

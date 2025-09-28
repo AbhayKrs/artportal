@@ -79,7 +79,7 @@ apiClient.interceptors.response.use(
         try {
             // Ask server for a new access token
             const res = await axios.post(api_baseURL + "/auth/refresh", {}, { withCredentials: true });
-            const { token } = res.data.token; // save new access token
+            const { token } = res.data; // save new access token
             const userData = jwt_decode(token);
             store.dispatch(r_signIn({ accessToken: token, user: userData }));
             processQueue(null, accessToken);
@@ -87,12 +87,12 @@ apiClient.interceptors.response.use(
             // Retry the original request with new token
             originalRequest.headers["Authorization"] = `Bearer ${token}`;
             return apiClient(originalRequest);
-        } catch (refreshError) {
-            processQueue(refreshError, null);
+        } catch (err) {
+            processQueue(err, null);
             Cookies.remove('hasSession');
             localStorage.removeItem('hasSession');
             store.dispatch(r_clearAuth());
-            return Promise.reject(refreshError);
+            return Promise.reject(err);
         } finally {
             isRefreshing = false;
         }
