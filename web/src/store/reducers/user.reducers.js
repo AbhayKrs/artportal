@@ -69,7 +69,8 @@ const userSlice = createSlice({
         },
         r_setUserArtworks: (state, action) => {
             const artworksItems = [...action.payload.artworks];
-            // state.profile_data = { ...state.viewed_user, artworks: artworksItems, artworks_count: action.payload.artworks_count }
+            state.artworks = artworksItems;
+            state.artworks_count = artworksItems.length;
         },
         r_setUserStoreList: (state, action) => {
             const storeList = [...action.payload.store];
@@ -129,7 +130,7 @@ const userSlice = createSlice({
             })
         },
         r_clearAuth: (state, action) => {
-            state.accessToken = null;
+            state.accessToken = '';
             state = initialState;
         },
         r_handleLogout: (state, action) => {

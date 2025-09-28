@@ -189,7 +189,6 @@ router.post("/refresh", async (req, res) => {
             token: accessToken
         });
     } catch (err) {
-        console.log("err: ", err);
         res.clearCookie("token");
         res.clearCookie("hasSession");
         return res.status(403).json({ msg: err.name });
@@ -238,7 +237,7 @@ router.get('/google/callback', passport.authenticate('google', {
         maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     // Redirect to frontend with access token
-    res.redirect(`${process.env.FRONTEND_ORIGIN}`);
+    res.redirect(`${process.env.FRONTEND_ORIGIN}/google_success?token=${accessToken}`);
 })
 
 // @route   POST api/v1.01/auth/logout --- Logout the user --- PUBLIC

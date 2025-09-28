@@ -222,6 +222,7 @@ router.post('/new', protect, artworkUpl.any(), async (req, res) => {
         //     }
         // });
     } catch (err) {
+        console.log("err: ", err)
         return res.status(404).json({ msg: err.name });
     }
 });

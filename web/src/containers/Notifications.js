@@ -4,7 +4,7 @@ import { NotificationTabPanel } from '../components/TabPanel';
 
 const Notifications = () => {
     return (
-        <div className=' flex flex-col gap-2 p-4 bg-gray-200 dark:bg-darkBg'>
+        <div className='flex flex-col gap-2 p-4 bg-gray-200 dark:bg-darkBg'>
             {/* <nav className="flex py-2 px-3 text-gray-700 bg-slate-300 rounded-lg dark:bg-neutral-900" aria-label="Breadcrumb">
                 <div className="inline-flex items-center gap-1 md:gap-3">
                     <div className="inline-flex items-center gap-2 font-medium ">

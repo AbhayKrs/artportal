@@ -135,7 +135,7 @@ const StoreAll = (props) => {
     }
 
     return (
-        <div className=' bg-gray-200 dark:bg-darkBg'>
+        <div className='bg-gray-200 dark:bg-darkBg'>
             <div className='p-4 items-center'>
                 <div className='flex sm:flex-row flex-col mb-3 justify-between'>
                     <div className='text-3xl  font-bold tracking-wider text-blue-700 dark:text-blue-700'>artportal Store</div>

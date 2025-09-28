@@ -103,7 +103,7 @@ const ExploreEdit = (props) => {
         <div className="main-container bg-gray-200 dark:bg-darkBg p-8">
             <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg p-5">
                 <div className="flex justify-between pt-5">
-                    <span className=' text-3xl text-gray-700 dark:text-gray-300'>Edit</span>
+                    <span className='text-3xl text-gray-700 dark:text-gray-300'>Edit</span>
                     <div>
                         <button onClick={() => navigate(`/library/${id}`)} className="rounded-md px-3 py-1 bg-gray-100 hover:bg-gray-200 focus:shadow-outline focus:outline-none">
                             Cancel
@@ -126,16 +126,16 @@ const ExploreEdit = (props) => {
                     </div>
                     <div className='w-full gap-2'>
                         <div className='flex flex-col'>
-                            <span className=' font-semibold text-gray-700 dark:text-gray-300'>Title<span className=' text-rose-400 text-md'>*</span></span>
+                            <span className='font-semibold text-gray-700 dark:text-gray-300'>Title<span className='text-rose-400 text-md'>*</span></span>
                             <input type="text" value={title} onChange={(ev) => setTitle(ev.target.value)} className="py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 focus:outline-none rounded-md w-full" placeholder='Title' />
                         </div>
                         <div className='flex flex-col'>
-                            <span className=' font-semibold text-gray-700 dark:text-gray-300'>Description<span className=' text-rose-400 text-md'>*</span></span>
+                            <span className='font-semibold text-gray-700 dark:text-gray-300'>Description<span className='text-rose-400 text-md'>*</span></span>
                             <textarea rows='4' value={description} onChange={(ev) => setDescription(ev.target.value)} className="scrollbar py-2 px-3 shadow text-md bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 resize-none focus:outline-none rounded-md w-full" placeholder='Title' />
                         </div>
                         <div className='flex flex-col'>
-                            <span className=' font-semibold text-gray-700 dark:text-gray-300'>Add tags:</span>
-                            <div className=' text-rose-400 font-semibold text-sm'>You may assign a maximum of 10 tags</div>
+                            <span className='font-semibold text-gray-700 dark:text-gray-300'>Add tags:</span>
+                            <div className='text-rose-400 font-semibold text-sm'>You may assign a maximum of 10 tags</div>
                             <div className="w-full inline-flex flex-col justify-center relative text-gray-500">
                                 <div className="relative">
                                     <input value={tagSearch} onChange={(ev) => setTagSearch(ev.target.value)} type="text" className="p-2 shadow  pl-8 w-full text-md rounded bg-slate-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 focus:outline-none" placeholder="Search for tags..." />

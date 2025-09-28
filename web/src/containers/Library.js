@@ -78,7 +78,7 @@ const Library = (props) => {
                 <div >
                     <div className='absolute inset-0 h-fit w-fit m-auto text-center text-gray-300'>
                         {/* <img loading='lazy' className='h-32 w-auto' src={emptyIcon} /> */}
-                        <h2 className=' text-2xl'>It's empty in here!</h2>
+                        <h2 className='text-2xl'>It's empty in here!</h2>
                     </div>
                 </div>
             }
@@ -91,5 +91,5 @@ export default Library;
 
 {/* <label className="flex items-center cursor-pointer">
                             <input type="radio" name='top' className="form-radio h-3.5 w-3.5 bg-slate-300 text-neutral-700 cursor-pointer mr-1" />
-                            <p className=' font-semibold text-sm'>New</p>
+                            <p className='font-semibold text-sm'>New</p>
                         </label> */}

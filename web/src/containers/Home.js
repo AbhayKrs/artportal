@@ -125,7 +125,7 @@ const Home = (props) => {
                     <div >
                         <div className='absolute inset-0 h-fit w-fit m-auto text-center text-gray-300'>
                             {/* <img loading='lazy' className='h-32 w-auto' src={emptyIcon} /> */}
-                            <h2 className=' text-2xl'>It's empty in here!</h2>
+                            <h2 className='text-2xl'>It's empty in here!</h2>
                         </div>
                     </div>
             }

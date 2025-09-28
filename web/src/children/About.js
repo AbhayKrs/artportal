@@ -4,8 +4,8 @@ import DefaultIcon from '../assets/images/panda.png';
 export const About = (props) => {
     return (
         <div className='flex flex-col gap-3 col-span-3 p-2 text-neutral-700 dark:text-gray-300'>
-            <div class="space-y-6">
-                <h1 className="text-3xl italic font-medium tracking-wide">"Protecting Creativity. Empowering Community."</h1>
+            <div className="space-y-6">
+                <h1 className="text-2xl italic font-medium tracking-wide">"Protecting Creativity. Empowering Community."</h1>
                 <section className="flex flex-col gap-2">
                     <p className="text-lg tracking-wide">Every artist begins with a blank canvas. A sketch. A vision. A moment of expression that deserves to be seen and remembered.</p>
                     <p className="text-lg tracking-wide">But the digital world has changed the way art lives online. With every upload came new risks - work being copied, scraped, or lost in the noise of algorithms that valued clicks over creativity. Artists need more than a platform; they needed a safe home now more than anything.</p>
@@ -17,7 +17,7 @@ export const About = (props) => {
                     <iframe className='rounded-md' width="650" height="400" src="https://www.youtube.com/embed/xvFZjo5PgG0?si=zeEqzKp1e47gMedV" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </section>
                 <div className="flex flex-col gap-2">
-                    <h3 className="text-3xl font-medium tracking-wide">Our mission</h3>
+                    <h3 className="text-2xl font-medium tracking-wide">Our mission</h3>
                     <ul className='list-disc pl-7'>
                         <li>Create a Safe Showcase - Provide a platform where artists can confidently upload and present their work without fear of misuse.</li>
                         <li>Ensure Security in the Age of AI - Protect creativity from unauthorized scraping, copying, or exploitation.</li>
@@ -30,7 +30,7 @@ export const About = (props) => {
                     </ul>
                 </div>
                 <div className="flex flex-col gap-2">
-                    <h3 className="text-3xl font-medium tracking-wide">Who it's for</h3>
+                    <h3 className="text-2xl font-medium tracking-wide">Who it's for</h3>
                     <p className="text-lg tracking-wide">ArtPortal is built for everyone who believes in the power of creativity and wants a safe, professional, and supportive space to share it.</p>
                     <ul className='list-disc pl-7'>
                         <li>Artists & Creators - Painters, illustrators, digital artists, designers, and photographers who want to build a secure digital library and professional portfolio of their work.</li>
@@ -42,8 +42,8 @@ export const About = (props) => {
                     </ul>
                 </div>
                 <div className="flex flex-col gap-2">
-                    <h3 className="text-3xl font-medium tracking-wide">Key features</h3>
-                    <ul className="text-lg tracking-wide" aria-hidden="false">
+                    <h3 className="text-2xl font-medium tracking-wide">Key features</h3>
+                    <ul className="tracking-wide" aria-hidden="false">
                         <li><strong>Art Library</strong> - A secure and organized space to upload, store, and showcase your entire body of work.</li>
                         <li><strong>Portfolio Management</strong> - Structured, visually refined project pages to present your body of work.</li>
                         <li><strong>Community & Networking</strong> - Tools to connect with peers, collaborators, and industry professionals.</li>
@@ -54,16 +54,16 @@ export const About = (props) => {
                     </ul>
                 </div>
                 <div className="flex flex-col gap-2">
-                    <h3 className="text-3xl font-medium tracking-wide">The Team</h3>
+                    <h3 className="text-2xl font-medium tracking-wide">The Team</h3>
                     <div className="flex flex-row gap-6">
                         {['CEO', 'CTO', 'Product Manager', 'UI/UX Lead', 'Sales & Marketing'].map(itx => (
                             <div className='flex flex-col gap-1 items-center'>
                                 <img className='h-12 rounded-md' src={DefaultIcon} />
-                                <p className="text-lg font-medium tracking-wide">Abhay ({itx})</p>
+                                <p className="text-base text-center font-medium tracking-wide">Abhay ({itx})</p>
                             </div>
                         ))}
                     </div>
-                    <p className="italic tracking-wide">* It is a one man show :)</p>
+                    <p className="text-gray-500 italic tracking-wide">* It is a one man show :)</p>
                 </div>
             </div>
         </div >

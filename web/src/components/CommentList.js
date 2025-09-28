@@ -109,7 +109,7 @@ const CommentList = ({ comments, handleInvalidUser }) => {
                 <div key={comment._id} className="flex flex-col gap-4 text-neutral-700 dark:text-gray-300">
                     <div className='flex flex-col gap-1'>
                         {/* Author + Time */}
-                        <div className="flex flex-row items-center gap-1">
+                        <div className="flex flex-row items-center gap-1 text-gray-500 dark:text-neutral-400">
                             <div
                                 onClick={() => navigate(`/users/${comment.author.id}`)}
                                 className="flex gap-1 cursor-pointer items-center"
@@ -124,9 +124,8 @@ const CommentList = ({ comments, handleInvalidUser }) => {
                                         />
                                     </div>
                                 )}
-                                <p className="text-xs">{comment.author.username}</p>
+                                <p className="text-sm">{comment.author.username} - {moment(comment.createdAt).fromNow()}</p>
                             </div>
-                            <p className="text-xs">- {moment(comment.createdAt).fromNow()}</p>
                         </div>
 
                         {/* Comment text or edit field */}
@@ -194,47 +193,46 @@ const CommentList = ({ comments, handleInvalidUser }) => {
                             </button>
                         </div>
 
+                        {/* Reply input */}
+                        {replies.find(r => r.id === index) && (
+                            <div className="flex flex-row gap-2 items-center">
+                                {user.avatar.icon.length > 0 && (
+                                    <div className="w-7 h-7 overflow-hidden">
+                                        <img
+                                            loading="lazy"
+                                            src={api_userImages(user.avatar.icon)}
+                                            alt="user_avatar"
+                                            className="object-contain w-full h-full"
+                                        />
+                                    </div>
+                                )}
+                                <input
+                                    type="text"
+                                    value={replies.find(r => r.id === index).text}
+                                    onChange={(e) => updateReplies(index, e.target.value)}
+                                    placeholder="Add a reply..."
+                                    className="flex-1 py-1.5 px-3 rounded-full text-sm border-2 border-gray-700 dark:border-neutral-600 text-gray-600 dark:text-neutral-300 outline-none"
+                                />
+                                <button
+                                    className="text-sm"
+                                    onClick={() => clearReply(index)}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    className="text-sm"
+                                    onClick={() => submitReply(index)}
+                                >
+                                    Reply
+                                </button>
+                            </div>
+                        )}
                     </div>
 
                     {/* Replies */}
                     {comment.replies?.length > 0 && (
                         <div className="pl-4 border-l-2 border-gray-300 dark:border-neutral-700">
                             <CommentList comments={comment.replies} handleInvalidUser={handleInvalidUser} />
-                        </div>
-                    )}
-
-                    {/* Reply input */}
-                    {replies.find(r => r.id === index) && (
-                        <div className="flex flex-row gap-2 items-center">
-                            {user.avatar.icon.length > 0 && (
-                                <div className="w-7 h-7 overflow-hidden">
-                                    <img
-                                        loading="lazy"
-                                        src={api_userImages(user.avatar.icon)}
-                                        alt="user_avatar"
-                                        className="object-contain w-full h-full"
-                                    />
-                                </div>
-                            )}
-                            <input
-                                type="text"
-                                value={replies.find(r => r.id === index).text}
-                                onChange={(e) => updateReplies(index, e.target.value)}
-                                placeholder="Add a reply..."
-                                className="flex-1 p-1 rounded text-xs border-2 border-gray-700 dark:border-neutral-600 text-gray-600 dark:text-neutral-300 outline-none"
-                            />
-                            <button
-                                className="text-xs"
-                                onClick={() => clearReply(index)}
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                className="text-xs"
-                                onClick={() => submitReply(index)}
-                            >
-                                Reply
-                            </button>
                         </div>
                     )}
                 </div>

@@ -81,7 +81,7 @@ export const LoginModal = ({ open, title, banner, error, onClose, openRegister, 
                     </div>
                     <a
                         href={api_googleRedirectURL}
-                        className="flex items-center justify-center w-full mt-6 py-2 px-3 rounded-full border border-gray-300 dark:border-slate-400 cursor-pointer">
+                        className="flex items-center justify-center w-full mt-6 py-2 px-3 rounded-full border border-gray-500 dark:border-gray-400 cursor-pointer">
                         <GoogleIcon />
                         <p className="w-full text-base text-center font-medium text-gray-800 dark:text-gray-300">Continue with Google</p>
                     </a>
@@ -125,7 +125,7 @@ export const LoginModal = ({ open, title, banner, error, onClose, openRegister, 
                             }}
                             className="h-4 w-4 appearance-none align-middle rounded-md outline-none bg-slate-300 dark:bg-neutral-700 checked:bg-blue-700 dark:checked:bg-blue-700 cursor-pointer"
                         />
-                        <p className=' tracking-wide text-sm text-neutral-700 dark:text-neutral-400'>Keep me logged in</p>
+                        <p className='tracking-wide text-sm text-neutral-700 dark:text-neutral-400'>Keep me logged in</p>
                     </label> */}
                     {error.login && !username && !password ?
                         <div className='flex p-2 border-2 border-red-500 rounded-lg gap-2'>
@@ -134,7 +134,7 @@ export const LoginModal = ({ open, title, banner, error, onClose, openRegister, 
                         </div> :
                         null
                     }
-                    <button onClick={onSubmitClick} className="flex w-fit py-2.5 px-6 text-base font-medium tracking-wide bg-blue-700 hover:bg-blue-600 text-neutral-800 dark:text-gray-300 rounded-xl items-center">Sign In</button>
+                    <button onClick={onSubmitClick} className="flex w-fit py-2.5 px-6 text-base font-semibold tracking-wide bg-blue-700 hover:bg-blue-600 text-neutral-800 dark:text-gray-300 rounded-xl items-center">Sign In</button>
                     <p className='tracking-wide font-semibold text-neutral-700 dark:text-gray-400 text-sm'>By clicking Sign In, I confirm that I have read and agree to the artportal <button type='button' className='text-sm font-bold text-blue-700'>Terms of Service</button> and <button type='button' className='text-sm font-bold text-blue-700'>Privacy Policy</button>.</p>
                 </div>
             </div>
@@ -206,7 +206,7 @@ export const RegisterModal = ({ open, title, banner, error, onClose, openLogin, 
                     </div>
                     <a
                         href={api_googleRedirectURL}
-                        className="flex items-center justify-center w-full mt-6 py-2 px-3 rounded-full border border-gray-300 dark:border-slate-400 cursor-pointer">
+                        className="flex items-center justify-center w-full mt-6 py-2 px-3 rounded-full border border-gray-500 dark:border-gray-400 cursor-pointer">
                         <GoogleIcon />
                         <p className="w-full text-center font-medium text-gray-800 dark:text-gray-300">Continue with Google</p>
                     </a>
@@ -264,13 +264,13 @@ export const RegisterModal = ({ open, title, banner, error, onClose, openLogin, 
                     {error.signup ?
                         <div className='flex p-2 border-2 border-red-500 rounded-lg gap-2'>
                             <IoCloseCircle className='h-5 w-5 text-red-500' />
-                            <p className=' font-bold text-sm text-red-500'>{error.message}</p>
+                            <p className='font-bold text-sm text-red-500'>{error.message}</p>
                         </div> :
                         null
                     }
                     <div className='flex gap-2'>
-                        <button onClick={onSubmitClick} className="flex w-fit py-2.5 px-6 text-base font-medium tracking-wide bg-blue-700 hover:bg-blue-600 text-neutral-800 dark:text-gray-300 rounded-xl items-center">Sign Up</button>
-                        <button onClick={onReset} className="flex w-fit py-2.5 px-6 text-base font-medium tracking-wide bg-neutral-700 hover:bg-neutral-600 text-neutral-800 dark:text-gray-300 rounded-xl items-center">Reset</button>
+                        <button onClick={onSubmitClick} className="flex w-fit py-2.5 px-6 text-base font-semibold tracking-wide bg-blue-700 hover:bg-blue-600 text-neutral-800 dark:text-gray-300 rounded-xl items-center">Sign Up</button>
+                        <button onClick={onReset} className="flex w-fit py-2.5 px-6 text-base font-semibold tracking-wide bg-neutral-400 hover:bg-neutral-300 text-neutral-800 dark:text-neutral-800 rounded-xl items-center">Reset</button>
                     </div>
                     <p className='tracking-wide font-semibold text-neutral-700 dark:text-gray-400 text-sm'>By clicking Sign Up, I confirm that I have read and agree to the artportal <button type='button' className='text-sm font-bold text-blue-700'>Terms of Service</button> and <button type='button' className='text-sm font-bold text-blue-700'>Privacy Policy</button>.</p>
                 </div>
@@ -545,7 +545,7 @@ export const CartModal = ({ open, onClose, cartList, cartTotal, api_storeImages,
                 <div className="flex flex-col w-full">
                     <div className="gap-4">
                         <div className="flex flex-col w-full gap-2">
-                            <h1 className="font-bold text-gray-700 dark:text-gray-300">Full Name <span className=' text-rose-400 text-md'>*</span></h1>
+                            <h1 className="font-bold text-gray-700 dark:text-gray-300">Full Name <span className='text-rose-400 text-md'>*</span></h1>
                             <div className="w-full bg-white dark:bg-neutral-700 flex rounded">
                                 <input value={name.fname} onChange={(ev) => setName({ ...name, fname: ev.target.value })} placeholder="First Name" className="p-1 px-2 bg-transparent outline-none w-full text-gray-800 dark:text-gray-300 rounded" />
                             </div>
@@ -554,7 +554,7 @@ export const CartModal = ({ open, onClose, cartList, cartTotal, api_storeImages,
                             </div>
                         </div>
                         <div className="flex flex-col w-full gap-2">
-                            <h1 className="font-bold text-gray-700 dark:text-gray-300">Delivery address <span className=' text-rose-400 text-md'>*</span></h1>
+                            <h1 className="font-bold text-gray-700 dark:text-gray-300">Delivery address <span className='text-rose-400 text-md'>*</span></h1>
                             <select value={countryCode} onChange={(ev) => setCountryCode(ev.target.value)} className="h-10 mt-2 form-select w-full rounded dark:bg-neutral-700 dark:text-gray-300">
                                 <option value="India">IN</option>
                                 <option value="US">USA</option>
@@ -831,17 +831,17 @@ export const SearchModal = ({ open, handleClose, betaMsg, searchVal, setSearchVa
                         <div className='flex flex-row p-2 bg-slate-300 dark:bg-neutral-800  gap-2'>
                             <button disabled={activeSearch === 'artwork'} onClick={() => { fetchSearchList('artwork', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'artwork' ? 'text-blue-700' : 'text-neutral-700 dark:text-gray-300 hover:text-blue-700'}`}>
                                 <FiAtSign className='h-4 w-4' />
-                                <span className=' font-semibold text-base'>Artworks</span>
+                                <span className='font-semibold text-base'>Artworks</span>
                             </button>
                             <span className='flex text-neutral-700 dark:text-gray-300'>&#8226;</span>
                             <button disabled={activeSearch === 'tag'} onClick={() => { fetchSearchList('tag', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'tag' ? 'text-blue-700' : 'text-neutral-700 dark:text-gray-300 hover:text-blue-700'}`}>
                                 <FaHashtag className='h-4 w-4' />
-                                <span className=' font-semibold text-base'>Tags</span>
+                                <span className='font-semibold text-base'>Tags</span>
                             </button>
                             <span className='flex text-neutral-700 dark:text-gray-300'>&#8226;</span>
                             <button disabled={activeSearch === 'artist'} onClick={() => { fetchSearchList('artist', searchVal) }} className={`flex gap-1 items-center tracking-wide ${activeSearch === 'artist' ? 'text-blue-700' : 'text-neutral-700 dark:text-gray-300 hover:text-blue-700'}`}>
                                 <FaGreaterThan className='h-4 w-4' />
-                                <span className=' font-semibold text-base'>Artists</span>
+                                <span className='font-semibold text-base'>Artists</span>
                             </button>
                         </div>
                         <div className='flex flex-col md:flex-row p-2 bg-slate-300 dark:bg-neutral-800  gap-2'>
@@ -945,7 +945,7 @@ export const SearchModal = ({ open, handleClose, betaMsg, searchVal, setSearchVa
                                 {searchList.length > 0 ? searchList.map((item, index) => (
                                     <div key={index} onClick={() => { navigate(`/library`); clearSearch() }} className='flex cursor-pointer items-center gap-4 rounded-lg text-neutral-700 dark:text-gray-200 bg-gray-100 dark:bg-neutral-900 p-4'>
                                         <FaHashtag className='h-5 w-5' />
-                                        <span className=' font-semibold leading-5'>{item}</span>
+                                        <span className='font-semibold leading-5'>{item}</span>
                                     </div>
                                 )) :
                                     <div className='flex flex-col gap-2 items-center justify-center p-4'>

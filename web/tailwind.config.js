@@ -29,13 +29,14 @@ module.exports = {
         "3xl": ['2rem', '2.25rem'],
       },
       minHeight: {
-        'show': 'calc(100vh - 1.55rem)',
-        'innershow': 'calc(100vh - 3.25rem)'
+        'show': 'calc(100vh - 1.675rem)',
+        'innershow': 'calc(100vh - 3.5rem)'
       },
       maxHeight: {
-        'show': 'calc(100vh - 1.55rem)',
-        'innershow': 'calc(100vh - 3.25rem)',
-        'modal': 'calc(100vh - 1.25rem)'
+        'show': 'calc(100vh - 1.675rem)',
+        'innershow': 'calc(100vh - 3.5rem)',
+        'modal': 'calc(100vh - 1.25rem)',
+        'comments': '46vh'
       },
       keyframes: {
         glitter: {

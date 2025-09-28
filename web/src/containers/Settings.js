@@ -62,48 +62,48 @@ export const Settings = (props) => {
                     {user.is_verified && <>
                         <div className="flex gap-2 w-full justify-center">
                             {user.avatar.icon.length > 0 && <img loading='lazy' className='w-24' src={api_userImages(user.avatar.icon)} />}
-                            <div className='clear-left'>
-                                <h2 className='text-2xl font-bold text-gray-700 dark:text-white'>{user.name}</h2>
-                                <h4 className='text-sm font-semibold text-gray-500 dark:text-neutral-400'>{`Member since ` + ` (` + moment(user.created_on).format('LL') + `)`}</h4>
-                                <h4 className='text-sm font-semibold text-gray-500 dark:text-neutral-400'>{`Premium member since ` + moment(user.created_on).format('LL')}</h4>
+                            <div className='flex flex-col gap-1 clear-left'>
+                                <h2 className='text-xl font-bold text-gray-700 dark:text-white'>{user.name}</h2>
+                                <h4 className='text-xs font-semibold text-gray-500 dark:text-neutral-400'>{`Member since ` + ` (` + moment(user.created_on).format('LL') + `)`}</h4>
+                                <h4 className='text-xs font-semibold text-gray-500 dark:text-neutral-400'>{`Premium member since ` + moment(user.created_on).format('LL')}</h4>
                             </div>
                         </div>
                     </>
                     }
                     <Divider />
                     <div className='flex flex-col gap-1 w-full'>
-                        <button onClick={() => navigate('/settings/general')} className={`flex w-full p-2 gap-2 items-end text-xl font-medium tracking-wide hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
+                        <button onClick={() => navigate('/settings/general')} className={`flex w-full p-2 gap-2 items-end text-lg font-medium tracking-wide hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
                             <div className={`${childPath === "general" ? 'flex' : 'hidden'} h-5 w-1 bottom-[-4px] left-0 rounded text-2xl bg-blue-700 dark:bg-blue-700`}></div>
                             General
                         </button>
                         {user.is_verified && <>
-                            <button onClick={() => navigate('/settings/account')} className={`flex w-full p-2 gap-2 items-end text-xl font-medium tracking-wide hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
+                            <button onClick={() => navigate('/settings/account')} className={`flex w-full p-2 gap-2 items-end text-lg font-medium tracking-wide hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
                                 <div className={`${childPath === "account" ? 'flex' : 'hidden'} h-5 w-1 bottom-[-4px] left-0 rounded text-2xl bg-blue-700 dark:bg-blue-700`}></div>
                                 Account
                             </button>
-                            <button onClick={() => navigate('/settings/notifications')} className={`flex w-full p-2 gap-2 items-end text-xl font-medium tracking-wide hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
+                            <button onClick={() => navigate('/settings/notifications')} className={`flex w-full p-2 gap-2 items-end text-lg font-medium tracking-wide hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
                                 <div className={`${childPath === "notifications" ? 'flex' : 'hidden'} h-5 w-1 bottom-[-4px] left-0 rounded text-2xl bg-blue-700 dark:bg-blue-700`}></div>
                                 Notifications
                             </button>
-                            <button onClick={() => navigate('/settings/community')} className={`flex w-full p-2 gap-2 items-end text-xl font-medium tracking-wide hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
+                            <button onClick={() => navigate('/settings/community')} className={`flex w-full p-2 gap-2 items-end text-lg font-medium tracking-wide hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
                                 <div className={`${childPath === "community" ? 'flex' : 'hidden'} h-5 w-1 bottom-[-4px] left-0 rounded text-2xl bg-blue-700 dark:bg-blue-700`}></div>
                                 Community
                             </button>
-                            <button onClick={() => navigate('/settings/billing')} className={`flex w-full p-2 gap-2 items-end text-xl font-medium tracking-wide hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
+                            <button onClick={() => navigate('/settings/billing')} className={`flex w-full p-2 gap-2 items-end text-lg font-medium tracking-wide hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
                                 <div className={`${childPath === "billing" ? 'flex' : 'hidden'} h-5 w-1 bottom-[-4px] left-0 rounded text-2xl bg-blue-700 dark:bg-blue-700`}></div>
                                 Billing
                             </button>
                         </>}
 
-                        <button onClick={() => navigate('/settings/about')} className={`flex w-full p-2 gap-2 items-end text-xl font-medium tracking-wide hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
+                        <button onClick={() => navigate('/settings/about')} className={`flex w-full p-2 gap-2 items-end text-lg font-medium tracking-wide hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
                             <div className={`${childPath === "about" ? 'flex' : 'hidden'} h-5 w-1 bottom-[-4px] left-0 rounded text-2xl bg-blue-700 dark:bg-blue-700`}></div>
                             About
                         </button>
-                        <button onClick={() => navigate('/settings/tos')} className={`flex w-full p-2 gap-2 items-end text-xl font-medium tracking-wide hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
+                        <button onClick={() => navigate('/settings/tos')} className={`flex w-full p-2 gap-2 items-end text-lg font-medium tracking-wide hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
                             <div className={`${childPath === "tos" ? 'flex' : 'hidden'} h-5 w-1 bottom-[-4px] left-0 rounded text-2xl bg-blue-700 dark:bg-blue-700`}></div>
                             Terms of Service
                         </button>
-                        <button onClick={() => navigate('/settings/privacy')} className={`flex w-full p-2 gap-2 items-end text-xl font-medium tracking-wide hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
+                        <button onClick={() => navigate('/settings/privacy')} className={`flex w-full p-2 gap-2 items-end text-lg font-medium tracking-wide hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl`}>
                             <div className={`${childPath === "privacy" ? 'flex' : 'hidden'} h-5 w-1 bottom-[-4px] left-0 rounded text-2xl bg-blue-700 dark:bg-blue-700`}></div>
                             Privacy Policy
                         </button>

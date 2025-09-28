@@ -25,7 +25,7 @@ const Profile = (props) => {
 
     const user = useSelector(state => state.user);
     const artworks = useSelector(state => state.library.artworks);
-    const profile_data = useSelector(state => state.common.profile_data);
+    const profile_data = useSelector(state => state.user);
 
     useEffect(() => {
         dispatch(r_setLoader(true));
@@ -102,10 +102,10 @@ const Profile = (props) => {
                                 src={api_artworkImages(artwork.files[0])}
                             />
                             <div className='absolute z-30 hidden group-hover:flex top-0 right-0 m-2 gap-1'>
-                                {user.id === profile_data.id && <BsTrash onClick={() => deleteArtwork(artwork._id)} className=' h-6 w-6 cursor-pointer text-gray-200' />}
+                                {user.id === profile_data.id && <BsTrash onClick={() => deleteArtwork(artwork._id)} className='h-6 w-6 cursor-pointer text-gray-200' />}
                                 <GoInfo onClick={() => navigate(`/library/${artwork._id}`)} className='w-6 h-6 cursor-pointer text-gray-200' />
                             </div>
-                            <div className='hidden absolute max-h-full bottom-0 p-2 pt-14 group-hover:flex group-hover:flex-row w-full bg-gradient-to-t from-black text-gray-200 group-hover:flex group-hover:justify-between'>
+                            <div className='hidden absolute max-h-full bottom-0 p-2 pt-14 group-hover:flex group-hover:flex-row group-hover:justify-between w-full bg-gradient-to-t from-black text-gray-200 '>
                                 <div className="flex flex-col place-self-end max-w-[65%]">
                                     <h3 className="text-md text-base font-bold leading-5 capitalize break-words">{artwork.title}</h3>
                                     <div className='flex'>
@@ -212,7 +212,7 @@ const Profile = (props) => {
     }
 
     return (
-        <div className=' bg-gray-200 dark:bg-darkBg'>
+        <div className='bg-gray-200 dark:bg-darkBg'>
             {console.log("profile_data", profile_data)}
             <div className="relative block h-96">
                 <div className="absolute top-0 w-full h-full bg-center bg-cover" style={{

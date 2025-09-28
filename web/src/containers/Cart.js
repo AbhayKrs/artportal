@@ -203,7 +203,7 @@ const Cart = (props) => {
                 <div className="flex flex-col w-full">
                     <div className="gap-4">
                         <div className="flex flex-col w-full gap-2">
-                            <h1 className="font-bold text-gray-700 dark:text-gray-300">Full Name <span className=' text-rose-400 text-md'>*</span></h1>
+                            <h1 className="font-bold text-gray-700 dark:text-gray-300">Full Name <span className='text-rose-400 text-md'>*</span></h1>
                             <div className="w-full bg-white dark:bg-neutral-700 flex rounded">
                                 <input value={name.fname} onChange={(ev) => setName({ ...name, fname: ev.target.value })} placeholder="First Name" className="p-1 px-2 bg-transparent outline-none w-full text-gray-800 dark:text-gray-300 rounded" />
                             </div>
@@ -212,7 +212,7 @@ const Cart = (props) => {
                             </div>
                         </div>
                         <div className="flex flex-col w-full gap-2">
-                            <h1 className="font-bold text-gray-700 dark:text-gray-300">Delivery address <span className=' text-rose-400 text-md'>*</span></h1>
+                            <h1 className="font-bold text-gray-700 dark:text-gray-300">Delivery address <span className='text-rose-400 text-md'>*</span></h1>
                             <select value={countryCode} onChange={(ev) => setCountryCode(ev.target.value)} className="h-10 mt-2 form-select w-full rounded dark:bg-neutral-700 dark:text-gray-300">
                                 <option value="India">IN</option>
                                 <option value="US">USA</option>
@@ -349,7 +349,7 @@ const Cart = (props) => {
     }
 
     return (
-        <div className=' bg-gray-200 dark:bg-darkBg flex w-full justify-center'>
+        <div className='bg-gray-200 dark:bg-darkBg flex w-full justify-center'>
             <div className="scrollbar w-full m-5 bg-slate-100 dark:bg-neutral-800 rounded-xl">
                 <div className='p-4 h-full flex flex-col'>
                     <h1 className='text-blue-700 dark:text-blue-700 text-5xl font-semibold tracking-widest '>Cart</h1>
