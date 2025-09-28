@@ -5,8 +5,8 @@ import jwt_decode from 'jwt-decode';
 import Cookies from 'js-cookie';
 
 let accessToken = null;
-// const api_baseURL = 'https://artportal.onrender.com/api/v1.01';
-const api_baseURL = 'http://localhost:5000/api/v1.01';
+console.log(process.env.NODE_ENV)
+const api_baseURL = process.env.NODE_ENV === "development" ? 'http://localhost:5000/api/v1.01' : 'https://artportal.onrender.com/api/v1.01';
 
 export const api_taggerURL = api_baseURL + '/tagger/model.json';
 export const api_googleRedirectURL = api_baseURL + `/auth/google`;
