@@ -2,6 +2,9 @@ import express from 'express';
 const router = express.Router();
 import { artworkBucket, artworkUpl } from '../config/gridfs_config.js';
 
+import NodeCache from "node-cache";
+const imageCache = new NodeCache({ stdTTL: 3600 });
+
 //Import Schemas
 import Artworks from '../models/artwork.js';
 import User from '../models/user.js';
@@ -39,16 +42,47 @@ const getHotScore = (artwork) => {
 router.get('/image/:filename', async (req, res) => {
     const { filename } = req.params;
 
+    const cachedImage = imageCache.get(filename);
+    if (cachedImage) {
+        res.set({
+            "Content-Type": cachedImage.contentType,
+            "Cache-Control": "public, max-age=31536000", // browser cache
+        });
+        return res.send(cachedImage.buffer);
+    }
+
     try {
-        const file = await artworkBucket.find({ filename }).toArray();
-        // Check if file
-        if (!file || file.length === 0) {
-            return res.status(404).json({ err: 'No file found' });
-        }
-        artworkBucket.openDownloadStreamByName(filename).pipe(res);
+        const downloadStream = artworkBucket.openDownloadStreamByName(filename);
+        let chunks = [];
+
+        downloadStream.on("data", (chunk) => chunks.push(chunk));
+
+        downloadStream.on("end", () => {
+            const fileBuffer = Buffer.concat(chunks);
+
+            // Guess content type by extension (basic way)
+            let contentType = "image/jpeg";
+            if (filename.endsWith(".png")) contentType = "image/png";
+            if (filename.endsWith(".gif")) contentType = "image/gif";
+
+            // 3. Save to cache
+            imageCache.set(filename, { buffer: fileBuffer, contentType });
+
+            // 4. Send to client
+            res.set({
+                "Content-Type": contentType,
+                "Cache-Control": "public, max-age=31536000",
+            });
+            res.send(fileBuffer);
+        });
+
+        downloadStream.on("error", (err) => {
+            console.error("GridFS error:", err);
+            return res.status(404).json({ err: "File not found" });
+        });
     } catch (err) {
-        console.log("err", err);
-        return res.status(404).json({ msg: err.name });
+        console.log("Server err", err);
+        return res.status(500).json({ msg: err.name });
     }
 });
 

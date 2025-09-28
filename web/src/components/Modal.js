@@ -118,7 +118,7 @@ export const LoginModal = ({ open, title, banner, error, onClose, openRegister, 
                             }}
                         />
                     </div>
-                    <label className="flex items-center cursor-pointer gap-2">
+                    {/* <label className="flex items-center cursor-pointer gap-2">
                         <input type="checkbox" checked={stayLoggedIn} onChange={handleStayLoggedin}
                             style={{
                                 WebkitAppearance: 'none',
@@ -126,7 +126,7 @@ export const LoginModal = ({ open, title, banner, error, onClose, openRegister, 
                             className="h-4 w-4 appearance-none align-middle rounded-md outline-none bg-slate-300 dark:bg-neutral-700 checked:bg-blue-700 dark:checked:bg-blue-700 cursor-pointer"
                         />
                         <p className=' tracking-wide text-sm text-neutral-700 dark:text-neutral-400'>Keep me logged in</p>
-                    </label>
+                    </label> */}
                     {error.login && !username && !password ?
                         <div className='flex p-2 border-2 border-red-500 rounded-lg gap-2'>
                             <IoCloseCircle className='h-5 w-5 text-red-500' />

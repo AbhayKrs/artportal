@@ -9,11 +9,20 @@ import path from 'path';
 const conn = mongoose.connection;
 let artworkBucket, storeBucket, commonBucket, taggerBucket;
 
-conn.once('open', () => {
+conn.once('open', async () => {
     artworkBucket = new GridFSBucket(conn.db, { bucketName: 'artworks' });
     storeBucket = new GridFSBucket(conn.db, { bucketName: 'stores' });
     commonBucket = new GridFSBucket(conn.db, { bucketName: 'commons' });
     taggerBucket = new GridFSBucket(conn.db, { bucketName: 'tagger' });
+
+    try {
+        await conn.db.collection("artworks.files").createIndex({ filename: 1 });
+        await conn.db.collection("stores.files").createIndex({ filename: 1 });
+        await conn.db.collection("commons.files").createIndex({ filename: 1 });
+        await conn.db.collection("tagger.files").createIndex({ filename: 1 });
+    } catch (err) {
+        console.error("❌ Index creation failed:", err);
+    }
 });
 
 // const storage = multer.memoryStorage();
