@@ -173,7 +173,7 @@ const Library = (props) => {
 
     return (
         <div className='md:relative flex flex-col md:flex-row gap-4 bg-gray-200 dark:bg-darkBg'>
-            <div className={`flex ${hidePane ? 'md:w-[70%]' : 'md:w-[69%]'} order-2 md:order-1 justify-center p-4 min-h-show`}>
+            <div className={`flex ${hidePane ? 'md:w-[70%]' : 'md:w-[69%]'} order-2 md:order-1 justify-center p-4 pr-2 min-h-show`}>
                 {artwork.categories.includes("mature_art") ?
                     <div className="flex flex-col mx-4 md:mx-0 gap-3 w-full">
                         <div className='flex flex-col items-center text-center'>
@@ -218,11 +218,11 @@ const Library = (props) => {
                         <div className='flex flex-wrap'>
                             {artwork.tags.map((item, index) => (
                                 <div key={index} className="flex w-fit justify-center items-center font-medium p-1 rounded-full text-neutral-600 dark:text-gray-300">
-                                    <div className="text-sm font-medium leading-none">{item.value}</div>
+                                    <div className="text-xs font-medium leading-none">{item.value}</div>
                                 </div>
                             ))}
                         </div>
-                        <div className='flex flex-col gap-4'>
+                        <div className='flex flex-col gap-2'>
                             <div className='flex flex-col gap-2 text-right justify-end text-neutral-900 dark:text-gray-400'>
                                 <div onClick={() => navigate(`/users/${artwork.artist._id}`)} className="flex flex-row gap-1 items-center cursor-pointer">
                                     <div className="w-6 h-6 overflow-hidden">
@@ -268,12 +268,7 @@ const Library = (props) => {
                                                 </button>
                                                 :
                                                 <button
-                                                    onClick={() => {
-                                                        user.is_verified ?
-                                                            handleToggleLike(true)
-                                                            :
-                                                            handleInvalidUser()
-                                                    }}
+                                                    onClick={() => { user.is_verified ? handleToggleLike(true) : handleInvalidUser() }}
                                                 >
                                                     <LikeIcon className='w-4 h-4 text-neutral-600 dark:text-neutral-500' />
                                                 </button>
@@ -289,12 +284,7 @@ const Library = (props) => {
                                                 </button>
                                                 :
                                                 <button
-                                                    onClick={() => {
-                                                        user.is_verified ?
-                                                            handleToggleLike(false)
-                                                            :
-                                                            handleInvalidUser()
-                                                    }}
+                                                    onClick={() => { user.is_verified ? handleToggleLike(false) : handleInvalidUser() }}
                                                 >
                                                     <DislikeIcon className='w-4 h-4 text-neutral-600 dark:text-neutral-500' />
                                                 </button>

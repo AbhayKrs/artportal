@@ -101,15 +101,15 @@ router.get('/', async (req, res) => {
         if (type === "search") {
             searchResponse = artworkList.filter(item => item.title.toLowerCase().indexOf(value.toLowerCase()) != -1);
             response = searchResponse;
-        }
-
-        if (type == "artist") {
+        } else if (type == "artist") {
             response = artworkList.filter(item => item.artist.username === value);
             return res.json(response);
+        } else {
+            response = artworkList;
         }
 
         if ((filter.length === 0 || filter === "undefined") && (period.length === 0 || period === "undefined")) {
-            response = artworkList;
+
         } else {
             const getPeriod = (label) => {
                 let value = 0;
@@ -126,35 +126,42 @@ router.get('/', async (req, res) => {
 
             switch (filter) {
                 case 'trending': {
-                    console.log("trending");
-                    response = artworkList.sort((a, b) => getHotScore(b) - getHotScore(a));
+                    if (type === "search") {
+                        searchResponse = response.filter(item => item.title.toLowerCase().indexOf(value.toLowerCase()) != -1);
+                        response = searchResponse;
+                    } else if (type == "artist") {
+                        response = response.filter(item => item.artist.username === value);
+                        return res.json(response);
+                    } else {
+                        response = response.sort((a, b) => getHotScore(b) - getHotScore(a));
+                    }
                     break;
                 }
                 case 'popular': {
                     let filteredByPeriod = [];
                     if (period === 'all time') {
-                        filteredByPeriod = artworkList;
+                        filteredByPeriod = response;
                     } else {
-                        filteredByPeriod = artworkList.filter(item => (Date.now() - item.createdAt) <= getPeriod(period));
+                        filteredByPeriod = response.filter(item => (Date.now() - item.createdAt) <= getPeriod(period));
                     }
                     response = filteredByPeriod.sort((item1, item2) => item2.likes.length - item1.likes.length)
                     break;
                 }
                 case 'new': {
-                    response = artworkList.sort((item1, item2) => item2.createdAt - item1.createdAt)
+                    response = response.sort((item1, item2) => item2.createdAt - item1.createdAt)
                     break;
                 }
                 case 'rising': {
-                    const D30_data = artworkList.filter(item => (Date.now() - item.createdAt) <= 2592000000);
+                    const D30_data = response.filter(item => (Date.now() - item.createdAt) <= 2592000000);
                     response = D30_data.sort((item1, item2) => item2.likes.length - item1.likes.length)
                     break;
                 }
                 case 'most discussed': {
                     let filteredByPeriod = [];
                     if (period === 'all time') {
-                        filteredByPeriod = artworkList;
+                        filteredByPeriod = response;
                     } else {
-                        filteredByPeriod = artworkList.filter(item => (Date.now() - item.createdAt) <= getPeriod(period));
+                        filteredByPeriod = response.filter(item => (Date.now() - item.createdAt) <= getPeriod(period));
                     }
                     response = filteredByPeriod.sort((item1, item2) => item2.comments.length - item1.comments.length)
                     break;

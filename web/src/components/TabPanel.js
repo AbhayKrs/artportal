@@ -75,7 +75,6 @@ const TabPanel = ({ search }) => {
             setSearchVal(params.query);
         }
 
-        console.log("params", params);
         if (params.filter || params.period) {
             params.filter ? setActiveFilter(params.filter) : setActiveFilter('');
             let filterlabel = params.filter && filterOptions.some(item => item.value === params.filter) ?
@@ -99,8 +98,6 @@ const TabPanel = ({ search }) => {
     }, []);
 
     const selectFilter = (item) => {
-        console.log("item", activeFilter, item);
-
         if (activeFilter === item.value) {
             setActiveFilter('');
             setActiveFilterLabel('Select a filter');
@@ -132,7 +129,7 @@ const TabPanel = ({ search }) => {
     const handleSearch = (val) => {
         setSearchVal(val);
         if (val.length > 0) {
-            dispatch(a_searchArtworks({ value: val, filter: "", period: "" }));
+            dispatch(a_searchArtworks({ value: val, filter: activeFilter.replace(/\s+/g, '+'), period: activePeriod.replace(/\s+/g, '+') }));
         } else {
             clearSearch();
         }
@@ -157,7 +154,7 @@ const TabPanel = ({ search }) => {
                             value={searchVal}
                             placeholder="Search..."
                             autoComplete="off"
-                            className="w-full bg-transparent text-neutral-800 dark:text-gray-200 placeholder-gray-600 dark:placeholder-gray-300 text-xl focus:outline-none"
+                            className="w-full bg-transparent text-neutral-800 dark:text-gray-200 placeholder-gray-600 dark:placeholder-gray-300 text-base focus:outline-none"
                             onChange={(ev) => handleSearch(ev.target.value)}
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter') {
@@ -178,7 +175,7 @@ const TabPanel = ({ search }) => {
                     </div>
                 </div>
             )}
-            <div className='flex flex-row w-full justify-between'>
+            <div className='flex flex-row gap-6 w-full'>
                 {search && (
                     <div className='flex flex-row gap-2 items-center'>
                         <button disabled={common.activeSearch === 'artwork'} onClick={() => { dispatch(r_setSearchType('artwork')); dispatch(a_searchArtworks({ value: searchVal, filter: "", period: "" })) }} className={`flex gap-1 items-center tracking-wide ${common.activeSearch === 'artwork' ? 'text-blue-700' : 'text-neutral-700 dark:text-gray-300 hover:text-blue-700'}`}>

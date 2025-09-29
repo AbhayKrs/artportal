@@ -98,7 +98,7 @@ const Layout = (props) => {
         :
         <Header className="hidden sm:block" hidePane={hidePane} setHidePane={setHidePane} />
       }
-      <div className={`max-h-show min-h-show overflow-auto flex flex-col bg-gray-200 dark:bg-darkBg ${isMobile ? "pt-8" : hidePane ? "pl-16" : "pl-60"}`}>
+      <div className={`max-h-show min-h-show overflow-auto flex flex-col bg-gray-200 dark:bg-darkBg ${isMobile ? "pt-8" : hidePane ? "pl-14" : "pl-60"}`}>
         <Snackbar msgdata={common.snackmsg} setMessage={(msgData) => dispatch(r_setSnackMessage(msgData))} />
         {/* <Loader /> */}
         <Outlet context={hidePane} />

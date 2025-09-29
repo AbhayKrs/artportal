@@ -168,9 +168,10 @@ const CommentList = ({ comments, handleInvalidUser }) => {
                                         <AiFillLike className="w-4 h-4 text-neutral-500" />
                                     </button>
                                 )}
-                                <span>{comment.likes.length}</span>
+                                <p className="font-semibold text-neutral-600 dark:text-gray-400 text-sm">
+                                    {comment.likes.length}
+                                </p>
                             </div>
-
                             <div className="flex flex-row gap-1 items-center">
                                 {comment.dislikes.includes(user.id) ? (
                                     <AiFillDislike className="w-4 h-4 text-gray-200" />
@@ -185,7 +186,9 @@ const CommentList = ({ comments, handleInvalidUser }) => {
                                         <AiFillDislike className="w-4 h-4 text-neutral-500" />
                                     </button>
                                 )}
-                                <span>{comment.dislikes.length}</span>
+                                <p className="font-semibold text-neutral-600 dark:text-gray-400 text-sm">
+                                    {comment.dislikes.length}
+                                </p>
                             </div>
                             <span className="text-gray-300 dark:text-neutral-500">•</span>
                             <button onClick={() => startReply(index, comment._id)}>
