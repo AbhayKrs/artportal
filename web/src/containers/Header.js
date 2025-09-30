@@ -75,8 +75,8 @@ const Header = ({ hidePane, setHidePane }) => {
                 <CloseIcon onClick={() => { dispatch(r_setBetaMessage(!common.betaMsg)) }} className='absolute m-auto inset-y-0 right-1 h-3 w-auto cursor-pointer text-neutral-800' />
             </div>} */}
             <div className={`flex flex-col items-center h-screen ${hidePane ? 'w-14' : 'w-60'}`}>
-                <div className={`flex flex-col h-full w-full overflow-y-auto ${hidePane ? 'py-4 px-2' : 'p-2'}`}>
-                    <div className={`flex mb-2 items-center ${hidePane ? 'flex-col gap-4' : 'justify-between pl-2 w-full'}`}>
+                <div className={`flex flex-col gap-2 h-full w-full overflow-y-auto ${hidePane ? 'py-4 px-2' : 'p-1'}`}>
+                    <div className={`flex items-center ${hidePane ? 'flex-col gap-6' : 'justify-between pl-2 w-full'}`}>
                         <Link to='/' className='flex items-center'>
                             <Artportal_logo fill="#1d4ed8" className='h-6 w-auto hover:cursor-pointer' />
                         </Link>
@@ -87,21 +87,17 @@ const Header = ({ hidePane, setHidePane }) => {
                             </button>
                         </div>
                     </div>
-                    <div className={`flex flex-col ${hidePane ? ' items-center' : 'w-full'}`}>
+                    <div className={`flex flex-col overflow-y-auto ${hidePane ? ' items-center' : 'w-full pr-1'}`}>
                         <HeaderLink type="link" hidePane={hidePane} text="Library" path="/library?filter=trending" icon={<LibraryIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
                         <HeaderLink type="link" hidePane={hidePane} text="Search" path="/search" icon={<SearchIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
                         <HeaderLink type="link" hidePane={hidePane} text="Store" path="/store" icon={<StoreIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
-                    </div>
-                    {user.is_verified ?
-                        <div className={`flex flex-col  ${hidePane ? '' : 'w-full'}`}>
-                            <Divider />
-                            <div className={`flex flex-col ${hidePane ? 'items-center' : ''}`}>
+                        {user.is_verified &&
+                            <>
+                                <Divider />
                                 <HeaderLink type="link" hidePane={hidePane} text="Upload" path="/library/new" icon={<UploadIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 <HeaderLink type="link" hidePane={hidePane} text={`Cart (${user && user.cart ? user.cart.length : 0})`} path="/store/cart" icon={<CartIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 <HeaderLink type="link" hidePane={hidePane} text="Notifications" path="/notifications" icon={<NotificationIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
-                            </div>
-                            <Divider />
-                            <div className='flex flex-col'>
+                                <Divider />
                                 <div className={`flex flex-col ${hidePane ? 'items-center' : ''}`}>
                                     <HeaderLink type="link" hidePane={hidePane} text="My Profile" path={`/users/${user.id}`} icon={<ProfileIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                     <HeaderLink type="link" hidePane={hidePane} text="My Pins" path={`/users/${user.id}/pins`} icon={<PinIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
@@ -115,89 +111,90 @@ const Header = ({ hidePane, setHidePane }) => {
                                     <HeaderLink type="link" hidePane={hidePane} text="Earnings" path="/studio/earnings" icon={<EarningsIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                     <HeaderLink type="link" hidePane={hidePane} text="Billing & Payments" path="/studio/payments" icon={<BillingIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 </div>
-                            </div>
-                        </div>
-                        :
-                        <div className={`flex flex-col ${hidePane ? 'items-center' : 'w-full'} mt-auto`}>
-                            <HeaderLink type="link" hidePane={hidePane} text="Settings" path="/settings" icon={<SettingsIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
-                            <Divider />
-                            <button onClick={() => dispatch(r_headerDialogOpen('openLoginDialog'))} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'p-3 text-lg font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
-                                <SigninIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />
-                                {!hidePane && `Sign In`}
-                            </button>
-                            <button onClick={() => dispatch(r_headerDialogOpen('openRegisterDialog'))} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'p-3 text-lg font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
-                                <SignupIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />
-                                {!hidePane && `Sign Up`}
-                            </button>
-                        </div>
-                    }
-                </div>
-                {user.is_verified &&
-                    (hidePane ?
-                        <div className='flex flex-col items-center w-full mt-auto'>
-                            <Divider noPadding />
-                            <div className='flex flex-col gap-2 my-2'>
-                                <div className='relative w-10 flex flex-col items-center gap-2'>
-                                    {user.avatar.icon.length > 0 && <div className='flex relative w-10 h-10 justify-center items-center'>
-                                        <img loading='lazy' alt='user' src={api_userImages(user.avatar.icon)} className='mt-0.5' />
-                                    </div>}
-                                    <div className='absolute justify-between left-[-5px] bottom-[-8px] flex flex-row bg-neutral-400/50 dark:bg-neutral-950/80 p-1 rounded-xl'>
-                                        <VerifiedIcon className="stroke-current stroke-1 text-neutral-800 dark:text-gray-300 h-3 w-3" />
-                                    </div>
-                                    <div className='absolute justify-between right-[-5px] bottom-[-8px] flex flex-row bg-neutral-400/50 dark:bg-neutral-950/80 p-1 rounded-xl'>
-                                        <Artportal_logo fill="#059669" className='h-2.5 w-auto hover:cursor-pointer' />
-                                    </div>
-                                </div>
-                                <div className='flex flex-row gap-1 items-center'>
-                                    <TokenIcon className="text-neutral-800 dark:text-gray-300 h-6 w-6" />
-                                    <p className='text-sm font-semibold tracking-wide text-neutral-800 dark:text-gray-300'>{user.tokens}</p>
-                                </div>
-                                <button onClick={logout} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'p-3 font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
-                                    <LogoutIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />
-                                </button>
-                            </div>
-                        </div>
-                        :
-                        <div className='flex flex-col w-full mt-auto'>
-                            <Divider noPadding />
-                            <div className='flex flex-col gap-3 px-2 my-2'>
-                                <button onClick={() => { navigate(`/users/${user.id}`) }} className='flex flex-row items-center gap-2 px-1'>
-                                    {user.avatar.icon.length > 0 && <div className='flex relative w-10 h-10 justify-center items-center'>
-                                        <img loading='lazy' alt='user' src={api_userImages(user.avatar.icon)} className='mt-0.5' />
-                                    </div>}
-                                    <div className='flex flex-col w-9/12'>
-                                        <p className='text-neutral-800 dark:text-gray-200 text-xl text-start font-medium tracking-wide'>{user.name.length > 14 ? user.name.slice(0, 12) + "..." : user.name}</p>
-                                        <div className='flex flex-row items-center gap-1'>
-                                            <p className='text-neutral-800 dark:text-gray-200 text-sm font-medium tracking-wide'>#{user.username}</p>
-                                            {user.is_verified && <VerifiedIcon className="stroke-current stroke-1 text-neutral-800 dark:text-gray-300 h-4 w-4" />}
-                                            {user.is_premium && <Artportal_logo fill="#059669" className='h-3 w-auto' />}
+                            </>
+                        }
+                    </div>
+                    <div className='flex flex-col items-center w-full mt-auto'>
+                        {user.is_verified ?
+                            (hidePane ?
+                                <>   <Divider noPadding />
+                                    <div className='flex flex-col gap-2 my-2'>
+                                        <div className='relative w-10 flex flex-col items-center gap-2'>
+                                            {user.avatar.icon.length > 0 && <div className='flex relative w-10 h-10 justify-center items-center'>
+                                                <img loading='lazy' alt='user' src={api_userImages(user.avatar.icon)} className='mt-0.5' />
+                                            </div>}
+                                            <div className='absolute justify-between left-[-5px] bottom-[-8px] flex flex-row bg-neutral-400/50 dark:bg-neutral-950/80 p-1 rounded-xl'>
+                                                <VerifiedIcon className="stroke-current stroke-1 text-neutral-800 dark:text-gray-300 h-3 w-3" />
+                                            </div>
+                                            <div className='absolute justify-between right-[-5px] bottom-[-8px] flex flex-row bg-neutral-400/50 dark:bg-neutral-950/80 p-1 rounded-xl'>
+                                                <Artportal_logo fill="#059669" className='h-2.5 w-auto hover:cursor-pointer' />
+                                            </div>
                                         </div>
-                                    </div>
-                                </button>
-                                <button onClick={() => { navigate('/premium') }} className='flex flex-row items-center justify-center bg-neutral-800 dark:bg-slate-200 gap-2 p-3 rounded-xl w-full'>
-                                    <Artportal_logo fill="#059669" className='h-5 w-auto hover:cursor-pointer' />
-                                    <p className='text-sm font-semibold tracking-wide text-neutral-200 dark:text-neutral-800'>Upgrade to artportal+</p>
-                                </button>
-                                <div className='flex flex-row justify-between items-center rounded-xl pl-3'>
-                                    <div className='flex flex-col items-start'>
                                         <div className='flex flex-row gap-1 items-center'>
                                             <TokenIcon className="text-neutral-800 dark:text-gray-300 h-6 w-6" />
-                                            <p className='text-base font-semibold tracking-wide text-neutral-800 dark:text-gray-300'>Tokens</p>
+                                            <p className='text-sm font-semibold tracking-wide text-neutral-800 dark:text-gray-300'>{user.tokens}</p>
                                         </div>
-                                        <p className='items-center text-sm font-semibold tracking-wide text-neutral-800 dark:text-gray-300'>{user.tokens} tokens</p>
+                                        <button onClick={logout} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'p-3 font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
+                                            <LogoutIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />
+                                        </button>
                                     </div>
-                                    <button className="p-1.5 hover:bg-gray-300 hover:dark:bg-neutral-700/50 rounded-xl" onClick={() => setTokenOpen(true)}>
-                                        <AddIcon className='h-8 w-8 text-neutral-800 dark:text-gray-300' />
-                                    </button>
-                                </div>
-                                <button onClick={logout} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'p-3 text-lg font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
-                                    <LogoutIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />
-                                    Logout
+                                </>
+                                :
+                                <>
+                                    <Divider noPadding />
+                                    <div className='flex flex-col w-full gap-2 px-2 my-2'>
+                                        <button onClick={() => { navigate(`/users/${user.id}`) }} className='flex flex-row items-center gap-2 px-1'>
+                                            {user.avatar.icon.length > 0 && <div className='flex relative w-10 h-10 justify-center items-center'>
+                                                <img loading='lazy' alt='user' src={api_userImages(user.avatar.icon)} className='mt-0.5' />
+                                            </div>}
+                                            <div className='flex flex-col w-9/12'>
+                                                <p className='text-neutral-800 dark:text-gray-200 text-xl text-start font-medium tracking-wide'>{user.name.length > 14 ? user.name.slice(0, 12) + "..." : user.name}</p>
+                                                <div className='flex flex-row items-center gap-1'>
+                                                    <p className='text-neutral-800 dark:text-gray-200 text-sm font-medium tracking-wide'>#{user.username}</p>
+                                                    {user.is_verified && <VerifiedIcon className="stroke-current stroke-1 text-neutral-800 dark:text-gray-300 h-4 w-4" />}
+                                                    {user.is_premium && <Artportal_logo fill="#059669" className='h-3 w-auto' />}
+                                                </div>
+                                            </div>
+                                        </button>
+                                        <button onClick={() => { navigate('/premium') }} className='flex flex-row items-center justify-center bg-neutral-800 dark:bg-slate-200 gap-2 p-3 rounded-xl w-full'>
+                                            <Artportal_logo fill="#059669" className='h-5 w-auto hover:cursor-pointer' />
+                                            <p className='text-sm font-semibold tracking-wide text-neutral-200 dark:text-neutral-800'>Upgrade to artportal+</p>
+                                        </button>
+                                        <div className='flex flex-row justify-between items-center rounded-xl pl-3'>
+                                            <div className='flex flex-col items-start'>
+                                                <div className='flex flex-row gap-1 items-center'>
+                                                    <TokenIcon className="text-neutral-800 dark:text-gray-300 h-6 w-6" />
+                                                    <p className='text-base font-semibold tracking-wide text-neutral-800 dark:text-gray-300'>Tokens</p>
+                                                </div>
+                                                <p className='items-center text-sm font-semibold tracking-wide text-neutral-800 dark:text-gray-300'>{user.tokens} tokens</p>
+                                            </div>
+                                            <button className="p-1.5 hover:bg-gray-300 hover:dark:bg-neutral-700/50 rounded-xl" onClick={() => setTokenOpen(true)}>
+                                                <AddIcon className='h-8 w-8 text-neutral-800 dark:text-gray-300' />
+                                            </button>
+                                        </div>
+                                        <button onClick={logout} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'p-3 text-lg font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
+                                            <LogoutIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />
+                                            Logout
+                                        </button>
+                                    </div>
+                                </>
+                            )
+                            :
+                            <>
+                                <HeaderLink type="link" hidePane={hidePane} text="Settings" path="/settings" icon={<SettingsIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
+                                <Divider />
+                                <button onClick={() => dispatch(r_headerDialogOpen('openLoginDialog'))} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'p-3 text-lg font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
+                                    <SigninIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />
+                                    {!hidePane && `Sign In`}
                                 </button>
-                            </div>
-                        </div>
-                    )
-                }
+                                <button onClick={() => dispatch(r_headerDialogOpen('openRegisterDialog'))} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'p-3 text-lg font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
+                                    <SignupIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />
+                                    {!hidePane && `Sign Up`}
+                                </button>
+                            </>
+                        }
+                    </div>
+                </div>
             </div>
             {common.openLoginDialog &&
                 <LoginModal
