@@ -74,8 +74,8 @@ const Header = ({ hidePane, setHidePane }) => {
                 <span className='font-semibold text-xs tracking-wider uppercase'>The site is currently in Beta</span>
                 <CloseIcon onClick={() => { dispatch(r_setBetaMessage(!common.betaMsg)) }} className='absolute m-auto inset-y-0 right-1 h-3 w-auto cursor-pointer text-neutral-800' />
             </div>} */}
-            <div className={`flex flex-col items-center h-screen ${hidePane ? 'w-14' : 'w-60'}`}>
-                <div className={`flex flex-col gap-2 h-full w-full overflow-y-auto ${hidePane ? 'py-4 px-2' : 'p-1'}`}>
+            <div className={`flex flex-col items-center h-screen ${hidePane ? 'w-16' : 'w-60'}`}>
+                <div className={`flex flex-col gap-2 h-full w-full overflow-y-auto ${hidePane ? 'py-4' : 'p-1 pt-2'}`}>
                     <div className={`flex items-center ${hidePane ? 'flex-col gap-6' : 'justify-between pl-2 w-full'}`}>
                         <Link to='/' className='flex items-center'>
                             <Artportal_logo fill="#1d4ed8" className='h-6 w-auto hover:cursor-pointer' />
@@ -87,7 +87,7 @@ const Header = ({ hidePane, setHidePane }) => {
                             </button>
                         </div>
                     </div>
-                    <div className={`flex flex-col overflow-y-auto ${hidePane ? ' items-center' : 'w-full pr-1'}`}>
+                    <div className={`flex flex-col overflow-y-auto ${hidePane ? ' items-center px-1' : 'w-full pr-1'}`}>
                         <HeaderLink type="link" hidePane={hidePane} text="Library" path="/library?filter=trending" icon={<LibraryIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
                         <HeaderLink type="link" hidePane={hidePane} text="Search" path="/search" icon={<SearchIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
                         <HeaderLink type="link" hidePane={hidePane} text="Store" path="/store" icon={<StoreIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
@@ -114,11 +114,12 @@ const Header = ({ hidePane, setHidePane }) => {
                             </>
                         }
                     </div>
-                    <div className='flex flex-col items-center w-full mt-auto'>
+                    <div className='flex flex-col w-full mt-auto'>
                         {user.is_verified ?
                             (hidePane ?
-                                <>   <Divider noPadding />
-                                    <div className='flex flex-col gap-2 my-2'>
+                                <>
+                                    <Divider noPadding />
+                                    <div className='flex items-center flex-col gap-2 mt-2'>
                                         <div className='relative w-10 flex flex-col items-center gap-2'>
                                             {user.avatar.icon.length > 0 && <div className='flex relative w-10 h-10 justify-center items-center'>
                                                 <img loading='lazy' alt='user' src={api_userImages(user.avatar.icon)} className='mt-0.5' />
@@ -130,7 +131,7 @@ const Header = ({ hidePane, setHidePane }) => {
                                                 <Artportal_logo fill="#059669" className='h-2.5 w-auto hover:cursor-pointer' />
                                             </div>
                                         </div>
-                                        <div className='flex flex-row gap-1 items-center'>
+                                        <div className='flex flex-col gap-1 items-center'>
                                             <TokenIcon className="text-neutral-800 dark:text-gray-300 h-6 w-6" />
                                             <p className='text-sm font-semibold tracking-wide text-neutral-800 dark:text-gray-300'>{user.tokens}</p>
                                         </div>
@@ -142,7 +143,7 @@ const Header = ({ hidePane, setHidePane }) => {
                                 :
                                 <>
                                     <Divider noPadding />
-                                    <div className='flex flex-col w-full gap-2 px-2 my-2'>
+                                    <div className='flex flex-col w-full gap-3 px-2 my-2'>
                                         <button onClick={() => { navigate(`/users/${user.id}`) }} className='flex flex-row items-center gap-2 px-1'>
                                             {user.avatar.icon.length > 0 && <div className='flex relative w-10 h-10 justify-center items-center'>
                                                 <img loading='lazy' alt='user' src={api_userImages(user.avatar.icon)} className='mt-0.5' />
@@ -160,22 +161,24 @@ const Header = ({ hidePane, setHidePane }) => {
                                             <Artportal_logo fill="#059669" className='h-5 w-auto hover:cursor-pointer' />
                                             <p className='text-sm font-semibold tracking-wide text-neutral-200 dark:text-neutral-800'>Upgrade to artportal+</p>
                                         </button>
-                                        <div className='flex flex-row justify-between items-center rounded-xl pl-3'>
-                                            <div className='flex flex-col items-start'>
-                                                <div className='flex flex-row gap-1 items-center'>
-                                                    <TokenIcon className="text-neutral-800 dark:text-gray-300 h-6 w-6" />
-                                                    <p className='text-base font-semibold tracking-wide text-neutral-800 dark:text-gray-300'>Tokens</p>
+                                        <div className='flex flex-col gap-2'>
+                                            <div className='flex flex-row justify-between items-center rounded-xl'>
+                                                <div className='flex flex-col items-start'>
+                                                    <div className='flex flex-row gap-1 items-center'>
+                                                        <TokenIcon className="text-neutral-800 dark:text-gray-300 h-6 w-6" />
+                                                        <p className='text-base font-semibold tracking-wide text-neutral-800 dark:text-gray-300'>Tokens</p>
+                                                    </div>
+                                                    <p className='items-center text-sm font-semibold tracking-wide text-neutral-800 dark:text-gray-300'>{user.tokens} tokens</p>
                                                 </div>
-                                                <p className='items-center text-sm font-semibold tracking-wide text-neutral-800 dark:text-gray-300'>{user.tokens} tokens</p>
+                                                <button className="p-1.5 hover:bg-gray-300 hover:dark:bg-neutral-700/50 rounded-xl" onClick={() => setTokenOpen(true)}>
+                                                    <AddIcon className='h-8 w-8 text-neutral-800 dark:text-gray-300' />
+                                                </button>
                                             </div>
-                                            <button className="p-1.5 hover:bg-gray-300 hover:dark:bg-neutral-700/50 rounded-xl" onClick={() => setTokenOpen(true)}>
-                                                <AddIcon className='h-8 w-8 text-neutral-800 dark:text-gray-300' />
+                                            <button onClick={logout} className={`flex gap-2 items-end ${hidePane ? 'mt-auto p-2' : 'p-3 text-lg font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
+                                                <LogoutIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />
+                                                Logout
                                             </button>
                                         </div>
-                                        <button onClick={logout} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'p-3 text-lg font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
-                                            <LogoutIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />
-                                            Logout
-                                        </button>
                                     </div>
                                 </>
                             )

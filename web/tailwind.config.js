@@ -36,7 +36,7 @@ module.exports = {
         'show': 'calc(100vh - 1.675rem)',
         'innershow': 'calc(100vh - 3.5rem)',
         'modal': 'calc(100vh - 1.25rem)',
-        'comments': '46vh'
+        'comments': '55vh'
       },
       keyframes: {
         glitter: {
