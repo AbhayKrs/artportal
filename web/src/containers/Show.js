@@ -8,7 +8,9 @@ import { a_fetchStoreItem, a_fetchStoreList } from '../store/actions/store.actio
 import { r_setLoader, r_setSnackMessage, r_headerDialogOpen } from '../store/reducers/common.reducers';
 import { api_userImages, api_artworkImages, api_storeImages } from '../utils/api_routes';
 
-import { AwardModal, ShareModal } from '../components/Modal';
+import AwardModal from '../components/Modals/AwardModal';
+import ShareModal from '../components/Modals/ShareModal';
+
 import Ratings from '../components/Ratings';
 
 import { IoEye, IoHeart, IoSend, IoShareSocialSharp, IoChatbox } from 'react-icons/io5';

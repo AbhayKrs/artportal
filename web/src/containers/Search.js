@@ -6,7 +6,7 @@ import moment from 'moment';
 import { r_clearSearchList, r_setLoader, r_setSearchType } from '../store/reducers/common.reducers';
 import { api_artworkImages } from '../utils/api_routes';
 
-import Masonry from '../components/Masonry';
+import MasonryGrid from '../components/Grids/Masonry';
 import TabPanel from '../components/TabPanel';
 
 import { MdSearch, MdClose } from 'react-icons/md';
@@ -46,7 +46,7 @@ const Search = (props) => {
             </Helmet>
             <TabPanel search />
             <Divider />
-            <Masonry cols={5}>
+            <MasonryGrid cols={5}>
                 {library.artworks.map((item, index) => (
                     <div onClick={() => navigate(`/library/${item._id}`)} className='relative group group-hover:block cursor-pointer'>
                         <img loading='lazy'
@@ -83,7 +83,7 @@ const Search = (props) => {
                         </div>
                     </div>
                 ))}
-            </Masonry>
+            </MasonryGrid>
         </div >
     )
 }

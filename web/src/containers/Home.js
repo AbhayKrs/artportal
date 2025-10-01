@@ -10,13 +10,14 @@ import { a_fetchHomeData, a_fetchArtworks } from '../store/actions/library.actio
 import HighlightList from '../components/HighlightList';
 
 import AppQR from '../assets/images/artportal_appQR.png';
-import Masonry from '../components/Masonry';
+import MasonryGrid from '../components/Grids/Masonry';
 
 import { BsHeart, BsChat } from 'react-icons/bs';
 import { BiTimeFive } from 'react-icons/bi';
 import Divider from '../components/Divider';
 
 import { ReactComponent as ViewsIcon } from '../assets/icons/views.svg';
+import Title from '../components/Title';
 
 const Home = (props) => {
     const dispatch = useDispatch();
@@ -38,12 +39,9 @@ const Home = (props) => {
             <div className='flex gap-2 w-full backdrop-sepia-0 rounded-lg'>
                 <div className='flex flex-col gap-4 w-8/12 p-4 backdrop-sepia-0 bg-white/30 dark:bg-black/30 rounded-lg'>
                     <div className='flex flex-col gap-2 justify-between w-full'>
-                        <div className='flex flex-row gap-4 relative'>
-                            <h2 className='font-medium text-2xl text-neutral-800 dark:text-gray-300'>Featured Artist</h2>
-                            <div className='absolute h-1 w-8 bottom-[-2px] left-0 text-2xl bg-gray-300 rounded-md'></div>
-                        </div>
+                        <Title text="Featured Artist" />
                         <div className='flex flex-col'>
-                            <p className='text-neutral-800 dark:text-gray-200 text-2xl font-medium tracking-wide'>Akunta</p>
+                            <p className='text-neutral-800 dark:text-gray-200 text-xl font-medium tracking-wide'>Akunta</p>
                             <a href="#" className='flex flex-row items-center gap-1'>
                                 <p className='text-neutral-800 dark:text-gray-200 text-sm font-medium tracking-wide'>#akn787</p>
                             </a>
@@ -61,15 +59,12 @@ const Home = (props) => {
                                 <img className='rounded-md shadow-md' src={AppQR} />
                             </span>
                         </div>
-                        <h2 className='w-min text-md md:text-xl lg:text-xl font-bold uppercase text-center tracking-wider text-neutral-800 dark:text-gray-200'>Download the app for<br /> <span className='text-2xl md:text-3xl lg:text-5xl font-black'>free!</span></h2>
+                        <h2 className='w-min text-md md:text-xl lg:text-xl font-bold uppercase text-center tracking-wide text-neutral-800 dark:text-gray-200'>Download the app for<br /> <span className='text-2xl md:text-3xl lg:text-5xl font-black'>free!</span></h2>
                     </div>
                 </div>
                 <div className='flex-1 w-2/12 content-center justify-items-center backdrop-sepia-0 bg-white/30 dark:bg-black/30 rounded-lg'>
-                    <div className='flex flex-col gap-2 lg:gap-4'>
-                        <div className='flex flex-row gap-4 relative'>
-                            <h2 className='font-medium text-2xl text-neutral-800 dark:text-gray-300'>Categories</h2>
-                            <div className='absolute h-1 w-8 bottom-[-2px] left-0 text-2xl bg-gray-300 rounded-md'></div>
-                        </div>
+                    <div className='flex flex-col gap-2 lg:gap-2'>
+                        <Title text="Categories" />
                         <ul className='list-disc pl-5'>
                             {["abstract", "architecture", "character", "concept", "environment", "mature", "traditional"].map((ctg, index) => (
                                 <li key={index} className='w-min text-md text-neutral-800 dark:text-gray-200'>{ctg}</li>
@@ -82,7 +77,7 @@ const Home = (props) => {
             {
                 library.artworks.length > 0 ?
                     <div className='flex flex-row'>
-                        <Masonry cols={5}>
+                        <MasonryGrid cols={5}>
                             {library.artworks.map((artwork, index) => (
                                 <div key={index} onClick={() => navigate(`/library/${artwork._id}`)} className='relative group group-hover:block cursor-pointer'>
                                     <img loading='lazy'
@@ -119,7 +114,7 @@ const Home = (props) => {
                                     </div>
                                 </div>
                             ))}
-                        </Masonry>
+                        </MasonryGrid>
                     </div>
                     :
                     <div >

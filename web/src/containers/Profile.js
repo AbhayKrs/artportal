@@ -6,7 +6,7 @@ import moment from 'moment';
 import { a_deleteArtwork, a_fetchArtworks } from '../store/actions/library.actions';
 import { api_artworkImages, api_userImages } from '../utils/api_routes';
 
-import Masonry from '../components/Masonry';
+import MasonryGrid from '../components/Grids/Masonry';
 
 import { BsHeart, BsChat, BsTrash } from 'react-icons/bs';
 import { FaUserEdit } from 'react-icons/fa';
@@ -93,7 +93,7 @@ const Profile = (props) => {
     const renderView = () => {
         switch (activeView) {
             case 'portfolio': return <div className='flex flex-row'>
-                <Masonry cols={4}>
+                <MasonryGrid cols={4}>
                     {profile_data.artworks.map((artwork, index) => (
                         <div key={index} className='relative group group-hover:block'>
                             <img loading='lazy'
@@ -134,11 +134,11 @@ const Profile = (props) => {
                             </div>
                         </div>
                     ))}
-                </Masonry>
+                </MasonryGrid>
             </div>
             case 'about': return <div className='text-4xl text-gray-400'>HELLO</div>
             case 'liked': return <div className='flex flex-row'>
-                <Masonry cols={5}>
+                <MasonryGrid cols={5}>
                     {artworks.filter(item => item.likes.indexOf(profile_data.id) >= 0).map((artwork, index) => (
                         <div key={index} onClick={() => navigate(`/library/${artwork._id}`)} className='relative group group-hover:block'>
                             <img loading='lazy'
@@ -175,10 +175,10 @@ const Profile = (props) => {
                             </div>
                         </div>
                     ))}
-                </Masonry>
+                </MasonryGrid>
             </div>
             case 'bookmarks': return <div className='flex flex-row'>
-                <Masonry cols={5}>
+                <MasonryGrid cols={5}>
                     {profile_data.bookmarks.map((artwork, index) => (
                         <div key={index} className='relative group group-hover:block'>
                             <img loading='lazy'
@@ -205,7 +205,7 @@ const Profile = (props) => {
                             </div>
                         </div>
                     ))}
-                </Masonry>
+                </MasonryGrid>
             </div>
             default: break;
         }

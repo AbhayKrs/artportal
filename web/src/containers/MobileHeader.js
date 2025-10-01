@@ -4,7 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { api_userImages } from '../utils/api_routes';
 
-import { TokenModal, LoginModal, RegisterModal, SignupSuccessModal } from '../components/Modal';
+import TokenModal from '../components/Modals/TokenModal';
+import LoginModal from '../components/Modals/LoginModal';
+import SignupModal from '../components/Modals/SignupModal';
+import SignupSuccessModal from '../components/Modals/SignupSuccessModal';
 import ThemeToggle from '../components/ThemeToggle';
 
 import { ReactComponent as Artportal_logo } from '../assets/icons/artportal_logo.svg';
@@ -210,7 +213,7 @@ const MobileHeader = () => {
                 />
             }
             {common.openRegisterDialog &&
-                <RegisterModal
+                <SignupModal
                     open={common.openRegisterDialog}
                     title={common.dialogTitle}
                     banner={common.signupImage}

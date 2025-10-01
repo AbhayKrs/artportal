@@ -10,10 +10,12 @@ import { MdClose } from 'react-icons/md';
 import { FiAtSign } from 'react-icons/fi';
 import { FaHashtag, FaGreaterThan } from 'react-icons/fa6';
 import { ReactComponent as SearchIcon } from '../assets/icons/search.svg';
+import { ReactComponent as EventsIcon } from '../assets/icons/events.svg';
+
 import { r_clearSearchList, r_setSearchType } from '../store/reducers/common.reducers';
 import { a_getTags } from '../store/actions/common.actions';
 
-const TabPanel = ({ search }) => {
+const TabPanel = ({ search, eventsPane, setEventsPane }) => {
     let navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -138,7 +140,7 @@ const TabPanel = ({ search }) => {
     return (
         <div className={`flex flex-col gap-2 w-full bg-slate-100/75 dark:bg-darkBg/75`}>
             {search && (
-                <div className='flex flex-col gap-2 w-full'>
+                <div className='flex flex-col gap-2'>
                     <div className="flex w-6/12 items-center bg-slate-300 dark:bg-neutral-800 rounded-xl py-2 px-4 gap-2">
                         <div className="flex relative items-center justify-center">
                             <SearchIcon className="h-4 w-4 text-neutral-800 dark:text-gray-300" />
@@ -226,6 +228,9 @@ const TabPanel = ({ search }) => {
                         }
                     </div>
                 )}
+                {!eventsPane && <button className='ml-auto' onClick={() => setEventsPane(!eventsPane)}>
+                    <EventsIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />
+                </button>}
             </div>
         </div>
     )

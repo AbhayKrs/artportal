@@ -7,7 +7,7 @@ import { r_setLoader } from '../store/reducers/common.reducers';
 import { a_fetchCategorizedStoreList, a_fetchStoreList } from '../store/actions/store.actions';
 
 import Dropdown from '../components/Dropdown';
-import { CartModal } from '../components/Modal';
+import CartModal from '../components/Modals/CartModal';
 
 import { MdShoppingCart, MdOutlineAddShoppingCart } from 'react-icons/md';
 import { a_fetchUserCart, a_handleCartAdd, a_handleRemoveFromCart } from '../store/actions/user.actions';

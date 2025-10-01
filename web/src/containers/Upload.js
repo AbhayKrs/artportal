@@ -13,7 +13,7 @@ import { BsHash } from 'react-icons/bs';
 
 import DragDrop from '../components/DragDrop';
 import Dropdown from '../components/Dropdown';
-import { ConfirmModal, FlaggedModal } from '../components/Modal';
+import FlaggedModal from '../components/Modals/FlaggedModal';
 
 import { ReactComponent as AiAgentIcon } from '../assets/icons/ai_agent.svg';
 

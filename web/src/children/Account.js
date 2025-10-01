@@ -3,14 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { api_artworkImages, api_userImages } from '../utils/api_routes';
 
-import { AvatarModal, ConfirmModal } from '../components/Modal';
+import Divider from '../components/Divider';
+import AvatarModal from '../components/Modals/AvatarModal';
+import ConfirmModal from '../components/Modals/ConfirmModal';
 
 import { AiOutlineLink } from 'react-icons/ai';
 import { FaEdit, FaRegUserCircle } from 'react-icons/fa';
 import { MdAlternateEmail, MdEditOff, MdDownloadDone } from 'react-icons/md';
 import { FcGoogle } from 'react-icons/fc';
 import { MdAddAPhoto, MdClose } from 'react-icons/md';
-import Divider from '../components/Divider';
 import { a_fetchAvatars } from '../store/actions/common.actions';
 import { a_handleEditUserAvatar, a_handleFetchUserDetails, a_handleUpdateUser, a_refreshUserDetails } from '../store/actions/user.actions';
 import { r_setSnackMessage } from '../store/reducers/common.reducers';

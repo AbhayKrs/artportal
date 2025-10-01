@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import { ImageCard } from './Card';
+import ImageCard from './Cards/ImageCard';
 
 import { ReactComponent as LeftIcon } from '../assets/icons/left.svg';
 import { ReactComponent as RightIcon } from '../assets/icons/right.svg';

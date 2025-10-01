@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import useWindowWidth from '../hooks/useWindowWidth';
+import useWindowWidth from '../../hooks/useWindowWidth';
 // import ImageCard from './ImageCard';
 
-const Masonry = ({ cols, children }) => {
+const MasonryGrid = ({ cols, children }) => {
     const width = useWindowWidth();
 
     const columnWrapper = {};
@@ -59,5 +59,5 @@ const Masonry = ({ cols, children }) => {
     )
 }
 
-export default Masonry;
+export default MasonryGrid;
 
