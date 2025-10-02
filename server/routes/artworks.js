@@ -38,7 +38,7 @@ const getHotScore = (artwork) => {
     return order + sign * (ageInSeconds / 45000);
 }
 
-// @route   GET api/v1.01/image/:filename --- Image from gridFS storage --- Public
+// @route   GET api/v1.01/artworks/image/:filename --- Image from gridFS storage --- Public
 router.get('/image/:filename', async (req, res) => {
     const { filename } = req.params;
 
@@ -221,13 +221,6 @@ router.post('/new', protect, artworkUpl.any(), async (req, res) => {
         newArtwork.save()
             .then(data => res.send(data))
             .catch(err => console.log(err))
-        // Artwork.create(newArtwork, (err, data) => {
-        //     if (err) {
-        //         console.log(err);
-        //     } else {
-        //         res.send(data);
-        //     }
-        // });
     } catch (err) {
         console.log("err: ", err)
         return res.status(404).json({ msg: err.name });

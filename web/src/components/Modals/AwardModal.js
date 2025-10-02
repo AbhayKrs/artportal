@@ -8,7 +8,6 @@ const AwardModal = ({ open, onClose, title }) => {
                     <div className='p-4 pt-2 flex flex-col gap-3'>
                         <IoCloseSharp onClick={onClose} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                         <h1 className='text-blue-700 dark:text-indigo-800 text-4xl font-semibold tracking-widest '>{title}</h1>
-                        {/* <AwardTabPanel awards={awardList} user={user} artworkID={artworkID} handleAwardArtwork={handleAwardArtwork} awardClose={onClose} /> */}
                     </div>
                 </div>
             </div>

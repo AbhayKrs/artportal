@@ -7,22 +7,20 @@ import { r_clearSearchList, r_setLoader, r_setSearchType } from '../store/reduce
 import { api_artworkImages } from '../utils/api_routes';
 
 import MasonryGrid from '../components/Grids/Masonry';
-import TabPanel from '../components/TabPanel';
 
-import { MdSearch, MdClose } from 'react-icons/md';
 import { BsHeart, BsChat } from 'react-icons/bs';
 import { BiTimeFive } from 'react-icons/bi';
 
 import Divider from '../components/Divider';
 import { Helmet } from 'react-helmet';
+import SearchTabs from '../components/Tabs/SearchTabs';
 
-const Search = (props) => {
+const Search = ({ }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const library = useSelector(state => state.library);
     const common = useSelector(state => state.common);
-
     let searchList = [];
 
     useEffect(() => {
@@ -44,7 +42,7 @@ const Search = (props) => {
             <Helmet>
                 <title>artportal | Search</title>
             </Helmet>
-            <TabPanel search />
+            <SearchTabs />
             <Divider />
             <MasonryGrid cols={5}>
                 {library.artworks.map((item, index) => (

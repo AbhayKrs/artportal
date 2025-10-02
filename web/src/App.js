@@ -10,8 +10,6 @@ import Footer from './containers/Footer';
 import Home from './containers/Home';
 import Library from './containers/Library';
 import Search from './containers/Search';
-import Upload from './containers/Upload';
-import Show from './containers/Show';
 import Store from './containers/Store';
 import StoreAll from './containers/StoreAll';
 import Profile from './containers/Profile';
@@ -44,6 +42,10 @@ import useWindowWidth from './hooks/useWindowWidth';
 import { a_fetchUserArtworks, a_fetchUserCart, a_fetchUserStoreList, a_fetchVisitorStatus, a_verifyAuth } from './store/actions/user.actions';
 import { r_verifyUser } from './store/reducers/user.reducers';
 import { r_setLoader, r_setSnackMessage } from './store/reducers/common.reducers';
+import LibraryView from './containers/LibraryView';
+import StoreView from './containers/StoreView';
+import StoreUpload from './containers/StoreUpload';
+import LibraryUpload from './containers/LibraryUpload';
 
 const Layout = (props) => {
   const dispatch = useDispatch();
@@ -118,13 +120,13 @@ const App = () => {
         { path: '/google_failed', element: <Google header="Failed" /> },
         { path: '/library', element: <Library /> },
         { path: '/search', element: <Search /> },
-        { path: '/library/:id', element: <Show.Library /> },
-        { path: '/library/new', element: <Upload.Library /> },
+        { path: '/library/:id', element: <LibraryView /> },
+        { path: '/library/new', element: <LibraryUpload /> },
         { path: '/library/:id/edit', element: <Edit.Library /> },
         { path: '/store', element: <Store /> },
-        { path: '/store/:id', element: <Show.Store /> },
+        { path: '/store/:id', element: <StoreView /> },
         { path: '/store/all', element: <StoreAll /> },
-        { path: '/store/new', element: <Upload.Store /> },
+        { path: '/store/new', element: <StoreUpload /> },
         { path: '/store/cart', element: <Cart /> },
         { path: '/users/:id', element: <Profile /> },
         { path: '/notifications', element: <Notifications /> },

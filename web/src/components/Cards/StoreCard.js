@@ -16,8 +16,8 @@ const StoreCard = ({ size, artwork, artist }) => {
                     <h3 className={`${size === 'l' ? 'text-base' : 'text-sm'} font-bold leading-5 capitalize`}>{artwork.title.length > 20 ? artwork.title.slice(0, 20) + "..." : artwork.title}</h3>
                     <UserBadge size="sm" link={`/users/${artwork.artist._id}`} user={artist} />
                 </div>
-                <div className="flex flex-row gap-2 items-start">
-                    <div class="text-xs py-1 px-2 rounded-md bg-blue-700">USD $4.89</div>
+                <div className="flex flex-row gap-1 items-start ml-1">
+                    <div class="text-xs py-1 px-1.5 text-nowrap rounded-md bg-blue-700">USD $4.89</div>
                     <CartAddIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />
                 </div>
             </div>

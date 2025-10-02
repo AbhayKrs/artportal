@@ -1,10 +1,11 @@
 import express from 'express';
-import { commongfs, commonUpl } from '../config/gridfsconfig.js';
-
 const router = express.Router();
+import { commonBucket, commonUpl } from '../config/gridfs_config.js';
+
+import NodeCache from "node-cache";
+const imageCache = new NodeCache({ stdTTL: 3600 });
 
 import Common from '../models/common.js';
-import { commonBucket } from '../config/gridfs_config.js';
 const { Tag, Sticker, Avatar, Location } = Common;
 
 // @route   GET api/v1.01/common/tags --- Fetch tags --- PUBLIC
@@ -59,23 +60,27 @@ router.post("/tags/add", async (req, res) => {
     }
 });
 
-// @route   GET api/v1.01/common/files --- Fetch all files --- PUBLIC
-router.get("/files", async (req, res) => {
+// @route   GET api/v1.01/common/files --- Fetch all files from common uploads db --- PUBLIC
+router.get('/files', async (req, res) => {
     try {
-        commongfs.files.find().toArray((err, files) => {
-            if (!files || files.length === 0) {
-                return res.status(200).json({
-                    success: false,
-                    message: 'No files found'
-                });
-            }
-            res.status(200).json({
-                success: true,
-                files
-            })
-        })
+        const files = commonBucket.find({}).toArray();
+
+        if (!files || files.length === 0) {
+            return res.status(404).json({ msg: "No files found" });
+        }
+
+        // Map only required info to send to client
+        const fileList = files.map(file => ({
+            filename: file.filename,
+            length: file.length,
+            contentType: file.contentType || 'unknown',
+            uploadDate: file.uploadDate,
+        }));
+
+        return res.json(fileList);
     } catch (err) {
-        return res.status(404).json(err);
+        console.error("Error fetching files:", err);
+        return res.status(500).json({ msg: "Server error" });
     }
 });
 
@@ -83,16 +88,47 @@ router.get("/files", async (req, res) => {
 router.get('/files/:filename', async (req, res) => {
     const { filename } = req.params;
 
+    const cachedImage = imageCache.get(filename);
+    if (cachedImage) {
+        res.set({
+            "Content-Type": cachedImage.contentType,
+            "Cache-Control": "public, max-age=31536000", // browser cache
+        });
+        return res.send(cachedImage.buffer);
+    }
+
     try {
-        const file = await commonBucket.find({ filename }).toArray();
-        // Check if file
-        if (!file || file.length === 0) {
-            return res.status(404).json({ err: 'No file found' });
-        }
-        commonBucket.openDownloadStreamByName(filename).pipe(res);
+        const downloadStream = commonBucket.openDownloadStreamByName(filename);
+        let chunks = [];
+
+        downloadStream.on("data", (chunk) => chunks.push(chunk));
+
+        downloadStream.on("end", () => {
+            const fileBuffer = Buffer.concat(chunks);
+
+            // Guess content type by extension (basic way)
+            let contentType = "image/jpeg";
+            if (filename.endsWith(".png")) contentType = "image/png";
+            if (filename.endsWith(".gif")) contentType = "image/gif";
+
+            // 3. Save to cache
+            imageCache.set(filename, { buffer: fileBuffer, contentType });
+
+            // 4. Send to client
+            res.set({
+                "Content-Type": contentType,
+                "Cache-Control": "public, max-age=31536000",
+            });
+            res.send(fileBuffer);
+        });
+
+        downloadStream.on("error", (err) => {
+            console.error("GridFS error:", err);
+            return res.status(404).json({ err: "File not found" });
+        });
     } catch (err) {
-        console.error(err.message);
-        return res.status(500).send('Unable to fetch image');
+        console.log("Server err", err);
+        return res.status(500).json({ msg: err.name });
     }
 });
 

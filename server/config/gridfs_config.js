@@ -7,17 +7,17 @@ import path from 'path';
 
 //Connect gfs to database
 const conn = mongoose.connection;
-let artworkBucket, storeBucket, commonBucket, taggerBucket;
+let artworkBucket, productBucket, commonBucket, taggerBucket;
 
 conn.once('open', async () => {
     artworkBucket = new GridFSBucket(conn.db, { bucketName: 'artworks' });
-    storeBucket = new GridFSBucket(conn.db, { bucketName: 'stores' });
+    productBucket = new GridFSBucket(conn.db, { bucketName: 'products' });
     commonBucket = new GridFSBucket(conn.db, { bucketName: 'commons' });
     taggerBucket = new GridFSBucket(conn.db, { bucketName: 'tagger' });
 
     try {
         await conn.db.collection("artworks.files").createIndex({ filename: 1 });
-        await conn.db.collection("stores.files").createIndex({ filename: 1 });
+        await conn.db.collection("products.files").createIndex({ filename: 1 });
         await conn.db.collection("commons.files").createIndex({ filename: 1 });
         await conn.db.collection("tagger.files").createIndex({ filename: 1 });
     } catch (err) {
@@ -47,8 +47,8 @@ const storage = new GridFsStorage({
 });
 
 const artworkUpl = multer({ storage });
-const storeUpl = multer({ storage });
+const productUpl = multer({ storage });
 const commonUpl = multer({ storage });
 const taggerUpl = multer({ storage });
 
-export { artworkBucket, storeBucket, commonBucket, taggerBucket, artworkUpl, storeUpl, commonUpl, taggerUpl }
+export { artworkBucket, productBucket, commonBucket, taggerBucket, artworkUpl, productUpl, commonUpl, taggerUpl }

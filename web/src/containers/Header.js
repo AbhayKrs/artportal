@@ -80,7 +80,7 @@ const Header = ({ hidePane, setHidePane }) => {
             <div className={`flex flex-col items-center h-screen ${hidePane ? 'w-16' : 'w-60'}`}>
                 <div className={`flex flex-col gap-2 h-full w-full overflow-y-auto ${hidePane ? 'py-4' : 'p-1 pt-2'}`}>
                     <div className={`flex items-center ${hidePane ? 'flex-col gap-6' : 'justify-between pl-2 w-full'}`}>
-                        <Link to='/' className='flex items-center'>
+                        <Link to='/' className='flex gap-1 items-center'>
                             <Artportal_logo fill="#1d4ed8" className='h-6 w-auto hover:cursor-pointer' />
                         </Link>
                         <div className={`flex ${hidePane ? 'flex-col' : 'flex-row'} items-center`}>

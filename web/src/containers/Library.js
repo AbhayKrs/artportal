@@ -8,16 +8,17 @@ import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducer
 import { ReactComponent as EventsIcon } from '../assets/icons/events.svg';
 import { ReactComponent as CloseIcon } from '../assets/icons/close.svg';
 
-import TabPanel from '../components/TabPanel';
 import MasonryGrid from '../components/Grids/Masonry';
 import Divider from '../components/Divider';
+import EventCard from '../components/Cards/EventCard';
+import LibraryTabs from '../components/Tabs/LibraryTabs';
 
 import { BsHeart, BsChat } from 'react-icons/bs';
 import { BiTimeFive } from 'react-icons/bi';
 import { Helmet } from 'react-helmet';
-import EventCard from '../components/Cards/EventCard';
 
-const Library = (props) => {
+
+const Library = ({ }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -38,7 +39,7 @@ const Library = (props) => {
                 <title>artportal | Library</title>
             </Helmet>
             <div className={`flex flex-col ${hidePane ? eventsPane ? 'md:w-[82.5%]' : 'md:w-full' : eventsPane ? 'md:w-[80.25%]' : 'md:w-full'} order-2 md:order-1 py-2 px-4 min-h-show`}>
-                <TabPanel eventsPane={eventsPane} setEventsPane={setEventsPane} />
+                <LibraryTabs eventsPane={eventsPane} setEventsPane={setEventsPane} />
                 <Divider />
                 {artworks.length > 0 ?
                     <div className='flex flex-row'>

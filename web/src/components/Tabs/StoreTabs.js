@@ -1,21 +1,21 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import Dropdown from './Dropdown';
+import Dropdown from '../Dropdown';
 
-import { filterOptions, periodOptions } from '../utils/constants';
+import { filterOptions, periodOptions } from '../../utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { a_fetchArtworks, a_searchArtworks } from '../store/actions/library.actions';
+import { a_fetchArtworks, a_searchArtworks } from '../../store/actions/library.actions';
 
 import { MdClose } from 'react-icons/md';
 import { FiAtSign } from 'react-icons/fi';
 import { FaHashtag, FaGreaterThan } from 'react-icons/fa6';
-import { ReactComponent as SearchIcon } from '../assets/icons/search.svg';
-import { ReactComponent as EventsIcon } from '../assets/icons/events.svg';
+import { ReactComponent as SearchIcon } from '../../assets/icons/search.svg';
+import { ReactComponent as EventsIcon } from '../../assets/icons/events.svg';
 
-import { r_clearSearchList, r_setSearchType } from '../store/reducers/common.reducers';
-import { a_getTags } from '../store/actions/common.actions';
+import { r_clearSearchList, r_setSearchType } from '../../store/reducers/common.reducers';
+import { a_getTags } from '../../store/actions/common.actions';
 
-const TabPanel = ({ search, eventsPane, setEventsPane }) => {
+const StoreTabs = ({ search, filtersPane, setFiltersPane }) => {
     let navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -33,7 +33,7 @@ const TabPanel = ({ search, eventsPane, setEventsPane }) => {
     });
 
     useEffect(() => {
-        const activePath = search ? "search" : "library";
+        const activePath = "store";
 
         if (triggerEffect) {
             //case 1 - No search / No Filter / No Period
@@ -228,7 +228,7 @@ const TabPanel = ({ search, eventsPane, setEventsPane }) => {
                         }
                     </div>
                 )}
-                {!eventsPane && <button className='ml-auto' onClick={() => setEventsPane(!eventsPane)}>
+                {!filtersPane && <button className='ml-auto' onClick={() => setFiltersPane(!filtersPane)}>
                     <EventsIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />
                 </button>}
             </div>
@@ -236,4 +236,4 @@ const TabPanel = ({ search, eventsPane, setEventsPane }) => {
     )
 }
 
-export default TabPanel;
+export default StoreTabs;

@@ -1,6 +1,3 @@
-import React from 'react';
-
-import { NotificationTabPanel } from '../components/TabPanel';
 
 const Notifications = () => {
     return (
@@ -13,7 +10,6 @@ const Notifications = () => {
                             Notifications
                         </p>
                         <span>|</span>
-                        <NotificationTabPanel />
                     </div>
                 </div>
             </nav> */}
