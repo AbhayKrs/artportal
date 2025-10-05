@@ -204,8 +204,8 @@ const LibraryView = ({ }) => {
                 {/* <div className='relative md:fixed md:left-4 flex flex-col h-fit md:w-[23%] mx-4 md:mx-0 ' style={{ maxHeight: "calc(100vh - 7.25rem)" }}> */}
                 <div className='flex flex-col gap-2 px-3'>
                     <div className='flex flex-col gap-1 w-full wrap-any'>
-                        <h1 className='text-xl tex-gray-900 dark:text-gray-200 font-bold'>{artwork.title}</h1>
-                        <p className='text-base tex-gray-800 dark:text-gray-300'>{artwork.description}</p>
+                        <h1 className='text-2xl text-gray-900 dark:text-gray-200 font-semibold'>{artwork.title}</h1>
+                        <p className='text-base text-gray-800 dark:text-gray-300'>{artwork.description}</p>
                     </div>
                     <div className='flex flex-row items-center w-full p-2 bg-neutral-300 dark:bg-neutral-800 rounded-xl gap-2'>
                         <div className="font-medium text-sm text-neutral-800 dark:text-gray-300">Categories</div>

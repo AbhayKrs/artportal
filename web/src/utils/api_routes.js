@@ -111,8 +111,8 @@ export const api_updateUserData = (userID, userData) => apiClient.put(`/users/${
 export const api_deleteBookmark = (bookmarkID, userID) => apiClient.delete(`/users/${userID}/bookmark/${bookmarkID}`);
 export const api_artworks = (type, value, filter, period) => apiClient.get(`/artworks?type=${type}&value=${value}&filter=${filter}&period=${period}`);
 export const api_artworkItem = (id, payload) => apiClient.get(`/artworks/${id}`, payload);
-export const api_storeListings = () => apiClient.get(`/products`);
-export const api_storeItem = productID => apiClient.get(`/products/${productID}`);
+export const api_products = () => apiClient.get(`/products`);
+export const api_productItem = productID => apiClient.get(`/products/${productID}`);
 export const api_categorizedStoreListings = (category) => apiClient.get(`/products?category=${category}`);
 export const api_userArtworks = userID => apiClient.get(`/users/${userID}/artworks`);
 export const api_userStoreListings = userID => apiClient.get(`/users/${userID}/products`);

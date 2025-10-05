@@ -30,11 +30,13 @@ module.exports = {
       },
       minHeight: {
         'show': 'calc(100vh - 1.675rem)',
-        'innershow': 'calc(100vh - 3.5rem)'
+        'innershow': 'calc(100vh - 3.5rem)',
+        'reviewShow': 'calc(100vh - 25rem)',
       },
       maxHeight: {
         'show': 'calc(100vh - 1.675rem)',
         'innershow': 'calc(100vh - 3.5rem)',
+        'reviewShow': 'calc(100vh - 15rem)',
         'modal': 'calc(100vh - 1.25rem)',
         'comments': '55vh'
       },

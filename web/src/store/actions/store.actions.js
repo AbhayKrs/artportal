@@ -1,10 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { api_categorizedStoreListings, api_storeItem, api_storeListings, api_productUpload } from '../../utils/api_routes';
+import { api_categorizedStoreListings, api_productItem, api_products, api_productUpload } from '../../utils/api_routes';
 import { r_setSellerList, r_setProduct, r_setProducts, r_storeUpload } from '../reducers/store.reducers';
 
 export const a_fetchProducts = createAsyncThunk("a_fetchProducts", async (payload, { getState, dispatch, rejectWithValue }) => {
-    await api_storeListings().then(res => {
+    await api_products().then(res => {
         dispatch(r_setProducts(res.data));
         return;
     }).catch(err => {
@@ -14,7 +14,8 @@ export const a_fetchProducts = createAsyncThunk("a_fetchProducts", async (payloa
 });
 
 export const a_fetchProduct = createAsyncThunk("a_fetchProduct", async (payload, { getState, dispatch, rejectWithValue }) => {
-    await api_storeItem(payload).then(res => {
+    await api_productItem(payload).then(res => {
+        console.log("res", res);
         dispatch(r_setProduct(res.data));
         return;
     }).catch(err => {

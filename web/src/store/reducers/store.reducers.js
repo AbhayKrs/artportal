@@ -17,12 +17,12 @@ export const initialState = {
                 category: ''
             }
         },
-        files: [],
+        images: [],
         _id: '',
         title: '',
         description: '',
         category: '',
-        rating: 0,
+        average_rating: 0,
         price: 0,
         reviews: [],
     },
@@ -42,7 +42,7 @@ const storeSlice = createSlice({
             state.products = products;
         },
         r_setProduct: (state, action) => {
-            state.product_item = action.payload;
+            state.product_item = { ...action.payload };
         },
         r_storeUpload: (state, action) => {
             const { file, title, description } = action.payload;

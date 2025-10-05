@@ -327,7 +327,7 @@ const StoreUpload = ({ }) => {
                 </div>
             </div>
             <div className="flex gap-2 justify-end pt-5">
-                <button onClick={() => navigate(`/library`)} className="flex w-fit py-2.5 px-6 text-base font-semibold tracking-wide bg-neutral-400 hover:bg-neutral-300 text-neutral-800 dark:text-neutral-800 rounded-xl items-center">
+                <button onClick={() => navigate(`/store`)} className="flex w-fit py-2.5 px-6 text-base font-semibold tracking-wide bg-neutral-400 hover:bg-neutral-300 text-neutral-800 dark:text-neutral-800 rounded-xl items-center">
                     Reset
                 </button>
                 <button disabled={files.length === 0 || title.length === 0 || description.length === 0} onClick={handleUpload} className="flex w-fit py-2.5 px-6 text-base font-semibold tracking-wide bg-blue-700 dark:bg-blue-700 disabled:bg-neutral-700 disabled:dark:bg-neutral-700 hover:bg-neutral-600 text-neutral-800 dark:text-gray-300 disabled:text-neutral-800 disabled:dark:text-neutral-500 rounded-xl items-center">
