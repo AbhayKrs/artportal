@@ -4,7 +4,7 @@ const router = express.Router();
 //Import Schemas
 import User from '../models/user.js';
 import Artworks from '../models/artwork.js';
-import Store from '../models/product.js';
+import Product from '../models/product.js';
 const { Artwork, Comment } = Artworks;
 
 import { adminKey } from '../middleware/adminMw.js';
@@ -56,9 +56,9 @@ router.get('/artworks', adminKey, async (req, res) => {
 });
 
 // @route   GET admin/v1.01/store --- Fetch all store items --- ADMIN
-router.get('/store', adminKey, async (req, res) => {
+router.get('/products', adminKey, async (req, res) => {
     try {
-        const items = await Store.find({});
+        const items = await Product.find({});
         res.json(items);
     } catch (err) {
         return res.status(404).json({ msg: err.name });

@@ -3,9 +3,9 @@ import { useParams, useNavigate, useOutletContext } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 
-import { a_fetchStoreItem, a_fetchStoreList } from '../store/actions/store.actions';
+import { a_fetchProduct, a_fetchProducts } from '../store/actions/store.actions';
 import { r_setLoader, r_setSnackMessage, r_headerDialogOpen } from '../store/reducers/common.reducers';
-import { api_userImages, api_artworkImages, api_storeImages } from '../utils/api_routes';
+import { api_userImages, api_artworkImages, api_productImages } from '../utils/api_routes';
 
 import Ratings from '../components/Ratings';
 
@@ -25,8 +25,8 @@ const StoreView = (props) => {
     useEffect(() => {
         dispatch(r_setLoader(true));
         window.scrollTo(0, 0)
-        dispatch(a_fetchStoreList());
-        dispatch(a_fetchStoreItem(id));
+        dispatch(a_fetchProducts());
+        dispatch(a_fetchProduct(id));
     }, [])
 
     useEffect(() => {
@@ -74,7 +74,7 @@ const StoreView = (props) => {
                             </div>
                              <div className='grid grid-cols-2 gap-2 mr-3'>
                                 {[0, 1, 2, 3].map(item => <div className="drop-shadow-lg rounded-xl bg-indigo-50 dark:bg-neutral-800 overflow-hidden h-fit">
-                                    <img loading='lazy' className="h-40 w-full object-cover object-center scale-110 transition-all duration-400 scale-100" src={api_storeImages(activeImg)} />
+                                    <img loading='lazy' className="h-40 w-full object-cover object-center scale-110 transition-all duration-400 scale-100" src={api_productImages(activeImg)} />
                                     <div className="py-4 px-2">
                                         <h2 className="tracking-widest text-xs title-font font-medium text-gray-400">CATEGORY: <span className='capitalize text-gray-700'>category</span></h2>
                                         <h1 className="title-font text-lg font-medium text-neutral-800 dark:text-neutral-300">title</h1>
@@ -88,10 +88,10 @@ const StoreView = (props) => {
                             </div> */}
                         </div>
                         <div className='order-1 lg:order-2 flex flex-col gap-2 lg:w-6/12 lg:h-full rounded'>
-                            <img loading='lazy' className="w-full h-full object-cover object-center" src={api_storeImages(activeImg)} />
+                            <img loading='lazy' className="w-full h-full object-cover object-center" src={api_productImages(activeImg)} />
                             <div className='grid grid-cols-3 gap-2'>
                                 {storeItem.files.map((file, index) =>
-                                    <img key={index} onClick={() => setActiveImg(file)} loading='lazy' className={`w-full object-cover object-center rounded ${activeImg === file ? 'border-4 border-blue-700 dark:border-blue-700' : ''}`} src={api_storeImages(file)} />
+                                    <img key={index} onClick={() => setActiveImg(file)} loading='lazy' className={`w-full object-cover object-center rounded ${activeImg === file ? 'border-4 border-blue-700 dark:border-blue-700' : ''}`} src={api_productImages(file)} />
                                 )}
                             </div>
                         </div>

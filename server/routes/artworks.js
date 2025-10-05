@@ -62,6 +62,7 @@ router.get('/image/:filename', async (req, res) => {
 
             // Guess content type by extension (basic way)
             let contentType = "image/jpeg";
+            if (filename.endsWith(".webp")) contentType = "image/webp";
             if (filename.endsWith(".png")) contentType = "image/png";
             if (filename.endsWith(".gif")) contentType = "image/gif";
 
@@ -205,6 +206,8 @@ router.get('/:id', async (req, res) => {
 router.post('/new', protect, artworkUpl.any(), async (req, res) => {
     try {
         const user = await User.findById(req.body.userID);
+
+        console.log("art", req.files);
 
         const newArtwork = new Artwork({
             artist: user._id,

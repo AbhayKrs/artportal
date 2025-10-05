@@ -150,20 +150,20 @@ router.delete('/:id/bookmark/:bookmark_id', async (req, res) => {
 })
 
 // @route   GET api/v1.01/users/:id/store --- Fetch store listings of user --- PUBLIC
-router.get('/:id/store', async (req, res) => {
+router.get('/:id/products', async (req, res) => {
     try {
         const user = await User.findById(req.params.id).populate('bookmarks');
-        if (!user.store) {
-            return res.status(400).send({ msg: 'Storelist not found' });
+        if (!user.products) {
+            return res.status(400).send({ msg: 'Products not found' });
         }
-        const storeData = {
-            store: user.store,
-            store_count: user.store_count
+        const productData = {
+            products: user.products,
+            products_count: user.products_count
         }
-        res.json(storeData);
+        res.json(productData);
     } catch (err) {
         console.error(err.message);
-        res.status(500).send('Unable to fetch store items');
+        res.status(500).send('Unable to fetch products');
     }
 });
 

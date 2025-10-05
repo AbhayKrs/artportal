@@ -1,31 +1,31 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { api_categorizedStoreListings, api_storeItem, api_storeListings, api_storeUpload } from '../../utils/api_routes';
-import { r_setSellerList, r_setStoreItem, r_setStoreList, r_storeUpload } from '../reducers/store.reducers';
+import { api_categorizedStoreListings, api_storeItem, api_storeListings, api_productUpload } from '../../utils/api_routes';
+import { r_setSellerList, r_setProduct, r_setProducts, r_storeUpload } from '../reducers/store.reducers';
 
-export const a_fetchStoreList = createAsyncThunk("a_fetchStoreList", async (payload, { getState, dispatch, rejectWithValue }) => {
+export const a_fetchProducts = createAsyncThunk("a_fetchProducts", async (payload, { getState, dispatch, rejectWithValue }) => {
     await api_storeListings().then(res => {
-        dispatch(r_setStoreList(res.data));
+        dispatch(r_setProducts(res.data));
         return;
     }).catch(err => {
-        console.log('---error a_fetchStoreList', err);
+        console.log('---error a_fetchProducts', err);
         return rejectWithValue(err.message);
     })
 });
 
-export const a_fetchStoreItem = createAsyncThunk("a_fetchStoreItem", async (payload, { getState, dispatch, rejectWithValue }) => {
+export const a_fetchProduct = createAsyncThunk("a_fetchProduct", async (payload, { getState, dispatch, rejectWithValue }) => {
     await api_storeItem(payload).then(res => {
-        dispatch(r_setStoreItem(res.data));
+        dispatch(r_setProduct(res.data));
         return;
     }).catch(err => {
-        console.log('---error a_fetchStoreItem', err);
+        console.log('---error a_fetchProduct', err);
         return rejectWithValue(err.message);
     })
 });
 
 export const a_fetchCategorizedStoreList = createAsyncThunk("a_fetchCategorizedStoreList", async (payload, { getState, dispatch, rejectWithValue }) => {
     await api_categorizedStoreListings(payload).then(res => {
-        dispatch(r_setStoreList(res.data));
+        dispatch(r_setProducts(res.data));
         return;
     }).catch(err => {
         console.log('---error a_fetchCategorizedStoreList', err);
@@ -34,7 +34,7 @@ export const a_fetchCategorizedStoreList = createAsyncThunk("a_fetchCategorizedS
 });
 
 export const a_handleStoreUpload = createAsyncThunk("a_handleStoreUpload", async (payload, { getState, dispatch, rejectWithValue }) => {
-    await api_storeUpload(payload).then(res => {
+    await api_productUpload(payload).then(res => {
         dispatch(r_storeUpload(res.data));
         return;
     }).catch(err => {

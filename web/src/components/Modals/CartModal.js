@@ -3,7 +3,7 @@ import Stepper from '../Stepper';
 import { IoCloseSharp, IoCloseCircle } from 'react-icons/io5';
 import { HiPlus, HiMinus, HiOutlineMail } from 'react-icons/hi';
 
-const CartModal = ({ open, onClose, cartList, cartTotal, api_storeImages, addToCart, handleCartRemove }) => {
+const CartModal = ({ open, onClose, cartList, cartTotal, api_productImages, addToCart, handleCartRemove }) => {
     const [couponCode, setCouponCode] = useState('');
     const [couponValue, setCouponValue] = useState(0);
     const [sellerInstruction, setSellerInstruction] = useState('');
@@ -57,7 +57,7 @@ const CartModal = ({ open, onClose, cartList, cartTotal, api_storeImages, addToC
                     {cartList && cartList.map(cartItem => (
                         <div className='flex sm:flex-row flex-col gap-5 py-2  text-md'>
                             <div className='flex gap-4'>
-                                <img loading='lazy' src={api_storeImages(cartItem.file)} className="w-20 h-20 object-cover rounded shadow-lg" alt="Thumbnail" />
+                                <img loading='lazy' src={api_productImages(cartItem.file)} className="w-20 h-20 object-cover rounded shadow-lg" alt="Thumbnail" />
                                 <div className='flex flex-col'>
                                     <span>Title: {cartItem.title}</span>
                                     <span>Category: {cartItem.title}</span>

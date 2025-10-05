@@ -25,9 +25,26 @@ conn.once('open', async () => {
     }
 });
 
-// const storage = multer.memoryStorage();
+const common_storage = new GridFsStorage({
+    url: process.env.MONGO_URI,
+    file: (req, file) => {
+        return new Promise((resolve, reject) => {
+            crypto.randomBytes(16, (err, buf) => {
+                if (err) {
+                    return reject(err);
+                }
+                const filename = buf.toString('hex') + path.extname(file.originalname);
+                const fileInfo = {
+                    filename: filename,
+                    bucketName: 'common'
+                };
+                resolve(fileInfo);
+            });
+        });
+    },
+});
 
-const storage = new GridFsStorage({
+const artwork_storage = new GridFsStorage({
     url: process.env.MONGO_URI,
     file: (req, file) => {
         return new Promise((resolve, reject) => {
@@ -46,9 +63,48 @@ const storage = new GridFsStorage({
     },
 });
 
-const artworkUpl = multer({ storage });
-const productUpl = multer({ storage });
-const commonUpl = multer({ storage });
-const taggerUpl = multer({ storage });
+const product_storage = new GridFsStorage({
+    url: process.env.MONGO_URI,
+    file: (req, file) => {
+        return new Promise((resolve, reject) => {
+            console.log("Received file for upload:", file.originalname);
+            crypto.randomBytes(16, (err, buf) => {
+                if (err) {
+                    return reject(err);
+                }
+                const filename = buf.toString('hex') + path.extname(file.originalname);
+                const fileInfo = {
+                    filename: filename,
+                    bucketName: 'products'
+                };
+                resolve(fileInfo);
+            });
+        });
+    },
+});
+
+const tagger_storage = new GridFsStorage({
+    url: process.env.MONGO_URI,
+    file: (req, file) => {
+        return new Promise((resolve, reject) => {
+            crypto.randomBytes(16, (err, buf) => {
+                if (err) {
+                    return reject(err);
+                }
+                const filename = buf.toString('hex') + path.extname(file.originalname);
+                const fileInfo = {
+                    filename: filename,
+                    bucketName: 'tagger'
+                };
+                resolve(fileInfo);
+            });
+        });
+    },
+});
+
+const artworkUpl = multer({ storage: artwork_storage });
+const productUpl = multer({ storage: product_storage });
+const commonUpl = multer({ storage: common_storage });
+const taggerUpl = multer({ storage: tagger_storage });
 
 export { artworkBucket, productBucket, commonBucket, taggerBucket, artworkUpl, productUpl, commonUpl, taggerUpl }

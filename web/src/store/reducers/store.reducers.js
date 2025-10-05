@@ -6,9 +6,9 @@ export const initialState = {
     title: '',
     description: '',
     uploadStatus: '',
-    sellerList: [],
-    storeList: [],
-    storeItem: {
+    seller_list: [],
+    products: [],
+    product_item: {
         seller: {
             id: '',
             username: '',
@@ -35,14 +35,14 @@ const storeSlice = createSlice({
     reducers: {
         r_setSellerList: (state, action) => {
             const sellerList = [...action.payload];
-            state.sellerList = sellerList;
+            state.seller_list = sellerList;
         },
-        r_setStoreList: (state, action) => {
-            const storeList = [...action.payload];
-            state.storeList = storeList;
+        r_setProducts: (state, action) => {
+            const products = [...action.payload];
+            state.products = products;
         },
-        r_setStoreItem: (state, action) => {
-            state.storeItem = action.payload;
+        r_setProduct: (state, action) => {
+            state.product_item = action.payload;
         },
         r_storeUpload: (state, action) => {
             const { file, title, description } = action.payload;
@@ -57,8 +57,8 @@ const storeSlice = createSlice({
 
 export const {
     r_setSellerList,
-    r_setStoreList,
-    r_setStoreItem,
+    r_setProducts,
+    r_setProduct,
     r_storeUpload
 } = storeSlice.actions
 export default storeSlice.reducer

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
-import { api_artworkImages, api_userImages, api_storeImages, api_googleRedirectURL, api_googleLogin } from '../../utils/api_routes';
+import { api_artworkImages, api_userImages, api_googleRedirectURL, api_googleLogin } from '../../utils/api_routes';
 
 import { MdSearch, MdClose } from 'react-icons/md';
 import { IoCloseSharp, IoCloseCircle } from 'react-icons/io5';

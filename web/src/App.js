@@ -11,7 +11,6 @@ import Home from './containers/Home';
 import Library from './containers/Library';
 import Search from './containers/Search';
 import Store from './containers/Store';
-import StoreAll from './containers/StoreAll';
 import Profile from './containers/Profile';
 import Google from './splash/Google';
 import Settings from './containers/Settings';
@@ -125,7 +124,6 @@ const App = () => {
         { path: '/library/:id/edit', element: <Edit.Library /> },
         { path: '/store', element: <Store /> },
         { path: '/store/:id', element: <StoreView /> },
-        { path: '/store/all', element: <StoreAll /> },
         { path: '/store/new', element: <StoreUpload /> },
         { path: '/store/cart', element: <Cart /> },
         { path: '/users/:id', element: <Profile /> },

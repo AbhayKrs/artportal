@@ -12,7 +12,7 @@ export const api_taggerURL = api_baseURL + '/agents/tagger/model.json';
 export const api_googleRedirectURL = api_baseURL + `/auth/google`;
 
 export const api_artworkImages = filename => api_baseURL + `/artworks/image/${filename}`;
-export const api_storeImages = filename => api_baseURL + `/store/image/${filename}`;
+export const api_productImages = filename => api_baseURL + `/products/image/${filename}`;
 export const api_userImages = filename => api_baseURL + `/common/files/${filename}`;
 
 const apiClient = axios.create({
@@ -111,18 +111,18 @@ export const api_updateUserData = (userID, userData) => apiClient.put(`/users/${
 export const api_deleteBookmark = (bookmarkID, userID) => apiClient.delete(`/users/${userID}/bookmark/${bookmarkID}`);
 export const api_artworks = (type, value, filter, period) => apiClient.get(`/artworks?type=${type}&value=${value}&filter=${filter}&period=${period}`);
 export const api_artworkItem = (id, payload) => apiClient.get(`/artworks/${id}`, payload);
-export const api_storeListings = () => apiClient.get(`/store`);
-export const api_storeItem = storeID => apiClient.get(`/store/${storeID}`);
-export const api_categorizedStoreListings = (category) => apiClient.get(`/store?category=${category}`);
+export const api_storeListings = () => apiClient.get(`/products`);
+export const api_storeItem = productID => apiClient.get(`/products/${productID}`);
+export const api_categorizedStoreListings = (category) => apiClient.get(`/products?category=${category}`);
 export const api_userArtworks = userID => apiClient.get(`/users/${userID}/artworks`);
-export const api_userStoreListings = userID => apiClient.get(`/users/${userID}/store`);
+export const api_userStoreListings = userID => apiClient.get(`/users/${userID}/products`);
 export const api_userCart = userID => apiClient.get(`/users/${userID}/cart`);
 export const api_avatars = () => apiClient.get(`/common/avatars`);
 export const api_awards = () => apiClient.get(`/common/stickers`);
 export const api_locations = () => apiClient.get(`/common/locations`);
 export const api_artworkUpload = data => apiClient.post(`/artworks/new`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
 export const api_commentOnArtwork = (isParent, userID, artworkID, parentID, commentText) => apiClient.post(`/artworks/${artworkID}/comments/new`, { userID, text: commentText, isParent, parentID }, { headers: { 'Content-Type': 'application/json' } })
-export const api_storeUpload = storeData => apiClient.post(`/store/new`, storeData, { headers: { 'Content-Type': 'multipart/form-data' } });
+export const api_productUpload = data => apiClient.post(`/products/new`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
 export const api_bookmarkArtwork = (userID, artworkID) => apiClient.post(`/users/${userID}/bookmark`, { artworkID }, { headers: { 'Content-Type': 'application/json' } });
 export const api_addToCart = (userID, cartData) => apiClient.post(`/users/${userID}/cart/add`, cartData);
 export const api_editAvatar = (userID, avatar) => apiClient.post(`/users/${userID}/avatar`, avatar);
@@ -137,7 +137,7 @@ export const api_giftToArtwork = (artworkID, userID, awardData) => apiClient.put
 export const api_updateCart = (userID, cartID, cartData) => apiClient.put(`/users/${userID}/cart/${cartID}`, cartData);
 export const api_deleteArtwork = (artworkID) => apiClient.delete(`/artworks/${artworkID}`, { headers: { 'Content-Type': 'application/json' } });
 export const api_deleteArtworkComment = (artworkID, commentID) => apiClient.delete(`/artworks/${artworkID}/comments/${commentID}`);
-export const api_deleteStoreListing = (storeID, userID) => apiClient.delete(`/store/${storeID}`, userID, { headers: { 'Content-Type': 'application/json' } });
+export const api_deleteStoreListing = (productID, userID) => apiClient.delete(`/products/${productID}`, userID, { headers: { 'Content-Type': 'application/json' } });
 export const api_deleteFromCart = (cartID, userID) => apiClient.delete(`/users/${userID}/cart/${cartID}`);
 
 // export const api_likeArtwork = artworkID => apis.put(`/artworks/${artworkID}/like`, { user: getState().user })

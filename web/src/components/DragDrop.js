@@ -63,7 +63,6 @@ const Image = ({ image, index, r_setSnackMessage, setCategories, isFlagged, setI
         for (var i = 0; i < p_ind.length; i++) {
             final.push(predicted_class[p_ind[i]]);
         }
-        console.log("fff", final);
         if (final.includes("mature_art")) {
             setIsFlagged(true);
             throw new Error("Flagged content");
@@ -95,7 +94,7 @@ const ImageList = ({ images, setCategories, r_setSnackMessage, isFlagged, setIsF
     ));
 }
 
-const DragDrop = ({ isFlagged, setIsFlagged, selectedImages, setReorderedFiles, setCategories, r_setSnackMessage }) => {
+const DragDrop = ({ source, isFlagged, setIsFlagged, selectedImages, setReorderedFiles, setCategories, r_setSnackMessage }) => {
     const [images, setImages] = useState([]);
 
     useEffect(() => {

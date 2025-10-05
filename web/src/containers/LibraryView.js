@@ -5,9 +5,9 @@ import moment from 'moment';
 import Cookies from 'js-cookie';
 
 import { a_fetchArtwork, a_fetchArtworks, a_handleDislikeArtwork, a_handleLikeArtwork, a_handleDeleteComment, a_handleEditComment, a_handleDislikeComment, a_handleLikeComment, a_bookmarkArtwork, a_handleAddComment } from '../store/actions/library.actions';
-import { a_fetchStoreItem, a_fetchStoreList } from '../store/actions/store.actions';
+import { a_fetchProduct, a_fetchProducts } from '../store/actions/store.actions';
 import { r_setLoader, r_setSnackMessage, r_headerDialogOpen } from '../store/reducers/common.reducers';
-import { api_userImages, api_artworkImages, api_storeImages } from '../utils/api_routes';
+import { api_userImages, api_artworkImages } from '../utils/api_routes';
 
 import AwardModal from '../components/Modals/AwardModal';
 import ShareModal from '../components/Modals/ShareModal';

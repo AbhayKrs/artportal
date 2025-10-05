@@ -39,6 +39,7 @@ router.get('/image/:filename', async (req, res) => {
 
             // Guess content type by extension (basic way)
             let contentType = "image/jpeg";
+            if (filename.endsWith(".webp")) contentType = "image/webp";
             if (filename.endsWith(".png")) contentType = "image/png";
             if (filename.endsWith(".gif")) contentType = "image/gif";
 
@@ -63,16 +64,24 @@ router.get('/image/:filename', async (req, res) => {
     }
 });
 
-// @route   GET api/v1.01/products --- Fetch all store products --- PUBLIC
+// @route   GET api/v1.01/products --- Fetch all products --- PUBLIC
 router.get('/', async (req, res) => {
     try {
         let products = [];
         const category = req.query.category;
         if (!category) {
-            products = await Product.find({});
+            products = await Product.find({})
+                .populate('seller', 'name username avatar')
+                .populate({
+                    path: 'reviews',
+                    populate: {
+                        path: 'reviewer',
+                        select: 'name username avatar'
+                    }
+                });;
         } else {
-            const storeData = await Product.find({});
-            products = storeData.filter(item => item.category === category);
+            const data = await Product.find({});
+            products = data.filter(item => item.category === category);
         }
         res.send(products);
     } catch (err) {
@@ -80,39 +89,56 @@ router.get('/', async (req, res) => {
     }
 });
 
-// @route   POST api/v1.01/products/new --- Post new store listing --- PUBLIC
-router.post('/new', protect, productUpl.any(), async (req, res) => {
-    try {
-        const user = await User.findById(req.body.userID);
+// @route   POST api/v1.01/products/new --- Create new product listing --- PUBLIC
+router.post('/new',
+    protect,
+    productUpl.any((err, req, res, next) => {
+        if (err) {
+            console.error('Multer Error:', err);
+            return res.status(500).send('Upload failed');
+        }
+        next();
+    }),
+    async (req, res) => {
+        try {
+            const user = await User.findById(req.body.userID);
 
-        const newProduct = new Store({
-            artist: user._id,
-            title: req.body.title,
-            description: req.body.description,
-            images: req.files.map(file => { return file.filename }),
-            category: req.body.category,
-            tags: req.body.tags.map(tag => { return JSON.parse(tag)._id }),
-            price: req.body.price,
-            discount_price: req.body.discount_price, // optional discounted price
-            stock: req.body.stock, // unique artworks may have only 1
-            reviews: [],
-            average_rating: 0
-        });
+            console.log("body", req.files);
 
-        newProduct.save()
-            .then(data => res.send(data))
-            .catch(err => console.log(err))
-    } catch (err) {
-        console.log("err: ", err)
-        return res.status(404).json({ msg: err.name });
+            const newProduct = new Product({
+                seller: user._id,
+                title: req.body.title,
+                description: req.body.description,
+                images: req.files.map(file => { return file.filename }),
+                category: req.body.category,
+                tags: req.body.tags,
+                price: req.body.price,
+                discount_price: req.body.discount_price, // optional discounted price
+                stock: req.body.stock, // unique artworks may have only 1
+                reviews: [],
+                average_rating: 0
+            });
+
+            console.log("newProduct", newProduct)
+
+            newProduct.save()
+                .then(data => {
+                    console.log("data", data)
+                    res.send(data)
+                })
+                .catch(err => console.log(err))
+        } catch (err) {
+            console.log("err: ", err)
+            return res.status(404).json({ msg: err.name });
+        }
     }
-});
+);
 
-// @route   GET api/v1.01/products/:id --- Fetch store listing by id --- PUBLIC
+// @route   GET api/v1.01/products/:id --- Fetch product by id --- PUBLIC
 router.get('/:id', async (req, res) => {
     try {
         const product = await Product.findById(req.params.id)
-            .populate('artist', 'name username avatar')
+            .populate('seller', 'name username avatar')
             .populate({
                 path: 'reviews',
                 populate: {
@@ -127,7 +153,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// @route   PUT api/v1.01/products/:id --- Edit store listing by id --- PUBLIC
+// @route   PUT api/v1.01/products/:id --- Edit product by id --- PUBLIC
 router.put('/:id', protect, function (req, res) {
     try {
         const updatedProduct = {
@@ -152,7 +178,7 @@ router.put('/:id', protect, function (req, res) {
     }
 });
 
-// @route   DELETE api/v1.01/products/:id --- Delete store listing by id --- PUBLIC
+// @route   DELETE api/v1.01/products/:id --- Delete product by id --- PUBLIC
 router.delete('/:id', protect, async (req, res) => {
     try {
 

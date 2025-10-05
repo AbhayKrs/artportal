@@ -6,6 +6,7 @@ import { Helmet } from 'react-helmet';
 import { r_setLoader } from '../store/reducers/common.reducers';
 import { api_artworkImages, api_userImages } from '../utils/api_routes';
 import { a_fetchUserCart, a_handleCartAdd, a_handleRemoveFromCart } from '../store/actions/user.actions';
+import { a_fetchProducts } from '../store/actions/store.actions';
 
 import SimpleGrid from '../components/Grids/Simple';
 import Divider from '../components/Divider';
@@ -21,7 +22,7 @@ const Store = ({ }) => {
     const navigate = useNavigate();
 
     const user = useSelector(state => state.user);
-    const artworks = useSelector(state => state.library.artworks);
+    const products = useSelector(state => state.store.products);
 
     const hidePane = useOutletContext();
     const [filtersPane, setFiltersPane] = useState(true);
@@ -32,7 +33,7 @@ const Store = ({ }) => {
     useEffect(() => {
         dispatch(r_setLoader(true));
         window.scrollTo(0, 0);
-        // dispatch(a_fetchStoreList());
+        dispatch(a_fetchProducts());
         // dispatch(a_fetchSelleList());
     }, [])
 
@@ -141,11 +142,11 @@ const Store = ({ }) => {
                     </button>
                 </div>
                 <StoreTabs filtersPane={filtersPane} setFiltersPane={setFiltersPane} />
-                {artworks.length > 0 ?
+                {products.length > 0 ?
                     <div className='flex flex-row'>
                         <SimpleGrid>
-                            {artworks.map((artwork, index) => (
-                                <StoreCard size="l" key={index} artwork={artwork} artist={artwork.artist} />
+                            {products.map((item, index) => (
+                                <StoreCard size="l" key={index} product={item} seller={item.seller} />
                             ))}
                         </SimpleGrid>
                     </div>

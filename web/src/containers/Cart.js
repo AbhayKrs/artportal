@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 
-import { api_storeImages } from '../utils/api_routes';
+import { api_productImages } from '../utils/api_routes';
 
 import { HiPlus, HiMinus, HiOutlineMail } from 'react-icons/hi';
 import Stepper from '../components/Stepper';
@@ -128,7 +128,7 @@ const Cart = (props) => {
                     {user.cart && user.cart.map(cartItem => (
                         <div className='flex sm:flex-row flex-col gap-5 py-2  text-md'>
                             <div className='flex gap-4'>
-                                <img loading='lazy' src={api_storeImages(cartItem.file)} className="w-20 h-20 object-cover rounded shadow-lg" alt="Thumbnail" />
+                                <img loading='lazy' src={api_productImages(cartItem.file)} className="w-20 h-20 object-cover rounded shadow-lg" alt="Thumbnail" />
                                 <div className='flex flex-col'>
                                     <span>Title: {cartItem.title}</span>
                                     <span>Category: {cartItem.title}</span>
