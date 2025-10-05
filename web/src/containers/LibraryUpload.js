@@ -53,10 +53,10 @@ const LibraryUpload = ({ }) => {
     }
 
     const onImageChange = (ev) => {
-        if (ev.target.files.length > 3 || files.length > 3) {
+        if (ev.target.files.length > 10 || files.length > 10) {
             const msgData = {
                 open: true,
-                message: 'Only a maximum of 3 files may be selected.',
+                message: 'Only a maximum of 10 files may be selected.',
                 type: 'warning'
             }
             dispatch(r_setSnackMessage(msgData));
@@ -103,7 +103,7 @@ const LibraryUpload = ({ }) => {
 
     const dropHandler = (ev) => {
         ev.nativeEvent.preventDefault();
-        if (ev.dataTransfer.files.length > 5 || files.length > 5) {
+        if (ev.dataTransfer.files.length > 10 || files.length > 10) {
             const msgData = {
                 open: true,
                 message: 'Only a maximum of 5 files may be selected.',
