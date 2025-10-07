@@ -100,45 +100,50 @@ apiClient.interceptors.response.use(
 );
 
 export const api_tags = () => apiClient.get(`/common/tags`);
+
 export const api_signIn = userData => apiClient.post(`/auth/login`, userData, { headers: { 'Content-Type': 'application/json' } });
 export const api_signUp = userData => apiClient.post(`/auth/signup`, userData, { headers: { 'Content-Type': 'application/json' } });
 export const api_googleLogin = (payload) => apiClient.post(`/auth/google`, { token: payload });
 export const api_verifyAuth = () => apiClient.post(`/auth/refresh`);
 export const api_logout = () => apiClient.post(`/auth/logout`);
+
 export const api_users = (type, value) => apiClient.get(`/users?type=${type}&value=${value}`);
 export const api_userData = userID => apiClient.get(`/users/${userID}`);
 export const api_updateUserData = (userID, userData) => apiClient.put(`/users/${userID}`, userData);
 export const api_deleteBookmark = (bookmarkID, userID) => apiClient.delete(`/users/${userID}/bookmark/${bookmarkID}`);
+export const api_userArtworks = userID => apiClient.get(`/users/${userID}/artworks`);
+
+export const api_cart = userID => apiClient.get(`/users/${userID}/cart`);
+export const api_addToCart = (userID, data) => apiClient.post(`/users/${userID}/cart/add`, data, { headers: { 'Content-Type': 'application/json' } });
+export const api_removeFromCart = (userID, data) => apiClient.post(`/users/${userID}/cart/remove`, data, { headers: { 'Content-Type': 'application/json' } });
+
 export const api_artworks = (type, value, filter, period) => apiClient.get(`/artworks?type=${type}&value=${value}&filter=${filter}&period=${period}`);
 export const api_artworkItem = (id, payload) => apiClient.get(`/artworks/${id}`, payload);
-export const api_products = () => apiClient.get(`/products`);
-export const api_productItem = productID => apiClient.get(`/products/${productID}`);
-export const api_categorizedStoreListings = (category) => apiClient.get(`/products?category=${category}`);
-export const api_userArtworks = userID => apiClient.get(`/users/${userID}/artworks`);
-export const api_userStoreListings = userID => apiClient.get(`/users/${userID}/products`);
-export const api_userCart = userID => apiClient.get(`/users/${userID}/cart`);
-export const api_avatars = () => apiClient.get(`/common/avatars`);
-export const api_awards = () => apiClient.get(`/common/stickers`);
-export const api_locations = () => apiClient.get(`/common/locations`);
-export const api_artworkUpload = data => apiClient.post(`/artworks/new`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
-export const api_commentOnArtwork = (isParent, userID, artworkID, parentID, commentText) => apiClient.post(`/artworks/${artworkID}/comments/new`, { userID, text: commentText, isParent, parentID }, { headers: { 'Content-Type': 'application/json' } })
-export const api_productUpload = data => apiClient.post(`/products/new`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
-export const api_bookmarkArtwork = (userID, artworkID) => apiClient.post(`/users/${userID}/bookmark`, { artworkID }, { headers: { 'Content-Type': 'application/json' } });
-export const api_addToCart = (userID, cartData) => apiClient.post(`/users/${userID}/cart/add`, cartData);
-export const api_editAvatar = (userID, avatar) => apiClient.post(`/users/${userID}/avatar`, avatar);
-export const api_editArtwork = (artworkID, updatedData) => apiClient.put(`/artworks/${artworkID}`, updatedData)
 export const api_artworkViewed = (artworkID, viewerID) => apiClient.put(`/artworks/${artworkID}/viewed`, { viewer_id: viewerID });
+export const api_artworkUpload = data => apiClient.post(`/artworks/new`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
+export const api_editArtwork = (artworkID, updatedData) => apiClient.put(`/artworks/${artworkID}`, updatedData);
+export const api_deleteArtwork = (artworkID) => apiClient.delete(`/artworks/${artworkID}`, { headers: { 'Content-Type': 'application/json' } });
+export const api_commentOnArtwork = (isParent, userID, artworkID, parentID, commentText) => apiClient.post(`/artworks/${artworkID}/comments/new`, { userID, text: commentText, isParent, parentID }, { headers: { 'Content-Type': 'application/json' } })
 export const api_editArtworkComment = (artworkID, newComment, commentID, userData) => apiClient.put(`/artworks/${artworkID}/comments/${commentID}`, { content: newComment, user: userData })
 export const api_likeArtwork = (artworkID, userID) => apiClient.put(`/artworks/${artworkID}/like`, { userID });
 export const api_dislikeArtwork = (artworkID, userID) => apiClient.put(`/artworks/${artworkID}/dislike`, { userID });
 export const api_likeComment = (artworkID, commentID, userID) => apiClient.put(`/artworks/${artworkID}/comments/${commentID}/like`, { userID });
 export const api_dislikeComment = (artworkID, commentID, userID) => apiClient.put(`/artworks/${artworkID}/comments/${commentID}/dislike`, { userID });
-export const api_giftToArtwork = (artworkID, userID, awardData) => apiClient.put(`/artworks/${artworkID}/award`, { userID: userID, ...awardData });
-export const api_updateCart = (userID, cartID, cartData) => apiClient.put(`/users/${userID}/cart/${cartID}`, cartData);
-export const api_deleteArtwork = (artworkID) => apiClient.delete(`/artworks/${artworkID}`, { headers: { 'Content-Type': 'application/json' } });
 export const api_deleteArtworkComment = (artworkID, commentID) => apiClient.delete(`/artworks/${artworkID}/comments/${commentID}`);
+export const api_giftToArtwork = (artworkID, userID, awardData) => apiClient.put(`/artworks/${artworkID}/award`, { userID: userID, ...awardData });
+
+export const api_products = () => apiClient.get(`/products`);
+export const api_productItem = productID => apiClient.get(`/products/${productID}`);
+export const api_categorizedStoreListings = (category) => apiClient.get(`/products?category=${category}`);
+export const api_userStoreListings = userID => apiClient.get(`/users/${userID}/products`);
+export const api_avatars = () => apiClient.get(`/common/avatars`);
+export const api_awards = () => apiClient.get(`/common/stickers`);
+export const api_locations = () => apiClient.get(`/common/locations`);
+export const api_productUpload = data => apiClient.post(`/products/new`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
+export const api_bookmarkArtwork = (userID, artworkID) => apiClient.post(`/users/${userID}/bookmark`, { artworkID }, { headers: { 'Content-Type': 'application/json' } });
+export const api_editAvatar = (userID, avatar) => apiClient.post(`/users/${userID}/avatar`, avatar);
+
 export const api_deleteStoreListing = (productID, userID) => apiClient.delete(`/products/${productID}`, userID, { headers: { 'Content-Type': 'application/json' } });
-export const api_deleteFromCart = (cartID, userID) => apiClient.delete(`/users/${userID}/cart/${cartID}`);
 
 // export const api_likeArtwork = artworkID => apis.put(`/artworks/${artworkID}/like`, { user: getState().user })
 // export const api_dislikeArtwork = artworkID => apis.put(`/artworks/${artworkID}/dislike`, { user: getState().user })

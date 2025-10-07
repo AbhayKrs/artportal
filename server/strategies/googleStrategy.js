@@ -14,7 +14,7 @@ export default (passport) => {
                 },
                 async function (request, accessToken, refreshToken, profile, done) {
                     try {
-                        let user = await User.findOne({ googleId: profile.id });
+                        let user = await User.findOne({ google_id: profile.id });
                         if (!user) {
                             //User does not exist in DB, create a new user entry with google creds
                             user = await User.create({

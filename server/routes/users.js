@@ -7,9 +7,11 @@ import { protect, admin } from '../middleware/authMw.js';
 import { checkObjectId } from '../middleware/checkObjectId.js';
 
 import User from '../models/user.js';
+import Products from '../models/product.js';
 import Artworks from '../models/artwork.js';
 import Cart from '../models/cart.js';
 const { Artwork, Comment } = Artworks;
+const { Product } = Products;
 
 import jwt from 'jsonwebtoken';
 
@@ -173,16 +175,16 @@ router.get('/:id/products', async (req, res) => {
 // @route   GET api/v1.01/users/:id/cart --- Fetch cart of user --- PUBLIC
 router.get('/:id/cart', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id).populate('bookmarks');
-        console.log("user", user)
-        if (!user.cart) {
+        const user = await User.findById(req.params.id);
+        const cart = await Cart.findOne({ customer_id: user._id }).populate({
+            path: "items.product",
+            model: "Product",
+            select: "title description images category seller price discount_price" // choose fields you want
+        });
+        if (!cart) {
             return res.status(400).send({ msg: 'Cartlist not found' });
         }
-        const cartData = {
-            cart: user.cart,
-            cart_count: user.cart_count
-        }
-        res.json(cartData);
+        res.json(cart);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Unable to fetch cart items');
@@ -192,89 +194,80 @@ router.get('/:id/cart', async (req, res) => {
 // @route   POST api/v1.01/users/:id/cart/add --- Add the listing to cart --- PUBLIC
 router.post('/:id/cart/add', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id).populate('bookmarks');
+        const { productID, quantity } = req.body;
+
+        const user = await User.findById(req.params.id);
+        const product = await Product.findById(productID);
         if (!user) {
-            return res.status(401).json({ msg: 'User not authorized!' })
+            return res.status(401).json({ msg: 'Not a valid user!' })
         }
-        const newCartItem = new Cart({
-            title: req.body.title,
-            file: req.body.file,
-            category: req.body.category,
-            price: req.body.price,
-            quantity: req.body.quantity,
-            subtotal: req.body.subtotal,
-            seller: {
-                id: user.id,
-                username: user.username
-            }
-        });
-        Cart.create(newCartItem, (err, cartItem) => {
-            if (err) {
-                console.log(err);
-            } else {
-                cartItem.save();
-                user.cart.push(cartItem);
-                user.cart_count = user.cart.length;
-                user.save();
-                res.json(cartItem);
-            }
-        });
+
+        let cart = await Cart.findOne({ customer_id: user._id });
+        if (!cart) {
+            cart = new Cart({
+                customer_id: user._id,
+                items: [],
+                subtotal: 0
+            });
+        }
+
+        const item_exists = cart.items.find(item => item.id.toString() == productID);
+
+        if (item_exists) {
+            item_exists.quantity += quantity;
+        } else {
+            cart.items.push({
+                id: new mongoose.Types.ObjectId(productID),
+                product: productID,
+                quantity
+            });
+        }
+        cart.subtotal += product.price * quantity;
+        await cart.save();
+
+        res.status(200).json({ message: "Item added to cart successfully" });
     } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Adding to cart failed');
+        console.error("Error adding to cart:", err);
+        res.status(500).send('Internal Server Error');
     }
 });
 
-// @route   PUT api/v1.01/users/:id/cart/:cart_id --- Update the listing in cart --- PUBLIC
-router.put('/:id/cart/:cart_id', async (req, res) => {
+// @route   POST api/v1.01/users/:id/cart/remove --- Remove the listing from cart --- PUBLIC
+router.post('/:id/cart/remove', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id).populate('bookmarks');
-        const editCartItem = user.cart.find(cartItem => cartItem._id === req.params.cart_id);
-        if (!editCartItem) {
-            return res.status(401).json({ msg: 'Cart item does not exist!' })
-        }
-        // // Check user
-        // if (library.author.id !== editComment.author.id) {
-        //     return res.status(401).json({ msg: 'User not authorized!' });
-        // }
-        const newData = { quantity: req.body.quantity, subtotal: req.body.subtotal }
-        await Cart.findByIdAndUpdate(
-            req.params.cart_id,
-            { quantity: newData.quantity, subtotal: newData.subtotal },
-            { new: true },
-            async (err, cartItem) => {
-                if (err) {
-                    console.log(err)
-                } else {
-                    const index = user.cart.findIndex(cartItem => cartItem === editCartItem);
-                    user.cart[index] = cartItem;
-                    await user.save();
-                }
-            }
-        );
-        return res.json(user.cart);
-    } catch (err) {
-        return res.status(404).json({ msg: err.name });
-    }
-})
+        const { productID, quantity } = req.body;
 
-// @route   DELETE api/v1.01/users/:id/cart/:cart_id --- Delete the listing in cart --- PUBLIC
-router.delete('/:id/cart/:cart_id', async (req, res) => {
-    try {
-        const user = await User.findById(req.params.id).populate('bookmarks');
-        const cartItem = await Cart.findById(req.params.cart_id);
-        const a_handleRemoveFromCart = user.cart.find(cartItem => cartItem._id === req.params.cart_id);
-        if (!a_handleRemoveFromCart) {
-            return res.status(404).json({ msg: 'Cart item does not exist!' });
+        const user = await User.findById(req.params.id);
+        const product = await Product.findById(productID);
+        if (!user) {
+            return res.status(401).json({ msg: 'Not a valid user!' })
         }
-        user.cart = user.cart.filter(cartItem => cartItem._id !== a_handleRemoveFromCart._id);
-        cartItem.deleteOne(a_handleRemoveFromCart);
-        user.cart_count = user.cart.length;
-        await user.save();
-        return res.json(user.cart);
+
+        let cart = await Cart.findOne({ customer_id: user._id });
+        if (!cart) {
+            return res.status(404).json({ message: "Cart not found" });
+        }
+
+        const item_index = cart.items.findIndex(item => item.id.toString() == productID);
+
+        if (item_index === -1) {
+            return res.status(404).json({ message: "Item not found in cart" });
+        }
+        const item = cart.items[item_index];
+        item.quantity -= quantity;
+        cart.subtotal -= product.price * quantity;
+
+        if (item.quantity <= 0) {
+            cart.items.splice(item_index, 1);
+            cart.subtotal = 0;
+        }
+
+        await cart.save();
+
+        res.status(200).json({ message: "Item added to cart successfully" });
     } catch (err) {
-        console.error(err.message);
-        return res.status(500).send('Deleting a cart item failed');
+        console.error("Error adding to cart:", err);
+        res.status(500).send('Internal Server Error');
     }
 });
 

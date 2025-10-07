@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-import { api_signIn, api_signUp, api_googleLogin, api_userData, api_updateUserData, api_deleteBookmark, api_userArtworks, api_userStoreListings, api_deleteStoreListing, api_userCart, api_editAvatar, api_deleteFromCart, api_updateCart, api_addToCart, api_verifyAuth } from '../../utils/api_routes'
+import { api_signIn, api_signUp, api_googleLogin, api_userData, api_updateUserData, api_deleteBookmark, api_userArtworks, api_userStoreListings, api_deleteStoreListing, api_userCart, api_editAvatar, api_removeFromCart, api_addToCart, api_verifyAuth, api_cart } from '../../utils/api_routes'
 import {
     r_setAuthError,
     r_setVisitorStatus,
@@ -247,7 +247,7 @@ export const a_deleteUserStoreItem = createAsyncThunk("a_deleteUserStoreItem", a
 
 export const a_fetchUserCart = createAsyncThunk("a_fetchUserCart", async (payload, { getState, dispatch, rejectWithValue }) => {
     const userID = getState().user.id;
-    await api_userCart(userID).then(res => {
+    await api_cart(userID).then(res => {
         dispatch(r_setCartList(res.data));
         return;
     }).catch(err => {
@@ -256,35 +256,16 @@ export const a_fetchUserCart = createAsyncThunk("a_fetchUserCart", async (payloa
     })
 });
 
-export const a_handleCartAdd = createAsyncThunk("a_handleCartAdd", async (payload, { getState, dispatch, rejectWithValue }) => {
+export const a_addToCart = createAsyncThunk("a_addToCart", async (payload, { getState, dispatch, rejectWithValue }) => {
     try {
-        let cartData;
         const userID = getState().user.id;
-        const userCart = getState().user.cart;
-        if (userCart.filter(item => item.title === payload.title).length !== 0) {
-            let quantity = userCart.filter(item => item.title === payload.title)[0].quantity + 1;
-            let subtotal = payload.price * quantity;
-            cartData = {
-                quantity,
-                subtotal
-            }
-            const cartID = userCart.filter(item => item.title === payload.title)[0]._id;
-            await api_updateCart(userID, cartID, cartData).then(res => {
-                dispatch(a_fetchUserCart());
-            })
-        } else {
-            cartData = {
-                file: payload.files[0],
-                title: payload.title,
-                category: payload.category,
-                price: payload.price,
-                quantity: 1,
-                subtotal: payload.price * 1
-            }
-            await api_addToCart(userID, cartData).then(res => {
-                dispatch(a_fetchUserCart());
-            })
+        const data = {
+            productID: payload,
+            quantity: 1
         }
+        await api_addToCart(userID, data).then(() => {
+            dispatch(a_fetchUserCart());
+        })
         return;
     } catch (err) {
         console.log('---error fetchCartList', err);
@@ -292,28 +273,16 @@ export const a_handleCartAdd = createAsyncThunk("a_handleCartAdd", async (payloa
     }
 });
 
-export const a_handleRemoveFromCart = createAsyncThunk("a_handleRemoveFromCart", async (payload, { getState, dispatch, rejectWithValue }) => {
-    let cartData;
-    const userID = getState().user.id;
-    const userCart = getState().user.cart;
-    const cartID = userCart.filter(item => item.title === payload.title)[0]._id;
+export const a_removeFromCart = createAsyncThunk("a_removeFromCart", async (payload, { getState, dispatch, rejectWithValue }) => {
     try {
-        if (userCart.filter(item => item.title === payload.title)[0].quantity === 1) {
-            await api_deleteFromCart(cartID, userID).then(res => {
-                dispatch(a_fetchUserCart());
-            })
-        } else {
-            let quantity = userCart.filter(item => item.title === payload.title)[0].quantity - 1;
-            let subtotal = payload.price * quantity;
-            cartData = {
-                quantity,
-                subtotal
-            }
-            const cartID = userCart.filter(item => item.title === payload.title)[0]._id;
-            await api_deleteFromCart(cartID, userID).then(res => {
-                dispatch(a_fetchUserCart());
-            })
+        const userID = getState().user.id;
+        const data = {
+            productID: payload,
+            quantity: 1
         }
+        await api_removeFromCart(userID, data).then(() => {
+            dispatch(a_fetchUserCart());
+        })
         return;
     } catch (err) {
         console.log('---error fetchCartList', err);

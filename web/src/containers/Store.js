@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet';
 
 import { r_setLoader } from '../store/reducers/common.reducers';
 import { api_artworkImages, api_userImages } from '../utils/api_routes';
-import { a_fetchUserCart, a_handleCartAdd, a_handleRemoveFromCart } from '../store/actions/user.actions';
+import { a_fetchUserCart, a_addToCart, a_removeFromCart } from '../store/actions/user.actions';
 import { a_fetchProducts } from '../store/actions/store.actions';
 
 import SimpleGrid from '../components/Grids/Simple';
@@ -37,35 +37,7 @@ const Store = ({ }) => {
         // dispatch(a_fetchSelleList());
     }, [])
 
-    const addToCart = (data) => {
-        let cartData;
-        const userID = user.id;
-        const userCart = user.cart;
-        try {
-            if (userCart.filter(item => item.title === data.title).length !== 0) {
-                let quantity = userCart.filter(item => item.title === data.title)[0].quantity + 1;
-                let subtotal = data.price * quantity;
-                cartData = {
-                    quantity,
-                    subtotal
-                }
-            } else {
-                cartData = {
-                    file: data.files[0],
-                    title: data.title,
-                    category: data.category,
-                    price: data.price,
-                    quantity: 1,
-                    subtotal: data.price * 1
-                }
-                dispatch(a_handleCartAdd({ userID, cartData })).then(res => {
-                    dispatch(a_fetchUserCart());
-                });
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    }
+
 
     const removeFromCart = (data) => {
         let cartData;
@@ -74,7 +46,7 @@ const Store = ({ }) => {
         const cartID = userCart.filter(item => item.title === data.title)[0]._id;
         try {
             if (userCart.filter(item => item.title === data.title)[0].quantity === 1) {
-                dispatch(a_handleRemoveFromCart({ cartID, userID })).then(res => {
+                dispatch(a_removeFromCart({ cartID, userID })).then(res => {
                     dispatch(a_fetchUserCart());
                 });
             } else {
@@ -85,7 +57,7 @@ const Store = ({ }) => {
                     subtotal
                 }
                 const cartID = userCart.filter(item => item.title === data.title)[0]._id;
-                dispatch(a_handleRemoveFromCart({ cartID, userID })).then(res => {
+                dispatch(a_removeFromCart({ cartID, userID })).then(res => {
                     dispatch(a_fetchUserCart());
                 });
             }

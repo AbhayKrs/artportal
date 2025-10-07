@@ -20,6 +20,7 @@ import { ImStarFull } from 'react-icons/im';
 import { TiInfoLarge } from 'react-icons/ti';
 import CommentList from '../components/CommentList';
 import Dropdown from '../components/Dropdown';
+import { a_fetchUserCart, a_addToCart, a_removeFromCart } from '../store/actions/user.actions';
 
 const StoreView = (props) => {
     const { id } = useParams();
@@ -29,6 +30,7 @@ const StoreView = (props) => {
     const hidePane = useOutletContext();
 
     const product = useSelector(state => state.store.product_item);
+    const cart = useSelector(state => state.user.cart);
 
     const [activeImg, setActiveImg] = useState('');
     const [activeRatingLabel, setActiveRatingLabel] = useState('Ratings');
@@ -46,97 +48,6 @@ const StoreView = (props) => {
         setActiveImg(product.images[0])
     }, [product])
 
-    const comments = [
-        {
-            "_id": "676a97844b74b764c2977319",
-            "author": {
-                "avatar": {
-                    "icon": "6cbaa37fa59b0caee31dc4b8cdd67d72.png",
-                    "category": "None"
-                },
-                "_id": "6761a96926d5543eacbf3353",
-                "name": "Akunta",
-                "username": "akn787"
-            },
-            "text": "test comm 1",
-            "is_parent": true,
-            "parent_ref": null,
-            "likes": [
-                "6761a96926d5543eacbf3353"
-            ],
-            "dislikes": [],
-            "createdAt": "2024-12-24T11:14:12.597Z",
-            "updatedAt": "2024-12-25T09:27:24.047Z",
-            "__v": 0,
-            "replies": []
-        },
-        {
-            "_id": "676aa28cb8891b5e03505196",
-            "author": {
-                "avatar": {
-                    "icon": "6cbaa37fa59b0caee31dc4b8cdd67d72.png",
-                    "category": "None"
-                },
-                "_id": "6761a96926d5543eacbf3353",
-                "name": "Akunta",
-                "username": "akn787"
-            },
-            "text": "test comm 2",
-            "is_parent": true,
-            "parent_ref": null,
-            "likes": [],
-            "dislikes": [],
-            "createdAt": "2024-12-24T12:01:16.087Z",
-            "updatedAt": "2024-12-24T12:01:16.087Z",
-            "__v": 0,
-            "replies": [
-                {
-                    "_id": "676ac67cdb61939c768ca050",
-                    "author": {
-                        "avatar": {
-                            "icon": "6cbaa37fa59b0caee31dc4b8cdd67d72.png",
-                            "category": "None"
-                        },
-                        "_id": "6761a96926d5543eacbf3353",
-                        "name": "Akunta",
-                        "username": "akn787"
-                    },
-                    "text": "test reply 1",
-                    "is_parent": false,
-                    "parent_ref": "676aa28cb8891b5e03505196",
-                    "likes": [],
-                    "dislikes": [],
-                    "createdAt": "2024-12-24T14:34:36.367Z",
-                    "updatedAt": "2024-12-24T14:34:36.367Z",
-                    "__v": 0,
-                    "replies": [
-                        {
-                            "_id": "676acd0e6e92402b6f01d7c9",
-                            "author": {
-                                "avatar": {
-                                    "icon": "6cbaa37fa59b0caee31dc4b8cdd67d72.png",
-                                    "category": "None"
-                                },
-                                "_id": "6761a96926d5543eacbf3353",
-                                "name": "Akunta",
-                                "username": "akn787"
-                            },
-                            "text": "test reply 1.1",
-                            "is_parent": false,
-                            "parent_ref": "676ac67cdb61939c768ca050",
-                            "likes": [],
-                            "dislikes": [],
-                            "createdAt": "2024-12-24T15:02:38.043Z",
-                            "updatedAt": "2024-12-24T15:02:38.043Z",
-                            "__v": 0,
-                            "replies": []
-                        }
-                    ]
-                }
-            ]
-        }
-    ];
-
     const handleRatingFilter = (val) => {
         // setCategory(category.value);
         setActiveRatingLabel(val.label)
@@ -147,6 +58,14 @@ const StoreView = (props) => {
         setActiveDateLabel(val.label)
     }
 
+    const addToCart = () => {
+        dispatch(a_addToCart(product._id));
+    }
+
+    const removeFromCart = () => {
+        dispatch(a_removeFromCart(product._id));
+    }
+
 
     return (
         <div className='md:relative flex flex-col md:flex-row bg-gray-200 dark:bg-darkBg max-100vh'>
@@ -155,7 +74,7 @@ const StoreView = (props) => {
                     <h1 className="text-gray-900 dark:text-gray-200 text-2xl font-semibold">{product.title}</h1>
                     <p className="text-gray-800 dark:text-gray-300 text-base">{product.description}</p>
                     <h2 className="tracking-widest text-base font-semibold text-gray-400">Category: <span className='capitalize'>{product.category}</span></h2>
-                    <div onClick={() => navigate(`/users/${product.seller._id}`)} className="flex flex-row gap-1 items-center cursor-pointer">
+                    <div onClick={() => navigate(`/users/${product.seller._id}`)} className="flex flex-row gap-2 items-center cursor-pointer">
                         <div className="w-6 h-6 overflow-hidden">
                             {product.seller.avatar.icon.length > 0 && <img loading='lazy' src={api_userImages(product.seller.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />}
                         </div>
@@ -173,9 +92,15 @@ const StoreView = (props) => {
                         <span className='text-xs text-rose-400'>including shipping & taxes</span>
                     </span>
                     <div className='flex gap-3'>
-                        <button onClick={() => { }} className="flex w-fit py-2.5 px-6 text-base font-semibold tracking-wide bg-blue-700 dark:bg-blue-700 disabled:bg-neutral-700 disabled:dark:bg-neutral-700 hover:bg-neutral-600 text-neutral-800 dark:text-gray-300 disabled:text-neutral-800 disabled:dark:text-neutral-500 rounded-xl items-center">
-                            Add to Cart
-                        </button>
+                        {cart.some(itm => itm.id === product._id) ?
+                            <button onClick={removeFromCart} className="flex w-fit py-2.5 px-6 text-base font-semibold tracking-wide bg-blue-700 dark:bg-blue-700 disabled:bg-neutral-700 disabled:dark:bg-neutral-700 hover:bg-neutral-600 text-neutral-800 dark:text-gray-300 disabled:text-neutral-800 disabled:dark:text-neutral-500 rounded-xl items-center">
+                                Remove from Cart
+                            </button>
+                            :
+                            <button onClick={addToCart} className="flex w-fit py-2.5 px-6 text-base font-semibold tracking-wide bg-blue-700 dark:bg-blue-700 disabled:bg-neutral-700 disabled:dark:bg-neutral-700 hover:bg-neutral-600 text-neutral-800 dark:text-gray-300 disabled:text-neutral-800 disabled:dark:text-neutral-500 rounded-xl items-center">
+                                Add to Cart
+                            </button>
+                        }
                         <button onClick={() => { }} className="flex w-fit py-2.5 px-6 text-base font-semibold tracking-wide bg-orange-700 dark:bg-orange-700 disabled:bg-neutral-700 disabled:dark:bg-neutral-700 hover:bg-neutral-600 text-neutral-800 dark:text-gray-300 disabled:text-neutral-800 disabled:dark:text-neutral-500 rounded-xl items-center">
                             Checkout
                         </button>

@@ -5,7 +5,7 @@ import { api_productImages } from '../utils/api_routes';
 
 import { HiPlus, HiMinus, HiOutlineMail } from 'react-icons/hi';
 import Stepper from '../components/Stepper';
-import { a_fetchUserCart, a_handleCartAdd, a_handleRemoveFromCart } from '../store/actions/user.actions';
+import { a_fetchUserCart, a_addToCart, a_removeFromCart } from '../store/actions/user.actions';
 
 const Cart = (props) => {
     const dispatch = useDispatch();
@@ -73,7 +73,7 @@ const Cart = (props) => {
                     subtotal
                 }
                 const cartID = userCart.filter(item => item.title === data.title)[0]._id;
-                dispatch(a_handleCartAdd({ userID, cartID, cartData })).then(res => {
+                dispatch(a_addToCart({ userID, cartID, cartData })).then(res => {
                     dispatch(a_fetchUserCart());
                 });
             } else {
@@ -85,7 +85,7 @@ const Cart = (props) => {
                     quantity: 1,
                     subtotal: data.price * 1
                 }
-                dispatch(a_handleCartAdd({ userID, cartData })).then(res => {
+                dispatch(a_addToCart({ cartData })).then(res => {
                     dispatch(a_fetchUserCart());
                 });
             }
@@ -101,7 +101,7 @@ const Cart = (props) => {
         const cartID = userCart.filter(item => item.title === data.title)[0]._id;
         try {
             if (userCart.filter(item => item.title === data.title)[0].quantity === 1) {
-                dispatch(a_handleRemoveFromCart({ cartID, userID })).then(res => {
+                dispatch(a_removeFromCart({ cartID, userID })).then(res => {
                     dispatch(a_fetchUserCart());
                 });
             } else {
@@ -112,7 +112,7 @@ const Cart = (props) => {
                     subtotal
                 }
                 const cartID = userCart.filter(item => item.title === data.title)[0]._id;
-                dispatch(a_handleRemoveFromCart({ cartID, userID })).then(res => {
+                dispatch(a_removeFromCart({ cartID, userID })).then(res => {
                     dispatch(a_fetchUserCart());
                 });
             }

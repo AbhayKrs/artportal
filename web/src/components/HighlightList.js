@@ -55,6 +55,7 @@ const HighlightList = ({ title, list, visibleItems = { desktop: 7, tablet: 4, mo
                     <LeftIcon className='h-8 w-8 text-neutral-800 dark:text-gray-300' />
                 </button>
                 <Carousel
+                    itemClass="px-0.5"
                     containerClass='w-full pb-4'
                     ref={carouselRef}
                     responsive={responsive}

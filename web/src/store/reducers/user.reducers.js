@@ -30,8 +30,7 @@ const initialState = {
     store_count: 0,
     cart: [],
     cart_open: false,
-    cart_count: 0,
-    cart_cost: 0,
+    cart_total: 0,
     is_premium: false,
     premium_validity: '',
     authSuccess: {
@@ -84,14 +83,9 @@ const userSlice = createSlice({
             state.cart_open = false
         },
         r_setCartList: (state, action) => {
-            const cartList = [...action.payload.cart];
-            let cart_cost = 0;
-            cartList.map(cart => {
-                cart_cost = cart_cost + cart.subtotal;
-            });
+            const cartList = [...action.payload.items];
             state.cart = cartList;
-            state.cart_count = action.payload.cart_count;
-            state.cart_cost = cart_cost;
+            state.cart_total = action.payload.subtotal;
         },
         r_pushToCart: (state, action) => {
             state.cart = [...state.cart, action.payload]

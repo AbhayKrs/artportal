@@ -89,7 +89,9 @@ const Layout = (props) => {
     // Check condition for site theme
     const hasSession = !!Cookies.get('hasSession') || !!localStorage.getItem('hasSession');
     if (!hasSession) return; // user anonymous, skip refresh
-    dispatch(a_verifyAuth());
+    dispatch(a_verifyAuth()).then(() => {
+      dispatch(a_fetchUserCart());
+    });
   }
 
   return (
