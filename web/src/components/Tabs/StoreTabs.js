@@ -138,7 +138,7 @@ const StoreTabs = ({ search, filtersPane, setFiltersPane }) => {
     }
 
     return (
-        <div className={`flex flex-col gap-2 w-full bg-slate-100/75 dark:bg-darkBg/75`}>
+        <div className={`flex flex-col gap-2 w-full`}>
             {search && (
                 <div className='flex flex-col gap-2'>
                     <div className="flex w-6/12 items-center bg-slate-300 dark:bg-neutral-800 rounded-xl py-2 px-4 gap-2">

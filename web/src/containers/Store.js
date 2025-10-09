@@ -8,7 +8,7 @@ import { api_artworkImages, api_userImages } from '../utils/api_routes';
 import { a_fetchUserCart, a_addToCart, a_removeFromCart } from '../store/actions/user.actions';
 import { a_fetchProducts } from '../store/actions/store.actions';
 
-import SimpleGrid from '../components/Grids/Simple';
+import SimpleGrid from '../components/Grids/SimpleGrid';
 import Divider from '../components/Divider';
 import Title from '../components/Title';
 import StoreCard from '../components/Cards/StoreCard';
@@ -117,6 +117,9 @@ const Store = ({ }) => {
                 {products.length > 0 ?
                     <div className='flex flex-row'>
                         <SimpleGrid>
+                            {products.map((item, index) => (
+                                <StoreCard size="l" key={index} product={item} seller={item.seller} />
+                            ))}
                             {products.map((item, index) => (
                                 <StoreCard size="l" key={index} product={item} seller={item.seller} />
                             ))}

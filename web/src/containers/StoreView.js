@@ -92,15 +92,9 @@ const StoreView = (props) => {
                         <span className='text-xs text-rose-400'>including shipping & taxes</span>
                     </span>
                     <div className='flex gap-3'>
-                        {cart.some(itm => itm.id === product._id) ?
-                            <button onClick={removeFromCart} className="flex w-fit py-2.5 px-6 text-base font-semibold tracking-wide bg-blue-700 dark:bg-blue-700 disabled:bg-neutral-700 disabled:dark:bg-neutral-700 hover:bg-neutral-600 text-neutral-800 dark:text-gray-300 disabled:text-neutral-800 disabled:dark:text-neutral-500 rounded-xl items-center">
-                                Remove from Cart
-                            </button>
-                            :
-                            <button onClick={addToCart} className="flex w-fit py-2.5 px-6 text-base font-semibold tracking-wide bg-blue-700 dark:bg-blue-700 disabled:bg-neutral-700 disabled:dark:bg-neutral-700 hover:bg-neutral-600 text-neutral-800 dark:text-gray-300 disabled:text-neutral-800 disabled:dark:text-neutral-500 rounded-xl items-center">
-                                Add to Cart
-                            </button>
-                        }
+                        <button onClick={addToCart} className="flex w-fit py-2.5 px-6 text-base font-semibold tracking-wide bg-blue-700 dark:bg-blue-700 disabled:bg-neutral-700 disabled:dark:bg-neutral-700 hover:bg-neutral-600 text-neutral-800 dark:text-gray-300 disabled:text-neutral-800 disabled:dark:text-neutral-500 rounded-xl items-center">
+                            Add to Cart
+                        </button>
                         <button onClick={() => { }} className="flex w-fit py-2.5 px-6 text-base font-semibold tracking-wide bg-orange-700 dark:bg-orange-700 disabled:bg-neutral-700 disabled:dark:bg-neutral-700 hover:bg-neutral-600 text-neutral-800 dark:text-gray-300 disabled:text-neutral-800 disabled:dark:text-neutral-500 rounded-xl items-center">
                             Checkout
                         </button>

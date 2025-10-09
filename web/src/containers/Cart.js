@@ -6,11 +6,18 @@ import { api_productImages } from '../utils/api_routes';
 import { HiPlus, HiMinus, HiOutlineMail } from 'react-icons/hi';
 import Stepper from '../components/Stepper';
 import { a_fetchUserCart, a_addToCart, a_removeFromCart } from '../store/actions/user.actions';
+import { Helmet } from 'react-helmet';
+import Title from '../components/Title';
+import Divider from '../components/Divider';
+
+import { ReactComponent as CouponIcon } from '../assets/icons/coupon.svg';
 
 const Cart = (props) => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.user);
+    const cart = useSelector(state => state.user.cart);
 
+    const [selected, setSelected] = useState();
     const [couponCode, setCouponCode] = useState('');
     const [couponValue, setCouponValue] = useState(0);
     const [sellerInstruction, setSellerInstruction] = useState('');
@@ -28,7 +35,7 @@ const Cart = (props) => {
     });
     const [cardHolder, setCardHolder] = useState('');
     const [cardNumber, setCardNumber] = useState('');
-    const [expDate, setExpDate] = useState({
+    const [expiry, setExpiry] = useState({
         date: '1',
         year: '2022'
     });
@@ -37,327 +44,228 @@ const Cart = (props) => {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
-        let cart = user.cart
-        let total = 0;
-        if (cart && cart.length > 0) {
-            cart.map(item => {
-                total = item.subtotal + cartTotal
-            })
-        }
+        setSelected(user.cart.map(item => item._id));
+        setCartTotal(user.cart_total);
+    }, [user.cart])
 
-        setCartTotal(total);
+    useEffect(() => {
         setFinal(cartTotal - taxValue - couponValue)
-    }, [couponValue, taxValue])
+    }, [cartTotal, couponValue, taxValue])
 
-    const checkAddressValues = () => {
-        if (name.fname.length === 0 || name.lname.length === 0 || address.line1.length === 0 || address.line2.length === 0 || address.zipCode.length === 0) {
-            return true;
-        } else return false;
+    const addToCart = (id) => {
+        dispatch(a_addToCart(id));
     }
-    const checkPaymentValues = () => {
-        if (cardHolder.length === 0 || cardNumber.length === 0 || cvv.length === 0) {
-            return true;
-        } else return false;
+    const removeFromCart = (id) => {
+        dispatch(a_removeFromCart(id));
     }
 
-    const addToCart = (data) => {
-        let cartData;
-        const userID = user.id;
-        const userCart = user.cart;
-        try {
-            if (userCart.filter(item => item.title === data.title).length !== 0) {
-                let quantity = userCart.filter(item => item.title === data.title)[0].quantity + 1;
-                let subtotal = data.price * quantity;
-                cartData = {
-                    quantity,
-                    subtotal
-                }
-                const cartID = userCart.filter(item => item.title === data.title)[0]._id;
-                dispatch(a_addToCart({ userID, cartID, cartData })).then(res => {
-                    dispatch(a_fetchUserCart());
-                });
+    const handleSelect = (id) => {
+        setSelected((prevSelected) => {
+            if (prevSelected.includes(id)) {
+                // If already selected, remove it
+                return prevSelected.filter(item => item !== id);
             } else {
-                cartData = {
-                    file: data.files[0],
-                    title: data.title,
-                    category: data.category,
-                    price: data.price,
-                    quantity: 1,
-                    subtotal: data.price * 1
-                }
-                dispatch(a_addToCart({ cartData })).then(res => {
-                    dispatch(a_fetchUserCart());
-                });
+                // If not selected, add it
+                return [...prevSelected, id];
             }
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    const removeFromCart = (data) => {
-        let cartData;
-        const userID = user.id;
-        const userCart = user.cart;
-        const cartID = userCart.filter(item => item.title === data.title)[0]._id;
-        try {
-            if (userCart.filter(item => item.title === data.title)[0].quantity === 1) {
-                dispatch(a_removeFromCart({ cartID, userID })).then(res => {
-                    dispatch(a_fetchUserCart());
-                });
-            } else {
-                let quantity = userCart.filter(item => item.title === data.title)[0].quantity - 1;
-                let subtotal = data.price * quantity;
-                cartData = {
-                    quantity,
-                    subtotal
-                }
-                const cartID = userCart.filter(item => item.title === data.title)[0]._id;
-                dispatch(a_removeFromCart({ cartID, userID })).then(res => {
-                    dispatch(a_fetchUserCart());
-                });
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    const switchCartView = () => {
-        switch (currentIndex) {
-            case 0: return <div>
-                <div className='sm:scrollbar px-2 flex flex-col bg-slate-200 dark:bg-neutral-900 max-h-48 overflow-y-auto w-full divide-y-2 divide-neutral-800 text-gray-800 dark:text-gray-300 font-semibold dark:font-medium'>
-                    {user.cart && user.cart.map(cartItem => (
-                        <div className='flex sm:flex-row flex-col gap-5 py-2  text-md'>
-                            <div className='flex gap-4'>
-                                <img loading='lazy' src={api_productImages(cartItem.file)} className="w-20 h-20 object-cover rounded shadow-lg" alt="Thumbnail" />
-                                <div className='flex flex-col'>
-                                    <span>Title: {cartItem.title}</span>
-                                    <span>Category: {cartItem.title}</span>
-                                    <span>Price: &#8377;{Number.parseFloat(cartItem.price).toFixed(2)}</span>
-                                </div>
-                            </div>
-                            <div className='flex flex-col items-end ml-auto gap-2'>
-                                <div className="flex flex-row h-10 rounded-lg relative bg-transparent mt-1">
-                                    <button onClick={addToCart} className="bg-slate-300 dark:bg-neutral-700 h-full w-10 rounded-l cursor-pointer flex items-center justify-center">
-                                        <HiPlus className='text-gray-600 dark:text-gray-300' />
-                                    </button>
-                                    <span className='bg-slate-300 dark:bg-neutral-700 font-semibold text-lg flex items-center text-gray-700 dark:text-gray-300 px-2'>{cartItem.quantity}</span>
-                                    <button onClick={removeFromCart} className="bg-slate-300 dark:bg-neutral-700 h-full w-10 rounded-r cursor-pointer flex items-center justify-center">
-                                        <HiMinus className='text-gray-600 dark:text-gray-300' />
-                                    </button>
-                                </div>
-                                <span className='text-md'>SubTotal: &#8377;{Number.parseFloat(cartItem.subtotal).toFixed(2)}</span>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-                <div className="flex sm:flex-row flex-col mt-4 sm:mx-2 mx-0 gap-4">
-                    <div className="sm:w-1/2 w-full gap-4">
-                        <div>
-                            <h1 className="font-bold uppercase text-gray-700 dark:text-gray-300">Coupon Code</h1>
-                            <p className="mb-2 text-sm italic text-gray-500">If you have a coupon code, please enter it in the box below</p>
-                            <div className="flex w-full justify-center">
-                                <div className="flex items-center w-full mx-auto bg-white dark:bg-neutral-700 rounded-lg">
-                                    <div className="w-full">
-                                        <input type="search" value={couponCode} onChange={(ev) => setCouponCode(ev.target.value)} className="w-full px-4 py-1 text-gray-800 dark:text-gray-400 rounded-full focus:outline-none bg-transparent" placeholder="Type a coupon code..." x-model="search" />
-                                    </div>
-                                    <div>
-                                        <button type="submit" className="flex items-center bg-blue-700 justify-center w-12 h-12 text-white rounded-r-lg">
-                                            <svg aria-hidden="true" data-prefix="fas" data-icon="gift" className="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 448c0 17.7 14.3 32 32 32h160V320H32v128zm256 32h160c17.7 0 32-14.3 32-32V320H288v160zm192-320h-42.1c6.2-12.1 10.1-25.5 10.1-40 0-48.5-39.5-88-88-88-41.6 0-68.5 21.3-103 68.3-34.5-47-61.4-68.3-103-68.3-48.5 0-88 39.5-88 88 0 14.5 3.8 27.9 10.1 40H32c-17.7 0-32 14.3-32 32v80c0 8.8 7.2 16 16 16h480c8.8 0 16-7.2 16-16v-80c0-17.7-14.3-32-32-32zm-326.1 0c-22.1 0-40-17.9-40-40s17.9-40 40-40c19.9 0 34.6 3.3 86.1 80h-86.1zm206.1 0h-86.1c51.4-76.5 65.7-80 86.1-80 22.1 0 40 17.9 40 40s-17.9 40-40 40z" /></svg>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <h1 className="font-bold uppercase text-gray-700 dark:text-gray-300">Instructions for seller</h1>
-                            <p className="mb-2 text-sm italic text-gray-500">If you have some information for the seller you can leave them in the box below</p>
-                            <textarea rows='4' value={sellerInstruction} onChange={(ev) => setSellerInstruction(ev.target.value)} className="scrollbar w-full p-2 bg-gray-100 dark:bg-neutral-700 rounded resize-none text-gray-800 dark:text-gray-400 focus:outline-none"></textarea>
-                        </div>
-                    </div>
-                    <div className="sm:w-1/2 w-full">
-                        <h1 className="font-bold uppercase text-gray-700 dark:text-gray-300">Order Details</h1>
-                        <p className="mb-6 italic text-gray-500">Shipping and additionnal costs are calculated based on values you have entered</p>
-                        <div className="flex justify-between">
-                            <div className="text-lg font-bold text-center text-gray-900 dark:text-gray-400">Total</div>
-                            <div className="font-bold text-center text-gray-900 dark:text-gray-300">&#8377;{Number.parseFloat(cartTotal).toFixed(2)}</div>
-                        </div>
-                        <div className="flex justify-between">
-                            <div className="flex text-lg font-bold text-gray-900 dark:text-gray-400">Coupon Discount</div>
-                            <div className="font-bold text-center text-green-500 dark:text-green-700">&#8377;{Number.parseFloat(couponValue).toFixed(2)}</div>
-                        </div>
-                        <div className="flex justify-between">
-                            <div className="flex text-lg font-bold text-center text-gray-900 dark:text-gray-400">Tax</div>
-                            <div className="font-bold text-center text-gray-900 dark:text-gray-300">&#8377;{Number.parseFloat(taxValue).toFixed(2)}</div>
-                        </div>
-                        <hr className='my-2 border-1 border-gray-800 dark:border-gray-300' />
-                        <div className="flex justify-between">
-                            <div className="text-lg font-bold text-center text-gray-900 dark:text-gray-400">Final</div>
-                            <div className="font-bold text-center text-gray-900 dark:text-gray-200">&#8377;{Number.parseFloat(final).toFixed(2)}</div>
-                        </div>
-                        <button onClick={() => setCurrentIndex(1)} className="flex float-right justify-center w-fit p-3 mt-6 sm:mb-0 mb-6 font-medium text-white uppercase bg-blue-700 rounded-xl shadow item-center hover:bg-blue-700 focus:shadow-outline focus:outline-none">Select the delivery location</button>
-                    </div>
-                </div>
-            </div>
-
-            case 1: return <div className='flex sm:flex-row flex-col h-full gap-4'>
-                <div className="flex flex-col w-full">
-                    <div className="gap-4">
-                        <div className="flex flex-col w-full gap-2">
-                            <h1 className="font-bold text-gray-700 dark:text-gray-300">Full Name <span className='text-rose-400 text-md'>*</span></h1>
-                            <div className="w-full bg-white dark:bg-neutral-700 flex rounded">
-                                <input value={name.fname} onChange={(ev) => setName({ ...name, fname: ev.target.value })} placeholder="First Name" className="p-1 px-2 bg-transparent outline-none w-full text-gray-800 dark:text-gray-300 rounded" />
-                            </div>
-                            <div className="w-full bg-white dark:bg-neutral-700 flex rounded">
-                                <input value={name.lname} onChange={(ev) => setName({ ...name, lname: ev.target.value })} placeholder="Last Name" className="p-1 px-2 bg-transparent outline-none w-full text-gray-800 dark:text-gray-300 rounded" />
-                            </div>
-                        </div>
-                        <div className="flex flex-col w-full gap-2">
-                            <h1 className="font-bold text-gray-700 dark:text-gray-300">Delivery address <span className='text-rose-400 text-md'>*</span></h1>
-                            <select value={countryCode} onChange={(ev) => setCountryCode(ev.target.value)} className="h-10 mt-2 form-select w-full rounded dark:bg-neutral-700 dark:text-gray-300">
-                                <option value="India">IN</option>
-                                <option value="US">USA</option>
-                                <option value="UK">UK</option>
-                            </select>
-                            <div className="w-full bg-white dark:bg-neutral-700 flex rounded">
-                                <input value={address.line1} onChange={(ev) => setAddress({ ...address, line1: ev.target.value })} placeholder="Address Line 1" className="p-1 px-2 bg-transparent outline-none w-full text-gray-800 dark:text-gray-300 rounded" />
-                            </div>
-                            <div className="w-full bg-white dark:bg-neutral-700 flex rounded ">
-                                <input value={address.line2} onChange={(ev) => setAddress({ ...address, line2: ev.target.value })} placeholder="Address Line 2" className="p-1 px-2 bg-transparent outline-none w-full text-gray-800 dark:text-gray-300 rounded" />
-                            </div>
-                            <div className="w-full bg-white dark:bg-neutral-700 flex rounded">
-                                <input value={address.zipCode} onChange={(ev) => setAddress({ ...address, zipCode: ev.target.value })} placeholder="Zip Code" className="p-1 px-2 bg-transparent outline-none w-full text-gray-800 dark:text-gray-300 rounded" />
-                            </div>
-                        </div>
-                    </div>
-                    <div className='flex ml-auto mt-auto gap-2'>
-                        <button onClick={() => setCurrentIndex(0)} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-rose-400 rounded-xl shadow item-center hover:bg-rose-500 focus:shadow-outline focus:outline-none">Back</button>
-                        <button disabled={checkAddressValues()} onClick={() => setCurrentIndex(2)} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-blue-700 rounded-xl shadow item-center hover:bg-blue-700 disabled:bg-neutral-300 disabled:text-gray-500 disabled:dark:bg-neutral-700 disabled:dark:text-gray-500 focus:shadow-outline focus:outline-none">Proceed to Payment</button>
-                    </div>
-                </div>
-            </div>
-
-            case 2: return <div className="flex flex-col h-full">
-                <div className='p-4 gap-3'>
-                    <div className="flex">
-                        <label for="type1" className="flex items-center cursor-pointer">
-                            <img loading='lazy' src="https://leadershipmemphis.org/wp-content/uploads/2020/08/780370.png" className="h-8" />
-                        </label>
-                    </div>
-                    <div>
-                        <label className="font-bold uppercase text-md mb-2 ml-1 text-gray-700 dark:text-gray-300">Name on Card</label>
-                        <div>
-                            <input value={cardHolder} onChange={(ev) => setCardHolder(ev.target.value)} className="w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-blue-700 transition-colors" placeholder="John Smith" type="text" />
-                        </div>
-                    </div>
-                    <div>
-                        <label className="font-bold uppercase text-md mb-2 ml-1 text-gray-700 dark:text-gray-300">Card Number</label>
-                        <div>
-                            <input value={cardNumber} onChange={(ev) => setCardNumber(ev.target.value)} className="w-full px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-blue-700 transition-colors" placeholder="0000 0000 0000 0000" type="text" />
-                        </div>
-                    </div>
-                    <div className='flex items-end'>
-                        <div className='flex gap-2 w-1/2'>
-                            <div className='flex flex-col'>
-                                <label className="font-bold uppercase text-md mb-2 ml-1 text-gray-700 dark:text-gray-300">Expiration Date</label>
-                                <select value={expDate.date} onChange={(ev) => setExpDate({ ...expDate, date: ev.target.value })} className="form-select w-fit py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-blue-700 transition-colors cursor-pointer">
-                                    <option value="1">01 - January</option>
-                                    <option value="2">02 - February</option>
-                                    <option value="3">03 - March</option>
-                                    <option value="4">04 - April</option>
-                                    <option value="5">05 - May</option>
-                                    <option value="6">06 - June</option>
-                                    <option value="7">07 - July</option>
-                                    <option value="8">08 - August</option>
-                                    <option value="9">09 - September</option>
-                                    <option value="10">10 - October</option>
-                                    <option value="11">11 - November</option>
-                                    <option value="12">12 - December</option>
-                                </select>
-                            </div>
-                            <select value={expDate.year} onChange={(ev) => setExpDate({ ...expDate, year: ev.target.value })} className="form-select w-fit py-2 mb-1 mt-auto border-2 border-gray-200 rounded-md focus:outline-none focus:border-blue-700 transition-colors cursor-pointer">
-                                <option value="2020">2020</option>
-                                <option value="2021">2021</option>
-                                <option value="2022">2022</option>
-                                <option value="2023">2023</option>
-                                <option value="2024">2024</option>
-                                <option value="2025">2025</option>
-                                <option value="2026">2026</option>
-                                <option value="2027">2027</option>
-                                <option value="2028">2028</option>
-                                <option value="2029">2029</option>
-                            </select>
-                        </div>
-                        <div className='w-1/2'>
-                            <label className="font-bold uppercase text-md mb-2 ml-1 text-gray-700 dark:text-gray-300">Security code</label>
-                            <div>
-                                <input value={cvv} onChange={(ev) => setCvv(ev.target.value)} className="w-32 px-3 py-2 mb-1 border-2 border-gray-200 rounded-md focus:outline-none focus:border-blue-700 transition-colors" placeholder="000" type="text" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className='flex ml-auto mt-auto gap-2'>
-                    <button onClick={() => setCurrentIndex(1)} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-rose-400 rounded-xl shadow item-center hover:bg-rose-500 focus:shadow-outline focus:outline-none">Back</button>
-                    <button disabled={checkPaymentValues()} onClick={() => setCurrentIndex(3)} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-blue-700 rounded-xl shadow item-center hover:bg-blue-700 disabled:bg-neutral-300 disabled:text-gray-500 disabled:dark:bg-neutral-700 disabled:dark:text-gray-500 focus:shadow-outline focus:outline-none">Proceed to Confirmation</button>
-                </div>
-            </div>
-
-            case 3: return <div className='flex flex-col h-full'>
-                <div className='gap-6'>
-                    <h1 className="font-bold uppercase text-gray-300">Summary</h1>
-                    <div className='flex sm:flex-row flex-col gap-8'>
-                        <div className='w-full'>
-                            <div className="text-lg font-bold text-gray-800 dark:text-blue-700">Price Details</div>
-                            <div className="flex justify-between">
-                                <div className="text-lg font-bold text-center text-gray-800 dark:text-gray-400">Total</div>
-                                <div className="font-bold text-center text-gray-900 dark:text-gray-300">&#8377;{Number.parseFloat(cartTotal).toFixed(2)}</div>
-                            </div>
-                            <div className="flex justify-between">
-                                <div className="flex text-lg font-bold text-gray-800 dark:text-gray-400">Coupon Discount</div>
-                                <div className="font-bold text-center text-green-700">&#8377;{Number.parseFloat(couponValue).toFixed(2)}</div>
-                            </div>
-                            <div className="flex justify-between">
-                                <div className="flex text-lg font-bold text-center text-gray-800 dark:text-gray-400">Tax</div>
-                                <div className="font-bold text-center text-gray-900 dark:text-gray-300">&#8377;{Number.parseFloat(taxValue).toFixed(2)}</div>
-                            </div>
-                            <hr className='my-2 border-1 border-gray-700 dark:boder-gray-300' />
-                            <div className="flex justify-between">
-                                <div className="text-lg font-bold text-center text-gray-800 dark:text-gray-400">Final</div>
-                                <div className="font-bold text-center text-gray-900 dark:text-gray-200">&#8377;{Number.parseFloat(final).toFixed(2)}</div>
-                            </div>
-                        </div>
-                        <div className='w-full'>
-                            <div className="text-lg font-bold text-gray-800 dark:text-blue-700">Shipping Address</div>
-                            <div className='text-md dark:text-gray-300 uppercase'>{name.fname + ' ' + name.lname}</div>
-                            <div className='flex items-center text-md dark:text-gray-300'><HiOutlineMail className='mr-2' /> david89@gmail.com</div>
-                            <div className='text-md dark:text-gray-300'>
-                                {address.line1 + ', ' + address.line2 + ', ' + address.zipCode}
-                            </div>
-                        </div>
-                    </div>
-                    <div className='w-full'>
-                        <div className="text-lg font-bold text-gray-800 dark:text-blue-700">Payment Details</div>
-                        <div className='text-md dark:text-gray-300'>Mode of Payment: Card</div>
-                        <div className='flex items-center text-md dark:text-gray-300'>Card Number: 	XXXXXXXX88881881</div>
-                    </div>
-                </div>
-                <div className='flex ml-auto mt-auto gap-2'>
-                    <button onClick={() => setCurrentIndex(2)} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-rose-400 rounded-xl shadow item-center hover:bg-rose-500 focus:shadow-outline focus:outline-none">Back</button>
-                    <button onClick={() => console.log('cart done')} className="flex float-right justify-center w-fit p-3 mt-6 font-medium text-white uppercase bg-blue-700 rounded-xl shadow item-center hover:bg-blue-700 disabled:bg-neutral-300 disabled:text-gray-500 disabled:dark:bg-neutral-700 disabled:dark:text-gray-500 focus:shadow-outline focus:outline-none">Checkout</button>
-                </div>
-            </div >
-        }
+        });
     }
 
     return (
-        <div className='bg-gray-200 dark:bg-darkBg flex w-full justify-center'>
-            <div className="scrollbar w-full m-5 bg-slate-100 dark:bg-neutral-800 rounded-xl">
-                <div className='p-4 h-full flex flex-col'>
-                    <h1 className='text-blue-700 dark:text-blue-700 text-5xl font-semibold tracking-widest '>Cart</h1>
-                    <Stepper activeIndex={currentIndex} />
-                    {switchCartView()}
+        <div className='md:relative flex flex-col md:flex-row gap-4 bg-gray-200 dark:bg-darkBg'>
+            <Helmet>
+                <title>artportal | Cart</title>
+            </Helmet>
+            <div className={`flex flex-col gap-2 w-full py-2 px-4`}>
+                <Title text="Cart" />
+                {/* <Stepper activeIndex={currentIndex} /> */}
+                <div className='flex flex-row gap-6'>
+                    <div className='flex flex-col gap-2 w-8/12'>
+                        <div className='flex flex-col p-4 rounded-lg bg-slate-200 dark:bg-neutral-900 w-full'>
+                            <h1 className="font-bold text-gray-700 dark:text-gray-300">Items</h1>
+                            {/* <Divider noPadding /> */}
+                            <div className='sm:scrollbar p-2 flex flex-col max-h-64 overflow-y-auto w-full divide-y-2 divide-neutral-800 text-gray-800 dark:text-gray-300 font-semibold dark:font-medium'>
+                                {user.cart && user.cart.map(itm => (
+                                    <div className='flex sm:flex-row flex-col gap-5 py-2 text-md'>
+                                        <input
+                                            type="checkbox"
+                                            checked={selected.includes(itm._id)}
+                                            onChange={() => handleSelect(itm._id)}
+                                            style={{ WebkitAppearance: 'none' }}
+                                            className="h-4 w-4 appearance-none align-middle rounded-md outline-none bg-slate-300 dark:bg-neutral-700 checked:bg-blue-700 dark:checked:bg-blue-700 cursor-pointer"
+                                        />
+                                        <div className='flex gap-4'>
+                                            <img loading='lazy' src={api_productImages(itm.product.images[0])} className="w-20 h-20 object-cover rounded shadow-lg" alt="Thumbnail" />
+                                            <div className='flex flex-col'>
+                                                <span>Title: {itm.product.title}</span>
+                                                <span>Category: {itm.product.category}</span>
+                                                <span>Price: &#8377;{Number.parseFloat(itm.product.price).toFixed(2)}</span>
+                                            </div>
+                                        </div>
+                                        <div className='flex flex-col items-end self-center ml-auto gap-2'>
+                                            <div className="flex items-center">
+                                                <button onClick={() => removeFromCart(itm.product._id)} className="inline-flex items-center justify-center p-1 text-sm font-medium h-6 w-6 text-gray-500 bg-white border border-gray-300 rounded-full focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 dark:bg-neutral-800 dark:text-gray-400 dark:border-neutral-700 dark:hover:bg-neutral-700 dark:hover:border-neutral-600 dark:focus:ring-neutral-700" type="button">
+                                                    <HiMinus className='text-gray-600 dark:text-gray-300' />
+                                                </button>
+                                                <div className="ms-3">
+                                                    <input
+                                                        required
+                                                        type="number"
+                                                        id="first_product"
+                                                        value={itm.quantity}
+                                                        className="bg-gray-50 w-14 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1 dark:bg-neutral-700 dark:border-neutral-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                    />
+                                                </div>
+                                                <button onClick={() => addToCart(itm.product._id)} className="inline-flex items-center justify-center h-6 w-6 p-1 ms-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-full focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 dark:bg-neutral-800 dark:text-gray-400 dark:border-neutral-700 dark:hover:bg-neutral-700 dark:hover:border-neutral-600 dark:focus:ring-neutral-700" type="button">
+                                                    <HiPlus className='text-gray-600 dark:text-gray-300' />
+                                                </button>
+                                            </div>
+                                            <span className='text-md'>&#8377;{Number.parseFloat(itm.quantity * itm.product.price).toFixed(2)}</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className='flex flex-col gap-2 p-4 rounded-lg bg-slate-200 dark:bg-neutral-900'>
+                            <h1 className="font-bold text-gray-700 dark:text-gray-300">Select a delivery address</h1>
+                            <Divider noPadding />
+                            <h1 className="font-bold text-gray-700 dark:text-gray-300">Delivery addresses (6)</h1>
+                            <div className='flex flex-col gap-2'>
+                                {[0].map(itm => (
+                                    <div className='flex flex-row gap-2'>
+                                        <input
+                                            type="checkbox"
+                                            checked={true}
+                                            onChange={() => { }}
+                                            style={{ WebkitAppearance: 'none' }}
+                                            className="h-4 w-4 m-0.5 appearance-none align-middle rounded-md outline-none bg-slate-300 dark:bg-neutral-700 checked:bg-blue-700 dark:checked:bg-blue-700 cursor-pointer"
+                                        />
+                                        <div className='flex flex-col gap-0.5'>
+                                            <h1 className='text-lg font-medium text-neutral-800 dark:text-gray-200'>Abhay Kumar</h1>
+                                            <p className='text-sm font-light text-neutral-800 dark:text-gray-200'>D804, Bestech Park View Ananda, Sector 81, GURUGRAM, HARYANA, 122004, India</p>
+                                            <p className='text-sm text-neutral-800 dark:text-gray-200'>Phone number: 9319308541</p>
+                                            <div className='flex flex-row gap-4'>
+                                                <a href="#" className='text-base font-medium text-blue-600 hover:underline'>Edit address</a>
+                                                <a href="#" className='text-base font-medium text-blue-600 hover:underline'>Add delivery instructions</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                    <div className='flex flex-col gap-4 w-4/12'>
+                        <div className='flex flex-col gap-2 p-4 rounded-lg bg-slate-200 dark:bg-neutral-900'>
+                            <img loading='lazy' src="https://leadershipmemphis.org/wp-content/uploads/2020/08/780370.png" className="h-8 w-fit" />
+                            <div className='flex flex-col gap-0.5'>
+                                <label className='text-sm text-neutral-800 dark:text-gray-300'>Card Number</label>
+                                <input
+                                    type="text"
+                                    name="cardNumber"
+                                    value={cardNumber}
+                                    className=" bg-slate-50 dark:bg-neutral-800 text-gray-800 dark:text-gray-200 dark:placeholder:text-neutral-400 rounded-lg text-base py-2 pl-4 w-full focus:outline-none"
+                                    placeholder="0000 0000 0000 0000"
+                                    onChange={(ev) => setCardNumber(ev.target.value)}
+                                />
+                            </div>
+                            <div className='flex flex-col gap-0.5'>
+                                <label className='text-sm text-neutral-800 dark:text-gray-300'>Card Holder</label>
+                                <input
+                                    type="text"
+                                    name="cardHolder"
+                                    value={cardHolder}
+                                    className=" bg-slate-50 dark:bg-neutral-800 text-gray-800 dark:text-gray-200 dark:placeholder:text-neutral-400 rounded-lg text-base py-2 pl-4 w-full focus:outline-none"
+                                    placeholder="John Smith"
+                                    onChange={(ev) => setCardHolder(ev.target.value)}
+                                />
+                            </div>
+                            <div className='flex items-end'>
+                                <div className='flex gap-2 w-1/2'>
+                                    <div className='flex flex-col gap-0.5'>
+                                        <label className='text-sm text-neutral-800 dark:text-gray-300'>Expiration Date</label>
+                                        <div className='flex flex-row'>
+                                            <input
+                                                type="text"
+                                                name="cardHolder"
+                                                value={expiry.date}
+                                                className=" bg-slate-50 dark:bg-neutral-800 text-gray-800 dark:text-gray-200 dark:placeholder:text-neutral-400 text-base rounded-l-lg py-2 pl-2 w-8 focus:outline-none"
+                                                placeholder="MM"
+                                                onChange={(ev) => setExpiry({ ...expiry, date: ev.target.value })}
+                                            />
+                                            <input
+                                                type="text"
+                                                name="cardHolder"
+                                                value={expiry.year}
+                                                className=" bg-slate-50 dark:bg-neutral-800 text-gray-800 dark:text-gray-200 dark:placeholder:text-neutral-400 text-base rounded-r-lg py-2 pl-2 w-16 focus:outline-none"
+                                                placeholder="YY"
+                                                onChange={(ev) => setExpiry({ ...expiry, year: ev.target.value })}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='flex flex-col gap-0.5'>
+                                    <label className='text-sm text-neutral-800 dark:text-gray-300'>Security code</label>
+                                    <input
+                                        type="text"
+                                        name="cardHolder"
+                                        value={cvv}
+                                        className=" bg-slate-50 dark:bg-neutral-800 text-gray-800 dark:text-gray-200 dark:placeholder:text-neutral-400 rounded-lg text-base py-2 pl-4 w-20 focus:outline-none"
+                                        placeholder="000"
+                                        onChange={(ev) => setCvv(ev.target.value)}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className='flex flex-col gap-1'>
+                            <div className='flex flex-col'>
+                                <h1 className="text-lg font-bold uppercase text-gray-700 dark:text-gray-300">Coupon Code</h1>
+                                <p className="text-sm italic text-gray-500">If you have a coupon code, please enter it in the box below</p>
+                            </div>
+                            <div className='flex relative items-center gap-2'>
+                                <button type="submit" className="absolute right-1 flex items-center bg-blue-700 justify-center p-1.5 rounded-lg">
+                                    <CouponIcon className='h-5 w-5 text-gray-200' />
+                                </button>
+                                <input
+                                    type="text"
+                                    name="search"
+                                    value={couponCode}
+                                    onChange={(ev) => setCouponCode(ev.target.value)}
+                                    placeholder="Type a coupon code..."
+                                    className="placeholder-gray-600 w-full dark:placeholder-gray-300 text-black dark:text-white bg-white disabled:bg-gray-200 dark:bg-neutral-900 dark:disabled:bg-neutral-900 h-10 pl-3 pr-10 rounded-lg text-sm focus:outline-none"
+                                />
+                            </div>
+                        </div>
+                        <div className="flex flex-col gap-1 w-full">
+                            <h1 className="text-lg font-bold uppercase text-gray-700 dark:text-gray-300">Order Details</h1>
+                            <div className="flex justify-between">
+                                <div className="text-base text-center text-gray-900 dark:text-gray-400">Items</div>
+                                <div className="text-base font-medium text-center text-gray-900 dark:text-gray-300">&#8377;{Number.parseFloat(cartTotal).toFixed(2)}</div>
+                            </div>
+                            <div className="flex justify-between">
+                                <div className="text-base text-center text-gray-900 dark:text-gray-400">Delivery</div>
+                                <div className="text-base font-medium text-center text-gray-900 dark:text-gray-300">&#8377;{Number.parseFloat(couponValue).toFixed(2)}</div>
+                            </div>
+                            <div className="flex justify-between">
+                                <div className="text-base text-gray-900 dark:text-gray-400">Coupon Discount</div>
+                                <div className="text-base font-medium text-center text-green-500 dark:text-green-700">&#8377;{Number.parseFloat(couponValue).toFixed(2)}</div>
+                            </div>
+                            <div className="flex justify-between">
+                                <div className="text-base text-center text-gray-900 dark:text-gray-400">Tax</div>
+                                <div className="text-base font-medium text-center text-gray-900 dark:text-gray-300">&#8377;{Number.parseFloat(taxValue).toFixed(2)}</div>
+                            </div>
+                            <Divider noPadding />
+                            <div className="flex justify-between">
+                                <div className="text-lg font-bold text-center text-gray-900 dark:text-gray-400">Total</div>
+                                <div className="font-bold text-center text-gray-900 dark:text-gray-200">&#8377;{Number.parseFloat(final).toFixed(2)}</div>
+                            </div>
+                        </div>
+                        <button onClick={() => { }} className="flex self-end w-fit py-2.5 px-6 text-base font-semibold tracking-wide bg-orange-700 dark:bg-orange-700 disabled:bg-neutral-700 disabled:dark:bg-neutral-700 hover:bg-neutral-600 text-neutral-800 dark:text-gray-200 disabled:text-neutral-800 disabled:dark:text-neutral-500 rounded-xl items-center">
+                            Checkout
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div >
+        </div>
     )
 }
 
