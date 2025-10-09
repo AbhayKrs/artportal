@@ -132,7 +132,7 @@ const Store = ({ }) => {
                 }
             </div>
             {filtersPane &&
-                <div className={`relative px-2 py-3 h-full max-h-show min-h-show md:fixed md:right-2 flex flex-col gap-3 w-full md:w-[14%] order-1 md:order-2 backdrop-sepia-0 bg-white/30 dark:bg-black/30 border-l-2 border-gray-400 dark:border-neutral-800`}>
+                <div className={`relative px-2 py-3 h-full md:fixed md:right-2 flex flex-col gap-3 w-full md:w-[14%] order-1 md:order-2 backdrop-sepia-0 bg-white/30 dark:bg-black/30 border-l-2 border-gray-400 dark:border-neutral-800`}>
                     <div className='flex flex-row justify-between px-2'>
                         <div className={`flex gap-1 text-lg font-medium tracking-wide text-neutral-800 dark:text-gray-300 rounded-xl items-end`}>
                             <EventsIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />

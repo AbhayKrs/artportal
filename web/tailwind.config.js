@@ -27,6 +27,9 @@ module.exports = {
         xl: ['1.5rem', '1.75rem'],
         "2xl": ['1.875rem', '2rem'],
         "3xl": ['2rem', '2.25rem'],
+        "4xl": ['2.5rem', '2.5rem'],
+        "5xl": ['2.75rem', '2.75rem'],
+
       },
       minHeight: {
         'show': 'calc(100vh - 1.675rem)',
@@ -60,7 +63,7 @@ module.exports = {
         },
       });
     },
-    function ({ addBase }) {
+    function ({ addBase, addComponents }) {
       addBase({
         '::-webkit-scrollbar': {
           width: '0.5em',
@@ -71,20 +74,15 @@ module.exports = {
         '::-webkit-scrollbar-thumb': {
           backgroundColor: '#404040',
           borderRadius: 3
-        },
-        // '@media (prefers-color-scheme: dark)': {
-        //   '::-webkit-scrollbar': {
-        //     width: '0.5em'
-        //   },
-        //   '::-webkit-scrollbar-track': {
-        //     backgroundColor: '#737373',
-        //   },
-        //   '::-webkit-scrollbar-thumb': {
-        //     backgroundColor: 'red',
-        //     borderRadius: 3
-        //   },
-        // }
+        }
       });
+      addComponents({
+        '.scrollbar-thin': {
+          '&::-webkit-scrollbar': {
+            width: '0.25em',
+          }
+        }
+      })
     },
   ]
 }

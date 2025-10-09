@@ -17,7 +17,7 @@ const Cart = (props) => {
     const user = useSelector(state => state.user);
     const cart = useSelector(state => state.user.cart);
 
-    const [selected, setSelected] = useState();
+    const [selected, setSelected] = useState([]);
     const [couponCode, setCouponCode] = useState('');
     const [couponValue, setCouponValue] = useState(0);
     const [sellerInstruction, setSellerInstruction] = useState('');

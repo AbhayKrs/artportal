@@ -213,87 +213,70 @@ const Profile = (props) => {
 
     return (
         <div className='bg-gray-200 dark:bg-darkBg'>
-            {console.log("profile_data", profile_data)}
-            <div className="relative block h-96">
-                <div className="absolute top-0 w-full h-full bg-center bg-cover" style={{
-                    backgroundImage: `url('https://cdna.artstation.com/p/assets/images/images/049/944/404/large/gabriel-gomez-fghghfghfghfghfghfghfg.jpg?1653675686')`
-                }}>
-                    <span id="blackOverlay" className="w-full h-full absolute opacity-25 bg-black"></span>
-                </div>
+            <div className="block h-64">
+                <img src='https://cdna.artstation.com/p/assets/images/images/049/944/404/large/gabriel-gomez-fghghfghfghfghfghfghfg.jpg?1653675686' className="w-full h-full object-cover" />
             </div>
-            <div className="relative pt-20 pb-6">
-                <div className="mx-auto px-4">
-                    <div className="relative flex flex-col min-w-0 break-words bg-neutral-100 dark:bg-neutral-800 w-full shadow-xl rounded-lg -mt-64">
-                        <div className="px-6 pb-6">
-                            <div className="flex flex-wrap justify-center mb-7">
-                                <div className="w-full sm:w-4/12 px-4">
-                                    <div className="grid grid-cols-2 lg:grid-cols-4 justify-center sm:pt-4 pt-16">
-                                        <div className="shrink mr-4 p-3 min-w-fit text-center justify-items-center">
-                                            <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-800 dark:text-gray-300">{profile_data.followers_count}</span><span className="text-sm font-semibold text-blueGray-500">Following</span>
-                                        </div>
-                                        <div className="mr-4 p-3 min-w-fit text-center justify-items-center">
-                                            <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-800 dark:text-gray-300">{profile_data.followers_count}</span><span className="text-sm font-semibold text-blueGray-500">Followers</span>
-                                        </div>
-                                        <div className="mr-4 p-3 min-w-fit text-center justify-items-center">
-                                            <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-800 dark:text-gray-300">{profile_data.artworks_count}</span><span className="text-sm font-semibold text-blueGray-500">Artwork Uploads</span>
-                                        </div>
-                                        <div className="mr-4 p-3 min-w-fit text-center justify-items-center">
-                                            <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-800 dark:text-gray-300">{profile_data.comment_count}</span><span className="text-sm font-semibold text-blueGray-500">Comments</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="w-full sm:w-3/12 px-4 flex justify-center">
-                                    <div className="relative h-fit align-middle -m-[27rem] -ml-[27.5rem] sm:-m-32 sm:-ml-28 max-w-[15rem]">
-                                        {profile_data.avatar.icon.length > 0 && <img loading='lazy' src={api_userImages(profile_data.avatar.icon)} />}
-                                    </div>
-                                </div>
-                                <div className="w-full sm:w-4/12 px-4 lg:text-right lg:self-center">
-                                    <div className="flex flex-col text-center pt-4 gap-1.5">
-                                        <h3 className="text-4xl font-semibold text-blueGray-800 dark:text-gray-300">
-                                            {profile_data.name}
-                                        </h3>
-                                        <span className="text-md text-blueGray-500 font-bold">
-                                            #{profile_data.username}
-                                        </span>
-                                        {profile_data.bio && <p className="text-blueGray-600 text-blueGray-700 dark:text-gray-400 font-bold italic">
-                                            {'“' + profile_data.bio + '”'}
-                                        </p>}
-                                        {user.id === profile_data.id ?
-                                            <div>
-                                                <button onClick={() => navigate('/settings/account')} className="flex items-center gap-2 bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150" type="button">
-                                                    <FaUserEdit />
-                                                    <span>Manage user profile</span>
-                                                </button>
-                                            </div>
-                                            :
-                                            <div className="px-3 sm:mt-0">
-                                                <button onClick={() => onFollowClick()} className="bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150" type="button">
-                                                    Follow
-                                                </button>
-                                                <button onClick={() => onMessageClick()} className="bg-teal-500 active:bg-teal-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150" type="button">
-                                                    Message
-                                                </button>
-                                            </div>
-                                        }
-                                    </div>
-                                </div>
+            <div className="flex flex-col gap-2 w-full">
+                <div className="flex flex-row gap-4 px-8 pt-4">
+                    <div className="relative h-fit align-middle sm:-mt-20 w-28 sm:w-40 rounded-full p-1.5 bg-darkBg">
+                        {profile_data.avatar.icon.length > 0 && <img loading='lazy' src={api_userImages(profile_data.avatar.icon)} />}
+                    </div>
+                    <div className="flex flex-col">
+                        <h3 className="text-4xl font-bold text-neutral-800 dark:text-gray-300">
+                            {profile_data.name}
+                        </h3>
+                        <span className="text-base font-semibold text-gray-500">
+                            #{profile_data.username}
+                        </span>
+                    </div>
+                    <div className="flex flex-row gap-4">
+                        <div className="grid grid-cols-2 lg:grid-cols-4 justify-center sm:pt-4 pt-16">
+                            <div className="shrink mr-4 p-3 min-w-fit text-center justify-items-center">
+                                <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-800 dark:text-gray-300">{profile_data.followers_count}</span><span className="text-sm font-semibold text-blueGray-500">Following</span>
                             </div>
-                            <div className='flex gap-3 py-3 items-center justify-start xs:flex-wrap xs:justify-center'>
-                                <div onClick={() => setActiveView('portfolio')} className={`text-lg font-semibold ${activeView === 'portfolio' ? 'text-blue-700 dark:text-blue-700' : 'text-gray-700 dark:text-gray-400'}  cursor-pointer`}>Portfolio</div>
-                                <span className='text-gray-700 dark:text-gray-400'>&#9679;</span>
-                                <div onClick={() => setActiveView('about')} className={`text-lg font-semibold ${activeView === 'about' ? 'text-blue-700 dark:text-blue-700' : 'text-gray-700 dark:text-gray-400'}  cursor-pointer`}>About</div>
-                                <span className='text-gray-700 dark:text-gray-400'>&#9679;</span>
-                                <div onClick={() => setActiveView('liked')} className={`text-lg font-semibold ${activeView === 'liked' ? 'text-blue-700 dark:text-blue-700' : 'text-gray-700 dark:text-gray-400'}  cursor-pointer`}>Liked</div>
-                                <span className='text-gray-700 dark:text-gray-400'>&#9679;</span>
-                                {user.id === profile_data.id && <div onClick={() => setActiveView('bookmarks')} className={`text-lg font-semibold ${activeView === 'bookmarks' ? 'text-blue-700 dark:text-blue-700' : 'text-gray-700 dark:text-gray-400'}  cursor-pointer`}>Bookmarks</div>}
+                            <div className="mr-4 p-3 min-w-fit text-center justify-items-center">
+                                <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-800 dark:text-gray-300">{profile_data.followers_count}</span><span className="text-sm font-semibold text-blueGray-500">Followers</span>
                             </div>
-                            {profile_data && renderView()}
+                            <div className="mr-4 p-3 min-w-fit text-center justify-items-center">
+                                <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-800 dark:text-gray-300">{profile_data.artworks_count}</span><span className="text-sm font-semibold text-blueGray-500">Artwork Uploads</span>
+                            </div>
+                            <div className="mr-4 p-3 min-w-fit text-center justify-items-center">
+                                <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-800 dark:text-gray-300">{profile_data.comment_count}</span><span className="text-sm font-semibold text-blueGray-500">Comments</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div >
-        </div >
+                <div className='flex gap-3 py-3 items-center justify-start xs:flex-wrap xs:justify-center'>
+                    <div onClick={() => setActiveView('portfolio')} className={`text-lg font-semibold ${activeView === 'portfolio' ? 'text-blue-700 dark:text-blue-700' : 'text-gray-700 dark:text-gray-400'}  cursor-pointer`}>Portfolio</div>
+                    <span className='text-gray-700 dark:text-gray-400'>&#9679;</span>
+                    <div onClick={() => setActiveView('about')} className={`text-lg font-semibold ${activeView === 'about' ? 'text-blue-700 dark:text-blue-700' : 'text-gray-700 dark:text-gray-400'}  cursor-pointer`}>About</div>
+                    <span className='text-gray-700 dark:text-gray-400'>&#9679;</span>
+                    <div onClick={() => setActiveView('liked')} className={`text-lg font-semibold ${activeView === 'liked' ? 'text-blue-700 dark:text-blue-700' : 'text-gray-700 dark:text-gray-400'}  cursor-pointer`}>Liked</div>
+                    <span className='text-gray-700 dark:text-gray-400'>&#9679;</span>
+                    {user.id === profile_data.id && <div onClick={() => setActiveView('bookmarks')} className={`text-lg font-semibold ${activeView === 'bookmarks' ? 'text-blue-700 dark:text-blue-700' : 'text-gray-700 dark:text-gray-400'}  cursor-pointer`}>Bookmarks</div>}
+                </div>
+                {profile_data && renderView()}
+            </div>
+        </div>
     )
 }
+
+// {user.id === profile_data.id ?
+//     <div>
+//         <button onClick={() => navigate('/settings/account')} className="flex items-center gap-2 bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150" type="button">
+//             <FaUserEdit />
+//             <span>Manage user profile</span>
+//         </button>
+//     </div>
+//     :
+//     <div className="px-3 sm:mt-0">
+//         <button onClick={() => onFollowClick()} className="bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150" type="button">
+//             Follow
+//         </button>
+//         <button onClick={() => onMessageClick()} className="bg-teal-500 active:bg-teal-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150" type="button">
+//             Message
+//         </button>
+//     </div>
+// }
 
 export default Profile
