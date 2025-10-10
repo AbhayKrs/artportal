@@ -124,7 +124,7 @@ const MobileHeader = () => {
                     {user.is_verified ?
                         <div className='flex flex-col w-full gap-4'>
                             <div className='flex flex-col'>
-                                <HeaderLink type="link" hidePane={false} text="Upload" path="/library/new" icon={<UploadIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
+                                <HeaderLink type="link" hidePane={false} text="Upload" path="/artwork/upload" icon={<UploadIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 <HeaderLink type="link" hidePane={false} text={`Cart (${user.cart.length})`} path="/store/cart" icon={<CartIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 <HeaderLink type="link" hidePane={false} text="Notifications" path="/notifications" icon={<NotificationIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                             </div>
@@ -168,7 +168,7 @@ const MobileHeader = () => {
                                 <div className='flex flex-col'>
                                     <p className='text-neutral-800 dark:text-gray-200 text-2xl font-medium tracking-wide'>{user.name}</p>
                                     <div className='flex flex-row items-center gap-1'>
-                                        <p className='text-neutral-800 dark:text-gray-200 text-sm font-medium tracking-wide'>#{user.username}</p>
+                                        <p className='text-neutral-800 dark:text-gray-200 text-sm font-medium tracking-wide'>@{user.username}</p>
                                         <VerifiedIcon className="stroke-current stroke-1 text-neutral-800 dark:text-gray-300 h-4 w-4" />
                                         <Artportal_logo fill="#059669" className='h-3 w-auto' />
                                     </div>

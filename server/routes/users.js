@@ -47,7 +47,7 @@ router.get('/', async (req, res) => {
 });
 
 // @route   GET api/v1.01/users/:id ---  Get user by ID --- PUBLIC
-router.get('/:id', async (req, res) => {
+router.get('/:id', protect, async (req, res) => {
     try {
         const user = await User.findById(req.params.id).populate('bookmarks');
         const payload = {
@@ -62,7 +62,7 @@ router.get('/:id', async (req, res) => {
             is_verified: user.is_verified,
             is_premium: user.is_premium,
             followers: user.followers,
-            followering: user.following,
+            following: user.following,
             bookmarks: user.bookmarks,
             created_on: user.createdAt,
             premium_validity: user.premium_validity
@@ -73,6 +73,31 @@ router.get('/:id', async (req, res) => {
                 token: token
             });
         })
+    } catch (err) {
+        return res.status(404).json({ msg: err.name });
+    }
+});
+
+// @route   GET api/v1.01/users/:id/view ---  Get user by ID --- PUBLIC
+router.get('/:id/view', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id).populate('bookmarks');
+        const artworks = await Artwork.find({ "artist": req.params.id }).populate('artist', 'name username avatar');
+
+        const response = {
+            id: user._id,
+            name: user.name,
+            username: user.username,
+            avatar: user.avatar,
+            bio: user.bio,
+            is_verified: user.is_verified,
+            is_premium: user.is_premium,
+            artworks,
+            followers: user.followers.length,
+            following: user.following.length,
+            bookmarks: user.bookmarks,
+        };
+        res.json(response);
     } catch (err) {
         return res.status(404).json({ msg: err.name });
     }
@@ -97,59 +122,6 @@ router.put('/:id', protect, async (req, res) => {
         return res.status(404).json({ msg: err.name });
     }
 });
-
-// @route   GET api/v1.01/users/:id/artworks --- Get all cart items --- PUBLIC
-router.get('/:id/artworks', async (req, res) => {
-    try {
-        const user = await User.findById(req.params.id).populate('bookmarks');
-        if (!user) {
-            return res.status(400).send({ msg: 'User not found' });
-        }
-
-        const artworks = await Artwork.find({ "artist": req.params.id }).populate('artist', 'name username avatar');
-        const artworksData = {
-            artworks: artworks,
-            artworks_count: artworks.length
-        }
-        res.json(artworksData);
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Unable to fetch artworks list');
-    }
-});
-
-// @route   POST api/v1.01/users/:id/bookmark --- Add artwork to bookmarks --- PUBLIC
-router.post('/:id/bookmark', async (req, res) => {
-    try {
-        const user = await User.findById(req.params.id).populate('bookmarks');
-        if (!user) {
-            return res.status(400).send({ msg: 'User not found' });
-        }
-        user.bookmarks.push(req.body.artworkID);
-        user.save();
-        res.json("Success!");
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Bookmark failed!');
-    }
-})
-
-// @route   DELETE api/v1.01/users/:id/bookmark --- Delete artwork from bookmarks --- PUBLIC
-router.delete('/:id/bookmark/:bookmark_id', async (req, res) => {
-    try {
-        const user = await User.findById(req.params.id).populate('bookmarks');
-        const bookmark_toDelete = await user.bookmarks.find(bookmark => bookmark._id === req.params.bookmark_id);
-        if (!bookmark_toDelete) {
-            return res.status(400).send({ msg: 'Bookmark does not exist!' });
-        }
-        user.bookmarks = user.bookmarks.filter(bookmark => bookmark._id !== bookmark_toDelete._id);
-        await user.save();
-        res.json(user.bookmarks);
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Bookmark failed!');
-    }
-})
 
 // @route   GET api/v1.01/users/:id/store --- Fetch store listings of user --- PUBLIC
 router.get('/:id/products', async (req, res) => {

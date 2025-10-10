@@ -91,7 +91,7 @@ const SearchModal = ({ open, handleClose, betaMsg, searchVal, setSearchVal, acti
                     </div>
                     {/* <MasonryGrid cols={5}>
                         {library.trending_artworks.map((artwork, index) => (
-                            <div key={index} onClick={() => navigate(`/library/${artwork._id}`)} className='relative group group-hover:block cursor-pointer'>
+                            <div key={index} onClick={() => navigate(`/artwork/${artwork._id}`)} className='relative group group-hover:block cursor-pointer'>
                                 <img loading='lazy'
                                     id={index}
                                     className='object-cover w-full h-full rounded'
@@ -139,7 +139,7 @@ const SearchModal = ({ open, handleClose, betaMsg, searchVal, setSearchVal, acti
                                         //     <div key={index} className='flex items-center gap-4 rounded-lg text-neutral-700 dark:text-gray-200 bg-gray-100 dark:bg-neutral-900 py-2 px-5'>
                                         //         <img src={api_artworkImages(item.files[0])} className='object-cover w-10 h-10 md:w-14 md:h-14 rounded' />
                                         //         <span className='text-base md:text-xl font-semibold leading-5 capitalize'>{item.title}</span>
-                                        //         <FaChevronRight onClick={() => { navigate(`/library/${item._id}`); clearSearch(); handleClose() }} className="ml-auto h-6 w-6 cursor-pointer" />
+                                        //         <FaChevronRight onClick={() => { navigate(`/artwork/${item._id}`); clearSearch(); handleClose() }} className="ml-auto h-6 w-6 cursor-pointer" />
                                         //     </div>
                                         // ))
                                         :

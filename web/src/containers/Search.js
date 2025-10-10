@@ -52,7 +52,7 @@ const Search = ({ }) => {
                             className='object-cover w-full h-full rounded'
                             src={api_artworkImages(item.files[0])}
                         />
-                        <div className='hidden absolute bottom-0 p-2 pt-14 group-hover:flex group-hover:flex-row w-full bg-gradient-to-t from-black text-gray-200 group-hover:justify-between'>
+                        {/* <div className='hidden absolute bottom-0 p-2 pt-14 group-hover:flex group-hover:flex-row w-full bg-gradient-to-t from-black text-gray-200 group-hover:justify-between'>
                             <div className="flex flex-col place-self-end max-w-[65%]">
                                 <h3 className="text-lg font-bold leading-5 capitalize break-words">{item.title}</h3>
                                 <div className='flex'>
@@ -78,7 +78,7 @@ const Search = ({ }) => {
                                     <span className="text-xs ml-1 antialiased">{moment(item.createdAt).fromNow()}</span>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 ))}
             </MasonryGrid>

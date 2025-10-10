@@ -231,9 +231,10 @@ router.post('/new', protect, artworkUpl.any(), async (req, res) => {
 });
 
 // @route   POST api/v1.01/artworks/new --- Create multiple new artwork entries --- Private
-router.post('/multiupload', protect, artworkUpl.any(), async (req, res) => {
+router.post('/multiupload', artworkUpl.any(), async (req, res) => {
     try {
-        const user = await User.findById(req.query.userID);
+        const user = await User.findById(req.body.userID);
+
         let proms = [];
         req.files.map(file => {
             const prom = new Promise((resolve, reject) => {
@@ -243,7 +244,7 @@ router.post('/multiupload', protect, artworkUpl.any(), async (req, res) => {
                     description: "description_" + file.filename,
                     files: [file.filename],
                     categories: ["concept_art"],
-                    tags: ["art", "myart"],
+                    tags: ["66ae769e21e0a74f70178e30", "66ae769e21e0a74f70178e47", "66ae769e21e0a74f70178e42"],
                     views: [],
                     likes: [],
                     comments: []

@@ -10,7 +10,7 @@ const ImageCard = ({ size, artwork, artist }) => {
     let navigate = useNavigate();
 
     return (
-        <div className={`group flex rounded-md relative cursor-pointer ${size === 'l' ? 'h-44 w-auto' : 'h-36 w-auto'}`} onClick={() => navigate(`/library/${artwork._id}`)}>
+        <div className={`group flex rounded-md relative cursor-pointer ${size === 'l' ? 'h-44 w-auto' : 'h-36 w-auto'}`} onClick={() => navigate(`/artwork/${artwork._id}`)}>
             {artwork.files[0].length > 0 && <img src={api_artworkImages(artwork.files[0])} className='object-cover w-full h-full rounded-md' />}
             <div className="hidden items-end h-full w-full group-hover:absolute group-hover:top-0 group-hover:flex group-hover:flex-row">
                 <div className="flex flex-col w-full pb-2 pt-14 px-2 bg-gradient-to-t from-black text-gray-200 group-hover:flex rounded-b-md" >

@@ -21,7 +21,6 @@ const initialState = {
     bookmarks: [],
     followers_count: 0,
     artworks: [],
-    artworks_count: 0,
     comments: [],
     comment_count: 0,
     is_seller: false,
@@ -51,10 +50,7 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         r_setAuthError: (state, action) => {
-            if (action.payload)
-                state.authError = action.payload;
-            else
-                state.authError = state.authError;
+            state.authError = action.payload;
         },
         r_setVisitorStatus: (state, action) => {
             state.profile_data = { ...initialState.profile_data, ...action.payload };
@@ -67,9 +63,8 @@ const userSlice = createSlice({
             state.authSuccess = action.payload;
         },
         r_setUserArtworks: (state, action) => {
-            const artworksItems = [...action.payload.artworks];
+            const artworksItems = [...action.payload];
             state.artworks = artworksItems;
-            state.artworks_count = artworksItems.length;
         },
         r_setUserStoreList: (state, action) => {
             const storeList = [...action.payload.store];
@@ -123,10 +118,6 @@ const userSlice = createSlice({
                 state[key] = action.payload[key]
             })
         },
-        r_clearAuth: (state, action) => {
-            state.accessToken = '';
-            state = initialState;
-        },
         r_handleLogout: (state, action) => {
             state.authSuccess = {
                 message: 'Logout successful',
@@ -140,6 +131,7 @@ const userSlice = createSlice({
         r_deleteBookmark: (state, action) => {
             state.viewed_user = { ...state.viewed_user, bookmarks: [...action.payload] }
         },
+        r_clearAuth: () => initialState
     }
 })
 

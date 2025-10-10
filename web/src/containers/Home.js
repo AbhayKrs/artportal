@@ -79,13 +79,13 @@ const Home = (props) => {
                     <div className='flex flex-row'>
                         <MasonryGrid cols={5}>
                             {library.artworks.map((artwork, index) => (
-                                <div key={index} onClick={() => navigate(`/library/${artwork._id}`)} className='relative group group-hover:block cursor-pointer'>
+                                <div key={index} onClick={() => navigate(`/artwork/${artwork._id}`)} className='relative group group-hover:block cursor-pointer'>
                                     <img loading='lazy'
                                         id={index}
                                         className='object-cover w-full h-full rounded'
                                         src={api_artworkImages(artwork.files[0])}
                                     />
-                                    <div className='opacity-0 flex transition-all delay-200 absolute bottom-0 p-2 pt-14 group-hover:opacity-100 w-full bg-gradient-to-t from-black text-gray-200 justify-between'>
+                                    {/* <div className='opacity-0 flex transition-all delay-200 absolute bottom-0 p-2 pt-14 group-hover:opacity-100 w-full bg-gradient-to-t from-black text-gray-200 justify-between'>
                                         <div className="flex flex-col place-self-end max-w-[65%]">
                                             <h4 className="text-md text-base  font-bold leading-5 break-words">{artwork.title.length > 20 ? artwork.title.slice(0, 20) + "..." : artwork.title}</h4>
                                             <div className='flex'>
@@ -111,7 +111,7 @@ const Home = (props) => {
                                                 <p className="text-xs antialiased">{moment(artwork.createdAt).fromNow()}</p>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
                             ))}
                         </MasonryGrid>

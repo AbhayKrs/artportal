@@ -38,8 +38,7 @@ import About from './children/About';
 import TOS from './children/TOS';
 import Privacy from './children/Privacy';
 import useWindowWidth from './hooks/useWindowWidth';
-import { a_fetchUserArtworks, a_fetchUserCart, a_fetchUserStoreList, a_fetchVisitorStatus, a_verifyAuth } from './store/actions/user.actions';
-import { r_verifyUser } from './store/reducers/user.reducers';
+import { a_fetchUserCart, a_fetchVisitorStatus, a_verifyAuth } from './store/actions/user.actions';
 import { r_setLoader, r_setSnackMessage } from './store/reducers/common.reducers';
 import LibraryView from './containers/LibraryView';
 import StoreView from './containers/StoreView';
@@ -121,8 +120,8 @@ const App = () => {
         { path: '/google_failed', element: <Google header="Failed" /> },
         { path: '/library', element: <Library /> },
         { path: '/search', element: <Search /> },
-        { path: '/library/:id', element: <LibraryView /> },
-        { path: '/library/new', element: <LibraryUpload /> },
+        { path: '/artwork/:id', element: <LibraryView /> },
+        { path: '/artwork/upload', element: <LibraryUpload /> },
         { path: '/library/:id/edit', element: <Edit.Library /> },
         { path: '/store', element: <Store /> },
         { path: '/store/:id', element: <StoreView /> },

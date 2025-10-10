@@ -109,9 +109,9 @@ export const api_logout = () => apiClient.post(`/auth/logout`);
 
 export const api_users = (type, value) => apiClient.get(`/users?type=${type}&value=${value}`);
 export const api_userData = userID => apiClient.get(`/users/${userID}`);
+export const api_profileData = userID => apiClient.get(`/users/${userID}/view`);
 export const api_updateUserData = (userID, userData) => apiClient.put(`/users/${userID}`, userData);
 export const api_deleteBookmark = (bookmarkID, userID) => apiClient.delete(`/users/${userID}/bookmark/${bookmarkID}`);
-export const api_userArtworks = userID => apiClient.get(`/users/${userID}/artworks`);
 
 export const api_cart = userID => apiClient.get(`/users/${userID}/cart`);
 export const api_addToCart = (userID, data) => apiClient.post(`/users/${userID}/cart/add`, data, { headers: { 'Content-Type': 'application/json' } });

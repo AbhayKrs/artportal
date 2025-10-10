@@ -62,7 +62,7 @@ export const a_verifyAuth = createAsyncThunk("a_verifyAuth", async (payload, { g
 });
 
 export const a_handleSignIn = createAsyncThunk("a_handleSignIn", async (payload, { getState, dispatch, rejectWithValue }) => {
-    const { stayLoggedIn, userData } = payload;
+    const { userData } = payload;
 
     await api_signIn(userData).then(res => {
         const { token } = res.data;
@@ -73,6 +73,7 @@ export const a_handleSignIn = createAsyncThunk("a_handleSignIn", async (payload,
         dispatch(r_headerDialogClose());
         return;
     }).catch(err => {
+        console.log('err', err)
         if (err.response) {
             const error = {
                 message: err.response.data,
@@ -209,16 +210,6 @@ export const a_handleDeleteBookmark = createAsyncThunk("a_handleDeleteBookmark",
             dispatch(r_setSnackMessage(msgData))
         }
         console.log('---error a_handleSignUp', err);
-        return rejectWithValue(err.message);
-    })
-});
-
-export const a_fetchUserArtworks = createAsyncThunk("a_fetchUserArtworks", async (payload, { getState, dispatch, rejectWithValue }) => {
-    await api_userArtworks(payload).then(res => {
-        dispatch(r_setUserArtworks(res.data));
-        return;
-    }).catch(err => {
-        console.log('---error fetchUserArtworks', err);
         return rejectWithValue(err.message);
     })
 });

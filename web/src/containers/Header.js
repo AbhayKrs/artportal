@@ -97,7 +97,7 @@ const Header = ({ hidePane, setHidePane }) => {
                         {user.is_verified &&
                             <>
                                 <Divider />
-                                <HeaderLink type="link" name="upload" hidePane={hidePane} text="Upload" path="/library/new" icon={<UploadIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
+                                <HeaderLink type="link" name="upload" hidePane={hidePane} text="Upload" path="/artwork/upload" icon={<UploadIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 <HeaderLink type="link" name="cart" withBadge hidePane={hidePane} text={`Cart (${user && user.cart ? user.cart.length : 0})`} path="/store/cart" icon={<CartIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 <HeaderLink type="link" name="notifications" hidePane={hidePane} text="Notifications" path="/notifications" icon={<NotificationIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 <Divider />
@@ -154,7 +154,7 @@ const Header = ({ hidePane, setHidePane }) => {
                                             <div className='flex flex-col w-9/12'>
                                                 <p className='text-neutral-800 dark:text-gray-200 text-xl text-start font-medium tracking-wide'>{user.name.length > 14 ? user.name.slice(0, 12) + "..." : user.name}</p>
                                                 <div className='flex flex-row items-center gap-1'>
-                                                    <p className='text-neutral-800 dark:text-gray-200 text-sm font-medium tracking-wide'>#{user.username}</p>
+                                                    <p className='text-neutral-800 dark:text-gray-200 text-sm font-medium tracking-wide'>@{user.username}</p>
                                                     {user.is_verified && <VerifiedIcon className="stroke-current stroke-1 text-neutral-800 dark:text-gray-300 h-4 w-4" />}
                                                     {user.is_premium && <Artportal_logo fill="#059669" className='h-3 w-auto' />}
                                                 </div>
@@ -212,7 +212,7 @@ const Header = ({ hidePane, setHidePane }) => {
                     onClose={() => dispatch(r_headerDialogClose())}
                     onClick={() => dispatch(r_headerDialogClose())}
                     openRegister={() => dispatch(r_headerDialogOpen('openRegisterDialog'))}
-                    handleSignIn={(stayLoggedIn, userData) => dispatch(a_handleSignIn({ stayLoggedIn, userData }))}
+                    handleSignIn={(userData) => dispatch(a_handleSignIn({ userData }))}
                 />
             }
             {common.openRegisterDialog &&

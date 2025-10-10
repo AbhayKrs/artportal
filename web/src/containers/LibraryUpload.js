@@ -216,10 +216,10 @@ const LibraryUpload = ({ }) => {
     return (
         <div className="main-container bg-gray-200 dark:bg-darkBg">
             <Helmet>
-                <title>artportal | Library - Upload</title>
+                <title>artportal | Upload</title>
             </Helmet>
             <div className="py-4 px-8">
-                <Title text="Library - Upload" />
+                <Title text="Upload" />
                 <div className='flex flex-col gap-2'>
                     <p className='font-semibold text-lg text-neutral-700 dark:text-neutral-400'>Once you upload your image, our system runs two AI checks in the background to help keep the platform safe and organized:</p>
                     <div className='flex flex-row gap-2 items-center'>

@@ -22,7 +22,7 @@ router.post("/login", async (req, res) => {
         if (!isOAuthValid) { return res.status(401).json(oauthErrors) }
 
         const isMatch = await bcrypt.compare(password, user.password || "");
-        if (!isMatch) return res.status(401).json({ error: "Incorrect Password. Please try again!" });
+        if (!isMatch) return res.status(401).json("Incorrect Password. Please try again!");
 
         const payload = {
             id: user._id,
@@ -75,7 +75,7 @@ router.post("/signup", async (req, res) => {
 
         const existingUser = await User.findOne({ $or: [{ username }, { email }] });
         if (existingUser) {
-            return res.status(400).json({ error: "Username or email already exists" });
+            return res.status(400).json("Username or email already exists");
         }
 
         const salt = await bcrypt.genSalt(10);
@@ -131,7 +131,7 @@ router.post("/signup", async (req, res) => {
                 });
             })
             .catch(err => {
-                res.status(500).json({ error: err.message });
+                res.status(500).json(err.message);
             });
     } catch (err) {
         return res.status(404).json({ msg: err.name });
@@ -256,7 +256,7 @@ router.post("/logout", async (req, res) => {
         res.clearCookie("hasSession");
         res.json({ success: true, message: "Logged out successfully" });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json(err.message);
     }
 });
 
