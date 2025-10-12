@@ -12,119 +12,111 @@ import HighlightList from '../components/HighlightList';
 import AppQR from '../assets/images/artportal_appQR.png';
 import MasonryGrid from '../components/Grids/Masonry';
 
-import { BsHeart, BsChat } from 'react-icons/bs';
-import { BiTimeFive } from 'react-icons/bi';
 import Divider from '../components/Divider';
+import { Helmet } from 'react-helmet';
 
 import { ReactComponent as ViewsIcon } from '../assets/icons/views.svg';
+import { ReactComponent as CloseIcon } from '../assets/icons/close.svg';
+
 import Title from '../components/Title';
+import PostList from '../components/PostList';
+import ImageCarousel from '../components/Carousels/ImageCaroursel';
 
 const Home = (props) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const hidePane = useOutletContext();
 
     const library = useSelector(state => state.library);
+    const [sidePane, setSidePane] = useState(true);
     const [showQR, setShowQR] = useState(false);
 
     useEffect(() => {
         window.scrollTo(0, 0);
         dispatch(r_setLoader(true));
-        dispatch(a_fetchHomeData({ filter: "", period: "" }));
+        dispatch(a_fetchHomeData({ filter: "new", period: "" }));
     }, [])
 
     return (
-        <div className='bg-gray-200 dark:bg-darkBg p-4'>
-            <HighlightList type="trending" title="Trending" list={library.trending_artworks} visibleItems={{ desktop: 7, tablet: 4, mobile: 2 }} />
-            <Divider />
-            <div className='flex gap-2 w-full backdrop-sepia-0 rounded-lg'>
-                <div className='flex flex-col gap-4 w-8/12 p-4 backdrop-sepia-0 bg-white/30 dark:bg-black/30 rounded-lg'>
-                    <div className='flex flex-col gap-2 justify-between w-full'>
-                        <Title text="Featured Artist" />
-                        <div className='flex flex-col'>
-                            <p className='text-neutral-800 dark:text-gray-200 text-xl font-medium tracking-wide'>Akunta</p>
-                            <a href="#" className='flex flex-row items-center gap-1'>
-                                <p className='text-neutral-800 dark:text-gray-200 text-sm font-medium tracking-wide'>#akn787</p>
-                            </a>
-                        </div>
-                    </div>
-                    <HighlightList title="" list={library.featured_artworks} visibleItems={{ desktop: 5, tablet: 2, mobile: 2 }} />
-                </div>
-                <div className='flex-1 w-2/12 content-center justify-items-center backdrop-sepia-0 bg-white/30 dark:bg-black/30 rounded-lg'>
-                    <div className='flex flex-col gap-2 lg:gap-4 p-4'>
-                        <div className='flex h-24 w-24 md:h-28 md:w-28 lg:h-36 lg:w-36'>
-                            <span className='relative m-auto text-center rounded-md'>
-                                {!showQR && <button className='flex absolute rounded-md z-10 inset-0 m-auto items-center justify-center backdrop-blur-sm' onClick={() => setShowQR(true)}>
-                                    <ViewsIcon className='w-8 h-8 text-neutral-600 dark:text-black/75' />
-                                </button>}
-                                <img className='rounded-md shadow-md' src={AppQR} />
-                            </span>
-                        </div>
-                        <h2 className='w-min text-md md:text-xl lg:text-xl font-bold uppercase text-center tracking-wide text-neutral-800 dark:text-gray-200'>Download the app for<br /> <span className='text-2xl md:text-3xl lg:text-5xl font-black'>free!</span></h2>
-                    </div>
-                </div>
-                <div className='flex-1 w-2/12 content-center justify-items-center backdrop-sepia-0 bg-white/30 dark:bg-black/30 rounded-lg'>
-                    <div className='flex flex-col gap-2 lg:gap-2'>
-                        <Title text="Categories" />
-                        <ul className='list-disc pl-5'>
-                            {["abstract", "architecture", "character", "concept", "environment", "mature", "traditional"].map((ctg, index) => (
-                                <li key={index} className='w-min text-md text-neutral-800 dark:text-gray-200'>{ctg}</li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
+        <div className='md:relative flex flex-col md:flex-row gap-4 bg-gray-200 dark:bg-darkBg'>
+            <Helmet>
+                <title>artportal</title>
+            </Helmet>
+            <div className={`flex flex-col gap-2 ${hidePane ? sidePane ? 'md:w-[74%]' : 'md:w-full' : sidePane ? 'md:w-[70.5%]' : 'md:w-full'} order-2 md:order-1 py-2 px-8 md:px-16 min-h-show`}>
+                <PostList list={library.artworks} />
             </div>
-            <Divider />
-            {
-                library.artworks.length > 0 ?
-                    <div className='flex flex-row'>
-                        <MasonryGrid cols={5}>
-                            {library.artworks.map((artwork, index) => (
-                                <div key={index} onClick={() => navigate(`/artwork/${artwork._id}`)} className='relative group group-hover:block cursor-pointer'>
-                                    <img loading='lazy'
-                                        id={index}
-                                        className='object-cover w-full h-full rounded'
-                                        src={api_artworkImages(artwork.files[0])}
-                                    />
-                                    {/* <div className='opacity-0 flex transition-all delay-200 absolute bottom-0 p-2 pt-14 group-hover:opacity-100 w-full bg-gradient-to-t from-black text-gray-200 justify-between'>
-                                        <div className="flex flex-col place-self-end max-w-[65%]">
-                                            <h4 className="text-md text-base  font-bold leading-5 break-words">{artwork.title.length > 20 ? artwork.title.slice(0, 20) + "..." : artwork.title}</h4>
-                                            <div className='flex'>
-                                                <p className="font-base text-xs my-1 mr-1">
-                                                    {artwork.artist.username}
-                                                </p>
-                                                <svg className="stroke-current stroke-1 text-indigo-600 dark:text-indigo-600 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
-                                                </svg>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col self-end place-items-end gap-1.5">
-                                            <div className="inline-flex gap-1 items-end">
-                                                <BsHeart className='h-4 w-4' />
-                                                <p className="text-xs antialiased">{artwork.likes.length}</p>
-                                            </div>
-                                            <div className="inline-flex gap-1 items-end">
-                                                <BsChat className='h-4 w-4' />
-                                                <p className="text-xs antialiased">{artwork.comments.length}</p>
-                                            </div>
-                                            <div className="inline-flex gap-1 items-end">
-                                                <BiTimeFive className='h-4 w-4' />
-                                                <p className="text-xs antialiased">{moment(artwork.createdAt).fromNow()}</p>
-                                            </div>
-                                        </div>
-                                    </div> */}
+            {sidePane &&
+                <div className={`relative px-2 py-3 h-full md:fixed max-h-show md:right-2 flex flex-col gap-3 w-full md:w-[25%] order-1 md:order-2 backdrop-sepia-0 bg-white/30 dark:bg-black/30 border-l-2 border-gray-400 dark:border-neutral-800`}>
+                    <div className='flex flex-col gap-3 px-1 h-full overflow-y-auto'>
+                        <div className='flex flex-col gap-2'>
+                            <span className={`flex gap-1 text-lg font-medium tracking-wide text-neutral-800 dark:text-gray-300 rounded-xl items-end`}>
+                                Trending Now
+                            </span>
+                            <div className='flex flex-row flex-wrap gap-1.5 w-full'>
+                                {["painting", "scifi", "landscape", "character"].map(itm => (
+                                    <button className='flex rounded-lg bg-gray-300 dark:bg-neutral-800 p-2'>
+                                        <span className='text-sm text-neutral-800 dark:text-gray-300'>#{itm}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                        <Divider noPadding />
+                        <div className='flex flex-col gap-2'>
+                            <span className={`flex gap-1 text-lg font-medium tracking-wide text-neutral-800 dark:text-gray-300 rounded-xl items-end`}>
+                                Featured Artist
+                            </span>
+                            <div className='flex flex-col gap-2 p-3 justify-between w-full backdrop-sepia-0 bg-white/30 dark:bg-black/30 rounded-lg'>
+                                <div className='flex flex-col'>
+                                    <p className='text-neutral-800 dark:text-gray-200 text-lg font-medium'>Akunta</p>
+                                    <a href="#" className='flex flex-row items-center gap-1 text-neutral-800 dark:text-gray-200 text-sm font-medium'>
+                                        @akn787
+                                    </a>
                                 </div>
-                            ))}
-                        </MasonryGrid>
-                    </div>
-                    :
-                    <div >
-                        <div className='absolute inset-0 h-fit w-fit m-auto text-center text-gray-300'>
-                            {/* <img loading='lazy' className='h-32 w-auto' src={emptyIcon} /> */}
-                            <h2 className='text-2xl'>It's empty in here!</h2>
+                                <ImageCarousel size={12} fit="cover" images={library.featured_artworks.map(itm => { return itm.files })} />
+                            </div>
+                        </div>
+                        <Divider noPadding />
+                        <div className='flex flex-col gap-2'>
+                            <span className={`flex gap-1 text-lg font-medium tracking-wide text-neutral-800 dark:text-gray-300 rounded-xl items-end`}>
+                                Top Spaces
+                            </span>
+                            <div className='flex flex-col gap-1.5 h-24 overflow-y-auto'>
+                                {["characterdesign", "3Ddesign"].map(itm => (
+                                    <button className='flex gap-2 items-center rounded-lg hover:bg-gray-300 hover:dark:bg-neutral-800 p-2'>
+                                        <div className="h-8 w-8 bg-violet-600/25 rounded-full"></div>
+                                        <div className='flex flex-col'>
+                                            <span className='text-sm text-neutral-800 dark:text-gray-300'>{itm}</span>
+                                            <span className='text-sm text-neutral-800 dark:text-gray-300'>65k posts</span>
+                                        </div>
+                                    </button>
+                                ))}
+                                {["characterdesign", "3Ddesign"].map(itm => (
+                                    <button className='flex gap-2 items-center rounded-lg hover:bg-gray-300 hover:dark:bg-neutral-800 p-2'>
+                                        <div className="h-8 w-8 bg-violet-600/25 rounded-full"></div>
+                                        <div className='flex flex-col'>
+                                            <span className='text-sm text-neutral-800 dark:text-gray-300'>{itm}</span>
+                                            <span className='text-sm text-neutral-800 dark:text-gray-300'>65k posts</span>
+                                        </div>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                        <Divider noPadding />
+                        <div className='flex flex-row gap-4 mx-auto items-center'>
+                            <h2 className='w-min text-md md:text-xl lg:text-xl font-bold uppercase text-center tracking-wide text-neutral-800 dark:text-gray-200'>Download the app for<br /> <span className='text-2xl md:text-3xl lg:text-4xl font-black'>free!</span></h2>
+                            <div className='flex h-24 w-24 md:h-28 md:w-28 lg:h-32 lg:w-32'>
+                                <span className='relative m-auto text-center rounded-md'>
+                                    {!showQR && <button className='flex absolute rounded-md z-10 inset-0 m-auto items-center justify-center backdrop-blur-sm' onClick={() => setShowQR(true)}>
+                                        <ViewsIcon className='w-8 h-8 text-neutral-600 dark:text-black/75' />
+                                    </button>}
+                                    <img className='rounded-md shadow-md' src={AppQR} />
+                                </span>
+                            </div>
                         </div>
                     </div>
+                </div>
             }
-        </div >
+        </div>
     )
 }
 

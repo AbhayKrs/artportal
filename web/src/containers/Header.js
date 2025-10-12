@@ -78,7 +78,7 @@ const Header = ({ hidePane, setHidePane }) => {
                 <CloseIcon onClick={() => { dispatch(r_setBetaMessage(!common.betaMsg)) }} className='absolute m-auto inset-y-0 right-1 h-3 w-auto cursor-pointer text-neutral-800' />
             </div>} */}
             <div className={`flex flex-col items-center h-screen ${hidePane ? 'w-14' : 'w-60'}`}>
-                <div className={`flex flex-col gap-2 h-full w-full overflow-y-auto ${hidePane ? 'py-4' : 'p-1 pt-2'}`}>
+                <div className={`flex flex-col gap-2 h-full w-full overflow-y-auto ${hidePane ? 'pt-4 pb-2' : 'p-1 pt-2'}`}>
                     <div className={`flex items-center ${hidePane ? 'flex-col gap-6' : 'justify-between pl-2 w-full'}`}>
                         <Link to='/' className='flex gap-1 items-center'>
                             <Artportal_logo fill="#1d4ed8" className='h-6 w-auto hover:cursor-pointer' />
@@ -186,7 +186,7 @@ const Header = ({ hidePane, setHidePane }) => {
                                 </>
                             )
                             :
-                            <>
+                            <div className={`flex flex-col ${hidePane ? 'items-center' : ''}`}>
                                 <HeaderLink type="link" name="settings" hidePane={hidePane} text="Settings" path="/settings" icon={<SettingsIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 <Divider />
                                 <button onClick={() => dispatch(r_headerDialogOpen('openLoginDialog'))} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'p-3 text-lg font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-center`}>
@@ -197,7 +197,7 @@ const Header = ({ hidePane, setHidePane }) => {
                                     <SignupIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />
                                     {!hidePane && `Sign Up`}
                                 </button>
-                            </>
+                            </div>
                         }
                     </div>
                 </div>

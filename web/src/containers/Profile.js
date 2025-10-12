@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
@@ -12,6 +12,7 @@ import { ReactComponent as Artportal_logo } from '../assets/icons/artportal_logo
 import { ReactComponent as SubscribeIcon } from "../assets/icons/subscribe.svg";
 import { ReactComponent as VerifiedIcon } from '../assets/icons/verified.svg';
 import { ReactComponent as NotificationIcon } from '../assets/icons/notifications.svg';
+import { ReactComponent as MoreIcon } from '../assets/icons/more.svg';
 
 import MasonryGrid from '../components/Grids/Masonry';
 
@@ -25,7 +26,10 @@ const Profile = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const moreRef = useRef(null);
     const profile = useSelector(state => state.profile);
+
+    const [moreActive, setMoreActive] = useState(false);
 
     useEffect(() => {
         dispatch(r_setLoader(true));
@@ -36,7 +40,14 @@ const Profile = () => {
         return () => dispatch(r_resetProfile());
     }, [id])
 
-    const [activeView, setActiveView] = useState('portfolio');
+    useEffect(() => {
+        const handleClick = (e) => {
+            if (!moreRef.current?.contains(e.target))
+                setMoreActive(false);
+        };
+        document.addEventListener("click", handleClick);
+        return () => document.removeEventListener("click", handleClick);
+    }, []);
 
     const onFollowClick = () => {
         if (profile.is_verified)
@@ -181,7 +192,7 @@ const Profile = () => {
                         {profile.avatar.icon.length > 0 && <img loading='lazy' src={api_userImages(profile.avatar.icon)} />}
                     </div>
                     <div className='flex flex-row w-full justify-between'>
-                        <div className="flex flex-col gap-1.5">
+                        <div className="flex flex-col gap-1.5 w-full">
                             <div className='flex flex-row justify-between'>
                                 <div className="flex flex-col">
                                     <div className='flex flex-row items-center gap-1'>
@@ -203,6 +214,22 @@ const Profile = () => {
                                     >
                                         Follow
                                     </button>
+                                    <div ref={moreRef} className='relative flex'>
+                                        <MoreIcon
+                                            onClick={() => setMoreActive(!moreActive)}
+                                            className="h-8 w-8 text-neutral-800 dark:text-gray-300 cursor-pointer"
+                                        />
+                                        {moreActive &&
+                                            <div className='absolute top-10 right-0 flex-col rounded-lg w-48 p-2 bg-neutral-800'>
+                                                <div className='flex flex-row py-1 px-2 gap-1 rounded-lg text-neutral-700 dark:text-gray-300 hover:bg-neutral-700'>
+                                                    <p>Add to Favourites</p>
+                                                </div>
+                                                <div className='flex flex-row py-1 px-2 gap-1 rounded-lg text-neutral-700 dark:text-gray-300 hover:bg-neutral-700'>
+                                                    <p>Block @{profile.username}</p>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
                                 </div>
                             </div>
                             <p className='text-base text-neutral-700 dark:text-gray-300'>{profile.bio}</p>
@@ -228,14 +255,14 @@ const Profile = () => {
                 <div className='flex flex-row'>
                     <MasonryGrid cols={5}>
                         {profile.artworks.map((artwork, index) => (
-                            <div key={index} className='relative group group-hover:block'>
+                            <div onClick={() => navigate(`/artwork/${artwork._id}`)} key={index} className='relative group group-hover:block cursor-pointer'>
                                 <img loading='lazy'
                                     id={index}
                                     className='object-cover w-full h-full'
                                     src={api_artworkImages(artwork.files[0])}
                                 />
-                                <div className='absolute z-30 hidden group-hover:flex top-0 right-0 m-2 gap-1'>
-                                    <GoInfo onClick={() => navigate(`/artwork/${artwork._id}`)} className='w-6 h-6 cursor-pointer text-gray-200' />
+                                {/* <div className='absolute z-30 hidden group-hover:flex top-0 right-0 m-2 gap-1'>
+                                    <GoInfo className='w-6 h-6 cursor-pointer text-gray-200' />
                                 </div>
                                 <div className='hidden absolute max-h-full bottom-0 p-2 pt-14 group-hover:flex group-hover:flex-row group-hover:justify-between w-full bg-gradient-to-t from-black text-gray-200 '>
                                     <div className="flex flex-col place-self-end max-w-[65%]">
@@ -263,7 +290,7 @@ const Profile = () => {
                                             <span className="text-xs ml-1 antialiased text-right whitespace-nowrap">{moment(artwork.createdAt).fromNow()}</span>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         ))}
                     </MasonryGrid>

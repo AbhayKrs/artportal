@@ -97,7 +97,7 @@ router.get('/', async (req, res) => {
         const value = req.query.value;
         const filter = req.query.filter;
         const period = req.query.period;
-        const artworkList = await Artwork.find({}).populate('artist', 'name username avatar');
+        const artworkList = await Artwork.find({}).populate('artist', 'name username avatar is_verified is_premium');
 
         if (type === "search") {
             searchResponse = artworkList.filter(item => item.title.toLowerCase().indexOf(value.toLowerCase()) != -1);

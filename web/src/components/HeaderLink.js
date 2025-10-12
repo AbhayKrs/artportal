@@ -17,7 +17,7 @@ const HeaderLink = ({ type, name, path, hidePane, icon, text, activeRoute, func 
     return (
         <>
             {type === "link" &&
-                <Link to={path} className={`relative flex gap-1 items-end ${hidePane ? 'p-2' : 'p-3 text-lg font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-end`}>
+                <Link to={path} className={`relative flex gap-2 items-end ${hidePane ? 'p-2' : 'p-3 text-lg font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-end`}>
                     <div className={`${activeRoute.includes(activePath) ? 'flex' : 'hidden'} h-5 w-1 bottom-[-4px] left-0 rounded text-2xl bg-blue-700 dark:bg-blue-700`}></div>
                     {icon}
                     {!hidePane && text}
@@ -25,7 +25,7 @@ const HeaderLink = ({ type, name, path, hidePane, icon, text, activeRoute, func 
                 </Link>
             }
             {type === "button" &&
-                <Link onClick={func} className={`flex gap-1 items-end ${hidePane ? 'p-2' : 'p-3 text-lg font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-end`}>
+                <Link onClick={func} className={`flex gap-2 items-end ${hidePane ? 'p-2' : 'p-3 text-lg font-medium tracking-wide'} hover:bg-gray-300 hover:dark:bg-neutral-700/50 text-neutral-800 dark:text-gray-300 rounded-xl items-end`}>
                     <div className={`${activeRoute.includes(activePath) ? 'flex' : 'hidden'} h-5 w-1 bottom-[-4px] left-0 rounded text-2xl bg-blue-700 dark:bg-blue-700`}></div>
                     {icon}
                     {!hidePane && text}

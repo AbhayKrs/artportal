@@ -37,52 +37,6 @@ const Store = ({ }) => {
         // dispatch(a_fetchSelleList());
     }, [])
 
-
-
-    const removeFromCart = (data) => {
-        let cartData;
-        const userID = user.id;
-        const userCart = user.cart;
-        const cartID = userCart.filter(item => item.title === data.title)[0]._id;
-        try {
-            if (userCart.filter(item => item.title === data.title)[0].quantity === 1) {
-                dispatch(a_removeFromCart({ cartID, userID })).then(res => {
-                    dispatch(a_fetchUserCart());
-                });
-            } else {
-                let quantity = userCart.filter(item => item.title === data.title)[0].quantity - 1;
-                let subtotal = data.price * quantity;
-                cartData = {
-                    quantity,
-                    subtotal
-                }
-                const cartID = userCart.filter(item => item.title === data.title)[0]._id;
-                dispatch(a_removeFromCart({ cartID, userID })).then(res => {
-                    dispatch(a_fetchUserCart());
-                });
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    const handleCartOpen = () => {
-        setCartOpen(true)
-    }
-    const handleCartClose = () => {
-        setCartOpen(false)
-    }
-
-    const findCartTotal = () => {
-        let cart = user.cart
-        if (cart && cart.length > 0) {
-            cart.map(item => {
-                cartTotal = item.subtotal + cartTotal
-            })
-        }
-        return cartTotal;
-    }
-
     const sellerList = [
         {
             _id: "66ae867c3245a84120c8e4c2",
@@ -106,7 +60,7 @@ const Store = ({ }) => {
             <Helmet>
                 <title>artportal | Store</title>
             </Helmet>
-            <div className={`flex flex-col gap-2 ${hidePane ? filtersPane ? 'md:w-[85.5%]' : 'md:w-full' : filtersPane ? 'md:w-[83.25%]' : 'md:w-full'} order-2 md:order-1 py-2 px-4 min-h-show`}>
+            <div className={`flex flex-col gap-2 ${hidePane ? filtersPane ? 'md:w-[85.5%]' : 'md:w-full' : filtersPane ? 'md:w-[78.5%]' : 'md:w-full'} order-2 md:order-1 py-2 px-4 min-h-show`}>
                 <div className='flex flex-row justify-between'>
                     <Title text="Store" />
                     <button onClick={() => navigate(`/store/new`)} className="flex w-fit py-2 px-4 text-base font-semibold tracking-wide bg-blue-700 dark:bg-blue-700 disabled:bg-neutral-700 disabled:dark:bg-neutral-700 hover:bg-neutral-600 text-neutral-800 dark:text-gray-300 disabled:text-neutral-800 disabled:dark:text-neutral-500 rounded-xl items-center">
@@ -126,13 +80,13 @@ const Store = ({ }) => {
                         </SimpleGrid>
                     </div>
                     :
-                    <div className='absolute inset-0 h-fit w-fit m-auto text-center text-gray-300'>
+                    <div className='inset-0 h-fit w-fit m-auto text-center text-gray-300'>
                         <h2 className='text-2xl'>It's empty in here!</h2>
                     </div>
                 }
             </div>
             {filtersPane &&
-                <div className={`relative px-2 py-3 h-full md:fixed md:right-2 flex flex-col gap-3 w-full md:w-[14%] order-1 md:order-2 backdrop-sepia-0 bg-white/30 dark:bg-black/30 border-l-2 border-gray-400 dark:border-neutral-800`}>
+                <div className={`relative max-h-show px-2 py-3 h-full md:fixed md:right-2 flex flex-col gap-3 w-full md:w-[18%] order-1 md:order-2 backdrop-sepia-0 bg-white/30 dark:bg-black/30 border-l-2 border-gray-400 dark:border-neutral-800`}>
                     <div className='flex flex-row justify-between px-2'>
                         <div className={`flex gap-1 text-lg font-medium tracking-wide text-neutral-800 dark:text-gray-300 rounded-xl items-end`}>
                             <EventsIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />

@@ -38,7 +38,7 @@ const Library = ({ }) => {
             <Helmet>
                 <title>artportal | Library</title>
             </Helmet>
-            <div className={`flex flex-col ${hidePane ? eventsPane ? 'md:w-[82.5%]' : 'md:w-full' : eventsPane ? 'md:w-[80.25%]' : 'md:w-full'} order-2 md:order-1 py-2 px-4 min-h-show`}>
+            <div className={`flex flex-col ${hidePane ? eventsPane ? 'md:w-[82.5%]' : 'md:w-full' : eventsPane ? 'md:w-[80%]' : 'md:w-full'} order-2 md:order-1 py-2 px-4 min-h-show`}>
                 <LibraryTabs eventsPane={eventsPane} setEventsPane={setEventsPane} />
                 <Divider />
                 {artworks.length > 0 ?
@@ -91,7 +91,7 @@ const Library = ({ }) => {
                 }
             </div>
             {eventsPane &&
-                <div className={`relative px-2 py-3 h-full md:fixed md:right-2 flex flex-col gap-3 w-full md:w-2/12 order-1 md:order-2 backdrop-sepia-0 bg-white/30 dark:bg-black/30 border-l-2 border-gray-400 dark:border-neutral-800`}>
+                <div className={`relative max-h-show px-2 py-3 h-full md:fixed md:right-2 flex flex-col gap-3 w-full md:w-[17.5%] order-1 md:order-2 backdrop-sepia-0 bg-white/30 dark:bg-black/30 border-l-2 border-gray-400 dark:border-neutral-800`}>
                     <div className='flex flex-row justify-between px-2'>
                         <div className={`flex gap-1 text-lg font-medium tracking-wide text-neutral-800 dark:text-gray-300 rounded-xl items-end`}>
                             <EventsIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />

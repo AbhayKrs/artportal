@@ -44,7 +44,7 @@ export const a_fetchArtwork = createAsyncThunk("a_fetchArtwork", async (payload,
 
 export const a_fetchHomeData = createAsyncThunk("a_fetchHomeData", async (payload, { getState, dispatch, rejectWithValue }) => {
     const { value, filter, period } = payload;
-    await api_artworks("list").then(res => dispatch(r_setArtworks(res.data)));
+    await api_artworks("list", "", filter, period).then(res => dispatch(r_setArtworks(res.data)));
     await api_artworks("list", "", "trending").then(res => dispatch(r_setTrendingList(res.data)));
     await api_artworks("artist", "jayabhay9").then(res => dispatch(r_setFeaturedList(res.data)));
     // await api_artworks("list", "", filter, period).then(res => {
