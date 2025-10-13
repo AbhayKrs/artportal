@@ -2,8 +2,8 @@ import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { api_artworkImages } from '../utils/api_routes';
-import { a_fetchArtwork, a_handleDislikeArtwork, a_handleLikeArtwork } from '../store/actions/library.actions';
-import { r_setSnackMessage } from '../store/reducers/common.reducers';
+import { a_fetchArtwork, a_handleDislikeArtwork, a_handleLikeArtwork } from '../store/actions/artworks.actions';
+import { r_setSnackMessage } from '../store/reducers/common.reducer';
 
 import UserBadge from './Badges/UserBadge';
 import Divider from './Divider';
@@ -54,10 +54,10 @@ const PostList = ({ list }) => {
                                     <UserBadge icon size="md" link={`/users/${itm.artist._id} `} user={itm.artist} />
                                     <span className='text-base text-neutral-700 dark:text-gray-300'>{moment(itm.createdAt).fromNow()}</span>
                                 </div>
-                                <MoreIcon className="h-6 w-6 text-neutral-800 dark:text-gray-200" />
+                                <MoreIcon className="h-6 w-6 text-neutral-800 dark:text-gray-400" />
                             </div>
                             <h1 className='text-lg text-neutral-800 dark:text-gray-200'>{itm.title}</h1>
-                            <ImageCarousel size={32} fit="contain" images={itm.files} />
+                            <ImageCarousel size={32} fit="contain" imagePaths={itm.files} />
                         </div>
                         <div className='flex flex-row gap-4'>
                             <div className='flex flex-row items-center gap-1'>

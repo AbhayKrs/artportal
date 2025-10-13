@@ -4,7 +4,7 @@ import Dropdown from '../Dropdown';
 
 import { filterOptions, periodOptions } from '../../utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { a_fetchArtworks } from '../../store/actions/library.actions';
+import { a_fetchArtworks } from '../../store/actions/artworks.actions';
 
 import { ReactComponent as EventsIcon } from '../../assets/icons/events.svg';
 

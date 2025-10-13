@@ -1,18 +1,20 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import commonReducers from './reducers/common.reducers';
-import userReducers from './reducers/user.reducers';
-import libraryReducers from './reducers/library.reducers';
-import storeReducers from './reducers/store.reducers';
-import profileReducers from './reducers/profile.reducers';
+import commonReducer from './reducers/common.reducer';
+import usersReducer from './reducers/users.reducer';
+import postsReducer from './reducers/posts.reducer';
+import artworksReducer from './reducers/artworks.reducer';
+import storeReducer from './reducers/store.reducer';
+import profileReducer from './reducers/profile.reducer';
 
 const store = configureStore({
     reducer: {
-        common: commonReducers,
-        user: userReducers,
-        library: libraryReducers,
-        store: storeReducers,
-        profile: profileReducers
+        common: commonReducer,
+        user: usersReducer,
+        posts: postsReducer,
+        artworks: artworksReducer,
+        store: storeReducer,
+        profile: profileReducer
     }
 })
 

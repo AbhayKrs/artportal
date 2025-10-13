@@ -4,7 +4,7 @@ import Dropdown from '../Dropdown';
 
 import { filterOptions, periodOptions } from '../../utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { a_fetchArtworks, a_searchArtworks } from '../../store/actions/library.actions';
+import { a_fetchArtworks, a_searchArtworks } from '../../store/actions/artworks.actions';
 
 import { MdClose } from 'react-icons/md';
 import { FiAtSign } from 'react-icons/fi';
@@ -12,7 +12,7 @@ import { FaHashtag, FaGreaterThan } from 'react-icons/fa6';
 import { ReactComponent as SearchIcon } from '../../assets/icons/search.svg';
 import { ReactComponent as EventsIcon } from '../../assets/icons/events.svg';
 
-import { r_clearSearchList, r_setSearchType } from '../../store/reducers/common.reducers';
+import { r_clearSearchList, r_setSearchType } from '../../store/reducers/common.reducer';
 import { a_getTags } from '../../store/actions/common.actions';
 
 const StoreTabs = ({ search, filtersPane, setFiltersPane }) => {

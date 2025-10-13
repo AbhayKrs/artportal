@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 
 import { api_artworkImages, api_userImages } from '../utils/api_routes';
-import { r_setLoader } from '../store/reducers/common.reducers';
+import { r_setLoader } from '../store/reducers/common.reducer';
 
 import Divider from '../components/Divider';
 

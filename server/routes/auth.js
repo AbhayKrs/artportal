@@ -12,7 +12,10 @@ router.post("/login", async (req, res) => {
         const { username, password } = req.body;
 
         const users = await User.find({});
-        const user = await User.findOne({ username }).populate("bookmarks");
+        const user = await User.findOne({ username })
+            .populate("artwork_bookmarks")
+            .populate("post_bookmarks");
+
         if (!user) return res.status(401).json('User not found!');
 
         const { errors: loginErrors, isValid: isLoginValid } = validateLoginInput(users, req.body);
@@ -37,7 +40,7 @@ router.post("/login", async (req, res) => {
             is_premium: user.is_premium,
             followers: user.followers,
             following: user.following,
-            bookmarks: user.bookmarks,
+            bookmarks: user.artwork_bookmarks,
             created_on: user.createdAt,
             premium_validity: user.premium_validity
         };
@@ -108,7 +111,7 @@ router.post("/signup", async (req, res) => {
                     is_premium: user.is_premium,
                     followers: user.followers,
                     following: user.following,
-                    bookmarks: user.bookmarks,
+                    bookmarks: user.artwork_bookmarks,
                     created_on: user.createdAt,
                     premium_validity: user.premium_validity
                 };
@@ -148,7 +151,9 @@ router.post("/refresh", async (req, res) => {
         const decoded = await verifyRefreshToken(refreshToken);
 
         // Find user and match token in DB
-        const user = await User.findOne({ _id: decoded.id }).populate('bookmarks');
+        const user = await User.findOne({ _id: decoded.id })
+            .populate("artwork_bookmarks")
+            .populate("post_bookmarks");
 
         if (!user || !user.refresh_token || user.refresh_token !== refreshToken) {
             return res.status(403).json({ msg: "Invalid token" });
@@ -166,7 +171,7 @@ router.post("/refresh", async (req, res) => {
             is_premium: user.is_premium,
             followers: user.followers,
             following: user.following,
-            bookmarks: user.bookmarks,
+            bookmarks: user.artwork_bookmarks,
             created_on: user.createdAt,
             premium_validity: user.premium_validity
         };
@@ -205,7 +210,10 @@ router.get('/google/callback', passport.authenticate('google', {
     session: false,
     failureRedirect: '/login'
 }), async (req, res) => {
-    const user = await User.findOne({ _id: req.user.id }).populate('bookmarks');
+    const user = await User.findOne({ _id: req.user.id })
+        .populate("artwork_bookmarks")
+        .populate("post_bookmarks");
+
     const payload = {
         id: user._id,
         name: user.name,
@@ -219,7 +227,7 @@ router.get('/google/callback', passport.authenticate('google', {
         is_premium: user.is_premium,
         followers: user.followers,
         following: user.following,
-        bookmarks: user.bookmarks,
+        bookmarks: user.artwork_bookmarks,
         created_on: user.createdAt,
         premium_validity: user.premium_validity
     };

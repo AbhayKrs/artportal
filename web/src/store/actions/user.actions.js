@@ -14,12 +14,12 @@ import {
     r_signUp,
     r_deleteBookmark,
     r_clearAuth
-} from '../reducers/user.reducers';
+} from '../reducers/users.reducer';
 import {
     r_setSnackMessage,
     r_headerDialogOpen,
     r_headerDialogClose
-} from '../reducers/common.reducers';
+} from '../reducers/common.reducer';
 
 import jwt_decode from 'jwt-decode';
 

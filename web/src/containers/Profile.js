@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 
 import { a_fetchProfileData } from '../store/actions/profile.actions';
-import { r_resetProfile } from '../store/reducers/profile.reducers';
-import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducers';
+import { r_resetProfile } from '../store/reducers/profile.reducer';
+import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducer';
 import { api_artworkImages, api_userImages } from '../utils/api_routes';
 
 import { ReactComponent as Artportal_logo } from '../assets/icons/artportal_logo.svg';

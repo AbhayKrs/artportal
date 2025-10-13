@@ -3,9 +3,9 @@ const router = express.Router();
 
 //Import Schemas
 import User from '../models/user.js';
-import Artworks from '../models/artwork.js';
+import Artwork from '../models/artwork.js';
 import Product from '../models/product.js';
-const { Artwork, Comment } = Artworks;
+import Comment from '../models/comment.js';
 
 import { adminKey } from '../middleware/adminMw.js';
 

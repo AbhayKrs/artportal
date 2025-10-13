@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from "../store/index";
-import { r_clearAuth, r_signIn } from '../store/reducers/user.reducers';
+import { r_clearAuth, r_signIn } from '../store/reducers/users.reducer';
 import jwt_decode from 'jwt-decode';
 import Cookies from 'js-cookie';
 
@@ -117,20 +117,34 @@ export const api_cart = userID => apiClient.get(`/users/${userID}/cart`);
 export const api_addToCart = (userID, data) => apiClient.post(`/users/${userID}/cart/add`, data, { headers: { 'Content-Type': 'application/json' } });
 export const api_removeFromCart = (userID, data) => apiClient.post(`/users/${userID}/cart/remove`, data, { headers: { 'Content-Type': 'application/json' } });
 
+export const api_posts = () => apiClient.get(`/posts`);
+export const api_post = (id, payload) => apiClient.get(`/posts/${id}`, payload);
+export const api_postViewed = (postID, viewerID) => apiClient.put(`/posts/${postID}/viewed`, { viewer_id: viewerID });
+export const api_postUpload = data => apiClient.post(`/posts/new`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
+export const api_postEdit = (postID, updatedData) => apiClient.put(`/posts/${postID}`, updatedData);
+export const api_postDelete = (postID) => apiClient.delete(`/posts/${postID}`, { headers: { 'Content-Type': 'application/json' } });
+export const api_postComment = (isParent, userID, postID, parentID, commentText) => apiClient.post(`/posts/${postID}/comments/new`, { userID, text: commentText, isParent, parentID }, { headers: { 'Content-Type': 'application/json' } })
+export const api_postCommentEdit = (postID, newComment, commentID, userData) => apiClient.put(`/posts/${postID}/comments/${commentID}`, { content: newComment, user: userData })
+export const api_postLike = (postID, userID) => apiClient.put(`/posts/${postID}/like`, { userID });
+export const api_postDislike = (postID, userID) => apiClient.put(`/posts/${postID}/dislike`, { userID });
+export const api_postCommentLike = (postID, commentID, userID) => apiClient.put(`/posts/${postID}/comments/${commentID}/like`, { userID });
+export const api_postCommentDislike = (postID, commentID, userID) => apiClient.put(`/posts/${postID}/comments/${commentID}/dislike`, { userID });
+export const api_postCommentDelete = (postID, commentID) => apiClient.delete(`/posts/${postID}/comments/${commentID}`);
+
 export const api_artworks = (type, value, filter, period) => apiClient.get(`/artworks?type=${type}&value=${value}&filter=${filter}&period=${period}`);
-export const api_artworkItem = (id, payload) => apiClient.get(`/artworks/${id}`, payload);
+export const api_artwork = (id, payload) => apiClient.get(`/artworks/${id}`, payload);
 export const api_artworkViewed = (artworkID, viewerID) => apiClient.put(`/artworks/${artworkID}/viewed`, { viewer_id: viewerID });
 export const api_artworkUpload = data => apiClient.post(`/artworks/new`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
-export const api_editArtwork = (artworkID, updatedData) => apiClient.put(`/artworks/${artworkID}`, updatedData);
-export const api_deleteArtwork = (artworkID) => apiClient.delete(`/artworks/${artworkID}`, { headers: { 'Content-Type': 'application/json' } });
-export const api_commentOnArtwork = (isParent, userID, artworkID, parentID, commentText) => apiClient.post(`/artworks/${artworkID}/comments/new`, { userID, text: commentText, isParent, parentID }, { headers: { 'Content-Type': 'application/json' } })
-export const api_editArtworkComment = (artworkID, newComment, commentID, userData) => apiClient.put(`/artworks/${artworkID}/comments/${commentID}`, { content: newComment, user: userData })
-export const api_likeArtwork = (artworkID, userID) => apiClient.put(`/artworks/${artworkID}/like`, { userID });
-export const api_dislikeArtwork = (artworkID, userID) => apiClient.put(`/artworks/${artworkID}/dislike`, { userID });
-export const api_likeComment = (artworkID, commentID, userID) => apiClient.put(`/artworks/${artworkID}/comments/${commentID}/like`, { userID });
-export const api_dislikeComment = (artworkID, commentID, userID) => apiClient.put(`/artworks/${artworkID}/comments/${commentID}/dislike`, { userID });
-export const api_deleteArtworkComment = (artworkID, commentID) => apiClient.delete(`/artworks/${artworkID}/comments/${commentID}`);
-export const api_giftToArtwork = (artworkID, userID, awardData) => apiClient.put(`/artworks/${artworkID}/award`, { userID: userID, ...awardData });
+export const api_artworkEdit = (artworkID, updatedData) => apiClient.put(`/artworks/${artworkID}`, updatedData);
+export const api_artworkDelete = (artworkID) => apiClient.delete(`/artworks/${artworkID}`, { headers: { 'Content-Type': 'application/json' } });
+export const api_artworkComment = (isParent, userID, artworkID, parentID, commentText) => apiClient.post(`/artworks/${artworkID}/comments/new`, { userID, text: commentText, isParent, parentID }, { headers: { 'Content-Type': 'application/json' } })
+export const api_artworkCommentEdit = (artworkID, newComment, commentID, userData) => apiClient.put(`/artworks/${artworkID}/comments/${commentID}`, { content: newComment, user: userData })
+export const api_artworkLike = (artworkID, userID) => apiClient.put(`/artworks/${artworkID}/like`, { userID });
+export const api_artworkDislike = (artworkID, userID) => apiClient.put(`/artworks/${artworkID}/dislike`, { userID });
+export const api_artworkCommentLike = (artworkID, commentID, userID) => apiClient.put(`/artworks/${artworkID}/comments/${commentID}/like`, { userID });
+export const api_artworkCommentDislike = (artworkID, commentID, userID) => apiClient.put(`/artworks/${artworkID}/comments/${commentID}/dislike`, { userID });
+export const api_artworkCommentDelete = (artworkID, commentID) => apiClient.delete(`/artworks/${artworkID}/comments/${commentID}`);
+export const api_artworkGift = (artworkID, userID, awardData) => apiClient.put(`/artworks/${artworkID}/award`, { userID: userID, ...awardData });
 
 export const api_products = () => apiClient.get(`/products`);
 export const api_productItem = productID => apiClient.get(`/products/${productID}`);
@@ -145,8 +159,8 @@ export const api_editAvatar = (userID, avatar) => apiClient.post(`/users/${userI
 
 export const api_deleteStoreListing = (productID, userID) => apiClient.delete(`/products/${productID}`, userID, { headers: { 'Content-Type': 'application/json' } });
 
-// export const api_likeArtwork = artworkID => apis.put(`/artworks/${artworkID}/like`, { user: getState().user })
-// export const api_dislikeArtwork = artworkID => apis.put(`/artworks/${artworkID}/dislike`, { user: getState().user })
+// export const api_artworkLike = artworkID => apis.put(`/artworks/${artworkID}/like`, { user: getState().user })
+// export const api_artworkDislike = artworkID => apis.put(`/artworks/${artworkID}/dislike`, { user: getState().user })
 // export const api_getAllMovies = () => api.get(`/movies`)
 // export const api_updateMovieById = (id, payload) => api.put(`/movie/${id}`, payload)
 // export const api_deleteMovieById = id => api.delete(`/movie/${id}`)

@@ -39,7 +39,7 @@ import TOS from './children/TOS';
 import Privacy from './children/Privacy';
 import useWindowWidth from './hooks/useWindowWidth';
 import { a_fetchUserCart, a_fetchVisitorStatus, a_verifyAuth } from './store/actions/user.actions';
-import { r_setLoader, r_setSnackMessage } from './store/reducers/common.reducers';
+import { r_setLoader, r_setSnackMessage } from './store/reducers/common.reducer';
 import LibraryView from './containers/LibraryView';
 import StoreView from './containers/StoreView';
 import StoreUpload from './containers/StoreUpload';

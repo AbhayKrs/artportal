@@ -29,7 +29,8 @@ const UserSchema = new Schema(
             _id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
             followedOn: { type: Date }
         }],
-        bookmarks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Artwork" }],
+        artwork_bookmarks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Artwork" }],
+        post_bookmarks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
         refresh_token: { type: String }
     },
     {

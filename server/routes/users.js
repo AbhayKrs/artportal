@@ -8,9 +8,9 @@ import { checkObjectId } from '../middleware/checkObjectId.js';
 
 import User from '../models/user.js';
 import Products from '../models/product.js';
-import Artworks from '../models/artwork.js';
+import Artwork from '../models/artwork.js';
+import Comment from '../models/comment.js';
 import Cart from '../models/cart.js';
-const { Artwork, Comment } = Artworks;
 const { Product } = Products;
 
 import jwt from 'jsonwebtoken';
@@ -63,7 +63,7 @@ router.get('/:id', protect, async (req, res) => {
             is_premium: user.is_premium,
             followers: user.followers,
             following: user.following,
-            bookmarks: user.bookmarks,
+            bookmarks: user.artwork_bookmarks,
             created_on: user.createdAt,
             premium_validity: user.premium_validity
         };
@@ -95,7 +95,7 @@ router.get('/:id/view', async (req, res) => {
             artworks,
             followers: user.followers.length,
             following: user.following.length,
-            bookmarks: user.bookmarks,
+            bookmarks: user.artwork_bookmarks,
         };
         res.json(response);
     } catch (err) {

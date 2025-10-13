@@ -3,7 +3,7 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Helmet } from 'react-helmet';
 
-import { r_setLoader } from '../store/reducers/common.reducers';
+import { r_setLoader } from '../store/reducers/common.reducer';
 import { api_artworkImages, api_userImages } from '../utils/api_routes';
 import { a_fetchUserCart, a_addToCart, a_removeFromCart } from '../store/actions/user.actions';
 import { a_fetchProducts } from '../store/actions/store.actions';

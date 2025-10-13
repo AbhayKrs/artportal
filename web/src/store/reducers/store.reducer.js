@@ -5,7 +5,7 @@ export const initialState = {
     file: '',
     title: '',
     description: '',
-    uploadStatus: '',
+    status: '',
     seller_list: [],
     products: [],
     product_item: {
@@ -49,7 +49,7 @@ const storeSlice = createSlice({
             state.file = file;
             state.title = title;
             state.description = description;
-            state.uploadStatus = 'success'
+            state.status = 'success'
         },
         handleStoreReset: () => initialState
     }

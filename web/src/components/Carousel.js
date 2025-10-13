@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { api_artworkImages } from '../utils/api_routes';
 import { useDispatch } from "react-redux";
 
-import { r_headerDialogOpen } from '../store/reducers/common.reducers';
+import { r_headerDialogOpen } from '../store/reducers/common.reducer';
 
 import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';

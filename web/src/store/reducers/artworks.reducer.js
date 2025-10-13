@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    openArtworkDialog: false,
-    artworks: [],
-    trending_artworks: [],
-    featured_artworks: [],
-    new_artworks: [],
-    highlight_artworks: [],
-    artwork: {
+    activeDialog: false,
+    main_list: [],
+    trending_list: [],
+    featured_list: [],
+    new_list: [],
+    highlight_list: [],
+    item: {
         _id: '',
         title: '',
         description: '',
@@ -30,29 +30,28 @@ const initialState = {
         awards: [],
         views: []
     },
-    uploadData: {
+    upload: {
         file: '',
         title: '',
         description: '',
-        uploadStatus: ''
-    },
-    activeDialog: false
+        status: ''
+    }
 }
 
-const librarySlice = createSlice({
-    name: 'library',
+const artworksSlice = createSlice({
+    name: 'artworks',
     initialState,
     reducers: {
-        r_setArtworkItem: (state, action) => {
-            let artwork_res = { ...action.payload };
+        r_setArtwork: (state, action) => {
+            let res = { ...action.payload };
             const commentMap = new Map();
-            artwork_res.comments.forEach(com => {
+            res.comments.forEach(com => {
                 com.replies = [];
                 commentMap.set(com._id, com);
             });
 
             const grouped = [];
-            artwork_res.comments.forEach(com => {
+            res.comments.forEach(com => {
                 if (com.is_parent) {
                     grouped.push(com);
                 } else {
@@ -70,66 +69,53 @@ const librarySlice = createSlice({
                     }
                 });
             };
-            artwork_res.comments_count = artwork_res.comments.length;
+            res.comments_count = res.comments.length;
             recursiveReplies(grouped);
 
-            artwork_res.comments = grouped;
-            state.artwork = artwork_res;
+            res.comments = grouped;
+            state.item = res;
         },
         r_setArtworks: (state, action) => {
             const artworks = [...action.payload];
-            state.artworks = artworks;
+            state.main_list = artworks;
         },
-        r_setTrendingList: (state, action) => {
+        r_setTrendingArtworks: (state, action) => {
             const list = [...action.payload];
-            state.trending_artworks = list;
+            state.trending_list = list;
         },
-        r_setFeaturedList: (state, action) => {
+        r_setFeaturedArtworks: (state, action) => {
             const list = [...action.payload];
-            state.featured_artworks = list;
+            state.featured_list = list;
         },
-        r_setNewlyAddedList: (state, action) => {
+        r_setNewArtworks: (state, action) => {
             const list = [...action.payload.sort(() => 0.4 - Math.random()).slice(0, 12)];
-            state.new_artworks = list;
+            state.new_list = list;
 
         },
-        r_setMonthHighlightsList: (state, action) => {
+        r_setHighlightedArtworks: (state, action) => {
             const list = [...action.payload.sort(() => 0.4 - Math.random()).slice(0, 12)];
-            state.highlight_artworks = list;
+            state.highlight_list = list;
         },
         r_artworkUpload: (state, action) => {
-            const { file, title, description } = action.payload;
-            state.uploadData = {
-                file: file,
-                title: title,
-                description: description,
-                uploadStatus: 'success'
+            state.upload = {
+                status: 'success',
+                ...action.payload
             }
         },
         r_artworkEdit: (state, action) => {
-            state.artwork = { ...action.payload };
-        },
-        r_dialogOpen: (state, action) => {
-            const selectedData = action.payload;
-            state.activeDialog = true;
-            state.selectedArtwork = selectedData
-        },
-        r_dialogClose: (state, action) => {
-            state.activeDialog = false
-        },
+            state.item = { ...action.payload };
+        }
     }
 });
 
 export const {
-    r_setArtworkItem,
+    r_setArtwork,
     r_setArtworks,
-    r_setTrendingList,
-    r_setFeaturedList,
-    r_setNewlyAddedList,
-    r_setMonthHighlightsList,
+    r_setTrendingArtworks,
+    r_setFeaturedArtworks,
+    r_setNewArtworks,
+    r_setHighlightedArtworks,
     r_artworkUpload,
-    r_artworkEdit,
-    r_dialogOpen,
-    r_dialogClose
-} = librarySlice.actions
-export default librarySlice.reducer
+    r_artworkEdit
+} = artworksSlice.actions
+export default artworksSlice.reducer

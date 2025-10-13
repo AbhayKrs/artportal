@@ -40,8 +40,8 @@ import { ReactComponent as AddIcon } from '../assets/icons/add.svg';
 import { ReactComponent as MenuIcon } from '../assets/icons/menu.svg';
 import HeaderLink from '../components/HeaderLink';
 import Divider from '../components/Divider';
-import { r_authMsgClose, r_handleLogout, r_setAuthError } from '../store/reducers/user.reducers';
-import { r_clearSearchList, r_headerDialogClose, r_headerDialogOpen, r_setSearchType, r_switchTheme } from '../store/reducers/common.reducers';
+import { r_authMsgClose, r_handleLogout, r_setAuthError } from '../store/reducers/users.reducer';
+import { r_clearSearchList, r_headerDialogClose, r_headerDialogOpen, r_setSearchType, r_switchTheme } from '../store/reducers/common.reducer';
 import { a_handleGoogleAuth, a_handleSignIn, a_handleSignUp } from '../store/actions/user.actions';
 
 const MobileHeader = () => {
@@ -50,7 +50,7 @@ const MobileHeader = () => {
     const location = useLocation();
 
     const common = useSelector(state => state.common);
-    const library = useSelector(state => state.library);
+    const artworks = useSelector(state => state.artworks);
     const user = useSelector(state => state.user);
 
     const [headerMenu, setHeaderMenu] = useState(false);
@@ -87,17 +87,6 @@ const MobileHeader = () => {
         setHeaderMenu(false)
         handleSignout();
         navigate('/');
-    }
-
-    const clearSearch = () => {
-        dispatch(r_clearSearchList())
-        setSearchVal('');
-    }
-
-
-    const handleArtworkSearch = () => {
-        navigate(`/library/search?query=${searchVal}`);
-        dispatch(r_clearSearchList())
     }
 
     return (

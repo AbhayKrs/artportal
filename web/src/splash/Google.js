@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import { useNavigate } from "react-router-dom";
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { r_signIn } from '../store/reducers/user.reducers';
+import { r_signIn } from '../store/reducers/users.reducer';
 
 const Google = (props) => {
     let navigate = useNavigate();

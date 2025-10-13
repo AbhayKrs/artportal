@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet';
 
 import { a_handleStoreUpload } from '../store/actions/store.actions';
 import { a_getTags } from '../store/actions/common.actions';
-import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducers';
+import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducer';
 
 import { MdClose } from 'react-icons/md';
 import { BsHash } from 'react-icons/bs';

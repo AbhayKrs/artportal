@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 import Cookies from 'js-cookie';
 
-import { a_fetchArtwork, a_fetchArtworks, a_handleDislikeArtwork, a_handleLikeArtwork, a_handleDeleteComment, a_handleEditComment, a_handleDislikeComment, a_handleLikeComment, a_bookmarkArtwork, a_handleAddComment } from '../store/actions/library.actions';
+import { a_fetchArtwork, a_fetchArtworks, a_handleDislikeArtwork, a_handleLikeArtwork, a_handleDeleteComment, a_handleEditComment, a_handleDislikeComment, a_handleLikeComment, a_bookmarkArtwork, a_handleAddComment } from '../store/actions/artworks.actions';
 import { a_fetchProduct, a_fetchProducts } from '../store/actions/store.actions';
-import { r_setLoader, r_setSnackMessage, r_headerDialogOpen } from '../store/reducers/common.reducers';
+import { r_setLoader, r_setSnackMessage, r_headerDialogOpen } from '../store/reducers/common.reducer';
 import { api_userImages, api_artworkImages } from '../utils/api_routes';
 
 import AwardModal from '../components/Modals/AwardModal';
@@ -38,8 +38,8 @@ const LibraryView = ({ }) => {
 
     const common = useSelector(state => state.common);
     const user = useSelector(state => state.user);
-    const library = useSelector(state => state.library);
-    const artwork = useSelector(state => state.library.artwork);
+    const artworks = useSelector(state => state.artworks);
+    const artwork = useSelector(state => state.artworks.item);
 
     const [prev, setPrev] = useState('');
     const [next, setNext] = useState('');
@@ -63,16 +63,16 @@ const LibraryView = ({ }) => {
     }, [id]);
 
     useEffect(() => {
-        const len = library.artworks.length;
-        library.artworks.forEach((item, index) => {
+        const len = artworks.main_list.length;
+        artworks.main_list.forEach((item, index) => {
             if (item._id === artwork._id) {
                 if (index > 0) {
-                    setPrev(library.artworks[index - 1]._id)
+                    setPrev(artworks.main_list[index - 1]._id)
                 } else {
                     setPrev('');
                 }
                 if (index < len - 1) {
-                    setNext(library.artworks[index + 1]._id)
+                    setNext(artworks.main_list[index + 1]._id)
                 } else {
                     setNext('')
                 }
@@ -298,7 +298,7 @@ const LibraryView = ({ }) => {
                                 </div>
                                 <div className='flex flex-row gap-3 items-center'>
                                     <IoShareSocialSharp onClick={() => setShareOpen(true)} className='h-6 w-6 cursor-pointer text-neutral-700 dark:text-gray-200' />
-                                    {user && user.bookmarks && !!user.bookmarks.find(item => item._id === artwork._id) ?
+                                    {user && user.artwork_bookmarks && !!user.artwork_bookmarks.find(item => item._id === artwork._id) ?
                                         <MdBookmarkAdded className='h-6 w-6 text-neutral-700 dark:text-gray-200' />
                                         :
                                         <MdBookmarkAdd

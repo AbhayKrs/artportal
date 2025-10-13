@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import moment from 'moment';
 
 import { api_artworkImages } from '../utils/api_routes';
-import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducers';
+import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducer';
 import { ReactComponent as EventsIcon } from '../assets/icons/events.svg';
 import { ReactComponent as CloseIcon } from '../assets/icons/close.svg';
 
@@ -23,7 +23,7 @@ const Library = ({ }) => {
     const navigate = useNavigate();
 
     const common = useSelector(state => state.common);
-    const artworks = useSelector(state => state.library.artworks);
+    const artworks = useSelector(state => state.artworks);
 
     const hidePane = useOutletContext();
     const [eventsPane, setEventsPane] = useState(true);
@@ -41,10 +41,10 @@ const Library = ({ }) => {
             <div className={`flex flex-col ${hidePane ? eventsPane ? 'md:w-[82.5%]' : 'md:w-full' : eventsPane ? 'md:w-[80%]' : 'md:w-full'} order-2 md:order-1 py-2 px-4 min-h-show`}>
                 <LibraryTabs eventsPane={eventsPane} setEventsPane={setEventsPane} />
                 <Divider />
-                {artworks.length > 0 ?
+                {artworks.main_list.length > 0 ?
                     <div className='flex flex-row'>
                         <MasonryGrid cols={5}>
-                            {artworks.map((artwork, index) => (
+                            {artworks.main_list.map((artwork, index) => (
                                 <div key={index} onClick={() => navigate(`/artwork/${artwork._id}`)} className='relative group group-hover:block cursor-pointer'>
                                     <img loading='lazy'
                                         id={index}
@@ -102,7 +102,7 @@ const Library = ({ }) => {
                         </button>
                     </div>
                     <div className='flex flex-col px-1 gap-2 h-11/12 overflow-y-auto'>
-                        {artworks.map((artwork, index) => (
+                        {artworks.main_list.map((artwork, index) => (
                             <EventCard size="m" key={index} artwork={artwork} artist={artwork.artist} />
                         ))}
                     </div>

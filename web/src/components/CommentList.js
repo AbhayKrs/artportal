@@ -10,7 +10,7 @@ import {
     a_handleLikeComment,
     a_bookmarkLibraryItem,
     a_handleAddComment
-} from '../store/actions/library.actions';
+} from '../store/actions/artworks.actions';
 import { api_userImages } from '../utils/api_routes';
 import { IoSend } from 'react-icons/io5';
 import { AiFillLike, AiFillDislike } from 'react-icons/ai';

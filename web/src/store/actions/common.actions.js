@@ -6,7 +6,7 @@ import {
     r_setAvatars,
     r_setAwards,
     r_setLocations
-} from '../reducers/common.reducers';
+} from '../reducers/common.reducer';
 
 
 export const a_getTags = createAsyncThunk("a_getTags", async (payload, { getState, dispatch, rejectWithValue }) => {

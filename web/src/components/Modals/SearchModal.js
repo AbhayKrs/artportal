@@ -90,7 +90,7 @@ const SearchModal = ({ open, handleClose, betaMsg, searchVal, setSearchVal, acti
                         </div>
                     </div>
                     {/* <MasonryGrid cols={5}>
-                        {library.trending_artworks.map((artwork, index) => (
+                        {artworks.trending_list.map((artwork, index) => (
                             <div key={index} onClick={() => navigate(`/artwork/${artwork._id}`)} className='relative group group-hover:block cursor-pointer'>
                                 <img loading='lazy'
                                     id={index}

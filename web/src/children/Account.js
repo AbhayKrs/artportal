@@ -14,7 +14,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { MdAddAPhoto, MdClose } from 'react-icons/md';
 import { a_fetchAvatars } from '../store/actions/common.actions';
 import { a_handleEditUserAvatar, a_handleFetchUserDetails, a_handleUpdateUser, a_refreshUserDetails } from '../store/actions/user.actions';
-import { r_setSnackMessage } from '../store/reducers/common.reducers';
+import { r_setSnackMessage } from '../store/reducers/common.reducer';
 
 export const Account = (props) => {
     const dispatch = useDispatch();

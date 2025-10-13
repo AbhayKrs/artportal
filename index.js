@@ -23,6 +23,7 @@ connectDB();
 // Importing api routes
 import auth from './server/routes/auth.js';
 import users from './server/routes/users.js';
+import posts from './server/routes/posts.js';
 import artworks from './server/routes/artworks.js';
 import products from './server/routes/products.js';
 import admin from './server/routes/admin.js';
@@ -67,6 +68,7 @@ app.use(`/api/${process.env.API_VERSION}/auth`, authLimiter);
 app.use(passport.initialize());
 
 // Define Routes
+app.use(`/api/${process.env.API_VERSION}/posts`, posts);
 app.use(`/api/${process.env.API_VERSION}/artworks`, artworks);
 app.use(`/api/${process.env.API_VERSION}/auth`, auth);
 app.use(`/api/${process.env.API_VERSION}/users`, users);

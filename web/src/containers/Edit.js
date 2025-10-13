@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { a_getTags } from '../store/actions/common.actions';
-import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducers';
-import { a_fetchArtworks, a_fetchArtwork, a_editArtwork } from '../store/actions/library.actions';
+import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducer';
+import { a_fetchArtworks, a_fetchArtwork, a_editArtwork } from '../store/actions/artworks.actions';
 
 import { api_artworkImages } from '../utils/api_routes';
 
@@ -19,7 +19,7 @@ const ExploreEdit = (props) => {
     const navigate = useNavigate();
 
     const common = useSelector(state => state.common);
-    const artwork = useSelector(state => state.library.artwork);
+    const artwork = useSelector(state => state.artworks.item);
 
     const { id } = useParams();
 

@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Helmet } from 'react-helmet';
 
-import { a_handleArtworkUpload } from '../store/actions/library.actions';
+import { a_handleArtworkUpload } from '../store/actions/artworks.actions';
 import { a_getTags } from '../store/actions/common.actions';
-import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducers';
+import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducer';
 
 import { MdClose } from 'react-icons/md';
 import { BsHash } from 'react-icons/bs';

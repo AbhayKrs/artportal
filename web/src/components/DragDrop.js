@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import * as tf from '@tensorflow/tfjs';
 import { api_taggerURL } from '../utils/api_routes';
+import ImageCarousel from "./Carousels/ImageCaroursel";
 
 const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
@@ -121,7 +122,8 @@ const DragDrop = ({ source, isFlagged, setIsFlagged, selectedImages, setReordere
                         ref={provided.innerRef}
                         className='scrollbar flex p-2 overflow-auto gap-2'
                         {...provided.droppableProps}>
-                        <ImageList images={images} setCategories={setCategories} r_setSnackMessage={r_setSnackMessage} isFlagged={isFlagged} setIsFlagged={setIsFlagged} />
+                        <ImageCarousel size={18} imageFiles={images} />
+                        {/* <ImageList imageFiles={images} setCategories={setCategories} r_setSnackMessage={r_setSnackMessage} isFlagged={isFlagged} setIsFlagged={setIsFlagged} /> */}
                         {provided.placeholder}
                     </div>
                 )}

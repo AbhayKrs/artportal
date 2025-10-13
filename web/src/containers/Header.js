@@ -40,8 +40,8 @@ import { ReactComponent as CloseIcon } from '../assets/icons/close.svg';
 import { ReactComponent as AddIcon } from '../assets/icons/add.svg';
 import HeaderLink from '../components/HeaderLink';
 import Divider from '../components/Divider';
-import { r_headerDialogClose, r_headerDialogOpen, r_switchTheme } from '../store/reducers/common.reducers';
-import { r_authMsgClose, r_clearAuth, r_handleLogout, r_setAuthError } from '../store/reducers/user.reducers';
+import { r_headerDialogClose, r_headerDialogOpen, r_switchTheme } from '../store/reducers/common.reducer';
+import { r_authMsgClose, r_clearAuth, r_handleLogout, r_setAuthError } from '../store/reducers/users.reducer';
 import { a_handleGoogleAuth, a_handleSignIn, a_handleSignUp } from '../store/actions/user.actions';
 
 const Header = ({ hidePane, setHidePane }) => {

@@ -6,7 +6,7 @@ import moment from 'moment';
 import { filterOptions, periodOptions } from '../utils/constants';
 
 import { a_fetchProduct, a_fetchProducts } from '../store/actions/store.actions';
-import { r_setLoader, r_setSnackMessage, r_headerDialogOpen } from '../store/reducers/common.reducers';
+import { r_setLoader, r_setSnackMessage, r_headerDialogOpen } from '../store/reducers/common.reducer';
 import { api_userImages, api_artworkImages, api_productImages } from '../utils/api_routes';
 
 import Ratings from '../components/Ratings';

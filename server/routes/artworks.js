@@ -1,17 +1,19 @@
 import express from 'express';
 const router = express.Router();
+
 import { artworkBucket, artworkUpl } from '../config/gridfs_config.js';
+import { protect } from '../middleware/authMw.js';
 
 import NodeCache from "node-cache";
 const imageCache = new NodeCache({ stdTTL: 3600 });
 
 //Import Schemas
-import Artworks from '../models/artwork.js';
+import Artwork from '../models/artwork.js';
 import User from '../models/user.js';
 import Common from '../models/common.js';
+import Comment from '../models/comment.js';
 import Gift from '../models/gift.js';
-import { protect } from '../middleware/authMw.js';
-const { Artwork, Comment } = Artworks;
+
 const { Sticker } = Common;
 
 const getHotScore = (artwork) => {
@@ -41,6 +43,8 @@ const getHotScore = (artwork) => {
 // @route   GET api/v1.01/artworks/image/:filename --- Image from gridFS storage --- Public
 router.get('/image/:filename', async (req, res) => {
     const { filename } = req.params;
+    const MAX_RETRIES = 3; // number of retry attempts
+    const RETRY_DELAY_MS = 300; // base delay in ms for exponential backoff
 
     const cachedImage = imageCache.get(filename);
     if (cachedImage) {
@@ -51,40 +55,56 @@ router.get('/image/:filename', async (req, res) => {
         return res.send(cachedImage.buffer);
     }
 
-    try {
-        const downloadStream = artworkBucket.openDownloadStreamByName(filename);
-        let chunks = [];
+    const fetchImageFromGridFS = (attempt = 1) => {
+        try {
+            const downloadStream = artworkBucket.openDownloadStreamByName(filename);
+            let chunks = [];
 
-        downloadStream.on("data", (chunk) => chunks.push(chunk));
+            downloadStream.on("data", (chunk) => chunks.push(chunk));
 
-        downloadStream.on("end", () => {
-            const fileBuffer = Buffer.concat(chunks);
+            downloadStream.on("end", () => {
+                const fileBuffer = Buffer.concat(chunks);
 
-            // Guess content type by extension (basic way)
-            let contentType = "image/jpeg";
-            if (filename.endsWith(".webp")) contentType = "image/webp";
-            if (filename.endsWith(".png")) contentType = "image/png";
-            if (filename.endsWith(".gif")) contentType = "image/gif";
+                // Guess content type by extension (basic way)
+                let contentType = "image/jpeg";
+                if (filename.endsWith(".webp")) contentType = "image/webp";
+                if (filename.endsWith(".png")) contentType = "image/png";
+                if (filename.endsWith(".gif")) contentType = "image/gif";
 
-            // 3. Save to cache
-            imageCache.set(filename, { buffer: fileBuffer, contentType });
+                // 3. Save to cache
+                imageCache.set(filename, { buffer: fileBuffer, contentType });
 
-            // 4. Send to client
-            res.set({
-                "Content-Type": contentType,
-                "Cache-Control": "public, max-age=31536000",
+                // 4. Send to client
+                res.set({
+                    "Content-Type": contentType,
+                    "Cache-Control": "public, max-age=31536000",
+                });
+                res.send(fileBuffer);
             });
-            res.send(fileBuffer);
-        });
 
-        downloadStream.on("error", (err) => {
-            console.error("GridFS error:", err);
-            return res.status(404).json({ err: "File not found" });
-        });
-    } catch (err) {
-        console.log("Server err", err);
-        return res.status(500).json({ msg: err.name });
+            downloadStream.on("error", (err) => {
+                console.error("GridFS error:", err);
+                if (attempt < MAX_RETRIES) {
+                    const delay = RETRY_DELAY_MS * Math.pow(2, attempt - 1);
+                    console.log(`Retrying in ${delay}ms...`);
+                    setTimeout(() => fetchImageFromGridFS(attempt + 1), delay);
+                } else {
+                    return res.status(404).json({ err: "File not found after retries" });
+                }
+            });
+        } catch (err) {
+            console.log("Server err", err);
+            if (attempt < MAX_RETRIES) {
+                const delay = RETRY_DELAY_MS * Math.pow(2, attempt - 1);
+                console.log(`Retrying in ${delay}ms due to server error...`);
+                setTimeout(() => fetchImageFromGridFS(attempt + 1), delay);
+            } else {
+                return res.status(500).json({ msg: err.message });
+            }
+        }
     }
+
+    fetchImageFromGridFS();
 });
 
 // @route   GET api/v1.01/artworks --- Fetch all artworks --- Public
@@ -302,8 +322,8 @@ router.delete('/:id', protect, async (req, res) => {
 
         const users = await User.find({});
         users.map(user => {
-            if (user.bookmarks.some(item => item === req.params.id)) {
-                user.bookmarks = [...user.bookmarks.filter(item => item != req.params.id)];
+            if (user.artwork_bookmarks.some(item => item === req.params.id)) {
+                user.artwork_bookmarks = [...user.artwork_bookmarks.filter(item => item != req.params.id)];
             }
 
             user.save();

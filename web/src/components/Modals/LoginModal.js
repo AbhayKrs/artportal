@@ -8,7 +8,7 @@ import { IoCloseSharp, IoCloseCircle } from 'react-icons/io5';
 import { FaUser, FaLock } from 'react-icons/fa';
 
 import { ReactComponent as GoogleIcon } from '../../assets/icons/google-icon.svg';
-import { r_setAuthError } from '../../store/reducers/user.reducers';
+import { r_setAuthError } from '../../store/reducers/users.reducer';
 
 const LoginModal = ({ open, title, error, banner, onClose, openRegister, handleSignIn, setAuthError }) => {
     let navigate = useNavigate();

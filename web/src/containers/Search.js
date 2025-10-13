@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import moment from 'moment';
 
-import { r_clearSearchList, r_setLoader, r_setSearchType } from '../store/reducers/common.reducers';
+import { r_clearSearchList, r_setLoader, r_setSearchType } from '../store/reducers/common.reducer';
 import { api_artworkImages } from '../utils/api_routes';
 
 import MasonryGrid from '../components/Grids/Masonry';
@@ -19,7 +19,7 @@ const Search = ({ }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const library = useSelector(state => state.library);
+    const artworks = useSelector(state => state.artworks);
     const common = useSelector(state => state.common);
     let searchList = [];
 
@@ -31,7 +31,7 @@ const Search = ({ }) => {
 
     useEffect(() => {
         if (common.activeSearch === "artwork") {
-            searchList = library.artworks;
+            searchList = artworks.main_list;
         } else if (common.activeSearch === 'tag') {
             searchList = common.tags;
         } else { }
@@ -45,7 +45,7 @@ const Search = ({ }) => {
             <SearchTabs />
             <Divider />
             <MasonryGrid cols={5}>
-                {library.artworks.map((item, index) => (
+                {artworks.main_list.map((item, index) => (
                     <div onClick={() => navigate(`/library/${item._id}`)} className='relative group group-hover:block cursor-pointer'>
                         <img loading='lazy'
                             id={index}

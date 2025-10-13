@@ -7,15 +7,17 @@ import path from 'path';
 
 //Connect gfs to database
 const conn = mongoose.connection;
-let artworkBucket, productBucket, commonBucket, taggerBucket;
+let postBucket, artworkBucket, productBucket, commonBucket, taggerBucket;
 
 conn.once('open', async () => {
+    postBucket = new GridFSBucket(conn.db, { bucketName: 'posts' });
     artworkBucket = new GridFSBucket(conn.db, { bucketName: 'artworks' });
     productBucket = new GridFSBucket(conn.db, { bucketName: 'products' });
     commonBucket = new GridFSBucket(conn.db, { bucketName: 'commons' });
     taggerBucket = new GridFSBucket(conn.db, { bucketName: 'tagger' });
 
     try {
+        await conn.db.collection("posts.files").createIndex({ filename: 1 });
         await conn.db.collection("artworks.files").createIndex({ filename: 1 });
         await conn.db.collection("products.files").createIndex({ filename: 1 });
         await conn.db.collection("commons.files").createIndex({ filename: 1 });
@@ -37,6 +39,25 @@ const common_storage = new GridFsStorage({
                 const fileInfo = {
                     filename: filename,
                     bucketName: 'common'
+                };
+                resolve(fileInfo);
+            });
+        });
+    },
+});
+
+const post_storage = new GridFsStorage({
+    url: process.env.MONGO_URI,
+    file: (req, file) => {
+        return new Promise((resolve, reject) => {
+            crypto.randomBytes(16, (err, buf) => {
+                if (err) {
+                    return reject(err);
+                }
+                const filename = buf.toString('hex') + path.extname(file.originalname);
+                const fileInfo = {
+                    filename: filename,
+                    bucketName: 'posts'
                 };
                 resolve(fileInfo);
             });
@@ -102,9 +123,10 @@ const tagger_storage = new GridFsStorage({
     },
 });
 
+const postUpl = multer({ storage: post_storage });
 const artworkUpl = multer({ storage: artwork_storage });
 const productUpl = multer({ storage: product_storage });
 const commonUpl = multer({ storage: common_storage });
 const taggerUpl = multer({ storage: tagger_storage });
 
-export { artworkBucket, productBucket, commonBucket, taggerBucket, artworkUpl, productUpl, commonUpl, taggerUpl }
+export { postBucket, artworkBucket, productBucket, commonBucket, taggerBucket, postUpl, artworkUpl, productUpl, commonUpl, taggerUpl }
