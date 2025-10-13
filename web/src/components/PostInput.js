@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { api_userImages } from '../utils/api_routes';
@@ -9,15 +9,22 @@ import AutoResizeTextarea from './Inputs/AutoResizeTextarea';
 import DragDrop from './DragDrop';
 
 import { ReactComponent as MediaIcon } from '../assets/icons/media.svg';
+import { a_getTags } from '../store/actions/common.actions';
+import { a_handlePostUpload } from '../store/actions/posts.actions';
 
 const PostInput = ({ value, toggle }) => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.user);
+    const tags = useSelector(state => state.common.tags);
 
     const [fullText, setFullText] = useState("");
     const [images, setImages] = useState([]);
     const [thumbnail, setThumbnail] = useState([]);
     const [primaryFile, setPrimaryFile] = useState('');
+
+    // useEffect(() => {
+    //     dispatch(a_getTags());
+    // }, [])
 
     if (user && user.accessToken === '')
         return null;
@@ -80,6 +87,20 @@ const PostInput = ({ value, toggle }) => {
         }
     }
 
+    const handleSubmit = () => {
+        const data = new FormData();
+
+        data.full_text = fullText;
+        images.map(file => data.append('files[]', file));
+        data.poll = {
+            question: '',
+            isMultipleChoice: false,
+            options: []
+        };
+
+        dispatch(a_handlePostUpload(data));
+    }
+
     return (
         <div className='flex flex-col gap-2 py-3 px-4 border-2 border-neutral-700 dark:border-white/10 rounded-lg bg-black/15'>
             <div className='flex flex-row gap-2'>
@@ -91,6 +112,7 @@ const PostInput = ({ value, toggle }) => {
                         value={fullText}
                         onChange={e => setFullText(e.target.value)}
                         placeholder="Write something..."
+                    // tags={tags.flatMap(itm => itm.value)}
                     />
                     <div className='flex flex-row'>
                         {images.length === 0 ?
@@ -113,13 +135,16 @@ const PostInput = ({ value, toggle }) => {
                         }
                     </div>
                     <Divider noPadding />
-                    <div className='flex flex-row gap-2'>
-                        <div className="flex" >
-                            <label htmlFor="file-upload">
-                                <MediaIcon className="h-5 w-5 text-neutral-700 dark:text-neutral-400 cursor-pointer" />
-                            </label>
-                            <input id="file-upload" className='hidden' type="file" multiple onChange={onImageChange} />
+                    <div className='flex flex-row justify-between'>
+                        <div className='flex flex-row gap-2'>
+                            <div className="flex" >
+                                <label htmlFor="file-upload">
+                                    <MediaIcon className="h-5 w-5 text-neutral-700 dark:text-neutral-400 cursor-pointer" />
+                                </label>
+                                <input id="file-upload" className='hidden' type="file" multiple onChange={onImageChange} />
+                            </div>
                         </div>
+                        <button className='flex text-base py-1 px-3 rounded-lg bg-blue-700' onClick={() => { }}>Submit</button>
                     </div>
                 </div>
             </div>

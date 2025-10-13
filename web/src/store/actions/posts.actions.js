@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { api_postComment, api_posts, api_postGift, api_postDelete, api_postDislike, api_postCommentDelete, api_postCommentDislike, api_postCommentEdit, api_post, api_postEdit, api_postCommentLike, api_postUpload, api_postLike, api_postViewed } from '../../utils/api_routes'
+import { api_postComment, api_posts, api_postDelete, api_postDislike, api_postCommentDelete, api_postCommentDislike, api_postCommentEdit, api_post, api_postEdit, api_postCommentLike, api_postUpload, api_postLike, api_postViewed } from '../../utils/api_routes'
 import { r_postEdit, r_postUpload } from '../reducers/posts.reducer';
 import { r_setPost, r_setPosts } from '../reducers/posts.reducer';
 import { a_refreshUserDetails } from './user.actions';
@@ -55,22 +55,6 @@ export const a_editPost = createAsyncThunk("a_editPost", async (payload, { getSt
         return;
     }).catch(err => {
         console.log('---error a_editPost', err);
-        return rejectWithValue(err.message);
-    })
-});
-
-export const a_bookmarkPost = createAsyncThunk("a_bookmarkPost", async (payload, { getState, dispatch, rejectWithValue }) => {
-    const { userID, artworkID } = payload;
-    await api_bookmarkPost(userID, artworkID).then(res => {
-        if (sessionStorage.jwtToken) {
-            dispatch(a_refreshUserDetails(userID));
-        } else if (localStorage.jwtToken) {
-            dispatch(a_refreshUserDetails(userID));
-        }
-        console.log('success a_bookmarkPost', res.data);
-        return;
-    }).catch(err => {
-        console.log('---error a_bookmarkPost', err);
         return rejectWithValue(err.message);
     })
 });
@@ -132,17 +116,6 @@ export const a_handleDislikePost = createAsyncThunk("a_handleDislikePost", async
         return;
     }).catch(err => {
         console.log('---error a_handleDislikePost', err);
-        return rejectWithValue(err.message);
-    })
-});
-
-export const a_handleAwardPost = createAsyncThunk("a_handleAwardPost", async (payload, { getState, dispatch, rejectWithValue }) => {
-    const { artworkID, userID, award } = payload;
-    await api_postGift(artworkID, userID, award).then(res => {
-        console.log('award', res.status);
-        return;
-    }).catch(err => {
-        console.log('---error a_handleAwardPost', err);
         return rejectWithValue(err.message);
     })
 });

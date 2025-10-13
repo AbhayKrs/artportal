@@ -124,7 +124,7 @@ router.post('/new', protect, postUpl.any(), async (req, res) => {
         const newPost = new Post({
             author: user._id,
             visibility: "public",
-            full_text: req.body.title,
+            full_text: req.body.full_text,
             files: req.files.map(file => { return file.filename }),
             poll: {
                 question: req.body.poll.question,

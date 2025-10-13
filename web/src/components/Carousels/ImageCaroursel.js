@@ -40,9 +40,16 @@ const ImageCarousel = ({ size = 12, fit = "contain", imagePaths = [], imageFiles
         if (imagePaths.length > 0) {
             lists = imagePaths.flatMap(img => api_artworkImages(img))
         } else if (imageFiles.length > 0) {
-            lists = imageFiles.flatMap(img => URL.createObjectURL(img.content))
+            lists = imageFiles.map(img => {
+                // If img.content is a File/Blob
+                return URL.createObjectURL(img.content);
+            });
         }
         setImages(lists);
+
+        return () => {
+            lists.forEach(url => URL.revokeObjectURL(url));
+        };
     }, [imagePaths, imageFiles])
 
     useEffect(() => {
