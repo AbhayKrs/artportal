@@ -8,12 +8,12 @@ const postSchema = new mongoose.Schema(
         // space: { type: mongoose.Schema.Types.ObjectId, ref: 'Space', default: null },
         visibility: { type: String, enum: ["public", "archived"], default: "public" },
         full_text: { type: String, required: true },
-        files: [{ type: String, required: true }],
+        files: [{ type: String }],
         poll: {
-            question: { type: String, required: true },
+            question: { type: String },
             multiple_choice: { type: Boolean, default: false },
             options: [{
-                text: { type: String, required: true },
+                text: { type: String },
                 votes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
             }],
             total_votes: { type: Number, default: 0 },

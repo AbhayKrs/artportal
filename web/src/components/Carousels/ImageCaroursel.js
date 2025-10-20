@@ -1,13 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
-import { api_artworkImages } from "../../utils/api_routes";
+import { api_artworkImages, api_postImages } from "../../utils/api_routes";
 
 import { ReactComponent as RightIcon } from '../../assets/icons/right.svg';
 import { ReactComponent as LeftIcon } from '../../assets/icons/left.svg';
 
-const ImageCarousel = ({ size = 12, fit = "contain", imagePaths = [], imageFiles = [] }) => {
+const ImageCarousel = ({ source, size = 12, fit = "contain", imagePaths = [], imageFiles = [] }) => {
     const [current, setCurrent] = useState(0);
     const startX = useRef(0);
-    const currentTranslate = useRef(0);
     const containerRef = useRef(null);
 
     const [images, setImages] = useState([]);
@@ -34,23 +33,29 @@ const ImageCarousel = ({ size = 12, fit = "contain", imagePaths = [], imageFiles
         if (diff < -50) handlePrev(); // swipe right
     };
 
+    const apiPath = (img) => {
+        switch (source) {
+            case 'artworks': return api_artworkImages(img);
+            case 'posts': return api_postImages(img);
+            default: return ""
+        }
+    }
+
+
     useEffect(() => {
         let lists = [];
-        console.log("imgss", imageFiles)
+        console.log("imgss", imageFiles, imagePaths)
         if (imagePaths.length > 0) {
-            lists = imagePaths.flatMap(img => api_artworkImages(img))
+            lists = imagePaths.flatMap(img => apiPath(img))
         } else if (imageFiles.length > 0) {
-            lists = imageFiles.map(img => {
-                // If img.content is a File/Blob
-                return URL.createObjectURL(img.content);
-            });
+            lists = imageFiles.map(img => URL.createObjectURL(img.content));
         }
         setImages(lists);
 
         return () => {
             lists.forEach(url => URL.revokeObjectURL(url));
         };
-    }, [imagePaths, imageFiles])
+    }, [])
 
     useEffect(() => {
         setImgSize(size);

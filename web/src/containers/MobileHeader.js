@@ -41,7 +41,7 @@ import { ReactComponent as MenuIcon } from '../assets/icons/menu.svg';
 import HeaderLink from '../components/HeaderLink';
 import Divider from '../components/Divider';
 import { r_authMsgClose, r_handleLogout, r_setAuthError } from '../store/reducers/users.reducer';
-import { r_clearSearchList, r_headerDialogClose, r_headerDialogOpen, r_setSearchType, r_switchTheme } from '../store/reducers/common.reducer';
+import { r_clearSearchList, r_headerDialogClose, r_headerDialogOpen, r_switchTheme } from '../store/reducers/common.reducer';
 import { a_handleGoogleAuth, a_handleSignIn, a_handleSignUp } from '../store/actions/user.actions';
 
 const MobileHeader = () => {
@@ -106,7 +106,7 @@ const MobileHeader = () => {
                 <div className='flex flex-col gap-2 h-10/12 overflow-y-auto'>
                     <div className='flex flex-col w-full'>
                         <HeaderLink type="link" hidePane={false} text="Library" path="/library" icon={<LibraryIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
-                        <HeaderLink type="button" hidePane={false} text="Search" icon={<SearchIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} func={() => { dispatch(r_setSearchType("artwork")); setSearchModal(true) }} />
+                        <HeaderLink type="button" hidePane={false} text="Search" icon={<SearchIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} func={() => { setSearchModal(true) }} />
                         <HeaderLink type="link" hidePane={false} text="Store" path="/store" icon={<StoreIcon className="h-5 w-5 text-neutral-800 dark:text-gray-300" />} activeRoute={activeRoute} />
                     </div>
                     <hr className='w-full border border-gray-300 dark:border-neutral-800 rounded-xl' />

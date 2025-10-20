@@ -4,7 +4,7 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import { Helmet } from 'react-helmet';
 
 import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducer';
-import { a_fetchHomeData, a_fetchArtworks } from '../store/actions/artworks.actions';
+import { a_featuredArtworks, a_fetchArtworks } from '../store/actions/artworks.actions';
 
 import MasonryGrid from '../components/Grids/Masonry';
 import PostList from '../components/PostList';
@@ -15,6 +15,7 @@ import Divider from '../components/Divider';
 import AppQR from '../assets/images/artportal_appQR.png';
 import { ReactComponent as ViewsIcon } from '../assets/icons/views.svg';
 import { ReactComponent as CloseIcon } from '../assets/icons/close.svg';
+import { a_fetchPosts } from '../store/actions/posts.actions';
 
 const Home = (props) => {
     const dispatch = useDispatch();
@@ -22,6 +23,7 @@ const Home = (props) => {
 
     const user = useSelector(state => state.user);
     const artworks = useSelector(state => state.artworks);
+    const posts = useSelector(state => state.posts);
 
     const [sidePane, setSidePane] = useState(true);
     const [showQR, setShowQR] = useState(false);
@@ -29,7 +31,9 @@ const Home = (props) => {
     useEffect(() => {
         window.scrollTo(0, 0);
         dispatch(r_setLoader(true));
-        dispatch(a_fetchHomeData({ filter: "new", period: "" }));
+        dispatch(a_fetchPosts());
+        // dispatch(a_fetch)
+        dispatch(a_featuredArtworks({ filter: "new", period: "" }));
     }, [])
 
     return (
@@ -39,7 +43,7 @@ const Home = (props) => {
             </Helmet>
             <div className={`flex flex-col gap-4 ${hidePane ? sidePane ? 'md:w-[74%]' : 'md:w-full' : sidePane ? 'md:w-[70.5%]' : 'md:w-full'} order-2 md:order-1 py-2 px-8 md:px-16 min-h-show`}>
                 <PostInput />
-                <PostList list={artworks.main_list} />
+                <PostList list={posts.main_list} />
             </div>
             {sidePane &&
                 <div className={`relative px-2 py-3 h-full md:fixed max-h-show md:right-2 flex flex-col gap-3 w-full md:w-[25%] order-1 md:order-2 backdrop-sepia-0 bg-white/30 dark:bg-black/30 border-l-2 border-gray-400 dark:border-neutral-800`}>

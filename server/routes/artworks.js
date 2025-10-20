@@ -227,8 +227,6 @@ router.post('/new', protect, artworkUpl.any(), async (req, res) => {
     try {
         const user = await User.findById(req.body.userID);
 
-        console.log("art", req.files);
-
         const newArtwork = new Artwork({
             artist: user._id,
             title: req.body.title,
@@ -294,7 +292,7 @@ router.put('/:id', protect, function (req, res) {
         };
         Artwork.findByIdAndUpdate(req.params.id, { $set: updatedArtwork }, (err, data) => {
             if (err) {
-                console.log(err);
+                console.log("err", err);
             } else {
                 res.send(data);
             }
@@ -352,7 +350,7 @@ router.put('/:id/like', protect, async (req, res) => {
                     return res.json("Success");
                 })
                 .catch(err => {
-                    console.log(err);
+                    console.log("err", err);
                 });
         } catch (err) {
             res.status(500).send('Failed to get likes count!');
@@ -377,12 +375,13 @@ router.put('/:id/dislike', protect, async (req, res) => {
                     return res.json("Success");
                 })
                 .catch(err => {
-                    console.log(err);
+                    console.log("err", err);
                 });
         } catch (err) {
             res.status(500).send('Failed to get likes count!');
         }
     } catch (err) {
+        console.log(err);
         return res.status(404).json({ msg: err.name });
     }
 })
@@ -405,7 +404,7 @@ router.post('/:id/gift', protect, async (req, res) => {
 
         Gift.create(giftEntry, (err, data) => {
             if (err) {
-                console.log(err);
+                console.log("err", err);
             } else {
                 res.send(data);
             }
@@ -529,7 +528,7 @@ router.put('/:id/comments/:comment_id/like', protect, async (req, res) => {
                 return res.json("Success");
             })
             .catch(err => {
-                console.log(err);
+                console.log("err", err);
             });
     } catch (err) {
         console.log("err", err);
@@ -551,7 +550,7 @@ router.put('/:id/comments/:comment_id/dislike', protect, async (req, res) => {
                 return res.json("Success");
             })
             .catch(err => {
-                console.log(err);
+                console.log("err", err);
             });
     } catch (err) {
         res.status(500).send('Failed to dislike comment!');

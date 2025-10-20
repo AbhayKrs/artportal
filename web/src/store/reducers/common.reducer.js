@@ -19,7 +19,6 @@ const initialState = {
     tags: [],
     dialogTitle: '',
     activeDialogName: '',
-    activeSearch: '',
     searchList: [],
     avatarList: [],
     awardList: [],
@@ -78,9 +77,6 @@ const commonSlice = createSlice({
             state.activeDialogName = '';
             state.dialogTitle = '';
         },
-        r_setSearchType: (state, action) => {
-            state.activeSearch = action.payload
-        },
         r_setSearchList: (state, action) => {
             const { type, list } = action.payload;
             const searchList = [...list];
@@ -113,7 +109,6 @@ export const {
     r_setSnackMessage,
     r_headerDialogOpen,
     r_headerDialogClose,
-    r_setSearchType,
     r_setSearchList,
     r_clearSearchList,
     r_setAvatars,

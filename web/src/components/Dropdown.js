@@ -29,7 +29,7 @@ const Dropdown = ({ size, name, options, right, left, withBg, onSelect, selected
             </button>
             <div style={dropMenu ? { opacity: 1, transform: 'translate(0) scale(1)', visibility: 'visible' } : {}} className="opacity-0 invisible transition-all duration-300 transform origin-top-right -translate-y-2 scale-95">
                 <div className={`absolute scrollbar max-h-[20em] w-56 overflow-auto mt-1 ${right && `right-0`} ${left && `left-0`} origin-top-right bg-slate-300 dark:bg-neutral-800 divide-y divide-gray-100 rounded-md shadow-lg outline-none`} aria-labelledby="headlessui-menu-button-1" id="headlessui-menu-items-117" role="menu">
-                    <div className="p-1 gap-0.5">
+                    <div className="flex flex-col p-2 gap-0.5">
                         {options.map((option, index) => (
                             <button key={index} onClick={() => selectItem(option)} tabIndex={index} className={`text-gray-700 dark:text-gray-300 flex justify-between w-full px-4 py-2 ${size === 'sm' ? "text-sm" : "text-base"} leading-5 text-left ${selected === option.label && `bg-gray-200 dark:bg-neutral-700`} hover:bg-gray-100 dark:hover:bg-neutral-700 rounded`} role="option">{option.label}</button>
                         ))}

@@ -6,7 +6,6 @@ import helmet from 'helmet';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import mongoSanitize from 'express-mongo-sanitize';
-import Redis from 'ioredis';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import path from 'path';
@@ -38,9 +37,6 @@ app.use(cors({
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"], // include Authorization header
 }));
-
-// const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
-// app.set('redis', redis);
 
 app.use(helmet({
     crossOriginResourcePolicy: false

@@ -8,6 +8,7 @@ import { r_setSnackMessage } from '../store/reducers/common.reducer';
 import UserBadge from './Badges/UserBadge';
 import Divider from './Divider';
 import ImageCarousel from './Carousels/ImageCaroursel';
+import PostText from './Typography/PostText';
 
 import { ReactComponent as Artportal_logo } from '../assets/icons/artportal_logo.svg';
 import { ReactComponent as LikeIcon } from '../assets/icons/like.svg';
@@ -51,13 +52,13 @@ const PostList = ({ list }) => {
                         <div className='flex flex-col gap-2'>
                             <div className='flex flex-row items-center justify-between'>
                                 <div className='flex flex-row gap-2'>
-                                    <UserBadge icon size="md" link={`/users/${itm.artist._id} `} user={itm.artist} />
+                                    <UserBadge icon size="md" link={`/users/${itm.author._id} `} user={itm.author} />
                                     <span className='text-base text-neutral-700 dark:text-gray-300'>{moment(itm.createdAt).fromNow()}</span>
                                 </div>
                                 <MoreIcon className="h-6 w-6 text-neutral-800 dark:text-gray-400" />
                             </div>
-                            <h1 className='text-lg text-neutral-800 dark:text-gray-200'>{itm.title}</h1>
-                            <ImageCarousel size={32} fit="contain" imagePaths={itm.files} />
+                            <PostText text={itm.full_text} />
+                            <ImageCarousel source="posts" size={28} fit="contain" imagePaths={itm.files} />
                         </div>
                         <div className='flex flex-row gap-4'>
                             <div className='flex flex-row items-center gap-1'>

@@ -9,6 +9,8 @@ import path from 'path';
 const conn = mongoose.connection;
 let postBucket, artworkBucket, productBucket, commonBucket, taggerBucket;
 
+
+
 conn.once('open', async () => {
     postBucket = new GridFSBucket(conn.db, { bucketName: 'posts' });
     artworkBucket = new GridFSBucket(conn.db, { bucketName: 'artworks' });

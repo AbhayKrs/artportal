@@ -33,11 +33,10 @@ export const a_fetchArtwork = createAsyncThunk("a_fetchArtwork", async (payload,
     })
 });
 
-export const a_fetchHomeData = createAsyncThunk("a_fetchHomeData", async (payload, { getState, dispatch, rejectWithValue }) => {
-    const { value, filter, period } = payload;
-    await api_artworks("list", "", filter, period).then(res => dispatch(r_setArtworks(res.data)));
-    await api_artworks("list", "", "trending").then(res => dispatch(r_setTrendingArtworks(res.data)));
-    await api_artworks("artist", "jayabhay9").then(res => dispatch(r_setFeaturedArtworks(res.data)));
+export const a_featuredArtworks = createAsyncThunk("a_featuredArtworks", async (payload, { getState, dispatch, rejectWithValue }) => {
+    await api_artworks("artist", "jayabhay9").then(res =>
+        dispatch(r_setFeaturedArtworks(res.data))
+    );
 });
 
 export const a_handleArtworkUpload = createAsyncThunk("a_handleArtworkUpload", async (payload, { getState, dispatch, rejectWithValue }) => {

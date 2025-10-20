@@ -168,7 +168,7 @@ router.put('/:id', protect, function (req, res) {
         };
         Product.findByIdAndUpdate(req.params.id, { $set: updatedProduct }, (err, data) => {
             if (err) {
-                console.log(err);
+                console.log("err", err);
             } else {
                 res.send(data);
             }

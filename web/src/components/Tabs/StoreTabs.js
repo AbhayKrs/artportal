@@ -12,7 +12,7 @@ import { FaHashtag, FaGreaterThan } from 'react-icons/fa6';
 import { ReactComponent as SearchIcon } from '../../assets/icons/search.svg';
 import { ReactComponent as EventsIcon } from '../../assets/icons/events.svg';
 
-import { r_clearSearchList, r_setSearchType } from '../../store/reducers/common.reducer';
+import { r_clearSearchList } from '../../store/reducers/common.reducer';
 import { a_getTags } from '../../store/actions/common.actions';
 
 const StoreTabs = ({ search, filtersPane, setFiltersPane }) => {
@@ -177,61 +177,6 @@ const StoreTabs = ({ search, filtersPane, setFiltersPane }) => {
                     </div>
                 </div>
             )}
-            <div className='flex flex-row gap-6 w-full'>
-                {search && (
-                    <div className='flex flex-row gap-2 items-center'>
-                        <button disabled={common.activeSearch === 'artwork'} onClick={() => { dispatch(r_setSearchType('artwork')); dispatch(a_searchArtworks({ value: searchVal, filter: "", period: "" })) }} className={`flex gap-1 items-center tracking-wide ${common.activeSearch === 'artwork' ? 'text-blue-700' : 'text-neutral-700 dark:text-gray-300 hover:text-blue-700'}`}>
-                            <FiAtSign className='h-4 w-4' />
-                            <span className='font-semibold text-base'>Artworks</span>
-                        </button>
-                        <span className='flex text-neutral-500'>&#8226;</span>
-                        <button disabled={searchVal.length === 0} onClick={() => { dispatch(a_getTags()); dispatch(a_searchArtworks({ value: searchVal })) }} className={`flex gap-1 items-center tracking-wide ${common.activeSearch === 'tag' ? 'text-blue-700' : 'text-neutral-700 dark:text-gray-300 hover:text-blue-700'} disabled:text-gray-300 dark:disabled:text-neutral-500`}>
-                            <FaHashtag className='h-4 w-4' />
-                            <span className='font-semibold text-base'>Tags</span>
-                        </button>
-                        <span className='flex text-neutral-500'>&#8226;</span>
-                        <button disabled={searchVal.length === 0} onClick={() => { dispatch(r_setSearchType('artist')); dispatch(a_searchArtworks({ value: searchVal })) }} className={`flex gap-1 items-center tracking-wide ${common.activeSearch === 'artist' ? 'text-blue-700' : 'text-neutral-700 dark:text-gray-300 hover:text-blue-700'} disabled:text-gray-300 dark:disabled:text-neutral-500`}>
-                            <FaGreaterThan className='h-4 w-4' />
-                            <span className='font-semibold text-base'>Artists</span>
-                        </button>
-                    </div>
-                )}
-                {(!search || (search && common.activeSearch === "artwork")) && (
-                    <div className='flex items-center'>
-                        <Dropdown
-                            left
-                            name='filters'
-                            selected={activeFilterLabel}
-                            options={filterOptions}
-                            onSelect={selectFilter}
-                        />
-                        {activePeriod.length > 0 &&
-                            <>
-                                {window.innerWidth > 640 ?
-                                    <Dropdown
-                                        left
-                                        name='period'
-                                        selected={activePeriodLabel}
-                                        options={periodOptions}
-                                        onSelect={handlePeriodChange}
-                                    />
-                                    :
-                                    <Dropdown
-                                        right
-                                        name='period'
-                                        selected={activePeriodLabel}
-                                        options={periodOptions}
-                                        onSelect={handlePeriodChange}
-                                    />
-                                }
-                            </>
-                        }
-                    </div>
-                )}
-                {!filtersPane && <button className='ml-auto' onClick={() => setFiltersPane(!filtersPane)}>
-                    <EventsIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />
-                </button>}
-            </div>
         </div>
     )
 }

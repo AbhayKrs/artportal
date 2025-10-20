@@ -93,6 +93,7 @@ router.get('/', async (req, res) => {
             });
         res.json(posts);
     } catch (err) {
+        console.log("err", err);
         res.status(500).send('Unable to fetch posts');
     }
 });
@@ -127,10 +128,10 @@ router.post('/new', protect, postUpl.any(), async (req, res) => {
             full_text: req.body.full_text,
             files: req.files.map(file => { return file.filename }),
             poll: {
-                question: req.body.poll.question,
-                multiple_choice: req.body.poll.isMultipleChoice,
-                options: req.body.poll.options,
-                expires_at: req.body.poll.expiry
+                question: req.body.poll?.question,
+                multiple_choice: req.body.poll?.isMultipleChoice,
+                options: req.body.poll?.options,
+                expires_at: req.body.poll?.expiry
             },
             views: [],
             likes: [],
@@ -152,12 +153,13 @@ router.put('/:id', protect, function (req, res) {
         const updatedPost = { ...req.body };
         Post.findByIdAndUpdate(req.params.id, { $set: updatedPost }, (err, data) => {
             if (err) {
-                console.log(err);
+                console.log("err", err);
             } else {
                 res.send(data);
             }
         });
     } catch (err) {
+        console.log("err", err);
         return res.status(404).json({ msg: err.name });
     }
 });
@@ -187,7 +189,7 @@ router.delete('/:id', protect, async (req, res) => {
         post.deleteOne({ _id: artwork._id });
         res.send('Post removed successfully!');
     } catch (err) {
-        console.error(err.message);
+        console.error(err);
         res.status(500).send('Post removal failed!');
     }
 });
@@ -206,12 +208,13 @@ router.put('/:id/like', protect, async (req, res) => {
                     return res.json("Success");
                 })
                 .catch(err => {
-                    console.log(err);
+                    console.log("err", err);
                 });
         } catch (err) {
             res.status(500).send('Failed to get likes count!');
         }
     } catch (err) {
+        console.log("err", err);
         return res.status(404).json({ msg: err.name });
     }
 });
@@ -230,12 +233,13 @@ router.put('/:id/dislike', protect, async (req, res) => {
                     return res.json("Success");
                 })
                 .catch(err => {
-                    console.log(err);
+                    console.log("err", err);
                 });
         } catch (err) {
             res.status(500).send('Failed to get likes count!');
         }
     } catch (err) {
+        console.log("err", err);
         return res.status(404).json({ msg: err.name });
     }
 });
@@ -246,6 +250,7 @@ router.get('/:id/comments', async (req, res) => {
         const post = await Post.findById(req.params.id);
         res.send(post.comments);
     } catch (err) {
+        console.log("err", err);
         res.status(500).send('Adding a comment failed');
     }
 });
@@ -352,7 +357,7 @@ router.put('/:id/comments/:comment_id/like', protect, async (req, res) => {
                 return res.json("Success");
             })
             .catch(err => {
-                console.log(err);
+                console.log("err", err);
             });
     } catch (err) {
         console.log("err", err);
@@ -373,7 +378,7 @@ router.put('/:id/comments/:comment_id/dislike', protect, async (req, res) => {
                 return res.json("Success");
             })
             .catch(err => {
-                console.log(err);
+                console.log("err", err);
             });
     } catch (err) {
         res.status(500).send('Failed to dislike comment!');

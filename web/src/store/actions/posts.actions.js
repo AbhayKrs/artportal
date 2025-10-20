@@ -23,6 +23,16 @@ export const a_postViewed = createAsyncThunk("a_postViewed", async (payload, { g
     return;
 });
 
+export const a_fetchPosts = createAsyncThunk("a_fetchPosts", async (payload, { getState, dispatch, rejectWithValue }) => {
+    await api_posts().then(res => {
+        dispatch(r_setPosts(res.data));
+        return;
+    }).catch(err => {
+        console.log('---error a_fetchPosts', err);
+        return rejectWithValue(err.message);
+    })
+});
+
 export const a_fetchPost = createAsyncThunk("a_fetchPost", async (payload, { getState, dispatch, rejectWithValue }) => {
     const userID = getState().user.id;
     await api_post(payload, { _id: userID }).then(res => {
@@ -32,10 +42,6 @@ export const a_fetchPost = createAsyncThunk("a_fetchPost", async (payload, { get
         console.log('---error a_fetchPost', err);
         return rejectWithValue(err.message);
     })
-});
-
-export const a_fetchHomeData = createAsyncThunk("a_fetchHomeData", async (payload, { getState, dispatch, rejectWithValue }) => {
-    await api_posts().then(res => dispatch(r_setPosts(res.data)));
 });
 
 export const a_handlePostUpload = createAsyncThunk("a_handlePostUpload", async (payload, { getState, dispatch, rejectWithValue }) => {
@@ -59,16 +65,7 @@ export const a_editPost = createAsyncThunk("a_editPost", async (payload, { getSt
     })
 });
 
-export const a_fetchPosts = createAsyncThunk("a_fetchPosts", async (payload, { getState, dispatch, rejectWithValue }) => {
-    const { filter, period } = payload;
-    await api_posts("list", "", filter, period).then(res => {
-        dispatch(r_setPosts(res.data));
-        return;
-    }).catch(err => {
-        console.log('---error a_fetchPosts', err);
-        return rejectWithValue(err.message);
-    })
-});
+
 
 export const a_searchPosts = createAsyncThunk("a_searchPosts", async (payload, { getState, dispatch, rejectWithValue }) => {
     const { value, filter, period } = payload;

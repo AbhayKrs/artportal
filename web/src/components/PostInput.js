@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Picker from 'emoji-picker-react';
 
 import { api_userImages } from '../utils/api_routes';
 import { r_setSnackMessage } from '../store/reducers/common.reducer';
@@ -21,6 +22,8 @@ const PostInput = ({ value, toggle }) => {
     const [images, setImages] = useState([]);
     const [thumbnail, setThumbnail] = useState([]);
     const [primaryFile, setPrimaryFile] = useState('');
+
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
     // useEffect(() => {
     //     dispatch(a_getTags());
@@ -89,17 +92,19 @@ const PostInput = ({ value, toggle }) => {
 
     const handleSubmit = () => {
         const data = new FormData();
+        const userID = user.id;
 
-        data.full_text = fullText;
+        data.append("full_text", fullText);
         images.map(file => data.append('files[]', file));
-        data.poll = {
-            question: '',
-            isMultipleChoice: false,
-            options: []
-        };
+        data.append('userID', userID);
 
         dispatch(a_handlePostUpload(data));
     }
+
+    const handleEmojiClick = (emojiData) => {
+        setFullText(prev => prev + emojiData.emoji);
+        setShowEmojiPicker(false);
+    };
 
     return (
         <div className='flex flex-col gap-2 py-3 px-4 border-2 border-neutral-700 dark:border-white/10 rounded-lg bg-black/15'>
@@ -143,8 +148,22 @@ const PostInput = ({ value, toggle }) => {
                                 </label>
                                 <input id="file-upload" className='hidden' type="file" multiple onChange={onImageChange} />
                             </div>
+                            <div className='relative'>
+                                <button
+                                    type="button"
+                                    className="text-neutral-600 dark:text-neutral-300 hover:text-yellow-400"
+                                    onClick={() => setShowEmojiPicker(v => !v)}
+                                >
+                                    <MediaIcon className="h-5 w-5 text-neutral-700 dark:text-neutral-400 cursor-pointer" />
+                                </button>
+                                {showEmojiPicker && (
+                                    <div className="absolute z-50 bottom-0 left-0">
+                                        <Picker onEmojiClick={handleEmojiClick} theme="dark" />
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                        <button className='flex text-base py-1 px-3 rounded-lg bg-blue-700' onClick={() => { }}>Submit</button>
+                        <button className='flex text-base py-1 px-3 rounded-lg bg-blue-700' onClick={handleSubmit}>Submit</button>
                     </div>
                 </div>
             </div>

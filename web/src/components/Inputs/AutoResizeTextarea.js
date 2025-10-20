@@ -50,7 +50,6 @@ export default function AutoResizeTextarea({
         div.style.position = "absolute";
         div.style.visibility = "hidden";
         div.style.whiteSpace = "pre-wrap";
-        div.style.wordWrap = "break-word";
         div.style.width = textarea.offsetWidth + "px";
 
         wrapper.appendChild(div);

@@ -14,6 +14,7 @@ router.get('/', adminKey, async (req, res) => {
     try {
         res.send("Admin API access approved...");
     } catch (err) {
+        console.log("err", err);
         res.status(500).send('Admin API access rejected...');
     }
 })
@@ -24,6 +25,7 @@ router.get('/users', adminKey, async (req, res) => {
         const users = await User.find({});
         res.json(users);
     } catch (err) {
+        console.log("err", err);
         return res.status(404).json({ msg: err.name });
     }
 });
@@ -41,6 +43,7 @@ router.delete('/users/:id', adminKey, async (req, res) => {
             throw new Error('User not found');
         }
     } catch (err) {
+        console.log("err", err);
         return res.status(404).json({ msg: err.name });
     }
 });
@@ -51,6 +54,7 @@ router.get('/artworks', adminKey, async (req, res) => {
         const artworks = await Artwork.find({});
         res.json(artworks);
     } catch (err) {
+        console.log("err", err);
         return res.status(404).json({ msg: err.name });
     }
 });
@@ -61,6 +65,7 @@ router.get('/products', adminKey, async (req, res) => {
         const items = await Product.find({});
         res.json(items);
     } catch (err) {
+        console.log("err", err);
         return res.status(404).json({ msg: err.name });
     }
 });
