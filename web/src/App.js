@@ -17,6 +17,20 @@ import Settings from './containers/Settings';
 import Edit from './containers/Edit';
 import Cart from './containers/Cart';
 import Notifications from './containers/Notifications';
+import LibraryView from './containers/LibraryView';
+import StoreView from './containers/StoreView';
+import StoreUpload from './containers/StoreUpload';
+import LibraryUpload from './containers/LibraryUpload';
+import PostView from './containers/PostView';
+
+import General from './children/General';
+import Account from './children/Account';
+import Notification from './children/Notification';
+import Community from './children/Community';
+import Billing from './children/Billing';
+import About from './children/About';
+import TOS from './children/TOS';
+import Privacy from './children/Privacy';
 
 import Loader from './components/Loader';
 import Snackbar from './components/Snackbar';
@@ -29,28 +43,16 @@ import Snackbar from './components/Snackbar';
 // import Upload from './components/Library/Upload';
 // import Privacy from './components/Help/Privacy';
 
-import General from './children/General';
-import Account from './children/Account';
-import Notification from './children/Notification';
-import Community from './children/Community';
-import Billing from './children/Billing';
-import About from './children/About';
-import TOS from './children/TOS';
-import Privacy from './children/Privacy';
 import useWindowWidth from './hooks/useWindowWidth';
 import { a_fetchUserCart, a_fetchVisitorStatus, a_verifyAuth } from './store/actions/user.actions';
 import { r_setLoader, r_setSnackMessage } from './store/reducers/common.reducer';
-import LibraryView from './containers/LibraryView';
-import StoreView from './containers/StoreView';
-import StoreUpload from './containers/StoreUpload';
-import LibraryUpload from './containers/LibraryUpload';
+
 import { a_fetchPosts } from './store/actions/posts.actions';
 import { a_fetchArtworks } from './store/actions/artworks.actions';
 
 const Layout = (props) => {
   const dispatch = useDispatch();
   const common = useSelector(state => state.common);
-  const user = useSelector(state => state.user);
 
   const width = useWindowWidth();
   const isMobile = width < 640; // sm breakpoint
@@ -124,6 +126,7 @@ const App = () => {
       element: <Layout />,
       children: [
         { path: '/', element: <Home /> },
+        { path: '/posts/:id', element: <PostView /> },
         { path: '/google_success', element: <Google header="Success" />, },
         { path: '/google_failed', element: <Google header="Failed" /> },
         { path: '/library', element: <Library /> },

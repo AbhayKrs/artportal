@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 
@@ -19,6 +20,8 @@ import { ReactComponent as MoreIcon } from '../../assets/icons/more.svg';
 
 const PostList = ({ search, list }) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const user = useSelector(state => state.user);
 
     const [listData, setListData] = useState([]);
@@ -52,10 +55,10 @@ const PostList = ({ search, list }) => {
     }, [search, list])
 
     return (
-        <div className='flex flex-col gap-4'>
-            {listData.map(itm => (
-                <>
-                    <div className='flex flex-col gap-3'>
+        <div className='flex flex-col'>
+            {listData.map((itm, index) => (
+                <div key={index}>
+                    <div onClick={() => navigate(`/posts/${itm._id}`)} className='flex flex-col gap-3 hover:bg-black/10 p-4 rounded-md cursor-pointer'>
                         <div className='flex flex-col gap-2'>
                             <div className='flex flex-row items-center justify-between'>
                                 <div className='flex flex-row gap-2'>
@@ -94,8 +97,8 @@ const PostList = ({ search, list }) => {
                             <LinkIcon className='w-4 h-4 text-neutral-600 dark:text-neutral-500' />
                         </div>
                     </div>
-                    <Divider noPadding />
-                </>
+                    {index < listData.length - 1 && <Divider />}
+                </div>
             ))}
         </div>
     )

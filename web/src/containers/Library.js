@@ -14,11 +14,10 @@ import LibraryTabs from '../components/Tabs/LibraryTabs';
 
 const Library = ({ }) => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const hidePane = useOutletContext();
 
     const artworks = useSelector(state => state.artworks);
 
-    const hidePane = useOutletContext();
     const [eventsPane, setEventsPane] = useState(true);
 
     useEffect(() => {

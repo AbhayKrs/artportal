@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Picker from 'emoji-picker-react';
+import EmojiPicker from 'emoji-picker-react';
 
 import { api_userImages } from '../utils/api_routes';
+import { a_handlePostUpload } from '../store/actions/posts.actions';
 import { r_setSnackMessage } from '../store/reducers/common.reducer';
 
 import Divider from './Divider';
@@ -10,14 +11,15 @@ import AutoResizeTextarea from './Inputs/AutoResizeTextarea';
 import DragDrop from './DragDrop';
 
 import { ReactComponent as MediaIcon } from '../assets/icons/media.svg';
-import { a_getTags } from '../store/actions/common.actions';
-import { a_handlePostUpload } from '../store/actions/posts.actions';
+import { ReactComponent as EmojiIcon } from '../assets/icons/emoji.svg';
+
 
 const PostInput = ({ value, toggle }) => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.user);
     const tags = useSelector(state => state.common.tags);
 
+    const pickerRef = useRef(null);
     const [fullText, setFullText] = useState("");
     const [images, setImages] = useState([]);
     const [thumbnail, setThumbnail] = useState([]);
@@ -28,6 +30,19 @@ const PostInput = ({ value, toggle }) => {
     // useEffect(() => {
     //     dispatch(a_getTags());
     // }, [])
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (pickerRef.current && !pickerRef.current.contains(event.target)) {
+                setShowEmojiPicker(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     if (user && user.accessToken === '')
         return null;
@@ -107,7 +122,7 @@ const PostInput = ({ value, toggle }) => {
     };
 
     return (
-        <div className='flex flex-col gap-2 py-3 px-4 border-2 border-neutral-700 dark:border-white/10 rounded-lg bg-black/15'>
+        <div className='flex flex-col gap-2 py-3 px-4 border border-gray-400 dark:border-neutral-800 rounded-lg bg-black/15'>
             <div className='flex flex-row gap-2'>
                 {user.avatar.icon && <div className="w-12 h-12 overflow-hidden">
                     {user.avatar.icon.length > 0 && <img loading='lazy' src={api_userImages(user.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />}
@@ -148,17 +163,24 @@ const PostInput = ({ value, toggle }) => {
                                 </label>
                                 <input id="file-upload" className='hidden' type="file" multiple onChange={onImageChange} />
                             </div>
-                            <div className='relative'>
+                            <div ref={pickerRef} className='relative'>
                                 <button
                                     type="button"
                                     className="text-neutral-600 dark:text-neutral-300 hover:text-yellow-400"
                                     onClick={() => setShowEmojiPicker(v => !v)}
                                 >
-                                    <MediaIcon className="h-5 w-5 text-neutral-700 dark:text-neutral-400 cursor-pointer" />
+                                    <EmojiIcon className="h-5 w-5 text-neutral-700 dark:text-neutral-400 cursor-pointer" />
                                 </button>
                                 {showEmojiPicker && (
-                                    <div className="absolute z-50 bottom-0 left-0">
-                                        <Picker onEmojiClick={handleEmojiClick} theme="dark" />
+                                    <div className="absolute z-50 top-6 left-0">
+                                        <EmojiPicker
+                                            theme={localStorage.getItem("theme")}
+                                            searchDisabled={true}
+                                            onEmojiClick={handleEmojiClick}
+                                            previewConfig={{
+                                                showPreview: false
+                                            }}
+                                        />
                                     </div>
                                 )}
                             </div>

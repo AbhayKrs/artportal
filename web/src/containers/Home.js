@@ -21,7 +21,6 @@ const Home = (props) => {
     const dispatch = useDispatch();
     const hidePane = useOutletContext();
 
-    const user = useSelector(state => state.user);
     const artworks = useSelector(state => state.artworks);
     const posts = useSelector(state => state.posts);
 
@@ -39,7 +38,7 @@ const Home = (props) => {
             <Helmet>
                 <title>artportal</title>
             </Helmet>
-            <div className={`flex flex-col gap-4 ${hidePane ? sidePane ? 'md:w-[74%]' : 'md:w-full' : sidePane ? 'md:w-[70.5%]' : 'md:w-full'} order-2 md:order-1 py-2 px-8 md:px-16 min-h-show`}>
+            <div className={`flex flex-col gap-2 ${hidePane ? sidePane ? 'md:w-[74%]' : 'md:w-full' : sidePane ? 'md:w-[70.5%]' : 'md:w-full'} order-2 md:order-1 py-2 px-8 md:px-16 min-h-show`}>
                 <PostInput />
                 <PostList list={posts.main_list} />
             </div>
