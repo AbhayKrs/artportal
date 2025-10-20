@@ -1,28 +1,27 @@
-import moment from 'moment';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 
-import { api_artworkImages } from '../utils/api_routes';
-import { a_fetchArtwork, a_handleDislikeArtwork, a_handleLikeArtwork } from '../store/actions/artworks.actions';
-import { r_setSnackMessage } from '../store/reducers/common.reducer';
+import { a_fetchArtwork, a_handleDislikeArtwork, a_handleLikeArtwork } from '../../store/actions/artworks.actions';
+import { r_setSnackMessage } from '../../store/reducers/common.reducer';
 
-import UserBadge from './Badges/UserBadge';
-import Divider from './Divider';
-import ImageCarousel from './Carousels/ImageCaroursel';
-import PostText from './Typography/PostText';
+import UserBadge from '../Badges/UserBadge';
+import Divider from '../Divider';
+import ImageCarousel from '../Carousels/ImageCaroursel';
+import PostText from '../Typography/PostText';
 
-import { ReactComponent as Artportal_logo } from '../assets/icons/artportal_logo.svg';
-import { ReactComponent as LikeIcon } from '../assets/icons/like.svg';
-import { ReactComponent as LikeFilledIcon } from '../assets/icons/likefilled.svg';
-import { ReactComponent as DislikeIcon } from '../assets/icons/dislike.svg';
-import { ReactComponent as DislikeFilledIcon } from '../assets/icons/dislikefilled.svg';
-import { ReactComponent as CommentIcon } from '../assets/icons/comment.svg';
-import { ReactComponent as PinIcon } from '../assets/icons/pin.svg';
-import { ReactComponent as LinkIcon } from '../assets/icons/link.svg';
-import { ReactComponent as MoreIcon } from '../assets/icons/more.svg';
+import { ReactComponent as LikeIcon } from '../../assets/icons/like.svg';
+import { ReactComponent as LikeFilledIcon } from '../../assets/icons/likefilled.svg';
+import { ReactComponent as CommentIcon } from '../../assets/icons/comment.svg';
+import { ReactComponent as PinIcon } from '../../assets/icons/pin.svg';
+import { ReactComponent as LinkIcon } from '../../assets/icons/link.svg';
+import { ReactComponent as MoreIcon } from '../../assets/icons/more.svg';
 
-const PostList = ({ list }) => {
+const PostList = ({ search, list }) => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.user);
+
+    const [listData, setListData] = useState([]);
 
     const handleInvalidUser = () => {
         const msgData = {
@@ -44,9 +43,17 @@ const PostList = ({ list }) => {
         }, 2000);
     }
 
+    useEffect(() => {
+        if (search && search.length > 0) {
+            const tagRegex = new RegExp(`#${search}(\\b|\\s|$)`, 'i');
+            list = list.filter(itm => tagRegex.test(itm.full_text));
+        }
+        setListData(list);
+    }, [search, list])
+
     return (
         <div className='flex flex-col gap-4'>
-            {list.map(itm => (
+            {listData.map(itm => (
                 <>
                     <div className='flex flex-col gap-3'>
                         <div className='flex flex-col gap-2'>

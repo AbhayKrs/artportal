@@ -240,7 +240,7 @@ const LibraryView = ({ }) => {
                         </div>
                         <div className='flex justify-between items-center'>
                             {/* {artwork.artist.id === user.id ?
-                                    <div onClick={() => navigate(`/artwork/${artwork._id}/edit`)} className='rounded-lg bg-blue-700 p-2 cursor-pointer ml-2'>
+                                    <div onClick={() => navigate(`/artworks/${artwork._id}/edit`)} className='rounded-lg bg-blue-700 p-2 cursor-pointer ml-2'>
                                         <MdEdit className="text-gray-200 h-6 w-6" />
                                     </div>
                                     : <div className="relative float-left flex">

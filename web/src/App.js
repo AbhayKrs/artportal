@@ -44,6 +44,8 @@ import LibraryView from './containers/LibraryView';
 import StoreView from './containers/StoreView';
 import StoreUpload from './containers/StoreUpload';
 import LibraryUpload from './containers/LibraryUpload';
+import { a_fetchPosts } from './store/actions/posts.actions';
+import { a_fetchArtworks } from './store/actions/artworks.actions';
 
 const Layout = (props) => {
   const dispatch = useDispatch();
@@ -59,6 +61,7 @@ const Layout = (props) => {
     dispatch(a_fetchVisitorStatus());
     load_theme();
     load_auth();
+    load_data();
   }, []);
 
   useEffect(() => {
@@ -93,6 +96,11 @@ const Layout = (props) => {
     });
   }
 
+  const load_data = () => {
+    dispatch(a_fetchPosts());
+    dispatch(a_fetchArtworks({ filter: "trending" }));
+  }
+
   return (
     <main className={`${common.theme} relative font-nunito`}>
       {isMobile ?
@@ -120,8 +128,8 @@ const App = () => {
         { path: '/google_failed', element: <Google header="Failed" /> },
         { path: '/library', element: <Library /> },
         { path: '/search', element: <Search /> },
-        { path: '/artwork/:id', element: <LibraryView /> },
-        { path: '/artwork/upload', element: <LibraryUpload /> },
+        { path: '/artworks/:id', element: <LibraryView /> },
+        { path: '/artworks/upload', element: <LibraryUpload /> },
         { path: '/library/:id/edit', element: <Edit.Library /> },
         { path: '/store', element: <Store /> },
         { path: '/store/:id', element: <StoreView /> },

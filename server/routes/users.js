@@ -49,7 +49,11 @@ router.get('/', async (req, res) => {
 // @route   GET api/v1.01/users/:id ---  Get user by ID --- PUBLIC
 router.get('/:id', protect, async (req, res) => {
     try {
-        const user = await User.findById(req.params.id).populate('bookmarks');
+        const user = await User.findById(req.params.id).populate({
+            path: "artwork_bookmarks",
+            model: "Artwork",
+            select: "title description files categories artist tags likes"
+        });
         const payload = {
             id: user._id,
             name: user.name,
@@ -81,7 +85,11 @@ router.get('/:id', protect, async (req, res) => {
 // @route   GET api/v1.01/users/:id/view ---  Get user by ID --- PUBLIC
 router.get('/:id/view', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id).populate('bookmarks');
+        const user = await User.findById(req.params.id).populate({
+            path: "artwork_bookmarks",
+            model: "Artwork",
+            select: "title description files categories artist tags likes"
+        });
         const artworks = await Artwork.find({ "artist": req.params.id }).populate('artist', 'name username avatar');
 
         const response = {
@@ -95,10 +103,11 @@ router.get('/:id/view', async (req, res) => {
             artworks,
             followers: user.followers.length,
             following: user.following.length,
-            bookmarks: user.artwork_bookmarks,
+            artwork_bookmarks: user.artwork_bookmarks,
         };
         res.json(response);
     } catch (err) {
+        console.log("err", err)
         return res.status(404).json({ msg: err.name });
     }
 });
@@ -126,7 +135,11 @@ router.put('/:id', protect, async (req, res) => {
 // @route   GET api/v1.01/users/:id/store --- Fetch store listings of user --- PUBLIC
 router.get('/:id/products', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id).populate('bookmarks');
+        const user = await User.findById(req.params.id).populate({
+            path: "artwork_bookmarks",
+            model: "Artwork",
+            select: "title description files categories artist tags likes"
+        });
         if (!user.products) {
             return res.status(400).send({ msg: 'Products not found' });
         }
@@ -246,7 +259,11 @@ router.post('/:id/cart/remove', async (req, res) => {
 // @route   PUT api/v1.01/users/:id/cart/:cart_id --- Update user avatar --- PUBLIC
 router.put('/:id/avatar', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id).populate('bookmarks');
+        const user = await User.findById(req.params.id).populate({
+            path: "artwork_bookmarks",
+            model: "Artwork",
+            select: "title description files categories artist tags likes"
+        });
         const artwork = await Artwork.find({ "author.id": req.params.id });
 
         artwork.map(item => {

@@ -6,7 +6,7 @@ const MasonryGrid = ({ cols, children }) => {
     const width = useWindowWidth();
 
     const columnWrapper = {};
-    const gap = 5;
+    const gap = 0;
     const result = [];
 
     const [columns, setColumns] = useState(cols);

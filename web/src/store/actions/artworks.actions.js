@@ -87,17 +87,6 @@ export const a_fetchArtworks = createAsyncThunk("a_fetchArtworks", async (payloa
     })
 });
 
-export const a_searchArtworks = createAsyncThunk("a_searchArtworks", async (payload, { getState, dispatch, rejectWithValue }) => {
-    const { value, filter, period } = payload;
-    await api_artworks("search", value, filter, period).then(res => {
-        dispatch(r_setArtworks(res.data));
-        return;
-    }).catch(err => {
-        console.log('---error a_searchArtworks', err);
-        return rejectWithValue(err.message);
-    })
-});
-
 export const a_artworkVisited = createAsyncThunk("a_artworkVisited", async (payload, { getState, dispatch, rejectWithValue }) => {
     console.log('page visited');
     return;
@@ -201,26 +190,4 @@ export const a_handleDislikeComment = createAsyncThunk("a_handleDislikeComment",
         console.log('---error a_handleDislikeComment', err);
         return rejectWithValue(err.message);
     })
-});
-
-export const a_handleTabChange = createAsyncThunk("a_handleTabChange", async (payload, { getState, dispatch, rejectWithValue }) => {
-    switch (payload) {
-        case 'Latest': {
-            let artworks = getState().artwork.artworks;
-            dispatch(r_setArtworks(artworks.sort(dynamicSort('createdAt'))));
-            break;
-        }
-        case 'Trending': {
-            let artworks = getState().artwork.artworks;
-            dispatch(r_setArtworks(artworks.sort(dynamicSort('title'))));
-            break;
-        }
-        case 'Rising': {
-            let artworks = getState().artwork.artworks;
-            dispatch(r_setArtworks(artworks.sort(dynamicSort('title'))));
-            break;
-        }
-        default: break;
-    }
-    return;
 });

@@ -171,25 +171,3 @@ export const a_handleDislikeComment = createAsyncThunk("a_handleDislikeComment",
         return rejectWithValue(err.message);
     })
 });
-
-export const a_handleTabChange = createAsyncThunk("a_handleTabChange", async (payload, { getState, dispatch, rejectWithValue }) => {
-    switch (payload) {
-        case 'Latest': {
-            let artworks = getState().artwork.artworks;
-            dispatch(r_setPosts(artworks.sort(dynamicSort('createdAt'))));
-            break;
-        }
-        case 'Trending': {
-            let artworks = getState().artwork.artworks;
-            dispatch(r_setPosts(artworks.sort(dynamicSort('title'))));
-            break;
-        }
-        case 'Rising': {
-            let artworks = getState().artwork.artworks;
-            dispatch(r_setPosts(artworks.sort(dynamicSort('title'))));
-            break;
-        }
-        default: break;
-    }
-    return;
-});

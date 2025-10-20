@@ -7,7 +7,7 @@ import { r_setLoader, r_setSnackMessage } from '../store/reducers/common.reducer
 import { a_featuredArtworks, a_fetchArtworks } from '../store/actions/artworks.actions';
 
 import MasonryGrid from '../components/Grids/Masonry';
-import PostList from '../components/PostList';
+import PostList from '../components/Lists/PostList';
 import ImageCarousel from '../components/Carousels/ImageCaroursel';
 import PostInput from '../components/PostInput';
 import Divider from '../components/Divider';
@@ -31,8 +31,6 @@ const Home = (props) => {
     useEffect(() => {
         window.scrollTo(0, 0);
         dispatch(r_setLoader(true));
-        dispatch(a_fetchPosts());
-        // dispatch(a_fetch)
         dispatch(a_featuredArtworks({ filter: "new", period: "" }));
     }, [])
 

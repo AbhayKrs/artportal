@@ -97,15 +97,13 @@ const Header = ({ hidePane, setHidePane }) => {
                         {user.is_verified &&
                             <>
                                 <Divider />
-                                <HeaderLink type="link" name="upload" hidePane={hidePane} text="Upload" path="/artwork/upload" icon={<UploadIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
+                                <HeaderLink type="link" name="upload" hidePane={hidePane} text="Upload" path="/artworks/upload" icon={<UploadIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 <HeaderLink type="link" name="cart" withBadge hidePane={hidePane} text={`Cart (${user && user.cart ? user.cart.length : 0})`} path="/store/cart" icon={<CartIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 <HeaderLink type="link" name="notifications" hidePane={hidePane} text="Notifications" path="/notifications" icon={<NotificationIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 <Divider />
                                 <div className={`flex flex-col ${hidePane ? 'items-center' : ''}`}>
                                     <HeaderLink type="link" name="myprofile" hidePane={hidePane} text="My Profile" path={`/users/${user.id}`} icon={<ProfileIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                     <HeaderLink type="link" name="mypins" hidePane={hidePane} text="My Pins" path={`/users/${user.id}/pins`} icon={<PinIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
-                                    <HeaderLink type="link" name="myspace" hidePane={hidePane} text="My Space" path={`/users/${user.id}/space`} icon={<CommunityIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
-                                    <HeaderLink type="link" name="myhistory" hidePane={hidePane} text="My History" path={`/users/${user.id}/history`} icon={<HistoryIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 </div>
                                 <Divider />
                                 <div className={`flex flex-col ${hidePane ? 'items-center' : ''}`}>

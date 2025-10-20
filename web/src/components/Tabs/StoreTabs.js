@@ -4,7 +4,7 @@ import Dropdown from '../Dropdown';
 
 import { filterOptions, periodOptions } from '../../utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { a_fetchArtworks, a_searchArtworks } from '../../store/actions/artworks.actions';
+import { a_fetchArtworks } from '../../store/actions/artworks.actions';
 
 import { MdClose } from 'react-icons/md';
 import { FiAtSign } from 'react-icons/fi';
@@ -130,11 +130,6 @@ const StoreTabs = ({ search, filtersPane, setFiltersPane }) => {
 
     const handleSearch = (val) => {
         setSearchVal(val);
-        if (val.length > 0) {
-            dispatch(a_searchArtworks({ value: val, filter: activeFilter.replace(/\s+/g, '+'), period: activePeriod.replace(/\s+/g, '+') }));
-        } else {
-            clearSearch();
-        }
     }
 
     return (
@@ -162,7 +157,6 @@ const StoreTabs = ({ search, filtersPane, setFiltersPane }) => {
                                 if (e.key === 'Enter') {
                                     switch (common.activeSearch) {
                                         case 'artwork': {
-                                            dispatch(a_searchArtworks({ value: searchVal, filter: "", period: "" }))
                                         }
                                     }
                                 }

@@ -113,7 +113,7 @@ const MobileHeader = () => {
                     {user.is_verified ?
                         <div className='flex flex-col w-full gap-4'>
                             <div className='flex flex-col'>
-                                <HeaderLink type="link" hidePane={false} text="Upload" path="/artwork/upload" icon={<UploadIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
+                                <HeaderLink type="link" hidePane={false} text="Upload" path="/artworks/upload" icon={<UploadIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 <HeaderLink type="link" hidePane={false} text={`Cart (${user.cart.length})`} path="/store/cart" icon={<CartIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                                 <HeaderLink type="link" hidePane={false} text="Notifications" path="/notifications" icon={<NotificationIcon className='h-5 w-auto text-neutral-800 dark:text-gray-300' />} activeRoute={activeRoute} />
                             </div>
