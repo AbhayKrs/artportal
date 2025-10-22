@@ -3,6 +3,7 @@ import { api_artworkImages, api_postImages } from "../../utils/api_routes";
 
 import { ReactComponent as RightIcon } from '../../assets/icons/right.svg';
 import { ReactComponent as LeftIcon } from '../../assets/icons/left.svg';
+import Image from "../Image";
 
 const ImageCarousel = ({ source, size = 12, fit = "contain", imagePaths = [], imageFiles = [] }) => {
     const [current, setCurrent] = useState(0);
@@ -44,7 +45,6 @@ const ImageCarousel = ({ source, size = 12, fit = "contain", imagePaths = [], im
 
     useEffect(() => {
         let lists = [];
-        console.log("imgss", imageFiles, imagePaths)
         if (imagePaths.length > 0) {
             lists = imagePaths.flatMap(img => apiPath(img))
         } else if (imageFiles.length > 0) {
@@ -66,6 +66,12 @@ const ImageCarousel = ({ source, size = 12, fit = "contain", imagePaths = [], im
         setImgCover(a);
     }, [fit])
 
+    const dragBlock = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    };
+
     return (
         <div className="relative w-full mx-auto overflow-hidden rounded-xl">
             <div
@@ -80,10 +86,10 @@ const ImageCarousel = ({ source, size = 12, fit = "contain", imagePaths = [], im
                         className={`bg-gray-100/50 dark:bg-black/15 flex-shrink-0 w-full flex justify-center`}
                         style={{ maxHeight: `${imgSize}rem` }}
                     >
-                        <img
-                            key={i}
+                        <Image
                             src={img}
                             alt={`slide-${i}`}
+                            pointer={false}
                             className={`w-full h-auto ${imgCover} rounded-lg`}
                         />
                     </div>

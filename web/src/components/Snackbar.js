@@ -24,7 +24,7 @@ const Snackbar = ({ msgdata, setMessage }) => {
 
     const selectedAlert = (type) => {
         switch (type) {
-            case 'error': return <div className="alert fixed z-50 bottom-3 left-3 bg-neutral-900 m-2 rounded border-b-2 border-red-500">
+            case 'error': return <div className="alert fixed z-50 bottom-3 right-3 bg-neutral-900 m-2 rounded border-b-2 border-red-500">
                 <div className='relative min-w-[250px] w-full p-3 flex flex-row items-center '>
                     <IoCloseSharp onClick={closeSnack} className='w-5 h-5 z-10 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                     <div className='relative flex flex-row items-center '>
@@ -47,7 +47,7 @@ const Snackbar = ({ msgdata, setMessage }) => {
                 </div>
             </div>;
 
-            case 'success': return <div className="alert fixed z-50 bottom-3 left-3 bg-neutral-900 m-2 rounded border-b-2 border-green-500">
+            case 'success': return <div className="alert fixed z-50 bottom-3 right-3 bg-neutral-900 m-2 rounded border-b-2 border-green-500">
                 <div className='relative min-w-[250px] w-full p-3 flex flex-row items-center '>
                     <IoCloseSharp onClick={closeSnack} className='w-5 h-5 z-10 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                     <div className="alert-icon flex items-center bg-green-500 border-2 border-green-500 justify-center h-6 w-6 flex-shrink-0 rounded-full">
@@ -68,7 +68,7 @@ const Snackbar = ({ msgdata, setMessage }) => {
                 </div>
             </div>
 
-            case 'warning': return <div className="alert fixed z-50 bottom-3 left-3 bg-neutral-900 m-2 rounded border-b-2 border-yellow-500">
+            case 'warning': return <div className="alert fixed z-50 bottom-3 right-3 bg-neutral-900 m-2 rounded border-b-2 border-yellow-500">
                 <div className='relative min-w-[250px] w-full p-3 flex flex-row items-center '>
                     <IoCloseSharp onClick={closeSnack} className='w-5 h-5 z-10 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                     <div className="alert-icon flex items-center bg-yellow-500 border-2 border-yellow-500 justify-center h-6 w-6 flex-shrink-0 rounded-full">
@@ -89,7 +89,7 @@ const Snackbar = ({ msgdata, setMessage }) => {
                 </div>
             </div>
 
-            case 'info': return <div className="alert fixed z-50 bottom-3 left-3 bg-neutral-900 m-2 rounded border-b-2 border-blue-500">
+            case 'info': return <div className="alert fixed z-50 bottom-3 right-3 bg-neutral-900 m-2 rounded border-b-2 border-blue-500">
                 <div className='relative min-w-[250px] w-full p-3 flex flex-row items-center '>
                     <IoCloseSharp onClick={closeSnack} className='w-5 h-5 z-10 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-400' />
                     <div className="alert-icon flex items-center bg-blue-400 text-white border-2 border-blue-400 justify-center h-6 w-6 flex-shrink-0 rounded-full">

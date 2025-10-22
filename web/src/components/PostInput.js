@@ -122,18 +122,21 @@ const PostInput = ({ value, toggle }) => {
     };
 
     return (
-        <div className='flex flex-col gap-2 py-3 px-4 border border-gray-400 dark:border-neutral-800 rounded-lg bg-black/15'>
+        <div className='flex flex-col gap-2 py-3 px-4 border border-gray-400 dark:border-neutral-800 rounded-lg bg-gray-200 dark:bg-black/15'>
             <div className='flex flex-row gap-2'>
-                {user.avatar.icon && <div className="w-12 h-12 overflow-hidden">
-                    {user.avatar.icon.length > 0 && <img loading='lazy' src={api_userImages(user.avatar.icon)} alt="user_avatar" className="object-cover w-full h-full" />}
-                </div>}
+
                 <div className='flex flex-col gap-2 w-full'>
-                    <AutoResizeTextarea
-                        value={fullText}
-                        onChange={e => setFullText(e.target.value)}
-                        placeholder="Write something..."
-                    // tags={tags.flatMap(itm => itm.value)}
-                    />
+                    <div className='flex flex-row gap-2'>
+                        {user.avatar.icon && <div className="w-12 h-12 overflow-hidden">
+                            {user.avatar.icon.length > 0 && <img loading='lazy' src={api_userImages(user.avatar.icon)} alt="user_avatar" className="object-contain w-full h-full" />}
+                        </div>}
+                        <AutoResizeTextarea
+                            value={fullText}
+                            onChange={e => setFullText(e.target.value)}
+                            placeholder="Write something..."
+                        // tags={tags.flatMap(itm => itm.value)}
+                        />
+                    </div>
                     <div className='flex flex-row'>
                         {images.length === 0 ?
                             null
@@ -185,7 +188,7 @@ const PostInput = ({ value, toggle }) => {
                                 )}
                             </div>
                         </div>
-                        <button className='flex text-base py-1 px-3 rounded-lg bg-blue-700' onClick={handleSubmit}>Submit</button>
+                        <button className='flex text-base py-1 px-3 rounded-lg text-white dark:text-black bg-blue-700' onClick={handleSubmit}>Submit</button>
                     </div>
                 </div>
             </div>

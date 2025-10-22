@@ -5,7 +5,7 @@ export const Privacy = (props) => {
         <div className='flex flex-col gap-3 col-span-3 p-2 text-neutral-700 dark:text-gray-300'>
             <h1 className="text-3xl font-medium tracking-wide">artportal Privacy Policy</h1>
             <p className="text-lg tracking-wide">Last updated: July 14, 2025</p>
-            <p className="text-lg tracking-wide">We are committed to protecting your personal information. This Privacy Policy applies to www.artstation.com. Contact us at <a href="mailto:privacy@artstation.com" className="text-blue-600 hover:underline">privacy@artstation.com</a> with questions.</p>
+            <p className="text-lg tracking-wide">We are committed to protecting your personal information. This Privacy Policy applies to www.artportal.com. Contact us at <a href="mailto:privacy@artportal.com" className="text-blue-600 hover:underline">privacy@artportal.com</a> with questions.</p>
 
             <div className="space-y-6">
                 <section className="flex flex-col gap-1">
@@ -88,12 +88,12 @@ export const Privacy = (props) => {
 
                 <section className="flex flex-col gap-1">
                     <h2 className="text-lg font-medium tracking-wide">14. Governing Law</h2>
-                    <p className="text-lg tracking-wide pl-7">Disputes are governed by the laws and venue in section 43 of the <a href="https://www.artstation.com/tos" className="text-blue-600 hover:underline">Terms of Service</a>.</p>
+                    <p className="text-lg tracking-wide pl-7">Disputes are governed by the laws and venue in section 43 of the <a href="https://www.artportal.com/tos" className="text-blue-600 hover:underline">Terms of Service</a>.</p>
                 </section>
 
                 <section className="flex flex-col gap-1">
                     <h2 className="text-lg font-medium tracking-wide">15. Complaints</h2>
-                    <p className="text-lg tracking-wide pl-7">Contact us first at <a href="mailto:privacy@artstation.com" className="text-blue-600 hover:underline">privacy@artstation.com</a>. You may also reach your local Data Protection Authority: <a href="https://edpb.europa.eu/about-edpb/board/members_en" className="text-blue-600 hover:underline">EEA</a>, <a href="https://ico.org.uk/global/contact-us/" className="text-blue-600 hover:underline">UK</a>, <a href="https://www.edoeb.admin.ch/edoeb/en/home/the-fdpic/contact.html" className="text-blue-600 hover:underline">Switzerland</a>.</p>
+                    <p className="text-lg tracking-wide pl-7">Contact us first at <a href="mailto:privacy@artportal.com" className="text-blue-600 hover:underline">privacy@artportal.com</a>. You may also reach your local Data Protection Authority: <a href="https://edpb.europa.eu/about-edpb/board/members_en" className="text-blue-600 hover:underline">EEA</a>, <a href="https://ico.org.uk/global/contact-us/" className="text-blue-600 hover:underline">UK</a>, <a href="https://www.edoeb.admin.ch/edoeb/en/home/the-fdpic/contact.html" className="text-blue-600 hover:underline">Switzerland</a>.</p>
                 </section>
             </div>
         </div>

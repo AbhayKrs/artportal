@@ -31,8 +31,7 @@ import search from './server/routes/search.js';
 import agents from './server/routes/agents.js';
 
 app.use(cors({
-    // origin: process.env.FRONTEND_ORIGIN || 'http://localhost:3000',
-    origin: 'http://localhost:3000',
+    origin: process.env.NODE_ENV === "production" ? process.env.FRONTEND_ORIGIN : 'http://localhost:3000',
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"], // include Authorization header
@@ -50,7 +49,7 @@ app.use(mongoSanitize());
 // Rate limiting - general & auth specific
 const generalLimiter = rateLimit({
     windowMs: 60 * 1000, // 1 minute
-    max: 200
+    max: 50
 });
 app.use(generalLimiter);
 
@@ -60,6 +59,32 @@ const authLimiter = rateLimit({
     message: 'Too many auth attempts from this IP, try again later'
 });
 app.use(`/api/${process.env.API_VERSION}/auth`, authLimiter);
+
+
+// Honey-token limiter
+const honeyLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 1, // Only allow 1 request per hour
+    message: 'Access denied',  // Bots hitting this will see this
+    handler: (req, res, next) => {
+        console.warn(`Honey-token accessed! IP: ${req.ip}, UA: ${req.headers['user-agent']}`);
+        res.status(403).json({ message: 'Access denied' });
+    }
+});
+
+// Honey-token endpoint
+app.get(`/api/${process.env.API_VERSION}/hidden`, honeyLimiter, (req, res) => {
+    res.status(404).json({ message: 'Not Found' });
+});
+
+const fakeEndpoints = ['/api/fake-1', '/api/fake-2', '/api/fake-3'];
+
+fakeEndpoints.forEach(ep => {
+    app.get(ep, honeyLimiter, (req, res) => {
+        console.warn(`Honey-token hit at ${ep} by IP: ${req.ip}`);
+        res.status(404).json({ message: 'Not Found' });
+    });
+});
 
 app.use(passport.initialize());
 

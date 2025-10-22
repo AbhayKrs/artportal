@@ -13,6 +13,7 @@ import { BsHash } from 'react-icons/bs';
 
 import DragDrop from '../components/DragDrop';
 import Dropdown from '../components/Dropdown';
+import Image from '../components/Image';
 
 const ExploreEdit = (props) => {
     const dispatch = useDispatch();
@@ -116,10 +117,21 @@ const ExploreEdit = (props) => {
                 <div className='flex lg:flex-row flex-col mt-3 lg:gap-4 md:gap-2'>
                     <div className='scrollbar w-full max-h-[37.5em] overflow-y-auto'>
                         <div className="flex flex-col gap-3">
-                            <img loading='lazy' src={`${api_artworkImages(artwork.files[0])}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
+                            <Image
+                                src={`${api_artworkImages(artwork.files[0])}`}
+                                alt="Artwork by Jane Doe"
+                                pointer={false}
+                                className="h-full px-10 xs:px-0 object-cover object-center rounded-lg"
+                            />
                             <div className='flex w-fit flex-col self-center items-center gap-3 place-content-center'>
                                 {artwork.files.filter((image, index) => index !== 0).map((image, index) => (
-                                    <img loading='lazy' key={index} src={`${api_artworkImages(image)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
+                                    <Image
+                                        key={index}
+                                        src={`${api_artworkImages(image)}`}
+                                        alt="Artwork by Jane Doe"
+                                        pointer={false}
+                                        className="h-full px-10 xs:px-0 object-cover object-center rounded-lg"
+                                    />
                                 ))}
                             </div>
                         </div>

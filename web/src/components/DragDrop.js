@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import * as tf from '@tensorflow/tfjs';
 import { api_taggerURL } from '../utils/api_routes';
-import ImageCarousel from "./Carousels/ImageCaroursel";
+import Image from "./Image";
 
 const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
@@ -11,7 +11,7 @@ const reorder = (list, startIndex, endIndex) => {
     return result;
 };
 
-const Image = ({ image, index, r_setSnackMessage, setCategories, isFlagged, setIsFlagged }) => {
+const PreviewImage = ({ image, index, r_setSnackMessage, setCategories, isFlagged, setIsFlagged }) => {
     useEffect(() => {
         r_setSnackMessage({
             open: true,
@@ -80,7 +80,13 @@ const Image = ({ image, index, r_setSnackMessage, setCategories, isFlagged, setI
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                 >
-                    <img id={'uploadImg' + index} loading='lazy' src={URL.createObjectURL(image.content)} className='w-full h-full object-cover rounded' />
+                    <Image
+                        id={'uploadImg' + index}
+                        src={URL.createObjectURL(image.content)}
+                        pointer={false}
+                        alt="Artwork by Jane Doe"
+                        className='w-full h-full object-cover rounded'
+                    />
                     {index === 0 ? <span className="absolute  text-white pt-0.5 px-2 rounded-tr-md bottom-0 left-0 bg-blue-700">Primary</span> : ''}
                 </div>
             )
@@ -91,7 +97,15 @@ const Image = ({ image, index, r_setSnackMessage, setCategories, isFlagged, setI
 
 const ImageList = ({ images, setCategories, r_setSnackMessage, isFlagged, setIsFlagged }) => {
     return images.map((image, index) => (
-        <Image image={image} index={index} key={image.id} setCategories={setCategories} r_setSnackMessage={r_setSnackMessage} isFlagged={isFlagged} setIsFlagged={setIsFlagged} />
+        <PreviewImage
+            image={image}
+            index={index}
+            key={image.id}
+            setCategories={setCategories}
+            r_setSnackMessage={r_setSnackMessage}
+            isFlagged={isFlagged}
+            setIsFlagged={setIsFlagged}
+        />
     ));
 }
 
@@ -122,8 +136,13 @@ const DragDrop = ({ source, isFlagged, setIsFlagged, selectedImages, setReordere
                         ref={provided.innerRef}
                         className='scrollbar flex p-2 overflow-auto gap-2'
                         {...provided.droppableProps}>
-                        <ImageCarousel size={18} imageFiles={images} />
-                        {/* <ImageList imageFiles={images} setCategories={setCategories} r_setSnackMessage={r_setSnackMessage} isFlagged={isFlagged} setIsFlagged={setIsFlagged} /> */}
+                        <ImageList
+                            imageFiles={images}
+                            isFlagged={isFlagged}
+                            setIsFlagged={setIsFlagged}
+                            setCategories={setCategories}
+                            r_setSnackMessage={r_setSnackMessage}
+                        />
                         {provided.placeholder}
                     </div>
                 )}

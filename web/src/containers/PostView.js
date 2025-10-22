@@ -7,14 +7,11 @@ import { a_fetchPost, a_fetchPosts } from '../store/actions/posts.actions';
 import { r_setLoader, r_setSnackMessage, r_headerDialogOpen } from '../store/reducers/common.reducer';
 import { api_postImages } from '../utils/api_routes';
 
-import { ReactComponent as ViewsIcon } from '../assets/icons/views.svg';
-import { ReactComponent as VerifiedIcon } from '../assets/icons/verified.svg';
-import { ReactComponent as Artportal_logo } from '../assets/icons/artportal_logo.svg';
+import { ReactComponent as LeftIcon } from '../assets/icons/leftchevron.svg';
 import { ReactComponent as CommentIcon } from '../assets/icons/comment.svg';
 import { ReactComponent as PinIcon } from '../assets/icons/pin.svg';
 import { ReactComponent as LikeIcon } from '../assets/icons/like.svg';
 import { ReactComponent as LinkIcon } from '../assets/icons/link.svg';
-import { ReactComponent as MoreIcon } from '../assets/icons/more.svg';
 import { ReactComponent as LikeFilledIcon } from '../assets/icons/likefilled.svg';
 
 import CommentList from '../components/CommentList';
@@ -144,13 +141,20 @@ const PostView = ({ }) => {
     return (
         <div className='md:relative flex flex-col md:flex-row gap-4 bg-gray-200 dark:bg-darkBg'>
             <div className={`flex ${hidePane ? 'md:w-[70%]' : 'md:w-[69%]'} order-2 md:order-1 justify-center p-4 pr-2 min-h-show`}>
-                <div className='flex flex-col gap-2'>
-                    <div className='flex flex-row gap-2'>
-                        <UserBadge icon size="md" link={`/users/${post.author._id} `} user={post.author} />
-                        <span className='text-base text-neutral-700 dark:text-gray-300'>{moment(post.createdAt).fromNow()}</span>
+                <div className='flex flex-col gap-6'>
+                    <div className='flex flex-row items-center gap-2'>
+                        <LeftIcon onClick={() => navigate(-1)} className='w-5 h-5 text-neutral-600 dark:text-neutral-300 cursor-pointer' />
+                        <span className='text-lg text-neutral-700 dark:text-gray-300'>Post</span>
                     </div>
-                    <PostText text={post.full_text} />
-                    <ImageCarousel source="posts" size={28} fit="contain" imagePaths={post.files} />
+                    <div className='flex flex-col gap-2'>
+
+                        <div className='flex flex-row gap-2'>
+                            <UserBadge icon size="md" link={`/users/${post.author._id} `} user={post.author} />
+                            <span className='text-base text-neutral-700 dark:text-gray-300'>{moment(post.createdAt).fromNow()}</span>
+                        </div>
+                        <PostText text={post.full_text} />
+                        {post.files && post.files.length > 0 && <ImageCarousel source="posts" size={28} fit="contain" imagePaths={post.files} />}
+                    </div>
                 </div>
             </div>
             <div className={`relative h-full max-h-innershow min-h-innershow md:fixed md:right-4 flex flex-col gap-2 ${hidePane ? 'md:w-[28%]' : 'md:w-3/12'}  order-1 md:order-2 rounded-lg backdrop-sepia-0 bg-white/30 dark:bg-black/30 my-4 py-3`}>

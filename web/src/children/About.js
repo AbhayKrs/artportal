@@ -7,11 +7,11 @@ export const About = (props) => {
             <div className="space-y-6">
                 <h1 className="text-2xl italic font-medium tracking-wide">"Protecting Creativity. Empowering Community."</h1>
                 <section className="flex flex-col gap-2">
-                    <p className="text-lg tracking-wide">Every artist begins with a blank canvas. A sketch. A vision. A moment of expression that deserves to be seen and remembered.</p>
-                    <p className="text-lg tracking-wide">But the digital world has changed the way art lives online. With every upload came new risks - work being copied, scraped, or lost in the noise of algorithms that valued clicks over creativity. Artists need more than a platform; they needed a safe home now more than anything.</p>
-                    <p className="text-lg tracking-wide">That's how artportal was born.</p>
-                    <p className="text-lg tracking-wide">We reimagined the digital art space, where an artist's portfolio could exist with the security it deserves, free from misuse and exploitation. A space where AI cannot strip away ownership, where every brushstroke, every design and every photograph remains firmly in the hands of its creator.</p>
-                    <p className="text-lg tracking-wide">But there is more to artportal than protection, it is a community driven environment for creators who believe in art's power to inspire, connect and embrace. Here, we hope you can grow connections and have those connections grow into opportunities.</p >
+                    <p className="text-base tracking-wide">Every artist begins with a blank canvas. A sketch. A vision. A moment of expression that deserves to be seen and remembered.</p>
+                    <p className="text-base tracking-wide">But the digital world has changed the way art lives online. With every upload came new risks - work being copied, scraped, or lost in the noise of algorithms that valued clicks over creativity. Artists need more than a platform; they needed a safe home now more than anything.</p>
+                    <p className="text-base tracking-wide">That's how artportal was born.</p>
+                    <p className="text-base tracking-wide">We reimagined the digital art space, where an artist's portfolio could exist with the security it deserves, free from misuse and exploitation. A space where AI cannot strip away ownership, where every brushstroke, every design and every photograph remains firmly in the hands of its creator.</p>
+                    <p className="text-base tracking-wide">But there is more to artportal than protection, it is a community driven environment for creators who believe in art's power to inspire, connect and embrace. Here, we hope you can grow connections and have those connections grow into opportunities.</p >
                 </section >
                 <section className='flex flex-col gap-2'>
                     <iframe className='rounded-md' width="650" height="400" src="https://www.youtube.com/embed/xvFZjo5PgG0?si=zeEqzKp1e47gMedV" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>

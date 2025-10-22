@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { api_artworkImages } from '../../utils/api_routes';
 
 import MasonryGrid from '../Grids/Masonry';
+import Image from '../Image';
 
 const ArtworksGridList = ({ search, list }) => {
     const navigate = useNavigate();
@@ -19,11 +20,20 @@ const ArtworksGridList = ({ search, list }) => {
     return (
         <MasonryGrid cols={5}>
             {listData.map((item, index) => (
-                <div onClick={() => navigate(`/artworks/${item._id}`)} className='relative group group-hover:block cursor-pointer'>
-                    <img loading='lazy'
+                // <div onClick={() => navigate(`/artworks/${item._id}`)} className='relative group group-hover:block cursor-pointer'>
+                //     <img loading='lazy'
+                //         id={index}
+                //         className='object-cover w-full h-full'
+                //         src={api_artworkImages(item.files[0])}
+                //     />
+                // </div>
+                <div onClick={() => navigate(`/artworks/${item._id}`)}>
+                    <Image
+                        pointer={true}
                         id={index}
-                        className='object-cover w-full h-full'
-                        src={api_artworkImages(item.files[0])}
+                        src={`${api_artworkImages(item.files[0])}`}
+                        alt="Artwork by Jane Doe"
+                        className='group group-hover:block cursor-pointer'
                     />
                 </div>
             ))}

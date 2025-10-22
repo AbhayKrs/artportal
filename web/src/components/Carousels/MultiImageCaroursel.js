@@ -3,6 +3,7 @@ import { api_artworkImages } from "../../utils/api_routes";
 
 import { ReactComponent as RightIcon } from '../../assets/icons/right.svg';
 import { ReactComponent as LeftIcon } from '../../assets/icons/left.svg';
+import Image from "../Image";
 
 const MultiImageCarousel = ({ size = 12, fit = "contain", images = [], perView = 2 }) => {
     const [current, setCurrent] = useState(0);
@@ -37,6 +38,12 @@ const MultiImageCarousel = ({ size = 12, fit = "contain", images = [], perView =
 
     const slideWidth = 100 / perView; // width of each image
 
+    const dragBlock = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    };
+
     return (
         <div className="relative w-full mx-auto overflow-hidden rounded-xl">
             <div
@@ -52,9 +59,11 @@ const MultiImageCarousel = ({ size = 12, fit = "contain", images = [], perView =
                         className="flex-shrink-0 flex justify-center"
                         style={{ width: `${slideWidth}%`, maxHeight: `${imgSize}rem` }}
                     >
-                        <img
+                        <Image
+                            id={index}
                             src={`${URL.createObjectURL(image.content)}`}
                             alt={`slide-${i}`}
+                            pointer={false}
                             className={`w-full h-auto ${imgCover} rounded-lg`}
                         />
                     </div>

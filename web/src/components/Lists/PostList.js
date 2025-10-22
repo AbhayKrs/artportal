@@ -58,31 +58,20 @@ const PostList = ({ search, list }) => {
         <div className='flex flex-col'>
             {listData.map((itm, index) => (
                 <div key={index}>
-                    <div onClick={() => navigate(`/posts/${itm._id}`)} className='flex flex-col gap-3 hover:bg-black/10 p-4 rounded-md cursor-pointer'>
+                    <div onClick={() => navigate(`/posts/${itm._id}`)} className='flex flex-col gap-3 hover:bg-white/25 dark:hover:bg-neutral-700/25 p-4 rounded-md cursor-pointer'>
                         <div className='flex flex-col gap-2'>
                             <div className='flex flex-row items-center justify-between'>
                                 <div className='flex flex-row gap-2'>
                                     <UserBadge icon size="md" link={`/users/${itm.author._id} `} user={itm.author} />
                                     <span className='text-base text-neutral-700 dark:text-gray-300'>{moment(itm.createdAt).fromNow()}</span>
                                 </div>
-                                <MoreIcon className="h-6 w-6 text-neutral-800 dark:text-gray-400" />
                             </div>
                             <PostText text={itm.full_text} />
                             <ImageCarousel source="posts" size={28} fit="contain" imagePaths={itm.files} />
                         </div>
                         <div className='flex flex-row gap-4'>
                             <div className='flex flex-row items-center gap-1'>
-                                {itm.likes.filter(item => item === user.id).length > 0 ?
-                                    <button disabled>
-                                        <LikeFilledIcon className='w-4 h-4 text-neutral-700 dark:text-gray-200' />
-                                    </button>
-                                    :
-                                    <button
-                                        onClick={() => { user.is_verified ? handleToggleLike(true, itm._id) : handleInvalidUser() }}
-                                    >
-                                        <LikeIcon className='w-4 h-4 text-neutral-600 dark:text-neutral-500' />
-                                    </button>
-                                }
+                                <LikeIcon className='w-4 h-4 text-neutral-600 dark:text-neutral-500' />
                                 <p className="font-semibold text-neutral-600 dark:text-gray-400 text-base">
                                     {itm.likes.length}
                                 </p>

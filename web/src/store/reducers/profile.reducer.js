@@ -14,6 +14,7 @@ const initialState = {
     followers: 0,
     following: 0,
     bookmarks: [],
+    posts: [],
     artworks: [],
     comments: []
 }

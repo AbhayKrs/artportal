@@ -32,6 +32,7 @@ import { ReactComponent as DislikeFilledIcon } from '../assets/icons/dislikefill
 import CommentList from '../components/CommentList';
 import Divider from '../components/Divider';
 import { a_refreshUserDetails } from '../store/actions/user.actions';
+import Image from '../components/Image';
 
 const LibraryView = ({ }) => {
     const dispatch = useDispatch();
@@ -174,6 +175,12 @@ const LibraryView = ({ }) => {
         dispatch(a_fetchArtwork(next));
     }
 
+    const dragBlock = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    };
+
     return (
         <div className='md:relative flex flex-col md:flex-row gap-4 bg-gray-200 dark:bg-darkBg'>
             <div className={`flex ${hidePane ? 'md:w-[70%]' : 'md:w-[69%]'} order-2 md:order-1 justify-center p-4 pr-2 min-h-show`}>
@@ -188,12 +195,25 @@ const LibraryView = ({ }) => {
                     :
                     <div className="flex flex-col gap-3 w-full">
                         <div className='flex m-auto w-fit self-center justify-center'>
-                            {artwork.files[0]?.length > 0 && <img loading='lazy' src={`${api_artworkImages(artwork.files[0])}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />}
+                            {artwork.files[0]?.length > 0 &&
+                                <Image
+                                    src={`${api_artworkImages(artwork.files[0])}`}
+                                    alt="Artwork by Jane Doe"
+                                    pointer={false}
+                                    className="h-full px-10 xs:px-0 object-cover object-center rounded-lg"
+                                />
+                            }
                         </div>
                         {artwork.files.filter((image, index) => index !== 0).length > 0 &&
                             <div className='flex w-fit flex-col self-center justify-center gap-3'>
                                 {artwork.files.filter((image, index) => index !== 0).map((image, index) => (
-                                    <img loading='lazy' key={index} src={`${api_artworkImages(image)}`} className="h-full px-10 xs:px-0 object-cover object-center rounded-lg" />
+                                    <Image
+                                        key={index}
+                                        src={`${api_artworkImages(image)}`}
+                                        alt="Artwork by Jane Doe"
+                                        pointer={false}
+                                        className="h-full px-10 xs:px-0 object-cover object-center rounded-lg"
+                                    />
                                 ))}
                             </div>
                         }
@@ -239,24 +259,6 @@ const LibraryView = ({ }) => {
                             <p className='tracking-wide whitespace-nowrap text-sm'>{moment(artwork.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</p>
                         </div>
                         <div className='flex justify-between items-center'>
-                            {/* {artwork.artist.id === user.id ?
-                                    <div onClick={() => navigate(`/artworks/${artwork._id}/edit`)} className='rounded-lg bg-blue-700 p-2 cursor-pointer ml-2'>
-                                        <MdEdit className="text-gray-200 h-6 w-6" />
-                                    </div>
-                                    : <div className="relative float-left flex">
-                                        <img
-                                            loading='lazy'
-                                            src={AwardIcon}
-                                            className='h-12 w-12 cursor-pointer'
-                                            onClick={() => {
-                                                user.is_verified ?
-                                                    setAwardOpen(true)
-                                                    :
-                                                    handleInvalidUser()
-                                            }}
-                                        />
-                                        <ImPlus className="absolute bottom-0 right-0 text-[#D1853A] h-4 w-4" />
-                                    </div>} */}
                             <div className='flex flex-row gap-6'>
                                 <div className='flex flex-row gap-3 items-center'>
                                     <div className='flex flex-row items-center gap-1'>
@@ -350,16 +352,6 @@ const LibraryView = ({ }) => {
                         />
                     </div>
                 </div>
-                {/* {artwork.awards.length > 0 ?
-                        <div id='award' className='flex overflow-x-hidden bg-slate-200 dark:bg-neutral-700 mx-2 p-2 rounded-lg gap-2'>
-                            {artwork.awards.map((award, index) => (
-                                <div key={index} className="relative float-left mr-2 flex">
-                                    <img loading='lazy' draggable="false" className='max-w-fit h-12 w-12' src={api_userImages(award.icon)} />
-                                    <span className="absolute font-bold top-0 right-0 inline-block rounded-full bg-indigo-800 shadow-lg shadow-neutral-800 text-gray-300 px-1.5 py-0.5 text-xs">{award.count}</span>
-                                </div>
-                            ))}
-                        </div>
-                        : ''} */}
                 {awardOpen &&
                     <AwardModal
                         open={awardOpen}

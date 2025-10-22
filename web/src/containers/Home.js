@@ -34,23 +34,23 @@ const Home = (props) => {
     }, [])
 
     return (
-        <div className='md:relative flex flex-col md:flex-row gap-4 bg-gray-200 dark:bg-darkBg'>
+        <div className='md:relative flex flex-col md:flex-row gap-4 bg-white dark:bg-darkBg'>
             <Helmet>
                 <title>artportal</title>
             </Helmet>
-            <div className={`flex flex-col gap-2 ${hidePane ? sidePane ? 'md:w-[74%]' : 'md:w-full' : sidePane ? 'md:w-[70.5%]' : 'md:w-full'} order-2 md:order-1 py-2 px-8 md:px-16 min-h-show`}>
+            <div className={`flex flex-col gap-2 ${hidePane ? sidePane ? 'md:w-[74%]' : 'md:w-full' : sidePane ? 'md:w-[64.25%]' : 'md:w-full'} order-2 md:order-1 py-4 px-8 min-h-show`}>
                 <PostInput />
                 <PostList list={posts.main_list} />
             </div>
             {sidePane &&
-                <div className={`relative px-2 py-3 h-full md:fixed max-h-show md:right-2 flex flex-col gap-3 w-full md:w-[25%] order-1 md:order-2 backdrop-sepia-0 bg-white/30 dark:bg-black/30 border-l-2 border-gray-400 dark:border-neutral-800`}>
+                <div className={`relative px-2 py-3 h-full md:fixed max-h-show md:right-2 flex flex-col gap-3 w-full md:w-[30%] order-1 md:order-2 backdrop-sepia-0 bg-white/30 dark:bg-black/30 border-l-2 border-gray-400 dark:border-neutral-800`}>
                     <div className='flex flex-col gap-3 px-1 h-full overflow-y-auto'>
                         <div className='flex flex-col gap-2'>
                             <span className={`flex gap-1 text-lg font-medium tracking-wide text-neutral-800 dark:text-gray-300 rounded-xl items-end`}>
                                 Trending Now
                             </span>
                             <div className='flex flex-row flex-wrap gap-1.5 w-full'>
-                                {["painting", "scifi", "landscape", "character"].map(itm => (
+                                {["painting", "scifi", "landscape", "character", "painting", "scifi", "landscape", "character", "painting", "scifi"].map(itm => (
                                     <button className='flex rounded-lg bg-gray-300 dark:bg-neutral-800 p-2'>
                                         <span className='text-sm text-neutral-800 dark:text-gray-300'>#{itm}</span>
                                     </button>
@@ -62,14 +62,14 @@ const Home = (props) => {
                             <span className={`flex gap-1 text-lg font-medium tracking-wide text-neutral-800 dark:text-gray-300 rounded-xl items-end`}>
                                 Featured Artist
                             </span>
-                            <div className='flex flex-col gap-2 p-3 justify-between w-full backdrop-sepia-0 bg-white/30 dark:bg-black/30 rounded-lg'>
-                                <div className='flex flex-col'>
+                            <div className='flex flex-row gap-3 justify-between w-full rounded-lg'>
+                                <div className='flex flex-col justify-center items-center w-1/2'>
                                     <p className='text-neutral-800 dark:text-gray-200 text-lg font-medium'>Akunta</p>
                                     <a href="#" className='flex flex-row items-center gap-1 text-neutral-800 dark:text-gray-200 text-sm font-medium'>
                                         @akn787
                                     </a>
                                 </div>
-                                <ImageCarousel size={12} fit="cover" imagePaths={artworks.featured_list.flatMap(item => item.files)} />
+                                {artworks.featured_list && artworks.featured_list.length > 0 && <ImageCarousel source="artworks" size={12} fit="cover" imagePaths={artworks.featured_list.flatMap(item => item.files)} />}
                             </div>
                         </div>
                         <Divider noPadding />
@@ -77,7 +77,7 @@ const Home = (props) => {
                             <span className={`flex gap-1 text-lg font-medium tracking-wide text-neutral-800 dark:text-gray-300 rounded-xl items-end`}>
                                 Top Spaces
                             </span>
-                            <div className='flex flex-col gap-1.5 h-24 overflow-y-auto'>
+                            <div className='flex flex-col gap-1.5 h-32 overflow-y-auto'>
                                 {["characterdesign", "3Ddesign"].map(itm => (
                                     <button className='flex gap-2 items-center rounded-lg hover:bg-gray-300 hover:dark:bg-neutral-800 p-2'>
                                         <div className="h-8 w-8 bg-violet-600/25 rounded-full"></div>

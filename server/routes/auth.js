@@ -245,7 +245,7 @@ router.get('/google/callback', passport.authenticate('google', {
         maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     // Redirect to frontend with access token
-    res.redirect(`${process.env.FRONTEND_ORIGIN}/google_success?token=${accessToken}`);
+    res.redirect(`${process.env.NODE_ENV === "production" ? process.env.FRONTEND_ORIGIN : 'http://localhost:3000'}/google_success?token=${accessToken}`);
 })
 
 // @route   POST api/v1.01/auth/logout --- Logout the user --- PUBLIC

@@ -110,6 +110,7 @@ const Profile = () => {
                             </div>
                             <p className='text-base text-neutral-700 dark:text-gray-300'>{profile.bio}</p>
                             <div className="flex flex-row gap-6">
+                                <span className="text-base font-semibold uppercase text-blueGray-800 dark:text-gray-200">{profile.posts.length} posts</span>
                                 <span className="text-base font-semibold uppercase text-blueGray-800 dark:text-gray-200">{profile.artworks.length} artworks</span>
                                 <span className="text-base font-semibold uppercase text-blueGray-800 dark:text-gray-200">{profile.followers} followers</span>
                                 <span className="text-base font-semibold uppercase text-blueGray-800 dark:text-gray-200">{profile.following} followers</span>

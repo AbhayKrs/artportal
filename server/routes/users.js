@@ -9,7 +9,7 @@ import { checkObjectId } from '../middleware/checkObjectId.js';
 import User from '../models/user.js';
 import Products from '../models/product.js';
 import Artwork from '../models/artwork.js';
-import Comment from '../models/comment.js';
+import Post from '../models/post.js';
 import Cart from '../models/cart.js';
 const { Product } = Products;
 
@@ -91,6 +91,7 @@ router.get('/:id/view', async (req, res) => {
             select: "title description files categories artist tags likes"
         });
         const artworks = await Artwork.find({ "artist": req.params.id }).populate('artist', 'name username avatar');
+        const posts = await Post.find({ "author": req.params.id }).populate('author', 'name username avatar');
 
         const response = {
             id: user._id,
@@ -101,6 +102,7 @@ router.get('/:id/view', async (req, res) => {
             is_verified: user.is_verified,
             is_premium: user.is_premium,
             artworks,
+            posts,
             followers: user.followers.length,
             following: user.following.length,
             artwork_bookmarks: user.artwork_bookmarks,
