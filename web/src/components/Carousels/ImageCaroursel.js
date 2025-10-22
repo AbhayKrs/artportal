@@ -66,12 +66,6 @@ const ImageCarousel = ({ source, size = 12, fit = "contain", imagePaths = [], im
         setImgCover(a);
     }, [fit])
 
-    const dragBlock = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
-    };
-
     return (
         <div className="relative w-full mx-auto overflow-hidden rounded-xl">
             <div

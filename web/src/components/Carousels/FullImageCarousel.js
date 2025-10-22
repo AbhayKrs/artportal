@@ -1,24 +1,24 @@
 import React, { useState, useRef, useEffect } from "react";
-import { api_artworkImages } from "../../utils/api_routes";
+import { api_artworkImages, api_postImages } from "../../utils/api_routes";
+
+import Image from "../Image";
 
 import { ReactComponent as RightIcon } from '../../assets/icons/right.svg';
 import { ReactComponent as LeftIcon } from '../../assets/icons/left.svg';
-import Image from "../Image";
+import { IoCloseSharp, IoCloseCircle } from 'react-icons/io5';
 
-const MultiImageCarousel = ({ size = 12, fit = "contain", images = [], perView = 2 }) => {
+
+const FullImageCarousel = ({ onClose, source, images }) => {
     const [current, setCurrent] = useState(0);
     const startX = useRef(0);
     const containerRef = useRef(null);
 
-    const [imgSize, setImgSize] = useState(size);
-    const [imgCover, setImgCover] = useState("object-contain");
-
     const handlePrev = () => {
-        setCurrent((prev) => Math.max(prev - 1, 0));
+        setCurrent((prev) => (prev === 0 ? images.length - 1 : prev - 1));
     };
 
     const handleNext = () => {
-        setCurrent((prev) => Math.min(prev + 1, images.length - perView));
+        setCurrent((prev) => (prev === images.length - 1 ? 0 : prev + 1));
     };
 
     // Swipe handlers
@@ -33,59 +33,55 @@ const MultiImageCarousel = ({ size = 12, fit = "contain", images = [], perView =
         if (diff < -50) handlePrev(); // swipe right
     };
 
-    useEffect(() => setImgSize(size), [size]);
-    useEffect(() => setImgCover("object-" + fit), [fit]);
-
-    const slideWidth = 100 / perView; // width of each image
 
     return (
-        <div className="relative w-full mx-auto overflow-hidden rounded-xl">
+        <div className="absolute z-50 inset-0 h-screen w-screen mx-auto content-center overflow-hidden bg-black/90">
             <div
                 ref={containerRef}
-                className="flex transition-transform duration-500 ease-in-out"
-                style={{ transform: `translateX(-${current * slideWidth}%)` }}
+                className="flex transition-transform duration-500 ease-in-out items-center"
+                style={{ transform: `translateX(-${current * 100}%)` }}
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
             >
-                {images.map((image, i) => (
+                {images.map((img, i) => (
                     <div
                         key={i}
-                        className="flex-shrink-0 flex justify-center"
-                        style={{ width: `${slideWidth}%`, maxHeight: `${imgSize}rem` }}
+                        className={`bg-gray-100/50 dark:bg-black/15 flex-shrink-0 h-full w-full flex justify-center`}
                     >
                         <Image
-                            id={index}
-                            src={`${URL.createObjectURL(image.content)}`}
+                            src={api_artworkImages(img)}
                             alt={`slide-${i}`}
                             pointer={false}
-                            className={`w-full h-auto ${imgCover} rounded-lg`}
+                            className={`w-full items-center h-auto rounded-lg`}
                         />
                     </div>
                 ))}
             </div>
 
-            {images.length > perView && (
+            <IoCloseSharp onClick={() => { onClose() }} className='w-7 h-7 absolute top-0 right-0 mt-2 mr-2 cursor-pointer text-gray-300' />
+
+            {images.length > 1 && (
                 <>
                     <button
                         onClick={handlePrev}
-                        className="absolute left-2 top-1/2 -translate-y-1/2 hover:bg-black/30 text-white p-1.5 rounded-full"
+                        className="absolute left-2 top-1/2 -translate-y-1/2  hover:bg-black/30 text-white p-1.5 rounded-full"
                     >
                         <LeftIcon className="w-6 h-6" />
                     </button>
 
                     <button
                         onClick={handleNext}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 hover:bg-black/30 text-white p-1.5 rounded-full"
+                        className="absolute right-2 top-1/2 -translate-y-1/2  hover:bg-black/30 text-white p-1.5 rounded-full"
                     >
                         <RightIcon className="w-6 h-6" />
                     </button>
 
                     {/* Dots */}
                     <div className="absolute bottom-3 w-full flex justify-center space-x-1">
-                        {Array.from({ length: images.length - perView + 1 }).map((_, i) => (
+                        {images.map((_, i) => (
                             <div
                                 key={i}
-                                className={`h-1.5 w-1.5 rounded-full ${i === current ? "bg-white" : "bg-white/40"}`}
+                                className={`h-1.5 w-1.5 rounded-full bg-blend-normal ${i === current ? "bg-white" : "bg-white/40"}`}
                             ></div>
                         ))}
                     </div>
@@ -95,4 +91,4 @@ const MultiImageCarousel = ({ size = 12, fit = "contain", images = [], perView =
     );
 };
 
-export default MultiImageCarousel;
+export default FullImageCarousel;

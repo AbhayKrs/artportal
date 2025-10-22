@@ -1,7 +1,7 @@
 // ImageProtected.jsx
 import React from "react";
 
-const Image = ({ src, alt = "", className = "", style = {}, pointer = false }) => {
+const Image = ({ src, alt = "", className = "", style = {}, pointer = false, rounded = false }) => {
     const dragBlock = (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -20,7 +20,7 @@ const Image = ({ src, alt = "", className = "", style = {}, pointer = false }) =
                 alt={alt}
                 draggable={false}
                 onDragStart={dragBlock}
-                className="block pointer-events-none select-none object-cover w-full h-full"
+                className={`block pointer-events-none select-none object-cover w-full h-full ${rounded && "rounded-lg"}`}
             />
 
             <div

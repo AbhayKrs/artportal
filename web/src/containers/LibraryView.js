@@ -5,21 +5,15 @@ import moment from 'moment';
 import Cookies from 'js-cookie';
 
 import { a_fetchArtwork, a_fetchArtworks, a_handleDislikeArtwork, a_handleLikeArtwork, a_handleDeleteComment, a_handleEditComment, a_handleDislikeComment, a_handleLikeComment, a_bookmarkArtwork, a_handleAddComment } from '../store/actions/artworks.actions';
-import { a_fetchProduct, a_fetchProducts } from '../store/actions/store.actions';
 import { r_setLoader, r_setSnackMessage, r_headerDialogOpen } from '../store/reducers/common.reducer';
 import { api_userImages, api_artworkImages } from '../utils/api_routes';
 
 import AwardModal from '../components/Modals/AwardModal';
 import ShareModal from '../components/Modals/ShareModal';
 
-import Ratings from '../components/Ratings';
-
 import { IoEye, IoHeart, IoSend, IoShareSocialSharp, IoChatbox } from 'react-icons/io5';
 import { MdEdit, MdEditOff, MdBookmarkAdd, MdBookmarkAdded } from 'react-icons/md';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
-import { ImStarFull } from 'react-icons/im';
-import { TiInfoLarge } from 'react-icons/ti';
 
 import { ReactComponent as ViewsIcon } from '../assets/icons/views.svg';
 import { ReactComponent as VerifiedIcon } from '../assets/icons/verified.svg';
@@ -28,11 +22,13 @@ import { ReactComponent as LikeIcon } from '../assets/icons/like.svg';
 import { ReactComponent as LikeFilledIcon } from '../assets/icons/likefilled.svg';
 import { ReactComponent as DislikeIcon } from '../assets/icons/dislike.svg';
 import { ReactComponent as DislikeFilledIcon } from '../assets/icons/dislikefilled.svg';
+import { ReactComponent as ExpandIcon } from '../assets/icons/expand.svg';
 
 import CommentList from '../components/CommentList';
 import Divider from '../components/Divider';
 import { a_refreshUserDetails } from '../store/actions/user.actions';
 import Image from '../components/Image';
+import FullImageCarousel from '../components/Carousels/FullImageCarousel';
 
 const LibraryView = ({ }) => {
     const dispatch = useDispatch();
@@ -47,6 +43,7 @@ const LibraryView = ({ }) => {
     const [comment, setComment] = useState('');
     const [shareOpen, setShareOpen] = useState(false);
     const [awardOpen, setAwardOpen] = useState(false);
+    const [expandedView, setExpandedView] = useState(false);
 
     const hidePane = useOutletContext();
 
@@ -175,14 +172,12 @@ const LibraryView = ({ }) => {
         dispatch(a_fetchArtwork(next));
     }
 
-    const dragBlock = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
-    };
+    const expandImage = () => {
+        setExpandedView(true);
+    }
 
     return (
-        <div className='md:relative flex flex-col md:flex-row gap-4 bg-gray-200 dark:bg-darkBg'>
+        <div className='flex flex-col md:flex-row gap-4 bg-gray-200 dark:bg-darkBg'>
             <div className={`flex ${hidePane ? 'md:w-[70%]' : 'md:w-[69%]'} order-2 md:order-1 justify-center p-4 pr-2 min-h-show`}>
                 {(!Cookies.get('hasSession') || !localStorage.getItem('hasSession')) && artwork.categories.includes("mature_art") ?
                     <div className="flex flex-col mx-4 md:mx-0 gap-3 w-full">
@@ -193,29 +188,45 @@ const LibraryView = ({ }) => {
                         </div>
                     </div>
                     :
-                    <div className="flex flex-col gap-3 w-full">
-                        <div className='flex m-auto w-fit self-center justify-center'>
+                    <div className="flex flex-col gap-2 w-full">
+                        <div className="relative flex m-auto w-full self-center justify-center">
                             {artwork.files[0]?.length > 0 &&
                                 <Image
                                     src={`${api_artworkImages(artwork.files[0])}`}
                                     alt="Artwork by Jane Doe"
                                     pointer={false}
+                                    rounded={true}
                                     className="h-full px-10 xs:px-0 object-cover object-center rounded-lg"
+                                    watermark={artwork.artist.username}
                                 />
                             }
+                            <button
+                                onClick={expandImage}
+                                className="absolute top-2 left-2 flex w-fit hover:bg-black/30 p-2 rounded-full"
+                            >
+                                <ExpandIcon className=' w-6 h-6 text-black' />
+                            </button>
                         </div>
                         {artwork.files.filter((image, index) => index !== 0).length > 0 &&
-                            <div className='flex w-fit flex-col self-center justify-center gap-3'>
-                                {artwork.files.filter((image, index) => index !== 0).map((image, index) => (
+                            artwork.files.filter((image, index) => index !== 0).map((image, index) => (
+                                <div className='relative flex w-fit flex-col self-center justify-center gap-2'>
                                     <Image
                                         key={index}
                                         src={`${api_artworkImages(image)}`}
                                         alt="Artwork by Jane Doe"
                                         pointer={false}
+                                        rounded={true}
                                         className="h-full px-10 xs:px-0 object-cover object-center rounded-lg"
+                                        watermark={artwork.artist.username}
                                     />
-                                ))}
-                            </div>
+                                    <button
+                                        onClick={expandImage}
+                                        className="absolute top-2 left-2 flex w-fit hover:bg-black/30 p-2 rounded-full"
+                                    >
+                                        <ExpandIcon className=' w-6 h-6 text-black' />
+                                    </button>
+                                </div>
+                            ))
                         }
                     </div>
                 }
@@ -372,8 +383,12 @@ const LibraryView = ({ }) => {
                         onClick={() => setShareOpen(false)}
                     />
                 }
-
             </div>
+            {expandedView && <FullImageCarousel
+                onClose={() => setExpandedView(false)}
+                source="artworks"
+                images={artwork.files}
+            />}
         </div >
     )
 }
